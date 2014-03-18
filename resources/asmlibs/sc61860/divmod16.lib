@@ -1,0 +1,128 @@
+
+
+
+LIB_DIVMOD16:
+    PUSH
+    LP 00
+    LDM
+    LP 10
+    EXAM
+    LP 01
+    LDM
+    LP 11
+    EXAM
+    LP 13
+    EXAB
+    EXAM
+    POP
+    LP 12
+    EXAM
+
+    RA
+    LP 17			; mov r7, #0 ; clear partial remainder
+    EXAM
+    LP 16
+    RA
+    EXAM			; mov r6, #0
+    LIB 16			;mov B, #16 ; set loop count
+
+    div_loop:
+    RC				; clr C ; clear carry flag
+    LP 10
+    LDM 			; mov a, r0 ; shift the highest bit of
+    SL				; rlc a ; the dividend into...
+
+    LP 10
+    EXAM            ; mov r0, a
+
+    LP 11
+    LDM				; mov a, r1
+    SL				; rlc a
+
+    LP 11
+    EXAM
+    LP 16
+    LDM				; mov a, r6 ; ... the lowest bit of the
+    SL				; rlc a ; partial remainder
+    LP 16
+    EXAM
+    LP 17
+    LDM				; mov a, r7
+    SL				; rlc a
+    LP 17
+    EXAM
+    LP 16
+    LDM				; mov a, r6 ; trial subtract divisor
+    RC				; clr C ; from partial remainder
+    LP 12
+    EXAM
+    SBCM
+    EXAM			; subb a, r2
+    LP 4
+    EXAM			; mov dpl, a
+    LP 17
+    LDM				; mov a, r7
+    LP 13
+    EXAM
+    SBCM
+    EXAM			; subb a, r3
+    LP 5
+    EXAM			; mov dph, a
+    JRCP clearC
+    SC
+    JRP suite
+    clearC:
+    RC
+    suite:				; cpl C ; complement external borrow
+    JPNC div_1		; jnc div_1 ; update partial remainder if
+    ; borrow
+    LP 5
+    LDM
+    LP 17
+    EXAM			; mov r7, dph ; update partial remainder
+    LP 4
+    LDM
+    LP 16
+    EXAM			; mov r6, dpl
+    div_1:
+    LP 14
+    LDM				; mov a, r4 ; shift result bit into partial
+    SL				; rlc a ; quotient
+    LP 14
+    EXAM			; mov r4, a
+    LP 15
+    LDM				; mov a, r5
+    SL				; rlc a
+    LP 15
+    EXAM			; mov r5, a
+    DECB
+    JPNZ div_loop	; djnz B, div_loop
+
+; r4 -> r0
+; r5 -> r1
+; r6 -> r2
+; r7 -> r3
+
+
+;    LP 15
+;    LDM				; mov a, r5 ; put quotient in r0, and r1
+;    LP 11
+;    EXAM			; mov r1, a
+;    LP 14
+;    LDM				; mov a, r4
+;    LP 10
+;    EXAM			; mov r0, a
+;    LP 17
+;    LDM				; mov a, r7 ; get remainder, saved before the
+;    LP 13
+;    EXAM			; mov r3, a ; last subtraction
+;    LP 16
+;    LDM				; mov a, r6
+;    LP 12
+;    EXAM			; mov r2, a
+    LIQ 14
+    LP 0
+    LII 3
+    MVW
+
+RTN

@@ -1,0 +1,8 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model></model>
+<Keyboard>
+    <KEY description="EJECT/LOAD" height="31" left="34" scancode="0xd0" top="234" width="36"/>
+    <KEY description="PLAY" height="31" left="156" scancode="0xd1" top="234" width="31"/>
+    <KEY description="RECORD" height="31" left="194" scancode="0xd4" top="234" width="31"/>
+</Keyboard>
+</KEYBMAP>

@@ -1,0 +1,10 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>cl1000</model>
+<Keyboard>
+    <KEY description="FEED" height="45" left="49" masterscancode="0x00" modifier="" scancode="0xc1" top="439" width="49"/>
+    <KEY description="RMT ON" height="48" left="79" masterscancode="0x00" modifier="" scancode="0xc5" top="655" width="41"/>
+    <KEY description="RMT OFF" height="49" left="16" masterscancode="0x00" modifier="" scancode="0xc6" top="653" width="48"/>
+    <KEY description="POWER ON" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xc7" top="0" width="20"/>
+    <KEY description="POWER OFF" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xc8" top="0" width="20"/>
+</Keyboard>
+</KEYBMAP>

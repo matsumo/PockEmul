@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ti57/ti57.bin</file>
+        <file>ti57/ti57.png</file>
+        <file>ti57/ti57lcd.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,30 @@
+<RCC>
+    <qresource prefix="/">
+        <file>G850V/base.bin</file>
+        <file>G850V/g850v.png</file>
+        <file>G850V/rom00.bin</file>
+        <file>G850V/rom0a.bin</file>
+        <file>G850V/rom0b.bin</file>
+        <file>G850V/rom0c.bin</file>
+        <file>G850V/rom0d.bin</file>
+        <file>G850V/rom0e.bin</file>
+        <file>G850V/rom0f.bin</file>
+        <file>G850V/rom01.bin</file>
+        <file>G850V/rom02.bin</file>
+        <file>G850V/rom03.bin</file>
+        <file>G850V/rom04.bin</file>
+        <file>G850V/rom05.bin</file>
+        <file>G850V/rom06.bin</file>
+        <file>G850V/rom07.bin</file>
+        <file>G850V/rom08.bin</file>
+        <file>G850V/rom09.bin</file>
+        <file>G850V/rom10.bin</file>
+        <file>G850V/rom11.bin</file>
+        <file>G850V/rom12.bin</file>
+        <file>G850V/rom13.bin</file>
+        <file>G850V/rom14.bin</file>
+        <file>G850V/rom15.bin</file>
+        <file>G850V/g850vlcd.png</file>
+        <file>G850V/g850vsymb.png</file>
+    </qresource>
+</RCC>

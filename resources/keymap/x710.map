@@ -1,0 +1,6 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>x710</model>
+<Keyboard>
+    <KEY description="FEED" height="47" left="492" masterscancode="0x00" modifier="" scancode="0xc1" top="548" width="43"/>
+</Keyboard>
+</KEYBMAP>

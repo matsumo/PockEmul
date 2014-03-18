@@ -1,0 +1,18 @@
+LIB_CPS16:
+	EXAB
+	LP	1	; HB check
+	EXAM
+	CPMA
+	JRCP	CPS1
+	JRNZP	CPS0
+	LP	0	; LB check
+	EXAB
+	EXAM
+	CPMA
+	JRCP	CPS1
+  CPS0:
+	RA
+	RTN
+  CPS1:
+	LIA	255
+	RTN

@@ -1,0 +1,10 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1425/cpu-1425.bin</file>
+        <file>pc1425/pc1425.png</file>
+        <file>pc1425/b0-1425.bin</file>
+        <file>pc1425/b1-1425.bin</file>
+        <file>pc1425/b2-1425.bin</file>
+        <file>pc1425/b3-1425.bin</file>
+    </qresource>
+</RCC>

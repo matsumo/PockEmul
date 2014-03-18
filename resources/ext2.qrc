@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ext/fp100.png</file>
+        <file>ext/fp100cable.png</file>
+        <file>ext/fp100-capot.png</file>
+        <file>ext/fp100head.png</file>
+        <file>ext/md-100.png</file>
+        <file>ext/ce-122.png</file>
+        <file>ext/ce122table.bmp</file>
+        <file>ext/pc-2021.png</file>
+        <file>ext/cable_blank.png</file>
+        <file>ext/ce-127r.png</file>
+        <file>ext/pc-2081.png</file>
+        <file>ext/fp40.png</file>
+        <file>ext/jackR.png</file>
+        <file>ext/cl-1000.png</file>
+        <file>ext/tp-83.png</file>
+    </qresource>
+</RCC>

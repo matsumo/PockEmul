@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1260/bas-1260.rom</file>
+        <file>pc1260/cpu-1260.rom</file>
+        <file>pc1260/1260lcd.png</file>
+        <file>pc1260/1260symb.png</file>
+        <file>pc1260/pc1260.png</file>
+    </qresource>
+</RCC>

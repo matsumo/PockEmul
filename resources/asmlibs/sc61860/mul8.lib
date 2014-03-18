@@ -1,0 +1,35 @@
+LIB_MUL8:		; B:A = A*B (M2*M1)
+	LP	6	; E = 0
+	ANIM	0
+	LP	7
+	ANIM	0
+	LP	0	; move M1->I
+	EXAM
+	RA
+	EXAB		; move M2->A, 0->B
+	
+  LM81:
+	LP	0	; M1 >> 1
+	EXAM
+	RC
+	SR
+	EXAM
+	JRNCP	3	; if (c == 1)
+	LP	6	; E = E + M2
+	ADB
+	RC		; M2 << 1
+	SL
+	EXAB
+	SL
+	EXAB
+	LP	0	; if (M1 == 0) then break;
+	CPIM	0
+	JRZP	3
+	JRM	LM81
+	
+	LP	7	; B:A = E
+	EXAM
+	EXAB
+	LP	6
+	EXAM
+	RTN

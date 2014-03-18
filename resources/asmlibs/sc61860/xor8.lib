@@ -1,0 +1,22 @@
+LIB_XOR8:	; Executes n1 = n1 XOR n2 as A = A XOR B	(based on n1 XOR n2 = (NOT(n1 AND n2)) AND (n1 OR n2) )
+	PUSH	; save n1
+	LP	6	; P->I
+	EXAM	; I=n1
+	EXAB	; A=n2 (in B)
+	ORMA	; I=I(n1) OR A(n2)
+
+	EXAB	; B=n2
+	POP	; A=n1
+	EXAB	; A=n2, B=n1
+	LP	3	; P->B
+	ANMA	; B=B(n1) AND A(n2)
+	LIA	255	; A=255
+	EXAB	; B=255, A=result of AND
+	SBM	; B=B(255)-A(result of AND)
+
+	LP	6	; P->I
+	EXAB	; A=~(n1 AND n2)
+	ANMA	; I=I(n1 OR n2) AND A(~(n1 AND n2))
+	LDM	; A=I(result)
+
+	RTN

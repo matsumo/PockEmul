@@ -1,0 +1,9 @@
+"Edit LM" pour SHARP PC-1401.
+© J.-F. Vignaud, Nano-ordinateurs, 1987.
+
+Paru dans "Nano-ordinateurs" n°3, juillet 1987.
+
+Programme binaire relogeable de 814 octets.
+
+CLOAD M"EDIT LM";16384
+CALL 16384

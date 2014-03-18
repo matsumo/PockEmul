@@ -1,0 +1,60 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Language" content="fr">
+<meta name="GENERATOR" content="Microsoft FrontPage 5.0">
+<meta name="ProgId" content="FrontPage.Editor.Document">
+<meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+<title>Release Notes</title>
+</head>
+
+<body>
+<p align="center"><b><font size="6">Script Simulator help</font></b></p>
+
+<p><b><font size="5">Entry Point</font></b></p>
+<p> At each cpu cycle, the <b>run</b> function is called. You MUST define this function :
+<code>function run(){
+} </code>
+
+<p><b><font size="5">Available functions</font></b></p>
+<ul>
+    <li><b>ScriptLog(String)</b></li>
+    Send a String to the Log Dialog on the "Simulator" topic
+    <li>bool GoDown(int pinId)</li>
+    <li>bool GoUp(int pinId)</li>
+    <li>bool Change(int pinId)</li>
+    <li>timerInit(int id)</li>
+    <li>int timerMsElapsed(int id)</li>
+    <li>int timerUsElapsed(int id)</li>
+    <livoid setMarker(int markId)</li>
+    <li><b>Connector Objects</b>
+        <ul>
+        <li> qint64	Get_values()</li>
+        return the connector value
+        <li> void	Set_values(qint64 val)</li>
+        Set the connector value
+        <li> bool	Get_pin(int pinId)</li>
+        <li> void	Set_pin(int pinId , bool)</li>
+        </ul>
+    </li>
+</ul>
+
+
+<p><b><font size="5">Constants</font></b></p>
+<p>MT_OUT2	1
+<p>GND		2
+<p>VGG		3
+<p>BUSY		4
+<p>D_OUT	5
+<p>MT_IN	6
+<p>MT_OUT1	7
+<p>D_IN		8
+<p>ACK		9
+<p>SEL2		10
+<p>SEL1		11
+
+
+
+
+
+</body>

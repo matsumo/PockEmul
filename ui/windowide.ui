@@ -1,0 +1,770 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>WindowIDE</class>
+ <widget class="QMainWindow" name="WindowIDE">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QHBoxLayout" name="horizontalLayout_3">
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <property name="sizeConstraint">
+       <enum>QLayout::SetMaximumSize</enum>
+      </property>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QTabWidget" name="tabWidget">
+          <property name="tabShape">
+           <enum>QTabWidget::Rounded</enum>
+          </property>
+          <property name="currentIndex">
+           <number>-1</number>
+          </property>
+          <property name="tabsClosable">
+           <bool>true</bool>
+          </property>
+          <property name="movable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_All"/>
+   </widget>
+   <widget class="QMenu" name="menuBuild">
+    <property name="title">
+     <string>Build</string>
+    </property>
+    <addaction name="actionCompile"/>
+    <addaction name="separator"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuBuild"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QDockWidget" name="outputdockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="features">
+    <set>QDockWidget::DockWidgetClosable|QDockWidget::DockWidgetFloatable</set>
+   </property>
+   <property name="windowTitle">
+    <string>Output</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>8</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QTabWidget" name="outputtabWidget">
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+       <property name="tabsClosable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="filesDockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="MinimumExpanding" vsizetype="Preferred">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="accessibleName">
+    <string/>
+   </property>
+   <property name="windowTitle">
+    <string>Files</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_3">
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTreeView" name="treeView"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="projectDockWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Preferred" vsizetype="Minimum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="minimumSize">
+    <size>
+     <width>274</width>
+     <height>116</height>
+    </size>
+   </property>
+   <property name="windowTitle">
+    <string>Project</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_2">
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_6">
+       <item>
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Target :</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QComboBox" name="targetComboBox">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>20</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>PC-1500</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1500.qrc">
+            <normaloff>:/pc1500/pc1500.png</normaloff>:/pc1500/pc1500.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1350</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1350.qrc">
+            <normaloff>:/pc1350/pc1350.png</normaloff>:/pc1350/pc1350.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1250</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1250.qrc">
+            <normaloff>:/pc1250/pc1250.png</normaloff>:/pc1250/pc1250.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1251</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1251.qrc">
+            <normaloff>:/pc1251/pc1251.png</normaloff>:/pc1251/pc1251.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1255</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1255/pc1255.jpg</normaloff>:/pc1255/pc1255.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1260</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1260/pc1260.jpg</normaloff>:/pc1260/pc1260.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1261</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1261/pc1261.jpg</normaloff>:/pc1261/pc1261.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1262</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1262/pc1262.jpg</normaloff>:/pc1262/pc1262.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1360</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1360/pc1360.jpg</normaloff>:/pc1360/pc1360.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1475</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1475/pc1475.jpg</normaloff>:/pc1475/pc1475.jpg</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::MinimumExpanding</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="vardockWidget">
+   <property name="windowTitle">
+    <string>var</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_4">
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QTextEdit" name="vartextEdit"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="procdockWidget">
+   <property name="windowTitle">
+    <string>proc</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>2</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_5">
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QTextEdit" name="proctextEdit"/>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QDockWidget" name="configDockWidget">
+   <property name="floating">
+    <bool>false</bool>
+   </property>
+   <property name="windowTitle">
+    <string>Configure</string>
+   </property>
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="QWidget" name="dockWidgetContents_6">
+    <layout class="QVBoxLayout" name="verticalLayout_5">
+     <item>
+      <widget class="QGroupBox" name="groupBox">
+       <property name="toolTip">
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;$1 : source filename&lt;/p&gt;&lt;p&gt;$2: source filename without extension&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       </property>
+       <property name="title">
+        <string>New Builder</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="leftMargin">
+         <number>2</number>
+        </property>
+        <property name="topMargin">
+         <number>2</number>
+        </property>
+        <property name="rightMargin">
+         <number>2</number>
+        </property>
+        <property name="bottomMargin">
+         <number>2</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_12">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_6">
+            <property name="text">
+             <string>Label</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderTitle"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_5">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label">
+            <property name="text">
+             <string>Command:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderFileName"/>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbOpenBuider">
+            <property name="text">
+             <string>...</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_14">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_8">
+            <property name="text">
+             <string>Pre-Build Cmd:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderPreBuild"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_7">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>Extensions:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderExt"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_10">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_4">
+            <property name="text">
+             <string>Binary generated file:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderBinFiles"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QLabel" name="label_5">
+            <property name="text">
+             <string>Output file:</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="leNewBuilderOutput"/>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_9">
+          <property name="leftMargin">
+           <number>2</number>
+          </property>
+          <property name="topMargin">
+           <number>2</number>
+          </property>
+          <property name="rightMargin">
+           <number>2</number>
+          </property>
+          <property name="bottomMargin">
+           <number>2</number>
+          </property>
+          <item>
+           <widget class="QPushButton" name="pbNBAdd">
+            <property name="text">
+             <string>Add</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbNBUpdate">
+            <property name="text">
+             <string>Update</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="pbNBRemove">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_2">
+       <property name="title">
+        <string>Defined builders</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_7">
+        <item>
+         <widget class="QListWidget" name="lwBuilders"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <layout class="QHBoxLayout" name="horizontalLayout_8">
+       <property name="leftMargin">
+        <number>2</number>
+       </property>
+       <property name="topMargin">
+        <number>2</number>
+       </property>
+       <property name="rightMargin">
+        <number>2</number>
+       </property>
+       <property name="bottomMargin">
+        <number>2</number>
+       </property>
+       <item>
+        <widget class="QComboBox" name="cbMB">
+         <property name="minimumSize">
+          <size>
+           <width>100</width>
+           <height>20</height>
+          </size>
+         </property>
+         <item>
+          <property name="text">
+           <string>PC-1500</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1500.qrc">
+            <normaloff>:/pc1500/pc1500.png</normaloff>:/pc1500/pc1500.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1350</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1350.qrc">
+            <normaloff>:/pc1350/pc1350.png</normaloff>:/pc1350/pc1350.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1250</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1250.qrc">
+            <normaloff>:/pc1250/pc1250.png</normaloff>:/pc1250/pc1250.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1251</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/pc1251.qrc">
+            <normaloff>:/pc1251/pc1251.png</normaloff>:/pc1251/pc1251.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1255</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1255/pc1255.jpg</normaloff>:/pc1255/pc1255.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1260</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1260/pc1260.jpg</normaloff>:/pc1260/pc1260.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1261</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1261/pc1261.jpg</normaloff>:/pc1261/pc1261.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1262</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1262/pc1262.jpg</normaloff>:/pc1262/pc1262.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1360</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1360/pc1360.jpg</normaloff>:/pc1360/pc1360.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>PC-1475</string>
+          </property>
+          <property name="icon">
+           <iconset>
+            <normaloff>:/pc1475/pc1475.jpg</normaloff>:/pc1475/pc1475.jpg</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbAddMB">
+         <property name="text">
+          <string>Add</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pbRemoveMB">
+         <property name="text">
+          <string>Remove</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <widget class="QGroupBox" name="groupBox_3">
+       <property name="title">
+        <string>Link Model/Builder</string>
+       </property>
+       <layout class="QVBoxLayout" name="verticalLayout_8">
+        <item>
+         <widget class="QListWidget" name="lwModelBuilder"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <action name="actionOpen">
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionSave_All">
+   <property name="text">
+    <string>Save All</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
+   </property>
+  </action>
+  <action name="actionCompile">
+   <property name="text">
+    <string>Compile</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionInstall">
+   <property name="text">
+    <string>Install ...</string>
+   </property>
+  </action>
+  <action name="actionTarget_Model">
+   <property name="text">
+    <string>Target Model</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+ </widget>
+ <resources>
+  <include location="../resources/pc1500.qrc"/>
+  <include location="../resources/pc1250.qrc"/>
+  <include location="../resources/pc1251.qrc"/>
+  <include location="../resources/pc1350.qrc"/>
+ </resources>
+ <connections/>
+</ui>

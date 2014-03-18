@@ -1,0 +1,194 @@
+<!DOCTYPE WEBLINKS>
+<weblinks version="1.0">
+    <model value="pc1211">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1211_e.html"/>
+        <url desc="Silicium (fr)" link="http://www.silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=73:pc1211&amp;catid=55:calcs"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1_OM_GB.pdf"/>
+    </model>
+    <model value="pc1245">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1245_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1245_OM_GB.pdf"/>
+    </model>
+    <model value="pc1250">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1250_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1251_OM_GB.pdf"/>
+    </model>
+    <model value="pc1251">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1251_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1251_OM_GB.pdf"/>
+    </model>
+    <model value="pc1255">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1255_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1251_OM_GB.pdf"/>
+    </model>
+    <model value="pc1260">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1260_e.html"/>
+        <url desc="Silicium (fr)" link="http://silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=176:sharp-pc-1260-1261-et-1262&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1260-1261_OM_FR_lite.pdf"/>
+</model>
+    <model value="pc1261">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1261_e.html"/>
+        <url desc="Silicium (fr)" link="http://silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=176:sharp-pc-1260-1261-et-1262&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1260-1261_OM_FR_lite.pdf"/>
+    </model>
+    <model value="pc1262">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1262_e.html"/>
+        <url desc="Silicium (fr)" link="http://silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=176:sharp-pc-1260-1261-et-1262&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1260-1261_OM_FR_lite.pdf"/>
+    </model>
+    <model value="pc1280">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1280_e.html"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1280_OM_DE.pdf"/>
+    </model>
+    <model value="pc1350">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1350_e.html"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1350_OM_FR.pdf"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1350_OM_DE.pdf"/>
+    </model>
+    <model value="pc1360">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1360_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1360_OM_GB.pdf"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1360_OM_DE.pdf"/>
+        </model>
+    <model value="pc1401">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1401_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1401_1402_OM_GB_small.pdf"/>
+    </model>
+    <model value="pc1402">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1402_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1401_1402_OM_GB_small.pdf"/>
+    </model>
+    <model value="pc1403">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1403_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1403_OM_GB.pdf"/>
+    </model>
+    <model value="pc1425">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1425_e.html"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1425_OM_FR.pdf"/>
+    </model>
+    <model value="pc1403H">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1403h_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1403_OM_GB.pdf"/>
+    </model>
+    <model value="pc1421">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1421_e.html"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1421_OM_DE.pdf"/>
+    </model>
+    <model value="pc1450">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1450_e.html"/>
+    </model>
+    <model value="pc1475">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1475_e.html"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1475_OM_DE.pdf"/>
+    </model>
+    <model value="pc1500">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1500_e.html"/>
+        <url desc="Silicium (fr)" link="http://silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=133:sharp-pc-1500&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC2_OM_GB.pdf"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1500_OM_FR.pdf"/>
+    </model>
+    <model value="pc1500a">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1500a_e.html"/>
+        <url desc="Silicium (fr)" link="http://silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=133:sharp-pc-1500&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC2_OM_GB.pdf"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1500A_OM_FR.pdf"/>
+    </model>
+    <model value="pc1600">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-1600_e.html"/>
+        <document desc="User Guide (de)" link="http://pockemul.free.fr/Documents/userguide/PC1600_OM_DE.pdf"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PC1600_OM_FR.pdf"/>
+    </model>
+    <model value="pc2500">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-2500_e.html"/>
+    </model>
+    <model value="trspc2">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/tandy/pc-2_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC2_OM_GB.pdf"/>
+    </model>
+
+    <model value="mc2200">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/seiko/mc-2200_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PC1245_OM_GB.pdf"/>
+    </model>
+    <model value="ce120p">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-120p_e.html"/>
+    </model>
+    <model value="ce123p">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-123p_e.html"/>
+        <url desc="A gift from Ledudu" link="http://casio.ledudu.com"/>
+    </model>
+    <model value="ce125">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-125_e.html"/>
+    </model>
+    <model value="ce126p">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-126p_e.html"/>
+    </model>
+    <model value="ce129p">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-129p_e.html"/>
+    </model>
+    <model value="mp220">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/seiko/mp-220_e.html"/>
+    </model>
+    <model value="ce140f">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/ce-140f_e.html"/>
+    </model>
+    <model value="x07">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/canon/x-07_e.html"/>
+        <url desc="Silicium (fr)" link="http://www.silicium.org/oldskool/calc/x07/index.htm"/>
+        <document desc="BASIC reference (fr)" link="http://pockemul.free.fr/Documents/userguide/X07/CarteReferenceBasicX-07.pdf"/>
+    </model>
+    <model value="pb1000">
+        <url desc="The original emulator" link="http://www.pisi.com.pl/piotr433/pb1000ee.htm"/>
+        <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=29&amp;serie=6"/>
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/pb-1000_e.html"/>
+        <url desc="Silicium wiki" link="http://www.silicium.org/wiki/index.php/CASIO_PB_1000"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PB1000/PB1000_OM_FR.pdf"/>
+    </model>
+    <model value="pb2000">
+        <url desc="The original emulator" link="http://www.pisi.com.pl/piotr433/pb2000ee.htm"/>
+        <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=60"/>
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/pb-2000c_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PB2000/PB2000_OM_GB.pdf"/>
+        <document desc="Introduction to C 1/3 (en)" link="http://pockemul.free.fr/Documents/userguide/PB2000/CasioPB2000C_I.pdf"/>
+        <document desc="Introduction to C 2/3 (en)" link="http://pockemul.free.fr/Documents/userguide/PB2000/CasioPB2000C_II.pdf"/>
+        <document desc="Introduction to C 3/3 (en)" link="http://pockemul.free.fr/Documents/userguide/PB2000/CasioPB2000C_III.pdf"/>
+    </model>
+    <model value="lbc1100">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/general/lbc-1100_e.html"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/General_LBC-1100.pdf"/>
+    </model>
+    <model value="e500">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-e500_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PCE500_OM_GB.pdf"/>
+    </model>
+    <model value="md100">
+        <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=671"/>
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/md-100_e.html"/>
+    </model>
+    <model value="fp100">
+        <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=1337"/>
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/fp-100_e.html"/>
+    </model>
+    <model value="g850">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-g850v_e.html"/>
+    </model>
+    <model value="fp200">
+        <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=169"/>
+        <url desc="Silicium (fr)" link="http://www.silicium.org/site/index.php?option=com_content&amp;view=article&amp;id=206:casio-fp-200&amp;catid=55:calcs&amp;Itemid=29"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/FP200_OM_FR.pdf"/>
+    </model>
+    <model value="tpc8300">
+        <url desc="MyCalcDB" link="http://casio.ledudu.com/pockets.asp?type=169"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Sanco_TPC-8300_e.pdf"/>
+    </model>
+    <model value="ti57">
+       <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI-57LCD_QRG_US.pdf"/>
+    </model>
+    <model value="rlh1000">
+       <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/hhc_user_guide.pdf"/>
+       <document desc="SnapBASIC Vol I (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapBASIC_vol1.pdf"/>
+       <document desc="SnapBASIC Vol II (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapBASIC_vol2.pdf"/>
+       <document desc="SnapFORTH Vol I Tutorial (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_I_Tutorial.pdf"/>
+       <document desc="SnapFORTH Vol II Reference Guide (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_II_Reference_Guide.pdf"/>
+    </model>
+</weblinks>

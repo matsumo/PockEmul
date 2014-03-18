@@ -1,0 +1,7 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>fp40</model>
+<Keyboard>
+    <KEY description="FEED" height="31" left="600" masterscancode="0x00" modifier="" scancode="0xc1" top="429" width="54"/>
+    <KEY description="MODE" height="120" left="641" masterscancode="0x00" modifier="" scancode="0xc9" top="251" width="50"/>
+</Keyboard>
+</KEYBMAP>

@@ -1,0 +1,14 @@
+LIB_CPG16:
+	EXAB		; HB check
+	LP	1
+	CPMA
+	JRCP	CPG1
+	JRNZP	CPG0
+	LP	0	; LB check
+	EXAB
+	CPMA
+	JRCP	CPG1
+  CPG0:	RA
+	RTN
+  CPG1:	LIA	255
+	RTN

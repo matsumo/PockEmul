@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pb2000/charset.bin</file>
+        <file>pb2000/pb-2000.png</file>
+        <file>pb2000/pb-2000lcd.png</file>
+        <file>pb2000/pb-2000symb.png</file>
+        <file>pb2000/rom0.bin</file>
+        <file>pb2000/rom1.bin</file>
+        <file>pb2000/om51p.bin</file>
+        <file>pb2000/om53b.bin</file>
+        <file>pb2000/om55l.bin</file>
+        <file>pb2000/basicoverlay.bmp</file>
+        <file>pb2000/coverlay.bmp</file>
+        <file>pb2000/prologoverlay.bmp</file>
+        <file>pb2000/prologoverlay.png</file>
+    </qresource>
+</RCC>

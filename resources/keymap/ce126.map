@@ -1,0 +1,10 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce126p</model>
+<Keyboard>
+    <KEY description="FEED" height="31" left="326" scancode="0xc1" top="256" width="31"/>
+    <KEY description="RMT ON" height="48" left="244" scancode="0xc5" top="251" width="41"/>
+    <KEY description="RMT OFF" height="49" left="196" scancode="0xc6" top="250" width="48"/>
+    <KEY description="POWER ON" height="48" left="87" scancode="0xc7" top="6" width="41"/>
+    <KEY description="POWER OFF" height="49" left="35" scancode="0xc8" top="4" width="48"/>
+</Keyboard>
+</KEYBMAP>

@@ -1,0 +1,12 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce122</model>
+<Keyboard>
+    <KEY description="FEED" height="31" left="92" masterscancode="0x00" modifier="" scancode="0xc1" top="256" width="31"/>
+    <KEY description="RMT ON" height="20" left="150" masterscancode="0x00" modifier="" scancode="0xc5" top="246" width="20"/>
+    <KEY description="RMT OFF" height="20" left="150" masterscancode="0x00" modifier="" scancode="0xc6" top="274" width="20"/>
+    <KEY description="POWER ON" height="20" left="257" masterscancode="0x00" modifier="" scancode="0xc7" top="251" width="20"/>
+    <KEY description="POWER OFF" height="20" left="258" masterscancode="0x00" modifier="" scancode="0xc8" top="273" width="20"/>
+    <KEY description="PRINT ON" height="20" left="203" masterscancode="0x00" modifier="" scancode="0xc3" top="251" width="20"/>
+    <KEY description="PRINT OFF" height="20" left="203" masterscancode="0x00" modifier="" scancode="0xc4" top="273" width="20"/>
+</Keyboard>
+</KEYBMAP>

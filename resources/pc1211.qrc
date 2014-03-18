@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1211/pc-1211.png</file>
+        <file>pc1211/char-1211.rom</file>
+        <file>pc1211/pc-1211lcd.png</file>
+        <file>pc1211/pc-1211symb.png</file>
+    </qresource>
+</RCC>

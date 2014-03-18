@@ -1,0 +1,45 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lcc/model/PC-1350/stdio.h</file>
+        <file>lcc/model/PC-1350/graph.h</file>
+        <file>lcc/model/__sound.h</file>
+        <file>lcc/model/PC-1350/sound.h</file>
+        <file>lcc/model/PC-1350/internal.h</file>
+        <file>lcc/model/PC-1251/internal.h</file>
+        <file>lcc/model/PC-1251/sound.h</file>
+        <file>lcc/model/__stdio.h</file>
+        <file>lcc/model/PC-1251/stdio.h</file>
+        <file>lcc/model/__internal.h</file>
+        <file>lcc/model/PC-1262/internal.h</file>
+        <file>lcc/model/PC-1262/sound.h</file>
+        <file>lcc/model/PC-1262/stdio.h</file>
+        <file>lcc/model/PC-1360/graph.h</file>
+        <file>lcc/model/PC-1360/internal.h</file>
+        <file>lcc/model/PC-1360/sound.h</file>
+        <file>lcc/model/PC-1360/stdio.h</file>
+        <file>lcc/model/PC-1250/internal.h</file>
+        <file>lcc/model/PC-1250/sound.h</file>
+        <file>lcc/model/PC-1250/stdio.h</file>
+        <file>lcc/model/PC-1255/internal.h</file>
+        <file>lcc/model/PC-1255/sound.h</file>
+        <file>lcc/model/PC-1255/stdio.h</file>
+        <file>lcc/model/PC-1260/internal.h</file>
+        <file>lcc/model/PC-1260/sound.h</file>
+        <file>lcc/model/PC-1260/stdio.h</file>
+        <file>lcc/model/PC-1261/internal.h</file>
+        <file>lcc/model/PC-1261/sound.h</file>
+        <file>lcc/model/PC-1261/stdio.h</file>
+        <file>lcc/model/PC-1475/internal.h</file>
+        <file>lcc/model/PC-1475/sound.h</file>
+        <file>lcc/model/PC-1475/stdio.h</file>
+        <file>lcc/model/__graph.h</file>
+        <file>lcc/model/PC-1250/graph.h</file>
+        <file>lcc/model/PC-1251/graph.h</file>
+        <file>lcc/model/PC-1255/graph.h</file>
+        <file>lcc/model/PC-1260/graph.h</file>
+        <file>lcc/model/PC-1261/graph.h</file>
+        <file>lcc/model/PC-1262/graph.h</file>
+        <file>lcc/model/PC-1475/graph.h</file>
+        <file>lcc/model/string.h</file>
+    </qresource>
+</RCC>

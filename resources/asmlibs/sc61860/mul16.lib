@@ -1,0 +1,38 @@
+LIB_MUL16:		; B:A = J:I*B:A (M2*M1)
+                ; look http://sgate.emt.bme.hu/patai/publications/z80guide/part4.html
+	LP	6	; E = 0
+	ANIM	0
+	LP	7
+	ANIM	0
+	
+  LM16:
+	LP	1	; M1 >> 1
+	EXAM
+	RC
+	SR
+	EXAM
+	DECP
+	EXAM
+	SR
+	EXAM
+	JRNCP	3	; if (c == 1)
+	LP	6	; E = E + M2
+	ADB
+	RC		; M2 << 1
+	SL
+	EXAB
+	SL
+	EXAB
+	LP	0	; if (M1 == 0) then complete;
+	CPIM	0
+    JRNZM	LM16
+	LP	1
+	CPIM	0
+    JRNZM	LM16
+	
+	LP	7	; B:A = E
+	EXAM
+	EXAB
+	LP	6
+	EXAM
+	RTN

@@ -1,0 +1,21 @@
+LIB_DIV8:	; A = A/B
+    CALL	divmod8
+	LP	0
+	LDM
+	RTN
+
+LIB_MOD8:
+    CALL	divmod8
+	EXAB
+	RTN
+
+divmod8:
+	LII	0
+	LP	3
+	EXAB
+div8_0:	CPMA
+	JRCP	div8_1
+	SBM
+	INCI
+	JRM	div8_0
+div8_1:	RTN

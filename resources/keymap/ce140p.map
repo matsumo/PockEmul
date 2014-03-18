@@ -1,0 +1,8 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce140p</model>
+<Keyboard>
+    <KEY description="FEED" height="31" left="747" scancode="0xc1" top="291" width="31"/>
+    <KEY description="PRINTER ON" height="31" left="750" scancode="0xc3" top="423" width="63"/>
+    <KEY description="SIO ON" height="31" left="816" scancode="0xc4" top="420" width="46"/>
+</Keyboard>
+</KEYBMAP>

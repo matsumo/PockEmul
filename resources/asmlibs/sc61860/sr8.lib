@@ -1,0 +1,8 @@
+LIB_SR8:
+	INCB
+	DECB
+	JRZP	5
+	RC
+	SR
+	JRM	6
+	RTN

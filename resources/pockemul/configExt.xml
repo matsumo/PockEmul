@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+ <demolauncher>
+   <demos>
+   <example idpocket="CE-122" filename="./" name="Sharp ce-122" image=":/ext/ce-122.png" connectortype="Sharp_9" conngender="female"/>
+   <example idpocket="CE-152" filename="./" name="Sharp ce-152" image=":/ext/ce-152.png" connectortype="Jack_3" conngender="female"/>
+   <example idpocket="CE-127R" filename="./" name="Sharp ce-127r" image=":/ext/ce-127r.png" connectortype="Jack_3" conngender="female"/>
+    <example idpocket="CE-125" filename="./" name="Sharp ce-125" image=":/ext/ce-125.png" connectortype="Sharp_11" conngender="male"/>
+    <example idpocket="MP-220" filename="./" name="Seiko MP-220" image=":/ext/mp-220.jpg" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="26-3591" filename="./" name="Tandy 26-3591" image=":/ext/26-3591.jpg" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-126P" filename="./" name="Sharp ce-126p" image=":/ext/ce-126p.png" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-123P" filename="./" name="Sharp ce-123p" image=":/ext/ce-123p.jpg" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-129P" filename="./" name="Sharp ce-129p" image=":/ext/ce-129p.jpg" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-120P" filename="./" name="Sharp ce-120p" image=":/ext/ce-120p.png" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-140P" filename="./" name="Sharp ce-140p" image=":/ext/ce-140p.jpg" connectortype="Sharp_15" conngender="male"/>
+     <example idpocket="CE-150" filename="./" name="Sharp ce-150" image=":/ext/ce-150.png" connectortype="Sharp_60" conngender="male"/>
+     <example idpocket="CE-153" filename="./" name="Sharp ce-153" image=":/pc1500/ce153.png" connectortype="Sharp_60" conngender="male"/>
+     <example idpocket="CE-162E" filename="./" name="Sharp ce-162e" image=":/pc1500/ce162e.png" connectortype="Sharp_60" conngender="male"/>
+     <example idpocket="CE-1560" filename="./" name="Sharp ce-1560" image=":/pc1500/ce1560_1.png" connectortype="Sharp_60" conngender="male"/>
+     <example idpocket="CE-140F" filename="./" name="Sharp ce-140f" image=":/ext/ce-140f.png" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="CE-1600P" filename="./" name="Sharp ce-1600p" image=":/ext/ce-1600p.png" connectortype="Sharp_60" conngender="male"/>
+     <example idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>
+     <example idpocket="Simulator" filename="./" name="Simulator" image=":/ext/simu.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="11Pins Cable" filename="./" name="Sharp EA-129C" image=":/ext/cable.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Casio MD-100" filename="./" name="Casio MD-100" image=":/ext/md-100.png" connectortype="Casio_30" conngender="female"/>
+     <example idpocket="Casio FP-100" filename="./" name="Casio FP-100" image=":/ext/fp100.png" connectortype="Centronics_36" conngender="female"/>
+     <example idpocket="Casio FP-40" filename="./" name="Casio FP-40" image=":/ext/fp40.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Nec PC-2021" filename="./" name="Nec PC-2021" image=":/ext/pc-2021.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Nec PC-2081" filename="./" name="Nec PC-2081" image=":/ext/pc-2081.png" connectortype="Jack_3" conngender="female"/>
+     <example idpocket="General CL-1000" filename="./" name="General CL-1000" image=":/ext/cl-1000.png" connectortype="General_20" conngender="male"/>
+     <example idpocket="SANCO TP-83" filename="./" name="SANCO TP-83" image=":/ext/tp-83.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Panasonic RL-P4002 Modem" filename="./" name="Panasonic RL-P4002 Modem (Not working)" image=":/rlh1000/rlp4002.png" connectortype="Panasonic_44" conngender="female;male"/>
+     <example idpocket="Panasonic RL-P6001" filename="./" name="Panasonic RL-P6001" image=":/rlh1000/rlp6001.png" connectortype="Panasonic_44" conngender="female;male"/>
+     <example idpocket="Panasonic RL-P9001 4Ko" filename="./" name="Panasonic RL-P9001 4Ko" image=":/rlh1000/rlp9002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9002 8Ko" filename="./" name="Panasonic RL-P9002 8Ko" image=":/rlh1000/rlp9002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9003 16Ko" filename="./" name="Panasonic RL-P9003 16Ko" image=":/rlh1000/rlp9002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9003R 16Ko ROM Simulator" filename="./" name="Panasonic RL-P9003R 16Ko ROM Simulator" image=":/rlh1000/rlp9003r.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9004 32Ko" filename="./" name="Panasonic RL-P9004 32Ko" image=":/rlh1000/rlp9002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9005 128Ko" filename="./" name="Panasonic RL-P9005 128Ko" image=":/rlh1000/rlp9002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P9006 EPROM Expander" filename="./" name="Panasonic RL-P9006 EPROM Expander" image=":/rlh1000/rlp9006.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P1004A" filename="./" name="Panasonic RL-P1004A" image=":/rlh1000/rlp1004a.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P1002" filename="./" name="Panasonic RL-P1002 (Not working)" image=":/rlh1000/rlp1002.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="Panasonic RL-P2001" filename="./" name="Panasonic RL-P2001 (Not working)" image=":/rlh1000/rlp2001.png" connectortype="Panasonic_44" conngender="male"/>
+     <example idpocket="SNAPBASIC" filename="./" name="SNAPBasic capsule" image=":/rlh1000/modimg/snapbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example idpocket="SNAPFORTH" filename="./" name="SNAPForth capsule" image=":/rlh1000/modimg/snapforth.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example idpocket="MSBASIC" filename="./" name="MSBasic capsule" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example idpocket="PORTACALC" filename="./" name="PortaCalc capsule" image=":/rlh1000/modimg/portacalc.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example idpocket="TELECOMP_I" filename="./" name="Telecomputing I" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example idpocket="PANACAPSFILE" filename="./" name="External Capsule file" image=":/rlh1000/modimg/capsule.png" connectortype="Panasonic_Capsule" conngender="male"/>
+   <example idpocket="HP82143A" filename="./" name="Printer (non-HP-IL) 82143A" image=":/hp41/modimg/hp82143a.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP82160A" filename="./" name="HP-IL module 82160A" image=":/hp41/modimg/hp82160a.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP82153A" filename="./" name="Optical wand 82153A" image=":/hp41/modimg/hp82153a.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41ADVANTAGE" filename="./" name="Advantage" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41CCD" filename="./" name="CCD" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41FORTH" filename="./" name="Forth" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41GAMES" filename="./" name="Games" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41HEPAX" filename="./" name="Hepax" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41MATH" filename="./" name="Math" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41MATHSTAT" filename="./" name="Math Stat" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41PPC" filename="./" name="PPC-ROM" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   <example idpocket="HP41MODFILE" filename="./" name="External MOD file" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
+   </demos>
+ </demolauncher>
+

@@ -1,0 +1,11 @@
+LIB_SL16:
+	INCI
+	DECI
+	JRZP	8
+	RC
+	SL
+	EXAB
+	SL
+	EXAB
+	JRM	9
+	RTN

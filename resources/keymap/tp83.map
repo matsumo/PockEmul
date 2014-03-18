@@ -1,0 +1,9 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>tp83</model>
+<Keyboard>
+    <KEY description="PRINT ON" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xc3" top="0" width="20"/>
+    <KEY description="PRINT OFF" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xc4" top="0" width="20"/>
+    <KEY description="FEED" height="20" left="400" masterscancode="0x00" modifier="" scancode="0xc1" top="68" width="31"/>
+    <KEY description="Back FEED" height="20" left="399" masterscancode="0x00" modifier="" scancode="0xc2" top="114" width="36"/>
+</Keyboard>
+</KEYBMAP>

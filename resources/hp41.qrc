@@ -1,0 +1,35 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hp41/MOD/NUT-C.MOD</file>
+        <file>hp41/MOD/NUT-CX.MOD</file>
+        <file>hp41/MOD/PRINTER.MOD</file>
+        <file>hp41/MOD/FORTH.MOD</file>
+        <file>hp41/MOD/GAMES.MOD</file>
+        <file>hp41/MOD/HEPAX.MOD</file>
+        <file>hp41/MOD/WAND.MOD</file>
+        <file>hp41/MOD/MATH.MOD</file>
+        <file>hp41/MOD/MATHSTAT.MOD</file>
+        <file>hp41/MOD/ADVANTAGE.MOD</file>
+        <file>hp41/MOD/CCD.MOD</file>
+        <file>hp41/MOD/PPC.MOD</file>
+        <file>hp41/hp41.png</file>
+        <file>hp41/hp41lcd.png</file>
+        <file>hp41/LCD4.ttf</file>
+        <file>hp41/41chrset.ttf</file>
+        <file>hp41/top.png</file>
+        <file>hp41/back.png</file>
+        <file>hp41/left.png</file>
+        <file>hp41/right.png</file>
+        <file>hp41/hp82143a.png</file>
+        <file>hp41/hp82143a_mode_man.png</file>
+        <file>hp41/hp82143a_mode_norm.png</file>
+        <file>hp41/hp82143a_cover.png</file>
+        <file>hp41/modimg/hp82143a.png</file>
+        <file>hp41/modimg/hp82153a.png</file>
+        <file>hp41/modimg/hp82160a.png</file>
+        <file>hp41/modimg/module.png</file>
+        <file>hp41/modimg/hepax.png</file>
+        <file>hp41/hp41symb.png</file>
+        <file>hp41/MOD/HPIL.MOD</file>
+    </qresource>
+</RCC>

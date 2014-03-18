@@ -1,0 +1,15 @@
+LIB_XOR16:	; Executes n1 = n1 XOR n2 as B:A = B:A XOR J:I	(based on n1 XOR n2 = (NOT(n1 AND n2)) AND (n1 OR n2) )
+	EXAB
+	LP	0
+	EXAM
+	EXAB
+	CALL	LIB_XOR8
+	PUSH
+	LP	1
+	EXAM
+	CALL	LIB_XOR8
+	EXAB
+	POP
+
+	RTN
+

@@ -1,0 +1,9 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce1600p</model>
+<Keyboard>
+    <KEY description="PRINT ON" height="31" left="735" masterscancode="0x00" modifier="" scancode="0xc3" top="410" width="36"/>
+    <KEY description="PRINT OFF" height="29" left="696" masterscancode="0x00" modifier="" scancode="0xc4" top="414" width="25"/>
+    <KEY description="FEED" height="20" left="946" masterscancode="0x00" modifier="" scancode="0xc1" top="417" width="60"/>
+    <KEY description="Back FEED" height="20" left="876" masterscancode="0x00" modifier="" scancode="0xc2" top="418" width="56"/>
+</Keyboard>
+</KEYBMAP>

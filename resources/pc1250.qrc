@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1250/1250A.bmp</file>
+        <file>pc1250/1250lcd.png</file>
+        <file>pc1250/1250symb.png</file>
+        <file>pc1250/PC-1250A.png</file>
+        <file>pc1250/bas-1250.rom</file>
+        <file>pc1250/cpu-1250.rom</file>
+        <file>pc1250/pc1250.png</file>
+        <file>pc1250/trspc3.png</file>
+        <file>pc1250/pc31k.png</file>
+        <file>pc1250/powerOFF.png</file>
+        <file>pc1250/powerPRO.png</file>
+        <file>pc1250/powerRSV.png</file>
+        <file>pc1250/powerRUN.png</file>
+        <file>pc1250/125xLeft.png</file>
+    </qresource>
+</RCC>

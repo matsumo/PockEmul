@@ -1,0 +1,86 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>pb2000</model>
+<Keyboard>
+    <KEY description="-" height="18" left="619" scancode="0x2d" top="182" width="25"/>
+    <KEY description="Tab" height="17" left="17" scancode="0xf" top="163" width="27"/>
+    <KEY description="&apos;" height="18" left="59" scancode="0xb0" top="163" width="27"/>
+    <KEY description="(" height="17" left="98" scancode="0x28" top="162" width="27"/>
+    <KEY description=")" height="17" left="136" scancode="0x29" top="163" width="27"/>
+    <KEY description="[" height="17" left="177" scancode="0x5b" top="163" width="27"/>
+    <KEY description="]" height="17" left="217" scancode="0x5d" top="164" width="27"/>
+    <KEY description="|" height="17" left="257" scancode="0x7c" top="163" width="27"/>
+    <KEY description="*" height="18" left="622" scancode="0x2a" top="147" width="25"/>
+    <KEY description="," height="17" left="348" scancode="0x2c" top="260" width="28"/>
+    <KEY description="." height="18" left="542" scancode="0x2e" top="258" width="25"/>
+    <KEY description="/" height="18" left="622" scancode="0x2f" top="108" width="25"/>
+    <KEY description=":" height="18" left="457" scancode="0x3a" top="228" width="27"/>
+    <KEY description=";" height="16" left="416" scancode="0x3b" top="229" width="27"/>
+    <KEY description="+" height="18" left="620" scancode="0x2b" top="220" width="25"/>
+    <KEY description="OFF" height="40" left="1" scancode="0xc8" top="84" width="10"/>
+    <KEY description="ON" height="40" left="-1" scancode="0xc7" top="28" width="10"/>
+    <KEY description="CLS" height="21" left="540" scancode="0xc" top="108" width="27"/>
+    <KEY description="DEL" height="18" left="581" scancode="0xa" top="33" width="26"/>
+    <KEY description="Down Arrow" height="17" left="541" scancode="0x4" top="66" width="27"/>
+    <KEY description="EXE Keyboard" height="20" left="579" scancode="0xd" top="257" width="67"/>
+    <KEY description="Equal" height="17" left="428" scancode="0x3d" top="196" width="29"/>
+    <KEY description="INS" height="17" left="502" scancode="0x9" top="35" width="27"/>
+    <KEY description="Left Arrow" height="19" left="500" scancode="0x6" top="65" width="29"/>
+    <KEY description="MODE" height="16" left="1" scancode="0x8" top="0" width="25"/>
+    <KEY description="On/Brk" height="21" left="499" scancode="0x3" top="107" width="27"/>
+    <KEY description="Rigth Arrow" height="16" left="580" scancode="0x7" top="67" width="27"/>
+    <KEY description="BS" height="22" left="579" scancode="0xd6" top="106" width="30"/>
+    <KEY description="[F]" height="17" left="456" scancode="0x11" top="163" width="28"/>
+    <KEY description="SML" height="26" left="18" scancode="0x14" top="254" width="30"/>
+    <KEY description="ANS" height="18" left="456" scancode="0xdc" top="261" width="29"/>
+    <KEY description="Space" height="18" left="391" scancode="0x20" top="260" width="50"/>
+    <KEY description="Up Arrow" height="19" left="540" scancode="0x5" top="34" width="28"/>
+    <KEY description="0" height="20" left="499" scancode="0x30" top="258" width="28"/>
+    <KEY description="1" height="20" left="499" scancode="0x31" top="221" width="27"/>
+    <KEY description="2" height="20" left="541" scancode="0x32" top="220" width="27"/>
+    <KEY description="3" height="20" left="581" scancode="0x33" top="221" width="27"/>
+    <KEY description="4" height="20" left="500" scancode="0x34" top="182" width="28"/>
+    <KEY description="5" height="20" left="540" scancode="0x35" top="181" width="28"/>
+    <KEY description="6" height="20" left="579" scancode="0x36" top="182" width="28"/>
+    <KEY description="7" height="20" left="499" scancode="0x37" top="144" width="28"/>
+    <KEY description="8" height="20" left="541" scancode="0x38" top="144" width="28"/>
+    <KEY description="9" height="20" left="580" scancode="0x39" top="146" width="28"/>
+    <KEY description="A" height="18" left="59" scancode="0x61" top="226" width="27"/>
+    <KEY description="B" height="18" left="229" scancode="0x62" top="259" width="27"/>
+    <KEY description="C" height="18" left="150" scancode="0x63" top="262" width="27"/>
+    <KEY description="D" height="18" left="138" scancode="0x64" top="229" width="27"/>
+    <KEY description="E" height="18" left="110" scancode="0x65" top="197" width="27"/>
+    <KEY description="F" height="18" left="178" scancode="0x66" top="228" width="27"/>
+    <KEY description="G" height="18" left="217" scancode="0x67" top="228" width="27"/>
+    <KEY description="H" height="18" left="257" scancode="0x68" top="228" width="27"/>
+    <KEY description="I" height="18" left="307" scancode="0x69" top="196" width="27"/>
+    <KEY description="J" height="18" left="296" scancode="0x6a" top="229" width="27"/>
+    <KEY description="K" height="18" left="336" scancode="0x6b" top="228" width="27"/>
+    <KEY description="L" height="18" left="377" scancode="0x6c" top="229" width="27"/>
+    <KEY description="M" height="18" left="309" scancode="0x6d" top="260" width="27"/>
+    <KEY description="N" height="18" left="269" scancode="0x6e" top="261" width="27"/>
+    <KEY description="O" height="18" left="349" scancode="0x6f" top="196" width="27"/>
+    <KEY description="P" height="18" left="388" scancode="0x70" top="196" width="27"/>
+    <KEY description="Q" height="18" left="28" scancode="0x71" top="194" width="27"/>
+    <KEY description="R" height="18" left="150" scancode="0x72" top="196" width="27"/>
+    <KEY description="S" height="18" left="98" scancode="0x73" top="227" width="27"/>
+    <KEY description="T" height="18" left="190" scancode="0x74" top="196" width="27"/>
+    <KEY description="U" height="18" left="268" scancode="0x75" top="196" width="27"/>
+    <KEY description="V" height="18" left="189" scancode="0x76" top="262" width="27"/>
+    <KEY description="W" height="18" left="69" scancode="0x77" top="195" width="27"/>
+    <KEY description="X" height="18" left="109" scancode="0x78" top="261" width="27"/>
+    <KEY description="Y" height="18" left="228" scancode="0x79" top="197" width="27"/>
+    <KEY description="Z" height="18" left="70" scancode="0x7a" top="260" width="27"/>
+    <KEY description="MENU" height="17" left="621" scancode="0xda" top="34" width="27"/>
+    <KEY description="CAL" height="18" left="621" scancode="0xe1" top="66" width="28"/>
+    <KEY description="ETC" height="13" left="445" scancode="0xfa" top="128" width="24"/>
+    <KEY description="NEW ALL" height="20" left="645" scancode="0x200" top="2" width="20"/>
+    <KEY description="CALC" height="15" left="417" scancode="0x202" top="164" width="27"/>
+    <KEY description="MEMO" height="18" left="296" scancode="0x203" top="163" width="29"/>
+    <KEY description="OUT" height="19" left="375" scancode="0x204" top="163" width="31"/>
+    <KEY description="IN" height="20" left="335" scancode="0x205" top="162" width="31"/>
+    <KEY description="F1" height="10" left="81" scancode="0xf6" top="130" width="50"/>
+    <KEY description="F2" height="10" left="176" scancode="0xf7" top="132" width="50"/>
+    <KEY description="F3" height="10" left="272" scancode="0xf8" top="132" width="50"/>
+    <KEY description="F4" height="10" left="368" scancode="0xf9" top="132" width="50"/>
+</Keyboard>
+</KEYBMAP>

@@ -1,0 +1,22 @@
+"Piles Jr." for Sharp PC-1500/TRS PC-2
+©2002 Kemsoft (Download the full Windows version of "Piles" at www.kemsoft.com)
+Author : Russ Kemsley.
+Unpublished.
+BASIC program - 1093 bytes.
+
+Piles Jr. is an addictive 6-card game of accordian. To win you must get down to one card.
+
+DEF SPACE to play
+
+Rules: You may cover up any card of the same suit or value, but the card must be either immediately to the left or the 3rd card to the left.
+
+Play:
+First select the card you want to move. The computer will beep (assuming you have beep on).
+Then select the card you wish to cover with the first card. The computer will beep again. 
+It it's a valid move, the cards will be rearranged accordingly. If it is not, you will
+get a message indicating so. 
+Feel free to contact the author at russ@kemsoft.com.
+
+Keys:
+F1-F6 select cards
+CL quit current game

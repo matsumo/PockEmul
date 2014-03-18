@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <author>Remy Rouvin</author>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>763</width>
+    <height>720</height>
+   </rect>
+  </property>
+  <property name="mouseTracking">
+   <bool>true</bool>
+  </property>
+  <property name="windowTitle">
+   <string>PockEmul</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff/>
+   </iconset>
+  </property>
+  <property name="layoutDirection">
+   <enum>Qt::LeftToRight</enum>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QVBoxLayout">
+    <property name="spacing">
+     <number>6</number>
+    </property>
+    <property name="leftMargin">
+     <number>9</number>
+    </property>
+    <property name="topMargin">
+     <number>9</number>
+    </property>
+    <property name="rightMargin">
+     <number>9</number>
+    </property>
+    <property name="bottomMargin">
+     <number>9</number>
+    </property>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>763</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuMonitor_2">
+    <property name="title">
+     <string>Monitor</string>
+    </property>
+    <addaction name="actionLog_Messages"/>
+    <addaction name="actionAnalogic_Port"/>
+   </widget>
+   <widget class="QMenu" name="menuRoot">
+    <property name="title">
+     <string>Session</string>
+    </property>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave_As"/>
+    <addaction name="separator"/>
+    <addaction name="actionExit"/>
+    <addaction name="actionTest"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout_PockEmul"/>
+    <addaction name="separator"/>
+    <addaction name="actionCheck_for_Updates"/>
+   </widget>
+   <widget class="QMenu" name="menuPockets">
+    <property name="title">
+     <string>View</string>
+    </property>
+    <addaction name="actionReset_Zoom"/>
+    <addaction name="actionMinimize_All"/>
+    <addaction name="actionClose_All"/>
+    <addaction name="separator"/>
+   </widget>
+   <widget class="QMenu" name="menuIDE">
+    <property name="title">
+     <string>IDE</string>
+    </property>
+    <addaction name="actionEditor"/>
+   </widget>
+   <addaction name="menuRoot"/>
+   <addaction name="menuMonitor_2"/>
+   <addaction name="menuPockets"/>
+   <addaction name="menuIDE"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+  <action name="actionAbout_PockEmul">
+   <property name="text">
+    <string>About PockEmul</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>New...</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Open</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Save</string>
+   </property>
+  </action>
+  <action name="actionSave_As">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Save As...</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="text">
+    <string>Close</string>
+   </property>
+  </action>
+  <action name="actionOn_Off">
+   <property name="text">
+    <string>On/Off</string>
+   </property>
+  </action>
+  <action name="actionSoft_Reset">
+   <property name="text">
+    <string>Soft Reset</string>
+   </property>
+  </action>
+  <action name="actionHard_Reset">
+   <property name="text">
+    <string>Hard Reset</string>
+   </property>
+  </action>
+  <action name="actionPrinter">
+   <property name="text">
+    <string>Printer...</string>
+   </property>
+  </action>
+  <action name="actionSerial_Interface">
+   <property name="text">
+    <string>Serial Interface</string>
+   </property>
+  </action>
+  <action name="actionLog_Messages">
+   <property name="text">
+    <string>Log Messages...</string>
+   </property>
+  </action>
+  <action name="actionCheck_for_Updates">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Check for Updates...</string>
+   </property>
+  </action>
+  <action name="actionExit">
+   <property name="text">
+    <string>Exit</string>
+   </property>
+  </action>
+  <action name="actionSkin_Editor">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Skin Editor ...</string>
+   </property>
+  </action>
+  <action name="actionExtensions">
+   <property name="text">
+    <string>Extensions...</string>
+   </property>
+  </action>
+  <action name="actionRegisters">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>Registers...</string>
+   </property>
+  </action>
+  <action name="actionI_O_Ports">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>I/O Ports...</string>
+   </property>
+  </action>
+  <action name="actionDesassembler">
+   <property name="text">
+    <string>Desassembler</string>
+   </property>
+  </action>
+  <action name="actionAnalogic_Port">
+   <property name="text">
+    <string>Analogic Port</string>
+   </property>
+  </action>
+  <action name="actionDfgdf">
+   <property name="text">
+    <string>dfgdf</string>
+   </property>
+  </action>
+  <action name="actionInternal_CPU_Memory">
+   <property name="text">
+    <string>Internal CPU Memory</string>
+   </property>
+  </action>
+  <action name="actionExternal_Memory">
+   <property name="text">
+    <string>External Memory</string>
+   </property>
+  </action>
+  <action name="actionSerial_Console">
+   <property name="text">
+    <string>Serial Console</string>
+   </property>
+  </action>
+  <action name="actionTape">
+   <property name="text">
+    <string>Tape</string>
+   </property>
+  </action>
+  <action name="actionKeyboard">
+   <property name="text">
+    <string>Keyboard</string>
+   </property>
+  </action>
+  <action name="actioncpu100">
+   <property name="text">
+    <string>100%</string>
+   </property>
+  </action>
+  <action name="actioncpu200">
+   <property name="text">
+    <string>200%</string>
+   </property>
+  </action>
+  <action name="actioncpu300">
+   <property name="text">
+    <string>300%</string>
+   </property>
+  </action>
+  <action name="actioncpu500">
+   <property name="text">
+    <string>500%</string>
+   </property>
+  </action>
+  <action name="actioncpumax">
+   <property name="text">
+    <string>Maximum speed</string>
+   </property>
+  </action>
+  <action name="actionNewLink">
+   <property name="text">
+    <string>New</string>
+   </property>
+  </action>
+  <action name="actionIdentify">
+   <property name="text">
+    <string>Identify</string>
+   </property>
+  </action>
+  <action name="actionMinimize_All">
+   <property name="text">
+    <string>Minimize All</string>
+   </property>
+  </action>
+  <action name="actionEditor">
+   <property name="text">
+    <string>Editor</string>
+   </property>
+  </action>
+  <action name="actionReset_Zoom">
+   <property name="text">
+    <string>Reset Zoom</string>
+   </property>
+  </action>
+  <action name="actionClose_All">
+   <property name="text">
+    <string>Close All</string>
+   </property>
+  </action>
+  <action name="actionTest">
+   <property name="text">
+    <string>test</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="0" margin="0"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>actionExit</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>255</x>
+     <y>167</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>

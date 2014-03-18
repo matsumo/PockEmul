@@ -1,0 +1,9 @@
+"Editor" pour SHARP PC-1261.
+© Nano-ordinateurs, 1987.
+
+Paru dans "Nano-ordinateurs" n°3, juillet 1987.
+
+Programme binaire relogeable de 744 octets.
+
+CLOAD M"EDITIOR";25088
+CALL 25088

@@ -1,0 +1,11 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>rlh1000</model>
+<Keyboard>
+    <KEY description="open/close" height="128" left="188" scancode="0x240" top="60" width="384" view="FRONT"/>
+    <KEY description="open/close" height="235" left="50" scancode="0x241" top="400" width="600" view="FRONT"/>
+    <KEY description="Disable Firmware" height="27" left="164" scancode="0x242" top="258" width="28" view="FRONT"/>
+    <KEY description="Enable Firmware" height="27" left="192" scancode="0x243" top="258" width="28" view="FRONT"/>
+    <KEY description="Firmware Page 0" height="27" left="164" scancode="0x244" top="287" width="28" view="FRONT"/>
+    <KEY description="Firmware Page 1" height="27" left="192" scancode="0x245" top="287" width="28" view="FRONT"/>
+</Keyboard>
+</KEYBMAP>

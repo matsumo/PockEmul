@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>lbc1100/lbc-1100.png</file>
+        <file>lbc1100/lbc-1100lcd.png</file>
+        <file>lbc1100/rom-0000-0FFF.bin</file>
+        <file>lbc1100/lbc-4000-4FFF.bin</file>
+        <file>lbc1100/lbc-5000-5FFF.bin</file>
+        <file>lbc1100/lbc-6000-6FFF.bin</file>
+        <file>lbc1100/lbc-7000-7FFF.bin</file>
+    </qresource>
+</RCC>

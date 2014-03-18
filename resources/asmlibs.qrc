@@ -1,0 +1,21 @@
+<RCC>
+    <qresource prefix="/">
+        <file>asmlibs/sc61860/cpe16.lib</file>
+        <file>asmlibs/sc61860/cpeq16.lib</file>
+        <file>asmlibs/sc61860/cpg16.lib</file>
+        <file>asmlibs/sc61860/cpge16.lib</file>
+        <file>asmlibs/sc61860/cpne16.lib</file>
+        <file>asmlibs/sc61860/cps16.lib</file>
+        <file>asmlibs/sc61860/cpse16.lib</file>
+        <file>asmlibs/sc61860/divmod8.lib</file>
+        <file>asmlibs/sc61860/mul8.lib</file>
+        <file>asmlibs/sc61860/mul16.lib</file>
+        <file>asmlibs/sc61860/sl8.lib</file>
+        <file>asmlibs/sc61860/sl16.lib</file>
+        <file>asmlibs/sc61860/sr8.lib</file>
+        <file>asmlibs/sc61860/sr16.lib</file>
+        <file>asmlibs/sc61860/xor8.lib</file>
+        <file>asmlibs/sc61860/xor16.lib</file>
+        <file>asmlibs/sc61860/divmod16.lib</file>
+    </qresource>
+</RCC>

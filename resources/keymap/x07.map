@@ -1,0 +1,71 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>x07</model>
+<Keyboard>
+    <KEY description="F1" height="30" left="85" scancode="0x1000030" top="198" width="36"/>
+    <KEY description="F2" height="30" left="141" scancode="0x1000031" top="197" width="36"/>
+    <KEY description="F3" height="30" left="196" scancode="0x1000032" top="196" width="36"/>
+    <KEY description="F4" height="30" left="252" scancode="0x1000033" top="196" width="36"/>
+    <KEY description="F5" height="30" left="307" scancode="0x1000034" top="196" width="36"/>
+    <KEY description="INS" height="30" left="381" scancode="0x12" top="198" width="36"/>
+    <KEY description="DEL" height="30" left="438" scancode="0x16" top="197" width="36"/>
+    <KEY description="HOME/CLR" height="30" left="493" scancode="0xc" top="197" width="36"/>
+    <KEY description="On/Brk" height="30" left="620" scancode="0x3" top="196" width="36"/>
+    <KEY description="Off" height="30" left="564" scancode="0x100003b" top="195" width="36"/>
+    <KEY description="F6" height="39" left="583" scancode="0x1000035" top="84" width="38"/>
+    <KEY description="Down Arrow" height="30" left="573" scancode="0x1000015" top="133" width="57"/>
+    <KEY description="Left Arrow" height="55" left="544" scancode="0x1000012" top="77" width="36"/>
+    <KEY description="Rigth Arrow" height="55" left="628" scancode="0x1000014" top="76" width="30"/>
+    <KEY description="Up Arrow" height="29" left="577" scancode="0x1000013" top="48" width="53"/>
+    <KEY description="-" height="30" left="549" scancode="0x2d" top="241" width="36"/>
+    <KEY description="^" height="30" left="599" scancode="0x5e" top="241" width="36"/>
+    <KEY description="@" height="30" left="573" scancode="0x40" top="280" width="36"/>
+    <KEY description="[" height="30" left="624" scancode="0x5b" top="280" width="36"/>
+    <KEY description="]" height="30" left="637" scancode="0x5d" top="317" width="36"/>
+    <KEY description="," height="30" left="462" scancode="0x2c" top="358" width="36"/>
+    <KEY description="." height="30" left="514" scancode="0x2e" top="357" width="36"/>
+    <KEY description="/" height="30" left="562" scancode="0x2f" top="357" width="36"/>
+    <KEY description=":" height="30" left="586" scancode="0x3a" top="317" width="36"/>
+    <KEY description=";" height="30" left="538" scancode="0x3b" top="319" width="36"/>
+    <KEY description="?" height="30" left="612" scancode="0x3f" top="357" width="36"/>
+    <KEY description="RETURN" height="32" left="573" scancode="0xd" top="394" width="100"/>
+    <KEY description="GRPH" height="30" left="238" scancode="0x14" top="396" width="36"/>
+    <KEY description="NUM" height="30" left="188" scancode="0x15" top="396" width="36"/>
+    <KEY description="Space" height="32" left="287" scancode="0x20" top="395" width="137"/>
+    <KEY description="0" height="30" left="499" scancode="0x30" top="242" width="36"/>
+    <KEY description="1" height="30" left="48" scancode="0x31" top="241" width="36"/>
+    <KEY description="2" height="30" left="99" scancode="0x32" top="241" width="36"/>
+    <KEY description="3" height="30" left="151" scancode="0x33" top="241" width="36"/>
+    <KEY description="4" height="30" left="200" scancode="0x34" top="241" width="36"/>
+    <KEY description="5" height="30" left="249" scancode="0x35" top="240" width="36"/>
+    <KEY description="6" height="30" left="301" scancode="0x36" top="242" width="36"/>
+    <KEY description="7" height="30" left="350" scancode="0x37" top="241" width="36"/>
+    <KEY description="8" height="30" left="400" scancode="0x38" top="241" width="36"/>
+    <KEY description="9" height="30" left="449" scancode="0x39" top="240" width="36"/>
+    <KEY description="A" height="30" left="87" scancode="0x41" top="319" width="36"/>
+    <KEY description="B" height="30" left="312" scancode="0x42" top="357" width="36"/>
+    <KEY description="C" height="30" left="213" scancode="0x43" top="358" width="36"/>
+    <KEY description="D" height="30" left="187" scancode="0x44" top="319" width="36"/>
+    <KEY description="E" height="30" left="175" scancode="0x45" top="280" width="36"/>
+    <KEY description="F" height="30" left="238" scancode="0x46" top="319" width="36"/>
+    <KEY description="G" height="30" left="287" scancode="0x47" top="319" width="36"/>
+    <KEY description="H" height="30" left="338" scancode="0x48" top="318" width="36"/>
+    <KEY description="I" height="30" left="426" scancode="0x49" top="279" width="36"/>
+    <KEY description="J" height="30" left="388" scancode="0x4a" top="319" width="36"/>
+    <KEY description="K" height="30" left="437" scancode="0x4b" top="319" width="36"/>
+    <KEY description="L" height="30" left="488" scancode="0x4c" top="318" width="36"/>
+    <KEY description="M" height="30" left="413" scancode="0x4d" top="357" width="36"/>
+    <KEY description="N" height="30" left="361" scancode="0x4e" top="358" width="36"/>
+    <KEY description="O" height="30" left="475" scancode="0x4f" top="280" width="36"/>
+    <KEY description="P" height="30" left="525" scancode="0x50" top="281" width="36"/>
+    <KEY description="Q" height="30" left="74" scancode="0x51" top="281" width="36"/>
+    <KEY description="R" height="30" left="224" scancode="0x52" top="280" width="36"/>
+    <KEY description="S" height="30" left="137" scancode="0x53" top="320" width="36"/>
+    <KEY description="T" height="30" left="276" scancode="0x54" top="280" width="36"/>
+    <KEY description="U" height="30" left="376" scancode="0x55" top="280" width="36"/>
+    <KEY description="V" height="30" left="263" scancode="0x56" top="358" width="36"/>
+    <KEY description="W" height="30" left="126" scancode="0x57" top="281" width="36"/>
+    <KEY description="X" height="30" left="162" scancode="0x58" top="358" width="36"/>
+    <KEY description="Y" height="30" left="326" scancode="0x59" top="281" width="36"/>
+    <KEY description="Z" height="30" left="112" scancode="0x5a" top="358" width="36"/>
+</Keyboard>
+</KEYBMAP>

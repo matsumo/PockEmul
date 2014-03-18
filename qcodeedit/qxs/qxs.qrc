@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/QXS">
+        <file>xml.qnfa</file>
+        <file>snippet.qnfa</file>
+        <file>qtscript.qnfa</file>
+        <file>cpp.qnfa</file>
+        <file>xml.qxf</file>
+        <file>qtscript.qxf</file>
+        <file>formats.qxf</file>
+        <file>cpp.qxf</file>
+        <file>marks.qxm</file>
+        <file>asm.qnfa</file>
+        <file>asm.qxf</file>
+    </qresource>
+</RCC>

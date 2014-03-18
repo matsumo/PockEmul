@@ -1,0 +1,509 @@
+<ui version="4.0" >
+ <class>DialogStartup</class>
+ <widget class="QDialog" name="DialogStartup" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>709</width>
+    <height>557</height>
+   </rect>
+  </property>
+  <property name="sizePolicy" >
+   <sizepolicy>
+    <hsizetype>0</hsizetype>
+    <vsizetype>0</vsizetype>
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle" >
+   <string>Startup</string>
+  </property>
+  <property name="sizeGripEnabled" >
+   <bool>true</bool>
+  </property>
+  <property name="modal" >
+   <bool>true</bool>
+  </property>
+  <layout class="QHBoxLayout" >
+   <property name="margin" >
+    <number>9</number>
+   </property>
+   <property name="spacing" >
+    <number>6</number>
+   </property>
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Pocket</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="listWidget" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="mouseTracking" >
+          <bool>true</bool>
+         </property>
+         <property name="toolTip" >
+          <string>Double Click to launch a model</string>
+         </property>
+         <property name="lineWidth" >
+          <number>1</number>
+         </property>
+         <property name="horizontalScrollBarPolicy" >
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>150</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="movement" >
+          <enum>QListView::Static</enum>
+         </property>
+         <property name="isWrapping" stdset="0" >
+          <bool>true</bool>
+         </property>
+         <property name="resizeMode" >
+          <enum>QListView::Adjust</enum>
+         </property>
+         <property name="layoutMode" >
+          <enum>QListView::SinglePass</enum>
+         </property>
+         <property name="spacing" >
+          <number>2</number>
+         </property>
+         <property name="viewMode" >
+          <enum>QListView::IconMode</enum>
+         </property>
+         <property name="modelColumn" >
+          <number>0</number>
+         </property>
+         <property name="uniformItemSizes" >
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text" >
+           <string>PC 1245</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1245.qrc" >:/PC1245/pc1245/pc1245.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1250</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1250.qrc" >:/PC1250/pc1250/pc1250.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Tandy PC-3</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1250.qrc" >:/PC1250/pc1250/trspc3.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1251</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1251.qrc" >:/PC1251/pc1251/pc1251.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1251H</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1251.qrc" >:/PC1251/pc1251/pc1251H.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1255</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1255.qrc" >:/PC1255/pc1255/pc1255.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1260</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1260.qrc" >:/PC1260/pc1260/pc1260.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1261</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1261.qrc" >:/PC1261/pc1261/pc1261.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1262</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1262.qrc" >:/PC1262/pc1262/pc1262.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1350</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1350.qrc" >:/PC1350/pc1350/pc1350.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1360</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1360.qrc" >:/PC1360/pc1360/pc1360.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1401</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1401.qrc" >:/PC1401/pc1401/pc1401.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1402</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1402.qrc" >:/PC1402/pc1402/pc1402.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1403</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1403.qrc" >:/PC1403/pc1403/pc1403.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1403H</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1403.qrc" >:/PC1403/pc1403/pc1403h.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1450</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1450.qrc" >:/PC1450/pc1450/pc1450.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1475</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1475.qrc" >:/PC1475/pc1475/pc1475.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1500</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1500.qrc" >:/PC1500/pc1500/pc1500.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>PC 1500A</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1500.qrc" >:/PC1500A/pc1500A/pc1500A.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>Tandy PC-2</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1500.qrc" >:/TRSPC2/pc1500/trspc2.jpg</iconset>
+          </property>
+         </item>
+		 <item>
+          <property name="text" >
+           <string>PC 1600</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/pc1600.qrc" >:/PC1600/pc1600/pc-1600.jpg</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_2" >
+      <attribute name="title" >
+       <string>Extensions</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="listWidget_2" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="mouseTracking" >
+          <bool>true</bool>
+         </property>
+         <property name="lineWidth" >
+          <number>1</number>
+         </property>
+         <property name="horizontalScrollBarPolicy" >
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>150</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="movement" >
+          <enum>QListView::Static</enum>
+         </property>
+         <property name="isWrapping" stdset="0" >
+          <bool>true</bool>
+         </property>
+         <property name="resizeMode" >
+          <enum>QListView::Adjust</enum>
+         </property>
+         <property name="layoutMode" >
+          <enum>QListView::SinglePass</enum>
+         </property>
+         <property name="spacing" >
+          <number>2</number>
+         </property>
+         <property name="viewMode" >
+          <enum>QListView::IconMode</enum>
+         </property>
+         <property name="modelColumn" >
+          <number>0</number>
+         </property>
+         <property name="uniformItemSizes" >
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text" >
+           <string>CE-125</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-125.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-126P</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-126p.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-123P</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-123p.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-129P</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-129p.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>26-3591</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/26-3591.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-140P</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-140p.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-150</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-150.jpg</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>CE-152</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/ce-152.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tab_3" >
+      <attribute name="title" >
+       <string>Custom</string>
+      </attribute>
+      <layout class="QVBoxLayout" >
+       <property name="margin" >
+        <number>9</number>
+       </property>
+       <property name="spacing" >
+        <number>6</number>
+       </property>
+       <item>
+        <widget class="QListWidget" name="listWidget_3" >
+         <property name="sizePolicy" >
+          <sizepolicy>
+           <hsizetype>5</hsizetype>
+           <vsizetype>5</vsizetype>
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="mouseTracking" >
+          <bool>true</bool>
+         </property>
+         <property name="lineWidth" >
+          <number>1</number>
+         </property>
+         <property name="horizontalScrollBarPolicy" >
+          <enum>Qt::ScrollBarAsNeeded</enum>
+         </property>
+         <property name="iconSize" >
+          <size>
+           <width>150</width>
+           <height>100</height>
+          </size>
+         </property>
+         <property name="movement" >
+          <enum>QListView::Static</enum>
+         </property>
+         <property name="isWrapping" stdset="0" >
+          <bool>true</bool>
+         </property>
+         <property name="resizeMode" >
+          <enum>QListView::Adjust</enum>
+         </property>
+         <property name="layoutMode" >
+          <enum>QListView::SinglePass</enum>
+         </property>
+         <property name="spacing" >
+          <number>2</number>
+         </property>
+         <property name="viewMode" >
+          <enum>QListView::IconMode</enum>
+         </property>
+         <property name="modelColumn" >
+          <number>0</number>
+         </property>
+         <property name="uniformItemSizes" >
+          <bool>false</bool>
+         </property>
+         <item>
+          <property name="text" >
+           <string>Serial Console</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/serial.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text" >
+           <string>11Pins Cable</string>
+          </property>
+          <property name="icon" >
+           <iconset resource="../resources/ext.qrc" >:/EXT/ext/cable.png</iconset>
+          </property>
+         </item>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="0" margin="0" />
+ <resources>
+  <include location="../resources/pockemul.qrc" />
+  <include location="../resources/ext.qrc" />
+  <include location="../resources/pc1245.qrc" />
+  <include location="../resources/pc1250.qrc" />
+  <include location="../resources/pc1251.qrc" />
+  <include location="../resources/pc1255.qrc" />
+  <include location="../resources/pc1260.qrc" />
+  <include location="../resources/pc1261.qrc" />
+  <include location="../resources/pc1262.qrc" />
+  <include location="../resources/pc1350.qrc" />
+  <include location="../resources/pc1360.qrc" />
+  <include location="../resources/pc1401.qrc" />
+  <include location="../resources/pc1402.qrc" />
+  <include location="../resources/pc1403.qrc" />
+  <include location="../resources/pc1450.qrc" />
+  <include location="../resources/pc1475.qrc" />
+  <include location="../resources/pc1500.qrc" />
+ </resources>
+ <connections/>
+</ui>

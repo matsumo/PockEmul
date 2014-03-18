@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1475/b0-1475.rom</file>
+        <file>pc1475/b1-1475.rom</file>
+        <file>pc1475/b2-1475.rom</file>
+        <file>pc1475/b3-1475.rom</file>
+        <file>pc1475/b4-1475.rom</file>
+        <file>pc1475/b5-1475.rom</file>
+        <file>pc1475/b6-1475.rom</file>
+        <file>pc1475/b7-1475.rom</file>
+        <file>pc1475/cpu-1475.rom</file>
+        <file>pc1475/1475lcd.png</file>
+        <file>pc1475/1475symb.png</file>
+        <file>pc1475/pc1475.png</file>
+    </qresource>
+</RCC>

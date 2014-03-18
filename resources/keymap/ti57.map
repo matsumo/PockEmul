@@ -1,0 +1,46 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ti57</model>
+<Keyboard>
+    <KEY description="-" height="20" left="214" masterscancode="0x00" modifier="" scancode="0x2d" top="407" width="20"/>
+    <KEY description="(" height="20" left="127" masterscancode="0x00" modifier="" scancode="0x28" top="335" width="20"/>
+    <KEY description=")" height="20" left="174" masterscancode="0x00" modifier="" scancode="0x29" top="332" width="20"/>
+    <KEY description="*" height="20" left="214" masterscancode="0x00" modifier="" scancode="0x2a" top="373" width="20"/>
+    <KEY description="." height="20" left="123" masterscancode="0x00" modifier="" scancode="0x2e" top="481" width="35"/>
+    <KEY description="/" height="20" left="216" masterscancode="0x00" modifier="" scancode="0x2f" top="334" width="20"/>
+    <KEY description="+" height="20" left="217" masterscancode="0x00" modifier="" scancode="0x2b" top="446" width="20"/>
+    <KEY description="CLR" height="20" left="220" masterscancode="0x00" modifier="" scancode="0xef" top="222" width="20"/>
+    <KEY description="INV" height="16" left="81" masterscancode="0x00" modifier="" scancode="0x0b" top="224" width="25"/>
+    <KEY description="Equal" height="20" left="214" masterscancode="0x00" modifier="" scancode="0x3d" top="481" width="20"/>
+    <KEY description="On/Off" height="21" left="204" masterscancode="0x00" modifier="" scancode="0xb2" top="121" width="31"/>
+    <KEY description="SHIFT1" height="20" left="37" masterscancode="0x00" modifier="" scancode="0x11" top="220" width="20"/>
+    <KEY description="0" height="20" left="77" masterscancode="0x00" modifier="" scancode="0x30" top="483" width="35"/>
+    <KEY description="1" height="20" left="76" masterscancode="0x00" modifier="" scancode="0x31" top="445" width="20"/>
+    <KEY description="2" height="20" left="123" masterscancode="0x00" modifier="" scancode="0x32" top="444" width="20"/>
+    <KEY description="3" height="20" left="168" masterscancode="0x00" modifier="" scancode="0x33" top="448" width="20"/>
+    <KEY description="4" height="20" left="75" masterscancode="0x00" modifier="" scancode="0x34" top="408" width="20"/>
+    <KEY description="5" height="20" left="123" masterscancode="0x00" modifier="" scancode="0x35" top="407" width="20"/>
+    <KEY description="6" height="20" left="168" masterscancode="0x00" modifier="" scancode="0x36" top="410" width="20"/>
+    <KEY description="7" height="20" left="74" masterscancode="0x00" modifier="" scancode="0x37" top="372" width="20"/>
+    <KEY description="8" height="20" left="120" masterscancode="0x00" modifier="" scancode="0x38" top="373" width="20"/>
+    <KEY description="9" height="20" left="168" masterscancode="0x00" modifier="" scancode="0x39" top="370" width="20"/>
+    <KEY description="+/-" height="20" left="168" masterscancode="0x00" modifier="" scancode="0xe0" top="483" width="20"/>
+    <KEY description="x^2" height="20" left="128" masterscancode="0x00" modifier="" scancode="0xe3" top="258" width="20"/>
+    <KEY description="SQRT(x)" height="20" left="172" masterscancode="0x00" modifier="" scancode="0xe4" top="260" width="20"/>
+    <KEY description="x^y" height="20" left="217" masterscancode="0x00" modifier="" scancode="0xe5" top="296" width="20"/>
+    <KEY description="1/x" height="20" left="216" masterscancode="0x00" modifier="" scancode="0xe9" top="259" width="20"/>
+    <KEY description="Ln" height="20" left="129" masterscancode="0x00" modifier="" scancode="0xeb" top="221" width="20"/>
+    <KEY description="GTO" height="20" left="42" masterscancode="0x00" modifier="" scancode="0x230" top="371" width="20"/>
+    <KEY description="SBR" height="20" left="41" masterscancode="0x00" modifier="" scancode="0x231" top="409" width="20"/>
+    <KEY description="RST" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x232" top="444" width="20"/>
+    <KEY description="R/S" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x233" top="482" width="20"/>
+    <KEY description="LRN" height="20" left="38" masterscancode="0x00" modifier="" scancode="0x234" top="257" width="20"/>
+    <KEY description="X&lt;&gt;T" height="20" left="84" masterscancode="0x00" modifier="" scancode="0x235" top="260" width="20"/>
+    <KEY description="SST" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x236" top="297" width="20"/>
+    <KEY description="STO" height="20" left="85" masterscancode="0x00" modifier="" scancode="0xdd" top="296" width="20"/>
+    <KEY description="RCL" height="20" left="128" masterscancode="0x00" modifier="" scancode="0xde" top="295" width="20"/>
+    <KEY description="SUM" height="20" left="176" masterscancode="0x00" modifier="" scancode="0x239" top="295" width="20"/>
+    <KEY description="BST" height="20" left="38" masterscancode="0x00" modifier="" scancode="0x23a" top="331" width="20"/>
+    <KEY description="EE" height="20" left="84" masterscancode="0x00" modifier="" scancode="0x23b" top="335" width="20"/>
+    <KEY description="CE" height="20" left="175" masterscancode="0x00" modifier="" scancode="0x23c" top="223" width="20"/>
+</Keyboard>
+</KEYBMAP>

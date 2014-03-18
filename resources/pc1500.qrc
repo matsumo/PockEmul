@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1500/CE-150.ROM</file>
+        <file>pc1500/SYS1500.ROM</file>
+        <file>pc1500/1500lcd.png</file>
+        <file>pc1500/1500symb.png</file>
+        <file>pc1500/pc1500.png</file>
+        <file>pc1500A/CE-150.ROM</file>
+        <file>pc1500A/SYS1500A.ROM</file>
+        <file>pc1500A/1500Alcd.png</file>
+        <file>pc1500A/1500Asymb.png</file>
+        <file>pc1500A/pc1500A.png</file>
+        <file>pc1500/pc2lcd.png</file>
+        <file>pc1500/pc2symb.png</file>
+        <file>pc1500/trspc2.png</file>
+        <file>pc1500/ce1560.png</file>
+        <file>pc1500/ce162e.bin</file>
+        <file>pc1500/ce162e.png</file>
+        <file>pc1500/ce153.png</file>
+        <file>pc1500/ce1560_1.png</file>
+        <file>pc1500/ce1560_cover.png</file>
+    </qresource>
+</RCC>

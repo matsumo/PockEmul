@@ -1,0 +1,9 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce120p</model>
+<Keyboard>
+    <KEY description="FEED" height="31" left="333" scancode="0xc1" top="321" width="31"/>
+    <KEY description="POWER ON" height="48" left="129" scancode="0xc7" top="313" width="41"/>
+    <KEY description="POWER OFF" height="49" left="76" scancode="0xc8" top="313" width="48"/>
+</Keyboard>
+</KEYBMAP>
+

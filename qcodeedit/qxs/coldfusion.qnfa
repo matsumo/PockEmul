@@ -1,0 +1,48 @@
+<!DOCTYPE QNFA>
+<QNFA language="ColdFusion" extensions="cfm;cfc;cfml;dbm" >
+	<context id="htmlComment" format="comment" >
+		<start parenthesis="htmlcomment:open" indent="1" fold="1">&lt;!--</start>
+		<stop parenthesis="htmlcomment:close" indent="1" fold="1">--&gt;</stop>
+	</context>
+	
+	<context id="cComment" format="comment" >
+		<start parenthesis="ccomment:open" indent="1" fold="1">/\*</start>
+		<stop parenthesis="ccomment:close" indent="1" fold="1">\*/</stop>
+	</context>
+	
+	<sequence id="entity" format="numbers">&amp;$w+;</sequence>
+	
+	<context id="closetag" format="numbers">
+		<start format="keyword" >&lt;/[$w$d:]+</start>
+		<stop format="keyword" parenthesis="xmltag:close@nomatch" indent="1" fold="1" >&gt;</stop>
+		
+	</context>
+	
+	<context id="script" >
+		<sequence format="preprocessor">[$w:\-]+$s*=</sequence>
+		
+		<context id="string" format="text" >
+			<start>"</start>
+			<stop>"</stop>
+			
+			<context id="embedded script" format="normal" >
+				<start format="preprocessor">#</start>
+				<stop format="preprocessor">#</stop>
+				
+				<embed target="ColdFusion:script" />
+			</context>
+		</context>
+	</context>
+	
+	<context id="opentag" format="numbers">
+		<start format="keyword" >&lt;[$w$d:]+</start>
+		<stop format="keyword" parenthesis="xmltag:open@nomatch" indent="1" fold="1" >&gt;</stop>
+		<stop format="keyword" >/$s*&gt;</stop>
+		
+		<embed target="ColdFusion:script" />
+	</context>
+	
+	<!--
+	<sequence id="tag/stop" parenthesis="xmltag:close@nomatch" indent="1" fold="1" format="keyword" >&lt;/[a-zA-Z0-9_:]+&gt;</sequence>
+	-->
+</QNFA>

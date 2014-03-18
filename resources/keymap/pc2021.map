@@ -1,0 +1,8 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>pc2021</model>
+<Keyboard>
+    <KEY description="FEED" height="20" left="214" masterscancode="0x00" modifier="" scancode="0xc1" top="307" width="52"/>
+    <KEY description="POWER ON" height="20" left="307" masterscancode="0x00" modifier="" scancode="0xc7" top="305" width="49"/>
+    <KEY description="POWER OFF" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xc8" top="0" width="20"/>
+</Keyboard>
+</KEYBMAP>

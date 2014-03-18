@@ -1,0 +1,16 @@
+Expression Parser written in C++
+
+Author: Nick Gammon
+Date:   14 September 2004
+
+Module to parse arithmetic expressions. For details see:
+
+http://www.gammon.com.au/forum/?id=4649
+
+
+(C) Copyright Nick Gammon 2004. Permission to copy, use, modify, sell and
+distribute this software is granted provided this copyright notice appears
+in all copies. This software is provided "as is" without express or implied
+warranty, and with no claim as to its suitability for any purpose.
+
+

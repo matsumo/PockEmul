@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>pc1245/1245lcd.png</file>
+        <file>pc1245/1245symb.png</file>
+        <file>pc1245/bas-1245.rom</file>
+        <file>pc1245/cpu-1245.rom</file>
+        <file>pc1245/pc1245.png</file>
+        <file>pc1245/mc2200.png</file>
+        <file>pc1245/mc2200lcd.png</file>
+        <file>pc1245/mc2200symb.png</file>
+        <file>pc1245/powerOFF.png</file>
+        <file>pc1245/powerPRO.png</file>
+        <file>pc1245/powerRUN.png</file>
+    </qresource>
+</RCC>

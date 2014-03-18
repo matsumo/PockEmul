@@ -1,0 +1,8 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>ce152</model>
+<Keyboard>
+    <KEY description="EJECT/LOAD" height="31" left="11" masterscancode="0x00" modifier="" scancode="0xd0" top="293" width="31"/>
+    <KEY description="PLAY" height="31" left="71" masterscancode="0x00" modifier="" scancode="0xd1" top="293" width="31"/>
+    <KEY description="RECORD" height="31" left="42" masterscancode="0x00" modifier="" scancode="0xd4" top="293" width="31"/>
+</Keyboard>
+</KEYBMAP>

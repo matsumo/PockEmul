@@ -1,0 +1,13 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>rlp4002</model>
+<Keyboard>
+    <KEY description="Module 1" height="127" left="88" masterscancode="0x00" modifier="" scancode="0x240" top="34" width="75"/>
+    <KEY description="Module 2" height="127" left="166" masterscancode="0x00" modifier="" scancode="0x241" top="34" width="75"/>
+    <KEY description="Module 3" height="127" left="242" masterscancode="0x00" modifier="" scancode="0x242" top="34" width="75"/>
+    <KEY description="Module 4" height="127" left="319" masterscancode="0x00" modifier="" scancode="0x243" top="34" width="75"/>
+    <KEY description="Module 5" height="127" left="88"  masterscancode="0x00" modifier="" scancode="0x244" top="164" width="75"/>
+    <KEY description="Module 6" height="127" left="166" masterscancode="0x00" modifier="" scancode="0x245" top="164" width="75"/>
+    <KEY description="Module 7" height="127" left="242" masterscancode="0x00" modifier="" scancode="0x246" top="164" width="75"/>
+    <KEY description="Module 8" height="127" left="319" masterscancode="0x00" modifier="" scancode="0x247" top="164" width="75"/>
+</Keyboard>
+</KEYBMAP>

@@ -1,0 +1,15 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>hp82143a</model>
+<Keyboard>
+    <KEY description="Print" height="31" left="373" masterscancode="0x00" modifier="" scancode="0xc0" top="343" width="51"/>
+    <KEY description="Paper Advance" height="31" left="497" masterscancode="0x00" modifier="" scancode="0xc1" top="344" width="51"/>
+    <KEY description="PRINTER ON" height="20" left="65" masterscancode="0x00" modifier="" scancode="0xc3" top="339" width="39"/>
+    <KEY description="PRINTER OFF" height="20" left="120" masterscancode="0x00" modifier="" scancode="0xc4" top="339" width="35"/>
+    <KEY description="Mode Trace" height="35" left="227" masterscancode="0x00" modifier="" scancode="0xca" top="373" width="20"/>
+    <KEY description="Mode Normal" height="20" left="263" masterscancode="0x00" modifier="" scancode="0xcb" top="384" width="45"/>
+    <KEY description="Mode Manual" height="20" left="178" masterscancode="0x00" modifier="" scancode="0xcc" top="385" width="41"/>
+    <KEY description="Intensity Min" height="20" left="178" masterscancode="0x00" modifier="" scancode="0xcd" top="355" width="40"/>
+    <KEY description="Intensity Normal" height="35" left="227" masterscancode="0x00" modifier="" scancode="0xce" top="323" width="20"/>
+    <KEY description="Intensity Max" height="20" left="263" masterscancode="0x00" modifier="" scancode="0xcf" top="355" width="40"/>
+</Keyboard>
+</KEYBMAP>

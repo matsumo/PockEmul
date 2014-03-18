@@ -1,0 +1,98 @@
+QML Templates
+=============
+
+The QML UI Templates Library will provide commonly used UI components for 
+generic use with QML. This library is not meant to replace the official Qt 
+Components project, but to provide larger templates for developers to take a 
+look and utilise in their own projects. 
+
+The UI Templates Library contains reusable UI elements and templates used in 
+the example applications RSSReader Example, Restaurant Application Example 
+and the MediaBrowser Example. 
+
+They are aimed to be the basic building blocks of QML applications focusing on 
+the UI. They are not only elementary UI components, like buttons or switches, 
+but rather more comprehensive templates like four views with tab navigation 
+bar or a list view + details view integrated, or a flickable path view for 
+browsing photos. 
+
+The style and graphics used in these elements are based on a uniform style, 
+which can be re-used in your own applications as you wish. The elements can 
+also be easily customised with different colors, styles, and graphics 
+according to your requirements. 
+
+
+FILES
+-------------------------------------------------------------------------------
+
+AccordionList/*
+
+- AccordionList template code and example usage
+
+DatePicker/*
+
+- DatePicker template code and example usage
+
+CoverFlow/*
+
+- CoverFlow template code and example usage
+
+ModalDialog/*
+
+- ModalDialog template code and example usage
+
+ModalNote/*
+
+- ModalNote template code and example usage
+
+PersistentModel/*
+
+- PersistentModel template code and example usage
+
+PopUp/*
+
+- PopUp template code and example usage
+
+SplashScreen/*
+
+- SplashScreen template code and example usage
+
+Switch/*
+
+- Switch template code and example usage
+
+TabBarNavigation/*
+
+- TabBarNavigation template code and example usage
+
+WaitIndicator/*
+
+- WaitIndicator template code and example usage
+
+screenshots/*
+  
+- Screenshots for the wiki page
+
+  
+INSTALLATION INSTRUCTIONS
+-------------------------------------------------------------------------------
+
+Desktop
+~~~~~~~~~~~~
+
+1. Download the templates ZIP file and unzip it into a directory of your 
+   choosing.
+
+2. Open up some templates example project and see how it works.
+
+3. Copy the template code into your own project and start using it.
+
+
+Developed with:
+
+- QtSDK 1.1beta
+
+
+VERSION HISTORY
+-------------------------------------------------------------------------------
+v1.0.0 Initial version published in Forum Nokia Projects.

@@ -1,0 +1,14 @@
+PC-2 Math Plotter: (c) 1982 Tandy Corporation. All rights reserved.
+
+"Math Plotter" consists of four programs:
+
+PLOT2R Planar Cartesian plotting. Performs graphic plotting of algebraic functions in planar Cartesian coordinates using the PC-2's high-resolution printer/plotter.
+
+PLOT2P Planar Polar plotting. Graphically plots algebraic functions in three-dimensional Cartesian coordinates.
+
+PLOT3R Three-dimensional Cartesian plotting.
+
+PLOT3C Cylindrical Polar plotting.
+
+All four programs feature self-modifying BASIC code that loads user-defined functions through software. You can define the plot limits, and the computer can store previous plot limits in memory. These programs will also display the last function set and give you a summary of function and plot limits on the plot.
+

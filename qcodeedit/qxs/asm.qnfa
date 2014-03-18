@@ -1,0 +1,235 @@
+<!DOCTYPE QNFA>
+<QNFA language="ASM" extensions="asm;inc" defaultLineMark="breakpoint">
+	<!-- <embed target="Doxygen"/> -->
+	
+	<context id="comment/multi" format="comment">
+		<start parenthesis="cppcomment:open" indent="1" fold="1">/\*</start>
+		<stop parenthesis="cppcomment:close" indent="1" fold="1">\*/</stop>
+	</context>
+	
+	<context id="comment/single" format="comment" >
+		<start>;</start>
+		<stop exclusive="false">\n</stop>
+		
+		<context id="evilJump" format="danger" >
+			<start>\\\n</start>
+			<stop exclusive="false">\n</stop>
+			<escape>\\</escape>
+		</context>
+	</context>
+	
+	<context id="preprocessor" format="preprocessor" transparency="true" stayOnLine="true" >
+        <start>\.</start>
+		<stop exclusive="false">\n</stop>
+		<escape>\\</escape>
+	</context>
+	
+    <sequence parenthesis="ifdef:open" indent="1" fold="1">#if</sequence>
+    <sequence parenthesis="ifdef:close" indent="1" fold="1">#endif</sequence>
+
+    <context id="preprocessorC" format="preprocessor" transparency="true" stayOnLine="true" >
+        <start exclusive="false">#</start>
+        <stop exclusive="false">\n</stop>
+        <escape>\\</escape>
+    </context>
+
+	<context id="data/string" format="text" >
+		<start>&quot;</start>
+		<stop>&quot;</stop>
+		<stop exclusive="false">\n</stop>
+		<sequence id="escape" format="escapeseq" >\\[nrtvf\\"'\n]</sequence>
+	</context>
+	
+	<context id="data/chars" format="text" >
+		<start>'</start>
+		<stop>'</stop>
+		<stop exclusive="false">\n</stop>
+		<sequence id="escape" format="escapeseq" >\\[nrtvf\\"'\n]</sequence>
+	</context>
+	
+	<sequence parenthesis="round:open">(</sequence>
+	<sequence parenthesis="round:close">)</sequence>
+	<sequence parenthesis="curly:open" indent="1" fold="1">{</sequence>
+	<sequence parenthesis="curly:close" indent="1" fold="1">}</sequence>
+	<sequence parenthesis="square:open">\[</sequence>
+	<sequence parenthesis="square:close">\]</sequence>
+	
+
+
+<!-- 	<list id="keywords/visibility" format="keyword">
+		<word parenthesis="visibility:boundary" fold="1" indent="1">public</word>
+		<word parenthesis="visibility:boundary" fold="1" indent="1">protected</word>
+		<word parenthesis="visibility:boundary" fold="1" indent="1">private</word>
+	</list> -->
+	
+
+	
+	<list id="keywords/data" format="keyword">
+
+<word>LII</word>					
+<word>LIJ</word>
+<word>LIA</word>
+<word>LIB</word>
+<word>IX</word>
+<word>DX</word>
+<word>IY</word>
+<word>DY</word>
+<word>MVW</word>
+<word>EXW</word>
+<word>MVB</word>
+<word>EXB</word>
+<word>ADN</word>
+<word>SBN</word>
+<word>ADW</word>
+<word>SBW</word>
+<word>LIDP</word>					
+<word>LIDL</word>
+<word>LIP</word>
+<word>LIQ</word>
+<word>ADB</word>
+<word>SBB</word>
+
+<word>MVWD</word>
+<word>EXWD</word>
+<word>MVBD</word>
+<word>EXBD</word>
+<word>SRW</word>
+<word>SLW</word>
+<word>FILM</word>
+<word>FILD</word>
+<word>LDP</word>
+<word>LDQ</word>
+<word>LDR</word>
+<word>RA</word>
+<word>IXL</word>
+<word>DXL</word>
+<word>IYS</word>
+<word>DYS</word>
+<word>JRNZP</word>
+<word>JRNZM</word>
+<word>JRNCP</word>
+<word>JRNCM</word>
+<word>JRP</word>
+<word>JRM</word>
+<word>RJMP</word>
+<word>LOOP</word>
+<word>STP</word>
+<word>STQ</word>
+<word>STR</word>
+<word>PUSH</word>
+<word>DATA</word>
+<word>RTN</word>
+<word>JRZP</word>
+<word>JRZM</word>
+<word>JRCP</word>
+<word>JRCM</word>
+<word>INCI</word>
+<word>DECI</word>
+<word>INCA</word>
+<word>DECA</word>
+<word>ADM</word>
+<word>SBM</word>
+<word>ANMA</word>
+<word>ORMA</word>
+<word>INCK</word>
+<word>DECK</word>
+<word>INCM</word>
+<word>DECM</word>
+<word>IN A</word>
+<word>NOPW</word>
+<word>WAIT</word>
+<word>CUP</word>
+<word>INCP</word>					
+<word>DECP</word>
+<word>STD</word>
+<word>MVDM</word>
+<word>READM</word>
+<word>MVMD</word>
+<word>READ</word>
+<word>LDD</word>
+<word>SWP</word>
+<word>LDM</word>
+<word>SL</word>
+<word>POP</word>
+<word>OUT A</word>
+<word>OUT F</word>
+<word>ANIM</word>					
+<word>ORIM</word>
+<word>TSIM</word>
+<word>CPIM</word>
+<word>ANIA</word>
+<word>ORIA</word>
+<word>TSIA</word>
+<word>CPIA</word>
+<word>CASE 2</word>
+<word>TEST</word>
+<word>CDN</word>
+<word>ADIM</word>					
+<word>SBIM</word>
+<word>ADIA</word>
+<word>SBIA</word>
+<word>CALL</word>
+<word>JP</word>
+<word>CASE1</word>
+<word>JPNZ</word>
+<word>JPNC</word>
+<word>JPZ</word>
+<word>JPC</word>
+<word>LP</word>						
+<word>INCJ</word>					
+<word>DECJ</word>
+<word>INCB</word>
+<word>DECB</word>
+<word>ADCM</word>
+<word>SBCM</word>
+<word>CPMA</word>
+<word>INCL</word>
+<word>DECL</word>
+<word>INCN</word>
+<word>DECN</word>
+<word>IN B</word>
+<word>NOPT</word>
+<word>SC</word>
+<word>RC</word>
+<word>SR</word>
+<word>ANID</word>
+<word>ORID</word>
+<word>TSID</word>
+<word>LEAVE</word>
+<word>EXAB</word>
+<word>EXAM</word>
+<word>OUT B</word>
+<word>OUT C</word>
+<word>CAL</word>
+	</list>
+	
+	
+	
+	
+	<list id="keywords/Qt" format="extra-keyword">
+        <word>HB</word>
+        <word>LB</word>
+	</list>
+	
+	<list id="ansi/trigraph" format="extra-keyword">
+		<prefix>\?\?</prefix>
+		<word>\(</word>
+		<word>\)</word>
+		<word>&lt;</word>
+		<word>&gt;</word>
+		<word>=</word>
+		<word>/</word>
+		<word>&apos;</word>
+		<word>!</word>
+		<word>-</word>
+	</list>
+	
+	<word id="QtCasts" format="extra-keyword">q$w+_cast</word>
+	
+	<word id="data/float" format="numbers">-?[0-9]*.[0-9]+f?</word>
+	<word id="data/hexadecimal" format="numbers">0[xX][0-9a-fA-F]+[ulUL]*</word>
+	<word id="data/octal" format="numbers">0[0-7]+</word>
+	<word id="data/decimal" format="numbers">-?[0-9]+[ulUL]*</word>
+
+    <word id="label" format="label">[0-9a-zA-Z]+:</word>
+</QNFA>

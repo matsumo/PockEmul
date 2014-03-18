@@ -1,0 +1,8 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>pc2081</model>
+<Keyboard>
+    <KEY description="EJECT/LOAD" height="48" left="354" masterscancode="0x00" modifier="" scancode="0xd0" top="357" width="61"/>
+    <KEY description="PLAY" height="48" left="166" masterscancode="0x00" modifier="" scancode="0xd1" top="359" width="32"/>
+    <KEY description="RECORD" height="46" left="116" masterscancode="0x00" modifier="" scancode="0xd4" top="360" width="37"/>
+</Keyboard>
+</KEYBMAP>

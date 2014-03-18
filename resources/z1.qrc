@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>z1/romz1gr.bin</file>
+        <file>z1/z1gr.png</file>
+        <file>z1/romz1.bin</file>
+        <file>z1/z1grlcd.png</file>
+        <file>z1/z1.png</file>
+        <file>z1/fx-890p.png</file>
+        <file>z1/z1Left.png</file>
+    </qresource>
+</RCC>

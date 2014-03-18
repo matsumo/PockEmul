@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/">
+        <file>core/pockemul.bmp</file>
+        <file>core/pdfpic.jpg</file>
+        <file>core/pdfthumbnail.jpg</file>
+        <file>core/back.png</file>
+        <file>core/bookcase.png</file>
+        <file>core/dev.png</file>
+        <file>core/exit.png</file>
+        <file>core/ext.png</file>
+        <file>core/folder.png</file>
+        <file>core/load.png</file>
+        <file>core/open.png</file>
+        <file>core/pdfthumbnail.png</file>
+        <file>core/pocket.png</file>
+        <file>core/save.png</file>
+        <file>core/cloud.png</file>
+        <file>core/cloud-white.png</file>
+        <file>core/PostIt.png</file>
+        <file>core/size-black.png</file>
+        <file>core/size-white.png</file>
+    </qresource>
+</RCC>

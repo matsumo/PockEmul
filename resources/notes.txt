@@ -1,0 +1,51 @@
+devices code :
+41 : CE-140F
+
+Devices code recherchés au boot :
+1280 : 41
+1475 : 41
+1360 : aucun
+1403H: 45
+1403 : 45
+
+Devices code recherchés au passage en mode calc:
+1280 : 41
+1475 : 41
+1360 : aucun
+1403H: aucun
+
+Devices code recherchés au SHIFT-PRINT :
+1280 : 0f 21
+1475 : 0f 21
+1360 : 0f 21
+1403H: 0f 20
+
+SETCOM 1200,N,8,1,CI
+    0x70 0x02 0x08 0x0D
+SETCOM 300,N,8,1,CI
+    0x70 0x00 0x08 0x0D
+SETCOM 1200,N,7,1,CI
+    0x70 0x12 0x08 0x0D
+SETCOM 1200,N,8,2,CI
+    0x70 0x22 0x08 0x0D
+
+
+ROM
+    0x7C
+
+OUTSTAT &41
+    0x71 0x41 0x0D
+
+INSTAT A
+    0x77
+
+
+ROM
+---
+Recois 8 Byte et plante aprés le 9eme
+Le 9eme doit etre un CheckSUM.
+Checksom += (x & 0F) + ((x>>8)&0F) attention ajouter le Carry sur le premier &0x0F
+Attend 10 paquets de 8 bytes
+Le dernier bloc
+Si commence par 0x75 alors .... les 8 suivants représentent le mot de passe (voir quel codage)
+
