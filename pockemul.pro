@@ -1,4 +1,3 @@
-
 QMAKE_CXXFLAGS += -fsigned-char
 
 CONFIG += qt \
@@ -79,6 +78,7 @@ UI_DIR += build/ui
 
 
 mac {
+DEFINES += NO_SOUND
     #debug:OBJECTS_DIR += build/o/wd
     release:OBJECTS_DIR += build/o/wr
 }
