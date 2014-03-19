@@ -1,0 +1,59 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <array name="qt_sources">
+        <item>https://download.qt-project.org/ministro/android/qt5/latest</item>
+    </array>
+    <string name="repository">default</string>
+    <array name="bundled_libs"/>
+    <array name="bundled_in_lib">
+        <item>lib--Managed_by_Qt_Creator--imports_Qt_labs_folderlistmodel_libqmlfolderlistmodelplugin.so:imports/Qt/labs/folderlistmodel/libqmlfolderlistmodelplugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--imports_Qt_labs_gestures_libqmlgesturesplugin.so:imports/Qt/labs/gestures/libqmlgesturesplugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--imports_Qt_labs_particles_libqmlparticlesplugin.so:imports/Qt/labs/particles/libqmlparticlesplugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--imports_Qt_labs_shaders_libqmlshadersplugin.so:imports/Qt/labs/shaders/libqmlshadersplugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_platforms_android_libqtforandroid.so:plugins/platforms/android/libqtforandroid.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_platforms_android_libqtforandroidGL.so:plugins/platforms/android/libqtforandroidGL.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_platforms_libqminimal.so:plugins/platforms/libqminimal.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_platforms_libqoffscreen.so:plugins/platforms/libqoffscreen.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqgif.so:plugins/imageformats/libqgif.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqico.so:plugins/imageformats/libqico.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqjpeg.so:plugins/imageformats/libqjpeg.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqmng.so:plugins/imageformats/libqmng.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqsvg.so:plugins/imageformats/libqsvg.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqtga.so:plugins/imageformats/libqtga.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqtiff.so:plugins/imageformats/libqtiff.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_imageformats_libqwbmp.so:plugins/imageformats/libqwbmp.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_bearer_libqgenericbearer.so:plugins/bearer/libqgenericbearer.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_sensors_libqtsensors_android.so:plugins/sensors/libqtsensors_android.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_sensors_libqtsensors_generic.so:plugins/sensors/libqtsensors_generic.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_sensorgestures_libqtsensorgestures_plugin.so:plugins/sensorgestures/libqtsensorgestures_plugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_sensorgestures_libqtsensorgestures_shakeplugin.so:plugins/sensorgestures/libqtsensorgestures_shakeplugin.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_sqldrivers_libqsqlite.so:plugins/sqldrivers/libqsqlite.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_accessible_libqtaccessiblequick.so:plugins/accessible/libqtaccessiblequick.so</item>
+        <item>lib--Managed_by_Qt_Creator--plugins_accessible_libqtaccessiblewidgets.so:plugins/accessible/libqtaccessiblewidgets.so</item>
+    </array>
+    <array name="bundled_in_assets">
+        <item>--Managed_by_Qt_Creator--/imports/builtins.qmltypes:imports/builtins.qmltypes</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/folderlistmodel/plugins.qmltypes:imports/Qt/labs/folderlistmodel/plugins.qmltypes</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/folderlistmodel/qmldir:imports/Qt/labs/folderlistmodel/qmldir</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/gestures/plugins.qmltypes:imports/Qt/labs/gestures/plugins.qmltypes</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/gestures/qmldir:imports/Qt/labs/gestures/qmldir</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/particles/plugins.qmltypes:imports/Qt/labs/particles/plugins.qmltypes</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/particles/qmldir:imports/Qt/labs/particles/qmldir</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/shaders/plugins.qmltypes:imports/Qt/labs/shaders/plugins.qmltypes</item>
+        <item>--Managed_by_Qt_Creator--/imports/Qt/labs/shaders/qmldir:imports/Qt/labs/shaders/qmldir</item>
+    </array>
+    <array name="qt_libs">
+        <item>gnustl_shared</item>
+        <item>Qt5Core</item>
+        <item>Qt5Gui</item>
+        <item>Qt5Network</item>
+        <item>Qt5Script</item>
+        <item>Qt5Sensors</item>
+        <item>Qt5Sql</item>
+        <item>Qt5Xml</item>
+        <item>Qt5Widgets</item>
+        <item>Qt5XmlPatterns</item>
+        <item>Qt5Declarative</item>
+        <item>Qt5PrintSupport</item>
+    </array>
+</resources>

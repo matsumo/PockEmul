@@ -1,0 +1,10 @@
+[8] fait monter le vaisseau
+[2] fait descendre le vaisseau
+[4] le fait avancer
+[6] le fait reculler
+[ENTER] tire (la cible se trouve devant le vaisseau)
+Mémoire : &6033->&6c2f
+(soit toute la mémoire utilisateur d'une machine non étendue)	
+Lancement : CALL &6505	 
+Les hi-scores stockés en &6FF6	 
+Paru dans le Sharpentier #13 mais patché pour qu'il fonctionne quelle que soit la ROM.

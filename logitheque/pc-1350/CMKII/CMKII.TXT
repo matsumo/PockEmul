@@ -1,0 +1,9 @@
+"Changer mkII" pour Sharp PC-1350.
+© Yas Soft, Pio, 1986, Nano-ordinateurs, 1987.
+
+Paru dans "Nano-ordinateurs" n°1, mars 1987.
+
+Programme binaire de 2865 octets.
+
+CLOAD M"CMKII",&6032
+CALL 26161

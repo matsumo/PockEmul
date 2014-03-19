@@ -1,0 +1,21 @@
+"Scramble 2" for Sharp PC-1500
+© Hebdogiciel, Shift editions
+Author : Jean-Marc Janin
+Published in "Hebdogiciel" # 81 - May 3,1985.
+
+NEW &40C5
+CLOAD "SCRAMBLE 2"
+
+1st execution:
+RUN
+Next times:
+DEF A or RUN
+
+Game :
+(Game in French) Go as far as you can. Get more fuel by shooting isolated dots 1 row from the top or the bottom of the screen.
+
+Keys :
+(4)(0) - up/down
+(8)(9)(/) - stop/normal/fast
+(E) horizontal shoot
+(Z) vertical shoot
