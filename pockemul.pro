@@ -612,7 +612,6 @@ RESOURCES +=  \
     resources/keymap.qrc \
     resources/stdlibs.qrc \
     qcodeedit/qxs/qxs.qrc \
-    src/core/lfhex/lfhex.qrc \
     resources/asmlibs.qrc \
     resources/core.qrc
 
