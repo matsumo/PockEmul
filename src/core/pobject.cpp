@@ -421,7 +421,10 @@ void CPObject::fillSoundBuffer(BYTE val)
 //    quint64 new_state;
     quint64 delta_state;
 	 
-    if (fillSoundBuffer_old_state == 0) fillSoundBuffer_old_state = pTIMER->state;
+    if ( (fillSoundBuffer_old_state == 0) ||
+         (fillSoundBuffer_old_state > pTIMER->state)) {
+        fillSoundBuffer_old_state = pTIMER->state;
+    }
 		
     if (getfrequency()==0) {
         mainwindow->audioMutex.lock();

@@ -602,20 +602,23 @@ void MainWindowPockemul::Minimize_All() {
 }
 
 bool MainWindowPockemul::Close_All() {
+
+    if (!listpPObject.isEmpty()) {
 #ifdef EMSCRIPTEN
-    saveAll = NO;
+        saveAll = NO;
 #else
-    switch (ask(mainwindow,"Do you want to save all sessions ?",3)) {
-    case 1: saveAll = YES;break;
-    case 2: saveAll = NO;break;
-    case 3: return false;
-    default: return true;
-    }
+        switch (ask(mainwindow,"Do you want to save all sessions ?",3)) {
+        case 1: saveAll = YES;break;
+        case 2: saveAll = NO;break;
+        case 3: return false;
+        default: return true;
+        }
 #endif
 
-    for (int k = 0; k < listpPObject.size(); k++)
-    {
-        listpPObject.at(k)->slotExit();
+        for (int k = 0; k < listpPObject.size(); k++)
+        {
+            listpPObject.at(k)->slotExit();
+        }
     }
 
     return true;
