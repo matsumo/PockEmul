@@ -83,6 +83,7 @@ DEFINES += NO_SOUND
     release:OBJECTS_DIR += build/o/wr
 }
 unix {
+DEFINES += NO_SOUND
     Debug:OBJECTS_DIR += build/o/wd
     Release:OBJECTS_DIR += build/o/wr
 }
