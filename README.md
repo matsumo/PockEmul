@@ -2,9 +2,9 @@ PockEmul
 ========
 PockEmul is a Multi-Pocket Computer emulator.
 
-http://pockemul.free.fr/forum/dev/device1.png
+![](http://pockemul.free.fr/forum/dev/device1.png)
 
-It is develop in C++ using Qt4.
+It is develop in C++ using Qt4 or Qt5.
 
 It is available on Win32, Linux, Mac OS X and Android
 
@@ -46,6 +46,9 @@ Main computer emulated:
  * Casio PB-2000C
  * Casio Z-1GR
  * NEC PC-2001
+ * Panasonic HHC
+ * TI-57
+ * HP-41
 
 Emulated Extensions:
  * Sharp ce-152
