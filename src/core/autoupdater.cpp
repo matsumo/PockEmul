@@ -63,7 +63,7 @@ void CAutoUpdater::downloadFile()
 
     QNetworkRequest request(url);
     QNetworkReply *reply = manager.get(request);
-
+    Q_UNUSED(reply)
 
 	checkButton->setEnabled(false);
 }

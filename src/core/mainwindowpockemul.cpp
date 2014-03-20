@@ -1163,7 +1163,7 @@ void MainWindowPockemul::updateFrameTimer()
 }
 
 void MainWindowPockemul::mousePressEvent	( QMouseEvent *event){
-    qWarning()<<"MainWindowPockemul::mousePressEvent";
+//    qWarning()<<"MainWindowPockemul::mousePressEvent";
     if (event->button() != Qt::LeftButton) {
         event->ignore();
 //        qWarning()<<"ignore event";
