@@ -85,6 +85,8 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     LcdFname		= P_RES(":/x07/x07lcd.png");
     SymbFname		= "";
 
+    RightFname  = P_RES(":/x07/x07Right.png");
+
     memsize		= 0x10000;
     InitMemValue	= 0x00;     // Mandatory : init memory to 0x00 !!!!!
 

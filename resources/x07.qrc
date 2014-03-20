@@ -4,5 +4,6 @@
         <file>x07/x07.png</file>
         <file>x07/x07lcd.png</file>
         <file>x07/x710.png</file>
+        <file>x07/x07Right.png</file>
     </qresource>
 </RCC>
