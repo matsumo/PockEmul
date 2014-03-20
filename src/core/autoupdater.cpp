@@ -63,7 +63,6 @@ void CAutoUpdater::downloadFile()
 
     QNetworkRequest request(url);
     QNetworkReply *reply = manager.get(request);
-    qWarning()<<"get:"<<url;
 
 
 	checkButton->setEnabled(false);
@@ -78,12 +77,10 @@ void CAutoUpdater::cancelDownload()
 
 void CAutoUpdater::downloadFinished(QNetworkReply *reply)
 {
-    qWarning()<<"finifshed";
     QUrl url = reply->url();
     if (reply->error()) {
         ask(mainwindow,tr("Download of %1 failed: %2").
             arg(url.toEncoded().constData()).arg(reply->errorString()),1);
-        qWarning()<<"fail:"<<reply->errorString();
     } else {
 
         QString result(reply->readAll());
@@ -91,12 +88,10 @@ void CAutoUpdater::downloadFinished(QNetworkReply *reply)
         if (result != POCKEMUL_VERSION){
             QMessageBox::about(this, tr("New Release"),tr("A new release is available\nCheck Web Site : http://pockemul.free.fr"));
             close();
-            qWarning()<<"ok1";
         }
         else {
             QMessageBox::about(this, tr("New Release"),tr("PockEmul is up-to-date"));
             close();
-            qWarning()<<"ok2";
         }
     }
 }
