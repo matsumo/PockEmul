@@ -15,21 +15,22 @@
 #include <QLabel>
 
 #include <QMainWindow>
-
+#include <QNetworkRequest>
+#include <QNetworkReply>
 
 #include "version.h"
 #include "common.h" 
 #include "autoupdater.h"
-#include "qhttp/qhttp.h"
 
 #define POCKEMUL_UPDATE_FILE "http://pockemul.free.fr/update/autoupdater.txt"
 
 extern QMainWindow *mainwindow;
-
+extern int ask(QWidget *parent,QString msg,int nbButton);
 
 CAutoUpdater::CAutoUpdater(QWidget *parent)
      : QDialog(parent)
 {
+    setAttribute(Qt::WA_DeleteOnClose, true);
 
 	checkButton = new QPushButton(tr("Retry"));
 	quitButton = new QPushButton(tr("Quit"));
@@ -41,9 +42,8 @@ CAutoUpdater::CAutoUpdater(QWidget *parent)
 
 	labelmsg = new QLabel(tr("Checking Updates"));
 	
-	http = new QHttp(this);
-	
-	connect(http, SIGNAL(done(bool)), this, SLOT(done(bool)));
+    connect(&manager, SIGNAL(finished(QNetworkReply*)),
+            SLOT(downloadFinished(QNetworkReply*)));
 	connect(checkButton, SIGNAL(clicked()), this, SLOT(downloadFile()));
 	connect(quitButton, SIGNAL(clicked()), this, SLOT(close()));
 	
@@ -60,39 +60,43 @@ void CAutoUpdater::downloadFile()
 {
 	QUrl url(POCKEMUL_UPDATE_FILE);
 	labelmsg->setText(tr("Ckecking Updates..."));
-	http->setHost(url.host(), url.port() != -1 ? url.port() : 80);
-	if (!url.userName().isEmpty())
-		http->setUser(url.userName(), url.password());
-	
-	httpRequestAborted = false;
-	httpGetId = http->get(url.path(), 0);
+
+    QNetworkRequest request(url);
+    QNetworkReply *reply = manager.get(request);
+    qWarning()<<"get:"<<url;
+
+
 	checkButton->setEnabled(false);
 }
 
 void CAutoUpdater::cancelDownload()
 {
-	httpRequestAborted = true;
-	http->abort();
+    httpRequestAborted = true;
 	checkButton->setEnabled(true);
 }
 
-void CAutoUpdater::done(bool error)
+
+void CAutoUpdater::downloadFinished(QNetworkReply *reply)
 {
-	if (error){
-		MSG_ERROR(http->errorString());
-	}
-	else {
-		QString result(http->readAll());
+    qWarning()<<"finifshed";
+    QUrl url = reply->url();
+    if (reply->error()) {
+        ask(mainwindow,tr("Download of %1 failed: %2").
+            arg(url.toEncoded().constData()).arg(reply->errorString()),1);
+        qWarning()<<"fail:"<<reply->errorString();
+    } else {
+
+        QString result(reply->readAll());
 //		MSG_ERROR(result)
         if (result != POCKEMUL_VERSION){
-			QMessageBox::about(this, tr("New Release"),tr("A new release is available\nCheck Web Site : http://pockemul.free.fr"));
-			close();
-		}
-		else {
-			QMessageBox::about(this, tr("New Release"),tr("PockEmul is up-to-date"));
-			close();		
-		}
-	}
-	QApplication::restoreOverrideCursor();
-	checkButton->setEnabled(true);
+            QMessageBox::about(this, tr("New Release"),tr("A new release is available\nCheck Web Site : http://pockemul.free.fr"));
+            close();
+            qWarning()<<"ok1";
+        }
+        else {
+            QMessageBox::about(this, tr("New Release"),tr("PockEmul is up-to-date"));
+            close();
+            qWarning()<<"ok2";
+        }
+    }
 }

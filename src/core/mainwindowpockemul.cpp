@@ -687,8 +687,8 @@ void MainWindowPockemul::Analogic()
 
 void MainWindowPockemul::CheckUpdates()
 {
-    CAutoUpdater dialogcheckupdate(this);
-    dialogcheckupdate.show();
+    CAutoUpdater *dialogcheckupdate = new CAutoUpdater(this);
+    dialogcheckupdate->show();
 }
 
 // FIXME: TURNON POCKET after full load

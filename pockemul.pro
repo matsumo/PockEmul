@@ -543,9 +543,6 @@ HEADERS += src/core/Connect.h \
     resources/lcc/model/__graph.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
-    qhttp/qringbuffer_p.h \
-    qhttp/qhttpauthenticator_p.h \
-    qhttp/qhttp.h \
 
 INCLUDEPATH += . \
     src/core \
@@ -802,8 +799,6 @@ SOURCES +=  \
     src/core/breakpoint.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
-    qhttp/qhttpauthenticator.cpp \
-    qhttp/qhttp.cpp \
 
 
 OTHER_FILES += \

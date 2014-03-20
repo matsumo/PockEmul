@@ -8,9 +8,9 @@
 
 
 #include <QDialog>
+#include <QNetworkAccessManager>
 
 class QDialogButtonBox;
-class QHttp;
 class QPushButton;
 class QLabel;
 
@@ -24,7 +24,7 @@ class CAutoUpdater : public QDialog
  private slots:
      void downloadFile();
      void cancelDownload();
-     void done(bool error);
+     void downloadFinished(QNetworkReply *reply);
 
  private:
      QPushButton *checkButton;
@@ -32,7 +32,8 @@ class CAutoUpdater : public QDialog
      QDialogButtonBox *buttonBox;
      QLabel		*labelmsg;
 
-     QHttp *http;
+     QNetworkAccessManager manager;
+
      int httpGetId;
      bool httpRequestAborted;
  };
