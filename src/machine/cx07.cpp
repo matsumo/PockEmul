@@ -86,6 +86,8 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     SymbFname		= "";
 
     RightFname  = P_RES(":/x07/x07Right.png");
+    LeftFname  = P_RES(":/x07/x07Left.png");
+    BackFname  = P_RES(":/x07/x07Back.png");
 
     memsize		= 0x10000;
     InitMemValue	= 0x00;     // Mandatory : init memory to 0x00 !!!!!

@@ -5,5 +5,7 @@
         <file>x07/x07lcd.png</file>
         <file>x07/x710.png</file>
         <file>x07/x07Right.png</file>
+        <file>x07/x07Back.png</file>
+        <file>x07/x07Left.png</file>
     </qresource>
 </RCC>
