@@ -16,8 +16,6 @@ public:
     CS6B0108(CPObject *parent);
     virtual ~CS6B0108();
 
-    virtual void    cmd_write(qint16 cmd);
-    virtual BYTE    cmd_read(qint16 cmd);
 
 };
 

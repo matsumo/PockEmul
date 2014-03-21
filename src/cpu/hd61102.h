@@ -54,6 +54,9 @@ public:
 
     void	addretrace (void);
 
+protected:
+    int outputRegister;
+
 private:
     quint64 last_state_cmd;
 };

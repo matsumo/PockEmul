@@ -30,6 +30,7 @@ CHD61102::CHD61102(CPObject *parent)
     info.status = 0;
     updated = false;
     last_state_cmd = 0;
+    outputRegister = -1;
 }
 
 CHD61102::~CHD61102() {
@@ -76,6 +77,7 @@ bool CHD61102::init()
     info.Yadr = 0;
     info.status = 0;
     updated = true;
+    outputRegister = -1;
 }
 
 BYTE CHD61102::instruction(qint16 cmd)
@@ -187,21 +189,31 @@ void CHD61102::cmd_write(qint16 cmd)
     AddLog(LOG_DISPLAY,tr("UPDATED write"));
 }
 
+
 BYTE CHD61102::cmd_read(qint16 cmd)
 {
+    BYTE value=0;
 
+    if (outputRegister==-1){
 
-    BYTE value = get8((info.Xadr * 0x40) + (info.Yadr==0 ? 63 : info.Yadr - 1) );
-    AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
-//    qWarning()<<tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0'));
-    (info.Yadr)++;
-    if (info.Yadr == 64) {
-        info.Yadr=0;
+        outputRegister = get8((info.Xadr * 0x40) + info.Yadr);
+        AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
+        //    qWarning()<<tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0'));
+
+    }
+    else {
+        (info.Yadr)++;
+        if (info.Yadr == 64) {
+            info.Yadr=0;
+        }
+        value = outputRegister;
+        outputRegister = -1;
     }
 
 //    if (pPC->fp_log) fprintf(pPC->fp_log,"LCD Read:%02x\n",value);
     return value;
 }
+
 
 void	CHD61102::Load_Internal(QFile *file){
     char t[16];
