@@ -227,15 +227,28 @@ void CPObject::maximizeWidth()
     }
 }
 
+void CPObject::FindAllLinked(CPObject * search, QList<CPObject *> * liste) {
+    int _size = liste->size();
+#ifdef AVOID
+    mainwindow->pdirectLink->findAllObj(search,liste);
+#else
+    mainwindow->pdirectLink->findAllObj(search,liste,false);
+#endif
+
+    if (liste->size()>_size) {
+        for (int i=_size;i<liste->size();i++){
+            FindAllLinked(liste->at(i), liste);
+        }
+    }
+}
+
 void CPObject::MoveWithLinked(QPoint p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
     ConList.append(this);
-#ifdef AVOID
-    mainwindow->pdirectLink->findAllObj(this,&ConList);
-#else
-    mainwindow->pdirectLink->findAllObj(this,&ConList,false);
-#endif
+
+    FindAllLinked(this,&ConList);
+
     for (int i=0;i<ConList.size();i++)
     {
         ConList.at(i)->Move(p);
