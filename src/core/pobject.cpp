@@ -599,7 +599,7 @@ void CPObject::tapAndHold(QMouseEvent * event)
     Q_UNUSED(event)
 
 #if 0
-#ifdef Q_OS_ANDROIS
+#ifdef Q_OS_ANDROID
     QContextMenuEvent *cme = new QContextMenuEvent(QContextMenuEvent::Mouse,QPoint(0,0),QPoint(0,0));
 #else
     QContextMenuEvent *cme = new QContextMenuEvent(QContextMenuEvent::Mouse,event->pos(),event->globalPos());
