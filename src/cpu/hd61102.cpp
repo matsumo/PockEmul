@@ -192,22 +192,14 @@ void CHD61102::cmd_write(qint16 cmd)
 
 BYTE CHD61102::cmd_read(qint16 cmd)
 {
-    BYTE value=0;
 
-    if (outputRegister==-1){
 
-        outputRegister = get8((info.Xadr * 0x40) + info.Yadr);
-        AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
-        //    qWarning()<<tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0'));
-
-    }
-    else {
-        (info.Yadr)++;
-        if (info.Yadr == 64) {
-            info.Yadr=0;
-        }
-        value = outputRegister;
-        outputRegister = -1;
+    BYTE value = get8((info.Xadr * 0x40) + (info.Yadr==0 ? 63 : info.Yadr - 1) );
+    AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
+//    qWarning()<<tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0'));
+    (info.Yadr)++;
+    if (info.Yadr == 64) {
+        info.Yadr=0;
     }
 
 //    if (pPC->fp_log) fprintf(pPC->fp_log,"LCD Read:%02x\n",value);

@@ -106,7 +106,7 @@ void Clcdc_e500::disp(void)
         {
             for (int j = 0 ; j < 8 ; j++)
             {
-            BYTE data = ((Ce500 *)pPC)->pHD61102_2->info.imem[ (j * 0x40) + i ];
+                BYTE data = ((Ce500 *)pPC)->pHD61102_2->info.imem[ (j * 0x40) + i ];
                 for (b=0; b<8;b++)
                 {
                     //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
