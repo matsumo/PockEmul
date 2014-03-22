@@ -15,6 +15,7 @@
 #include <QThread>
 #include <QPixmap>
 #include <QBitmap>
+#include <QDebug>
 
 #include "common.h"
 
@@ -73,20 +74,16 @@ void Cce140f::ComputeKey(void)
 bool Cce140f::init(void)
 {
     CPObject::init();
-
     setfrequency( 0);
     pCONNECTOR	   = new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",true,QPoint(597,310));	publish(pCONNECTOR);
     pCONNECTOR_Ext = new Cconnector(this,11,1,Cconnector::Sharp_11,"Connector 11 pins Ext.",false,QPoint(6,295));	publish(pCONNECTOR_Ext);
-
     WatchPoint.add(&pCONNECTOR_value,64,11,this,"Standard 11pins connector");
     WatchPoint.add(&pCONNECTOR_Ext_value,64,11,this,"Ext 11pins connector");
-
 
     AddLog(LOG_PRINTER,tr("CE-140F initializing..."));
 
     if(pKEYB)	pKEYB->init();
     if(pTIMER)	pTIMER->init();
-
 
 //	SET_PIN(PIN_ACK,DOWN);
 AddLog(LOG_PRINTER,tr("Initial value for PIN_BUSY %1").arg(GET_PIN(PIN_BUSY)?"1":"0"));
@@ -111,7 +108,6 @@ AddLog(LOG_PRINTER,tr("Initial value for PIN_BUSY %1").arg(GET_PIN(PIN_BUSY)?"1"
     ACK		= false;
     SEL2	= false;
     SEL1	= false;
-
     return true;
 }
 

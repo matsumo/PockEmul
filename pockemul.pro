@@ -1014,7 +1014,8 @@ OTHER_FILES += \
     resources/keymap/rlp9006.map \
     resources/keymap/rlp1004a.map \
     resources/keymap/rlp4002.map \
-    resources/keymap/ce1560.map
+    resources/keymap/ce1560.map \
+    resources/keymap/ce140f.map
 
 
 

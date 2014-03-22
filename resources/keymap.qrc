@@ -50,5 +50,6 @@
         <file>keymap/rlp1004a.map</file>
         <file>keymap/rlp4002.map</file>
         <file>keymap/ce1560.map</file>
+        <file>keymap/ce140f.map</file>
     </qresource>
 </RCC>
