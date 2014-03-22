@@ -133,14 +133,14 @@ void Cpc2021::Refreshpc2021(qint8 data)
         painter.end();
     }
 
-    if (posX >= 20) {
+    if (posX >= 40) {
         posX=0;
         top+=10;
     }
 
     painter.begin(pc2021display);
 
-    painter.drawImage(QRectF(0,MAX(149-top,0),165,MIN(top,149)),*pc2021buf,QRectF(0,MAX(0,top-149),170,MIN(top,149)));
+    painter.drawImage(QRectF(0,MAX(149-top,0),330,MIN(top,149)),*pc2021buf,QRectF(0,MAX(0,top-149),340,MIN(top,149)));
 
 // Draw printer head
 //    painter.fillRect(QRect(0 , 147,407,2),QBrush(QColor(0,0,0)));
@@ -194,8 +194,8 @@ bool Cpc2021::init(void)
 
     // Create CE-126 Paper Image
     // The final paper image is 207 x 149 at (277,0) for the ce125
-    pc2021buf	= new QImage(QSize(170, 3000),QImage::Format_ARGB32);
-    pc2021display= new QImage(QSize(170, 149),QImage::Format_ARGB32);
+    pc2021buf	= new QImage(QSize(340, 3000),QImage::Format_ARGB32);
+    pc2021display= new QImage(QSize(340, 149),QImage::Format_ARGB32);
 
 
 //TODO Update the chartable with upd16343 char table
@@ -305,3 +305,67 @@ bool Cpc2021::run(void)
 
     return true;
 }
+
+/*
+ *Nom du type: PC-2021
+Nom du produit: imprimante thermique 40 chiffres
+Prix: 23800
+Date de livraison: 83/12
+Méthode d'impression: transfert thermique (matricielle thermique)
+Disponible format de papier A5: × A4: × A3: × B5: × B4: ×
+Disponible feuille de coupe de type de papier: × continue: × copie: × roll: ○
+　　　　　　　　　  Carte postale: × OHP: × papier thermique: ○
+fil de la tête: 8
+Interface: Centro série
+Nombre de colonnes d'impression pica: 40
+　　　　　　　Kanji: plus de
+Dot Pixels pica: 7 × 5
+　　　　　　　  Kanji: plus de
+Pica vitesse d'impression: 40
+　　　　　　　Kanji: plus de
+Direction nouvelle ligne: avant
+largeur de saut de ligne:
+Nouvelle vitesse de la ligne:
+Direction Impression: un moyen
+Tampon:
+1er niveau Kanji: plus de
+Le deuxième niveau de kanji: plus de
+Couleur:
+Remarques Couleur: Non
+Copie couleur pension:
+Ankh italique:
+　　　　　　　       Gothique:
+　　　　　　　       Courrier:
+Taille de kanji: Caractère Dimensions: 1,02 mm x 2,05 mm
+Standard chinois de la police: Type de caractère: 160 caractères (alphanumérique, minuscules, katakana, symbole de kana)
+　　　　　　　Options:
+méthode d'alimentation du papier feuille d'emploi: plus de
+　　　　　　　Alimentation feuille à feuille: plus de
+　　　　　　　Tracteur chargeur: sur
+　　　　　　　Poussez tracteur: plus de
+　　　　　　　Pin alimentation: plus de
+　　　　　　　Guide Carte postale: sur
+　　　　　　　support de papier rouleau: norme
+Type continu papier (1): x
+　　　　　　　-Continu (2): x
+　　　　　　　Continue: ×
+　　　　　　　Copie: ×
+　　　　　　　Rouler: largeur de 80mm
+　　　　　　　Carte postale: ×
+　　　　　　　OHP: ×
+　　　　　　　Papier thermique: ○
+Caractère externe nombre de caractères d'enregistrement:
+Télécharger nombre de caractères:
+Les conditions de température de fonctionnement: 0-40
+　　　　　　　　Stockage: -25 à 60
+conditions d'humidité de fonctionnement: 30-85
+　　　　　　　　Stockage: 5-90
+Consommation électrique (W) d'exploitation: 0,4
+　　　　　　　　Stockage: 1.8
+Poids (kg): 0,44
+VCCI correspond:
+Dimensions (mm) (W): 110 (D): 130 (H): 40
+Article ci-joint: rouleau de papier thermique (PC-2021-P1)
+　　　: Piles alcalines AA (4 pcs.)
+　　　: Manuel, certificat
+*/
