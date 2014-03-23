@@ -499,23 +499,34 @@ void Cce140f::processCommand(void) {
     }
 
     switch (data.first()) {
-        case 0x04: process_CLOSE(0);break;
-        case 0x05: process_FILES();break;
-        case 0x06: process_FILES_LIST(0);break;
-        case 0x07: process_FILES_LIST(1);break;
-        case 0x08: process_INIT(0x08);break;
-        case 0x09: process_INIT(0x09);break;
-        case 0x0A: process_KILL(0x0A);break;
-        case 0x0E: process_LOAD(0x0E);break;
-        case 0x17: process_LOAD(0x17);break;
-        case 0x12: process_LOAD(0x12);break;
-        case 0x0F: process_LOAD(0x0F);break;
-        case 0x10: process_SAVE(0x10);break;
-        case 0x11: process_SAVE(0x11);break;
-        case 0x16: process_SAVE(0x16);break;       // SAVE ASCII
-        case 0x1D: process_DSKF(); break;
-        case 0xFE: process_SAVE(0xfe);break;    // Handle ascii saved data stream
-        case 0xFF: process_SAVE(0xff);break;    // Handle saved data stream
+    //        case 0x03: process_OPEN(0);break;
+    case 0x04: process_CLOSE(0);break;
+    case 0x05: process_FILES();break;
+    case 0x06: process_FILES_LIST(0);break;
+    case 0x07: process_FILES_LIST(1);break;
+    case 0x08: process_INIT(0x08);break;
+    case 0x09: process_INIT(0x09);break;
+    case 0x0A: process_KILL(0x0A);break;
+        //    case 0x0B: process_NAME(0x0B);break;
+        //    case 0x0C: process_SET(0x0C);break;
+        //    case 0x0D: process_COPY(0x0D);break;
+    case 0x0E: process_LOAD(0x0E);break;
+    case 0x0F: process_LOAD(0x0F);break;
+    case 0x10: process_SAVE(0x10);break;
+    case 0x11: process_SAVE(0x11);break;
+    case 0x12: process_LOAD(0x12);break;
+        //    case 0x13: process_INPUT(0x13);break;
+        //    case 0x14: process_INPUT(0x14);break;
+//    case 0x15: process_PRINT(0x15);break;
+    case 0x16: process_SAVE(0x16);break;       // SAVE ASCII
+    case 0x17: process_LOAD(0x17);break;
+        //    case 0x1A: process_EOF(0x1A);break;
+        //    case 0x1C: process_LOC(0x1C);break;
+    case 0x1D: process_DSKF(); break;
+        //    case 0x1F: process_INPUT(0x1f);break;
+        //    case 0x20: process_INPUT(0x20);break;
+    case 0xFE: process_SAVE(0xfe);break;    // Handle ascii saved data stream
+    case 0xFF: process_SAVE(0xff);break;    // Handle saved data stream
     default: emit msgError("CE-140F : Unknown command.");
     }
 }
