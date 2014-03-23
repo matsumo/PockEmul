@@ -15,12 +15,12 @@ Cce162e::Cce162e(CPObject *parent):CPObject(this)
     BackGroundFname	= P_RES(":/pc1500/ce162e.png");
     setcfgfname(QString("ce162e"));
 
-    setDXmm(140);//Pc_DX_mm = 329;
-    setDYmm(90);//Pc_DY_mm = 115;
-    setDZmm(26);//Pc_DZ_mm = 48;
+    setDXmm(140);
+    setDYmm(90);
+    setDZmm(26);
 
-    setDX(485);//Pc_DX	= 960;
-    setDY(299);//Pc_DY	= 320;
+    setDX(485);
+    setDY(299);
 
 
     pTIMER		= new Ctimer(this);
