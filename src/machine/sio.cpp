@@ -76,6 +76,9 @@ Csio::Csio(CPObject *parent)	: CPObject(this)
     pTIMER		= new Ctimer(this);
     setDX(195);
     setDY(145);
+    setDXmm(50);
+    setDYmm(55);
+    setDZmm(33);
 
     dialogconsole = new DialogConsole(this);
 

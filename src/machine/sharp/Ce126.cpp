@@ -57,7 +57,10 @@ Cce126::Cce126(CPObject *parent):Cprinter(this)
     pKEYB		= new Ckeyb(this,"ce126.map");
     setDX(620);//Pc_DX	= 620;
     setDY(488);//Pc_DY	= 488;
-//    SnapPts = QPoint(594,145);
+
+    setDXmm(116);
+    setDYmm(140);
+    setDZmm(23);
 
     setPaperPos(QRect(150,-3,207,149));
 
@@ -590,6 +593,9 @@ Cce123::Cce123()
     setcfgfname("ce123p");
     setDX(708);//Pc_DX	= 708;
     setDY(566);//Pc_DY	= 566;
+    setDXmm(196);
+    setDYmm(155);
+    setDZmm(33);
     SnapPts = QPoint(215,307);
     setPaperPos(QRect(89,185-149,207,149));
 
@@ -630,6 +636,9 @@ C263591::C263591()
     setDX(854);//Pc_DX	= 854;
     setDY(349);//Pc_DY	= 349;
     SnapPts = QPoint(373,0);
+    setDXmm(236);
+    setDYmm(96);
+    setDZmm(33);
 
     setPaperPos(QRect(78,0,207,149));
 

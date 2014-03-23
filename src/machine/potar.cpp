@@ -17,6 +17,11 @@ Cpotar::Cpotar(CPObject *parent )	: CPObject(this)
 
     setDX(75);//Pc_DX	= 75;
     setDY(20);//Pc_DY	= 20;
+
+    setDXmm(50);
+    setDYmm(20);
+    setDZmm(10);
+
     value = 0;
 }
 

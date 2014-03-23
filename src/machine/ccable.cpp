@@ -20,6 +20,9 @@ Ccable::Ccable(CPObject *parent)	: CPObject(this)
     pTIMER		= new Ctimer(this);
     setDX(150);
     setDY(450);
+    setDXmm(196);
+    setDYmm(155);
+    setDZmm(33);
     standard = true;
 }
 

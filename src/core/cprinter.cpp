@@ -23,6 +23,8 @@ Cprinter::~Cprinter()
 void Cprinter::resizeEvent ( QResizeEvent * ) {
     float ratio = (float)this->width()/getDX() ;
 
+    if (!paperWidget) return;
+
     QRect rect = this->paperWidget->baseRect;
     this->paperWidget->setGeometry( rect.x()*ratio,
                                     rect.y()*ratio,
@@ -49,7 +51,7 @@ void Cprinter::contextMenuEvent ( QContextMenuEvent * event )
 }
 
 void Cprinter::moveEvent ( QMoveEvent * event ) {
-    this->paperWidget->updated=true;
+    if (paperWidget) paperWidget->updated=true;
 }
 
 void Cprinter::setPaperPos(QRect pos)
@@ -64,7 +66,7 @@ QRect Cprinter::PaperPos()
 
 void Cprinter::raise()
 {
-    paperWidget->updated = true;
+    if (paperWidget) paperWidget->updated = true;
     AddLog(LOG_TEMP,"RAISE");
     CPObject::raise();
 

@@ -79,6 +79,9 @@ Cce152::Cce152(CPObject *parent)	: CPObject(parent)
     pTIMER		= new Ctimer(this);
     setDX(200);//Pc_DX		= 200;
     setDY(320);//Pc_DY		= 320;
+    setDXmm(186);
+    setDYmm(115);
+    setDZmm(52);
     KeyMap		= KeyMapce152;
     KeyMapLenght= KeyMapce152Lenght;
     pKEYB		= new Ckeyb(this,"ce152.map");

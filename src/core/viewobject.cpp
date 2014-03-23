@@ -15,6 +15,7 @@ extern MainWindowPockemul* mainwindow;
 CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
 {
     FrontImage=TopImage=LeftImage=RightImage=BottomImage=BackImage=0;
+    Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;
 }
 
 CViewObject::~CViewObject()
@@ -126,6 +127,10 @@ void CViewObject::setZoom(qreal value)
 }
 
 QSize CViewObject::viewRect(View v) {
+    if (getDXmm()==0) {
+        qWarning()<<"ERROR DXùù not set";
+        return QSize(0,0);
+    }
     float _ratio = this->getDX()/this->getDXmm();
 
     switch (v) {
@@ -316,12 +321,11 @@ void CViewObject::changeGeometrySize(int newposx,int newposy,int newwidth,int ne
     setDY(newheight);
 }
 void CViewObject::changeGeometry(int newposx,int newposy,int newwidth,int newheight) {
+
     setPosX(newposx);
     setPosY(newposy);
-
     setGeometry(newposx,newposy,newwidth,newheight);
     setMask(mask.scaled(newwidth,newheight).mask());
-
 #ifdef AVOID
     Avoid::Rectangle rectangle(Avoid::Point(newposx-10, newposy-10),
                                Avoid::Point(newposx+newwidth+20, newposy+newheight+20));

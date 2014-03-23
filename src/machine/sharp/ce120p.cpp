@@ -12,6 +12,9 @@ Cce120p::Cce120p()
     setDX(883);//Pc_DX	= 883;
     setDY(568);//Pc_DY	= 568;
 //    SnapPts = QPoint(402,43);
+    setDXmm(253);
+    setDYmm(164);
+    setDZmm(38);
 
     setPaperPos(QRect(89,185-149,207,149));
 

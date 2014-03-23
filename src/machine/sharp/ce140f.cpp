@@ -39,7 +39,9 @@ Cce140f::Cce140f(CPObject *parent):CPObject(parent)
     pKEYB		= new Ckeyb(this,"ce140f.map");
     setDX(620);//Pc_DX	= 620;//480;
     setDY(488);//Pc_DY	= 488;//420;
-
+    setDXmm(118);
+    setDYmm(145);
+    setDZmm(39);
     ctrl_char = false;
     t = 0;
     c = 0;

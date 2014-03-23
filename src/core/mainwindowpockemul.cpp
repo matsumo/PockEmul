@@ -965,7 +965,7 @@ void MainWindowPockemul::updateTimer()
 }
 
 void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
-//    qWarning()<<"mainwindow::doZoom";
+
     if (((zoom >= 20) && (delta<0)) ||
         ((zoom <300) && (delta >0))){
         int d = (delta>0) ? step : -step;
@@ -981,6 +981,7 @@ void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
     for (int i=0;i<listpPObject.size();i++) {
         CPObject * locpc = listpPObject.at(i);
 
+
         // calculate the new origine
 
         float newposx = locpc->posx() + (locpc->posx()-point.x())*(delta)/100.0;
@@ -990,6 +991,7 @@ void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
                               newposy,
                               locpc->currentViewRect().width()*zoom/100/(locpc->Front?1:4),
                               locpc->currentViewRect().height()*zoom/100/(locpc->Front?1:4));
+
 
     }
 }
