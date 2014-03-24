@@ -1077,7 +1077,10 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
                 pLCDC->Refresh = true;
                 break;
 //////////////////////////////////////////////////////////
-
+    case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77:
+    case 0x78: case 0x79: case 0x7a: case 0x7b: case 0x7c: case 0x7d: case 0x7e: case 0x7f:
+//        qWarning()<<QString("Write[%1]=%2").arg(address,2,16,QChar('0')).arg(value,2,16,QChar('0'));
+        break;
 
     case 0x80:
     case 0x81:
@@ -1144,6 +1147,37 @@ UINT8 Cpc1600::in(UINT8 address)
     case 0x57: pCPU->imem[address] = pHD61102_2->instruction(0x300); break;
     case 0x5b: pCPU->imem[address] = pHD61102_1->instruction(0x300); break;
 
+        //////////////////////////////////////////////////////////
+       // DISPLAY CONTROL
+      //////////////////////////////////////////////////////////
+/*
+ *70-77: Floppy II, otherwise known as 78-7F
+78-7F; floppy I
+78w: command (40 = Read, Write = 60, A0 = format)
+78r: Motor and disk status
+        b7: Engine not started
+        b6: no write protection
+        b3: disk in the drive
+79w: define Sector
+79r: Read current Sector
+
+7Aw: Motor b7: motor on
+7Ar: Status
+        b7: busy ????
+        b6: changed Disk
+        b1: Ready
+        b0: Error (inverted)
+7B: read / write data
+7C-7F: unused
+*/
+    case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77:
+    case 0x78: case 0x79: case 0x7a: case 0x7b: case 0x7c: case 0x7d: case 0x7e: case 0x7f:
+        pCPU->imem[0x78] |= 0x48;  // bit 3 and 6 set to 1. Disk loaded and not write protected
+        pCPU->imem[0x7A] &= 0xFE;   // bit 0 (ERR) to 0
+        pCPU->imem[0x7A] |= 0x42;   //   b7:ack ???  b6: changed Disk    b1: Ready  b0: Error (inverted)
+        if (fp_log) fprintf(fp_log,"IN [%02X]=%02X\n",address,pCPU->imem[address]);
+//        qWarning()<<QString("Read[%1]   pc=%2").arg(address,2,16,QChar('0')).arg(pCPU->get_PC(),4,16,QChar('0'));
+        break;
     }
 
     return 1;

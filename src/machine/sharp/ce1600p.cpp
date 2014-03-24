@@ -94,12 +94,26 @@ bool Cce1600p::init(void)
         paperWidget = new CpaperWidget(QRect(195,30,695,170),ce150buf,this);
         paperWidget->show();
 
+        initsound();
 
 
     return true;
 }
 
+/* disk
+& 78 bit 3 0: drive is empty
+1: drive contains disk
+Bit 6 0: The drive is or the write protection is active
+1: drive is running and write protection is inactive
+Bit 7 0: Drive is running
+1: drive is
+& 79 Bit 0 The three bits together form the.
+Bit 1 number of the currently selected bit 2 Track
+7A & Bit 7 Write:
+0: off drive motor
+1: Drive motor on
 
+*/
 
 
 bool Cce1600p::run(void)
@@ -241,10 +255,21 @@ bool Cce1600p::run(void)
         if (Pen_Z >50) Pen_Z = 50;
         if (Pen_Z == 6) // Pen up
         {
-#if 0
-            int iChanIndex = FSOUND_PlaySoundEx(FSOUND_FREE, clac, 0 , true);
-            FSOUND_SetVolumeAbsolute(iChanIndex,255);
-            FSOUND_SetPaused(iChanIndex,false);
+#ifndef NO_SOUND
+//            clac->play();
+            if (getfrequency()>0) {
+                fillSoundBuffer(0xFF);
+                fillSoundBuffer(0x00);
+            }
+            else {
+//                int ps = m_audioOutput->periodSize();
+                mainwindow->audioMutex.lock();
+                QByteArray buff;
+                buff.append(0xFF);
+                buff.append((char)0);
+                m_output->write(buff.constData(),2);
+                mainwindow->audioMutex.unlock();
+            }
 #endif
 
             Pen_Status = PEN_UP;
@@ -256,7 +281,22 @@ bool Cce1600p::run(void)
             FSOUND_SetVolumeAbsolute(iChanIndex,255);
             FSOUND_SetPaused(iChanIndex,false);
 #endif
-
+#ifndef NO_SOUND
+//            clac->play();
+            if (getfrequency()>0) {
+                fillSoundBuffer(0xFF);
+                fillSoundBuffer(0x00);
+            }
+            else {
+//                int ps = m_audioOutput->periodSize();
+                mainwindow->audioMutex.lock();
+                QByteArray buff;
+                buff.append(0xFF);
+                buff.append((char)0);
+                m_output->write(buff.constData(),2);
+                mainwindow->audioMutex.unlock();
+            }
+#endif
             Pen_Status = PEN_DOWN;
             AddLog(LOG_PRINTER,"PEN DOWN");
         }
