@@ -415,32 +415,11 @@ Item {
             text: (isdeleted ==1) ? "Permanently delete" : "Delete"
             onClicked: {
                 if (cloud.askDialog("Do you want to delete this session ?",2)==2) return;
-                message.showMessage("Not yet implemented",2000);
-                return;
-                var url = serverURL + "delPML/" + currentApiKey +"/" + pmlid;
-                requestGet(url,function (o) {
-                    if (o.readyState == 4 ) {
-                        if (o.status==200) {
-                            delegate.state="";
-                            if (isdeleted==1) {
-                                refpmlModel.remove(rowid);
-                                cloud.saveCache(cacheFileName,serializerefpmlModel());
-                            }
-                            else {
 
-                                console.log("DELETE");
-                                changed = false;
-                                refpmlModel.setProperty(rowid,"isdeleted",1);
-                                cloud.saveCache(cacheFileName,serializerefpmlModel());
-                            }
-                            populateCategoryModel();
-                            pmlview.categoryListView.currentIndex = pmlview.categoryListView.count-1;
-                            pmlview.objid = -1;
-                            populatePMLModel();
-
-                        }
-                    }
-                });
+                root.delete_pml(pmlid,
+                               function(){xmlpmlModel.reload();},
+                               function(){}
+                               );
             }
         }
 

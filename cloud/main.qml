@@ -404,6 +404,32 @@ Rectangle {
         });
     }
 
+    function delete_pml(pmlid,on_success,on_failure) {
+        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+        var url = serverURL+ '?method=file.delete_pml'+
+                '&file_guid='+pmlid+
+                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+                '&auth_token='+auth_token;
+        console.log('url:'+url);
+        requestPost(url, "" , function (o) {
+
+            if (o.readyState == 4 ) {
+                if (o.status==200) {
+                    var obj = JSON.parse(o.responseText);
+                    console.log(o.responseText);
+                    if (obj.status == 0) {
+                        message.showMessage("File deleted",2000);
+                        on_success();
+                    }
+                    else {
+                        message.showErrorMessage(obj.message,5000);
+                        on_failure();
+                    }
+                }
+            }
+        });
+    }
+
     function update_pml(title,description) {
         var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
         var url = serverURL+ '?method=file.update&'+
