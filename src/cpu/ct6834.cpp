@@ -754,52 +754,26 @@ void CT6834::Line (UINT8 x1, UINT8 y1, UINT8 x2, UINT8 y2)
 
 void CT6834::Circle(int x, int y, int r)
 {
-#if 1
+
 // high accuracy
-double xlim = sqrt((double)(r * r) / 2);
+    double xlim = sqrt((double)(r * r) / 2);
 
-for(int cx = 0, cy = r; cx <= xlim+1 ; cx++) {
-    double d1 = (cx * cx + cy * cy) - r * r;
-    double d2 = (cx * cx + (cy - 1) * (cy - 1)) - r * r;
-    if(abs(d1) > abs(d2)) {
-        cy--;
-    }
-    Pset(cx + x, cy + y);
-    Pset(cx + x, -cy + y);
-    Pset(-cx + x, cy + y);
-    Pset(-cx + x, -cy + y);
-    Pset(cy + x, cx + y);
-    Pset(cy + x, -cx + y);
-    Pset(-cy + x, cx + y);
-    Pset(-cy + x, -cx + y);
-}
-#else
-// high speed
-    int cx = 0, cy = r;
-    int d = 2 - 2 * r;
-
-    Pset(cx + x, cy + y);
-    Pset(cx + x, -cy + y);
-    Pset(cy + x, cx + y);
-    Pset(-cy + x, cx + y);
-    while(1) {
-        if(d > -cy) {
+    for(int cx = 0, cy = r; cx <= xlim+1 ; cx++) {
+        double d1 = (cx * cx + cy * cy) - r * r;
+        double d2 = (cx * cx + (cy - 1) * (cy - 1)) - r * r;
+        if(abs(d1) > abs(d2)) {
             cy--;
-            d += 1 - 2 * cy;
-        }
-        if(d <= cx) {
-            cx++;
-            d += 1 + 2 * cx;
-        }
-        if(!cy) {
-            return;
         }
         Pset(cx + x, cy + y);
+        Pset(cx + x, -cy + y);
         Pset(-cx + x, cy + y);
         Pset(-cx + x, -cy + y);
-        Pset(cx + x, -cy + y);
+        Pset(cy + x, cx + y);
+        Pset(cy + x, -cx + y);
+        Pset(-cy + x, cx + y);
+        Pset(-cy + x, -cx + y);
     }
-#endif
+
 }
 
 
@@ -836,6 +810,20 @@ bool CT6834::init()
 {
     mem=(UINT8 *)malloc(0x2200*sizeof(UINT8));
 
+    Reset();
+
+    connect(this,SIGNAL(TurnOFFSig()),pPC,SLOT(TurnOFFSlot()));
+
+    cursorTimer.start();
+
+    return true;
+}
+
+void CT6834::Reset()
+{
+    // Ram_Video should be integrated into mem.
+    memset((void*)&Ram_Video,0,sizeof (Ram_Video));
+    memset(mem,0,0x2200);
     initUdk();
 
     General_Info.Scroll_Min_Y = 0;
@@ -853,20 +841,6 @@ bool CT6834::init()
     General_Info.Break        = 0;
     General_Info.EnableKeyEntry = true;
     General_Info.LcdOn        = false;
-
-    connect(this,SIGNAL(TurnOFFSig()),pPC,SLOT(TurnOFFSlot()));
-
-    cursorTimer.start();
-
-    return true;
-}
-
-void CT6834::Reset()
-{
-    // Ram_Video should be integrated into mem.
-    memset((void*)&Ram_Video,0,sizeof (Ram_Video));
-    memset(mem,0,0x2200);
-    initUdk();
 }
 
 void CT6834::AddKey (UINT8 Key)
