@@ -65,6 +65,22 @@ PROJECT_MODULE += \
 contains(PROJECT_TYPE,IOS) {
 DEFINES += NO_SOUND
 
+BUNDLE_DATA.files = $$PWD/iOS_BundleData/Icon-60.png \
+                        $$PWD/iOS_BundleData/Icon-60@2x.png \
+                        $$PWD/iOS_BundleData/Icon-72.png \
+                        $$PWD/iOS_BundleData/Icon-72@2x.png \
+                        $$PWD/iOS_BundleData/Icon-76.png \
+                        $$PWD/iOS_BundleData/Icon-76@2x.png \
+                        $$PWD/iOS_BundleData/Icon-Small-40.png \
+                        $$PWD/iOS_BundleData/Icon-Small-40@2x.png \
+                        $$PWD/iOS_BundleData/Icon-Small-50.png \
+                        $$PWD/iOS_BundleData/Icon-Small-50@2x.png \
+                        $$PWD/iOS_BundleData/Icon-Small.png \
+                        $$PWD/iOS_BundleData/Icon-Small@2x.png \
+                        $$PWD/iOS_BundleData/Icon.png \
+                        $$PWD/iOS_BundleData/Icon@2x.png
+QMAKE_BUNDLE_DATA += BUNDLE_DATA
+
 PROJECT_MODULE += \
     M_EMB_QRC \
     M_CLOUD \
@@ -79,6 +95,7 @@ UI_DIR += build/ui
 
 mac {
 DEFINES += NO_SOUND
+ICON=$$PWD/MacOs-BundleData/Icon.icns
     #debug:OBJECTS_DIR += build/o/wd
     release:OBJECTS_DIR += build/o/wr
 }
