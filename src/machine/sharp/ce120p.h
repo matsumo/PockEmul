@@ -15,7 +15,7 @@ public:
 
     Cconnector	*pCONNECTOR_Ext;	qint64 pCONNECTOR_Ext_value;
 
-    Cce120p();
+    Cce120p(CPObject *parent = 0);
     virtual ~Cce120p();
 };
 

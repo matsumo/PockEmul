@@ -127,7 +127,9 @@ bool Cce150::init(void)
     setfrequency( 0);
     pCONNECTOR	 = new Cconnector(this,60,0,Cconnector::Sharp_60,"Connector 60 pins",true,QPoint(465,72),Cconnector::EAST);	publish(pCONNECTOR);
     pEXTCONNECTOR= new Cconnector(this,60,1,Cconnector::Sharp_60,"Connector 60 pins Ext",false,QPoint(565,0),Cconnector::NORTH);	publish(pEXTCONNECTOR);
+    pTAPECONNECTOR= new Cconnector(this,3,2,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
 
+    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     WatchPoint.add(&pCONNECTOR_value,64,60,this,"Standard 60pins connector");
     WatchPoint.add((qint64 *) &(pLH5810->lh5810.r_opa),8,8,this,"LH5810 Port A");
     WatchPoint.add((qint64 *) &(pLH5810->lh5810.r_opb),8,8,this,"LH5810 Port B");
@@ -209,7 +211,11 @@ bool Cce150::run(void)
 
     bus->fromUInt64(pCONNECTOR->Get_values());
 
+    pTAPECONNECTOR->Set_pin(3,true);//(rmtSwitch ? SEL1:true));       // RMT
+    pTAPECONNECTOR->Set_pin(2,bus->isCMTOUT());    // Out
+    bus->setCMTIN( pTAPECONNECTOR->Get_pin(1));      // In
 
+    pTAPECONNECTOR_value = pTAPECONNECTOR->Get_values();
 
     ////////////////////////////////////////////////////////////////////
     //	VOLTAGE OK :-)

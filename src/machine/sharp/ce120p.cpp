@@ -5,13 +5,13 @@
 
 
 
-Cce120p::Cce120p()
+Cce120p::Cce120p(CPObject *parent):Cce126(this)
 {								//[constructor]
     BackGroundFname	= P_RES(":/ext/ce-120p.png");
     setcfgfname("ce120p");
-    setDX(883);//Pc_DX	= 883;
-    setDY(568);//Pc_DY	= 568;
-//    SnapPts = QPoint(402,43);
+    setDX(883);
+    setDY(568);
+
     setDXmm(253);
     setDYmm(164);
     setDZmm(38);
@@ -71,6 +71,7 @@ bool Cce120p::Set_Connector(void) {
     bool extSEL2	= pCONNECTOR_Ext->Get_pin(PIN_SEL2);
     bool extSEL1	= pCONNECTOR_Ext->Get_pin(PIN_SEL1);
 
+#if 1
     pCONNECTOR_Ext->Set_pin(PIN_MT_OUT2,MT_OUT2);
     pCONNECTOR_Ext->Set_pin(PIN_BUSY,BUSY);
     pCONNECTOR_Ext->Set_pin(PIN_D_OUT,D_OUT);
@@ -80,6 +81,7 @@ bool Cce120p::Set_Connector(void) {
     //pCONNECTOR_Ext->Set_pin(PIN_ACK,ACK || extACK);
     pCONNECTOR_Ext->Set_pin(PIN_SEL2,SEL2);
     pCONNECTOR_Ext->Set_pin(PIN_SEL1,SEL1);
+#endif
 
     pCONNECTOR->Set_pin(PIN_MT_OUT2,MT_OUT2);
     pCONNECTOR->Set_pin(PIN_BUSY,BUSY);

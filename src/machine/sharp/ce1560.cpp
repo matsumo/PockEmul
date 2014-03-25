@@ -112,7 +112,7 @@ bool Cce1560::init(void)
     pEXTCONNECTOR= new Cconnector(this,60,1,Cconnector::Sharp_60,"Connector 60 pins Ext",false,QPoint(0,447),Cconnector::WEST);	publish(pEXTCONNECTOR);
     pTAPECONNECTOR= new Cconnector(this,3,2,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
 
-    WatchPoint.add(&pCONNECTOR_value,64,11,this,"Standard 11pins connector");
+    WatchPoint.add(&pCONNECTOR_value,64,11,this,"Standard 60pins connector");
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     if(pKEYB)	pKEYB->init();
     if(pTIMER)	pTIMER->init();

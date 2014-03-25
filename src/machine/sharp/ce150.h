@@ -49,6 +49,7 @@ public:
 	bool		needRedraw;
 	Cconnector	*pCONNECTOR;	qint64 pCONNECTOR_value;
     Cconnector	*pEXTCONNECTOR;	qint64 pEXTCONNECTOR_value;
+    Cconnector	*pTAPECONNECTOR;qint64 pTAPECONNECTOR_value;
 
     CbusPc1500  *bus;
     CLH5810		*pLH5810;
