@@ -202,7 +202,7 @@ bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
 
 bool Cpc1280::Set_Connector(void)
 {
-// ces 2 ports sont bien accédés par le 1280
+
     int port1 = Get_8(0x3800);
     int port2 = Get_8(0x3A00);
 
@@ -236,6 +236,9 @@ bool Cpc1280::Get_Connector(void)
 
 void Cpc1280::TurnON(void)
 {
+#if 1
+    CpcXXXX::TurnON();
+#else
     if (!Power && pKEYB->LastKey == K_BRK) {
         Initial_Session_Load();
         off = 0;
@@ -243,6 +246,7 @@ void Cpc1280::TurnON(void)
         PowerSwitch = PS_RUN;
         if (pLCDC) pLCDC->TurnON();
     }
+#endif
 }
 
 #define RATIO (251.0/502.0)
