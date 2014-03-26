@@ -209,7 +209,7 @@ bool Cce152::UpdateFinalImage(void) {
         painter.drawImage(67,304,QImage(P_RES(":/ext/ce-152-tape.png")));
         painter.end();
     }
-    if (mode == PLAY) {
+    if ( (mode == PLAY) || (mode == RECORD) ){
         painter.begin(FinalImage);
         QRect recordRect = pKEYB->getKey(0xD1).Rect;
         painter.drawImage(recordRect,QImage(P_RES(":/ext/ce-152-key.png")));
@@ -340,6 +340,7 @@ bool Cce152::SetWav(bool bit)
         if (fp_tape) fprintf(fp_tape,"state=%lld diff=%lld delta=%lld val=%s c=%lld\n",pTIMER->state,pTIMER->state-previous_state_setwav,delta,bit?"1":"0",counter);
         previous_state_setwav = pTIMER->state;
         int error = fputc ( (bit?0xFF:0x00), info.ptrFd) ;
+        TapeCounter++;
         counter++;
         if (counterDiv100 < (counter/100)) {
             counterDiv100 = counter/100;
