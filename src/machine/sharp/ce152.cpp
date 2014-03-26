@@ -224,21 +224,22 @@ bool Cce152::UpdateFinalImage(void) {
 
     }
 
-    if (counter !=0) {
+    if (TapeCounter !=0) {
 
 
         painter.begin(FinalImage);
         painter.translate(67+189+19,304+29+19);
-        painter.rotate(-counter/100);
+        painter.rotate(-TapeCounter/100);
         painter.drawImage(-19,-19,pignon);
         painter.end();
 
         painter.begin(FinalImage);
         painter.translate(67+50+19,304+29+19);
-        painter.rotate(-counter/400);
+        painter.rotate(-TapeCounter/300);
         painter.drawImage(-19,-19,pignon);
         painter.end();
 
+//        qWarning()<<counter/100;
     }
     // PRINTER SWITCH
 
@@ -288,8 +289,7 @@ bool Cce152::GetWav(void)
 		counter++;
         if (counterDiv100 < (counter/100)) {
             counterDiv100 = counter/100;
-//            qWarning()<<counterDiv100;
-//            update();
+            update();
         }
         first_state +=wait;
 	}
@@ -343,8 +343,8 @@ bool Cce152::SetWav(bool bit)
         counter++;
         if (counterDiv100 < (counter/100)) {
             counterDiv100 = counter/100;
-//            qWarning()<<counterDiv100;
-//            update();
+            Refresh_Display=true;
+            update();
         }
         first_state +=wait;
 	}
