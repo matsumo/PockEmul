@@ -31,5 +31,8 @@
         <file>ext/simu.png</file>
         <file>ext/ce-150.png</file>
         <file>ext/ce-125.png</file>
+        <file>ext/ce-152-key.png</file>
+        <file>ext/ce-152-tape.png</file>
+        <file>ext/ce-152-wheel.png</file>
     </qresource>
 </RCC>

@@ -51,6 +51,7 @@ typedef struct {
     virtual bool	init(void);				//initialize
     virtual bool	exit(void);				//end
     virtual bool	run(void);
+    virtual bool UpdateFinalImage(void);
 	bool	GetWav(void);
 	bool	SetWav(bool);
 
@@ -83,6 +84,7 @@ protected slots:
 	int		RecTape(void);
 
 protected:
+    QImage pignon;
 	int		myfgetc(WavFileInfo* ptrFile);
 	long	TapeCounter;
 	int		carac;
@@ -91,6 +93,7 @@ protected:
 	int		low_pt;
     quint64	first_state;
     quint64	counter;
+    quint64 counterDiv100;
 	int		GetWav_Val;
 
 	int		UpdateHeadToWav (u_long    nbSamp,WavFileInfo* ptrFile);

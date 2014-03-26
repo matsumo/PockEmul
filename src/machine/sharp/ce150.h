@@ -88,6 +88,7 @@ protected:
 	bool		Change_Color;
 	bool	StartRot;
 	BYTE	Direction;
+    bool rmt;
 
 };
 

@@ -152,6 +152,8 @@ bool Cce150::init(void)
     paperWidget = new CpaperWidget(QRect(95,25,200,202),ce150buf,this);
     paperWidget->show();
 
+    rmt = false;
+
     return(1);
 
 }
@@ -211,7 +213,14 @@ bool Cce150::run(void)
 
     bus->fromUInt64(pCONNECTOR->Get_values());
 
-    pTAPECONNECTOR->Set_pin(3,true);//(rmtSwitch ? SEL1:true));       // RMT
+    ////////////////////////////////////////////////////////////////////
+    //	RMT ON/OFF
+    ////////////////////////////////////////////////////////////////////
+    // Service manual PA 1234. Take a look
+
+    if (pLH5810->lh5810.r_opa & 0x02)	rmt = true;	// RMT 0 ON
+    if (pLH5810->lh5810.r_opa & 0x04)	rmt = false; 	// RMT 0 OFF
+    pTAPECONNECTOR->Set_pin(3,rmt); //(rmtSwitch ? SEL1:true));       // RMT
     pTAPECONNECTOR->Set_pin(2,bus->isCMTOUT());    // Out
     bus->setCMTIN( pTAPECONNECTOR->Get_pin(1));      // In
 
@@ -281,12 +290,7 @@ bool Cce150::run(void)
     }
 
 	
-	////////////////////////////////////////////////////////////////////
-	//	RMT ON/OFF
-	////////////////////////////////////////////////////////////////////
-    // Service manual PA 1234. Take a look
-//    if (pLH5810->lh5810.r_opa & 0x02)	((Cpc15XX *)pPC->pTIMER->pPC)->pce152->paused = false;	// RMT 0 ON
-//    if (pLH5810->lh5810.r_opa & 0x04)	((Cpc15XX *)pPC->pTIMER->pPC)->pce152->paused = true;	// RMT 0 OFF
+
 
 
     // PC CHANGE

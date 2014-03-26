@@ -1,5 +1,7 @@
 #include <QFileDialog>
 #include <QTime>
+#include <QPainter>
+#include <QDebug>
 
 #include "common.h"
 #include "pcxxxx.h"
@@ -70,6 +72,8 @@ Cce152::Cce152(CPObject *parent)	: CPObject(parent)
 {
    // if (parent == 0) pPC = (CPObject *)this;
     BackGroundFname	= P_RES(":/ext/ce-152.png");
+    pignon = QImage(P_RES(":/ext/ce-152-wheel.png"));
+
     setcfgfname("ce152");
     Tapein		= 0;				//Tape loaded (0:none, other:access)
     TapeCounter	= 0;
@@ -77,8 +81,8 @@ Cce152::Cce152(CPObject *parent)	: CPObject(parent)
     SoundOn		= false;
     info.ptrFd	= 0;
     pTIMER		= new Ctimer(this);
-    setDX(200);//Pc_DX		= 200;
-    setDY(320);//Pc_DY		= 320;
+    setDX(393);
+    setDY(600);
     setDXmm(186);
     setDYmm(115);
     setDZmm(52);
@@ -87,6 +91,7 @@ Cce152::Cce152(CPObject *parent)	: CPObject(parent)
     pKEYB		= new Ckeyb(this,"ce152.map");
     first_state = 0;
     counter		= 0;
+    counterDiv100 = 0;
     GetWav_Val	= 0;
     previous_state_setwav = 0;
 }
@@ -191,6 +196,59 @@ void Cce152::ComputeKey(void)
     case K_RECORD: RecTape(); break;
     }
 }
+bool Cce152::UpdateFinalImage(void) {
+    CPObject::UpdateFinalImage();
+
+    QPainter painter;
+
+
+    if (mode == RECORD) {
+        painter.begin(FinalImage);
+        QRect recordRect = pKEYB->getKey(0xD4).Rect;
+        painter.drawImage(recordRect,QImage(P_RES(":/ext/ce-152-key.png")));
+        painter.drawImage(67,304,QImage(P_RES(":/ext/ce-152-tape.png")));
+        painter.end();
+    }
+    if (mode == PLAY) {
+        painter.begin(FinalImage);
+        QRect recordRect = pKEYB->getKey(0xD1).Rect;
+        painter.drawImage(recordRect,QImage(P_RES(":/ext/ce-152-key.png")));
+        painter.drawImage(67,304,QImage(P_RES(":/ext/ce-152-tape.png")));
+        painter.end();
+
+    }
+    if (mode == LOAD) {
+        painter.begin(FinalImage);
+        painter.drawImage(67,304,QImage(P_RES(":/ext/ce-152-tape.png")));
+        painter.end();
+
+    }
+
+    if (counter !=0) {
+
+
+        painter.begin(FinalImage);
+        painter.translate(67+189+19,304+29+19);
+        painter.rotate(-counter/100);
+        painter.drawImage(-19,-19,pignon);
+        painter.end();
+
+        painter.begin(FinalImage);
+        painter.translate(67+50+19,304+29+19);
+        painter.rotate(-counter/400);
+        painter.drawImage(-19,-19,pignon);
+        painter.end();
+
+    }
+    // PRINTER SWITCH
+
+//    painter.drawImage(282,235,BackgroundImageBackup->copy(282,235,30,20).mirrored(rmtSwitch,false));
+
+
+    Refresh_Display = true;
+
+    return true;
+}
 
 bool Cce152::run(void)
 {
@@ -214,6 +272,7 @@ bool Cce152::GetWav(void)
 
     if (first_state == 0) {
         counter = 1;
+        counterDiv100 = 0;
         first_state = pTIMER->state;
     }
 
@@ -227,6 +286,11 @@ bool Cce152::GetWav(void)
                 (pTIMER->state - first_state),
                 (GetWav_Val>0x10)?"1":"0",GetWav_Val,counter);
 		counter++;
+        if (counterDiv100 < (counter/100)) {
+            counterDiv100 = counter/100;
+//            qWarning()<<counterDiv100;
+//            update();
+        }
         first_state +=wait;
 	}
 
@@ -261,6 +325,7 @@ bool Cce152::SetWav(bool bit)
 	if (first_state == 0) 
 		{
             counter = 1;
+            counterDiv100 = 0;
 			first_state = pTIMER->state;
 		}
 
@@ -276,6 +341,11 @@ bool Cce152::SetWav(bool bit)
         previous_state_setwav = pTIMER->state;
         int error = fputc ( (bit?0xFF:0x00), info.ptrFd) ;
         counter++;
+        if (counterDiv100 < (counter/100)) {
+            counterDiv100 = counter/100;
+//            qWarning()<<counterDiv100;
+//            update();
+        }
         first_state +=wait;
 	}
 
@@ -295,7 +365,9 @@ int	Cce152::StopPlay(void)
 		UpdateHeadToWav (0,&info);
         fflush(info.ptrFd);
 	}
-	mode = STOP;
+    // SEEK to the begining of the file
+     myfseek (&info, 0, SEEK_SET);
+    mode = LOAD;
 	return 1;
 }
 

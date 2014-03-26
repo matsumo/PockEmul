@@ -153,6 +153,14 @@ void Ckeyb::keyscan(void)
     }
 }
 
+CKey Ckeyb::getKey(int code)
+{
+    for (int i=0;i<Keys.size();i++) {
+        if (Keys.at(i).ScanCode == code) return Keys.at(i);
+    }
+
+}
+
 
 BYTE Ckeyb::Read(BYTE data)
 {

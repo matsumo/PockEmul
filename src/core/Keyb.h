@@ -331,6 +331,7 @@ public:
     QList<int> keyPressedList;
 
 	QList<CKey>	Keys;
+    CKey getKey(int code);
 	bool	modified;
 	int		baseWidth;
 	int		baseHeight;
