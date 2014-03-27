@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 #ifdef Q_OS_IOS
      app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #else
-     app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,false);
+     app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #endif
 //     test();
 #else
