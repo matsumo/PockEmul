@@ -953,6 +953,8 @@ void CpcXXXX::LoadSession(void)
 										tr("Choose a file"),
 										".",
 										tr("PockEmul sessions (*.pkm)"));
+
+    if (fileName.isEmpty()) return;
                     
 	QFile file(fileName);
 	if (!file.open(QIODevice::ReadOnly)) {

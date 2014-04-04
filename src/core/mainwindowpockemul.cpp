@@ -222,6 +222,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Canon X-07"]=X07;
     objtable["Canon X-710"]=X710;
     objtable["PC-E500"]=E500;
+    objtable["PC-E500S"]=E500S;
     objtable["PC-E550"]=E550;
     objtable["PC-G850V"]=G850V;
     objtable["Casio PB-1000"]=PB1000;
@@ -330,6 +331,7 @@ CPObject *pPC=0;
         case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
         case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
         case E500   : pPC = new Ce500;      pPC->setName("PC-E500"); break;
+        case E500S  : pPC = new Ce500(0,E500S);      pPC->setName("PC-E500S"); break;
         case E550   : pPC = new Ce550;      pPC->setName("PC-E550"); break;
         case G850V  : pPC = new Cg850v;     pPC->setName("PC-G850V"); break;
         case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
@@ -580,8 +582,6 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                 }
 
         }
-        else
-                ask(this, tr("Please choose a pocket model or Cancel"),1);
 
         return 0;
 
@@ -956,8 +956,9 @@ void MainWindowPockemul::updateTimer()
     if (deltaTime == -1) {	t.start();}
     deltaTime = t.restart();
 
-    rawclk += deltaTime;//*1000000L;
-    //AddLog(LOG_TEMP,tr("temps:%1").arg(deltaTime));
+    rawclk += deltaTime;
+
+
 #ifdef EMSCRIPTEN
     PcThread->run();
 #endif
@@ -1119,7 +1120,7 @@ void MainWindowPockemul::updateFrameTimer()
                     if (CurrentpPC->getfrequency()) {
                         //	AddLog(LOG_TIME,tr("Time Frame elapsed : %1 ms  nb=%2 cur=%3 last=%4").arg(deltaTime).arg(CurrentpPC->pTIMER->nb_state).arg(Current_State).arg(CurrentpPC->pTIMER->last_state));
                         statepersec = (int) ( CurrentpPC->getfrequency());
-                        rate = (int) ((100L*CurrentpPC->pTIMER->nb_state)/((statepersec/1000)*deltaTime));
+                        rate = (int) ((100L*CurrentpPC->pTIMER->nb_state)/((statepersec/1000L)*deltaTime));
                         CurrentpPC->pTIMER->nb_state=0;
 #ifndef Q_OS_ANDROID
                         CurrentpPC->rate = nbframe;//rate;
