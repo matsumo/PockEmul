@@ -65,7 +65,7 @@ int main(int argc, char *argv[])
 #else
      app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #endif
-//     test();
+     test();
 #else
 
 #endif
@@ -151,13 +151,15 @@ mainwindow = new MainWindowPockemul();
 #   endif
 #endif
 
-    int v_inter = 60;
+    float ratio = MAX(1,QGuiApplication::primaryScreen()->logicalDotsPerInch()/150);
+    int iconSize = 48*ratio;
+    int v_inter = 50*ratio;
     int v_pos = 12;
     LaunchButtonWidget* launch1 = new LaunchButtonWidget(mainwindow->centralwidget,
                                                 LaunchButtonWidget::PictureFlow,
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
                                                 ":/core/pocket.png");
-    launch1->setGeometry(0,v_pos,48,48);
+    launch1->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     launch1->setToolTip("Start a new Pocket Emulation.");
 
@@ -166,7 +168,7 @@ mainwindow = new MainWindowPockemul();
                                                  LaunchButtonWidget::PictureFlow,
                                                  QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                  ":/core/ext.png");
-    launch2->setGeometry(0,v_pos,48,48);
+    launch2->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     launch2->setToolTip("Start a new Extension Emulation.");
 #endif
@@ -177,7 +179,7 @@ mainwindow = new MainWindowPockemul();
                                                      QStringList(),
                                                      ":/core/dev.png");
     mainwindow->connect(dev,SIGNAL(clicked()),mainwindow,SLOT(IDE()));
-    dev->setGeometry(0,v_pos,48,48);
+    dev->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     dev->setToolTip("Start the Integrated development Environment.");
 #endif
@@ -187,7 +189,7 @@ mainwindow = new MainWindowPockemul();
                                                       QStringList(),
                                                       ":/core/save.png");
     mainwindow->connect(save,SIGNAL(clicked()),mainwindow,SLOT(saveassession()));
-    save->setGeometry(0,v_pos,48,48);
+    save->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     save->setToolTip("Save the current session.");
 
@@ -196,7 +198,7 @@ mainwindow = new MainWindowPockemul();
                                                       QStringList()<<"."<<"*.pml",
                                                       ":/core/load.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
-    load->setGeometry(0,v_pos,48,48);
+    load->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     load->setToolTip("Load an existing session.");
 
@@ -210,7 +212,7 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/cloud.png");
 #   endif
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
-    cloudButton->setGeometry(0,v_pos,48,48);
+    cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     cloudButton->setToolTip("Go to the Cloud.");
 #endif
@@ -220,7 +222,7 @@ mainwindow = new MainWindowPockemul();
                                                           QStringList()<< (downloadManager->targetDir)<<"*.pdf",
                                                       ":/core/bookcase.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
-    bookcase->setGeometry(0,v_pos,48,48);
+    bookcase->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
     bookcase->setToolTip("Browse the bookcase.");
 
@@ -229,8 +231,10 @@ mainwindow = new MainWindowPockemul();
                                                       QStringList(),
                                                       ":/core/exit.png");
     mainwindow->connect(exit,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
-    exit->setGeometry(0,v_pos,48,48);
+
+    exit->setGeometry(0,v_pos,iconSize,iconSize);
     v_pos += v_inter;
+
     exit->setToolTip("Exit PockEmul.");
 
 //    CTinyBasic tb;

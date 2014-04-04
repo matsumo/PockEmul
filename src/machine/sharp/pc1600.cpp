@@ -27,9 +27,6 @@
 #include	"dialoganalog.h"
 #include    "buspc1500.h"
 
-extern int	g_DasmStep;
-extern bool	UpdateDisplayRunning;
-
 
 Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
@@ -39,7 +36,7 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 //if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 
     setfrequency( (int) 3500000);
-    ioFreq = 0;
+    ioFreq = 20000;
     setcfgfname(QString("pc1600"));
 
     SessionHeader	= "PC1600PKM";
@@ -60,12 +57,12 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 
     Pc_Offset_X = Pc_Offset_Y = 0;
 
-    setDXmm(195);//Pc_DX_mm = 195;
-    setDYmm(86);//Pc_DY_mm = 86;
-    setDZmm(25);//Pc_DZ_mm = 25;
+    setDXmm(195);
+    setDYmm(86);
+    setDZmm(25);
 
-    setDX(679);//Pc_DX		= 679; //572;
-    setDY(299);//Pc_DY		= 299;//254;
+    setDX(679);
+    setDY(299);
 
     Lcd_X		= 60;
     Lcd_Y		= 50;
@@ -400,24 +397,29 @@ bool Cpc1600::init(void)				// initialize
 
 bool Cpc1600::run(void)
 {
-    UINT32 previous_pc;
-    UINT32 Current_PC;
+//    UINT32 previous_pc;
 
-    previous_pc = pCPU->get_PC();
+//    previous_pc = pCPU->get_PC();
 
 // ---------------------------------------------------------
     CpcXXXX::run();
 
-    if (off) return true;
-
-
+    if (pCPU->halt) {
+        qWarning()<<"halt";
+    }
+    if (off) {
+//        qWarning()<<"off";
+        return true;
+    }
 
     if (cpuSwitchPending)
     {
+        qWarning()<<"switching";
         if (masterCPU)
         {
             if (pZ80->z80.r.halt) {
                 // Switch CPU
+                qWarning()<<"switch";
                 if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nSWITCH CPU\n\n");
                 //pLH5803->lh5801.HLT = 0;
                 pCPU = pLH5803;
@@ -441,9 +443,10 @@ bool Cpc1600::run(void)
 
 // ---------------------------------------------------------
 
-    Current_PC = pCPU->get_PC();
+
 //hack(Current_PC);
 #ifndef QT_NO_DEBUG
+    UINT32 Current_PC = pCPU->get_PC();
     hack(Current_PC);
 #endif
 
@@ -812,12 +815,13 @@ bool Cpc1600::Mem_Mirror(UINT32 *d)
 
 bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
 {
+    Q_UNUSED(data)
     Mem_Mirror(d);
 
 
     if (masterCPU)
     {
-        if ( (*d>=0x0000) && (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return false; }
+        if (                 (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return false; }
         if ( (*d>=0x4000) && (*d<=0x7FFF) )
         {
             *d += bank2 * 0x10000;
@@ -883,7 +887,7 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
     {
         //if (pCPU->fp_log) fprintf(pCPU->fp_log,"Check adr [%05x]",*d);
 
-        if ( (*d>=0x0000) && (*d<=0x1FFF) )	{ *d+=0x8000;return(EXTENSION_CE161_CHECK); }						// ROM area(0000-3FFF) 16K
+        if (                 (*d<=0x1FFF) )	{ *d+=0x8000;return(EXTENSION_CE161_CHECK); }						// ROM area(0000-3FFF) 16K
         if ( (*d>=0x2000) && (*d<=0x37FF) )	{ *d+=0x8000;return(EXTENSION_CE161_CHECK | EXTENSION_CE159_CHECK); }	// ROM area(0000-3FFF) 16K
         if ( (*d>=0x3800) && (*d<=0x3FFF) )	{ *d+=0x8000;return(EXTENSION_CE161_CHECK | EXTENSION_CE159_CHECK | EXTENSION_CE155_CHECK); }		// ROM area(0000-3FFF) 16K
         if ( (*d>=0x4000) && (*d<=0x57FF) )	{ *d+=0x8000;return(1); }										// RAM area(0000-3FFF) 16K
@@ -914,11 +918,12 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
 
 bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
+    Q_UNUSED(data)
     Mem_Mirror(d);
 
     if (masterCPU)
     {
-        if ( (*d>=0x0000) && (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return true; }
+        if (                 (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return true; }
         if ( (*d>=0x4000) && (*d<=0x7FFF) )
         {
             *d += bank2 * 0x10000;
@@ -960,7 +965,7 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
     }
     else
     {
-        if ( (*d>=0x0000) && (*d<=0x7FFF) )	{ *d+=0x8000;return(1); }						// ROM area(0000-3FFF) 16K
+        if (                 (*d<=0x7FFF) )	{ *d+=0x8000;return(1); }						// ROM area(0000-3FFF) 16K
 
         if ( (*d>=0x8000) && (*d<=0x9FFF) ) { *d+=0x70000;return(1); }										// RAM area(4000-7FFFF)
         if ( (*d>=0xA000) && (*d<=0xBFFF) ) { *d+=0x70000;return(1); }										// RAM area(4000-7FFFF)
@@ -984,8 +989,15 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
     return(1);
 }
 
-void Cpc1600::Set_Port(PORTS Port,BYTE data){}
-BYTE Cpc1600::Get_Port(PORTS Port){return(0);}
+void Cpc1600::Set_Port(PORTS Port,BYTE data){
+    Q_UNUSED(Port)
+    Q_UNUSED(data)
+}
+
+BYTE Cpc1600::Get_Port(PORTS Port){
+    Q_UNUSED(Port)
+    return(0);
+}
 
 UINT8 Cpc1600::out(UINT8 address,UINT8 value)
 {
@@ -1186,6 +1198,8 @@ UINT8 Cpc1600::in(UINT8 address)
 
 void Cpc1600::Regs_Info(UINT8 Type)
 {
+    Q_UNUSED(Type)
+
     strcat(Regs_String,	"");
     pCPU->Regs_Info(1);
 }
@@ -1260,7 +1274,10 @@ bool	CLH5810_PC1600::init(void)
     return(1);
 }
 
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
+                  pKEYB->keyPressedList.contains(c) || \
+                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
 BYTE Cpc1600::getKey()
 {
 
@@ -1395,9 +1412,7 @@ bool CLH5810_PC1600::step()
     return(1);
 }
 
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 void Cpc1600::ComputeKey()
 {
     // Manage left connector click

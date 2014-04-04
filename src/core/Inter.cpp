@@ -22,7 +22,7 @@ quint64 Ctimer::currentState(void) {
 //    return (qint64) (( mainwindow->rawclk * (CPUSpeed *(pPC->getfrequency() / 1000L)) )/1000000L);
 //    return (qint64) ( (mainwindow->rawclk * CPUSpeed * pPC->getfrequency()) / 1000L);
 
-    return (quint64) ( (mainwindow->rawclk * CPUSpeed * (pPC->getfrequency() / 1000L)));
+    return (quint64) ( CPUSpeed *(mainwindow->rawclk * (pPC->getfrequency() / 1000L)));
 }
 
 bool Ctimer::init(void)
@@ -89,7 +89,7 @@ quint64 Ctimer::usElapsed(quint64 stateRef) {
 }
 quint64 Ctimer::nsElapsed(quint64 stateRef) {
 
-    qint64 r = (state - stateRef) * 1000000000L / (CPUSpeed *pPC->getfrequency());
+    quint64 r = (state - stateRef) * 1000000000L / (CPUSpeed *pPC->getfrequency());
     return r;
 }
 // return TP index

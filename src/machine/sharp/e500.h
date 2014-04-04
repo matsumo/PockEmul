@@ -2,6 +2,7 @@
 #define E500_H
 
 #include "pcxxxx.h"
+#include "mainwindowpockemul.h"
 
 class CHD61102;
 //class CRP5C01;
@@ -33,7 +34,7 @@ public:
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
 
-    Ce500(CPObject *parent = 0);
+    Ce500(CPObject *parent = 0,Models mod=E500);
 
     virtual ~Ce500()
     {								//[constructor]

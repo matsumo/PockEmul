@@ -61,7 +61,7 @@ TAnalog_Data CData::Read(int indice)
     return dataset.at(indice);
 }
 
-qint64 CData::Read_values(int indice)
+quint64 CData::Read_values(int indice)
 {
     return dataset.at(indice).values;
 }
@@ -70,7 +70,7 @@ quint64 CData::Read_state(int indice)
     return dataset.at(indice).state;
 }
 
-qint8 CData::Read_marker(int indice)
+quint8 CData::Read_marker(int indice)
 {
     return dataset.at(indice).marker;
 }
@@ -82,7 +82,7 @@ QDataStream &operator<<(QDataStream &out, const CData &dataplot)
 {
 #if 1
 	out << dataplot.timeUnit;
-    qint16 size = dataplot.dataset.size();
+    int size = dataplot.dataset.size();
     out << size;
     for (int i=0;i < size;i++) {
         TAnalog_Data d = dataplot.dataset.at(i);
@@ -95,11 +95,11 @@ QDataStream &operator<<(QDataStream &out, const CData &dataplot)
 QDataStream &operator>>(QDataStream &in, CData &dataplot)
 {
     in >> dataplot.timeUnit;
-    qint16 size=0;
+    int size=0;
     in >> size;
     for (int i=0;i < size;i++) {
-        qint64 v,s;
-        qint8 m;
+        quint64 v,s;
+        quint8 m;
         in >> v >> s >> m;
         TAnalog_Data d = { v , s , m };
         dataplot.dataset.append(d);

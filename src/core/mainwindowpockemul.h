@@ -97,6 +97,7 @@ enum Models {
     X07,
     X710,
     E500,
+    E500S,
     E550,
     G850V,
     PB1000,

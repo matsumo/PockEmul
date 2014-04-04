@@ -36,6 +36,7 @@
      <example idpocket="Canon X-07" filename="./" name="Canon X-07" image=":/x07/x07.png"/>
      <example idpocket="PC-E500" filename="./" name="Sharp pc-E500" image=":/e500/pc-e500.png"/>
      <example idpocket="PC-E550" filename="./" name="Sharp pc-E550" image=":/e500/pc-e550.png"/>
+     <example idpocket="PC-E500S" filename="./" name="Sharp pc-E500S" image=":/e500/pc-e500s.png"/>
      <example idpocket="PC-G850V" filename="./" name="Sharp PC-G850V" image=":/G850V/g850v.png"/>
      <example idpocket="Casio PB-1000" filename="./" name="Casio PB-1000" image=":/pb1000/pb-1000.png"/>
      <example idpocket="Casio PB-2000C" filename="./" name="Casio PB-2000C" image=":/pb2000/pb-2000.png"/>

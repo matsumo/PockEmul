@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "e500.h"
 #include "sc62015.h"
 #include "hd61102.h"
@@ -50,25 +52,42 @@ FFFFF   -----------------------
 <CE7> BC000h reservation du reseau de logique positive BFFFFh ~
 */
 
-Ce500::Ce500(CPObject *parent)	: CpcXXXX(parent)
+Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 3072000/3);
-    setcfgfname(QString("e500"));
-
-    SessionHeader	= "E500PKM";
-    Initial_Session_Fname ="e500.pkm";
-
-    BackGroundFname	= P_RES(":/e500/pc-e500.png");
-    LcdFname		= P_RES(":/e500/e500lcd.png");
-    SymbFname		= P_RES(":/e500/e500symb.png");
-
     memsize		= 0x100000;
     InitMemValue	= 0xff;
     /* ROM area(c0000-fffff) S3: */
     SlotList.clear();
     SlotList.append(CSlot(256, 0x40000 , ""             , ""            , CSlot::RAM , "RAM S1"));
     SlotList.append(CSlot(256, 0x80000 , ""             , ""            , CSlot::RAM , "RAM S2"));
-    SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3.rom"), "e500/s3.rom" , CSlot::ROM , "ROM S3"));
+
+    switch (mod) {
+    case E500:
+        setcfgfname(QString("e500"));
+        SessionHeader	= "E500PKM";
+        Initial_Session_Fname ="e500.pkm";
+
+        BackGroundFname	= P_RES(":/e500/pc-e500.png");
+        LcdFname		= P_RES(":/e500/e500lcd.png");
+        SymbFname		= P_RES(":/e500/e500symb.png");
+        SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3.rom"), "e500/s3.rom" , CSlot::ROM , "ROM 7.3"));
+        break;
+    case E500S:
+        setcfgfname(QString("e500s"));
+        SessionHeader	= "E500SPKM";
+        Initial_Session_Fname ="e500s.pkm";
+
+        BackGroundFname	= P_RES(":/e500/pc-e500s.png");
+        LcdFname		= P_RES(":/e500/e500lcd.png");
+        SymbFname		= P_RES(":/e500/e500symb.png");
+        SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3-8.3-E500S.rom"), "e500/s3-8.3-E500S.rom" , CSlot::ROM , "ROM 8.3"));
+        break;
+    default: break;
+    }
+
+
+
 
 
     PowerSwitch	= 0;
@@ -380,6 +399,9 @@ void Ce500::disp(qint8 cmd,UINT32 data)
         break;
     case 0xb:							/* LCDC 1 read data */
         mem[0x200b] = pHD61102_1->instruction(0x300);
+        break;
+    default:
+        qWarning()<<"unhandled lcd command:"<< cmd<<data;
         break;
     }
 }

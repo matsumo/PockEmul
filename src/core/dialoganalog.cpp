@@ -23,14 +23,14 @@ dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QD
 	setupUi(this);
 
     connect(chkBCapture, SIGNAL(stateChanged(int)), this, SLOT(updatecapture(int))); 
-    connect(pbZoomIn, SIGNAL(clicked()), this, SLOT(zoomin())); 
-    connect(pbZoomOut, SIGNAL(clicked()), this, SLOT(zoomout())); 
-    connect(pbFit, SIGNAL(clicked()), this, SLOT(fitmarkers())); 
-    connect(hlScrollBar, SIGNAL(valueChanged(int)), this, SLOT(scroll(int))); 
-    connect(pbSave, SIGNAL(clicked()), this, SLOT(slotSave())); 
-    connect(pbLoad, SIGNAL(clicked()), this, SLOT(slotLoad())); 
-    connect(pbMarker, SIGNAL(clicked()), this, SLOT(slotMarker())); 
-    connect(twWatchPoint, SIGNAL(currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * )), this, SLOT(slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * ))); 
+    connect(pbZoomIn,   SIGNAL(clicked()), this, SLOT(zoomin()));
+    connect(pbZoomOut,  SIGNAL(clicked()), this, SLOT(zoomout()));
+    connect(pbFit,      SIGNAL(clicked()), this, SLOT(fitmarkers()));
+    connect(hlScrollBar,SIGNAL(valueChanged(int)), this, SLOT(scroll(int)));
+    connect(pbSave,     SIGNAL(clicked()), this, SLOT(slotSave()));
+    connect(pbLoad,     SIGNAL(clicked()), this, SLOT(slotLoad()));
+    connect(pbMarker,   SIGNAL(clicked()), this, SLOT(slotMarker()));
+    connect(twWatchPoint,SIGNAL(currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * )), this, SLOT(slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * )));
 
     connect(mainwindow,SIGNAL(DestroySignal(CPObject*)),this,SLOT(DestroySlot(CPObject*)));
 
@@ -117,7 +117,7 @@ void dialogAnalog::slotSave(void)
     //out.setVersion(QDataStream::Qt_4_0);
 
 	// Write the data
-
+    out << NbBits;
 	out << dataplot;
 }
 
@@ -140,6 +140,7 @@ void dialogAnalog::slotLoad(void)
 
     mainwindow->analogMutex.lock();
 	// Read the data
+    in >> NbBits;
 	in >> dataplot;
     mainwindow->analogMutex.unlock();
 
@@ -281,6 +282,7 @@ void dialogAnalog::fillPixmap(CData *data, QPen *dataPen)
 	TAnalog_Data plot,next_plot;
 	QPainter painter;
     int heightPerField = lastPixmap.height() / NbBits;
+    int dataview_width = frame_dataview->width();
 	
 	painter.begin(&lastPixmap);
 	painter.setPen(*dataPen);
@@ -301,7 +303,7 @@ void dialogAnalog::fillPixmap(CData *data, QPen *dataPen)
 		X2=StateToX(next_plot.state);
 
         // Crop to the visible area
-        if (!( (j>1) && ( (X2<0) || ( X1>frame_dataview->width())))) {
+        if (!( (j>1) && ( (X2<0) || ( X1>dataview_width)))) {
 
             for (int jj=0;jj<NbBits;jj++)
             {

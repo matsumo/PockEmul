@@ -66,18 +66,21 @@ void CPocketThread::run()
                 {
                     // test si en retard
                     quint64 cs = pPC->pTIMER->currentState();
-                    if (pPC->pTIMER->state <= cs)
+//                    qWarning()<< cs - pPC->pTIMER->state;
+                    if (pPC->pTIMER->state < cs)
                     {
+//                        qWarning()<<pPC->pTIMER->state << cs;
                         if (pPC->ioFreq > 0) {
-                            int step = MIN((quint64)(f / pPC->ioFreq - pPC->pTIMER->deltaStep),cs-pPC->pTIMER->state);
+                            quint64 step = MIN((quint64)(f / pPC->ioFreq - pPC->pTIMER->deltaStep),cs - pPC->pTIMER->state);
                             pPC->pTIMER->deltaStep = pPC->runRange(step) - step;
                         }
                         else {
                             pPC->run();
                         }
                         // WRITE the LINK BOX Connector
-                        if ( ( dynamic_cast<CpcXXXX *>(pPC) ) &&  !((CpcXXXX*)pPC)->DasmFlag)
+                        if ( ( dynamic_cast<CpcXXXX *>(pPC) ) &&  !((CpcXXXX*)pPC)->DasmFlag) {
                             mainwindow->pdirectLink->Cascade(pPC);
+                        }
 
                         pause = false;
 
@@ -85,6 +88,9 @@ void CPocketThread::run()
                             mainwindow->dialoganalogic->captureData();
                         }
 
+                    }
+                    else {
+//                        qWarning()<<pPC->pTIMER->state << cs;
                     }
                 }
                 if (pPC->toDestroy)
@@ -101,7 +107,10 @@ void CPocketThread::run()
 #ifdef EMSCRIPTEN
         if (pause) return;
 #else
-        if (pause) msleep(10);
+        if (pause) {
+//            qWarning()<<"pause";
+            msleep(10);
+        }
 #endif
 #ifdef NEWTIMER
         mainwindow->rawclk += timer.nsecsElapsed();

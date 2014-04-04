@@ -1,3 +1,4 @@
+#include <QDebug>
 
 #include "tc8576p.h"
 #include "pcxxxx.h"
@@ -90,6 +91,7 @@ bool CTC8576P::step(void)
 // Write operation
 bool CTC8576P::instruction(BYTE cmd)
 {
+    qWarning()<<"TC8576P - instruction";
     if (pPC->fp_log) fprintf(pPC->fp_log,"TC8576P - COMMAND - %02x\n",cmd);
     // Serial Command Register
     // b7 = 0; command byte=b0->b6
@@ -197,6 +199,7 @@ void CTC8576P::SPR(void)
 
 bool CTC8576P::in(BYTE data)
 {
+    qWarning()<<"TC8576P";
     if (pPC->fp_log) fprintf(pPC->fp_log,"TC8576P - IN - %02x, par=%i\n",data,r.par);
 
     r.pr[r.par] = data;

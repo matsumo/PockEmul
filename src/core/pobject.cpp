@@ -305,7 +305,7 @@ quint64 CPObject::runRange(quint64 step) {
 
         quint64 t = pTIMER->state;
 
-        while (!off && (pTIMER->state - t < step)) {
+        while (!off && ((pTIMER->state - t) < step)) {
             run();
 
 #if 0
