@@ -62,6 +62,7 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
     SlotList.append(CSlot(256, 0x40000 , ""             , ""            , CSlot::RAM , "RAM S1"));
     SlotList.append(CSlot(256, 0x80000 , ""             , ""            , CSlot::RAM , "RAM S2"));
 
+    model = mod;
     switch (mod) {
     case E500:
         setcfgfname(QString("e500"));
@@ -81,14 +82,11 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
         BackGroundFname	= P_RES(":/e500/pc-e500s.png");
         LcdFname		= P_RES(":/e500/e500lcd.png");
         SymbFname		= P_RES(":/e500/e500symb.png");
+        SlotList.append(CSlot(128, 0x20000 , P_RES(":/e500/s3ext-8.3-E500S.rom"), "e500/s3ext-8.3-E500S.rom" , CSlot::ROM , "ROM 8.3 EXT"));
         SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3-8.3-E500S.rom"), "e500/s3-8.3-E500S.rom" , CSlot::ROM , "ROM 8.3"));
         break;
     default: break;
     }
-
-
-
-
 
     PowerSwitch	= 0;
     Pc_Offset_X = Pc_Offset_Y = 0;
@@ -128,6 +126,12 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
     tmp_state=0;
     ioFreq=0;
 
+}
+
+Ce500::~Ce500()
+{
+    delete pHD61102_1;
+    delete pHD61102_2;
 }
 
 void	Ce500::initExtension(void)
@@ -365,8 +369,9 @@ bool Ce500::Get_Connector(void)
     return(1);
 }
 
-void Ce500::disp(qint8 cmd,UINT32 data)
+BYTE Ce500::disp(qint8 cmd,UINT32 data)
 {
+//    qWarning()<<cmd<<data;
     switch(cmd){
     case   6:							/* LCDC 2 write data */
         pHD61102_2->instruction(0x100 | data);
@@ -395,15 +400,19 @@ void Ce500::disp(qint8 cmd,UINT32 data)
         pLCDC->Refresh = true;
         break;
     case   7:							/* LCDC 2 read data */
-        mem[0x2007] = pHD61102_2->instruction(0x300);
+//        qWarning()<<"read lcd 1:";
+        return pHD61102_2->instruction(0x300);
         break;
     case 0xb:							/* LCDC 1 read data */
-        mem[0x200b] = pHD61102_1->instruction(0x300);
+//        qWarning()<<"read lcd 2:";
+        return pHD61102_1->instruction(0x300);
         break;
     default:
         qWarning()<<"unhandled lcd command:"<< cmd<<data;
         break;
     }
+
+    return 0;
 }
 
 /*---------------------------------------------------------------------------*/
@@ -506,18 +515,31 @@ bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
 #endif
 
 
-    if ( (*d>=0x00000) && (*d<=0x3FFFF)) {
+    if ( (*d>=0x00000) && (*d<=0x0FFFF)) {
 
 //        if((*d&0x3000)==0x1000){
 //            *d&=0x103f; pRP5C01->write(*d&31,data);
 //            return((*d&0x10)==0);		/* CLOCK (010xx) */
 //        }
 
-        if((*d&0x6000)==0x2000){
-            *d&=0x200f; disp(*d&15,data);//lcdc.access=1; lcdc.lcdcadr=*d&15;
-            return(1-(*d&1));			/* LCDC (0200x) */
+        if((*d & 0x6000)==0x2000){
+            *d &= 0x200f;
+            disp(*d&15,data);//lcdc.access=1; lcdc.lcdcadr=*d&15;
+            return 0; //(1-(*d&1));			/* LCDC (0200x) */
+        }
+        else {
+            qWarning()<<"write:"<<*d<<data;
         }
         return 1;
+    }
+
+    if ( (*d>=0x20000) && (*d<=0x3FFFF)) {
+
+        switch (model) {
+        case E500: return 0;
+        case E500S: return 1;
+        default: return 0;
+        }
     }
 #if (TEST_MEMORY_MAPPING)
 
@@ -588,8 +610,8 @@ bool Ce500::Chk_Adr_R(UINT32 *d,UINT32 *data)
     if(*d>0x3ffff) return(1);			/* RAM area(40000-7ffff) S2: */
 
     if((*d&0x6000)==0x2000){
-        *d&=0x200f; disp(*d&15,*data);//pLCDC->SetDirtyBuf(pLCDC->SetDirtyBuf(*d & 15));
-        return(1);//-(*d&1));			/* LCDC (0200x) */
+        *data = disp(*d&15,*data);//pLCDC->SetDirtyBuf(pLCDC->SetDirtyBuf(*d & 15));
+        return(0);//-(*d&1));			/* LCDC (0200x) */
     }
 
 //    if((*d&0x3000)==0x1000){

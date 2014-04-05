@@ -97,7 +97,7 @@ void DialogDump::LoadBin(void)
 	// Launch Open File Dialog
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
                                                  "",
-                                                 tr("Binary File (*.bin)"));
+                                                 tr("Binary File (*.bin *.rom);;All Files (*.*)"));
 
 	if( fileName.isNull() ) 
 		return ;

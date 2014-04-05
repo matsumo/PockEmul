@@ -22,6 +22,9 @@
 #include "ui/cregsz80widget.h"
 #include "dialoganalog.h"
 
+#include "lcc/parser/parser.h"
+
+
 //#define	UN_DEFINE	printf("Undefined Code !!(pc=%05X)\n",reg.x.p);
 #define		UN_DEFINE	debug.isdebug=1;
 #define		OPR1			0		/* first operand by i-mem access */
@@ -4143,3 +4146,21 @@ UINT32 Cdebug_sc62015::DisAsm_1(UINT32 adr)
     return((adr+l)&MASK_20);
 }
 
+void Cdebug_sc62015::injectReg(Parser *p)
+{
+
+    Csc62015 * _sc = (Csc62015*)(pPC->pCPU);
+
+    p->symbols_ ["A"]=	_sc->get_reg(REG_A);
+    p->symbols_ ["IL"]=	_sc->get_reg(REG_IL);
+    p->symbols_ ["BA"]=	_sc->get_reg(REG_BA);
+    p->symbols_ ["I"]=	_sc->get_reg(REG_I);
+    p->symbols_ ["X"]=	_sc->get_reg(REG_X);
+    p->symbols_ ["Y"]=	_sc->get_reg(REG_Y);
+    p->symbols_ ["U"]=	_sc->get_reg(REG_U);
+    p->symbols_ ["S"]=	_sc->get_reg(REG_S);
+    p->symbols_ ["P"]=	_sc->get_reg(REG_P);
+    p->symbols_ ["F"]=	_sc->get_reg(REG_F);
+    p->symbols_ ["PC"]=	_sc->get_reg(REG_PC);
+
+}

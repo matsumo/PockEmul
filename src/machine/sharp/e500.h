@@ -36,9 +36,8 @@ public:
 
     Ce500(CPObject *parent = 0,Models mod=E500);
 
-    virtual ~Ce500()
-    {								//[constructor]
-    }
+    virtual ~Ce500();
+
     bool init();
 
     CHD61102        *pHD61102_1;
@@ -46,7 +45,7 @@ public:
 
 //    CRP5C01         *pRP5C01;
 
-    void disp(qint8 cmd, UINT32 data);
+    BYTE disp(qint8 cmd, UINT32 data);
     BYTE getKey();
     bool run();
 
@@ -60,6 +59,7 @@ protected:
 private:
     bool Xin,Xout,start2khz,start4khz;
     qint64 tmp_state;
+    Models model;
 
 
 };
