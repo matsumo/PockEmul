@@ -62,6 +62,14 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
     SlotList.append(CSlot(256, 0x40000 , ""             , ""            , CSlot::RAM , "RAM S1"));
     SlotList.append(CSlot(256, 0x80000 , ""             , ""            , CSlot::RAM , "RAM S2"));
 
+
+    setDXmm(200);
+    setDYmm(100);
+    setDZmm(14);
+
+    setDX(715);
+    setDY(357);
+
     model = mod;
     switch (mod) {
     case E500:
@@ -79,6 +87,13 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
         SessionHeader	= "E500SPKM";
         Initial_Session_Fname ="e500s.pkm";
 
+//        setDXmm(220);
+//        setDYmm(105);
+//        setDZmm(19);
+
+//        setDX(786);
+//        setDY(375);
+
         BackGroundFname	= P_RES(":/e500/pc-e500s.png");
         LcdFname		= P_RES(":/e500/e500lcd.png");
         SymbFname		= P_RES(":/e500/e500symb.png");
@@ -91,12 +106,7 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
     PowerSwitch	= 0;
     Pc_Offset_X = Pc_Offset_Y = 0;
 
-    setDXmm(200);
-    setDYmm(100);
-    setDZmm(14);
 
-    setDX(715);
-    setDY(357);
 
     Lcd_X		= 69;
     Lcd_Y		= 99;
