@@ -922,18 +922,20 @@ QString MainWindowPockemul::saveassession()
                 tr("Session File (*.pml)"));
 
 
-    QFileInfo fi( fn );
-            if (fi.suffix().isEmpty())
-            {
-                    // no suffix, adding .pml  - BUG For Android
-                fn.append(".pml");
-            }
-    QFile f(fn);
-    if (f.open(QFile::WriteOnly | QFile::Truncate)) {
-        QTextStream out(&f);
-        out << s;
-    }
+    if (!fn.isEmpty()) {
 
+        QFileInfo fi( fn );
+        if (fi.suffix().isEmpty())
+        {
+            // no suffix, adding .pml  - BUG For Android
+            fn.append(".pml");
+        }
+        QFile f(fn);
+        if (f.open(QFile::WriteOnly | QFile::Truncate)) {
+            QTextStream out(&f);
+            out << s;
+        }
+    }
     saveAll = ASK;
 
     delete xml;
