@@ -38,7 +38,9 @@ void CbusPanasonic::fromUInt64(quint64 val)
 QString CbusPanasonic::toLog() const
 {
     QString ret;
-    ret = QString("Dest:%1  - %2").arg(getDest()).arg(getFunc());
+    ret = isWrite()?"W:":"R:";
+    ret += QString("Dest:%1  - %2").arg(getDest()).arg(getFunc());
+
     switch (getFunc()) {
     case BUS_QUERY: ret += "BUS_QUERY"; break;
     case BUS_SELECT: ret += "BUS_SELECT"; break;

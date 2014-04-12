@@ -6,13 +6,15 @@
 
 #include "mainwindowpockemul.h"
 
+class MC6847;
+
 class Crlp2001:public CPObject {
     Q_OBJECT
 public:
     const char*	GetClassName(){ return("Crlp2001");}
 
     Cconnector	*pCONNECTOR;
-
+    MC6847      *pMC6847;
 
     bool run(void);
     bool init(void);				//initialize
@@ -33,8 +35,9 @@ protected slots:
     void Rotate();
 
 private:
-
+    bool INTrequest;
     bool rotate;
+    quint8 controlReg;
 
 };
 

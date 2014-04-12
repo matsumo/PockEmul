@@ -557,7 +557,8 @@ HEADERS += src/core/Connect.h \
     src/machine/sharp/ce162e.h \
     src/machine/sharp/ce153.h \
     src/core/breakpoint.h \
-    resources/lcc/model/__graph.h
+    resources/lcc/model/__graph.h \
+    src/cpu/mc6847.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -813,7 +814,8 @@ SOURCES +=  \
     src/machine/sharp/buspc1500.cpp \
     src/machine/sharp/ce162e.cpp \
     src/machine/sharp/ce153.cpp \
-    src/core/breakpoint.cpp
+    src/core/breakpoint.cpp \
+    src/cpu/mc6847.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

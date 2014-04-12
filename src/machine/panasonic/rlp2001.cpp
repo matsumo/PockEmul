@@ -9,6 +9,7 @@
 #include "Keyb.h"
 #include "rlp2001.h"
 #include "buspanasonic.h"
+#include "mc6847.h"
 
 Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
 {                                                       //[constructor]
@@ -30,9 +31,14 @@ Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
 
 
 
-    memsize      = 0x1000;
-    SlotList.append(CSlot(4 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 4Ko"));
+    memsize      = 0x2000;
+    SlotList.append(CSlot(4 , 0x0000 , P_RES(":/rlh1000/rlp2001.bin") , ""        , CSlot::ROM , "ROM 4Ko"));
+    SlotList.append(CSlot(4 , 0x1000 , "" , ""        , CSlot::RAM , "Ram Video"));
 
+    INTrequest = false;
+
+    pMC6847 = new MC6847();
+    pMC6847->set_vram_ptr(&mem[0x1000],0xff);
 }
 
 Crlp2001::~Crlp2001(){
@@ -43,135 +49,115 @@ Crlp2001::~Crlp2001(){
 
 bool Crlp2001::run(void)
 {
-    return true;
 
-#if 0
-    Cbus bus;
+    CbusPanasonic bus;
 
     bus.fromUInt64(pCONNECTOR->Get_values());
     if (bus.getFunc()==BUS_SLEEP) return true;
 
     if ( (bus.getDest()!=0) && (bus.getDest()!=30)) return true;
 
-//    bus.setDest(0);
+    bus.setDest(0);
 
     if (bus.getFunc()==BUS_QUERY) {
-        bus.setData(0xFB);
-        if (romSwitch) bus.setData(0xf7);
-        if (model==RLP9006) bus.setData(0xf7);
+        bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
         return true;
     }
 
     if (bus.getFunc()==BUS_SELECT) {
-        Power = false;
-        bank=0;
-//        qWarning()<<"9001 BUS SELECT:"<<bus.getData();
-        if (romSwitch) {
-            Power = false;
-            if ( bus.getData()==128 ) {
-                Power = true;
-                bank = 0;
-            }
-        }
-        else if (model==RLP9006) {
-            switch (bus.getData()) {
-            case 1: Power = true; bank = 7; break;
-            case 2: Power = true; bank = 6;  break;
-            case 4: Power = true; bank = 5;  break;
-            case 8: Power = true; bank = 4;  break;
-            case 16: Power = true; bank = 3;  break;
-            case 32: Power = true; bank = 2;  break;
-            case 64: Power = true; bank = 1;  break;
-            case 128: Power = true; bank = 0;  break;
-            default: Power = false; break;
-            }
-        }
-        else {
-            switch (bus.getData()) {
-            case 1: Power = true; bank = 0; break;
-            case 2: if ((model == RLP9004)||(model == RLP9005)) { Power = true; bank = 1; } break;
-            case 4: if (model == RLP9005) { Power = true; bank = 2; } break;
-            case 8: if (model == RLP9005) { Power = true; bank = 3; } break;
-            case 16: if (model == RLP9005) { Power = true; bank = 4; } break;
-            case 32: if (model == RLP9005) { Power = true; bank = 5; } break;
-            case 64: if (model == RLP9005) { Power = true; bank = 6; } break;
-            case 128: if (model == RLP9005) { Power = true; bank = 7; } break;
-            default: Power = false; break;
-            }
-        }
+//        qWarning()<<"2001 BUS SELECT:"<<bus.getData();
 
+        switch (bus.getData()) {
+        case 1: Power = true; break;
+        default: Power = false; break;
+        }
         if (Power)
         {
             bus.setFunc(BUS_READDATA);
-            bus.setData(0x00);
+            bus.setData(0x01);
             pCONNECTOR->Set_values(bus.toUInt64());
         }
         return true;
     }
 
+    if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
+            switch(bus.getData()) {
+            case 0x00: // Print
+                qWarning()<<"BUS_TOUCH:"<<bus.getData();
+    //            Refresh(0);
+    //            buffer.clear();
+                INTrequest = false;
+                break;
+            case 0x80: //
+                qWarning()<<"BUS_TOUCH:"<<bus.getData();
+
+                INTrequest = true;
+    //            receiveMode = true;
+                break;
+
+            default: qWarning()<<"BUS_TOUCH:"<<bus.getData();
+                break;
+            }
+            bus.setFunc(BUS_ACK);
+    }
+
+    if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
+        if (INTrequest) {
+            qWarning()<<"INTREQUEST:true";
+            bus.setINT(true);
+            bus.setData(0x00);
+            INTrequest = false;
+        }
+        else {
+//            qWarning()<<"INTREQUEST:false";
+            bus.setData(0xff);
+        }
+        bus.setFunc(BUS_READDATA);
+        pCONNECTOR->Set_values(bus.toUInt64());
+        return true;
+       }
+
+    if ( (bus.getFunc()==BUS_LINE0) && bus.isWrite() ) {
+        // Analyse command
+        controlReg = bus.getData();
+        qWarning()<<"Control Register set: "<<controlReg;
+
+        bus.setFunc(BUS_ACK);
+    }
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
+        qWarning()<<"Read data LINE 0:";
+        bus.setFunc(BUS_ACK);
+    }
+
     if (!Power) return true;
 
-
-
     quint32 adr = bus.getAddr();
+//    quint8 data = bus.getData();
 
     switch (bus.getFunc()) {
-    case BUS_SLEEP:
-    case BUS_ACK: break;
+    case BUS_SLEEP: break;
     case BUS_WRITEDATA:
-
-        switch (model) {
-        case RLP9001: if((adr>=0x8000) && (adr < 0x9000)) mem[adr-0x8000] = bus.getData(); break;
-        case RLP9002: if((adr>=0x8000) && (adr < 0xa000)) mem[adr-0x8000] = bus.getData(); break;
-        case RLP9003: if((adr>=0x8000) && (adr < 0xc000)) mem[adr-0x8000] = bus.getData(); break;
-        case RLP9003R:if((adr>=0x8000) && (adr < 0xc000)) mem[adr-0x8000] = bus.getData(); break;
-        case RLP9004:
-        case RLP9005: if((adr>=0x8000) && (adr < 0xc000)) mem[(adr-0x8000)+bank*0x4000] = bus.getData(); break;
-        default: break;
+        if((adr>=0x3000) && (adr < 0x4000)) {
+            mem[adr-0x2000] = bus.getData();
+            INTrequest = true;
+            qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
         }
-
         break;
     case BUS_READDATA:
-
-//        bus.setData(0x7f);
-        switch (model) {
-        case RLP9001: if((adr>=0x8000) && (adr < 0x9000)) bus.setData(mem[adr-0x8000]); break;
-        case RLP9002: if((adr>=0x8000) && (adr < 0xa000)) bus.setData(mem[adr-0x8000]); break;
-        case RLP9003: if((adr>=0x8000) && (adr < 0xc000)) bus.setData(mem[adr-0x8000]); break;
-        case RLP9003R:
-            if (romSwitch && (adr>=0x4000) && (adr < 0x8000)) {
-//                qWarning()<<"ROM SIMUL:"<<adr<<"="<<mem[adr-0x4000+0x14];
-                bus.setFunc(BUS_ACK);
-                bus.setData(mem[adr-0x4000+romoffset]);
-            }
-            else if((adr>=0x8000) && (adr < 0xc000)) bus.setData(mem[adr-0x8000]);
-            break;
-        case RLP9004:
-        case RLP9005: if((adr>=0x8000) && (adr < 0xc000)) bus.setData(mem[adr-0x8000+bank*0x4000]); break;
-        case RLP9006:
-            if ( (adr>=0x4000) && (adr < 0x8000)) {
-//                qWarning()<<"ROM SIMUL:"<<adr<<"="<<mem[adr-0x4000+0x14];
-                bus.setFunc(BUS_ACK);
-                bus.setData(mem[adr-0x4000+bank*0x4000]);
-            }
-            break;
-        default: break;
-        }
-
+        if ( (adr>=0x2000) && (adr<0x4000) ) bus.setData(mem[adr-0x2000]);
+        else bus.setData(0x7f);
         break;
-    case BUS_INTREQUEST:
-        bus.setData(0xff);
-        bus.setFunc(BUS_READDATA);
+    default:
+        qWarning()<<bus.toLog();
         break;
-    default: break;
+
     }
 
     pCONNECTOR->Set_values(bus.toUInt64());
     return true;
 
-#endif
 }
 
 
@@ -197,6 +183,9 @@ bool Crlp2001::init(void)
     if(pKEYB)   pKEYB->init();
 
     Power = false;
+
+
+    if (pMC6847) pMC6847->init();
 
     AddLog(LOG_MASTER,"done.\n");
 
