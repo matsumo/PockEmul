@@ -79,8 +79,18 @@ public:
     void set_vram_ptr(quint8* ptr, int size) {
         vram_ptr = ptr; vram_size = size;
     }
+    void load_font_bin(QString path);
     void load_font_image(QString path);
     void draw_screen();
+    void set_screen_ptr(QImage *screen) {
+        screenImage = screen;
+    }
+
+    int displaySL;
+
+    int computeSL(int y);
+private:
+    QImage *screenImage;
 };
 
 

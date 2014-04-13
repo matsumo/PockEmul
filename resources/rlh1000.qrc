@@ -31,5 +31,6 @@
         <file>rlh1000/Portacalc.bin</file>
         <file>rlh1000/modimg/portacalc.png</file>
         <file>rlh1000/rlp2001.bin</file>
+        <file>rlh1000/rlp2001char.bin</file>
     </qresource>
 </RCC>

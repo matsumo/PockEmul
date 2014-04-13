@@ -22,6 +22,7 @@ public:
     virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
     virtual bool	InitDisplay(void);
+    virtual bool UpdateFinalImage(void);
 
     Crlp2001(CPObject *parent = 0);
     virtual ~Crlp2001();
@@ -38,6 +39,7 @@ private:
     bool INTrequest;
     bool rotate;
     quint8 controlReg;
+    QImage *screen;
 
 };
 

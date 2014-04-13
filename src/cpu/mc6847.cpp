@@ -6,6 +6,9 @@
 
     [ mc6847 ]
 */
+#include <QDebug>
+#include <QPainter>
+#include <QFile>
 
 #include "mc6847.h"
 
@@ -143,6 +146,7 @@ bool MC6847::init()
 void MC6847::reset()
 {
     vsync = hsync = disp = true;
+    displaySL = 0;
 }
 
 void MC6847::write_signal(int id, quint32 data, quint32 mask)
@@ -231,6 +235,21 @@ void MC6847::load_font_image(QString path)
 #endif
 }
 
+void MC6847::load_font_bin(QString path)
+{
+    // external font
+    QFile file;
+    file.setFileName(path);
+    if (file.exists())
+    {
+        file.open(QIODevice::ReadOnly);
+        QDataStream in(&file);
+        in.readRawData ((char *) extfont,256 * 16 );
+        file.close();
+    }
+
+}
+
 void MC6847::draw_screen()
 {
     // render screen
@@ -252,12 +271,25 @@ void MC6847::draw_screen()
     }
 
     // copy to screen
-//    for(int y = 0; y < 192; y++) {
-//        scrntype* dest = emu->screen_buffer(y);
-//        for(int x = 0; x < 256; x++) {
-//            dest[x] = palette_pc[screen[y][x]];
-//        }
-//    }
+    QPainter painter(screenImage);
+
+    for(int y = 0; y < 192; y++) {
+//        scrntype* dest = emu->(y);
+        for(int x = 0; x < 256; x++) {
+            painter.setPen( palette_pc[screen[y][x]]);
+            painter.drawPoint( x, computeSL(y));
+        }
+    }
+    painter.end();
+}
+
+int MC6847::computeSL(int y) {
+    int _res = y;
+    _res -= displaySL;
+    if (_res<0) _res+=192;
+
+    return _res;
+
 }
 
 void MC6847::draw_cg(int xofs, int yofs)
@@ -355,20 +387,36 @@ void MC6847::draw_rg(int xofs, int yofs)
     }
 }
 
+
+#define MC6847_ATTR_OFS		1
+//#define MC6847_ATTR_AG		0x80
+//#define MC6847_ATTR_AS		0x40
+#define MC6847_ATTR_INTEXT	0x02
+//#define MC6847_ATTR_GM0		0x10
+//#define MC6847_ATTR_GM1		0x08
+//#define MC6847_ATTR_GM2		0x04
+//#define MC6847_ATTR_CSS		0x02
+#define MC6847_ATTR_INV		0x01
+
+
+
 void MC6847::draw_alpha()
 {
-
+//    qWarning()<<"drawAlpha";
     int ofs = 0;
 
     for(int y = 0; y < 192; y += 12) {
         for(int x = 0; x < 256; x += 8) {
-            quint8 data = vram_ptr[ofs + MC6847_VRAM_OFS];
+            quint8 data = vram_ptr[2*ofs + MC6847_ATTR_OFS];
 #ifdef MC6847_ATTR_OFS
-            quint8 attr = vram_ptr[ofs + MC6847_ATTR_OFS];
+            quint8 attr = vram_ptr[2*ofs ];
 #endif
+
             if(++ofs >= vram_size) {
                 ofs = 0;
             }
+//            qWarning()<<"ofs="<<ofs;
+
             // vram data bits may be connected to mode signals
             bool as2 = as;
             bool intext2 = intext;
@@ -405,7 +453,7 @@ void MC6847::draw_alpha()
             if(!as2) {
                 if(intext2) {
                     // external alphanumerics
-                    pattern = &extfont[16 * data];
+                    pattern = &extfont[0x400-16 * (data-0x60)];
                 } else {
                     // internal alphanumerics
                     pattern = (quint8 *)(&intfont[12 * (data & 0x3f)]);
@@ -445,6 +493,7 @@ void MC6847::draw_alpha()
             }
         }
     }
+//    qWarning()<<"end::DrawAlpha";
 }
 
 

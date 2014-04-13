@@ -100,7 +100,7 @@ bool Crlh1000::init(void)				// initialize
 //pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("rlh1000.log","wt");	// Open log file
 #ifndef QT_NO_DEBUG
-    pCPU->logsw = true;
+//    pCPU->logsw = true;
 #endif
     CpcXXXX::init();
 

@@ -38,7 +38,9 @@ Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
     INTrequest = false;
 
     pMC6847 = new MC6847();
-    pMC6847->set_vram_ptr(&mem[0x1000],0xff);
+
+    screen = new QImage(256,192,QImage::Format_ARGB32);
+
 }
 
 Crlp2001::~Crlp2001(){
@@ -85,19 +87,21 @@ bool Crlp2001::run(void)
     if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
             switch(bus.getData()) {
             case 0x00: // Print
-                qWarning()<<"BUS_TOUCH:"<<bus.getData();
+                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
     //            Refresh(0);
     //            buffer.clear();
+                pMC6847->draw_screen();
                 INTrequest = false;
                 break;
             case 0x80: //
-                qWarning()<<"BUS_TOUCH:"<<bus.getData();
+                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
 
+                pMC6847->draw_screen();
                 INTrequest = true;
     //            receiveMode = true;
                 break;
 
-            default: qWarning()<<"BUS_TOUCH:"<<bus.getData();
+            default: qWarning()<<"BUS_TOUCH:"<<bus.toLog();
                 break;
             }
             bus.setFunc(BUS_ACK);
@@ -105,7 +109,7 @@ bool Crlp2001::run(void)
 
     if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
         if (INTrequest) {
-            qWarning()<<"INTREQUEST:true";
+//            qWarning()<<"INTREQUEST:true";
             bus.setINT(true);
             bus.setData(0x00);
             INTrequest = false;
@@ -122,6 +126,8 @@ bool Crlp2001::run(void)
     if ( (bus.getFunc()==BUS_LINE0) && bus.isWrite() ) {
         // Analyse command
         controlReg = bus.getData();
+
+        pMC6847->displaySL = (controlReg & 0x0f) * 12;
         qWarning()<<"Control Register set: "<<controlReg;
 
         bus.setFunc(BUS_ACK);
@@ -142,6 +148,11 @@ bool Crlp2001::run(void)
         if((adr>=0x3000) && (adr < 0x4000)) {
             mem[adr-0x2000] = bus.getData();
             INTrequest = true;
+//            pMC6847->draw_screen();
+
+//            qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
+        }
+        else {
             qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
         }
         break;
@@ -160,7 +171,22 @@ bool Crlp2001::run(void)
 
 }
 
+bool Crlp2001::UpdateFinalImage(void) {
+    CPObject::UpdateFinalImage();
 
+    // Draw switch by 180 rotation
+    QPainter painter;
+
+    // PRINTER SWITCH
+    painter.begin(FinalImage);
+    painter.drawImage(500,10,*screen);
+
+    painter.end();
+
+    Refresh_Display = true;
+
+    return true;
+}
 
 
 /*****************************************************************************/
@@ -185,7 +211,12 @@ bool Crlp2001::init(void)
     Power = false;
 
 
-    if (pMC6847) pMC6847->init();
+    if (pMC6847) {
+        pMC6847->set_vram_ptr(&mem[0x1000],0x400);
+        pMC6847->set_screen_ptr(screen);
+        pMC6847->load_font_bin(":/rlh1000/rlp2001char.bin");
+        pMC6847->init();
+    }
 
     AddLog(LOG_MASTER,"done.\n");
 
