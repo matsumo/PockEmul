@@ -86,21 +86,15 @@ bool Crlp2001::run(void)
 
     if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
             switch(bus.getData()) {
-            case 0x00: // Print
-                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
-    //            Refresh(0);
-    //            buffer.clear();
-                pMC6847->draw_screen();
-                INTrequest = false;
+            case 0x00:
+//                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
+                INTEnabled = false;
                 break;
             case 0x80: //
-                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
-
-                pMC6847->draw_screen();
+//                qWarning()<<"BUS_TOUCH:"<<bus.toLog();
+                INTEnabled = true;
                 INTrequest = true;
-    //            receiveMode = true;
                 break;
-
             default: qWarning()<<"BUS_TOUCH:"<<bus.toLog();
                 break;
             }
@@ -108,7 +102,7 @@ bool Crlp2001::run(void)
     }
 
     if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
-        if (INTrequest) {
+        if (INTEnabled && INTrequest) {
 //            qWarning()<<"INTREQUEST:true";
             bus.setINT(true);
             bus.setData(0x00);
@@ -126,8 +120,8 @@ bool Crlp2001::run(void)
     if ( (bus.getFunc()==BUS_LINE0) && bus.isWrite() ) {
         // Analyse command
         controlReg = bus.getData();
-
         pMC6847->displaySL = (controlReg & 0x0f) * 12;
+//        pMC6847->set_vram_ptr(&mem[0x1000+(64*(controlReg & 0x0f))],0x400);
         qWarning()<<"Control Register set: "<<controlReg;
 
         bus.setFunc(BUS_ACK);
@@ -146,22 +140,30 @@ bool Crlp2001::run(void)
     case BUS_SLEEP: break;
     case BUS_WRITEDATA:
         if((adr>=0x3000) && (adr < 0x4000)) {
-            mem[adr-0x2000] = bus.getData();
+            if (mem[adr-0x2000] != bus.getData()) {
+                mem[adr-0x2000] = bus.getData();
+//                qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
+                pMC6847->draw_screen();
+            }
             INTrequest = true;
-//            pMC6847->draw_screen();
 
 //            qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
         }
         else {
-            qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
+            qWarning()<<"**** Write unh video:"<<QString("%1").arg(adr,4,16,QChar('0'))<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
         }
         break;
     case BUS_READDATA:
-        if ( (adr>=0x2000) && (adr<0x4000) ) bus.setData(mem[adr-0x2000]);
-        else bus.setData(0x7f);
+        if ( (adr>=0x2000) && (adr<0x4000) ) {
+            bus.setData(mem[adr-0x2000]);
+        }
+        else {
+            bus.setData(0x7f);
+            qWarning()<<"*****READ "<<QString("%1").arg(adr,4,16,QChar('0'));
+        }
         break;
     default:
-        qWarning()<<bus.toLog();
+//        qWarning()<<bus.toLog();
         break;
 
     }

@@ -37,6 +37,7 @@ protected slots:
 
 private:
     bool INTrequest;
+    bool INTEnabled;
     bool rotate;
     quint8 controlReg;
     QImage *screen;

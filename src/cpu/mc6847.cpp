@@ -276,8 +276,8 @@ void MC6847::draw_screen()
     for(int y = 0; y < 192; y++) {
 //        scrntype* dest = emu->(y);
         for(int x = 0; x < 256; x++) {
-            painter.setPen( palette_pc[screen[y][x]]);
-            painter.drawPoint( x, computeSL(y));
+            painter.setPen( palette_pc[screen[computeSL(y)][x]]);
+            painter.drawPoint( x, y);
         }
     }
     painter.end();
@@ -285,8 +285,9 @@ void MC6847::draw_screen()
 
 int MC6847::computeSL(int y) {
     int _res = y;
-    _res -= displaySL;
+    _res += displaySL - 12;
     if (_res<0) _res+=192;
+    if (_res>191) _res -=192;
 
     return _res;
 
@@ -396,7 +397,7 @@ void MC6847::draw_rg(int xofs, int yofs)
 //#define MC6847_ATTR_GM1		0x08
 //#define MC6847_ATTR_GM2		0x04
 //#define MC6847_ATTR_CSS		0x02
-#define MC6847_ATTR_INV		0x01
+#define MC6847_ATTR_INV		0x08
 
 
 
