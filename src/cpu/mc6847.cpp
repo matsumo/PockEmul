@@ -285,7 +285,7 @@ void MC6847::draw_screen()
 
 int MC6847::computeSL(int y) {
     int _res = y;
-    _res += displaySL - 12;
+    _res += displaySL;
     if (_res<0) _res+=192;
     if (_res>191) _res -=192;
 
