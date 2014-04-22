@@ -7,7 +7,8 @@ Rectangle {
     VisualItemModel {
         id: visualSettingsModel
 
-//        SettingsDelegate { visible: false; id: testcombo; name: "combobox"; labelString: "Combobox"; type: "combo"; saveInput: false }
+//        SettingsDelegate { id: testcombo; name: "combobox"; labelString: "Combobox"; type: "combo"; saveInput: false }
+        SettingsDelegate { id: labelCloud; name: "label1"; labelString: "Cloud settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: servername; name: "serverURL"; labelString: "Cloud Server"; type: "input"; defaultText: "http://pockemul.dscloud.me/elgg/"}
         SettingsDelegate { id: nameFld; name: "name"; labelString: "Name"; type: "input"; }
         SettingsDelegate { id: emailFld; name: "email"; labelString: "Email"; type: "input"; }
@@ -30,66 +31,14 @@ Rectangle {
 
         SettingsDelegate { name: "apikey"; labelString: "Login"; type: "action"; saveInput:false;
             onButtonClicked: {
-//                buttonElementEnabled = false;
                 root.user_login(usernameFld.inputText,passwordFld.inputText);
-/*
-                var key = cloud.generateKey(usernameFld.inputText,passwordFld.inputText);
-                serverURL = cloud.getValueFor("serverURL","");
-                var url = serverURL+'login?username='+encodeURIComponent(usernameFld.inputText)+'&key='+encodeURIComponent(key);
-//                console.log('url:'+url);
-//                console.log('Test:'+cloud.generateKey("ABC","DEF"));
-                requestGet(url, function (o) {
-
-                    if (o.readyState == 4 ) {
-                        if (o.status==200) {
-                            buttonElementEnabled = true;
-                            cloud.saveValueFor(name,o.responseText);
-                            currentApiKey = o.responseText;
-                            apikey.inputText = o.responseText;
-                            privateCloud.refresh();
-                            publicCloud.refresh();
-                        }
-                        else {
-                            apikey.inputText = "Authentification failed !";
-                        }
-                    }
-                });
-*/
             }
         }
-/*
-        SettingsDelegate { name: "register"; labelString: "Register new user"; type: "action"; saveInput:false;
-            onButtonClicked: {
-//                buttonElementEnabled = false;
-                if (passwordFld.inputText != passwordFld2.inputText) {
-                    apikey.inputText = "Passwords mismatch !.";
-                    return;
-                }
 
-                var key = cloud.generateKey(usernameFld.inputText,passwordFld.inputText);
-                serverURL = cloud.getValueFor("serverURL","");
-                var url = serverURL+'register?username='+encodeURIComponent(usernameFld.inputText)+'&key='+encodeURIComponent(key);
-//                console.log('url:'+url);
-                requestGet(url, function (o) {
+        SettingsDelegate { id: labelServer; name: "labelServer"; labelString: "Telnet Server settings"; type: "text"; saveInput: false }
+        SettingsDelegate { id: telnetPort; name: "telnetPort"; labelString: "Telnet Server port"; type: "input"; defaultText: "4000"}
+        SettingsDelegate { id: telnetEnabled; name: "telnetEnabled"; labelString: "Enable server"; type: "checkbox"; defaultText: "checked"}
 
-                    if (o.readyState == 4 ) {
-                        if (o.status==200) {
-                            buttonElementEnabled = true;
-                            cloud.saveValueFor("apikey",o.responseText);
-                            currentApiKey = o.responseText;
-                            apikey.inputText = o.responseText;
-                            privateCloud.refresh();
-                            publicCloud.refresh();
-                        }
-                        else {
-                            apikey.inputText = "Registration failed. Try an other username.";
-                        }
-                    }
-                });
-            }
-        }
-        SettingsDelegate { id: apikey; name: "out"; labelString: "Retrieved Key"; type: "input"; saveInput:false; }
-*/
     }
 
     ListView {
@@ -106,23 +55,7 @@ Rectangle {
         scrollArea: categories; height: categories.height; width: 8
         anchors.right: categories.right
     }
-    //        LineInput {
-    //            id: username
-    //            objectName: "UserName"
-    //            height: 30
-    //            label: "User Name";
-    //            font.pixelSize: 16
-    //            onInputAccepted: cloud.saveValueFor(key,value)
-    //        }
 
-    //        LineInput {
-    //            id: password
-    //            objectName: "Password"
-    //            height: 30
-    //            label: "Password";
-    //            font.pointSize: 16
-    //            onInputAccepted: cloud.saveValueFor(key,value)
-    //        }
 }
 
 

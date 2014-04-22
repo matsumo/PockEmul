@@ -140,6 +140,7 @@ bool MC6847::init()
 //    register_vline_event(this);
 //    update_timing(CPU_CLOCKS, FRAMES_PER_SEC, LINES_PER_FRAME);
 
+    displaySL = 0;
     return true;
 }
 
@@ -454,7 +455,7 @@ void MC6847::draw_alpha()
             if(!as2) {
                 if(intext2) {
                     // external alphanumerics
-                    pattern = &extfont[0x400-16 * (data-0x60)];
+                    pattern = &extfont[0x800-16 * (data+1)];
                 } else {
                     // internal alphanumerics
                     pattern = (quint8 *)(&intfont[12 * (data & 0x3f)]);

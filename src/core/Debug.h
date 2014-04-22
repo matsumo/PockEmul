@@ -74,6 +74,7 @@ class Cdebug_sc61860:public Cdebug{
     Q_OBJECT
 public:
 	UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
+    virtual void injectReg(Parser *p);
 
 		Cdebug_sc61860(CPObject *parent)	: Cdebug(parent)
 		{

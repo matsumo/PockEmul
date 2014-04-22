@@ -133,7 +133,7 @@ bool Cg850v::Set_Connector()
 #if 0
     switch(pin11If) {
     case PIN11IF_3IO:
-//        return (io3Out & 0x03) | ((io3Out >> 4) & 0x08);
+        return (io3Out & 0x03) | ((io3Out >> 4) & 0x08);
     case PIN11IF_8PIO:
 //        return ~pio8Io & pio8Out;
     case PIN11IF_UART:
@@ -147,7 +147,7 @@ bool Cg850v::Set_Connector()
 
 bool Cg850v::Get_Connector()
 {
-//    pin11If = pCONNECTOR->Get_values() >> 3;
+    pin11If = pCONNECTOR->Get_values() >> 3;
 
     return true;
 }
@@ -369,6 +369,8 @@ UINT8 Cg850v::out(UINT8 address, UINT8 value)
     case 0x17: interruptMask = value;
         return 0;
     case 0x18:
+//        io3Out = value & 0xc3;
+
         pCONNECTOR->Set_pin(PIN_MT_OUT1,value&0x80?true:false);
         pCONNECTOR->Set_pin(PIN_D_OUT,value&0x02?true:false);
         pCONNECTOR->Set_pin(PIN_BUSY,value&0x01?true:false);
@@ -417,7 +419,7 @@ bool Cg850v::run()
 {
     CpcXXXX::run();
 
-#if 0
+#if 1
     if (pKEYB->LastKey==0) {
             keyBreak &= ~0x80;
         }

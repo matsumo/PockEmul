@@ -11,6 +11,7 @@
 #include "pcxxxx.h"
 #include "cpu.h"
 #include "lh5801.h"
+#include "sc61860.h"
 #include "lcc/parser/parser.h"
 
 //#include "inter.h"
@@ -677,6 +678,25 @@ UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
 	NextDasmAdr = ((adr+l)&MASK_20);
 
 	return((adr+l)&MASK_20);
+}
+
+void Cdebug_sc61860::injectReg(Parser *p)
+{
+
+    CSC61860 * _sc = (CSC61860*)(pPC->pCPU);
+
+    p->symbols_ ["P"]=	_sc->get_reg(REG_P);
+    p->symbols_ ["Q"]=	_sc->get_reg(REG_Q);
+    p->symbols_ ["R"]=	_sc->get_reg(REG_R);
+    p->symbols_ ["I"]=	_sc->get_reg(REG_I);
+    p->symbols_ ["J"]=	_sc->get_reg(REG_J);
+    p->symbols_ ["A"]=	_sc->get_reg(REG_A);
+    p->symbols_ ["B"]=	_sc->get_reg(REG_B);
+    p->symbols_ ["X"]=	_sc->get_reg(REG_X);
+    p->symbols_ ["Y"]=	_sc->get_reg(REG_Y);
+    p->symbols_ ["DP"]=	_sc->get_reg(REG_DP);
+    p->symbols_ ["PC"]=	_sc->get_reg(REG_PC);
+
 }
 
 ////////////////////////////////////////////////////////////

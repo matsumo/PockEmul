@@ -41,6 +41,8 @@ private:
     bool rotate;
     quint8 controlReg;
     QImage *screen;
+    quint64 oldState;
+    bool screenUpdated;
 
 };
 

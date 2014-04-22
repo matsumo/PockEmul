@@ -52,48 +52,6 @@ CloudImageProvider::~CloudImageProvider()
 }
 
 
-#if 0
-QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
-{
-    QEventLoop loop;
-    QTimer timer;
-    QNetworkAccessManager *_mgr = new QNetworkAccessManager;
-
-    timer.setSingleShot(true);
-    connect(&timer, SIGNAL(timeout()), &loop, SLOT(quit()));
-    connect(_mgr, SIGNAL(finished(QNetworkReply*)), &loop, SLOT(quit()));
-//    connect(_mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(loadfinished(QNetworkReply*)));
-
-
-    qWarning()<<id<<"   auth_token="<<CloudWindow::getValueFor("auth_token")<<" size="<<requestedSize;
-
-    QUrlQuery qu;
-    qu.addQueryItem("apikey","7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa");
-    qu.addQueryItem("auth_token",CloudWindow::getValueFor("auth_token"));
-
-    QNetworkRequest req("http://"+id);
-    qWarning()<<req.url();
-
-    QNetworkReply *_reply = _mgr->post(req, qu.query(QUrl::FullyEncoded).toUtf8());
-    timer.start(5000); //your predefined timeout
-
-    loop.exec();
-
-    if (timer.isActive()) {
-        //replay received before timer, you can then get replay form network access manager and do whatever you want with it
-        QByteArray imageData = _reply->readAll();
-
-        QImage image;
-        image.loadFromData(imageData);
-        return image;
-    }
-    else //timer elapsed, no replay from client, ups
-    {
-    }
-
-    return QImage();
-}
-#else
 // CACHE MODULE
 QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
@@ -119,7 +77,7 @@ QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QS
 
     return QImage();
 }
-#endif
+
 
 QPixmap CloudImageProvider::requestPixmap(const QString& id, QSize* size, const QSize& requestedSize)
 {

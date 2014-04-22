@@ -20,6 +20,8 @@ public:
     ~Cregssc61860Widget();
 
     void refresh();
+private slots:
+    void updateReg(void);
 
 private:
     Ui::Cregssc61860Widget *ui;

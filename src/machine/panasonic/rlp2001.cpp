@@ -10,6 +10,7 @@
 #include "rlp2001.h"
 #include "buspanasonic.h"
 #include "mc6847.h"
+#include "Inter.h"
 
 Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
 {                                                       //[constructor]
@@ -40,6 +41,7 @@ Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
     pMC6847 = new MC6847();
 
     screen = new QImage(256,192,QImage::Format_ARGB32);
+    oldState = 0;
 
 }
 
@@ -51,10 +53,20 @@ Crlp2001::~Crlp2001(){
 
 bool Crlp2001::run(void)
 {
-
     CbusPanasonic bus;
 
     bus.fromUInt64(pCONNECTOR->Get_values());
+
+    if (pTIMER) {
+        if (oldState==0) oldState = pTIMER->state;
+        if (screenUpdated && (pTIMER->msElapsed(oldState)>20) ) {
+            pMC6847->draw_screen();
+            oldState = pTIMER->state;
+            screenUpdated = false;
+        }
+    }
+
+
     if (bus.getFunc()==BUS_SLEEP) return true;
 
     if ( (bus.getDest()!=0) && (bus.getDest()!=30)) return true;
@@ -143,7 +155,8 @@ bool Crlp2001::run(void)
             if (mem[adr-0x2000] != bus.getData()) {
                 mem[adr-0x2000] = bus.getData();
 //                qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
-                pMC6847->draw_screen();
+//                pMC6847->draw_screen();
+                screenUpdated = true;
             }
             INTrequest = true;
 
@@ -181,7 +194,7 @@ bool Crlp2001::UpdateFinalImage(void) {
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
-    painter.drawImage(500,10,*screen);
+    painter.drawImage(200,30,*screen);
 
     painter.end();
 

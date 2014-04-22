@@ -34,17 +34,26 @@ Item {
         visible: (type=="combo")
     }
 
+    Rectangle {
+        width: parent.width
+        height: labelElement.height *1.2
+        color: "black"
+        opacity: 1
+        visible: (type == "text")
+    }
+
     Row {
         y:2
         spacing: 10
         Text {
             id: labelElement
             text: labelString
-            color: delegate.ListView.isCurrentItem ? "white" : "black"
+            color: (delegate.ListView.isCurrentItem | (type == "text")) ? "white" : "black"
             font { family: "Helvetica"; pointSize: 16; bold: false }
             anchors.verticalCenter: parent.verticalCenter
             visible: ((type == "text") | (type == "action") )
         }
+
         TextButton {
             id: buttonElement
 

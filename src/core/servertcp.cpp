@@ -13,8 +13,7 @@ ServeurTcp :: ServeurTcp (QObject *parent)
     Q_UNUSED(parent)
 
     listen(QHostAddress::LocalHost,4000);
-    QObject:: connect(this, SIGNAL(newConnection()),
-    this, SLOT(demande_connexion()));
+    QObject:: connect(this, SIGNAL(newConnection()),this, SLOT(demande_connexion()));
     currentPC = 0;
 }
 
