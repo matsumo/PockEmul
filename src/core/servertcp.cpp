@@ -4,6 +4,7 @@
 #include "servertcp.h"
 #include "mainwindowpockemul.h"
 #include "pobject.h"
+#include "cloud/cloudwindow.h"
 
 extern MainWindowPockemul *mainwindow;
 extern QList<CPObject *> listpPObject;
@@ -12,9 +13,16 @@ ServeurTcp :: ServeurTcp (QObject *parent)
 {
     Q_UNUSED(parent)
 
-    listen(QHostAddress::LocalHost,4000);
-    QObject:: connect(this, SIGNAL(newConnection()),this, SLOT(demande_connexion()));
+    Connect();
     currentPC = 0;
+}
+
+void ServeurTcp::Connect() {
+    if (CloudWindow::getValueFor("telnetEnabled")=="on") {
+        int _port = CloudWindow::getValueFor("telnetPort").toInt();
+        listen(QHostAddress::LocalHost,_port);
+        QObject:: connect(this, SIGNAL(newConnection()),this, SLOT(demande_connexion()));
+    }
 }
 
 // si un client demande une connexion

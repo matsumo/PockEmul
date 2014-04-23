@@ -51,7 +51,7 @@ Item {
             color: (delegate.ListView.isCurrentItem | (type == "text")) ? "white" : "black"
             font { family: "Helvetica"; pointSize: 16; bold: false }
             anchors.verticalCenter: parent.verticalCenter
-            visible: ((type == "text") | (type == "action") )
+            visible: ((type == "text") | (type == "action") | (type == "checkbox"))
         }
 
         TextButton {
@@ -65,6 +65,14 @@ Item {
             onClicked: {
                 buttonClicked();
             }
+        }
+        Switch {
+            objectName: name
+            bheight: buttonElement.height*.9
+            bwidth: bheight * 2
+            on: (labelString=="checked") ? true:false
+            onToggleState: if (saveInput) cloud.saveValueFor(key,value)
+            visible: (type == "checkbox")
         }
     }
 

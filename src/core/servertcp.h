@@ -16,6 +16,7 @@ public :
     void send_greeting(QTextStream *sock);
     void cmd_help(QTextStream *sock, QString subcmd);
     QStringList splitArgs(QString cmd);
+    void Connect();
 private slots :
     void demande_connexion() ;
     void lecture();

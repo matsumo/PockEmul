@@ -37,7 +37,8 @@ Rectangle {
 
         SettingsDelegate { id: labelServer; name: "labelServer"; labelString: "Telnet Server settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: telnetPort; name: "telnetPort"; labelString: "Telnet Server port"; type: "input"; defaultText: "4000"}
-        SettingsDelegate { id: telnetEnabled; name: "telnetEnabled"; labelString: "Enable server"; type: "checkbox"; defaultText: "checked"}
+        SettingsDelegate { id: telnetEnabled; name: "telnetEnabled"; labelString: "Enable server"; type: "checkbox"; defaultText: "on"}
+        SettingsDelegate { id: telnetLocalHost; name: "telnetLocalHost"; labelString: "Local Host only"; type: "checkbox"; defaultText: "on"}
 
     }
 

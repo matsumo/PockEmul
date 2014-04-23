@@ -43,9 +43,12 @@ import QtQuick 1.0
 
 Item {
     id: toggleswitch
+    property alias objectName: toggleswitch.objectName
+    objectName: "checkbox"
     property alias bwidth: background.width
     property alias bheight: background.height
     width: background.width; height: background.height
+    signal toggleState(string key,string value)
 
 //![1]
     property bool on: false
@@ -57,9 +60,13 @@ Item {
             toggleswitch.state = "off";
         else 
             toggleswitch.state = "on";
+
+        toggleswitch.toggleState(toggleswitch.objectName, toggleswitch.state )
     }
 //![2]
-
+    Component.onCompleted: {
+        state = cloud.getValueFor(toggleswitch.objectName, defaultText)
+    }
 //![3]
     function releaseSwitch() {
         if (knob.x == 1) {
