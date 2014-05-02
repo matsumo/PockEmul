@@ -13,6 +13,7 @@
 
 Ccesimu::Ccesimu(CPObject *parent): CPObject(this)
 {							//[constructor]
+    Q_UNUSED(parent)
 
     //ToDestroy = false;
 
@@ -22,19 +23,26 @@ Ccesimu::Ccesimu(CPObject *parent): CPObject(this)
     pTIMER		= new Ctimer(this);
     setDX(160);//Pc_DX	= 160;
     setDY(160);//Pc_DY	= 160;
-
+    pCONNECTOR = 0;
+    pSavedCONNECTOR = 0;
+    engine = 0;
+    script = 0;
+    mainfunction = 0;
+    helpDialog = 0;
+    textbrowser = 0;
+    layout = 0;
 }
 
 Ccesimu::~Ccesimu() {
-    delete pCONNECTOR;
-    delete pSavedCONNECTOR;
-    delete engine;
-    delete script;
-    delete mainfunction;
+    if (pCONNECTOR) delete pCONNECTOR;
+    if (pSavedCONNECTOR) delete pSavedCONNECTOR;
+    if (engine) delete engine;
+    if (script)  delete script;
+    if (mainfunction) delete mainfunction;
 
-    delete helpDialog;
-    delete textbrowser;
-    delete layout;
+    if (helpDialog) delete helpDialog;
+    if (textbrowser) delete textbrowser;
+    if (layout) delete layout;
 }
 
 void Ccesimu::contextMenuEvent ( QContextMenuEvent * event )
@@ -87,7 +95,7 @@ bool Ccesimu::init(void){
     objectValue = engine->newQObject(this);
     engine->globalObject().setProperty("Simulator", objectValue);
     mainfunction = 0;
-    run_oldstate = -1;
+    run_oldstate = 0;
     for (int i=0;i<20;i++) states[i]=0;
 
     return true;
@@ -101,10 +109,10 @@ bool Ccesimu::run(void){
     if (!pTIMER) return true;
 
 // Try to introduce a latency
-    quint64			deltastate = 0;
+//    quint64			deltastate = 0;
 
-    if (run_oldstate == -1) run_oldstate = pTIMER->state;
-    deltastate = pTIMER->state - run_oldstate;
+    if (run_oldstate == 0) run_oldstate = pTIMER->state;
+//    deltastate = pTIMER->state - run_oldstate;
 //    if (deltastate < CESIMULATENCY ) return true;
 //    run_oldstate	= pTIMER->state;
     if (pTIMER->usElapsed(run_oldstate)<500) return true;

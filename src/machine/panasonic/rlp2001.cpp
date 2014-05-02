@@ -187,7 +187,7 @@ bool Crlp2001::run(void)
 }
 
 bool Crlp2001::UpdateFinalImage(void) {
-    CPObject::UpdateFinalImage();
+//    CPObject::UpdateFinalImage();
 
     // Draw switch by 180 rotation
     QPainter painter;

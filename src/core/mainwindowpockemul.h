@@ -117,6 +117,7 @@ enum Models {
     TPC8300,
     TP83,
     RLH1000,
+    RLP3001,
     RLP4002,
     RLP6001,
     RLP9001,

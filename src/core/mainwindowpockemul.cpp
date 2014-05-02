@@ -242,6 +242,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["SANCO TPC-8300"]=TPC8300;
     objtable["SANCO TP-83"]=TP83;
     objtable["Panasonic HHC RL-H1000"]=RLH1000;
+    objtable["Panasonic RL-P3001 RS-232C"]=RLP3001;
     objtable["Panasonic RL-P4002 Modem"]=RLP4002;
     objtable["Panasonic RL-P6001"]=RLP6001;
     objtable["Panasonic RL-P9001 4Ko"]=RLP9001;
@@ -354,6 +355,7 @@ CPObject *pPC=0;
         case TP83    : pPC = new Ctp83;         pPC->setName("SANCO TP-83"); break;
 
         case RLH1000 : pPC = new Crlh1000;      pPC->setName("Panasonic HHC RL-H1000"); break;
+        case RLP3001 : pPC = new Crlp3001;      pPC->setName("Panasonic RL-P3001 RS-232C"); break;
         case RLP4002 : pPC = new Crlp4002;      pPC->setName("Panasonic RL-P4002 Modem"); break;
         case RLP6001 : pPC = new Crlp6001;      pPC->setName("Panasonic RL-P6001"); break;
         case RLP9001 : pPC = new Crlp9001;      pPC->setName("Panasonic RL-P9001 4Ko"); break;
@@ -1111,7 +1113,6 @@ void MainWindowPockemul::updateFrameTimer()
 
                 CurrentpPC->pTIMER->nb_state += (Current_State - CurrentpPC->pTIMER->last_state);
                 CurrentpPC->pTIMER->last_state = Current_State;
-
 
                 // Update ToolTip only one time per second
                 if ( deltaTime >= 1000)

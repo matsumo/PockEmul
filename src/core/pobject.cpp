@@ -888,8 +888,6 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
                             // Connect
 
                             MoveWithLinked(listpPObject.at(k)->pos() + listpPObject.at(k)->ConnList.at(c)->getSnap()*mainwindow->zoom/100 - pos() - nearList.at(r)->getSnap()*mainwindow->zoom/100);
-//                            mainwindow->pdirectLink->AConnList.append(listpPObject.at(k)->ConnList.at(c));
-//                            mainwindow->pdirectLink->BConnList.append(nearList.at(r));
                             mainwindow->pdirectLink->addLink(listpPObject.at(k)->ConnList.at(c),nearList.at(r),true);
                             QList<CPObject *> list;
                             listpPObject.at(k)->manageStackPos(&list);
@@ -900,8 +898,6 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
             }
         }
     }
-
-
 
     startKeyDrag = false;
     startPosDrag = false;
@@ -1026,7 +1022,6 @@ void CPObject::paintEvent(QPaintEvent *event)
         painter.begin(this);
         if (FinalImage)
         {
-
             painter.drawImage(QPoint(0,0), FinalImage->scaled(this->size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
         }
 
@@ -1333,7 +1328,6 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
 		QAction * actionLocConn = menulink->addAction(ConnList.at(i)->Desc);
         actionLocConn->setData(tr("C%1").arg((long)ConnList.at(i)));
 		connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));    
-		
 	}	
 }
 
@@ -1385,7 +1379,6 @@ bool CPObject::UpdateFinalImage(void)
 	{
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
-
 
         painter.end();
 	}

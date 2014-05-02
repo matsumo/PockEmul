@@ -28,7 +28,6 @@ Rectangle {
                                    passwordFld.inputText);
             }
         }
-
         SettingsDelegate { name: "apikey"; labelString: "Login"; type: "action"; saveInput:false;
             onButtonClicked: {
                 root.user_login(usernameFld.inputText,passwordFld.inputText);

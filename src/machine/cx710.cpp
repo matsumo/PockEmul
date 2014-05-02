@@ -25,17 +25,12 @@ Cx710::Cx710(CPObject *parent):Cce515p(this) {
     setcfgfname(QString("x710"));
     BackGroundFname	= P_RES(":/x07/x710.png");
 
+    setDXmm(200);
+    setDYmm(120);
+    setDZmm(36);
 
-//    KeyMap      = KeyMapx710;
-//    KeyMapLenght= KeyMapce140pLenght;
-    delete pKEYB; pKEYB		= new Ckeyb(this,"x710.map");
-
-    setDXmm(200);//Pc_DX_mm = 256;
-    setDYmm(120);//Pc_DY_mm = 185;
-    setDZmm(36);//Pc_DZ_mm = 42;
-
-    setDX(715);//Pc_DX	= 895;
-    setDY(665);//Pc_DY	= 615;
+    setDX(715);
+    setDY(665);
 
     setPaperPos(QRect(155,46,400,300));
 

@@ -85,7 +85,8 @@ Csio::Csio(CPObject *parent)	: CPObject(this)
 }
 
 Csio::~Csio(){
-    delete(pSIOCONNECTOR);
+    delete pSIOCONNECTOR;
+    delete dialogconsole;
 }
 
 quint8 Csio::getPinId(SIGNAME signal) {

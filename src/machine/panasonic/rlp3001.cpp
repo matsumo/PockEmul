@@ -7,7 +7,7 @@
 #include "common.h"
 #include "fluidlauncher.h"
 
-#include "rlp4002.h"
+#include "rlp3001.h"
 
 #include "Log.h"
 #include "dialoganalog.h"
@@ -21,44 +21,45 @@
 #define UP              1
 
 
-Crlp4002::Crlp4002(CPObject *parent):CPObject(this)
+Crlp3001::Crlp3001(CPObject *parent):CPObject(this)
 { //[constructor]
     Q_UNUSED(parent)
 
     setfrequency( 0);
 
-    BackGroundFname     = P_RES(":/rlh1000/rlp4002.png");
+    BackGroundFname     = P_RES(":/rlh1000/rlp3001.png");
     setcfgfname("rlp4002");
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp4002.map");
-    setDXmm(227);
-    setDYmm(95);
-    setDZmm(31);
+    pKEYB               = new Ckeyb(this,"rlp3001.map");
 
+    setDXmm(113);
+    setDYmm(95);
+    setDZmm(51);
  // Ratio = 3,57
-    setDX(848);//Pc_DX  = 75;
+    setDX(440);//Pc_DX  = 75;
     setDY(340);//Pc_DY  = 20;
+
     rotate = false;
     slotChanged = false;
     connected = false;
     rts = false;
     cts = false;
 
-    memsize             = 0x2000;
+    memsize             = 0x1000;
     InitMemValue        = 0x7f;
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 , P_RES(":/rlh1000/Telecomputing_2.bin")    , "" , CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(4 , 0x0000 , P_RES(":/rlh1000/RS232.bin")    , "" , CSlot::ROM , "ROM"));
 
 }
 
-Crlp4002::~Crlp4002() {
+Crlp3001::~Crlp3001() {
     delete pCONNECTOR;
 }
 
 #define RTS ( (commandReg & 0xa0)==0xa0 ? true: false)
 
-bool Crlp4002::run(void)
+bool Crlp3001::run(void)
 {
     static quint64 _state=0;
 
@@ -234,7 +235,7 @@ bool Crlp4002::run(void)
 }
 
 
-bool Crlp4002::init(void)
+bool Crlp3001::init(void)
 {
     CPObject::init();
 
@@ -273,27 +274,27 @@ bool Crlp4002::init(void)
 /*****************************************************/
 /* Exit PRINTER                                                                          */
 /*****************************************************/
-bool Crlp4002::exit(void)
+bool Crlp3001::exit(void)
 {
     CPObject::exit();
     return true;
 }
 
-bool Crlp4002::Get_Connector(void) {
+bool Crlp3001::Get_Connector(void) {
     return true;
 }
 
-bool Crlp4002::Set_Connector(void) {
+bool Crlp3001::Set_Connector(void) {
     return true;
 }
 
 
-void Crlp4002::paintEvent(QPaintEvent *event)
+void Crlp3001::paintEvent(QPaintEvent *event)
 {
     CPObject::paintEvent(event);
 }
 
-void Crlp4002::contextMenuEvent ( QContextMenuEvent * event )
+void Crlp3001::contextMenuEvent ( QContextMenuEvent * event )
 {
     QMenu *menu= new QMenu(this);
 
@@ -310,7 +311,7 @@ void Crlp4002::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Crlp4002::Rotate()
+void Crlp3001::Rotate()
 {
     rotate = ! rotate;
 
@@ -318,7 +319,7 @@ void Crlp4002::Rotate()
 
 }
 
-void Crlp4002::readData()
+void Crlp3001::readData()
 {
     QString ligne;
     while(soc.bytesAvailable()) // tant qu'il y a quelque chose à lire dans la socket
@@ -332,7 +333,7 @@ void Crlp4002::readData()
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-void Crlp4002::ComputeKey()
+void Crlp3001::ComputeKey()
 {
 
     if (pKEYB->LastKey>0) {
@@ -340,7 +341,7 @@ void Crlp4002::ComputeKey()
     }
 }
 
-void Crlp4002::addModule(QString item,CPObject *pPC)
+void Crlp3001::addModule(QString item,CPObject *pPC)
 {
     Q_UNUSED(pPC)
 
@@ -386,7 +387,7 @@ void Crlp4002::addModule(QString item,CPObject *pPC)
 }
 
 
-bool Crlp4002::SaveSession_File(QXmlStreamWriter *xmlOut)
+bool Crlp3001::SaveSession_File(QXmlStreamWriter *xmlOut)
 {
     xmlOut->writeStartElement("session");
         xmlOut->writeAttribute("version", "2.0");
@@ -405,7 +406,7 @@ bool Crlp4002::SaveSession_File(QXmlStreamWriter *xmlOut)
     return true;
 }
 
-bool Crlp4002::LoadSession_File(QXmlStreamReader *xmlIn)
+bool Crlp3001::LoadSession_File(QXmlStreamReader *xmlIn)
 {
     if (xmlIn->name()=="session") {
         bool rot = xmlIn->attributes().value("rotate").toString().toInt(0,16);
@@ -427,7 +428,7 @@ bool Crlp4002::LoadSession_File(QXmlStreamReader *xmlIn)
     return true;
 }
 
-bool Crlp4002::InitDisplay(void)
+bool Crlp3001::InitDisplay(void)
 {
 
 //    CPObject::InitDisplay();
@@ -448,3 +449,4 @@ bool Crlp4002::InitDisplay(void)
 
     return true;
 }
+
