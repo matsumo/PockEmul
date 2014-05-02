@@ -28,10 +28,10 @@ Crlp3001::Crlp3001(CPObject *parent):CPObject(this)
     setfrequency( 0);
 
     BackGroundFname     = P_RES(":/rlh1000/rlp3001.png");
-    setcfgfname("rlp4002");
+    setcfgfname("rlp3001");
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp3001.map");
+//    pKEYB               = new Ckeyb(this,"rlp3001.map");
 
     setDXmm(113);
     setDYmm(95);
@@ -431,22 +431,22 @@ bool Crlp3001::LoadSession_File(QXmlStreamReader *xmlIn)
 bool Crlp3001::InitDisplay(void)
 {
 
-//    CPObject::InitDisplay();
-    slotChanged = true;
+    //    CPObject::InitDisplay();
+        slotChanged = true;
 
-    delete BackgroundImageBackup;
-    BackgroundImageBackup = CreateImage(QSize(getDX(), getDY()),BackGroundFname,false,false,rotate?180:0);
-    delete BackgroundImage;
-    BackgroundImage = new QImage(*BackgroundImageBackup);
-    delete FinalImage;
-    FinalImage = new QImage(*BackgroundImageBackup);
+        delete BackgroundImageBackup;
+        BackgroundImageBackup = CreateImage(QSize(getDX(), getDY()),BackGroundFname,false,false,rotate?180:0);
+        delete BackgroundImage;
+        BackgroundImage = new QImage(*BackgroundImageBackup);
+        delete FinalImage;
+        FinalImage = new QImage(*BackgroundImageBackup);
 
-    pCONNECTOR->setSnap(rotate?QPoint(811,72):QPoint(37,72));
+        pCONNECTOR->setSnap(rotate?QPoint(406,72):QPoint(34,72));
 
-    pCONNECTOR->setDir(rotate?Cconnector::EAST:Cconnector::WEST);
+        pCONNECTOR->setDir(rotate?Cconnector::EAST:Cconnector::WEST);
         mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
-    setMask(mask.mask());
+        setMask(mask.mask());
 
-    return true;
+        return true;
 }
 
