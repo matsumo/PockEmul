@@ -34,5 +34,6 @@
         <file>rlh1000/rlp2001char.bin</file>
         <file>rlh1000/RS232.bin</file>
         <file>rlh1000/Telecomputing_2.bin</file>
+        <file>rlh1000/rlp3001.png</file>
     </qresource>
 </RCC>
