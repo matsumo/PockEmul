@@ -48,6 +48,8 @@
      <example brand="PANASONIC" idpocket="MSBASIC" filename="./" name="MSBasic capsule" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
      <example brand="PANASONIC" idpocket="PORTACALC" filename="./" name="PortaCalc capsule" image=":/rlh1000/modimg/portacalc.png" connectortype="Panasonic_Capsule" conngender="male"/>
      <example brand="PANASONIC" idpocket="TELECOMP_I" filename="./" name="Telecomputing I" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example brand="PANASONIC" idpocket="TELECOMP_II" filename="./" name="Telecomputing II" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
+     <example brand="PANASONIC" idpocket="RS232C" filename="./" name="RS232C" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
      <example brand="PANASONIC" idpocket="PANACAPSFILE" filename="./" name="External Capsule file" image=":/rlh1000/modimg/capsule.png" connectortype="Panasonic_Capsule" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP82143A" filename="./" name="Printer (non-HP-IL) 82143A" image=":/hp41/modimg/hp82143a.png" connectortype="hp41" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP82160A" filename="./" name="HP-IL module 82160A" image=":/hp41/modimg/hp82160a.png" connectortype="hp41" conngender="male"/>

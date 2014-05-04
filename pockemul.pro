@@ -559,7 +559,8 @@ HEADERS += src/core/Connect.h \
     src/core/breakpoint.h \
     resources/lcc/model/__graph.h \
     src/cpu/mc6847.h \
-    src/machine/panasonic/rlp3001.h
+    src/machine/panasonic/rlp3001.h \
+    src/machine/panasonic/rlext.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -817,7 +818,8 @@ SOURCES +=  \
     src/machine/sharp/ce153.cpp \
     src/core/breakpoint.cpp \
     src/cpu/mc6847.cpp \
-    src/machine/panasonic/rlp3001.cpp
+    src/machine/panasonic/rlp3001.cpp \
+    src/machine/panasonic/rlext.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

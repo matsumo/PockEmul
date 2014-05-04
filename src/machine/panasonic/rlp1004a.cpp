@@ -44,9 +44,8 @@ Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(this)
     setposX(0);
 
     pTIMER              = new Ctimer(this);
-//    KeyMap      = KeyMaprlp1004a;
-//    KeyMapLenght= KeyMaprlp1004aLenght;
     pKEYB               = new Ckeyb(this,"rlp1004a.map");
+
     setDXmm(113);
     setDYmm(95);
     setDZmm(51);
@@ -136,7 +135,7 @@ bool Crlp1004a::run(void)
     bus.setDest(0);
 
 //    qWarning()<<"PRINTER:"<<bus.toLog();
-    if (bus.getFunc()==BUS_QUERY) {
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
@@ -144,7 +143,7 @@ bool Crlp1004a::run(void)
         return true;
     }
 
-    if (bus.getFunc()==BUS_SELECT) {
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
 //        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {

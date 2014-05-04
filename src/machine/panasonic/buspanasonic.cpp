@@ -42,8 +42,6 @@ QString CbusPanasonic::toLog() const
     ret += QString("Dest:%1  - %2").arg(getDest()).arg(getFunc());
 
     switch (getFunc()) {
-    case BUS_QUERY: ret += "BUS_QUERY"; break;
-    case BUS_SELECT: ret += "BUS_SELECT"; break;
     case BUS_READDATA: ret += "BUS_READDATA";
         ret += QString(" - addr=%1").arg(getAddr(),6,16,QChar('0'));
         break;

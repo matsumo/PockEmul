@@ -122,7 +122,7 @@ bool Crlp1002::run(void)
     bus.setDest(0);
 
 //    qWarning()<<"PRINTER:"<<bus.toLog();
-    if (bus.getFunc()==BUS_QUERY) {
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
@@ -130,7 +130,7 @@ bool Crlp1002::run(void)
         return true;
     }
 
-    if (bus.getFunc()==BUS_SELECT) {
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
 //        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {

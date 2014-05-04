@@ -8,7 +8,6 @@
 
 #include "rlp6001.h"
 #include "clink.h"
-//#include "rlh1000.h"
 #include "Connect.h"
 #include "buspanasonic.h"
 #include "Inter.h"
@@ -26,11 +25,9 @@ Crlp6001::Crlp6001(CPObject *parent )   : CPObject(this)
     setDXmm(85);
     setDYmm(318);
     setDZmm(51);
- // Ratio = 3,57
-    setDX(252);//Pc_DX  = 75;
-    setDY(1075);//Pc_DY = 20;
-//    setDX(1458);//Pc_DX  = 75;
-//    setDY(1095);//Pc_DY = 20;
+
+    setDX(252);
+    setDY(1075);
 }
 
 Crlp6001::~Crlp6001(){
@@ -55,10 +52,10 @@ bool Crlp6001::run(void)
 
     if (bus.getDest()==30) {
         // BUS_QUERY on Dest 30 : Ask all ext for F7 return (ROM Expander)
-        if ( bus.getFunc()==BUS_QUERY) {
+        if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
 //            qWarning()<<"BUS_QUERY on Dest 30";
             for (int i=0; i<5;i++) {
-                CbusPanasonic _b(0,BUS_QUERY,0);
+                CbusPanasonic _b(0,BUS_LINE0,0);
                 pEXTCONNECTOR[i]->Set_values(_b.toUInt64());
                 mainwindow->pdirectLink->outConnector(pEXTCONNECTOR[i]);
                 _b.fromUInt64(pEXTCONNECTOR[i]->Get_values());
@@ -71,7 +68,7 @@ bool Crlp6001::run(void)
                 }
             }
         }
-        if (bus.getFunc()==BUS_SELECT) {
+        if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
 //            qWarning()<<"BUS_SELECT on Dest 30";
             for (int i=0; i<5;i++) {
                 pEXTCONNECTOR[i]->Set_values(bus.toUInt64());
@@ -218,11 +215,6 @@ void Crlp6001::contextMenuEvent ( QContextMenuEvent * event )
     QMenu *menu= new QMenu(this);
 
     BuildContextMenu(menu);
-
-//    menu.addSeparator();
-
-//    menu.addAction(tr("Show console"),this,SLOT(ShowConsole()));
-//    menu.addAction(tr("Hide console"),this,SLOT(HideConsole()));
 
     menu->popup(event->globalPos () );
     event->accept();

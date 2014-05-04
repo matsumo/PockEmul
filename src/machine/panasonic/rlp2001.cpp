@@ -73,14 +73,14 @@ bool Crlp2001::run(void)
 
     bus.setDest(0);
 
-    if (bus.getFunc()==BUS_QUERY) {
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
         return true;
     }
 
-    if (bus.getFunc()==BUS_SELECT) {
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
 //        qWarning()<<"2001 BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {

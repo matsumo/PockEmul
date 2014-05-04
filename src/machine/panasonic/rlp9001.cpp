@@ -101,7 +101,7 @@ bool Crlp9001::run(void)
 
 //    bus.setDest(0);
 
-    if (bus.getFunc()==BUS_QUERY) {
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
         bus.setData(0xFB);
         if (romSwitch) bus.setData(0xf7);
         if (model==RLP9006) bus.setData(0xf7);
@@ -110,7 +110,7 @@ bool Crlp9001::run(void)
         return true;
     }
 
-    if (bus.getFunc()==BUS_SELECT) {
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
         Power = false;
         bank=0;
 //        qWarning()<<"9001 BUS SELECT:"<<bus.getData();

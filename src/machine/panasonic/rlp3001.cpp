@@ -87,7 +87,7 @@ bool Crlp3001::run(void)
 
 
 //    qWarning()<<"MODEM:"<<bus.toLog();
-    if (bus.getFunc()==BUS_QUERY) {
+    if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
@@ -95,7 +95,7 @@ bool Crlp3001::run(void)
         return true;
     }
 
-    if (bus.getFunc()==BUS_SELECT) {
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
 //        qWarning()<<"4002 BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {
@@ -350,6 +350,9 @@ void Crlp3001::addModule(QString item,CPObject *pPC)
     int _res = 0;
     QString moduleName;
     if (item=="TELECOMP_I") moduleName = P_RES(":/rlh1000/Telecomputing_1.bin");
+    if (item=="TELECOMP_II") moduleName = P_RES(":/rlh1000/Telecomputing_2.bin");
+    if (item=="RS232C") moduleName = P_RES(":/rlh1000/RS232.bin");
+
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,

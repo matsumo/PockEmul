@@ -316,7 +316,7 @@ bool Crlh1000::Chk_Adr(UINT32 *d, UINT32 data)
                 bus->setDest(t);
                 bus->setData(data);
                 bus->setWrite(true);
-                bus->setFunc(BUS_SELECT);
+                bus->setFunc(BUS_LINE2);
                 if (fp_log) fprintf(fp_log,"BUS_SELECT DEST=%i data=%02x \n",bus->getDest(),bus->getData());
                 manageBus();
                 if (bus->getFunc()==BUS_READDATA) {
@@ -439,7 +439,7 @@ bool Crlh1000::Chk_Adr_R(UINT32 *d, UINT32 *data)
                     if (fp_log) fprintf(fp_log,"BUS_QUERY DEST=%i  ",bus->getDest());
                     bus->setData(0xff);
                     bus->setWrite(false);
-                    bus->setFunc(BUS_QUERY);
+                    bus->setFunc(BUS_LINE0);
                     manageBus();
                     if (fp_log) fprintf(fp_log,"  data=%02X  \n",bus->getData());
 
