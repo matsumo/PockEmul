@@ -1,5 +1,6 @@
 QMAKE_CXXFLAGS += -fsigned-char
 
+
 CONFIG += qt \
     resources \
     thread \
@@ -28,6 +29,7 @@ PROJECT_TYPE = \
 
 
 android {
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-src
 PROJECT_TYPE = ANDROID
 }
 
@@ -55,7 +57,7 @@ PROJECT_MODULE += \
 }
 
 contains(PROJECT_TYPE,ANDROID) {
-DEFINES += NO_SOUND
+QT +=  androidextras multimedia
 
 PROJECT_MODULE += \
     M_EMB_QRC \
@@ -94,13 +96,13 @@ UI_DIR += build/ui
 
 
 mac {
-DEFINES += NO_SOUND
+#DEFINES += NO_SOUND
 ICON=$$PWD/MacOs-BundleData/Icon.icns
     #debug:OBJECTS_DIR += build/o/wd
     release:OBJECTS_DIR += build/o/wr
 }
 unix {
-DEFINES += NO_SOUND
+#DEFINES += NO_SOUND
     Debug:OBJECTS_DIR += build/o/wd
     Release:OBJECTS_DIR += build/o/wr
 }
@@ -958,7 +960,6 @@ OTHER_FILES += \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
     android/src/org/qtproject/qt5/android/bindings/QtApplication.java \
-    android/src/org/qtproject/pockemul/Pockemul.java \
     android/res/layout/splash.xml \
     android/res/values/strings.xml \
     android/res/values-de/strings.xml \
@@ -1038,7 +1039,11 @@ OTHER_FILES += \
     resources/keymap/rlp1004a.map \
     resources/keymap/rlp4002.map \
     resources/keymap/ce1560.map \
-    resources/keymap/ce140f.map
+    resources/keymap/ce140f.map \
+    android/AndroidManifest.xml \
+    android/src/org/qtproject/pockemul/PockemulActivity.java
+
+ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 
 

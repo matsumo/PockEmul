@@ -438,7 +438,7 @@ void CPObject::fillSoundBuffer(BYTE val)
          (fillSoundBuffer_old_state > pTIMER->state)) {
         fillSoundBuffer_old_state = pTIMER->state;
     }
-		
+
     if (getfrequency()==0) {
         mainwindow->audioMutex.lock();
         audioBuff.append(val);

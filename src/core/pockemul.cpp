@@ -6,6 +6,7 @@
 #include <QSplashScreen>
 #include <QScreen>
 
+
 #include "launchbuttonwidget.h"
 #include "mainwindowpockemul.h"
 
@@ -27,7 +28,7 @@
 
 
 #ifdef Q_OS_ANDROID
-#include <jni.h>
+#include <QAndroidJniObject>
 static JavaVM* s_javaVM = 0;
 static jclass s_PockemulObjectClassID = 0;
 static jmethodID s_PockemulObjectConstructorMethodID=0;
@@ -61,7 +62,7 @@ int main(int argc, char *argv[])
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 #if QT_VERSION >= 0x050000
 #ifdef Q_OS_ANDROID
-     app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,false);
+     app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #else
      app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #endif
@@ -124,6 +125,8 @@ mainwindow = new MainWindowPockemul();
 //    splash.finish(mainwindow);
 
 //    mainwindow->menuBar()->setVisible(false);//->menuAction()->setVisible( false );
+    // search for ShowMyModalDialog method
+
 #endif
 
     QWidget *cw= new QWidget();
@@ -292,6 +295,8 @@ QString toQString(JNIEnv * env,jstring 	str)
       // this method is called immediately after the module is load
 JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
 {
+    qWarning()<<"Yahooo !";
+    return JNI_VERSION_1_6;
     JNIEnv* env;
     if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
         qCritical()<<"Can't get the enviroument";
@@ -354,13 +359,15 @@ JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
         qCritical()<<"Can't find openURL method";
         return -1;
     }
-    qWarning()<<"Yahooo !";
+
     return JNI_VERSION_1_6;
 }
 
 #endif
 
 QString m_getArgs() {
+    qWarning() << QApplication::arguments();
+    return "";
 #ifdef Q_OS_ANDROID
     JNIEnv* env;
         // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
@@ -389,23 +396,17 @@ QString m_getArgs() {
 }
 
 int ask(QWidget *parent, QString msg, int nbButton) {
+    qWarning() << "Ask";
 #ifdef Q_OS_ANDROID
-    JNIEnv* env;
-        // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
-        if (s_javaVM->AttachCurrentThread(&env, NULL)<0)
-        {
-            qCritical()<<"AttachCurrentThread failed";
-            return 0;
-        }
-        m_PockemulObject = env->NewGlobalRef(env->NewObject(s_PockemulObjectClassID, s_PockemulObjectConstructorMethodID));
-        jstring parameter = fromQString(env,&msg);
-        jint res = env->CallIntMethod(m_PockemulObject, s_PockemulObjectDialogMethodID,parameter,nbButton);
+    jint res = QAndroidJniObject::callStaticMethod<jint>("org/qtproject/pockemul/PockemulActivity",
+                                        "ShowMyModalDialog",
+                                        "(Ljava/lang/String;I)I",
+                                        QAndroidJniObject::fromString(msg).object<jstring>(),
+                                        nbButton);
 
         qWarning()<<res;
-        // Don't forget to detach from current thread
-            s_javaVM->DetachCurrentThread();
 
-            return res;
+        return res;
 #else
     if (nbButton==1) {
         QMessageBox::warning(parent, "PockEmul",msg);
@@ -433,18 +434,10 @@ int ask(QWidget *parent, QString msg, int nbButton) {
 
 void Vibrate() {
 #ifdef Q_OS_ANDROID
-    JNIEnv* env;
-        // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
-        if (s_javaVM->AttachCurrentThread(&env, NULL)<0)
-        {
-            qCritical()<<"AttachCurrentThread failed";
-
-        }
-        m_PockemulObject = env->NewGlobalRef(env->NewObject(s_PockemulObjectClassID, s_PockemulObjectConstructorMethodID));
-        env->CallVoidMethod(m_PockemulObject, s_PockemulObjectVibrateMethodID);
-
-        // Don't forget to detach from current thread
-        s_javaVM->DetachCurrentThread();
+    qWarning() << "Vibrate";
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                        "Vibrate",
+                                        "()V");
 
 #endif
 }
@@ -453,20 +446,12 @@ void m_openURL(QUrl url) {
 #ifdef Q_OS_ANDROID
     if (url.isLocalFile()) {
         qWarning()<<url;
-        JNIEnv* env;
-            // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
-            if (s_javaVM->AttachCurrentThread(&env, NULL)<0)
-            {
-                qCritical()<<"AttachCurrentThread failed";
+        QString fn = url.toLocalFile();
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                            "openURL",
+                                            "(Ljava/lang/String;)V",
+                                            QAndroidJniObject::fromString(fn).object<jstring>()     );
 
-            }
-            m_PockemulObject = env->NewGlobalRef(env->NewObject(s_PockemulObjectClassID, s_PockemulObjectConstructorMethodID));
-            QString fn = url.toLocalFile();
-            jstring parameter = fromQString(env,&fn);
-            env->CallVoidMethod(m_PockemulObject, s_PockemulObjectopenURLMethodID,parameter);
-
-            // Don't forget to detach from current thread
-            s_javaVM->DetachCurrentThread();
 
             return;
     }
@@ -479,21 +464,12 @@ void m_addShortcut(QString name, QString param) {
 #ifdef Q_OS_ANDROID
 
     qWarning()<<"assShortcut";
-        JNIEnv* env;
-            // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
-            if (s_javaVM->AttachCurrentThread(&env, NULL)<0)
-            {
-                qCritical()<<"AttachCurrentThread failed";
+        QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                                  "addShortcut",
+                                                  "(Ljava/lang/String;Ljava/lang/String;)V",
+                                                  QAndroidJniObject::fromString(name).object<jstring>(),
+                                                  QAndroidJniObject::fromString(param).object<jstring>());
 
-            }
-            m_PockemulObject = env->NewGlobalRef(env->NewObject(s_PockemulObjectClassID, s_PockemulObjectConstructorMethodID));
-
-            jstring parameter = fromQString(env,&param);
-            jstring nameparam = fromQString(env,&name);
-            env->CallVoidMethod(m_PockemulObject, s_PockemulObjectaddShortcutMethodID,nameparam,parameter);
-
-            // Don't forget to detach from current thread
-            s_javaVM->DetachCurrentThread();
             qWarning()<<"End addShortcut";
 #else
     Q_UNUSED(name)

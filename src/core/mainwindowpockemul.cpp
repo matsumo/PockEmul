@@ -1297,7 +1297,7 @@ void MainWindowPockemul::initCommandLine(void) {
 //        };
 #ifdef Q_OS_ANDROID
     QString args = m_getArgs();
-    qWarning()<<args;
+    qWarning()<<"android args:"<<args;
     if ( ! args.isEmpty()) {
         cmdline = new QCommandLine(args.prepend("pockemul ").
                                    split( QRegExp(" (?=[^\"]*(\"[^\"]*\"[^\"]*)*$)") ).
