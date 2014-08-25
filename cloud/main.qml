@@ -2,7 +2,7 @@ import QtQuick 1.0
 import "TabbedQuickApp"
 import "content"
 import "."
-//import QtSensors 5.0 as Sensors
+//import QtSensors 5.3 as Sensors
 
 Rectangle {
     width: 360
@@ -89,8 +89,14 @@ Rectangle {
                 anchors.fill: parent
                 onClicked: Qt.quit()
             }
-
         }
+
+//         Tab {
+//                name: ""
+//                icon: "pics/back-white.png"
+//                Test {}
+//            }
+
 
     }
 
@@ -103,67 +109,7 @@ Rectangle {
 
     }
 
-/*
-    XmlListModel {
-         id: tmpXmlListModel
-         query: "/item"
 
-         XmlRole { name: "insert"; query: "insert/string()"; }
-         XmlRole { name: "pmlid"; query: "pmlid/string()"; }
-         XmlRole { name: "username"; query: "username/string()" }
-         XmlRole { name: "objects"; query: "objects/string()" }
-         XmlRole { name: "listobjects"; query: "listobjects/string()" }
-         XmlRole { name: "ispublic"; query: "ispublic/number()" }
-         XmlRole { name: "isdeleted"; query: "deleted/number()" }
-         XmlRole { name: "title"; query: "title/string()" }
-         XmlRole { name: "description"; query: "description/string()" }
-         onStatusChanged: {
-
-             if (status == XmlListModel.Ready) {
-
-                 var ind = privateCloud.refpmlModel.count;
-                 for (var i=0; i<count; i++) {
-                     var item = get(i)
-//                     console.log(item.listobjects)
-                     if (item.insert == 1) {
-//                         console.log("INSERT MODE");
-                         privateCloud.refpmlModel.append({rowid : ind+i,
-                                                             pmlid: item.pmlid,
-                                                             username: item.username,
-                                                             objects: item.objects,
-                                                             listobjects: item.listobjects,
-                                                             ispublic: item.ispublic,
-                                                             isdeleted: item.isdeleted,
-                                                             title: item.title,
-                                                             description: item.description})
-                     }
-                     if (item.insert == 0) {
-//                         console.log("UPDATE MODE");
-                         // fetch refpmlModel and find pmlid
-                         for (var j=0; j<privateCloud.refpmlModel.count; j++) {
-                             var existingitem = privateCloud.refpmlModel.get(j);
-                             if (existingitem.pmlid == item.pmlid) {
-                                 // update record
-                                 privateCloud.refpmlModel.set(j,
-                                                              {objects: item.objects,listobjects: item.listobjects})
-
-                             }
-                         }
-
-
-                     }
-                     tabbedui.tabClicked(0);
-                     cloud.saveCache(privateCloud.cacheFileName,privateCloud.serializerefpmlModel());
-                     privateCloud.populateCategoryModel("");
-                     privateCloud.objid = 0;
-                     privateCloud.populatePMLModel("");
-                     privateCloud.focusPml(item.pmlid);
-                 }
-
-             }
-         }
-     }
-*/
     // this function is included locally, but you can also include separately via a header definition
     function requestGet(url, callback) {
         var xhr = new XMLHttpRequest();
