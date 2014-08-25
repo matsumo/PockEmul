@@ -63,6 +63,7 @@ bool Crlp2001::run(void)
             pMC6847->draw_screen();
             oldState = pTIMER->state;
             screenUpdated = false;
+            Refresh_Display = true;
         }
     }
 
@@ -198,7 +199,7 @@ bool Crlp2001::UpdateFinalImage(void) {
 
     painter.end();
 
-    Refresh_Display = true;
+//    Refresh_Display = true;
 
     return true;
 }
