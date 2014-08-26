@@ -38,6 +38,7 @@
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
 <uses-permission android:name="android.permission.VIBRATE"/>
+<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
 

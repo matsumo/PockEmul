@@ -54,6 +54,24 @@ public class PockemulActivity extends QtActivity {
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
+        //get the received intent
+        Intent receivedIntent = getIntent();
+        //get the action
+        String receivedAction = receivedIntent.getAction();
+        args = receivedIntent.getStringExtra("args");
+        Log.i("Qt", "*******************************");
+        if (receivedAction != null) {
+            Log.i("Qt", receivedAction);
+
+            // and get whatever type user account id is
+        }
+        if (args != null) {
+            Log.i("Qt", args);
+
+
+            // and get whatever type user account id is
+        }
     }
 
     @Override
@@ -61,6 +79,8 @@ public class PockemulActivity extends QtActivity {
     {
         super.onDestroy();
     }
+
+
 
     /** If no pattern was found, vibrate for a small amount of time. */
     private static final long DURATION = 10;  // millisec.
@@ -77,6 +97,11 @@ public class PockemulActivity extends QtActivity {
     private ContentResolver mContentResolver;
     private boolean mSettingEnabled;
 
+    private static String args;
+    public static String getArgs()
+    {
+        return args;
+    }
 
     private static final Semaphore dialogSemaphore = new Semaphore(0, true);
 
@@ -159,35 +184,25 @@ public class PockemulActivity extends QtActivity {
 
     }
 
-    public String getArgs() {
-        //return getQtActivityArgs();
-        return getIntent().getStringExtra("args");
-    }
-
     public static void addShortcut(String name,String param) {
         //Adding shortcut for MainActivity
         //on Home screen
-        Log.i("Qt", "***** AddShortcut");
         Intent shortcut = new Intent("com.android.launcher.action.INSTALL_SHORTCUT");
 
-        Log.i("Qt", "***** AddShortcut-1");
         // Shortcut name
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME, name);
         shortcut.putExtra("duplicate", false);  // Just create once
 
-        Log.i("Qt", "***** AddShortcut-2");
         // Setup current activity shoud be shortcut object
         ComponentName comp = new ComponentName("org.qtproject.pockemul","org.qtproject.pockemul.PockemulActivity");
         Intent intent = new Intent(Intent.ACTION_MAIN).setComponent(comp);
         intent.putExtra("args",param);
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
 
-        Log.i("Qt", "***** AddShortcut-3");
         // Set shortcut icon
         ShortcutIconResource iconRes = Intent.ShortcutIconResource.fromContext(m_instance, R.drawable.icon);
         shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconRes);
 
-        Log.i("Qt", "***** AddShortcut-4");
         m_instance.sendBroadcast(shortcut);
     }
 

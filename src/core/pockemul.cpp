@@ -29,19 +29,6 @@
 
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
-static JavaVM* s_javaVM = 0;
-static jclass s_PockemulObjectClassID = 0;
-static jmethodID s_PockemulObjectConstructorMethodID=0;
-static jmethodID s_PockemulObjectDialogMethodID=0;
-static jmethodID s_PockemulObjectVibrateMethodID=0;
-static jmethodID s_PockemulObjectopenURLMethodID=0;
-static jmethodID s_PockemulObjectaddShortcutMethodID=0;
-static jmethodID s_PockemulObjectgetArgsMethodID=0;
-static jmethodID s_HapticObjectPlayMethodID=0;
-static jmethodID s_HapticObjectPauseMethodID=0;
-static jmethodID s_HapticObjectStopMethodID=0;
-static jmethodID s_HapticObjectReleaseMethodID=0;
-jobject m_PockemulObject;
 
 #endif
 
@@ -119,7 +106,7 @@ mainwindow = new MainWindowPockemul();
 #ifdef Q_OS_ANDROID
 //    QSplashScreen splash;
 //    splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")).scaled(mainwindow->geometry().size()));
-//    splash.showFullScreen();
+//    splash.show();
 //    splash.showMessage("Loading modules...",Qt::AlignLeft,Qt::white);
 //    app->processEvents();
 //    splash.finish(mainwindow);
@@ -266,133 +253,20 @@ mainwindow = new MainWindowPockemul();
 
 }
 
-#ifdef Q_OS_ANDROID
-
-//Convert from QString to Java String
-jstring fromQString	(	JNIEnv * 	env,QString * 	qstring	 )
-{
-      if (qstring == 0) {
-            return 0;
-      }
-
-      return env->NewString((const jchar *) qstring->unicode(), (long) qstring->length());
-}
-
-// converting jstring to QString
-QString toQString(JNIEnv * env,jstring 	str)
-{
-    if (str == 0L) {
-        return "";
-    }
-    // converting jstring to QString
-    const char *strResult = env->GetStringUTFChars( str, 0 );
-    QString strres(strResult);
-    env->ReleaseStringUTFChars( str, strResult);
-
-    return strres;
-}
-
-      // this method is called immediately after the module is load
-JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* /*reserved*/)
-{
-    qWarning()<<"Yahooo !";
-    return JNI_VERSION_1_6;
-    JNIEnv* env;
-    if (vm->GetEnv(reinterpret_cast<void**>(&env), JNI_VERSION_1_6) != JNI_OK) {
-        qCritical()<<"Can't get the enviroument";
-        return -1;
-    }
-
-    s_javaVM = vm;
-    // search for our class
-    jclass clazz=env->FindClass("org/qtproject/pockemul/Pockemul");
-    if (!clazz)
-    {
-        qCritical()<<"Can't find Pockemul class";
-        return -1;
-    }
-    // keep a global reference to it
-    s_PockemulObjectClassID = (jclass)env->NewGlobalRef(clazz);
-
-    // search for its contructor
-    s_PockemulObjectConstructorMethodID = env->GetMethodID(s_PockemulObjectClassID, "<init>", "()V");
-    if (!s_PockemulObjectConstructorMethodID)
-    {
-        qCritical()<<"Can't find Pockemul class contructor";
-        return -1;
-    }
-
-    // search for ShowMyModalDialog method
-    s_PockemulObjectDialogMethodID = env->GetMethodID(s_PockemulObjectClassID, "ShowMyModalDialog", "(Ljava/lang/String;I)I");
-    if (!s_PockemulObjectDialogMethodID)
-    {
-        qCritical()<<"Can't find ShowMyModalDialog method";
-        return -1;
-    }
-    // search for Vibrate method
-    s_PockemulObjectVibrateMethodID = env->GetMethodID(s_PockemulObjectClassID, "Vibrate", "()V");
-    if (!s_PockemulObjectVibrateMethodID)
-    {
-        qCritical()<<"Can't find Vibrate method";
-        return -1;
-    }
-    // search for openURL method
-    s_PockemulObjectopenURLMethodID = env->GetMethodID(s_PockemulObjectClassID, "openURL", "(Ljava/lang/String;)V");
-    if (!s_PockemulObjectopenURLMethodID)
-    {
-        qCritical()<<"Can't find Vibrate method";
-        return -1;
-    }
-
-    // search for openURL method
-    s_PockemulObjectaddShortcutMethodID = env->GetMethodID(s_PockemulObjectClassID, "addShortcut", "(Ljava/lang/String;Ljava/lang/String;)V");
-    if (!s_PockemulObjectaddShortcutMethodID)
-    {
-        qCritical()<<"Can't find openURL method";
-        return -1;
-    }
-
-    // search for getArgs method
-    s_PockemulObjectgetArgsMethodID = env->GetMethodID(s_PockemulObjectClassID, "getArgs", "()Ljava/lang/String;");
-    if (!s_PockemulObjectgetArgsMethodID)
-    {
-        qCritical()<<"Can't find openURL method";
-        return -1;
-    }
-
-    return JNI_VERSION_1_6;
-}
-
-#endif
-
 QString m_getArgs() {
-    qWarning() << QApplication::arguments();
-    return "";
+
 #ifdef Q_OS_ANDROID
-    JNIEnv* env;
-        // Qt is running in a different thread than Java UI, so you always Java VM *MUST* be attached to current thread
-        if (s_javaVM->AttachCurrentThread(&env, NULL)<0)
-        {
-            qCritical()<<"AttachCurrentThread failed";
-            return 0;
-        }
-        m_PockemulObject = env->NewGlobalRef(env->NewObject(s_PockemulObjectClassID, s_PockemulObjectConstructorMethodID));
 
-        jstring res = (jstring) env->CallObjectMethod(m_PockemulObject, s_PockemulObjectgetArgsMethodID);
-
-        qWarning()<<"return:"<<res;
+    QAndroidJniObject stringArgs = QAndroidJniObject::callStaticObjectMethod("org/qtproject/pockemul/PockemulActivity",
+                                        "getArgs",
+                                        "()Ljava/lang/String;");
+    qWarning()<<"return:"<<stringArgs.toString();
 
 
-
-            QString s= toQString(env,res);
-            qWarning()<<"s="<<s;
-
-            // Don't forget to detach from current thread
-            s_javaVM->DetachCurrentThread();
-            return s;
+    return stringArgs.toString();
 
 #endif
-            return QString("");
+    return QString("");
 }
 
 int ask(QWidget *parent, QString msg, int nbButton) {
@@ -464,13 +338,13 @@ void m_addShortcut(QString name, QString param) {
 #ifdef Q_OS_ANDROID
 
     qWarning()<<"assShortcut";
-        QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
-                                                  "addShortcut",
-                                                  "(Ljava/lang/String;Ljava/lang/String;)V",
-                                                  QAndroidJniObject::fromString(name).object<jstring>(),
-                                                  QAndroidJniObject::fromString(param).object<jstring>());
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                              "addShortcut",
+                                              "(Ljava/lang/String;Ljava/lang/String;)V",
+                                              QAndroidJniObject::fromString(name).object<jstring>(),
+                                              QAndroidJniObject::fromString(param).object<jstring>());
 
-            qWarning()<<"End addShortcut";
+    qWarning()<<"End addShortcut";
 #else
     Q_UNUSED(name)
     Q_UNUSED(param)
