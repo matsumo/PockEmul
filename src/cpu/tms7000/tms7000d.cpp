@@ -373,7 +373,7 @@ quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
     int pos = 0;
     char tmpbuf[32];
 
-    opcode = oprom[pos++];
+    opcode = pPC->Get_8(pc+pos);pos++;//oprom[pos++];
 
     for( i=0; i<sizeof(opcodes) / sizeof(opcodeinfo); i++ )
     {
@@ -401,39 +401,39 @@ quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
                         buffer += sprintf (buffer, "%s", of[j].opstr[k]);
                         break;
                     case UI8:
-                        a = (UINT8)opram[pos++];
+                        a = pPC->Get_8(pc+pos);pos++;//(UINT8)opram[pos++];
                         buffer += sprintf(buffer, of[j].opstr[k], (unsigned int)a);
                         //size += 1;
                         break;
                     case I8:
-                        b = (qint8)opram[pos++];
+                        b = pPC->Get_8(pc+pos);pos++;//(qint8)opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (qint8)b);
                         //size += 1;
                         break;
                     case UI16:
-                        c = (UINT16)opram[pos++];
+                        c = pPC->Get_16(pc+pos);pos++;//(UINT16)opram[pos++];
                         c <<= 8;
-                        c += opram[pos++];
+                        c += pPC->Get_8(pc+pos);pos++;//opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (unsigned int)c);
                         //size += 2;
                         break;
                     case I16:
-                        d = (qint16)opram[pos++];
+                        d = pPC->Get_16(pc+pos);pos++;//(qint16)opram[pos++];
                         d <<= 8;
-                        d += opram[pos++];
+                        d += pPC->Get_8(pc+pos);pos++;//opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (signed int)d);
                         //size += 2;
                         break;
                     case PCREL:
-                        b = (qint8)opram[pos++];
+                        b = pPC->Get_8(pc+pos);pos++;//(qint8)opram[pos++];
                         sprintf(tmpbuf, "$%04X", pc+2+k+b);
                         buffer += sprintf (buffer, of[j].opstr[k], tmpbuf);
                         //size += 1;
                         break;
                     case PCABS:
-                        c = (UINT16)opram[pos++];
+                        c = (UINT16)pPC->Get_16(pc+pos);pos++;//opram[pos++];
                         c <<= 8;
-                        c += opram[pos++];
+                        c += pPC->Get_8(pc+pos);pos++;//opram[pos++];
                         sprintf(tmpbuf, "$%04X", c);
                         buffer += sprintf (buffer, of[j].opstr[k], tmpbuf);
                         //size += 2;

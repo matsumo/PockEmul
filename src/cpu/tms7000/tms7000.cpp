@@ -36,10 +36,10 @@
 #define RM(Addr) pPC->Get_8(Addr)
 #define WM(Addr,Value) pPC->Set_8(Addr,Value)
 
-#define IMMBYTE(b)  b = pPC->mem[ppc]; ppc++
-#define SKIPBYTE()  pPC->mem[ppc]; ppc++
-#define SIMMBYTE(b) b = ((signed)pPC->mem[ppc]); ppc++
-#define IMMWORD(w)  w.b.h = pPC->mem[ppc++]; w.b.l = pPC->mem[ppc++]
+#define IMMBYTE(b)  b = pPC->Get_8(ppc); ppc++
+#define SKIPBYTE()  pPC->Get_8(ppc); ppc++
+#define SIMMBYTE(b) b = ((signed)pPC->Get_8(ppc)); ppc++
+#define IMMWORD(w)  w.b.h = pPC->Get_8(ppc++); w.b.l = pPC->Get_8(ppc++)
 
 #define PUSHBYTE(b) pSP++; WM(pSP,b)
 #define PUSHWORD(w) pSP++; WM(pSP,w.b.h); pSP++; WM(pSP,w.b.l)
@@ -77,7 +77,8 @@
 
 
 Ctms7000::Ctms7000(CPObject *parent, TMS7000_Models mod)
-    : CCPU(parent)
+    : CCPU(parent),
+    m_opcode(s_opfn)
 {
 
     pDEBUG = new Cdebug_tms7000(parent);
@@ -335,6 +336,8 @@ void Ctms7000::check_IRQ_lines()
 
 void Ctms7000::do_interrupt( UINT16 address, UINT8 line )
 {
+    CallSubLevel++;
+
     PUSHBYTE( pSR );        /* Push Status register */
     PUSHWORD( PC );         /* Push Program Counter */
     pSR = 0;                /* Clear Status register */
@@ -1371,6 +1374,7 @@ void Ctms7000::call_dir()
 {
     PAIR    tPC;
 
+    CallSubLevel++;
     IMMWORD( tPC );
     PUSHWORD( PC );
     ppc = tPC.d;
@@ -1382,6 +1386,7 @@ void Ctms7000::call_ind()
 {
     UINT8   v;
 
+    CallSubLevel++;
     IMMBYTE( v );
     PUSHWORD( PC );
     PC.w.l = RRF16(v);
@@ -1393,6 +1398,7 @@ void Ctms7000::call_inx()
 {
     PAIR    tPC;
 
+    CallSubLevel++;
     IMMWORD( tPC );
     PUSHWORD( PC );
     ppc = tPC.w.l + RDB;
@@ -2933,6 +2939,7 @@ void Ctms7000::push_st()
 
 void Ctms7000::reti()
 {
+    CallSubLevel--;
     PULLWORD( PC );
     PULLBYTE( pSR );
 
@@ -2942,6 +2949,7 @@ void Ctms7000::reti()
 
 void Ctms7000::rets()
 {
+    CallSubLevel--;
     PULLWORD( PC );
     m_icount -= 7;
 }
@@ -3534,6 +3542,7 @@ void Ctms7000::sub_ir()
 
 void Ctms7000::trap_0()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfffe);
     m_icount -= 14;
@@ -3541,6 +3550,7 @@ void Ctms7000::trap_0()
 
 void Ctms7000::trap_1()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfffc);
     m_icount -= 14;
@@ -3548,6 +3558,7 @@ void Ctms7000::trap_1()
 
 void Ctms7000::trap_2()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfffa);
     m_icount -= 14;
@@ -3555,6 +3566,7 @@ void Ctms7000::trap_2()
 
 void Ctms7000::trap_3()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfff8);
     m_icount -= 14;
@@ -3562,6 +3574,7 @@ void Ctms7000::trap_3()
 
 void Ctms7000::trap_4()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfff6);
     m_icount -= 14;
@@ -3569,6 +3582,7 @@ void Ctms7000::trap_4()
 
 void Ctms7000::trap_5()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfff4);
     m_icount -= 14;
@@ -3576,6 +3590,7 @@ void Ctms7000::trap_5()
 
 void Ctms7000::trap_6()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfff2);
     m_icount -= 14;
@@ -3583,6 +3598,7 @@ void Ctms7000::trap_6()
 
 void Ctms7000::trap_7()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xfff0);
     m_icount -= 14;
@@ -3590,6 +3606,7 @@ void Ctms7000::trap_7()
 
 void Ctms7000::trap_8()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffee);
     m_icount -= 14;
@@ -3597,6 +3614,7 @@ void Ctms7000::trap_8()
 
 void Ctms7000::trap_9()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffec);
     m_icount -= 14;
@@ -3604,6 +3622,7 @@ void Ctms7000::trap_9()
 
 void Ctms7000::trap_10()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffea);
     m_icount -= 14;
@@ -3611,6 +3630,7 @@ void Ctms7000::trap_10()
 
 void Ctms7000::trap_11()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffe8);
     m_icount -= 14;
@@ -3618,6 +3638,7 @@ void Ctms7000::trap_11()
 
 void Ctms7000::trap_12()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffe6);
     m_icount -= 14;
@@ -3625,6 +3646,7 @@ void Ctms7000::trap_12()
 
 void Ctms7000::trap_13()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffe4);
     m_icount -= 14;
@@ -3632,6 +3654,7 @@ void Ctms7000::trap_13()
 
 void Ctms7000::trap_14()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffe2);
     m_icount -= 14;
@@ -3639,6 +3662,7 @@ void Ctms7000::trap_14()
 
 void Ctms7000::trap_15()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffe0);
     m_icount -= 14;
@@ -3646,6 +3670,7 @@ void Ctms7000::trap_15()
 
 void Ctms7000::trap_16()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffde);
     m_icount -= 14;
@@ -3653,6 +3678,7 @@ void Ctms7000::trap_16()
 
 void Ctms7000::trap_17()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffdc);
     m_icount -= 14;
@@ -3660,6 +3686,7 @@ void Ctms7000::trap_17()
 
 void Ctms7000::trap_18()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffda);
     m_icount -= 14;
@@ -3667,6 +3694,7 @@ void Ctms7000::trap_18()
 
 void Ctms7000::trap_19()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffd8);
     m_icount -= 14;
@@ -3674,6 +3702,7 @@ void Ctms7000::trap_19()
 
 void Ctms7000::trap_20()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffd6);
     m_icount -= 14;
@@ -3681,6 +3710,7 @@ void Ctms7000::trap_20()
 
 void Ctms7000::trap_21()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffd4);
     m_icount -= 14;
@@ -3688,6 +3718,7 @@ void Ctms7000::trap_21()
 
 void Ctms7000::trap_22()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffd2);
     m_icount -= 14;
@@ -3695,6 +3726,7 @@ void Ctms7000::trap_22()
 
 void Ctms7000::trap_23()
 {
+    CallSubLevel++;
     PUSHWORD( PC );
     ppc = RM16(0xffd0);
     m_icount -= 14;
@@ -4502,7 +4534,9 @@ bool Ctms7000::exit()
 void Ctms7000::step()
 {
     {
+        m_icount = 0;
         execute_run();
+        pPC->pTIMER->state -= m_icount;
     }
 
 

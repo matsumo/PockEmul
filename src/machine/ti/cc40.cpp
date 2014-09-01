@@ -191,10 +191,22 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
+
     if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
-    if (*d==0x0119) { RomBank = data & 0x0f;	return true; }
-    if (*d==0x011E) { pHD44780->control_write(data); return false; }
-    if (*d==0x011F) { pHD44780->data_write(data); return false; }
+    if (*d==0x0119) { RomBank = data & 0x0f; /*qWarning()<<"romBank:"<<RomBank;*/	return true; }
+    if (*d==0x011E) {
+        qWarning()<<"pHD44780->control_write:"<<data;
+        pHD44780->control_write(data);
+        pLCDC->redraw = true;
+        return false;
+    }
+    if (*d==0x011F) {
+        qWarning()<<"pHD44780->data_write:"<<data;
+        pHD44780->data_write(data);
+        pLCDC->redraw = true;
+        return false;
+    }
+    if ( (*d>=0x0000) && (*d<=0xCFFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
 
@@ -215,7 +227,9 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
     Q_UNUSED(d)
     Q_UNUSED(data)
 
+    if (*d==0x011E) { *data = pHD44780->control_read(); return false; }
     if (*d==0x011F) { *data = pHD44780->data_read(); return false; }
+    if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
 
     return true;
 }
@@ -343,11 +357,12 @@ UINT8 Ccc40::out(UINT8 Port, UINT8 Value)
 
 bool Ccc40::init()
 {
-    pCPU->logsw = true;
+    pCPU->logsw = false;
 #ifndef QT_NO_DEBUG
     pCPU->logsw = false;
 #endif
     CpcXXXX::init();
+    pHD44780->init();
     initExtension();
     Reset();
     Cetl = false;
@@ -392,7 +407,7 @@ bool Ccc40::run()
 void Ccc40::Reset()
 {
     CpcXXXX::Reset();
-
+    pHD44780->Reset();
 }
 
 void Ccc40::TurnON()
