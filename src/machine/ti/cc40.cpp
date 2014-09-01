@@ -161,17 +161,17 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     setDY(525);
 
     Lcd_X		= 50;
-    Lcd_Y		= 160;
-    Lcd_DX		= 510;
-    Lcd_DY		= 60;
-    Lcd_ratio_X	= 1;
-    Lcd_ratio_Y	= 1;
+    Lcd_Y		= 180;
+    Lcd_DX		= 186;
+    Lcd_DY		= 9;
+    Lcd_ratio_X	= 2.7;
+    Lcd_ratio_Y	= 2.7;
 
     pLCDC		= new Clcdc_cc40(this);
     pCPU		= new Ctms70c20(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"cc40.map");
-    pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"));
+    pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
 
 

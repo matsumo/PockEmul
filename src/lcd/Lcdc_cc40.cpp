@@ -33,13 +33,23 @@ void Clcdc_cc40::disp(void)
     info = ((Ccc40*) pPC)->pHD44780->getInfo();
 //    disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+//    QImage loc = QImage(QSize(16*6,18),QImage::Format_ARGB32);
+    QImage loc = QImage(pPC->LcdFname).scaled(QSize(16*6,18),Qt::IgnoreAspectRatio,Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32);
+    QPainter painter(&loc);
 
+    info->m_lines = 2;
+    info->m_chars = 16;
     ((Ccc40 *)pPC)->pHD44780->screen_update(&painter);
+    painter.end();
 
+    QPainter painterFinal(pPC->LcdImage);
+
+    painterFinal.drawImage(QRect(0,0,16*6,9),loc,QRect(0,0,16*6,9));
+    painterFinal.drawImage(QRect(16*6,0,16*6,9),loc,QRect(0,9,16*6,9));
+    painterFinal.end();
 
     redraw = 0;
-    painter.end();
+
 }
 
 

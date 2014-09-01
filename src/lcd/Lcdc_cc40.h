@@ -22,7 +22,7 @@ public:
     {						//[constructor]
     }
 
-    HD44780info info;
+    HD44780info *info;
 };
 
 

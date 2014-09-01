@@ -70,7 +70,7 @@ public:
     void data_write(UINT8 data);
     UINT8 control_read();
     void control_write(UINT8 data);
-    HD44780info getInfo();
+    HD44780info *getInfo();
 
     quint64 on_timer_rate;
 //    int video_update(bitmap_t &bitmap, const rectangle &cliprect);

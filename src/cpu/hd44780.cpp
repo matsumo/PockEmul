@@ -69,6 +69,8 @@ bool CHD44780::init()
 
 void CHD44780::Reset()
 {
+    qWarning()<<"CHD44780::Reset()";
+
     memset(info.m_ddram, 0x20, sizeof(info.m_ddram)); // can't use 0 here as it would show CGRAM instead of blank space on a soft reset
     memset(info.m_cgram, 0, sizeof(info.m_cgram));
 
@@ -180,6 +182,7 @@ inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UIN
         {
             if (pos < info.m_chars) {
                 painter->setPen(state ? pPC->pLCDC->Color_On : pPC->pLCDC->Color_Off );
+//qWarning()<<"line:"<<line;
                 painter->drawPoint( pos * 6 + x, line * (line_heigh+1) + y );
 //                bitmap.pix16(line * (line_heigh+1) + y, pos * 6 + x) = state;
             }
@@ -195,6 +198,7 @@ inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UIN
                 }
 
                 if (line < info.m_lines){
+                    qWarning()<<"drawpoint:"<<pos * 6 + x<<","<< line * (line_heigh+1) + y<<"color:"<<state;
                     painter->setPen(state ? pPC->pLCDC->Color_On : pPC->pLCDC->Color_Off );
                     painter->drawPoint( pos * 6 + x, line * (line_heigh+1) + y );
     //                bitmap.pix16(line * (line_heigh+1) + y, pos * 6 + x) = state;
@@ -203,7 +207,7 @@ inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UIN
         }
         else
         {
-//            fatalerror("%s: use a custom callback for this LCD configuration (%d x %d)\n", tag(), m_lines, m_chars);
+            qWarning()<<"use a custom callback for this LCD configuration:"<< info.m_lines<<","<< info.m_chars;
         }
     }
 }
@@ -503,8 +507,8 @@ UINT8 CHD44780::data_read()
     return data;
 }
 
-HD44780info CHD44780::getInfo()
+HD44780info * CHD44780::getInfo()
 {
-    return info;
+    return &info;
 }
 
