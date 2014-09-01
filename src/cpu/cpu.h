@@ -55,6 +55,15 @@ typedef union {
     qint32 sd;
 } DPAIR;
 
+// I/O line states
+enum line_state
+{
+    CLEAR_LINE = 0,				// clear (a fired or held) line
+    ASSERT_LINE,				// assert an interrupt immediately
+    HOLD_LINE,					// hold interrupt line until acknowledged
+    PULSE_LINE					// pulse interrupt line instantaneously (only for NMI, RESET)
+};
+
 class CCPU:public QObject{
 Q_OBJECT
 public:

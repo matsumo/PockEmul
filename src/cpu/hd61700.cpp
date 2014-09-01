@@ -22,7 +22,7 @@
 
 #include <QDebug>
 
-#define CLEAR_LINE 0
+
 //#include "emu.h"
 //#include "debugger.h"
 #include "hd61700.h"

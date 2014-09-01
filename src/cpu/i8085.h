@@ -8,7 +8,7 @@ enum {
         I8085_HALT, I8085_IM, I8085_IREQ, I8085_ISRV, I8085_VECTOR,
         I8085_TRAP_STATE, I8085_INTR_STATE,
         I8085_RST55_STATE, I8085_RST65_STATE, I8085_RST75_STATE};
-#define CLEAR_LINE		0		/* clear (a fired, held or pulsed) line */
+
 
 #define I8085_INTR_LINE     0
 #define I8085_RST55_LINE        1
