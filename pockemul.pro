@@ -1051,7 +1051,8 @@ OTHER_FILES += \
     resources/keymap/ce1560.map \
     resources/keymap/ce140f.map \
     android/AndroidManifest.xml \
-    android/src/org/qtproject/pockemul/PockemulActivity.java
+    android/src/org/qtproject/pockemul/PockemulActivity.java \
+    resources/keymap/cc40.map
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

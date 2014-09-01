@@ -38,11 +38,11 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
-    Ctms7000 *tms7000cpu;
+    Ctms7000 *ptms7000cpu;
     CHD44780 *pHD44780;
 
     quint8 ks;
-    quint16 getKey();
+    quint8 getKey();
     bool Cetl;
     quint8 sid;
 

@@ -95,6 +95,8 @@ public:
 //    DECLARE_WRITE8_MEMBER( tms70x0_pf_w );
 //    DECLARE_READ8_MEMBER( tms70x0_pf_r );
 
+    void pf_write(UINT32 offset, UINT8 data);
+    UINT8 pf_read(UINT32 offset);
 protected:
 
 

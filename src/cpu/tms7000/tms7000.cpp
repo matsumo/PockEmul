@@ -4241,8 +4241,9 @@ void Ctms7000::service_timer1()
 //  tick2 = total_cycles();
 }
 
-#if 0
-WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
+
+//WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
+void Ctms7000::pf_write(UINT32 offset,UINT8 data)
 {
     UINT8   temp1, temp2, temp3;
 
@@ -4257,7 +4258,7 @@ WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
         case 0x02:
             m_t1_decrementer = m_pf[0x02] = data;
             m_cycles_per_INT2 = 0x10*((m_pf[3] & 0x1f)+1)*(m_pf[0x02]+1);
-            LOG( ( "tms7000: Timer adjusted. Decrementer: 0x%2.2x (Cycles per interrupt: %d)\n", m_t1_decrementer, m_cycles_per_INT2 ) );
+//            LOG( ( "tms7000: Timer adjusted. Decrementer: 0x%2.2x (Cycles per interrupt: %d)\n", m_t1_decrementer, m_cycles_per_INT2 ) );
             break;
         case 0x03:  /* T1CTL, timer 1 control */
             if( ((m_pf[0x03] & 0x80) == 0) && ((data & 0x80) == 0x80 ) )   /* Start timer? */
@@ -4265,20 +4266,20 @@ WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
                 m_pf[0x03] = data;
                 m_t1_prescaler = m_pf[3] & 0x1f; /* Reload prescaler (5 bit) */
                 m_cycles_per_INT2 = 0x10*((m_pf[3] & 0x1f)+1)*(m_pf[0x02]+1);
-                LOG( ( "tms7000: Timer started. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
+//                LOG( ( "tms7000: Timer started. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
             }
             else if( ((data & 0x80) == 0x80 ) && ((m_pf[0x03] & 0x80) == 0) )   /* Timer Stopped? */
             {
                 m_pf[0x03] = data;
                 m_t1_prescaler = m_pf[3] & 0x1f; /* Reload prescaler (5 bit) */
                 m_cycles_per_INT2 = 0x10*((m_pf[3] & 0x1f)+1)*(m_pf[0x02]+1);
-                LOG( ( "tms7000: Timer stopped. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
+//                LOG( ( "tms7000: Timer stopped. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
             }
             else /* Don't modify timer state, but still store data */
             {
                 m_pf[0x03] = data;
                 m_cycles_per_INT2 = 0x10*((m_pf[3] & 0x1f)+1)*(m_pf[0x02]+1);
-                LOG( ( "tms7000: Timer adjusted. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
+//                LOG( ( "tms7000: Timer adjusted. Prescaler: 0x%2.2x (Cycles per interrupt: %d)\n", m_pf[3] & 0x1f, m_cycles_per_INT2 ) );
             }
             break;
 
@@ -4287,19 +4288,22 @@ WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
             break;
 
         case 0x06: /* Port B write */
-            m_io->write_byte( TMS7000_PORTB, data );
+            pPC->out(TMS7000_PORTB,data);
+//            m_io->write_byte( TMS7000_PORTB, data );
             m_pf[ 0x06 ] = data;
             break;
 
         case 0x08: /* Port C write */
             temp1 = data & m_pf[ 0x09 ];    /* Mask off input bits */
-            m_io->write_byte( TMS7000_PORTC, temp1 );
+//            m_io->write_byte( TMS7000_PORTC, temp1 );
+            pPC->out(TMS7000_PORTC,temp1);
             m_pf[ 0x08 ] = temp1;
             break;
 
         case 0x0a: /* Port D write */
             temp1 = data & m_pf[ 0x0b ];    /* Mask off input bits */
-            m_io->write_byte( TMS7000_PORTD, temp1 );
+//            m_io->write_byte( TMS7000_PORTD, temp1 );
+            pPC->out(TMS7000_PORTD,temp1);
             m_pf[ 0x0a ] = temp1;
             break;
 
@@ -4310,7 +4314,8 @@ WRITE8_MEMBER( Ctms7000::tms70x0_pf_w )   /* Perpherial file write */
     }
 }
 
-READ8_MEMBER( Ctms7000::tms70x0_pf_r )    /* Perpherial file read */
+//READ8_MEMBER( Ctms7000::tms70x0_pf_r )    /* Perpherial file read */
+UINT8 Ctms7000::pf_read(UINT32 offset)
 {
     UINT8 result;
     UINT8   temp1, temp2, temp3;
@@ -4334,7 +4339,7 @@ READ8_MEMBER( Ctms7000::tms70x0_pf_r )    /* Perpherial file read */
             break;
 
         case 0x04: /* Port A read */
-            result = m_io->read_byte( TMS7000_PORTA );
+            result = pPC->in( TMS7000_PORTA );
             break;
 
 
@@ -4345,14 +4350,14 @@ READ8_MEMBER( Ctms7000::tms70x0_pf_r )    /* Perpherial file read */
 
         case 0x08: /* Port C read */
             temp1 = m_pf[ 0x08 ] & m_pf[ 0x09 ];    /* Get previous output bits */
-            temp2 = m_io->read_byte( TMS7000_PORTC );           /* Read port */
+            temp2 = pPC->in( TMS7000_PORTC );           /* Read port */
             temp3 = temp2 & (~m_pf[ 0x09 ]);                /* Mask off output bits */
             result = temp1 | temp3;                             /* OR together */
             break;
 
         case 0x0a: /* Port D read */
             temp1 = m_pf[ 0x0a ] & m_pf[ 0x0b ];    /* Get previous output bits */
-            temp2 = m_io->read_byte( TMS7000_PORTD );           /* Read port */
+            temp2 = pPC->in( TMS7000_PORTD );           /* Read port */
             temp3 = temp2 & (~m_pf[ 0x0b ]);                /* Mask off output bits */
             result = temp1 | temp3;                             /* OR together */
             break;
@@ -4365,7 +4370,7 @@ READ8_MEMBER( Ctms7000::tms70x0_pf_r )    /* Perpherial file read */
 
     return result;
 }
-#endif
+
 
 // BCD arthrimetic handling
 static const UINT8 lut_bcd_out[6] = { 0x00, 0x06, 0x00, 0x66, 0x60, 0x66 };
