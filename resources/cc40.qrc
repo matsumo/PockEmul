@@ -4,5 +4,6 @@
         <file>cc40/cc40.png</file>
         <file>cc40/cc40_2krom.bin</file>
         <file>cc40/cc40lcd.png</file>
+        <file>cc40/hd44780_a00.bin</file>
     </qresource>
 </RCC>

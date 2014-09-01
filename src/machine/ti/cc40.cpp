@@ -4,6 +4,7 @@
 #include "common.h"
 #include "cc40.h"
 #include "tms7000/tms7000.h"
+#include "hd44780.h"
 
 #include "Inter.h"
 #include "Keyb.h"
@@ -14,8 +15,118 @@
 
 #include "Log.h"
 
-// TODO: MultiTouch Events
+/*
+CC-40 MEMORY MAP1:
 
+
+    DECIMAL    HEX     DESCRIPTION         SIZE
+   -------------------------------------------------------------------------
+       0      0000
+                      REGISTER FILE       128 BYTES PROCESSOR RAM
+     127      007F
+   -------------------------------------------------------------------------
+     128      0080
+                      UNUSED              128 BYTES
+     255      00FF
+   -------------------------------------------------------------------------
+     256      0100
+                      PERIPHERAL FILE     256 BYTES MEMORY MAP I/O
+     511      01FF
+   -------------------------------------------------------------------------
+     512      0200
+                      UNUSED              1.5K
+    2047      07FF
+   -------------------------------------------------------------------------
+    2048      0800
+                      SYSTEM RAM          2K INSTALLED
+    4095      0FFF
+   -------------------------------------------------------------------------
+    4096      1000
+                      SYSTEM RAM          2K INSTALLED
+    6143      17FF
+   -------------------------------------------------------------------------
+    6144      1800
+                      SYSTEM RAM          6K NOT INSTALLED
+   12287      2FFF
+   -------------------------------------------------------------------------
+   12288      3000
+                      SYSTEM RAM          2K INSTALLED
+   14335      37FF
+   -------------------------------------------------------------------------
+   14336      3800
+                      SYSTEM RAM          6K NOT INSTALLED
+   20479      4FFF
+   -------------------------------------------------------------------------
+   20480      5000
+                      CARTRIDE PORT       32K
+   53247      CFFF
+   -------------------------------------------------------------------------
+   53248      D000
+                      SYSTEM ROM          8K
+   61439      EFFF
+   -------------------------------------------------------------------------
+   61440      F000
+                      UNUSED              2K
+   63487      F7FF
+   -------------------------------------------------------------------------
+   63488      F800
+                      PROCESSOR ROM       2K
+   65536      FFFF
+   -------------------------------------------------------------------------
+
+============================================================================
+
+   CC-40 MEMORY MAP: AFTER 12K RAM ADDED:
+
+    DECIMAL    HEX     DESCRIPTION         SIZE
+   -------------------------------------------------------------------------
+       0      0000
+                      REGISTER FILE       128 BYTES PROCESSOR RAM
+     127      007F
+   -------------------------------------------------------------------------
+     128      0080
+                      UNUSED              128 BYTES
+     255      00FF
+   -------------------------------------------------------------------------
+     256      0100
+                      PERIPHERAL FILE     256 BYTES MEMORY MAP I/O
+     511      01FF
+   -------------------------------------------------------------------------
+     512      0200
+                      UNUSED              1.5K
+    2047      07FF
+   -------------------------------------------------------------------------
+    2048      0800
+                      SYSTEM RAM          2K INSTALLED
+    4095      0FFF
+   -------------------------------------------------------------------------
+    4096      1000
+                      SYSTEM RAM          8K INSTALLED
+   12287      2FFF
+   -------------------------------------------------------------------------
+   12288      3000
+                      SYSTEM RAM          8K INSTALLED
+   20479      4FFF
+   -------------------------------------------------------------------------
+   20480      5000
+                      CARTRIDE PORT       32K
+   53247      CFFF
+   -------------------------------------------------------------------------
+   53248      D000
+                      SYSTEM ROM          8K
+   61439      EFFF
+   -------------------------------------------------------------------------
+   61440      F000
+                      UNUSED              2K
+   63487      F7FF
+   -------------------------------------------------------------------------
+   63488      F800
+                      PROCESSOR ROM       2K
+   65536      FFFF
+   -------------------------------------------------------------------------
+
+===========================================================================
+    */
 
 #define STROBE_TIMER 5
 
@@ -33,12 +144,13 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 
 //    TopFname    = P_RES(":/fp200/fp200Top.png");
 
-    memsize		= 0x10000;
-    InitMemValue	= 0xFF;
+    memsize		= 0x20000;
+    InitMemValue	= 0x00;
 
     SlotList.clear();
-    SlotList.append(CSlot(32 , 0x0000 ,	P_RES(":/cc40/cc40.bin")   , ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(32 , 0x0000 ,	P_RES(":/cc40/cc40_2krom.bin")   , ""	, CSlot::ROM , "ROM cpu"));
+    SlotList.append(CSlot(2  , 0xF800 ,	P_RES(":/cc40/cc40_2krom.bin")  , ""	, CSlot::ROM , "ROM cpu"));
+    SlotList.append(CSlot(32 , 0x10000,	P_RES(":/cc40/cc40.bin")        , ""	, CSlot::ROM , "ROM"));
+
     SlotList.append(CSlot(8  , 0x8000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(8  , 0xa000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(8  , 0xc000 ,	""                  , ""	, CSlot::RAM , "RAM"));
@@ -62,6 +174,7 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new Ctms70c20(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"cc40.map");
+    pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"));
 
 
 
@@ -81,11 +194,21 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
+    if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
+    if (*d==0x0119) { RomBank = data & 0x0f;	return true; }
+    if (*d==0x011E) { pHD44780->control_write(data); return false; }
+    if (*d==0x011F) { pHD44780->data_write(data); return false; }
+    if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
+    if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
+
+
+
+
     if (                 (*d<=0x7FFF) )	return(false);		// ROM area(0000-7FFF)
-    if ( (*d>=0x8000) && (*d<=0x9FFF) )	{ return(true);	}
+
     if ( (*d>=0xA000) && (*d<=0xBFFF) )	{ return(ext_MemSlot1->ExtArray[ID_FP201]->IsChecked);	}
     if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ return(ext_MemSlot2->ExtArray[ID_FP201]->IsChecked);	}
-    if ( (*d>=0xE000) && (*d<=0xFFFF) )	{ return(ext_MemSlot3->ExtArray[ID_FP201]->IsChecked || ext_MemSlot3->ExtArray[ID_FP205]->IsChecked || ext_MemSlot3->ExtArray[ID_FP231CE]->IsChecked);	}
+
 
     return true;
 }
@@ -94,6 +217,8 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
     Q_UNUSED(d)
     Q_UNUSED(data)
+
+    if (*d==0x011F) { *data = pHD44780->data_read(); return false; }
 
     return true;
 }

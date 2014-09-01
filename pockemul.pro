@@ -564,7 +564,8 @@ HEADERS += src/core/Connect.h \
     src/machine/panasonic/rlp3001.h \
     src/machine/panasonic/rlext.h \
     src/cpu/tms7000/tms7000.h \
-    src/machine/ti/cc40.h
+    src/machine/ti/cc40.h \
+    src/cpu/hd44780.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -827,7 +828,8 @@ SOURCES +=  \
     src/machine/panasonic/rlext.cpp \
     src/cpu/tms7000/tms7000.cpp \
     src/cpu/tms7000/tms7000d.cpp \
-    src/machine/ti/cc40.cpp
+    src/machine/ti/cc40.cpp \
+    src/cpu/hd44780.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

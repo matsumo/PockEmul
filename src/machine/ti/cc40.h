@@ -3,6 +3,7 @@
 
 class CPObject;
 class Ctms7000;
+class CHD44780;
 
 #include "pcxxxx.h"
 
@@ -38,6 +39,7 @@ public:
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
     Ctms7000 *tms7000cpu;
+    CHD44780 *pHD44780;
 
     quint8 ks;
     quint16 getKey();
