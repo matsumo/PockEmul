@@ -74,6 +74,8 @@
 #include "panasonic/rlp2001.h"
 
 #include "ti/ti57.h"
+#include "ti/cc40.h"
+
 #include "hp/hp41.h"
 #include "hp/hp82143A.h"
 

@@ -562,7 +562,9 @@ HEADERS += src/core/Connect.h \
     resources/lcc/model/__graph.h \
     src/cpu/mc6847.h \
     src/machine/panasonic/rlp3001.h \
-    src/machine/panasonic/rlext.h
+    src/machine/panasonic/rlext.h \
+    src/cpu/tms7000/tms7000.h \
+    src/machine/ti/cc40.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -633,7 +635,8 @@ RESOURCES +=  \
     resources/stdlibs.qrc \
     qcodeedit/qxs/qxs.qrc \
     resources/asmlibs.qrc \
-    resources/core.qrc
+    resources/core.qrc \
+    resources/cc40.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \
@@ -821,7 +824,10 @@ SOURCES +=  \
     src/core/breakpoint.cpp \
     src/cpu/mc6847.cpp \
     src/machine/panasonic/rlp3001.cpp \
-    src/machine/panasonic/rlext.cpp
+    src/machine/panasonic/rlext.cpp \
+    src/cpu/tms7000/tms7000.cpp \
+    src/cpu/tms7000/tms7000d.cpp \
+    src/machine/ti/cc40.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

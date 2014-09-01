@@ -128,6 +128,18 @@ public:
         quint16 Dasm_upd7810(char *buffer, quint16 pc, const dasm_s *dasmXX, const UINT8 *oprom, const UINT8 *opram, int is_7810);
 };
 
+class Cdebug_tms7000:public Cdebug{
+    Q_OBJECT
+public:
+
+    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
+
+    Cdebug_tms7000(CPObject *parent)	: Cdebug(parent)
+    {
+    }
+
+};
+
 class Cdebug_z80:public Cdebug{
     Q_OBJECT
 public:

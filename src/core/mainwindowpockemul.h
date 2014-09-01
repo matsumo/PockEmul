@@ -134,7 +134,8 @@ enum Models {
     TI57,
     HP41,
     HP82143A,
-    CE1560
+    CE1560,
+    CC40
 };
 
 class MainWindowPockemul : public QMainWindow, public Ui::MainWindow
