@@ -13,14 +13,7 @@
 #undef IN
 #undef OUT
 
-// I/O line states
-enum line_state
-{
-    CLEAR_LINE = 0,				// clear (a fired or held) line
-    ASSERT_LINE,				// assert an interrupt immediately
-    HOLD_LINE,					// hold interrupt line until acknowledged
-    PULSE_LINE					// pulse interrupt line instantaneously (only for NMI, RESET)
-};
+
 
 
 // I/O line definitions

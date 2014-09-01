@@ -47,5 +47,6 @@
     <example brand="GENERAL" idpocket="General LBC-1100" filename="./" name="General LBC-1100" image=":/lbc1100/lbc-1100.png"/>
     <example brand="SANCO" idpocket="SANCO TPC-8300" filename="./" name="SANCO TPC-8300" image=":/tpc8300/tpc-8300.png"/>
    <example brand="PANASONIC" idpocket="Panasonic HHC RL-H1000" filename="./" name="Panasonic HHC RL-H1000" image=":/rlh1000/rlh1000.png"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="CC-40" filename="./" name="Texas Instruments CC-40" image=":/cc40/cc40.png"/>
    </demos>
  </demolauncher>

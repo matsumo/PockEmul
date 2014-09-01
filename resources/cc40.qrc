@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>cc40/cc40.bin</file>
+        <file>cc40/cc40.png</file>
+        <file>cc40/cc40_2krom.bin</file>
+        <file>cc40/cc40lcd.png</file>
+    </qresource>
+</RCC>
