@@ -195,4 +195,8 @@
        <document desc="SnapFORTH Vol I Tutorial (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_I_Tutorial.pdf"/>
        <document desc="SnapFORTH Vol II Reference Guide (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_II_Reference_Guide.pdf"/>
     </model>
+    <model value="cc40">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/texas/cc-40_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/CC40_user_guide_EN.pdf"/>
+    </model>
 </weblinks>
