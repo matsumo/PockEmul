@@ -138,6 +138,8 @@ public:
     {
     }
 
+    quint16 Dasm_tms7000(char *buffer, quint16 pc, const UINT8 *oprom, const UINT8 *opram);
+
 };
 
 class Cdebug_z80:public Cdebug{

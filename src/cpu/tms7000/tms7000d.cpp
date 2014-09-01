@@ -363,8 +363,11 @@ static const opcodeinfo opcodes[] = {
     {0x00, "NOP", 23, 0 }
 };
 
-#if 0
-CPU_DISASSEMBLE( tms7000 )
+
+quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
+                                       quint16 pc,
+                                       const quint8 *oprom,
+                                       const quint8 *opram)
 {
     int opcode, i/*, size = 1*/;
     int pos = 0;
@@ -380,9 +383,9 @@ CPU_DISASSEMBLE( tms7000 )
 
             int             j,k,vector;
             UINT8   a;
-            INT8    b;
+            qint8    b;
             UINT16  c;
-            INT16   d;
+            qint16   d;
 
             buffer += sprintf (buffer, "%s", opcodes[i].name);
 
@@ -403,8 +406,8 @@ CPU_DISASSEMBLE( tms7000 )
                         //size += 1;
                         break;
                     case I8:
-                        b = (INT8)opram[pos++];
-                        buffer += sprintf (buffer, of[j].opstr[k], (INT8)b);
+                        b = (qint8)opram[pos++];
+                        buffer += sprintf (buffer, of[j].opstr[k], (qint8)b);
                         //size += 1;
                         break;
                     case UI16:
@@ -415,14 +418,14 @@ CPU_DISASSEMBLE( tms7000 )
                         //size += 2;
                         break;
                     case I16:
-                        d = (INT16)opram[pos++];
+                        d = (qint16)opram[pos++];
                         d <<= 8;
                         d += opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (signed int)d);
                         //size += 2;
                         break;
                     case PCREL:
-                        b = (INT8)opram[pos++];
+                        b = (qint8)opram[pos++];
                         sprintf(tmpbuf, "$%04X", pc+2+k+b);
                         buffer += sprintf (buffer, of[j].opstr[k], tmpbuf);
                         //size += 1;
@@ -441,15 +444,15 @@ CPU_DISASSEMBLE( tms7000 )
                         break;
                 }
             }
-            return pos | opcodes[i].s_flag | DASMFLAG_SUPPORTED;
+            return pos;// | opcodes[i].s_flag ;
         }
     }
 
     /* No Match */
     strcpy (buffer, "Illegal Opcode");
-    return pos | DASMFLAG_SUPPORTED;
+    return pos ;
 }
-#endif
+
 
 UINT32 Cdebug_tms7000::DisAsm_1(UINT32 oldpc)
 {
@@ -459,7 +462,7 @@ UINT32 Cdebug_tms7000::DisAsm_1(UINT32 oldpc)
     Buffer[0] = '\0';
     char *str = Buffer;
     DasmAdr = oldpc;
-    int nb = 0;//Dasm_upd7810( Buffer, oldpc,dasmXX_7907, (quint8*)(&pPC->mem[oldpc]),(quint8*) (&pPC->mem[oldpc]), 0 );
+    int nb = Dasm_tms7000( Buffer, oldpc, (quint8*)(&pPC->mem[oldpc]),(quint8*) (&pPC->mem[oldpc]) );
     NextDasmAdr = oldpc + nb;
     char prefix[55];
     sprintf(prefix,"%05X:",(uint)oldpc);

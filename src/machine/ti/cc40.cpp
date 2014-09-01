@@ -5,7 +5,7 @@
 #include "cc40.h"
 #include "tms7000/tms7000.h"
 #include "hd44780.h"
-
+#include "Lcdc_cc40.h"
 #include "Inter.h"
 #include "Keyb.h"
 #include "cextension.h"
@@ -148,13 +148,10 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     InitMemValue	= 0x00;
 
     SlotList.clear();
+    SlotList.append(CSlot(52  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(2  , 0xF800 ,	P_RES(":/cc40/cc40_2krom.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/cc40/cc40.bin")        , ""	, CSlot::ROM , "ROM"));
 
-    SlotList.append(CSlot(8  , 0x8000 ,	""                  , ""	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8  , 0xa000 ,	""                  , ""	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8  , 0xc000 ,	""                  , ""	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8  , 0xe000 ,	""                  , ""	, CSlot::RAM , "RAM"));
 
     setDXmm(236);
     setDYmm(147);
@@ -170,7 +167,7 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     Lcd_ratio_X	= 1;
     Lcd_ratio_Y	= 1;
 
-//    pLCDC		= new Clcdc_fp200(this);
+    pLCDC		= new Clcdc_cc40(this);
     pCPU		= new Ctms70c20(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"cc40.map");
@@ -346,7 +343,7 @@ UINT8 Ccc40::out(UINT8 Port, UINT8 Value)
 
 bool Ccc40::init()
 {
-//    pCPU->logsw = true;
+    pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
     pCPU->logsw = false;
 #endif
@@ -363,23 +360,23 @@ bool Ccc40::init()
 
 void	Ccc40::initExtension(void)
 {
-    AddLog(LOG_MASTER,"INIT EXT FP-200");
+    AddLog(LOG_MASTER,"INIT EXT CC-40");
     // initialise ext_MemSlot1
-    ext_MemSlot1 = new CExtensionArray("RAM Slot 1","Add RAM Module");
-    ext_MemSlot2 = new CExtensionArray("RAM Slot 2","Add RAM Module");
-    ext_MemSlot3 = new CExtensionArray("RAM/ROM Slot 3","Add RAM or ROM Module");
-    ext_MemSlot1->setAvailable(ID_FP201,true); ext_MemSlot1->setChecked(ID_FP201,false);
-    ext_MemSlot2->setAvailable(ID_FP201,true); ext_MemSlot2->setChecked(ID_FP201,false);
-    ext_MemSlot3->setAvailable(ID_FP201,true); ext_MemSlot3->setChecked(ID_FP201,false);
-    ext_MemSlot3->setAvailable(ID_FP205,true);
-    ext_MemSlot3->setAvailable(ID_FP231CE,true);
+//    ext_MemSlot1 = new CExtensionArray("RAM Slot 1","Add RAM Module");
+//    ext_MemSlot2 = new CExtensionArray("RAM Slot 2","Add RAM Module");
+//    ext_MemSlot3 = new CExtensionArray("RAM/ROM Slot 3","Add RAM or ROM Module");
+//    ext_MemSlot1->setAvailable(ID_FP201,true); ext_MemSlot1->setChecked(ID_FP201,false);
+//    ext_MemSlot2->setAvailable(ID_FP201,true); ext_MemSlot2->setChecked(ID_FP201,false);
+//    ext_MemSlot3->setAvailable(ID_FP201,true); ext_MemSlot3->setChecked(ID_FP201,false);
+//    ext_MemSlot3->setAvailable(ID_FP205,true);
+//    ext_MemSlot3->setAvailable(ID_FP231CE,true);
 
-    addExtMenu(ext_MemSlot1);
-    addExtMenu(ext_MemSlot2);
-    addExtMenu(ext_MemSlot3);
-    extensionArray[0] = ext_MemSlot1;
-    extensionArray[1] = ext_MemSlot2;
-    extensionArray[2] = ext_MemSlot3;
+//    addExtMenu(ext_MemSlot1);
+//    addExtMenu(ext_MemSlot2);
+//    addExtMenu(ext_MemSlot3);
+//    extensionArray[0] = ext_MemSlot1;
+//    extensionArray[1] = ext_MemSlot2;
+//    extensionArray[2] = ext_MemSlot3;
 }
 
 bool Ccc40::run()
