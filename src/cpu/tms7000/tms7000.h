@@ -41,6 +41,7 @@ enum
     TMS7000_IRQ1_LINE = 0,   /* INT1 */
     TMS7000_IRQ2_LINE,       /* INT2 */
     TMS7000_IRQ3_LINE,       /* INT3 */
+    INPUT_LINE_RESET,
     TMS7000_IRQNONE = 255
 };
 
@@ -97,6 +98,7 @@ public:
 
     void pf_write(UINT32 offset, UINT8 data);
     UINT8 pf_read(UINT32 offset);
+    void set_input_line(UINT8 line, UINT8 state);
 protected:
 
 

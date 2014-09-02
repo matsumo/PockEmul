@@ -19,10 +19,6 @@ public:
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
-//    virtual UINT8 in8(UINT16 Port);
-//    virtual UINT8 out8(UINT16 Port,UINT8 x);
-//    virtual UINT16 in16(UINT16 Port);
-//    virtual UINT16 out16(UINT16 Port, UINT16 x);
 
     virtual bool	Set_Connector(void);
     virtual bool	Get_Connector(void);
@@ -43,16 +39,17 @@ public:
 
     quint8 ks;
     quint8 getKey();
-    bool Cetl;
-    quint8 sid;
+    UINT8 m_clock_control;
+    UINT8 m_banks;
+    UINT8 m_power;
 
-    int lastKeyBufSize;
-    bool newKey;
-    UINT8 matrixResult;
     virtual void initExtension(void);
 
 
 
+    void clock_w(UINT8 data);
+    UINT8 clock_r();
+    void power_w(UINT8 data);
 };
 
 

@@ -174,10 +174,6 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
 
-
-    lastKeyBufSize = 0;
-    newKey = false;
-
     ioFreq = 0;             // Mandatory for Centronics synchronization
     ptms7000cpu = (Ctms70c20*)pCPU;
 }
@@ -185,7 +181,15 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 Ccc40::~Ccc40() {
 }
 
+void Ccc40::power_w(UINT8 data)
+{
+    // d0: power-on hold latch
+    m_power = data & 1;
 
+    // stop running
+    if (!m_power)
+        ptms7000cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
+}
 
 bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 {
@@ -193,16 +197,23 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 
 
     if ( (*d>=0x0100) && (*d<=0x010F) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}  // CPU RAM
+    if (*d==0x0111) { power_w(data); return false; }
     if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
-    if (*d==0x0119) { RomBank = data & 0x0f; /*qWarning()<<"romBank:"<<RomBank;*/	return true; }
+    if (*d==0x0119) {
+        RomBank = data & 0x03; /*qWarning()<<"romBank:"<<RomBank;*/
+        RamBank = (data >> 2 & 3);
+        m_banks = data & 0x0f;
+        return true;
+    }
+    if (*d==0x011A) { clock_w(data); return false; }
     if (*d==0x011E) {
-        qWarning()<<"pHD44780->control_write:"<<data;
+//        qWarning()<<"pHD44780->control_write:"<<data;
         pHD44780->control_write(data);
         pLCDC->redraw = true;
         return false;
     }
     if (*d==0x011F) {
-        qWarning()<<"pHD44780->data_write:"<<data;
+//        qWarning()<<"pHD44780->data_write:"<<data;
         pHD44780->data_write(data);
         pLCDC->redraw = true;
         return false;
@@ -222,6 +233,9 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
     if ( (*d>=0x0100) && (*d<=0x010F) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
 
+    if (*d==0x0116) { *data = 1; return false; }
+    if (*d==0x0119) { *data = m_banks; return false; }
+    if (*d==0x011A) { *data = clock_r(); return false; }
     if (*d==0x011E) { *data = pHD44780->control_read(); return false; }
     if (*d==0x011F) { *data = pHD44780->data_read(); return false; }
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
@@ -264,6 +278,31 @@ UINT8 Ccc40::out(UINT8 Port, UINT8 Value)
     return 0;
 }
 
+UINT8 Ccc40::clock_r()
+{
+    return m_clock_control;
+}
+
+void Ccc40::clock_w(UINT8 data)
+{
+    // d3: enable clock divider
+    if (data & 8)
+    {
+        if (m_clock_control != (data & 0x0f))
+        {
+            // d0-d2: clock divider (2.5MHz /3 to /17 in steps of 2)
+            double div = (~data & 7) * 2 + 1;
+//            m_maincpu->set_clock_scale(1 / div);
+        }
+    }
+    else if (m_clock_control & 8)
+    {
+        // high to low
+//        m_maincpu->set_clock_scale(1);
+    }
+
+    m_clock_control = data & 0x0f;
+}
 
 bool Ccc40::init()
 {
@@ -275,10 +314,6 @@ bool Ccc40::init()
     pHD44780->init();
     initExtension();
     Reset();
-    Cetl = false;
-    sid = 0;
-
-
 
     return true;
 }
@@ -314,6 +349,10 @@ bool Ccc40::run()
 void Ccc40::Reset()
 {
     CpcXXXX::Reset();
+
+    m_clock_control = 0;
+    m_power = 1;
+
     pHD44780->Reset();
 }
 
@@ -407,7 +446,7 @@ quint8 Ccc40::getKey()
         }
         if (ks & 0x20) {
 //            if (KEY(''))			data|=0x01;
-//            if (KEY(''))			data|=0x02;
+            if (KEY(K_CLR))			data|=0x02;
             if (KEY(K_LA))			data|=0x04;
             if (KEY(K_RA))			data|=0x08;
             if (KEY(K_UA))			data|=0x10;

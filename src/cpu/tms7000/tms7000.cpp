@@ -24,7 +24,7 @@
  *
  *  This source implements the MC pin at Vss and mode bits in single chip mode.
  *****************************************************************************/
-
+#include <QDebug>
 
 #include "tms7000.h"
 #include "pcxxxx.h"
@@ -336,6 +336,7 @@ void Ctms7000::check_IRQ_lines()
 
 void Ctms7000::do_interrupt( UINT16 address, UINT8 line )
 {
+    qWarning()<<"do_interrupt";
     CallSubLevel++;
 
     PUSHBYTE( pSR );        /* Push Status register */
@@ -4207,8 +4208,12 @@ void Ctms7000::execute_run()
 
             if( (m_pf[0x03] & 0x80) == 0x80 ) /* Is timer system active? */
             {
+                 qWarning()<<"timer system active";
                 if( (m_pf[0x03] & 0x40) != 0x40) /* Is system clock (divided by 16) the timer source? */
+                {
+                    qWarning()<<"service_timer1";
                     service_timer1();
+                }
             }
         }
 
@@ -4221,6 +4226,9 @@ void Ctms7000::execute_run()
 /****************************************************************************
  * Trigger the event counter
  ****************************************************************************/
+void Ctms7000::set_input_line(UINT8 line, UINT8 state) {
+    m_irq_state[line] = state;
+}
 
 void Ctms7000::service_timer1()
 {
@@ -4232,6 +4240,7 @@ void Ctms7000::service_timer1()
         {
             m_t1_decrementer = m_pf[2]; /* Reload decrementer (8 bit) */
 //            set_input_line(TMS7000_IRQ2_LINE, HOLD_LINE);
+            set_input_line(TMS7000_IRQ2_LINE,HOLD_LINE);
             //LOG( ("tms7000: trigger int2 (cycles: %d)\t%d\tdelta %d\n", total_cycles(), total_cycles() - tick, m_cycles_per_INT2-(total_cycles() - tick) );
             //tick = total_cycles() );
             /* Also, cascade out to timer 2 - timer 2 unimplemented */
@@ -4539,7 +4548,7 @@ bool Ctms7000::exit()
 void Ctms7000::step()
 {
     {
-        m_icount = 0;
+        m_icount = 32;
         execute_run();
         pPC->pTIMER->state -= m_icount;
     }
