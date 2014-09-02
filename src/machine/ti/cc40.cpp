@@ -9,6 +9,7 @@
 #include "Inter.h"
 #include "Keyb.h"
 #include "cextension.h"
+#include "Lcdc_symb.h"
 
 #include "Connect.h"
 #include "dialoganalog.h"
@@ -140,7 +141,7 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 
     BackGroundFname	= P_RES(":/cc40/cc40.png");
     LcdFname		= P_RES(":/cc40/cc40lcd.png");
-    SymbFname		= "";
+    SymbFname		= P_RES(":/cc40/cc40lcd.png");;
 
 //    TopFname    = P_RES(":/fp200/fp200Top.png");
 
@@ -162,11 +163,18 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     setDY(525);
 
     Lcd_X		= 50;
-    Lcd_Y		= 180;
+    Lcd_Y		= 175;
     Lcd_DX		= 186;
     Lcd_DY		= 9;
     Lcd_ratio_X	= 2.7;
     Lcd_ratio_Y	= 2.7;
+
+    Lcd_Symb_X	= 50;//(int) (45 * 1.18);
+    Lcd_Symb_Y	= 160;//(int) (35 * 1.18);
+    Lcd_Symb_DX	= 250;
+    Lcd_Symb_DY	= 30;
+    Lcd_Symb_ratio_X	= 2;//1.18;
+    Lcd_Symb_ratio_Y	= 2;//1.18;
 
     pLCDC		= new Clcdc_cc40(this);
     pCPU		= new Ctms70c20(this);
@@ -181,6 +189,8 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 
 Ccc40::~Ccc40() {
 }
+
+
 
 void Ccc40::power_w(UINT8 data)
 {
@@ -334,6 +344,7 @@ bool Ccc40::init()
 #endif
     CpcXXXX::init();
     pHD44780->init();
+
     initExtension();
     Reset();
 
@@ -477,14 +488,14 @@ quint8 Ccc40::getKey()
             if (KEY('O'))			data|=0x80;
         }
         if (ks & 0x20) {
-//            if (KEY(''))			data|=0x01;
+            if (KEY('0'))			data|=0x01;
             if (KEY(K_CLR))			data|=0x02;
             if (KEY(K_LA))			data|=0x04;
             if (KEY(K_RA))			data|=0x08;
             if (KEY(K_UA))			data|=0x10;
             if (KEY('/'))			data|=0x20;
             if (KEY(K_DA))			data|=0x40;
-            if (KEY(')'))			data|=0x80;
+            if (KEY('9'))			data|=0x80;
         }
         if (ks & 0x40) {
 //            if (KEY(''))			data|=0x01;

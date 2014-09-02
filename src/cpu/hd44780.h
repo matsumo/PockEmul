@@ -13,10 +13,13 @@ class CpcXXXX;
 
 ***************************************************************************/
 
+typedef void (*hd44780_pixel_update_func)(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off);
+#define HD44780_PIXEL_UPDATE(name) void name(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off)
+
 typedef struct {
     UINT8       m_lines;          // number of lines
     UINT8       m_chars;          // chars for line
-//	hd44780_pixel_update_func m_pixel_update_func; // pixel update callback
+    hd44780_pixel_update_func m_pixel_update_func; // pixel update callback
 
     bool        m_busy_flag;      // busy flag
     UINT8       m_ddram[0x80];    // internal display data RAM
@@ -64,6 +67,7 @@ public:
     // construction/destruction
     explicit CHD44780(QString fnCharSet,QObject *parent = 0);
 
+    void set_pixel_update_cb(hd44780_pixel_update_func _cb) { info.m_pixel_update_func = _cb; }
     // device interface
     QString fncharset;
     UINT8 data_read();
@@ -74,9 +78,9 @@ public:
 
     quint64 on_timer_rate;
 
-    UINT32 screen_update(QPainter *painter);
+    UINT32 screen_update(QPainter *painter,QColor color_ON,QColor color_OFF);
 
-    void pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state);
+    void pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor color_ON,QColor color_OFF);
     void set_charset_type(int type);
 
     // device-level overrides

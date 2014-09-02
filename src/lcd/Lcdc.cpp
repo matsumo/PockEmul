@@ -52,19 +52,34 @@ void Clcdc::Contrast(int command)
 	Update();
 }
 
+void Clcdc::disp_one_symb(QPainter *painter, const char *figure, QColor color, int x, int y)
+{
+    int j, xi=0;
+    painter->setPen(color);
+    for (j=0; figure[j]; j++) {
+        switch (figure[j]) {
+        case '#':	painter->drawPoint( x+xi, y );
+                    xi++;		break;
+        case ' ':	xi++;		break;
+        case '\r':	xi=0; y++;	break;
+        };
+    }
+}
+
 void Clcdc::disp_one_symb(const char *figure, QColor color, int x, int y)
 {
 	QPainter painter(pPC->SymbImage);
-	int j, xi=0;
-	painter.setPen(color);
-	for (j=0; figure[j]; j++) {
-		switch (figure[j]) {
-		case '#':	painter.drawPoint( x+xi, y ); 
-					xi++;		break;
-		case ' ':	xi++;		break;
-		case '\r':	xi=0; y++;	break;				
-		};
-	}
+    Clcdc::disp_one_symb(&painter,figure,color,x,y);
+//	int j, xi=0;
+//	painter.setPen(color);
+//	for (j=0; figure[j]; j++) {
+//		switch (figure[j]) {
+//		case '#':	painter.drawPoint( x+xi, y );
+//					xi++;		break;
+//		case ' ':	xi++;		break;
+//		case '\r':	xi=0; y++;	break;
+//		};
+//	}
 	painter.end();
 }
 

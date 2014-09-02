@@ -45,6 +45,7 @@ public:
     virtual void	disp_speed(void){}		//display CPU speed
 
 	void disp_one_symb(const char *figure, QColor color, int x, int y);
+    static void disp_one_symb(QPainter *painter, const char *figure, QColor color, int x, int y);
 	virtual void disp_symb(void);
 	void Contrast(int command);
     const char*	GetClassName(){ return("Clcdc");}
@@ -55,7 +56,8 @@ public:
     Clcdc(CPObject *parent);
 
     virtual ~Clcdc();
-	
+
+
 protected:
 	QColor origColor_Off;
 };

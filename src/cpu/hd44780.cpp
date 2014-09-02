@@ -5,7 +5,6 @@
 
 #include "hd44780.h"
 #include "pcxxxx.h"
-#include "Lcdc.h"
 
 #define LOG 0
 
@@ -157,20 +156,20 @@ void CHD44780::update_nibble(int rs, int rw)
     info.m_nibble = !info.m_nibble;
 }
 
-inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state)
+inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor color_ON,QColor color_OFF)
 {
-//	if (info.m_pixel_update_func != NULL)
-//	{
-//		m_pixel_update_func(*this, bitmap, line, pos, y, x, state);
-//	}
-//	else
+    if (info.m_pixel_update_func != NULL)
+    {
+        info.m_pixel_update_func(painter, line, pos, y, x, state, color_ON, color_OFF);
+    }
+    else
     {
         UINT8 line_heigh = (info.m_char_size == 8) ? info.m_char_size : info.m_char_size + 1;
 
         if (info.m_lines <= 2)
         {
             if (pos < info.m_chars) {
-                painter->setPen(state ? pPC->pLCDC->Color_On : pPC->pLCDC->Color_Off );
+                painter->setPen(state ? color_ON : color_OFF );
 //qWarning()<<"line:"<<line;
                 painter->drawPoint( pos * 6 + x, line * (line_heigh+1) + y );
 //                bitmap.pix16(line * (line_heigh+1) + y, pos * 6 + x) = state;
@@ -188,7 +187,7 @@ inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UIN
 
                 if (line < info.m_lines){
                     qWarning()<<"drawpoint:"<<pos * 6 + x<<","<< line * (line_heigh+1) + y<<"color:"<<state;
-                    painter->setPen(state ? pPC->pLCDC->Color_On : pPC->pLCDC->Color_Off );
+                    painter->setPen(state ? color_ON : color_OFF );
                     painter->drawPoint( pos * 6 + x, line * (line_heigh+1) + y );
     //                bitmap.pix16(line * (line_heigh+1) + y, pos * 6 + x) = state;
                 }
@@ -202,7 +201,7 @@ inline void CHD44780::pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UIN
 }
 
 
-UINT32 CHD44780::screen_update(QPainter *painter)
+UINT32 CHD44780::screen_update(QPainter *painter, QColor color_ON, QColor color_OFF)
 {
 //    bitmap.fill(0, cliprect);
 //    painter->fillRect();
@@ -237,7 +236,7 @@ UINT32 CHD44780::screen_update(QPainter *painter)
                     UINT8 * charset = (info.m_ddram[char_pos] < 0x10) ? info.m_cgram : info.m_cgrom;
 
                     for (int x=0; x<5; x++)
-                        pixel_update(painter, line, pos, y, x, BIT(charset[char_base + y], 4 - x));
+                        pixel_update(painter, line, pos, y, x, BIT(charset[char_base + y], 4 - x),color_ON,color_OFF);
                 }
 
                 // if is the correct position draw cursor and blink
@@ -247,12 +246,12 @@ UINT32 CHD44780::screen_update(QPainter *painter)
                     UINT8 cursor_pos = (info.m_char_size == 8) ? info.m_char_size : info.m_char_size + 1;
                     if (info.m_cursor_on)
                         for (int x=0; x<5; x++)
-                            pixel_update(painter, line, pos, cursor_pos - 1, x, 1);
+                            pixel_update(painter, line, pos, cursor_pos - 1, x, 1,color_ON,color_OFF);
 
                     if (!info.m_blink && info.m_blink_on)
                         for (int y=0; y<(cursor_pos - 1); y++)
                             for (int x=0; x<5; x++)
-                                pixel_update(painter, line, pos, y, x, 1);
+                                pixel_update(painter, line, pos, y, x, 1,color_ON,color_OFF);
                 }
             }
         }
