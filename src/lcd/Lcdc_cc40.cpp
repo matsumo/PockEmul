@@ -24,14 +24,6 @@ void Clcdc_cc40::disp_symb(void)
 
     Clcdc::disp_symb();
 
-    // reference _________________...
-    // output#  |10  11     12     13     14      0      1      2      3   4
-    // above    | <  SHIFT  CTL    FN     DEG    RAD    GRAD   I/O    UCL  >
-    // ---- raw lcd screen here ----
-    // under    |    ERROR   v      v      v      v      v      v    _LOW
-    // output#  |    60     61     62     63     50     51     52     53
-    //output_set_lamp_value(y * 10 + x, state);
-
 
 }
 
@@ -58,17 +50,17 @@ HD44780_PIXEL_UPDATE(Ccc40_update_pixel_symb)
         case 4:  Clcdc::disp_one_symb(painter,S_SUP, COLOR(state),	240,	0); break;
         case 10: Clcdc::disp_one_symb(painter,S_INF, COLOR(state),	  0,	0); break;
         case 11: Clcdc::disp_one_symb(painter,S_SHIFT, COLOR(state), 20,	0); break;
-//        case 12: Clcdc::disp_one_symb(painter,S_CTL, COLOR(state),	50,	0); break;
-//        case 13: Clcdc::disp_one_symb(painter,S_FN,  COLOR(state),	80,	0); break;
+        case 12: Clcdc::disp_one_symb(painter,S_CTL, COLOR(state),	 50,	0); break;
+        case 13: Clcdc::disp_one_symb(painter,S_FN,  COLOR(state),	 80,	0); break;
         case 14: Clcdc::disp_one_symb(painter,S_DEG, COLOR(state),	110,	0); break;
 
         case 50: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	140,	25); break;
         case 51: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	165,	25); break;
         case 52: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	190,	25); break;
-//        case 53: Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	215,	25); break;
-//        case 60: Clcdc::disp_one_symb(painter,S_ERROR, COLOR(state),	 20,	25); break;
-        case 61: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	50,	25); break;
-        case 62: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	80,	25); break;
+        case 53: Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	215,	25); break;
+        case 60: Clcdc::disp_one_symb(painter,S_ERROR, COLOR(state), 20,	25); break;
+        case 61: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	 50,	25); break;
+        case 62: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	 80,	25); break;
         case 63: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	110,	25); break;
         }
     }
