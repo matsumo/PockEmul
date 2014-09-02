@@ -144,13 +144,14 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 
 //    TopFname    = P_RES(":/fp200/fp200Top.png");
 
-    memsize		= 0x20000;
+    memsize		= 0x40000;
     InitMemValue	= 0x00;
 
     SlotList.clear();
     SlotList.append(CSlot(52  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(2  , 0xF800 ,	P_RES(":/cc40/cc40_2krom.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/cc40/cc40.bin")        , ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(128 , 0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
 
 
     setDXmm(236);
@@ -183,6 +184,7 @@ Ccc40::~Ccc40() {
 
 void Ccc40::power_w(UINT8 data)
 {
+    qWarning()<<"power_w:"<<data;
     // d0: power-on hold latch
     m_power = data & 1;
 
@@ -196,7 +198,9 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
     Q_UNUSED(data)
 
 
-    if ( (*d>=0x0100) && (*d<=0x010F) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}  // CPU RAM
+    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
+
+    // CPU RAM
     if (*d==0x0111) { power_w(data); return false; }
     if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
     if (*d==0x0119) {
@@ -218,7 +222,11 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
         pLCDC->redraw = true;
         return false;
     }
-    if ( (*d>=0x0000) && (*d<=0xCFFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x0100) && (*d<=0x01FF) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
+
+
+    if ( (*d>=0x0000) && (*d<=0x4FFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return false; } // system ROM
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
 
@@ -231,13 +239,23 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
     Q_UNUSED(d)
     Q_UNUSED(data)
 
-    if ( (*d>=0x0100) && (*d<=0x010F) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
+    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
 
+    if (*d==0x0110) { *data = 0x4c; /*qWarning()<<"bus_ctrl_read";*/return false; }
+    if (*d==0x0114) { *data = 1; return false; }
     if (*d==0x0116) { *data = 1; return false; }
     if (*d==0x0119) { *data = m_banks; return false; }
     if (*d==0x011A) { *data = clock_r(); return false; }
-    if (*d==0x011E) { *data = pHD44780->control_read(); return false; }
-    if (*d==0x011F) { *data = pHD44780->data_read(); return false; }
+    if (*d==0x011E) { *data = pHD44780->control_read();
+//        qWarning()<<"pHD44780->control_read:"<<*data;
+        return false; }
+    if (*d==0x011F) { *data = pHD44780->data_read();
+//        qWarning()<<"pHD44780->data_read:"<<*data;
+        return false; }
+
+    if ( (*d>=0x0100) && (*d<=0x01FF) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
+
+    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return true; } // Cartridge
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
 
     return true;
@@ -292,12 +310,16 @@ void Ccc40::clock_w(UINT8 data)
         {
             // d0-d2: clock divider (2.5MHz /3 to /17 in steps of 2)
             double div = (~data & 7) * 2 + 1;
+            qWarning()<<"frequency change to "<<2500000/div;
+            setfrequency(2500000/div);
 //            m_maincpu->set_clock_scale(1 / div);
         }
     }
     else if (m_clock_control & 8)
     {
         // high to low
+        setfrequency(2500000);
+        qWarning()<<"frequency change to 2500000";
 //        m_maincpu->set_clock_scale(1);
     }
 
@@ -306,7 +328,7 @@ void Ccc40::clock_w(UINT8 data)
 
 bool Ccc40::init()
 {
-    pCPU->logsw = false;
+//    pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
     pCPU->logsw = false;
 #endif
@@ -341,6 +363,13 @@ void	Ccc40::initExtension(void)
 
 bool Ccc40::run()
 {
+//    if (pKEYB->LastKey>0) {
+
+//        ptms7000cpu->set_input_line(TMS7000_IRQ2_LINE,1);
+//    }
+//    else
+//        ptms7000cpu->set_input_line(TMS7000_IRQ2_LINE,0);
+
     CpcXXXX::run();
 
     return true;
@@ -352,6 +381,9 @@ void Ccc40::Reset()
 
     m_clock_control = 0;
     m_power = 1;
+    ks = 0;
+    m_banks = 0;
+    RomBank = RamBank = 0;
 
     pHD44780->Reset();
 }
@@ -440,7 +472,7 @@ quint8 Ccc40::getKey()
 //            if (KEY(''))			data|=0x04;
             if (KEY(':'))			data|=0x08;
             if (KEY('L'))			data|=0x10;
-            if (KEY('?'))			data|=0x20;
+            if (KEY('='))			data|=0x20;
             if (KEY('P'))			data|=0x40;
             if (KEY('O'))			data|=0x80;
         }

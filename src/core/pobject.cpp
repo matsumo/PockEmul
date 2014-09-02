@@ -260,7 +260,15 @@ void CPObject::MoveWithLinked(QPoint p) {
 //        CPObject * locpc = listpPObject.at(i);
 
 //        if ((locpc != this) && !locpc->geometry().intersect(this->geometry()).isNull()) locpc->MoveWithLinked(p);
-//    }
+    //    }
+}
+
+void CPObject::setfrequency(int f)
+{
+    frequency = f;
+    if (pTIMER) {
+        pTIMER->state = pTIMER->currentState();
+    }
 }
 
 

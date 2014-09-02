@@ -6,6 +6,13 @@
 
 #define BIT(x,n) (((x)>>(n))&1)
 
+// reference _________________...
+// output#  |10  11     12     13     14      0      1      2      3   4
+// above    | <  SHIFT  CTL    FN     DEG    RAD    GRAD   I/O    UCL  >
+// ---- raw lcd screen here ----
+// under    |    ERROR   v      v      v      v      v      v    _LOW
+// output#  |    60     61     62     63     50     51     52     53
+
 Clcdc_cc40::Clcdc_cc40(CPObject *parent)	: Clcdc(parent){						//[constructor]
 
     Color_Off.setRgb(

@@ -7,26 +7,15 @@
 #include "pcxxxx.h"
 #include "Lcdc.h"
 
-#define LOG 1
+#define LOG 0
 
 /***************************************************************************
 
-        Hitachi HD44352 LCD controller
+        Hitachi HD44780 LCD controller
 
 ***************************************************************************/
 
-#define		LCD_BYTE_INPUT			0x01
-#define 	LCD_BYTE_OUTPUT			0x02
-#define 	LCD_CHAR_OUTPUT			0x03
-#define 	LCD_ON_OFF				0x04
-#define 	LCD_CURSOR_GRAPHIC		0x06
-#define 	LCD_CURSOR_CHAR			0x07
-#define 	LCD_SCROLL_CHAR_WIDTH	0x08
-#define 	LCD_CURSOR_STATUS		0x09
-#define 	LCD_USER_CHARACTER		0x0b
-#define 	LCD_CONTRAST			0x0c
-#define 	LCD_IRQ_FREQUENCY		0x0d
-#define 	LCD_CURSOR_POSITION		0x0e
+
 
 #define BIT(x,n) (((x)>>(n))&1)
 
@@ -317,7 +306,7 @@ void CHD44780::control_write(UINT8 data)
         info.m_ac =info. m_ir & 0x7f;
         set_busy_flag(37);
 
-//        if (LOG) qWarning()("HD44780 '%s': set DDRAM address %x\n", m_ac);
+        if (LOG) qWarning()<<"HD44780 : set DDRAM address "<<info.m_ac;
     }
     else if (BIT(info.m_ir, 6))      // set CGRAM address
     {
@@ -325,7 +314,7 @@ void CHD44780::control_write(UINT8 data)
         info.m_ac = info.m_ir & 0x3f;
         set_busy_flag(37);
 
-//        if (LOG) logerror("HD44780 '%s': set CGRAM address %x\n", tag(), m_ac);
+        if (LOG) qWarning()<<"HD44780 : set CGRAM address "<<info.m_ac;
     }
     else if (BIT(info.m_ir, 5))      // function set
     {
@@ -365,7 +354,7 @@ void CHD44780::control_write(UINT8 data)
         info.m_blink_on   = BIT(info.m_ir, 0);
         set_busy_flag(37);
 
-//        if (LOG) logerror("HD44780 '%s': display %d, cursor %d, blink %d\n", tag(), info.m_display_on, info.m_cursor_on, info.m_blink_on);
+        if (LOG) qWarning()<<"HD44780 : display "<<info.m_display_on<<", cursor "<<info.m_cursor_on<<", blink "<< info.m_blink_on;
     }
     else if (BIT(info.m_ir, 2))      // entry mode set
     {
@@ -373,11 +362,11 @@ void CHD44780::control_write(UINT8 data)
         info.m_shift_on  = BIT(info.m_ir, 0);
         set_busy_flag(37);
 
-//        if (LOG) logerror("HD44780 '%s': entry mode set: direction %d, shift %d\n", tag(), info.m_direction, info.m_shift_on);
+        if (LOG) qWarning()<<"HD44780 : entry mode set: direction "<<info.m_direction<<", shift "<< info.m_shift_on;
     }
     else if (BIT(info.m_ir, 1))      // return home
     {
-//        if (LOG) logerror("HD44780 '%s': return home\n", tag());
+        if (LOG) qWarning()<<"HD44780 : return home";
 
         info.m_ac         = 0;
         info.m_active_ram = DDRAM;
@@ -387,7 +376,7 @@ void CHD44780::control_write(UINT8 data)
     }
     else if (BIT(info.m_ir, 0))      // clear display
     {
-//        if (LOG) logerror("HD44780 '%s': clear display\n", tag());
+        if (LOG) qWarning()<<"HD44780 : clear display";
 
         info.m_ac         = 0;
         info.m_active_ram = DDRAM;
@@ -401,45 +390,6 @@ void CHD44780::control_write(UINT8 data)
 
 }
 
-UINT8 CHD44780::compute_newval(UINT8 type, UINT8 oldval, UINT8 newval)
-{
-    switch(type & 0x07)
-    {
-        case 0x00:
-            return (~oldval) & newval;
-        case 0x01:
-            return oldval ^ newval;
-        case 0x03:
-            return oldval & (~newval);
-        case 0x04:
-            return newval;
-        case 0x05:
-            return oldval | newval;
-        case 0x07:
-            return oldval;
-        case 0x02:
-        case 0x06:
-        default:
-            return 0;
-    }
-}
-
-//UINT8 CHD44780::get_char(UINT16 pos)
-//{
-//    switch ((UINT8)pos/8)
-//    {
-//        case 0xcf:
-//            return info.m_custom_char[0][pos%8];
-//        case 0xdf:
-//            return info.m_custom_char[1][pos%8];
-//        case 0xef:
-//            return info.m_custom_char[2][pos%8];
-//        case 0xff:
-//            return info.m_custom_char[3][pos%8];
-//        default:
-//            return charset[pos];
-//    }
-//}
 
 void CHD44780::data_write(UINT8 data)
 {

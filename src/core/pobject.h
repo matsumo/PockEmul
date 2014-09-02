@@ -122,7 +122,7 @@ public:
 
 
     int		getfrequency() { return frequency; }
-    void	setfrequency(int f) { frequency = f; }
+    void	setfrequency(int f);
 
 
 	bool	Refresh_Display;

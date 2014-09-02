@@ -1945,6 +1945,7 @@ void Ctms7000::eint()
 
 void Ctms7000::idle()
 {
+    qWarning()<<"IDLE";
     m_idle_state = 1;
     m_icount -= 6;
 }
@@ -4265,11 +4266,13 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
             m_pf[0x00] = temp3 | (data & (~0x2a) ); /* OR in the remaining data */
             break;
         case 0x02:
+        qWarning()<<"pf_write("<<offset<<")="<<data;
             m_t1_decrementer = m_pf[0x02] = data;
             m_cycles_per_INT2 = 0x10*((m_pf[3] & 0x1f)+1)*(m_pf[0x02]+1);
 //            LOG( ( "tms7000: Timer adjusted. Decrementer: 0x%2.2x (Cycles per interrupt: %d)\n", m_t1_decrementer, m_cycles_per_INT2 ) );
             break;
         case 0x03:  /* T1CTL, timer 1 control */
+        qWarning()<<"pf_write("<<offset<<")="<<data;
             if( ((m_pf[0x03] & 0x80) == 0) && ((data & 0x80) == 0x80 ) )   /* Start timer? */
             {
                 m_pf[0x03] = data;
@@ -4519,6 +4522,11 @@ void Ctms7000::Regs_Info(UINT8 Type)
                                 m_sr & 0x01 ? '?':'.'
                     );
 
+        for (int i=0;i<0x20;i++)
+            sprintf(Regs_String,"%s%02X ",Regs_String,RM(i));
+        sprintf(Regs_String,"%s    ",Regs_String);
+        for (int i=0;i<0x10;i++)
+            sprintf(Regs_String,"%s%02X ",Regs_String,RM(0x100+i));
         break;
     }
 
@@ -4548,7 +4556,7 @@ bool Ctms7000::exit()
 void Ctms7000::step()
 {
     {
-        m_icount = 32;
+        m_icount = 0;
         execute_run();
         pPC->pTIMER->state -= m_icount;
     }

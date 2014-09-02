@@ -73,8 +73,6 @@ public:
     HD44780info *getInfo();
 
     quint64 on_timer_rate;
-//    int video_update(bitmap_t &bitmap, const rectangle &cliprect);
-    static UINT8 compute_newval(UINT8 type, UINT8 oldval, UINT8 newval);
 
     UINT32 screen_update(QPainter *painter);
 
