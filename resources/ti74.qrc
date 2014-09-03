@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ti74/ti74.png</file>
+    </qresource>
+</RCC>

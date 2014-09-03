@@ -638,7 +638,8 @@ RESOURCES +=  \
     qcodeedit/qxs/qxs.qrc \
     resources/asmlibs.qrc \
     resources/core.qrc \
-    resources/cc40.qrc
+    resources/cc40.qrc \
+    resources/ti74.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \

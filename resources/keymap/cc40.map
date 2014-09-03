@@ -1,6 +1,8 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>cc40</model>
 <Keyboard>
+    <KEY description="ON" height="20" left="730" masterscancode="0x00" modifier="" scancode="0xc7" top="235" width="45"/>
+    <KEY description="OFF" height="20" left="780" masterscancode="0x00" modifier="" scancode="0xc8" top="237" width="45"/>
     <KEY description="RUN" height="20" left="679" masterscancode="0x00" modifier="" scancode="0x23d" top="233" width="45"/>
     <KEY description="FN" height="29" left="636" masterscancode="0x00" modifier="" scancode="0x23e" top="472" width="39"/>
     <KEY description="-" height="22" left="788" masterscancode="0x00" modifier="" scancode="0x2d" top="432" width="32"/>
@@ -24,7 +26,6 @@
     <KEY description="Left Arrow" height="25" left="634" masterscancode="0x00" modifier="" scancode="0x06" top="292" width="40"/>
     <KEY description="MODE" height="16" left="522" masterscancode="0x00" modifier="" scancode="0x08" top="48" width="25"/>
     <KEY description="BREAK" height="20" left="628" masterscancode="0x00" modifier="" scancode="0x03" top="234" width="45"/>
-    <KEY description="On/Off" height="21" left="594" masterscancode="0x00" modifier="" scancode="0xb2" top="32" width="19"/>
     <KEY description="Rigth Arrow" height="25" left="684" masterscancode="0x00" modifier="" scancode="0x07" top="293" width="40"/>
     <KEY description="SHIFT1" height="30" left="32" masterscancode="0x00" modifier="" scancode="0x11" top="425" width="53"/>
     <KEY description="SML" height="16" left="22" masterscancode="0x00" modifier="" scancode="0x14" top="221" width="25"/>

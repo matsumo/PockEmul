@@ -448,12 +448,10 @@ void	Ccc40::initExtension(void)
 
 bool Ccc40::run()
 {
-//    if (pKEYB->LastKey>0) {
-
-//        ptms7000cpu->set_input_line(TMS7000_IRQ2_LINE,1);
-//    }
-//    else
-//        ptms7000cpu->set_input_line(TMS7000_IRQ2_LINE,0);
+    if (pKEYB->LastKey == K_POW_ON) {
+        TurnON();
+        pKEYB->LastKey = 0;
+    }
 
     CpcXXXX::run();
 
@@ -515,6 +513,8 @@ quint8 Ccc40::getKey()
 
     if ((pKEYB->LastKey>0))
     {
+
+
         if (ks & 0x01) {
             if (KEY('1'))			data|=0x01;
             if (KEY('2'))			data|=0x02;
@@ -593,11 +593,14 @@ quint8 Ccc40::getKey()
             if (KEY(K_RUN))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
             if (KEY(K_FN))			{
+#if 0
                 pCPU->logsw = true;
                 pCPU->Check_Log();
-//                data|=0x20;
+#else
+                data|=0x20;
+#endif
             }
-            if (KEY(K_OF))			data|=0x40;
+            if (KEY(K_POW_OFF))			data|=0x40;
 //            if (KEY(''))			data|=0x80;
         }
 

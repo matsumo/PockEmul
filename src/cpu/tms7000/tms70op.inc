@@ -664,6 +664,7 @@ void Ctms7000::nop()
 
 void Ctms7000::idle()
 {
+    qWarning()<<"IDLE";
     info.m_icount -= 6;
     info.m_pc--;
     info.m_idle_state = true;
