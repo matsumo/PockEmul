@@ -12,5 +12,10 @@
         <file>cc40/cartimg/ss-3006.png</file>
         <file>cc40/cartimg/ss-3008.png</file>
         <file>cc40/cartimg/ss-3009.png</file>
+        <file>cc40/cc40_finance.bin</file>
+        <file>cc40/cc40_games1.bin</file>
+        <file>cc40/cc40_mathematics.bin</file>
+        <file>cc40/cc40_memoprocessor.bin</file>
+        <file>cc40/cc40_statistics.bin</file>
     </qresource>
 </RCC>
