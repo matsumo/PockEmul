@@ -198,5 +198,6 @@
     <model value="cc40">
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/texas/cc-40_e.html"/>
         <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/CC40_user_guide_EN.pdf"/>
+        <document desc="Basic Quick Reference Card (en)" link="http://pockemul.free.fr/Documents/userguide/cc40-basic-quickref.pdf"/>
     </model>
 </weblinks>

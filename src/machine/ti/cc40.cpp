@@ -583,8 +583,8 @@ quint8 Ccc40::getKey()
         }
 
         if (ks & 0x80) {
-            if (KEY(K_SHT))			data|=0x01;
-            if (KEY(K_CTRL))			data|=0x02;
+            if (KEY(K_CTRL))		data|=0x01;
+            if (KEY(K_SHT))			data|=0x02;
             if (KEY(K_BRK))			data|=0x04;
             if (KEY(K_RUN))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
