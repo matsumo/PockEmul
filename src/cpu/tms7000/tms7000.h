@@ -63,10 +63,37 @@ enum TMS7000_Models
 #define TMS7000_CHIP_FAMILY_70CX2   0x04
 #define TMS7000_CHIP_FAMILY_MASK    0x06
 
+typedef struct {
+    UINT32 m_info_flags;
+    int m_icount;
+
+    bool m_irq_state[2];
+    bool m_idle_state;
+    bool m_idle_halt;
+    UINT16 m_pc;
+    UINT8 m_sp;
+    UINT8 m_sr;
+    UINT8 m_op;
+
+    UINT8 m_io_control[3];
+
+//    emu_timer *m_timer_handle[2];
+    UINT8 m_timer_data[2];
+    UINT8 m_timer_control[2];
+    int m_timer_decrementer[2];
+    int m_timer_prescaler[2];
+    UINT16 m_timer_capture_latch[2];
+
+    UINT8 m_port_latch[4];
+    UINT8 m_port_ddr[4];
+} TMS7000info;
 
 class Ctms7000 : public CCPU
 {
 public:
+
+    TMS7000info info;
+
     // construction/destruction
     Ctms7000(CPObject *parent, TMS7000_Models mod = TMS7000) ;
     virtual ~Ctms7000();
@@ -99,8 +126,8 @@ public:
     virtual UINT32  get_PC();
     virtual void    Regs_Info(UINT8);
 
-    bool chip_is_cmos() { return (m_info_flags & TMS7000_CHIP_IS_CMOS) ? true : false; }
-    UINT32 chip_get_family() { return m_info_flags & TMS7000_CHIP_FAMILY_MASK; }
+    bool chip_is_cmos() { return (info.m_info_flags & TMS7000_CHIP_IS_CMOS) ? true : false; }
+    UINT32 chip_get_family() { return info.m_info_flags & TMS7000_CHIP_FAMILY_MASK; }
     bool chip_is_family_70x0() { return chip_get_family() == TMS7000_CHIP_FAMILY_70X0; }
     bool chip_is_family_70x2() { return chip_get_family() == TMS7000_CHIP_FAMILY_70X2; }
     bool chip_is_family_70cx2() { return chip_get_family() == TMS7000_CHIP_FAMILY_70CX2; }
@@ -134,32 +161,12 @@ protected:
 //    address_space_config m_program_config;
 //    address_space_config m_io_config;
 
-    UINT32 m_info_flags;
+
 
 //    address_space *m_program;
 //    direct_read_data *m_direct;
 //    address_space *m_io;
-    int m_icount;
 
-    bool m_irq_state[2];
-    bool m_idle_state;
-    bool m_idle_halt;
-    UINT16 m_pc;
-    UINT8 m_sp;
-    UINT8 m_sr;
-    UINT8 m_op;
-
-    UINT8 m_io_control[3];
-
-//    emu_timer *m_timer_handle[2];
-    UINT8 m_timer_data[2];
-    UINT8 m_timer_control[2];
-    int m_timer_decrementer[2];
-    int m_timer_prescaler[2];
-    UINT16 m_timer_capture_latch[2];
-
-    UINT8 m_port_latch[4];
-    UINT8 m_port_ddr[4];
 
     void flag_ext_interrupt(int irqline);
     void check_interrupts();
@@ -185,13 +192,13 @@ protected:
     inline UINT16 read_mem16(UINT16 address) { return pPC->Get_8(address) << 8 | pPC->Get_8((address + 1) & 0xffff); }
     inline void write_mem16(UINT16 address, UINT16 data) { pPC->Set_8(address, data >> 8 & 0xff); pPC->Set_8((address + 1) & 0xffff, data & 0xff); }
 
-    inline UINT8 imm8() { return pPC->Get_8(m_pc++); }
-    inline UINT16 imm16() { UINT16 ret = pPC->Get_8(m_pc++) << 8; return ret | pPC->Get_8(m_pc++); }
+    inline UINT8 imm8() { return pPC->Get_8(info.m_pc++); }
+    inline UINT16 imm16() { UINT16 ret = pPC->Get_8(info.m_pc++) << 8; return ret | pPC->Get_8(info.m_pc++); }
 
-    inline UINT8 pull8() { return pPC->Get_8(m_sp--); }
-    inline void push8(UINT8 data) { pPC->Set_8(++m_sp, data); }
-    inline UINT16 pull16() { UINT16 ret = pPC->Get_8(m_sp--); return ret | pPC->Get_8(m_sp--) << 8; }
-    inline void push16(UINT16 data) { pPC->Set_8(++m_sp, data >> 8 & 0xff); pPC->Set_8(++m_sp, data & 0xff); }
+    inline UINT8 pull8() { return pPC->Get_8(info.m_sp--); }
+    inline void push8(UINT8 data) { pPC->Set_8(++info.m_sp, data); }
+    inline UINT16 pull16() { UINT16 ret = pPC->Get_8(info.m_sp--); return ret | pPC->Get_8(info.m_sp--) << 8; }
+    inline void push16(UINT16 data) { pPC->Set_8(++info.m_sp, data >> 8 & 0xff); pPC->Set_8(++info.m_sp, data & 0xff); }
 
     // opcode handlers
     void br_dir();

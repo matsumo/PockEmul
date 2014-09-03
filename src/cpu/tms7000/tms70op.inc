@@ -12,90 +12,90 @@
 
 void Ctms7000::am_a(op_func op)
 {
-	m_icount -= 5;
+    info.m_icount -= 5;
 	AM_WB(write_r8, 0, read_r8(0), 0);
 }
 
 void Ctms7000::am_b(op_func op)
 {
-	m_icount -= 5;
+    info.m_icount -= 5;
 	AM_WB(write_r8, 1, read_r8(1), 0);
 }
 
 void Ctms7000::am_r(op_func op)
 {
-	m_icount -= 7;
+    info.m_icount -= 7;
 	UINT8 r = imm8();
 	AM_WB(write_r8, r, read_r8(r), 0);
 }
 
 void Ctms7000::am_a2a(op_func op)
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	AM_WB(write_r8, 0, read_r8(0), read_r8(0));
 }
 
 void Ctms7000::am_a2b(op_func op)
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	AM_WB(write_r8, 1, read_r8(1), read_r8(0));
 }
 
 void Ctms7000::am_a2p(op_func op)
 {
-	m_icount -= 10;
+    info.m_icount -= 10;
 	UINT8 r = imm8();
 	AM_WB(write_p, r, read_p(r), read_r8(0));
 }
 
 void Ctms7000::am_a2r(op_func op)
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	UINT8 r = imm8();
 	AM_WB(write_r8, r, read_r8(r), read_r8(0));
 }
 
 void Ctms7000::am_b2a(op_func op)
 {
-	m_icount -= 5;
+    info.m_icount -= 5;
 	AM_WB(write_r8, 0, read_r8(0), read_r8(1));
 }
 
 void Ctms7000::am_b2b(op_func op)
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	AM_WB(write_r8, 1, read_r8(1), read_r8(1));
 }
 
 void Ctms7000::am_b2r(op_func op)
 {
-	m_icount -= 7;
+    info.m_icount -= 7;
 	UINT8 r = imm8();
 	AM_WB(write_r8, r, read_r8(r), read_r8(1));
 }
 
 void Ctms7000::am_b2p(op_func op)
 {
-	m_icount -= 9;
+    info.m_icount -= 9;
 	UINT8 r = imm8();
 	AM_WB(write_p, r, read_p(r), read_r8(1));
 }
 
 void Ctms7000::am_r2a(op_func op)
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	AM_WB(write_r8, 0, read_r8(0), read_r8(imm8()));
 }
 
 void Ctms7000::am_r2b(op_func op)
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	AM_WB(write_r8, 1, read_r8(1), read_r8(imm8()));
 }
 
 void Ctms7000::am_r2r(op_func op)
 {
-	m_icount -= 10;
+    info.m_icount -= 10;
 	UINT8 param2 = read_r8(imm8());
 	UINT8 r = imm8();
 	AM_WB(write_r8, r, read_r8(r), param2);
@@ -103,19 +103,19 @@ void Ctms7000::am_r2r(op_func op)
 
 void Ctms7000::am_i2a(op_func op)
 {
-	m_icount -= 7;
+    info.m_icount -= 7;
 	AM_WB(write_r8, 0, read_r8(0), imm8());
 }
 
 void Ctms7000::am_i2b(op_func op)
 {
-	m_icount -= 7;
+    info.m_icount -= 7;
 	AM_WB(write_r8, 1, read_r8(1), imm8());
 }
 
 void Ctms7000::am_i2r(op_func op)
 {
-	m_icount -= 9;
+    info.m_icount -= 9;
 	UINT8 param2 = imm8();
 	UINT8 r = imm8();
 	AM_WB(write_r8, r, read_r8(r), param2);
@@ -123,7 +123,7 @@ void Ctms7000::am_i2r(op_func op)
 
 void Ctms7000::am_i2p(op_func op)
 {
-	m_icount -= 11;
+    info.m_icount -= 11;
 	UINT8 param2 = imm8();
 	UINT8 r = imm8();
 	AM_WB(write_p, r, read_p(r), param2);
@@ -131,13 +131,13 @@ void Ctms7000::am_i2p(op_func op)
 
 void Ctms7000::am_p2a(op_func op)
 {
-	m_icount -= 9;
+    info.m_icount -= 9;
 	AM_WB(write_r8, 0, read_r8(0), read_p(imm8()));
 }
 
 void Ctms7000::am_p2b(op_func op)
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	AM_WB(write_r8, 1, read_r8(1), read_p(imm8()));
 }
 
@@ -204,7 +204,7 @@ int Ctms7000::op_rrc(UINT8 param1, UINT8 param2)
 
 int Ctms7000::op_swap(UINT8 param1, UINT8 param2)
 {
-	m_icount -= 3;
+    info.m_icount -= 3;
 	UINT16 t = param1 >> 4 | param1 << 4;
 	SET_CNZ(t);
 	return t;
@@ -212,7 +212,7 @@ int Ctms7000::op_swap(UINT8 param1, UINT8 param2)
 
 int Ctms7000::op_xchb(UINT8 param1, UINT8 param2)
 {
-	m_icount -= 1;
+    info.m_icount -= 1;
 	UINT8 t = read_r8(1);
 	SET_CNZ(t);
 	write_r8(1, param1);
@@ -251,7 +251,7 @@ int Ctms7000::op_cmp(UINT8 param1, UINT8 param2)
 
 int Ctms7000::op_mpy(UINT8 param1, UINT8 param2)
 {
-	m_icount -= 39;
+    info.m_icount -= 39;
 	UINT16 t = param1 * param2;
 	SET_CNZ(t >> 8 & 0xff);
 	write_mem16(0, t); // always writes result to regs A-B
@@ -300,7 +300,7 @@ static const UINT8 lut_bcd_out[6] = { 0x00, 0x06, 0x00, 0x66, 0x60, 0x66 };
 
 int Ctms7000::op_dac(UINT8 param1, UINT8 param2)
 {
-	m_icount -= 2;
+    info.m_icount -= 2;
 	int c = GET_C();
 
 	UINT8 h1 = param1 >> 4 & 0xf;
@@ -318,14 +318,14 @@ int Ctms7000::op_dac(UINT8 param1, UINT8 param2)
 	UINT8 t = param1 + param2 + c + lut_bcd_out[d];
 	SET_CNZ(t);
 	if (d > 2)
-		m_sr |= SR_C;
+        info.m_sr |= SR_C;
 
 	return t;
 }
 
 int Ctms7000::op_dsb(UINT8 param1, UINT8 param2)
 {
-	m_icount -= 2;
+    info.m_icount -= 2;
 	int c = !GET_C();
 
 	UINT8 h1 = param1 >> 4 & 0xf;
@@ -343,7 +343,7 @@ int Ctms7000::op_dsb(UINT8 param1, UINT8 param2)
 	UINT8 t = param1 - param2 - c - lut_bcd_out[d];
 	SET_CNZ(t);
 	if (d <= 2)
-		m_sr |= SR_C;
+        info.m_sr |= SR_C;
 
 	return t;
 }
@@ -351,19 +351,19 @@ int Ctms7000::op_dsb(UINT8 param1, UINT8 param2)
 // branches
 inline void Ctms7000::shortbranch(bool check)
 {
-	m_icount -= 2;
+    info.m_icount -= 2;
 	INT8 d = (INT8)imm8();
 
 	if (check)
 	{
-		m_pc += d;
-		m_icount -= 2;
+        info.m_pc += d;
+        info.m_icount -= 2;
 	}
 }
 
 inline void Ctms7000::jmp(bool check)
 {
-	m_icount -= 3;
+    info.m_icount -= 3;
 	shortbranch(check);
 }
 
@@ -396,7 +396,7 @@ int Ctms7000::op_btjz(UINT8 param1, UINT8 param2)
 // dec double
 void Ctms7000::decd_a()
 {
-	m_icount -= 9;
+    info.m_icount -= 9;
 	UINT32 t = read_r16(0) - 1;
 	write_r16(0, t);
 	SET_NZ(t >> 8);
@@ -405,7 +405,7 @@ void Ctms7000::decd_a()
 
 void Ctms7000::decd_b()
 {
-	m_icount -= 9;
+    info.m_icount -= 9;
 	UINT32 t = read_r16(1) - 1;
 	write_r16(1, t);
 	SET_NZ(t >> 8);
@@ -414,7 +414,7 @@ void Ctms7000::decd_b()
 
 void Ctms7000::decd_r()
 {
-	m_icount -= 11;
+    info.m_icount -= 11;
 	UINT8 r = imm8();
 	UINT32 t = read_r16(r) - 1;
 	write_r16(r, t);
@@ -425,7 +425,7 @@ void Ctms7000::decd_r()
 // cmpa extended
 void Ctms7000::cmpa_dir()
 {
-	m_icount -= 12;
+    info.m_icount -= 12;
 	UINT16 t = read_r8(0) - read_mem8(imm16());
 	SET_NZ(t);
 	SET_C(~t);
@@ -433,7 +433,7 @@ void Ctms7000::cmpa_dir()
 
 void Ctms7000::cmpa_inx()
 {
-	m_icount -= 14;
+    info.m_icount -= 14;
 	UINT16 t = read_r8(0) - read_mem8(imm16() + read_r8(1));
 	SET_NZ(t);
 	SET_C(~t);
@@ -441,7 +441,7 @@ void Ctms7000::cmpa_inx()
 
 void Ctms7000::cmpa_ind()
 {
-	m_icount -= 11;
+    info.m_icount -= 11;
 	UINT16 t = read_r8(0) - read_mem8(read_r16(imm8()));
 	SET_NZ(t);
 	SET_C(~t);
@@ -450,7 +450,7 @@ void Ctms7000::cmpa_ind()
 // lda extended
 void Ctms7000::lda_dir()
 {
-	m_icount -= 11;
+    info.m_icount -= 11;
 	UINT8 t = read_mem8(imm16());
 	write_r8(0, t);
 	SET_CNZ(t);
@@ -458,7 +458,7 @@ void Ctms7000::lda_dir()
 
 void Ctms7000::lda_inx()
 {
-	m_icount -= 13;
+    info.m_icount -= 13;
 	UINT8 t = read_mem8(imm16() + read_r8(1));
 	write_r8(0, t);
 	SET_CNZ(t);
@@ -466,7 +466,7 @@ void Ctms7000::lda_inx()
 
 void Ctms7000::lda_ind()
 {
-	m_icount -= 10;
+    info.m_icount -= 10;
 	UINT8 t = read_mem8(read_r16(imm8()));
 	write_r8(0, t);
 	SET_CNZ(t);
@@ -475,7 +475,7 @@ void Ctms7000::lda_ind()
 // sta extended
 void Ctms7000::sta_dir()
 {
-	m_icount -= 11;
+    info.m_icount -= 11;
 	UINT8 t = read_r8(0);
 	write_mem8(imm16(), t);
 	SET_CNZ(t);
@@ -483,7 +483,7 @@ void Ctms7000::sta_dir()
 
 void Ctms7000::sta_inx()
 {
-	m_icount -= 13;
+    info.m_icount -= 13;
 	UINT8 t = read_r8(0);
 	write_mem8(imm16() + read_r8(1), t);
 	SET_CNZ(t);
@@ -491,7 +491,7 @@ void Ctms7000::sta_inx()
 
 void Ctms7000::sta_ind()
 {
-	m_icount -= 10;
+    info.m_icount -= 10;
 	UINT8 t = read_r8(0);
 	write_mem8(read_r16(imm8()), t);
 	SET_CNZ(t);
@@ -500,7 +500,7 @@ void Ctms7000::sta_ind()
 // mov double
 void Ctms7000::movd_dir()
 {
-	m_icount -= 15;
+    info.m_icount -= 15;
 	UINT16 t = imm16();
 	write_r16(imm8(), t);
 	SET_CNZ(t >> 8 & 0xff);
@@ -508,7 +508,7 @@ void Ctms7000::movd_dir()
 
 void Ctms7000::movd_inx()
 {
-	m_icount -= 17;
+    info.m_icount -= 17;
 	UINT16 t = imm16() + read_r8(1);
 	write_r16(imm8(), t);
 	SET_CNZ(t >> 8 & 0xff);
@@ -516,7 +516,7 @@ void Ctms7000::movd_inx()
 
 void Ctms7000::movd_ind()
 {
-	m_icount -= 14;
+    info.m_icount -= 14;
 	UINT16 t = read_r16(imm8());
 	write_r16(imm8(), t);
 	SET_CNZ(t >> 8 & 0xff);
@@ -525,78 +525,78 @@ void Ctms7000::movd_ind()
 // long branch
 void Ctms7000::br_dir()
 {
-	m_icount -= 10;
-	m_pc = imm16();
+    info.m_icount -= 10;
+    info.m_pc = imm16();
 }
 
 void Ctms7000::br_inx()
 {
-	m_icount -= 12;
-	m_pc = imm16() + read_r8(1);
+    info.m_icount -= 12;
+    info.m_pc = imm16() + read_r8(1);
 }
 
 void Ctms7000::br_ind()
 {
-	m_icount -= 9;
-	m_pc = read_r16(imm8());
+    info.m_icount -= 9;
+    info.m_pc = read_r16(imm8());
 }
 
 // call/return
 void Ctms7000::call_dir()
 {
-	m_icount -= 14;
+    info.m_icount -= 14;
 	UINT16 t = imm16();
-	push16(m_pc);
+    push16(info.m_pc);
     CallSubLevel++;
-	m_pc = t;
+    info.m_pc = t;
 }
 
 void Ctms7000::call_inx()
 {
-	m_icount -= 16;
+    info.m_icount -= 16;
 	UINT16 t = imm16() + read_r8(1);
-	push16(m_pc);
+    push16(info.m_pc);
     CallSubLevel++;
-	m_pc = t;
+    info.m_pc = t;
 }
 
 void Ctms7000::call_ind()
 {
-	m_icount -= 13;
+    info.m_icount -= 13;
 	UINT16 t = read_r16(imm8());
-	push16(m_pc);
+    push16(info.m_pc);
     CallSubLevel++;
-	m_pc = t;
+    info.m_pc = t;
 }
 
 void Ctms7000::trap(UINT8 address)
 {
-	m_icount -= 14;
-	push16(m_pc);
+    info.m_icount -= 14;
+    push16(info.m_pc);
     CallSubLevel++;
-	m_pc = read_mem16(0xff00 | address);
+    info.m_pc = read_mem16(0xff00 | address);
 }
 
 void Ctms7000::reti()
 {
-	m_icount -= 9;
-	m_pc = pull16();
+    info.m_icount -= 9;
+    info.m_pc = pull16();
     CallSubLevel--;
-	m_sr = pull8() & 0xf0;
+    info.m_sr = pull8() & 0xf0;
 	check_interrupts();
 }
 
 void Ctms7000::rets()
 {
-	m_icount -= 7;
-	m_pc = pull16();
+    info.m_icount -= 7;
+    info.m_pc = pull16();
     CallSubLevel--;
 }
 
 // pop
 void Ctms7000::pop_a()
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	UINT8 t = pull8();
 	write_r8(0, t);
 	SET_CNZ(t);
@@ -604,7 +604,7 @@ void Ctms7000::pop_a()
 
 void Ctms7000::pop_b()
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	UINT8 t = pull8();
 	write_r8(1, t);
 	SET_CNZ(t);
@@ -612,7 +612,7 @@ void Ctms7000::pop_b()
 
 void Ctms7000::pop_r()
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	UINT8 t = pull8();
 	write_r8(imm8(), t);
 	SET_CNZ(t);
@@ -620,15 +620,15 @@ void Ctms7000::pop_r()
 
 void Ctms7000::pop_st()
 {
-	m_icount -= 6;
-	m_sr = pull8() & 0xf0;
+    info.m_icount -= 6;
+    info.m_sr = pull8() & 0xf0;
 	check_interrupts();
 }
 
 // push
 void Ctms7000::push_a()
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	UINT8 t = read_r8(0);
 	push8(t);
 	SET_CNZ(t);
@@ -636,7 +636,7 @@ void Ctms7000::push_a()
 
 void Ctms7000::push_b()
 {
-	m_icount -= 6;
+    info.m_icount -= 6;
 	UINT8 t = read_r8(1);
 	push8(t);
 	SET_CNZ(t);
@@ -644,7 +644,7 @@ void Ctms7000::push_b()
 
 void Ctms7000::push_r()
 {
-	m_icount -= 8;
+    info.m_icount -= 8;
 	UINT8 t = read_r8(imm8());
 	push8(t);
 	SET_CNZ(t);
@@ -652,52 +652,52 @@ void Ctms7000::push_r()
 
 void Ctms7000::push_st()
 {
-	m_icount -= 6;
-	push8(m_sr);
+    info.m_icount -= 6;
+    push8(info.m_sr);
 }
 
 // other
 void Ctms7000::nop()
 {
-	m_icount -= 5;
+    info.m_icount -= 5;
 }
 
 void Ctms7000::idle()
 {
-	m_icount -= 6;
-	m_pc--;
-	m_idle_state = true;
+    info.m_icount -= 6;
+    info.m_pc--;
+    info.m_idle_state = true;
 }
 
 void Ctms7000::dint()
 {
-	m_icount -= 5;
-	m_sr &= ~(SR_N | SR_Z | SR_C | SR_I);
+    info.m_icount -= 5;
+    info.m_sr &= ~(SR_N | SR_Z | SR_C | SR_I);
 }
 
 void Ctms7000::eint()
 {
-	m_icount -= 5;
-	m_sr |= (SR_N | SR_Z | SR_C | SR_I);
+    info.m_icount -= 5;
+    info.m_sr |= (SR_N | SR_Z | SR_C | SR_I);
 	check_interrupts();
 }
 
 void Ctms7000::ldsp()
 {
-	m_icount -= 5;
-	m_sp = read_r8(1);
+    info.m_icount -= 5;
+    info.m_sp = read_r8(1);
 }
 
 void Ctms7000::stsp()
 {
-	m_icount -= 6;
-	write_r8(1, m_sp);
+    info.m_icount -= 6;
+    write_r8(1, info.m_sp);
 }
 
 void Ctms7000::setc()
 {
-	m_icount -= 5;
-	m_sr = (m_sr & ~SR_N) | SR_C | SR_Z;
+    info.m_icount -= 5;
+    info.m_sr = (info.m_sr & ~SR_N) | SR_C | SR_Z;
 }
 
 // not standard
@@ -707,7 +707,7 @@ void Ctms7020_exl::lvdp()
 	* MOVP P40,xx
 	* MOVP P36,A
 	*/
-	m_icount -= 10; // TODO: check real timing
+    info.m_icount -= 10; // TODO: check real timing
 	imm8(); // always 0x28? discarded?
 	read_p(0x28);
 	UINT8 t = read_p(0x24);
@@ -718,6 +718,6 @@ void Ctms7020_exl::lvdp()
 // illegal opcode handling
 void Ctms7000::illegal(UINT8 op)
 {
-	m_icount -= 5; // guessed
-        qWarning()<<"illegal opcode "<< op <<"@"<< m_pc;
+    info.m_icount -= 5; // guessed
+        qWarning()<<"illegal opcode "<< op <<"@"<< info.m_pc;
 }

@@ -490,12 +490,16 @@ bool Ccc40::SaveConfig(QXmlStreamWriter *xmlOut)
 {
     Q_UNUSED(xmlOut)
 
+    pHD44780->save_internal(xmlOut);
+
     return true;
 }
 
 bool Ccc40::LoadConfig(QXmlStreamReader *xmlIn)
 {
     Q_UNUSED(xmlIn)
+
+    pHD44780->Load_Internal(xmlIn);
 
     return true;
 }

@@ -6,6 +6,8 @@
 #include "common.h"
 
 class CpcXXXX;
+class QXmlStreamReader;
+class QXmlStreamWriter;
 
 /***************************************************************************
 
@@ -88,8 +90,8 @@ public:
     bool	exit(void);						//end
     void	Reset(void);
     bool	step(void);
-
-
+    void Load_Internal(QXmlStreamReader *xmlIn);
+    void save_internal(QXmlStreamWriter *xmlOut);
 
 private:
 

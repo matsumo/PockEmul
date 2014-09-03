@@ -47,10 +47,10 @@
 #define SR_Z        0x20 /* Zero */
 #define SR_I        0x10 /* Interrupt */
 
-#define GET_C()     (m_sr >> 7 & 1)
-#define SET_C(x)    m_sr = (m_sr & 0x7f) | ((x) >> 1 & 0x80)
-#define SET_NZ(x)   m_sr = (m_sr & 0x9f) | ((x) >> 1 & 0x40) | (((x) & 0xff) ? 0 : 0x20)
-#define SET_CNZ(x)  m_sr = (m_sr & 0x1f) | ((x) >> 1 & 0xc0) | (((x) & 0xff) ? 0 : 0x20)
+#define GET_C()     (info.m_sr >> 7 & 1)
+#define SET_C(x)    info.m_sr = (info.m_sr & 0x7f) | ((x) >> 1 & 0x80)
+#define SET_NZ(x)   info.m_sr = (info.m_sr & 0x9f) | ((x) >> 1 & 0x40) | (((x) & 0xff) ? 0 : 0x20)
+#define SET_CNZ(x)  info.m_sr = (info.m_sr & 0x1f) | ((x) >> 1 & 0xc0) | (((x) & 0xff) ? 0 : 0x20)
 
 
 //const device_type TMS7000 = &device_creator<tms7000_device>;
@@ -235,32 +235,32 @@ bool Ctms7000::init()
 
 //    m_icountptr = &m_icount;
 
-    m_irq_state[TMS7000_INT1_LINE] = false;
-    m_irq_state[TMS7000_INT3_LINE] = false;
+    info.m_irq_state[TMS7000_INT1_LINE] = false;
+    info.m_irq_state[TMS7000_INT3_LINE] = false;
 
-    m_idle_state = false;
-    m_idle_halt = false;
-    m_pc = 0;
-    m_sp = 0;
-    m_sr = 0;
-    m_op = 0;
+    info.m_idle_state = false;
+    info.m_idle_halt = false;
+    info.m_pc = 0;
+    info.m_sp = 0;
+    info.m_sr = 0;
+    info.m_op = 0;
 
-    memset(m_io_control, 0, 3);
+    memset(info.m_io_control, 0, 3);
 
-    memset(m_port_latch, 0, 4);
-    memset(m_port_ddr, 0, 4);
-    m_port_ddr[1] = 0xff; // !
+    memset(info.m_port_latch, 0, 4);
+    memset(info.m_port_ddr, 0, 4);
+    info.m_port_ddr[1] = 0xff; // !
 
     for (int tmr = 0; tmr < 2; tmr++)
     {
 //        m_timer_handle[tmr] = machine().scheduler().timer_alloc(timer_expired_delegate(FUNC(Ctms7000::simple_timer_cb), this));
 //        m_timer_handle[tmr]->adjust(attotime::never, tmr);
 
-        m_timer_data[tmr] = 0;
-        m_timer_control[tmr] = 0;
-        m_timer_decrementer[tmr] = 0;
-        m_timer_prescaler[tmr] = 0;
-        m_timer_capture_latch[tmr] = 0;
+        info.m_timer_data[tmr] = 0;
+        info.m_timer_control[tmr] = 0;
+        info.m_timer_decrementer[tmr] = 0;
+        info.m_timer_prescaler[tmr] = 0;
+        info.m_timer_capture_latch[tmr] = 0;
     }
 
     // register for savestates
@@ -306,10 +306,10 @@ bool Ctms7000::init()
 
 void Ctms7000::Reset()
 {
-    if (m_idle_state)
+    if (info.m_idle_state)
     {
-        m_pc++;
-        m_idle_state = false;
+        info.m_pc++;
+        info.m_idle_state = false;
     }
 
     // while _RESET is asserted:
@@ -328,16 +328,16 @@ void Ctms7000::Reset()
     }
 
     // when _RESET goes inactive (0 to 1)
-    m_sr = 0;
+    info.m_sr = 0;
 
     write_p(0x00, 0x00); // IOCNT0
     if (chip_is_family_70x2())
         write_p(0x10, 0x00); // IOCNT1
 
-    write_mem16(0, m_pc); // previous PC
-    m_sp = 0x01;
-    m_pc = read_mem16(0xfffe);
-    m_icount -= 17;
+    write_mem16(0, info.m_pc); // previous PC
+    info.m_sp = 0x01;
+    info.m_pc = read_mem16(0xfffe);
+    info.m_icount -= 17;
 }
 
 
@@ -351,29 +351,29 @@ void Ctms7000::execute_set_input(int irqline, int state)
     bool irqstate = (state == CLEAR_LINE) ? false : true;
 
     // reverse polarity (70cx2-only)
-    if (m_io_control[2] & (0x01 << (4 * irqline)))
+    if (info.m_io_control[2] & (0x01 << (4 * irqline)))
         irqstate = !irqstate;
 
-    if (m_irq_state[irqline] != irqstate)
+    if (info.m_irq_state[irqline] != irqstate)
     {
-        m_irq_state[irqline] = irqstate;
+        info.m_irq_state[irqline] = irqstate;
 
         // set/clear internal irq flag
         flag_ext_interrupt(irqline);
 
-        if (m_irq_state[irqline])
+        if (info.m_irq_state[irqline])
         {
             // latch timer 1 on INT3
             if (irqline == TMS7000_INT3_LINE)
-                m_timer_capture_latch[0] = m_timer_decrementer[0];
+                info.m_timer_capture_latch[0] = info.m_timer_decrementer[0];
 
             // on 70cx2, latch timer 2 on INT1
             if (irqline == TMS7000_INT1_LINE && chip_is_family_70cx2())
-                m_timer_capture_latch[1] = m_timer_decrementer[1];
+                info.m_timer_capture_latch[1] = info.m_timer_decrementer[1];
 
             // clear external if it's edge-triggered (70cx2-only)
-            if (m_io_control[2] & (0x02 << (4 * irqline)))
-                m_irq_state[irqline] = false;
+            if (info.m_io_control[2] & (0x02 << (4 * irqline)))
+                info.m_irq_state[irqline] = false;
 
             check_interrupts();
         }
@@ -386,16 +386,16 @@ void Ctms7000::flag_ext_interrupt(int irqline)
         return;
 
     // set/clear for pending external interrupt
-    if (m_irq_state[irqline])
-        m_io_control[0] |= (0x02 << (4 * irqline));
+    if (info.m_irq_state[irqline])
+        info.m_io_control[0] |= (0x02 << (4 * irqline));
     else
-        m_io_control[0] &= ~(0x02 << (4 * irqline));
+        info.m_io_control[0] &= ~(0x02 << (4 * irqline));
 }
 
 void Ctms7000::check_interrupts()
 {
     // global interrupt bit
-    if (!(m_sr & SR_I))
+    if (!(info.m_sr & SR_I))
         return;
 
     // check for and handle interrupt
@@ -404,10 +404,10 @@ void Ctms7000::check_interrupts()
         // INT 1,2,3 are in IOCNT0 d0-d5
         // INT 4,5 are in IOCNT1 d0-d3
         int shift = (irqline > 2) ? irqline * 2 - 6 : irqline * 2;
-        if ((m_io_control[irqline > 2] >> shift & 3) == 3)
+        if ((info.m_io_control[irqline > 2] >> shift & 3) == 3)
         {
             // ack
-            m_io_control[irqline > 2] &= ~(0x02 << shift);
+            info.m_io_control[irqline > 2] &= ~(0x02 << shift);
 
             flag_ext_interrupt(irqline);
             do_interrupt(irqline);
@@ -418,20 +418,20 @@ void Ctms7000::check_interrupts()
 
 void Ctms7000::do_interrupt(int irqline)
 {
-    if (m_idle_state)
+    if (info.m_idle_state)
     {
-        m_icount -= 17;
-        m_pc++;
-        m_idle_state = false;
+        info.m_icount -= 17;
+        info.m_pc++;
+        info.m_idle_state = false;
     }
     else
-        m_icount -= 19;
+        info.m_icount -= 19;
 
-    push8(m_sr);
-    push16(m_pc);
+    push8(info.m_sr);
+    push16(info.m_pc);
     CallSubLevel++;
-    m_sr = 0;
-    m_pc = read_mem16(0xfffc - irqline * 2);
+    info.m_sr = 0;
+    info.m_pc = read_mem16(0xfffc - irqline * 2);
 
 //    standard_irq_callback(irqline);
 }
@@ -443,10 +443,10 @@ void Ctms7000::do_interrupt(int irqline)
 
 void Ctms7000::timer_run(int tmr)
 {
-    m_timer_prescaler[tmr] = m_timer_control[tmr] & 0x1f;
+    info.m_timer_prescaler[tmr] = info.m_timer_control[tmr] & 0x1f;
 
     // run automatic timer if source is internal
-    if ((m_timer_control[tmr] & 0xe0) == 0x80)
+    if ((info.m_timer_control[tmr] & 0xe0) == 0x80)
     {
 //        attotime period = attotime::from_hz(clock()) * 16 * (m_timer_prescaler[tmr] + 1); // fOSC/16
 //        m_timer_handle[tmr]->adjust(period, tmr);
@@ -458,9 +458,9 @@ void Ctms7000::timer_reload(int tmr)
     // stop possible running timer
 //    m_timer_handle[tmr]->adjust(attotime::never, tmr);
 
-    if (m_timer_control[tmr] & 0x80)
+    if (info.m_timer_control[tmr] & 0x80)
     {
-        m_timer_decrementer[tmr] = m_timer_data[tmr];
+        info.m_timer_decrementer[tmr] = info.m_timer_data[tmr];
         timer_run(tmr);
     }
 }
@@ -468,9 +468,9 @@ void Ctms7000::timer_reload(int tmr)
 void Ctms7000::timer_tick_pre(int tmr)
 {
     // timer prescaler underflow
-    if (--m_timer_prescaler[tmr] < 0)
+    if (--info.m_timer_prescaler[tmr] < 0)
     {
-        m_timer_prescaler[tmr] = m_timer_control[tmr] & 0x1f;
+        info.m_timer_prescaler[tmr] = info.m_timer_control[tmr] & 0x1f;
         timer_tick_low(tmr);
     }
 }
@@ -478,15 +478,15 @@ void Ctms7000::timer_tick_pre(int tmr)
 void Ctms7000::timer_tick_low(int tmr)
 {
     // timer decrementer underflow
-    if (--m_timer_decrementer[tmr] < 0)
+    if (--info.m_timer_decrementer[tmr] < 0)
     {
         timer_reload(tmr);
 
         // set INT2/INT5
-        m_io_control[tmr] |= 0x08;
+        info.m_io_control[tmr] |= 0x08;
 
         // cascaded timer
-        if (tmr == 0 && (m_timer_control[1] & 0xa0) == 0xa0)
+        if (tmr == 0 && (info.m_timer_control[1] & 0xa0) == 0xa0)
             timer_tick_pre(tmr + 1);
     }
 }
@@ -506,7 +506,7 @@ void Ctms7000::timer_tick_low(int tmr)
 //  note: 7000 family is from $00 to $0b, 7002 family adds $10 to $17
 //-------------------------------------------------
 void Ctms7000::set_input_line(UINT8 line, UINT8 state) {
-    m_irq_state[line] = state;
+    info.m_irq_state[line] = state;
 }
 
 UINT8 Ctms7000::pf_read(UINT32 offset)
@@ -515,29 +515,29 @@ UINT8 Ctms7000::pf_read(UINT32 offset)
     {
         // i/o control
         case 0x00: case 0x10:
-            return m_io_control[offset >> 4];
+            return info.m_io_control[offset >> 4];
 
         // timer 1/2 data
         case 0x02: case 0x12:
             // current decrementer value
-            return m_timer_decrementer[offset >> 4];
+            return info.m_timer_decrementer[offset >> 4];
 
         // timer 1 control
         case 0x03:
             // timer capture (latched by INT3)
-            return m_timer_capture_latch[0];
+            return info.m_timer_capture_latch[0];
 
         // port data
         case 0x04: case 0x06: case 0x08: case 0x0a:
         {
             // note: port B is write-only, reading it returns the output value as if ddr is 0xff
             int port = offset / 2 - 2;
-            return (pPC->in( TMS7000_PORTA ) & ~m_port_ddr[port]) | (m_port_latch[port] & m_port_ddr[port]);
+            return (pPC->in( TMS7000_PORTA ) & ~info.m_port_ddr[port]) | (info.m_port_latch[port] & info.m_port_ddr[port]);
         }
 
         // port direction (note: 7000 doesn't support it for port A)
         case 0x05: case 0x09: case 0x0b:
-            return m_port_ddr[offset / 2 - 2];
+            return info.m_port_ddr[offset / 2 - 2];
 
         default:
 //            logerror("%s: tms7000_pf_r @ $%04x\n", tag(), offset);
@@ -556,7 +556,7 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
             // d0,d2,d4: INT1,2,3 enable
             // d1,d3,d5: INT1,2,3 flag (write 1 to clear flag)
             // d6-d7: memory mode (currently not implemented)
-            m_io_control[0] = (m_io_control[0] & (~data & 0x2a)) | (data & 0xd5);
+            info.m_io_control[0] = (info.m_io_control[0] & (~data & 0x2a)) | (data & 0xd5);
 
             // possibly need to reactivate flags
             if (data & 0x02)
@@ -571,14 +571,14 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
         case 0x10:
             // d0,d2: INT4,5 enable
             // d1,d3: INT4,5 flag (write 1 to clear flag)
-            m_io_control[1] = (m_io_control[1] & (~data & 0x0a)) | (data & 0x05);
+            info.m_io_control[1] = (info.m_io_control[1] & (~data & 0x0a)) | (data & 0x05);
             check_interrupts();
             break;
 
         // timer 1/2 data
         case 0x02: case 0x12:
             // decrementer reload value
-            m_timer_data[offset >> 4] = data;
+            info.m_timer_data[offset >> 4] = data;
             break;
 
         // timer 1/2 control
@@ -587,8 +587,8 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
             // 0(normal), or 1(halt) - indicating it can only wake up with RESET or external interrupt
             if (chip_is_cmos())
             {
-                m_idle_halt = (data & 0x20) ? true : false;
-                if (m_idle_halt)
+                info.m_idle_halt = (data & 0x20) ? true : false;
+                if (info.m_idle_halt)
                     qWarning()<<"CMOS low-power halt mode enabled";
             }
             data &= ~0x20;
@@ -598,12 +598,12 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
             // d5: t2: cascade from t1
             // d6: source (internal/external)
             // d7: stop/start timer
-            m_timer_control[offset >> 4] = data;
+            info.m_timer_control[offset >> 4] = data;
             timer_reload(offset >> 4);
 
             // on cmos chip, clear INT2/INT5 as well
             if (~data & 0x80 && chip_is_cmos())
-                m_io_control[offset >> 4] &= ~0x08;
+                info.m_io_control[offset >> 4] &= ~0x08;
 
             break;
 
@@ -613,15 +613,15 @@ void Ctms7000::pf_write(UINT32 offset,UINT8 data)
             // note: in memory expansion modes, some port output pins are used for memory strobes.
             // this is currently ignored, since port writes will always be visible externally on peripheral expansion anyway.
             int port = offset / 2 - 2;
-            pPC->out(port, data & m_port_ddr[port]);
-            m_port_latch[port] = data;
+            pPC->out(port, data & info.m_port_ddr[port]);
+            info.m_port_latch[port] = data;
             break;
         }
 
         // port direction (note: 7000 doesn't support it for port A)
         case 0x05: case 0x09: case 0x0b:
             // note: changing port direction does not change(refresh) the output pins
-            m_port_ddr[offset / 2 - 2] = data;
+            info.m_port_ddr[offset / 2 - 2] = data;
             break;
 
         default:
@@ -643,11 +643,11 @@ void Ctms7000::execute_run()
 
     do
     {
-//        debugger_instruction_hook(this, m_pc);
+//        debugger_instruction_hook(this, info.m_pc);
 
-        m_op = pPC->Get_8(m_pc++);
-        execute_one(m_op);
-    } while (m_icount > 0);
+        info.m_op = pPC->Get_8(info.m_pc++);
+        execute_one(info.m_op);
+    } while (info.m_icount > 0);
 }
 
 void Ctms7000::execute_one(UINT8 op)
@@ -864,13 +864,13 @@ void Ctms7000::execute_one(UINT8 op)
         case 0xdf: am_r(&Ctms7000::op_rlc); break;
 
         case 0xe0: jmp(true); break;
-        case 0xe1: jmp(m_sr & SR_N); break; // jn/jlt
-        case 0xe2: jmp(m_sr & SR_Z); break; // jz/jeq
-        case 0xe3: jmp(m_sr & SR_C); break; // jc/jhs
-        case 0xe4: jmp(!(m_sr & (SR_Z | SR_N))); break; // jp/jgt
-        case 0xe5: jmp(!(m_sr & SR_N)); break; // jpz/jge - note: error in TI official documentation
-        case 0xe6: jmp(!(m_sr & SR_Z)); break; // jnz/jne
-        case 0xe7: jmp(!(m_sr & SR_C)); break; // jnc/jl
+        case 0xe1: jmp(info.m_sr & SR_N); break; // jn/jlt
+        case 0xe2: jmp(info.m_sr & SR_Z); break; // jz/jeq
+        case 0xe3: jmp(info.m_sr & SR_C); break; // jc/jhs
+        case 0xe4: jmp(!(info.m_sr & (SR_Z | SR_N))); break; // jp/jgt
+        case 0xe5: jmp(!(info.m_sr & SR_N)); break; // jpz/jge - note: error in TI official documentation
+        case 0xe6: jmp(!(info.m_sr & SR_Z)); break; // jnz/jne
+        case 0xe7: jmp(!(info.m_sr & SR_C)); break; // jnc/jl
 
         case 0xe8: case 0xe9: case 0xea: case 0xeb: case 0xec: case 0xed: case 0xee: case 0xef:
         case 0xf0: case 0xf1: case 0xf2: case 0xf3: case 0xf4: case 0xf5: case 0xf6: case 0xf7:
@@ -893,7 +893,7 @@ void Ctms7020_exl::execute_one(UINT8 op)
 UINT32 Ctms7000::get_PC()
 {
 //    upd7907_state *cpustate = &upd7907stat;
-    return m_pc;
+    return info.m_pc;
 }
 
 void Ctms7000::Load_Internal(QXmlStreamReader *xmlIn)
@@ -902,19 +902,7 @@ void Ctms7000::Load_Internal(QXmlStreamReader *xmlIn)
         if ( (xmlIn->name()=="cpu") &&
              (xmlIn->attributes().value("model").toString() == "tms7000")) {
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
-//            memcpy((char *) &upd7907stat,ba_reg.data(),sizeof(upd7907stat));
-//            upd7907stat.ppc = ppc;
-//            upd7907stat.opXX = opXX_7907;
-//            upd7907stat.op48 = op48_7907;
-//            upd7907stat.op4C = op4C_7907;
-//            upd7907stat.op4D = op4D_7907;
-//            upd7907stat.op60 = op60_7907;
-//            upd7907stat.op64 = op64_7907;
-//            upd7907stat.op70 = op70_7907;
-//            upd7907stat.op74 = op74_7907;
-//            upd7907stat.handle_timers = upd78c05_timers;
-//            QByteArray ba_imem = QByteArray::fromBase64(xmlIn->attributes().value("iMem").toString().toLatin1());
-//            memcpy((char *) &(upd7907stat.imem),ba_imem.data(),IMEM_LEN);
+            memcpy((char *) &info,ba_reg.data(),sizeof(TMS7000info));
 
         }
         xmlIn->skipCurrentElement();
@@ -926,8 +914,8 @@ void Ctms7000::save_internal(QXmlStreamWriter *xmlOut)
 
     xmlOut->writeStartElement("cpu");
         xmlOut->writeAttribute("model","tms7000");
-//        QByteArray ba_reg((char*)&upd7907stat,sizeof(upd7907stat));
-//        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+        QByteArray ba_reg((char*)&info,sizeof(TMS7000info));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
     xmlOut->writeEndElement();
 }
 
@@ -944,28 +932,28 @@ void Ctms7000::Regs_Info(UINT8 Type)
         sprintf(
                     Regs_String,
                     "%c%c%c%c%c%c%c%c",
-                                m_sr & 0x80 ? 'C':'c',
-                                m_sr & 0x40 ? 'N':'n',
-                                m_sr & 0x20 ? 'Z':'z',
-                                m_sr & 0x10 ? 'I':'i',
-                                m_sr & 0x08 ? '?':'.',
-                                m_sr & 0x04 ? '?':'.',
-                                m_sr & 0x02 ? '?':'.',
-                                m_sr & 0x01 ? '?':'.'
+                                info.m_sr & 0x80 ? 'C':'c',
+                                info.m_sr & 0x40 ? 'N':'n',
+                                info.m_sr & 0x20 ? 'Z':'z',
+                                info.m_sr & 0x10 ? 'I':'i',
+                                info.m_sr & 0x08 ? '?':'.',
+                                info.m_sr & 0x04 ? '?':'.',
+                                info.m_sr & 0x02 ? '?':'.',
+                                info.m_sr & 0x01 ? '?':'.'
                     );
         break;
     case 1:			// Log File
         sprintf(
                     Regs_String,
                     "%c%c%c%c%c%c%c%c",
-                                m_sr & 0x80 ? 'C':'c',
-                                m_sr & 0x40 ? 'N':'n',
-                                m_sr & 0x20 ? 'Z':'z',
-                                m_sr & 0x10 ? 'I':'i',
-                                m_sr & 0x08 ? '?':'.',
-                                m_sr & 0x04 ? '?':'.',
-                                m_sr & 0x02 ? '?':'.',
-                                m_sr & 0x01 ? '?':'.'
+                                info.m_sr & 0x80 ? 'C':'c',
+                                info.m_sr & 0x40 ? 'N':'n',
+                                info.m_sr & 0x20 ? 'Z':'z',
+                                info.m_sr & 0x10 ? 'I':'i',
+                                info.m_sr & 0x08 ? '?':'.',
+                                info.m_sr & 0x04 ? '?':'.',
+                                info.m_sr & 0x02 ? '?':'.',
+                                info.m_sr & 0x01 ? '?':'.'
                     );
 
         for (int i=0;i<0x20;i++)
@@ -1002,9 +990,9 @@ bool Ctms7000::exit()
 void Ctms7000::step()
 {
     {
-        m_icount = 0;
+        info.m_icount = 0;
         execute_run();
-        pPC->pTIMER->state -= m_icount;
+        pPC->pTIMER->state -= info.m_icount;
     }
 
 

@@ -47,6 +47,7 @@ bool CHD44780::init()
     in.readRawData ((char *) &charset,0x1000 );
     qWarning()<<charset;
     info.m_cgrom = (UINT8 *)&charset;
+
     return true;
 }
 
@@ -461,3 +462,25 @@ HD44780info * CHD44780::getInfo()
     return &info;
 }
 
+void CHD44780::Load_Internal(QXmlStreamReader *xmlIn)
+{
+    if (xmlIn->readNextStartElement()) {
+        if ( (xmlIn->name()=="cpu") &&
+             (xmlIn->attributes().value("model").toString() == "hd44780")) {
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) &info,ba_reg.data(),sizeof(info));
+            info.m_cgrom = (UINT8 *)&charset;
+//            updated = true;
+        }
+        xmlIn->skipCurrentElement();
+    }
+}
+
+void CHD44780::save_internal(QXmlStreamWriter *xmlOut)
+{
+    xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","hd44780");
+        QByteArray ba_reg((char*)&info,sizeof(info));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+    xmlOut->writeEndElement();
+}
