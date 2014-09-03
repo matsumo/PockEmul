@@ -143,7 +143,7 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     LcdFname		= P_RES(":/cc40/cc40lcd.png");
     SymbFname		= P_RES(":/cc40/cc40lcd.png");;
 
-//    TopFname    = P_RES(":/fp200/fp200Top.png");
+
 
     memsize		= 0x40000;
     InitMemValue	= 0x00;
@@ -293,7 +293,7 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 
     if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
-    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return false; } // system ROM
+    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x1B000 + ( RamBank * 0x8000 );	return false; } // system ROM
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
 
@@ -324,7 +324,7 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
     if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ *data = sysram_r(*d-0x1000); return false;	}  // CPU RAM
 
-    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return true; } // Cartridge
+    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x1B000 + ( RamBank * 0x8000 );	return true; } // Cartridge
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
 
     return true;

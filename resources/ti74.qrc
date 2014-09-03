@@ -1,5 +1,8 @@
 <RCC>
     <qresource prefix="/">
         <file>ti74/ti74.png</file>
+        <file>ti74/ti74.bin</file>
+        <file>ti74/ti74lcd.png</file>
+        <file>ti74/tms70c46.bin</file>
     </qresource>
 </RCC>

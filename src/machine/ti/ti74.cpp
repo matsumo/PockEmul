@@ -5,7 +5,7 @@
 #include "ti74.h"
 #include "tms7000/tms7000.h"
 #include "hd44780.h"
-#include "Lcdc_cc40.h"
+#include "Lcdc_ti74.h"
 #include "Inter.h"
 #include "Keyb.h"
 #include "cextension.h"
@@ -16,132 +16,21 @@
 
 #include "Log.h"
 
-/*
-CC-40 MEMORY MAP1:
 
-
-    DECIMAL    HEX     DESCRIPTION         SIZE
-   -------------------------------------------------------------------------
-       0      0000
-                      REGISTER FILE       128 BYTES PROCESSOR RAM
-     127      007F
-   -------------------------------------------------------------------------
-     128      0080
-                      UNUSED              128 BYTES
-     255      00FF
-   -------------------------------------------------------------------------
-     256      0100
-                      PERIPHERAL FILE     256 BYTES MEMORY MAP I/O
-     511      01FF
-   -------------------------------------------------------------------------
-     512      0200
-                      UNUSED              1.5K
-    2047      07FF
-   -------------------------------------------------------------------------
-    2048      0800
-                      SYSTEM RAM          2K INSTALLED
-    4095      0FFF
-   -------------------------------------------------------------------------
-    4096      1000
-                      SYSTEM RAM          2K INSTALLED
-    6143      17FF
-   -------------------------------------------------------------------------
-    6144      1800
-                      SYSTEM RAM          6K NOT INSTALLED
-   12287      2FFF
-   -------------------------------------------------------------------------
-   12288      3000
-                      SYSTEM RAM          2K INSTALLED
-   14335      37FF
-   -------------------------------------------------------------------------
-   14336      3800
-                      SYSTEM RAM          6K NOT INSTALLED
-   20479      4FFF
-   -------------------------------------------------------------------------
-   20480      5000
-                      CARTRIDE PORT       32K
-   53247      CFFF
-   -------------------------------------------------------------------------
-   53248      D000
-                      SYSTEM ROM          8K
-   61439      EFFF
-   -------------------------------------------------------------------------
-   61440      F000
-                      UNUSED              2K
-   63487      F7FF
-   -------------------------------------------------------------------------
-   63488      F800
-                      PROCESSOR ROM       2K
-   65536      FFFF
-   -------------------------------------------------------------------------
-
-============================================================================
-
-   CC-40 MEMORY MAP: AFTER 12K RAM ADDED:
-
-    DECIMAL    HEX     DESCRIPTION         SIZE
-   -------------------------------------------------------------------------
-       0      0000
-                      REGISTER FILE       128 BYTES PROCESSOR RAM
-     127      007F
-   -------------------------------------------------------------------------
-     128      0080
-                      UNUSED              128 BYTES
-     255      00FF
-   -------------------------------------------------------------------------
-     256      0100
-                      PERIPHERAL FILE     256 BYTES MEMORY MAP I/O
-     511      01FF
-   -------------------------------------------------------------------------
-     512      0200
-                      UNUSED              1.5K
-    2047      07FF
-   -------------------------------------------------------------------------
-    2048      0800
-                      SYSTEM RAM          2K INSTALLED
-    4095      0FFF
-   -------------------------------------------------------------------------
-    4096      1000
-                      SYSTEM RAM          8K INSTALLED
-   12287      2FFF
-   -------------------------------------------------------------------------
-   12288      3000
-                      SYSTEM RAM          8K INSTALLED
-   20479      4FFF
-   -------------------------------------------------------------------------
-   20480      5000
-                      CARTRIDE PORT       32K
-   53247      CFFF
-   -------------------------------------------------------------------------
-   53248      D000
-                      SYSTEM ROM          8K
-   61439      EFFF
-   -------------------------------------------------------------------------
-   61440      F000
-                      UNUSED              2K
-   63487      F7FF
-   -------------------------------------------------------------------------
-   63488      F800
-                      PROCESSOR ROM       2K
-   65536      FFFF
-   -------------------------------------------------------------------------
-
-===========================================================================
-    */
 
 #define STROBE_TIMER 5
 
 Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 2500000);
+    setfrequency( (int) 4000000);
     setcfgfname(QString("ti74"));
 
     SessionHeader	= "TI74PKM";
     Initial_Session_Fname ="ti74.pkm";
 
     BackGroundFname	= P_RES(":/ti74/ti74.png");
-    LcdFname		= P_RES(":/cc40/cc40lcd.png");
-    SymbFname		= P_RES(":/cc40/cc40lcd.png");;
+    LcdFname		= P_RES(":/ti74/ti74lcd.png");
+    SymbFname		= P_RES(":/ti74/ti74lcd.png");;
 
 
     memsize		= 0x40000;
@@ -149,9 +38,9 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(52  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(2  , 0xF800 ,	P_RES(":/cc40/cc40_2krom.bin")  , ""	, CSlot::ROM , "ROM cpu"));
-    SlotList.append(CSlot(32 , 0x10000,	P_RES(":/cc40/cc40.bin")        , ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(128 , 0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/tms70c46.bin")  , ""	, CSlot::ROM , "ROM cpu"));
+    SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/ti74.bin")        , ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(128 ,0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
 
 
     setDXmm(204);
@@ -162,23 +51,23 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     setDY(340);
 
     Lcd_X		= 50;
-    Lcd_Y		= 175;
+    Lcd_Y		= 60;
     Lcd_DX		= 186;
     Lcd_DY		= 10;
-    Lcd_ratio_X	= 2.7;
-    Lcd_ratio_Y	= 2.7;
+    Lcd_ratio_X	= 2.25;
+    Lcd_ratio_Y	= 2.25;
 
     Lcd_Symb_X	= 50;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 160;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 250;
-    Lcd_Symb_DY	= 30;
+    Lcd_Symb_Y	= 50;//(int) (35 * 1.18);
+    Lcd_Symb_DX	= 210;
+    Lcd_Symb_DY	= 20;
     Lcd_Symb_ratio_X	= 2;//1.18;
     Lcd_Symb_ratio_Y	= 2;//1.18;
 
-    pLCDC		= new Clcdc_cc40(this);
-    pCPU		= new Ctms70c20(this);
+    pLCDC		= new Clcdc_ti74(this);
+    pCPU		= new Ctms70c46(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"cc40.map");
+    pKEYB		= new Ckeyb(this,"ti74.map");
     pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
 
@@ -291,10 +180,10 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     if ( (*d>=0x0100) && (*d<=0x010B) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
 
     if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
-    if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
-    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return false; } // system ROM
-    if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
-    if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
+    if ( (*d>=0x1000) && (*d<=0x3FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
+    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ *d += 0x1C000 + ( RamBank * 0x8000 );	return false; } // system ROM
+    if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return false; } // system ROM
+    if ( (*d>=0xF000) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
 
 
     return true;
@@ -321,10 +210,10 @@ bool Cti74::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
     if ( (*d>=0x0100) && (*d<=0x010B) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
 
-    if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ *data = sysram_r(*d-0x1000); return false;	}  // CPU RAM
+    if ( (*d>=0x1000) && (*d<=0x3FFF) )	{ *data = sysram_r(*d-0x1000); return false;	}  // CPU RAM
 
-    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return true; } // Cartridge
-    if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
+    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ *d += 0x1C000 + ( RamBank * 0x8000 );	return true; } // Cartridge
+    if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return true; } // system ROM
 
     return true;
 }

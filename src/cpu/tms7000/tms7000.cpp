@@ -168,6 +168,12 @@ Ctms70c40::Ctms70c40(CPObject *parent, TMS7000_Models mod)
     : Ctms7000(parent, mod)
 {
 }
+
+Ctms70c46::Ctms70c46(CPObject *parent, TMS7000_Models mod)
+    : Ctms7000(parent, mod)
+{
+}
+
 //tms7020_device::tms7020_device(const machine_config &mconfig, const char *tag, device_t *owner, UINT32 clock)
 //    : tms7000_device(mconfig, TMS7020, "TMS7020", tag, owner, clock, ADDRESS_MAP_NAME(tms7020_mem), 0, "tms7020", __FILE__)
 //{
