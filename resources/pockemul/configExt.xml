@@ -63,6 +63,12 @@
    <example brand="HEWLETT-PACKARD" idpocket="HP41MATHSTAT" filename="./" name="Math Stat" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP41PPC" filename="./" name="PPC-ROM" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP41MODFILE" filename="./" name="External MOD file" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
-   </demos>
+   <example brand="TEXAS INSTRUMENTS" idpocket="PASCAL" filename="./" name="Pascal module" image=":/cc40/cartimg/pascal.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="MEMO" filename="./" name="Memo Processor module" image=":/cc40/cartimg/ss-3004.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="FINANCE" filename="./" name="Finance module" image=":/cc40/cartimg/ss-3006.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="STAT" filename="./" name="Statistic module" image=":/cc40/cartimg/ss-3008.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="MATH" filename="./" name="Mathematics module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
+
+</demos>
  </demolauncher>
 

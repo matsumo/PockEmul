@@ -5,5 +5,12 @@
         <file>cc40/cc40_2krom.bin</file>
         <file>cc40/cc40lcd.png</file>
         <file>cc40/hd44780_a00.bin</file>
+        <file>cc40/cartimg/pascal.png</file>
+        <file>cc40/cartimg/ss-1000.png</file>
+        <file>cc40/cartimg/ss-2000.png</file>
+        <file>cc40/cartimg/ss-3004.png</file>
+        <file>cc40/cartimg/ss-3006.png</file>
+        <file>cc40/cartimg/ss-3008.png</file>
+        <file>cc40/cartimg/ss-3009.png</file>
     </qresource>
 </RCC>

@@ -34,6 +34,8 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
+    virtual void ComputeKey();
+
     Ctms7000 *ptms7000cpu;
     CHD44780 *pHD44780;
 
@@ -59,6 +61,12 @@ public:
     void sysram_w(UINT16 offset, UINT8 data);
     UINT8 sysram_r(UINT16 offset);
     void init_sysram(int chip, UINT16 size);
+
+    bool slotChanged;
+    int currentSlot;
+
+protected slots:
+        void addModule(QString item, CPObject *pPC);
 };
 
 
