@@ -42,14 +42,23 @@ public:
     UINT8 m_clock_control;
     UINT8 m_banks;
     UINT8 m_power;
+    UINT8 m_bus_control;
 
     virtual void initExtension(void);
 
-
+    UINT8 *m_sysram[2];
+    UINT16 m_sysram_size[2];
+    UINT16 m_sysram_end[2];
+    UINT16 m_sysram_mask[2];
 
     void clock_w(UINT8 data);
     UINT8 clock_r();
     void power_w(UINT8 data);
+    void bus_control_w(UINT8 data);
+    UINT8 bus_control_r();
+    void sysram_w(UINT16 offset, UINT8 data);
+    UINT8 sysram_r(UINT16 offset);
+    void init_sysram(int chip, UINT16 size);
 };
 
 

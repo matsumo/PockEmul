@@ -165,7 +165,7 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     Lcd_X		= 50;
     Lcd_Y		= 175;
     Lcd_DX		= 186;
-    Lcd_DY		= 9;
+    Lcd_DY		= 10;
     Lcd_ratio_X	= 2.7;
     Lcd_ratio_Y	= 2.7;
 
@@ -185,6 +185,9 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
 
     ioFreq = 0;             // Mandatory for Centronics synchronization
     ptms7000cpu = (Ctms70c20*)pCPU;
+
+    m_sysram[0] = NULL;
+    m_sysram[1] = NULL;
 }
 
 Ccc40::~Ccc40() {
@@ -203,6 +206,59 @@ void Ccc40::power_w(UINT8 data)
         ptms7000cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 }
 
+UINT8 Ccc40::sysram_r(UINT16 offset)
+{
+    // read system ram, based on addressing configured in bus_control_w
+    if (offset < m_sysram_end[0] && m_sysram_size[0] != 0)
+        return m_sysram[0][offset & (m_sysram_size[0] - 1)];
+    else if (offset < m_sysram_end[1] && m_sysram_size[1] != 0)
+        return m_sysram[1][(offset - m_sysram_end[0]) & (m_sysram_size[1] - 1)];
+    else
+        return 0xff;
+}
+
+void Ccc40::sysram_w(UINT16 offset,UINT8 data)
+{
+    // write system ram, based on addressing configured in bus_control_w
+    if (offset < m_sysram_end[0] && m_sysram_size[0] != 0)
+        m_sysram[0][offset & (m_sysram_size[0] - 1)] = data;
+    else if (offset < m_sysram_end[1] && m_sysram_size[1] != 0)
+        m_sysram[1][(offset - m_sysram_end[0]) & (m_sysram_size[1] - 1)] = data;
+}
+
+UINT8 Ccc40::bus_control_r()
+{
+    return m_bus_control;
+}
+
+void Ccc40::bus_control_w(UINT8 data)
+{
+    // d0,d1: auto enable clock divider on cartridge memory access (d0: area 1, d1: area 2)
+
+    // d2,d3: system ram addressing
+    // 00: 8K, 8K @ $1000-$2fff, $3000-$4fff
+    // 01: 8K, 2K @ $1000-$2fff, $3000-$37ff
+    // 10: 2K, 8K @ $1000-$17ff, $1800-$37ff
+    // 11: 2K, 2K @ $1000-$17ff, $1800-$1fff
+    int d2 = (data & 4) ? 0x0800 : 0x2000;
+    int d3 = (data & 8) ? 0x0800 : 0x2000;
+    m_sysram_end[0] = d3;
+    m_sysram_mask[0] = d3 - 1;
+    m_sysram_end[1] = d3 + d2;
+    m_sysram_mask[1] = d2 - 1;
+
+    // d4,d5: cartridge memory addressing
+    // 00: 2K @ $5000-$57ff & $5800-$5fff
+    // 01: 8K @ $5000-$6fff & $7000-$8fff
+    // 10:16K @ $5000-$8fff & $9000-$cfff
+    // 11: 8K @ $1000-$2fff & $3000-$4fff - system ram is disabled
+
+    // d6: auto enable clock divider on system rom access
+
+    // d7: unused?
+    m_bus_control = data;
+}
+
 bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
@@ -211,6 +267,7 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
     if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
 
     // CPU RAM
+    if (*d==0x0110) { bus_control_w(data); return false; }
     if (*d==0x0111) { power_w(data); return false; }
     if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
     if (*d==0x0119) {
@@ -232,10 +289,10 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
         pLCDC->redraw = true;
         return false;
     }
-    if ( (*d>=0x0100) && (*d<=0x01FF) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
+    if ( (*d>=0x0100) && (*d<=0x010B) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
 
-
-    if ( (*d>=0x0000) && (*d<=0x4FFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
     if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return false; } // system ROM
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
@@ -251,7 +308,7 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
     if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
 
-    if (*d==0x0110) { *data = 0x4c; /*qWarning()<<"bus_ctrl_read";*/return false; }
+    if (*d==0x0110) { *data = bus_control_r(); return false; }
     if (*d==0x0114) { *data = 1; return false; }
     if (*d==0x0116) { *data = 1; return false; }
     if (*d==0x0119) { *data = m_banks; return false; }
@@ -263,7 +320,9 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 //        qWarning()<<"pHD44780->data_read:"<<*data;
         return false; }
 
-    if ( (*d>=0x0100) && (*d<=0x01FF) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
+    if ( (*d>=0x0100) && (*d<=0x010B) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
+
+    if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ *data = sysram_r(*d-0x1000); return false;	}  // CPU RAM
 
     if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x15000 + ( RamBank * 0x8000 );	return true; } // Cartridge
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return true; } // system ROM
@@ -336,6 +395,18 @@ void Ccc40::clock_w(UINT8 data)
     m_clock_control = data & 0x0f;
 }
 
+void Ccc40::init_sysram(int chip, UINT16 size)
+{
+    if (m_sysram[chip] == NULL)
+    {
+        // init to largest possible
+        m_sysram[chip] = (UINT8 *)malloc(0x2000*sizeof(UINT8));
+    }
+
+//	m_nvram[chip]->set_base(m_sysram[chip], size);
+    m_sysram_size[chip] = size;
+}
+
 bool Ccc40::init()
 {
 //    pCPU->logsw = true;
@@ -344,6 +415,9 @@ bool Ccc40::init()
 #endif
     CpcXXXX::init();
     pHD44780->init();
+
+    init_sysram(0, 0x800); // default to 6KB
+    init_sysram(1, 0x800); // "
 
     initExtension();
     Reset();
@@ -475,13 +549,13 @@ quint8 Ccc40::getKey()
             if (KEY('B'))			data|=0x10;
             if (KEY('N'))			data|=0x20;
             if (KEY('M'))			data|=0x40;
-            if (KEY('<'))			data|=0x80;
+            if (KEY(','))			data|=0x80;
         }
         if (ks & 0x10) {
 //            if (KEY(''))			data|=0x01;
             if (KEY(' '))			data|=0x02;
 //            if (KEY(''))			data|=0x04;
-            if (KEY(':'))			data|=0x08;
+            if (KEY(';'))			data|=0x08;
             if (KEY('L'))			data|=0x10;
             if (KEY('='))			data|=0x20;
             if (KEY('P'))			data|=0x40;
@@ -499,7 +573,7 @@ quint8 Ccc40::getKey()
         }
         if (ks & 0x40) {
 //            if (KEY(''))			data|=0x01;
-            if (KEY('>'))			data|=0x02;
+            if (KEY('.'))			data|=0x02;
             if (KEY('+'))			data|=0x04;
             if (KEY(K_RET))			data|=0x08;
             if (KEY('-'))			data|=0x10;
@@ -514,7 +588,11 @@ quint8 Ccc40::getKey()
             if (KEY(K_BRK))			data|=0x04;
             if (KEY(K_RUN))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
-            if (KEY(K_FN))			data|=0x20;
+            if (KEY(K_FN))			{
+                pCPU->logsw = true;
+                pCPU->Check_Log();
+//                data|=0x20;
+            }
             if (KEY(K_OF))			data|=0x40;
 //            if (KEY(''))			data|=0x80;
         }

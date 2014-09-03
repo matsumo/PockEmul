@@ -67,13 +67,16 @@ HD44780_PIXEL_UPDATE(Ccc40_update_pixel_symb)
 }
 HD44780_PIXEL_UPDATE(Ccc40_update_pixel)
 {
+    // char size is 5x7 + cursor
+    if (x > 4 || y > 7)
+        return;
     if (line == 1 && pos == 15)
     {
     }
     else if (line < 2 && pos < 16)
     {
         // internal: 2*16, external: 1*31 + indicators
-//        bitmap.pix16(1 + y, 1 + line*16*6 + pos*6 + x) = state;
+        if (y == 7) y++;
         painter->setPen(COLOR(state));
         painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
     }
