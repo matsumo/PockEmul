@@ -16,7 +16,10 @@ Clcdc_ti74::Clcdc_ti74(CPObject *parent)	: Clcdc(parent){						//[constructor]
 }
 
 Clcdc_ti95::Clcdc_ti95(CPObject *parent)	: Clcdc_ti74(parent){
-
+    Color_Off.setRgb(
+                        (int) (152*contrast),
+                        (int) (170*contrast),
+                        (int) (151*contrast));
 }
 
 void Clcdc_ti74::disp_symb(void)
@@ -80,6 +83,51 @@ HD44780_PIXEL_UPDATE(Cti74_update_pixel)
     }
 }
 
+
+
+HD44780_PIXEL_UPDATE(Cti95_update_pixel_symb)
+{
+    if (line == 1 && pos == 15)
+    {
+        // output#  |  40   43     41   44   42     12  11  10/13/14  0    1    2
+        // above    | _LOW _ERROR  2nd  INV  ALPHA  LC  INS  DEGRAD  HEX  OCT  I/O
+        // screen-  | _P{70} <{71}                                             RUN{3}
+        //   area   .                                                          SYS{4}
+
+        int id = y*10+x;
+        switch (id) {
+        case 40: Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	  0,	0); break;
+        case 43: Clcdc::disp_one_symb(painter,S_ERROR, COLOR(state), 20,	0); break;
+        case 41: Clcdc::disp_one_symb(painter,S_SEC, COLOR(state),	 50,	0); break;
+//        case 44: Clcdc::disp_one_symb(painter,S_INV,  COLOR(state),	 80,	0); break;
+//        case 42:  Clcdc::disp_one_symb(painter,S_ALPHA,  COLOR(state),	110,	0); break;
+//        case 12:  Clcdc::disp_one_symb(painter,S_LC, COLOR(state),	140,	0); break;
+//        case 11:  Clcdc::disp_one_symb(painter,S_INS, COLOR(state),	140,	0); break;
+        case 10:  Clcdc::disp_one_symb(painter,S_DEG, COLOR(state),	170,	0); break;
+        case 13:  Clcdc::disp_one_symb(painter,S_G, COLOR(state),	170,	0); break;
+        case 14:  Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	170,	0); break;
+//        case 0:  Clcdc::disp_one_symb(painter,S_HEX, COLOR(state),	170,	0); break;
+//        case 1:  Clcdc::disp_one_symb(painter,S_OCT, COLOR(state),	170,	0); break;
+        case 2:  Clcdc::disp_one_symb(painter,S_IO, COLOR(state),	205,	0); break;
+
+        case 3:  Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	170,	0); break;
+        case 4:  Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	170,	0); break;
+        case 70:  Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	170,	0); break;
+        case 71:  Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	170,	0); break;
+
+
+//        case 63: Clcdc::disp_one_symb(painter,S_BASIC, COLOR(state), 20,	18); break;
+//        case 64: Clcdc::disp_one_symb(painter,S_CALC, COLOR(state),	 50,	18); break;
+        case 1: Clcdc::disp_one_symb(painter,S_DEG, COLOR(state),	 80,	18); break;
+        case 62: Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	110,	18); break;
+        case 53: Clcdc::disp_one_symb(painter,S_G,   COLOR(state),	140,	18);
+                 Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	145,	18); break;
+        case 54: Clcdc::disp_one_symb(painter,S_STAT, COLOR(state),	170,	18); break;
+
+        }
+    }
+}
+
 HD44780_PIXEL_UPDATE(Cti95_update_pixel)
 {
     // char size is 5x7 + cursor
@@ -103,7 +151,7 @@ HD44780_PIXEL_UPDATE(Cti95_update_pixel)
         const int gap = 6;
         int group = pos / 3;
         painter->setPen(COLOR(state));
-        painter->drawPoint( 9 + group*gap + pos*6 + x, 23 + y );
+        painter->drawPoint( 9 + group*gap + pos*6 + x, 22 + y );
     }
 }
 

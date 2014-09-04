@@ -118,7 +118,7 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 
     delete pLCDC;
     pLCDC		= new Clcdc_ti95(this);
-    pKEYB->fn_KeyMap = "ti-95.map";
+    pKEYB->fn_KeyMap = "ti95.map";
 
 }
 
@@ -430,6 +430,119 @@ quint8 Cti74::getKey()
             }
             if (KEY(K_CTRL))			data|=0x40;
             if (KEY(K_SHT))			data|=0x80;
+        }
+
+//        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
+
+    }
+
+    if (data>0) {
+
+        AddLog(LOG_KEYBOARD,tr("KEY PRESSED=%1").arg(data,2,16,QChar('0')));
+    }
+    return data;//^0xff;
+
+}
+
+
+quint8 Cti95::getKey()
+{
+
+    quint8 data=0;
+
+    if ((pKEYB->LastKey>0))
+    {
+
+
+        if (ks & 0x01) {
+            if (KEY(K_POW_OFF))			data|=0x01;
+            if (KEY('Q'))			data|=0x02;
+            if (KEY('A'))			data|=0x04;
+            if (KEY('Z'))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY(')'))			data|=0x20;
+            if (KEY('/'))			data|=0x40;
+            if (KEY('='))			data|=0x80;
+        }
+
+        if (ks & 0x02) {
+            if (KEY('{'))			data|=0x01;
+            if (KEY('W'))			data|=0x02;
+            if (KEY('S'))			data|=0x04;
+            if (KEY('X'))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY('3'))			data|=0x20;
+            if (KEY('+'))			data|=0x40;
+            if (KEY('2'))			data|=0x80;
+        }
+
+        if (ks & 0x04) {
+            if (KEY(K_F1))			data|=0x01;
+            if (KEY('E'))			data|=0x02;
+            if (KEY('D'))			data|=0x04;
+            if (KEY('C'))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY('6'))			data|=0x20;
+            if (KEY('-'))			data|=0x40;
+            if (KEY('5'))			data|=0x80;
+        }
+        if (ks & 0x08) {
+            if (KEY(K_F2))			data|=0x01;
+            if (KEY('R'))			data|=0x02;
+            if (KEY('F'))			data|=0x04;
+            if (KEY('V'))			data|=0x08;
+//            if (KEY(K_RUN))			data|=0x10;
+            if (KEY('9'))			data|=0x20;
+            if (KEY('*'))			data|=0x40;
+            if (KEY('8'))			data|=0x80;
+        }
+        if (ks & 0x10) {
+            if (KEY(K_F3))			data|=0x01;
+            if (KEY('T'))			data|=0x02;
+            if (KEY('G'))			data|=0x04;
+            if (KEY('B'))			data|=0x08;
+            if (KEY(' '))			data|=0x10;
+            if (KEY('0'))			data|=0x20;
+            if (KEY('.'))			data|=0x40;
+            if (KEY(K_SIGN))			data|=0x80;
+        }
+        if (ks & 0x20) {
+            if (KEY(K_F4))			data|=0x01;
+            if (KEY('Y'))			data|=0x02;
+            if (KEY('H'))			data|=0x04;
+            if (KEY('N'))			data|=0x08;
+            if (KEY(K_LA))			data|=0x10;
+            if (KEY('O'))			data|=0x20;
+            if (KEY('P'))			data|=0x40;
+            if (KEY('7'))			data|=0x80;
+        }
+        if (ks & 0x40) {
+            if (KEY(K_F5))			data|=0x01;
+            if (KEY('U'))			data|=0x02;
+            if (KEY('J'))			data|=0x04;
+            if (KEY('M'))			data|=0x08;
+            if (KEY(K_RA))		data|=0x10;
+            if (KEY('L'))			data|=0x20;
+            if (KEY(K_SHT))			data|=0x40;
+            if (KEY('4'))			data|=0x80;
+        }
+
+        if (ks & 0x80) {
+            if (KEY('('))		data|=0x01;
+            if (KEY('I'))			data|=0x02;
+            if (KEY('K'))			data|=0x04;
+//            if (KEY('/'))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+//            if (KEY(K_FN))			{
+//#if 0
+//                pCPU->logsw = true;
+//                pCPU->Check_Log();
+//#else
+//                data|=0x20;
+//#endif
+//            }
+            if (KEY(K_CLR))			data|=0x40;
+            if (KEY('1'))			data|=0x80;
         }
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);

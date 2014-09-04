@@ -39,7 +39,7 @@ public:
     CHD44780 *pHD44780;
 
     quint8 ks;
-    quint8 getKey();
+    virtual quint8 getKey();
     UINT8 m_clock_control;
     UINT8 m_banks;
     UINT8 m_power;
@@ -64,6 +64,8 @@ class Cti95 : public Cti74
 public:
     Cti95(CPObject *parent = 0);
     virtual ~Cti95();
+
+    virtual quint8 getKey();
 };
 
 #endif // TI74_H
