@@ -693,11 +693,11 @@ void Ccc40::addModule(QString item,CPObject *pPC)
     int _res = 0;
     QString moduleName;
     if (item=="PASCAL") moduleName = P_RES(":/cc40/SnapBasic.bin");
-    if (item=="MEMO") moduleName = P_RES(":/cc40/cc40_memoprocessor.bin");
+    if (item=="MEMO")   moduleName = P_RES(":/cc40/cc40_memoprocessor.bin");
     if (item=="FINANCE") moduleName = P_RES(":/cc40/cc40_finance.bin");
-    if (item=="STAT") moduleName = P_RES(":/cc40/cc40_statistics.bin");
-    if (item=="MATH") moduleName = P_RES(":/cc40/cc40_mathematics.bin");
-    if (item=="GAMES1")   moduleName = P_RES(":/cc40/cc40_games1.bin");
+    if (item=="STAT")   moduleName = P_RES(":/cc40/cc40_statistics.bin");
+    if (item=="MATH")   moduleName = P_RES(":/cc40/cc40_mathematics.bin");
+    if (item=="GAMES")  moduleName = P_RES(":/cc40/cc40_games1.bin");
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,

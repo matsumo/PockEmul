@@ -68,6 +68,7 @@
    <example brand="TEXAS INSTRUMENTS" idpocket="FINANCE" filename="./" name="Finance module" image=":/cc40/cartimg/ss-3006.png" connectortype="CC-40_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="STAT" filename="./" name="Statistic module" image=":/cc40/cartimg/ss-3008.png" connectortype="CC-40_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="MATH" filename="./" name="Mathematics module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="GAMES" filename="./" name="Game module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
 
 </demos>
  </demolauncher>

@@ -174,6 +174,78 @@ Ctms70c46::Ctms70c46(CPObject *parent, TMS7000_Models mod)
 {
 }
 
+bool Ctms70c46::init()
+{
+    Ctms7000::init();
+    m_control = 0;
+    return true;
+}
+
+void Ctms70c46::Reset()
+{
+    Ctms7000::Reset();
+    m_control = 0;
+    pPC->mem[0x10C] = 0xff;
+}
+
+UINT8 Ctms70c46::pf_read(UINT32 offset)
+{
+    switch (offset)
+    {
+    case 0x0c: return e_bus_data_r();
+    case 0x0e:    return 0xff;
+    case 0x0f:
+        // d0: slave _HSK
+        // d1: slave _BAV
+        // d2: unused?
+        // d3: IRQ active
+        return (pPC->LastKey>0)? 0x08:00;
+    default:
+        return Ctms7000::pf_read(offset);
+        break;
+    }
+
+    return 0;
+}
+
+UINT8 Ctms70c46::control_r()
+{
+    return m_control;
+}
+
+void Ctms70c46::control_w(UINT8 data)
+{
+    // d5: enable external databus
+    if (~m_control & data & 0x20)
+         e_bus_data_w(0xff); // go into high impedance
+
+    // d4: enable clock divider when accessing slow memory (not emulated)
+    // known fast memory areas: internal ROM/RAM, system RAM
+    // known slow memory areas: system ROM, cartridge ROM/RAM
+
+    // d0-d3(all bits?): clock divider when d4 is set and addressbus is in slow memory area
+    // needs to be measured, i just know that $30 is full speed, and $38 is about 4 times slower
+    m_control = data;
+}
+
+void Ctms70c46::pf_write(UINT32 offset,UINT8 data)
+{
+    switch (offset)
+    {
+    case 0x0c:
+        e_bus_data_w(data);
+        break;
+    case 0x0f:
+        // d0: master _HSK (setting it low(write 1) also clears IRQ)
+        // d1: master _BAV
+        // other bits: unused?
+        break;
+    default:
+        Ctms7000::pf_write(offset,data);
+        break;
+    }
+}
+
 //tms7020_device::tms7020_device(const machine_config &mconfig, const char *tag, device_t *owner, UINT32 clock)
 //    : tms7000_device(mconfig, TMS7020, "TMS7020", tag, owner, clock, ADDRESS_MAP_NAME(tms7020_mem), 0, "tms7020", __FILE__)
 //{
@@ -404,6 +476,7 @@ void Ctms7000::check_interrupts()
     if (!(info.m_sr & SR_I))
         return;
 
+
     // check for and handle interrupt
     for (int irqline = 0; irqline < 5; irqline++)
     {
@@ -414,7 +487,7 @@ void Ctms7000::check_interrupts()
         {
             // ack
             info.m_io_control[irqline > 2] &= ~(0x02 << shift);
-
+qWarning()<<"check_interrupts";
             flag_ext_interrupt(irqline);
             do_interrupt(irqline);
             return;
@@ -538,7 +611,7 @@ UINT8 Ctms7000::pf_read(UINT32 offset)
         {
             // note: port B is write-only, reading it returns the output value as if ddr is 0xff
             int port = offset / 2 - 2;
-            return (pPC->in( TMS7000_PORTA ) & ~info.m_port_ddr[port]) | (info.m_port_latch[port] & info.m_port_ddr[port]);
+            return (pPC->in( port ) & ~info.m_port_ddr[port]) | (info.m_port_latch[port] & info.m_port_ddr[port]);
         }
 
         // port direction (note: 7000 doesn't support it for port A)
@@ -966,7 +1039,7 @@ void Ctms7000::Regs_Info(UINT8 Type)
             sprintf(Regs_String,"%s%02X ",Regs_String,read_r8(i));
         sprintf(Regs_String,"%s    ",Regs_String);
         for (int i=0;i<0x10;i++)
-            sprintf(Regs_String,"%s%02X ",Regs_String,read_p(i));
+            sprintf(Regs_String,"%s%02X ",Regs_String,pf_read(i));
         break;
     }
 

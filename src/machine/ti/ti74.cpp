@@ -33,14 +33,14 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     SymbFname		= P_RES(":/ti74/ti74lcd.png");;
 
 
-    memsize		= 0x40000;
+    memsize		= 0x20000;
     InitMemValue	= 0x00;
 
     SlotList.clear();
-    SlotList.append(CSlot(52  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(60  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/tms70c46.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/ti74.bin")        , ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(128 ,0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+//    SlotList.append(CSlot(128 ,0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
 
 
     setDXmm(204);
@@ -72,7 +72,7 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 
 
     ioFreq = 0;             // Mandatory for Centronics synchronization
-    ptms7000cpu = (Ctms70c20*)pCPU;
+    ptms70c46cpu = (Ctms70c46*)pCPU;
 
     m_sysram[0] = NULL;
     m_sysram[1] = NULL;
@@ -91,61 +91,9 @@ void Cti74::power_w(UINT8 data)
 
     // stop running
     if (!m_power)
-        ptms7000cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
+        ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
 }
 
-UINT8 Cti74::sysram_r(UINT16 offset)
-{
-    // read system ram, based on addressing configured in bus_control_w
-    if (offset < m_sysram_end[0] && m_sysram_size[0] != 0)
-        return m_sysram[0][offset & (m_sysram_size[0] - 1)];
-    else if (offset < m_sysram_end[1] && m_sysram_size[1] != 0)
-        return m_sysram[1][(offset - m_sysram_end[0]) & (m_sysram_size[1] - 1)];
-    else
-        return 0xff;
-}
-
-void Cti74::sysram_w(UINT16 offset,UINT8 data)
-{
-    // write system ram, based on addressing configured in bus_control_w
-    if (offset < m_sysram_end[0] && m_sysram_size[0] != 0)
-        m_sysram[0][offset & (m_sysram_size[0] - 1)] = data;
-    else if (offset < m_sysram_end[1] && m_sysram_size[1] != 0)
-        m_sysram[1][(offset - m_sysram_end[0]) & (m_sysram_size[1] - 1)] = data;
-}
-
-UINT8 Cti74::bus_control_r()
-{
-    return m_bus_control;
-}
-
-void Cti74::bus_control_w(UINT8 data)
-{
-    // d0,d1: auto enable clock divider on cartridge memory access (d0: area 1, d1: area 2)
-
-    // d2,d3: system ram addressing
-    // 00: 8K, 8K @ $1000-$2fff, $3000-$4fff
-    // 01: 8K, 2K @ $1000-$2fff, $3000-$37ff
-    // 10: 2K, 8K @ $1000-$17ff, $1800-$37ff
-    // 11: 2K, 2K @ $1000-$17ff, $1800-$1fff
-    int d2 = (data & 4) ? 0x0800 : 0x2000;
-    int d3 = (data & 8) ? 0x0800 : 0x2000;
-    m_sysram_end[0] = d3;
-    m_sysram_mask[0] = d3 - 1;
-    m_sysram_end[1] = d3 + d2;
-    m_sysram_mask[1] = d2 - 1;
-
-    // d4,d5: cartridge memory addressing
-    // 00: 2K @ $5000-$57ff & $5800-$5fff
-    // 01: 8K @ $5000-$6fff & $7000-$8fff
-    // 10:16K @ $5000-$8fff & $9000-$cfff
-    // 11: 8K @ $1000-$2fff & $3000-$4fff - system ram is disabled
-
-    // d6: auto enable clock divider on system rom access
-
-    // d7: unused?
-    m_bus_control = data;
-}
 
 bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
 {
@@ -155,66 +103,31 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
 
     // CPU RAM
-    if (*d==0x0110) { bus_control_w(data); return false; }
-    if (*d==0x0111) { power_w(data); return false; }
-    if (*d==0x0115) { fillSoundBuffer((data & 1) ? 0x7f : 0); return false; }
-    if (*d==0x0119) {
-        RomBank = data & 0x03; /*qWarning()<<"romBank:"<<RomBank;*/
-        RamBank = (data >> 2 & 3);
-        m_banks = data & 0x0f;
-        return true;
-    }
-    if (*d==0x011A) { clock_w(data); return false; }
-    if (*d==0x011E) {
-//        qWarning()<<"pHD44780->control_write:"<<data;
-        pHD44780->control_write(data);
-        pLCDC->redraw = true;
-        return false;
-    }
-    if (*d==0x011F) {
-//        qWarning()<<"pHD44780->data_write:"<<data;
-        pHD44780->data_write(data);
-        pLCDC->redraw = true;
-        return false;
-    }
-    if ( (*d>=0x0100) && (*d<=0x010B) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
+
+    if   (*d==0x010C) {  ks = data; }
+    if ( (*d>=0x0100) && (*d<=0x010F) )	{ ptms70c46cpu->pf_write(*d-0x100,data); return false;	}
+
+    if (*d==0x0118) { ptms70c46cpu->control_w(data); return true; }
 
     if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
-    if ( (*d>=0x1000) && (*d<=0x3FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
-    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ *d += 0x1C000 + ( RamBank * 0x8000 );	return false; } // system ROM
+    if   (*d==0x1000) { pHD44780->control_write(data); pLCDC->redraw = true; return false; }
+    if   (*d==0x1001) { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
+    if ( (*d>=0x1000) && (*d<=0x1FFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return true;	}  // CPU RAM
+    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return false; } // system ROM
     if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF000) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
-
-
     return true;
 }
 
 bool Cti74::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
-    Q_UNUSED(d)
-    Q_UNUSED(data)
-
     if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
-
-    if (*d==0x0110) { *data = bus_control_r(); return false; }
-    if (*d==0x0114) { *data = 1; return false; }
-    if (*d==0x0116) { *data = 1; return false; }
-    if (*d==0x0119) { *data = m_banks; return false; }
-    if (*d==0x011A) { *data = clock_r(); return false; }
-    if (*d==0x011E) { *data = pHD44780->control_read();
-//        qWarning()<<"pHD44780->control_read:"<<*data;
-        return false; }
-    if (*d==0x011F) { *data = pHD44780->data_read();
-//        qWarning()<<"pHD44780->data_read:"<<*data;
-        return false; }
-
-    if ( (*d>=0x0100) && (*d<=0x010B) )	{ *data = ptms7000cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
-
-    if ( (*d>=0x1000) && (*d<=0x3FFF) )	{ *data = sysram_r(*d-0x1000); return false;	}  // CPU RAM
-
-    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ *d += 0x1C000 + ( RamBank * 0x8000 );	return true; } // Cartridge
+    if ( (*d>=0x0100) && (*d<=0x010F) )	{ *data = ptms70c46cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
+    if   (*d==0x0118) { *data = ptms70c46cpu->control_r(); return false; }
+    if   (*d==0x1000) { *data = pHD44780->control_read(); return false; }
+    if   (*d==0x1001) { *data = pHD44780->data_read(); return false; }
     if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return true; } // system ROM
-
     return true;
 }
 
@@ -226,11 +139,12 @@ UINT8 Cti74::in(UINT8 Port)
 
     switch (Port) {
     case TMS7000_PORTA: // keyboard read
+        qWarning()<<"strobe getkey:"<<ks;
         return getKey();
         break;
     case TMS7000_PORTB: break;
     case TMS7000_PORTC: break;
-    case TMS7000_PORTD: break;
+    case TMS7000_PORTD:  return 0x00; break;
     default :break;
     }
 
@@ -241,12 +155,17 @@ UINT8 Cti74::out(UINT8 Port, UINT8 Value)
 {
     switch (Port) {
     case TMS7000_PORTA: break;
-    case TMS7000_PORTB: // Keyboard strobe
-//        qWarning()<<"strobe:"<<Value;
-        ks = Value;
+    case TMS7000_PORTB: RomBank = Value & 0x03;
+        // d2: power-on latch
+        if (~Value & 4 && m_power)
+        {
+            m_power = 0;
+            ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE); // stop running
+        }
         break;
     case TMS7000_PORTC: break;
     case TMS7000_PORTD: break;
+    case TMS7000_PORTE: break;
     default :break;
     }
 
@@ -258,42 +177,7 @@ UINT8 Cti74::clock_r()
     return m_clock_control;
 }
 
-void Cti74::clock_w(UINT8 data)
-{
-    // d3: enable clock divider
-    if (data & 8)
-    {
-        if (m_clock_control != (data & 0x0f))
-        {
-            // d0-d2: clock divider (2.5MHz /3 to /17 in steps of 2)
-            double div = (~data & 7) * 2 + 1;
-            qWarning()<<"frequency change to "<<2500000/div;
-            setfrequency(2500000/div);
-//            m_maincpu->set_clock_scale(1 / div);
-        }
-    }
-    else if (m_clock_control & 8)
-    {
-        // high to low
-        setfrequency(2500000);
-        qWarning()<<"frequency change to 2500000";
-//        m_maincpu->set_clock_scale(1);
-    }
 
-    m_clock_control = data & 0x0f;
-}
-
-void Cti74::init_sysram(int chip, UINT16 size)
-{
-    if (m_sysram[chip] == NULL)
-    {
-        // init to largest possible
-        m_sysram[chip] = (UINT8 *)malloc(0x2000*sizeof(UINT8));
-    }
-
-//	m_nvram[chip]->set_base(m_sysram[chip], size);
-    m_sysram_size[chip] = size;
-}
 
 bool Cti74::init()
 {
@@ -303,9 +187,6 @@ bool Cti74::init()
 #endif
     CpcXXXX::init();
     pHD44780->init();
-
-    init_sysram(0, 0x800); // default to 6KB
-    init_sysram(1, 0x800); // "
 
     initExtension();
     Reset();
@@ -341,6 +222,21 @@ bool Cti74::run()
         pKEYB->LastKey = 0;
     }
 
+    if (pKEYB->LastKey == K_FN) {
+        pCPU->logsw = true;
+        pCPU->Check_Log();
+    }
+
+    if (pKEYB->LastKey>0) {
+        if (ptms70c46cpu->info.m_idle_state)
+        {
+            ptms70c46cpu->info.m_icount -= 17;
+            ptms70c46cpu->info.m_pc++;
+            ptms70c46cpu->info.m_idle_state = false;
+        }
+        else
+            ptms70c46cpu->info.m_icount -= 19;
+    }
     CpcXXXX::run();
 
     return true;
@@ -404,81 +300,83 @@ quint8 Cti74::getKey()
 
 
         if (ks & 0x01) {
-            if (KEY('1'))			data|=0x01;
-            if (KEY('2'))			data|=0x02;
-            if (KEY('3'))			data|=0x04;
-            if (KEY('4'))			data|=0x08;
-            if (KEY('5'))			data|=0x10;
-            if (KEY('6'))			data|=0x20;
-            if (KEY('7'))			data|=0x40;
-            if (KEY('8'))			data|=0x80;
-        }
-        if (ks & 0x02) {
-            if (KEY('Q'))			data|=0x01;
-            if (KEY('W'))			data|=0x02;
-            if (KEY('E'))			data|=0x04;
-            if (KEY('R'))			data|=0x08;
-            if (KEY('T'))			data|=0x10;
-            if (KEY('Y'))			data|=0x20;
-            if (KEY('U'))			data|=0x40;
-            if (KEY('I'))			data|=0x80;
-        }
-        if (ks & 0x04) {
-            if (KEY('A'))			data|=0x01;
-            if (KEY('S'))			data|=0x02;
-            if (KEY('D'))			data|=0x04;
-            if (KEY('F'))			data|=0x08;
-            if (KEY('G'))			data|=0x10;
-            if (KEY('H'))			data|=0x20;
+            if (KEY('M'))			data|=0x01;
+            if (KEY('K'))			data|=0x02;
+            if (KEY('I'))			data|=0x04;
+            if (KEY(K_LA))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY('U'))			data|=0x20;
             if (KEY('J'))			data|=0x40;
-            if (KEY('K'))			data|=0x80;
+            if (KEY('N'))			data|=0x80;
+        }
+
+        if (ks & 0x02) {
+            if (KEY(','))			data|=0x01;
+            if (KEY('L'))			data|=0x02;
+            if (KEY('O'))			data|=0x04;
+            if (KEY(K_RA))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY('Y'))			data|=0x20;
+            if (KEY('H'))			data|=0x40;
+            if (KEY('B'))			data|=0x80;
+        }
+
+        if (ks & 0x04) {
+            if (KEY(' '))			data|=0x01;
+            if (KEY(';'))			data|=0x02;
+            if (KEY('P'))			data|=0x04;
+            if (KEY(K_UA))			data|=0x08;
+//            if (KEY(''))			data|=0x10;
+            if (KEY('T'))			data|=0x20;
+            if (KEY('G'))			data|=0x40;
+            if (KEY('V'))			data|=0x80;
         }
         if (ks & 0x08) {
-            if (KEY('Z'))			data|=0x01;
-            if (KEY('X'))			data|=0x02;
-            if (KEY('C'))			data|=0x04;
-            if (KEY('V'))			data|=0x08;
-            if (KEY('B'))			data|=0x10;
-            if (KEY('N'))			data|=0x20;
-            if (KEY('M'))			data|=0x40;
-            if (KEY(','))			data|=0x80;
+            if (KEY(K_RET))			data|=0x01;
+//            if (KEY(''))			data|=0x02;
+            if (KEY(K_CLR))			data|=0x04;
+            if (KEY(K_DA))			data|=0x08;
+            if (KEY(K_RUN))			data|=0x10;
+            if (KEY('R'))			data|=0x20;
+            if (KEY('F'))			data|=0x40;
+            if (KEY('C'))			data|=0x80;
         }
         if (ks & 0x10) {
-//            if (KEY(''))			data|=0x01;
-            if (KEY(' '))			data|=0x02;
-//            if (KEY(''))			data|=0x04;
-            if (KEY(';'))			data|=0x08;
-            if (KEY('L'))			data|=0x10;
-            if (KEY('='))			data|=0x20;
-            if (KEY('P'))			data|=0x40;
-            if (KEY('O'))			data|=0x80;
+            if (KEY('?'))			data|=0x01;
+            if (KEY('1'))			data|=0x02;
+            if (KEY('4'))			data|=0x04;
+            if (KEY('7'))			data|=0x08;
+            if (KEY(K_BRK))			data|=0x10;
+            if (KEY('E'))			data|=0x20;
+            if (KEY('D'))			data|=0x40;
+            if (KEY('X'))			data|=0x80;
         }
         if (ks & 0x20) {
             if (KEY('0'))			data|=0x01;
-            if (KEY(K_CLR))			data|=0x02;
-            if (KEY(K_LA))			data|=0x04;
-            if (KEY(K_RA))			data|=0x08;
-            if (KEY(K_UA))			data|=0x10;
-            if (KEY('/'))			data|=0x20;
-            if (KEY(K_DA))			data|=0x40;
-            if (KEY('9'))			data|=0x80;
+            if (KEY('2'))			data|=0x02;
+            if (KEY('5'))			data|=0x04;
+            if (KEY('8'))			data|=0x08;
+            if (KEY(K_MOD))			data|=0x10;
+            if (KEY('W'))			data|=0x20;
+            if (KEY('S'))			data|=0x40;
+            if (KEY('Z'))			data|=0x80;
         }
         if (ks & 0x40) {
-//            if (KEY(''))			data|=0x01;
-            if (KEY('.'))			data|=0x02;
-            if (KEY('+'))			data|=0x04;
-            if (KEY(K_RET))			data|=0x08;
-            if (KEY('-'))			data|=0x10;
-//            if (KEY(''))			data|=0x20;
-//            if (KEY(''))			data|=0x40;
-            if (KEY('*'))			data|=0x80;
+            if (KEY('.'))			data|=0x01;
+            if (KEY('3'))			data|=0x02;
+            if (KEY('6'))			data|=0x04;
+            if (KEY('9'))			data|=0x08;
+            if (KEY(K_POW_OFF))			data|=0x10;
+            if (KEY('Q'))			data|=0x20;
+            if (KEY('A'))			data|=0x40;
+//            if (KEY(''))			data|=0x80;
         }
 
         if (ks & 0x80) {
-            if (KEY(K_CTRL))		data|=0x01;
-            if (KEY(K_SHT))			data|=0x02;
-            if (KEY(K_BRK))			data|=0x04;
-            if (KEY(K_RUN))			data|=0x08;
+            if (KEY('+'))		data|=0x01;
+            if (KEY('-'))			data|=0x02;
+            if (KEY('*'))			data|=0x04;
+            if (KEY('/'))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
             if (KEY(K_FN))			{
 #if 0
@@ -488,8 +386,8 @@ quint8 Cti74::getKey()
                 data|=0x20;
 #endif
             }
-            if (KEY(K_POW_OFF))			data|=0x40;
-//            if (KEY(''))			data|=0x80;
+            if (KEY(K_CTRL))			data|=0x40;
+            if (KEY(K_SHT))			data|=0x80;
         }
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);

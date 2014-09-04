@@ -52,6 +52,7 @@
         <file>keymap/ce1560.map</file>
         <file>keymap/ce140f.map</file>
         <file>keymap/cc40.map</file>
+        <file>keymap/ti74.map</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

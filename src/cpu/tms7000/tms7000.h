@@ -42,7 +42,8 @@ enum
     TMS7000_PORTA = 0,      /* read-only on 70x0 */
     TMS7000_PORTB,          /* write-only */
     TMS7000_PORTC,
-    TMS7000_PORTD
+    TMS7000_PORTD,
+    TMS7000_PORTE           /* TMS70C46 only */
 };
 
 enum TMS7000_Models
@@ -385,16 +386,25 @@ public:
 //	DECLARE_WRITE8_MEMBER(dockbus_data_w);
 
 //	// access I/O port E if databus is disabled
-//	DECLARE_READ8_MEMBER(e_bus_data_r) { return (space.debugger_access()) ? 0xff : ((m_control & 0x20) ? 0xff : m_io->read_byte(TMS7000_PORTE)); }
-//	DECLARE_WRITE8_MEMBER(e_bus_data_w) { if (~m_control & 0x20) m_io->write_byte(TMS7000_PORTE, data); }
+    UINT8 e_bus_data_r() { return ((m_control & 0x20) ? 0xff : portE); }
+    void e_bus_data_w(UINT8 data) { if (~m_control & 0x20) portE=data; }
+
+    // device-level overrides
+    virtual bool init();
+    virtual void Reset();
+
+    virtual void pf_write(UINT32 offset, UINT8 data);
+    virtual UINT8 pf_read(UINT32 offset);
+
+    UINT8 control_r();
+    void control_w(UINT8 data);
 
 protected:
-    // device-level overrides
-//    virtual bool init();
-//    virtual void Reset();
+
 
 private:
     UINT8 m_control;
+    UINT8 portE;
 };
 
 //extern const device_type TMS7000;

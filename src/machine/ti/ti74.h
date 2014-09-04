@@ -3,7 +3,7 @@
 
 
 class CPObject;
-class Ctms7000;
+class Ctms70c46;
 class CHD44780;
 
 #include "pcxxxx.h"
@@ -35,7 +35,7 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
-    Ctms7000 *ptms7000cpu;
+    Ctms70c46 *ptms70c46cpu;
     CHD44780 *pHD44780;
 
     quint8 ks;
@@ -55,11 +55,6 @@ public:
     void clock_w(UINT8 data);
     UINT8 clock_r();
     void power_w(UINT8 data);
-    void bus_control_w(UINT8 data);
-    UINT8 bus_control_r();
-    void sysram_w(UINT16 offset, UINT8 data);
-    UINT8 sysram_r(UINT16 offset);
-    void init_sysram(int chip, UINT16 size);
 };
 
 
