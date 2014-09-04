@@ -222,10 +222,10 @@ bool Cti74::run()
         pKEYB->LastKey = 0;
     }
 
-    if (pKEYB->LastKey == K_FN) {
-        pCPU->logsw = true;
-        pCPU->Check_Log();
-    }
+//    if (pKEYB->LastKey == K_FN) {
+//        pCPU->logsw = true;
+//        pCPU->Check_Log();
+//    }
 
     if (pKEYB->LastKey>0) {
         if (ptms70c46cpu->info.m_idle_state)

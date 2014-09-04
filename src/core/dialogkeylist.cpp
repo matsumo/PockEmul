@@ -54,7 +54,7 @@ void DialogKeyList::slotDelKey()
 
 void DialogKeyList::slotInitSize()
 {
-	i->Rect.setRect(0,0,20,20);
+    i->Rect.moveTo(0,0);
 	pPC->pKEYB->modified = true;
 }
 
