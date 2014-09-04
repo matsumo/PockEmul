@@ -49,10 +49,7 @@ public:
 
     virtual void initExtension(void);
 
-    UINT8 *m_sysram[2];
-    UINT16 m_sysram_size[2];
-    UINT16 m_sysram_end[2];
-    UINT16 m_sysram_mask[2];
+
 
     void clock_w(UINT8 data);
     UINT8 clock_r();

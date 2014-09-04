@@ -34,18 +34,14 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     LcdFname		= P_RES(":/ti74/ti74lcd.png");
     SymbFname		= P_RES(":/ti74/ti74lcd.png");;
 
-
     memsize		= 0x20000;
     InitMemValue	= 0x00;
 
     SlotList.clear();
     SlotList.append(CSlot(60  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(32  , 0x4000 ,	""                  , ""	, CSlot::RAM , "CARTRIDGE"));
-
     SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/tms70c46.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/ti74.bin")        , ""	, CSlot::ROM , "ROM"));
-//    SlotList.append(CSlot(128 ,0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
-
 
     setDXmm(204);
     setDYmm(95);
@@ -61,12 +57,12 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     Lcd_ratio_X	= 2.25;
     Lcd_ratio_Y	= 2.25;
 
-    Lcd_Symb_X	= 50;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 50;//(int) (35 * 1.18);
+    Lcd_Symb_X	= 50;
+    Lcd_Symb_Y	= 50;
     Lcd_Symb_DX	= 210;
     Lcd_Symb_DY	= 23;
-    Lcd_Symb_ratio_X	= 2;//1.18;
-    Lcd_Symb_ratio_Y	= 2;//1.18;
+    Lcd_Symb_ratio_X	= 2;
+    Lcd_Symb_ratio_Y	= 2;
 
     pLCDC		= new Clcdc_ti74(this);
     pCPU		= new Ctms70c46(this);
@@ -74,12 +70,9 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     pKEYB		= new Ckeyb(this,"ti74.map");
     pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
-
     ioFreq = 0;             // Mandatory for Centronics synchronization
     ptms70c46cpu = (Ctms70c46*)pCPU;
 
-    m_sysram[0] = NULL;
-    m_sysram[1] = NULL;
 }
 
 Cti74::~Cti74() {
@@ -114,12 +107,12 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     Lcd_ratio_X	= 340.0/Lcd_DX;
     Lcd_ratio_Y	= 75.0/Lcd_DY;
 
-    Lcd_Symb_X	= 50;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 50;//(int) (35 * 1.18);
+    Lcd_Symb_X	= 50;
+    Lcd_Symb_Y	= 50;
     Lcd_Symb_DX	= 210;
     Lcd_Symb_DY	= 23;
-    Lcd_Symb_ratio_X	= 2;//1.18;
-    Lcd_Symb_ratio_Y	= 2;//1.18;
+    Lcd_Symb_ratio_X	= 2;
+    Lcd_Symb_ratio_Y	= 2;
 
     delete pLCDC;
     pLCDC		= new Clcdc_ti95(this);
@@ -186,7 +179,6 @@ UINT8 Cti74::in(UINT8 Port)
 
     switch (Port) {
     case TMS7000_PORTA: // keyboard read
-        qWarning()<<"strobe getkey:"<<ks;
         return getKey();
         break;
     case TMS7000_PORTB: break;
@@ -269,22 +261,6 @@ bool Cti74::run()
         pKEYB->LastKey = 0;
     }
 
-//    if (pKEYB->LastKey == K_FN) {
-//        pCPU->logsw = true;
-//        pCPU->Check_Log();
-//    }
-
-//    if (pKEYB->LastKey>0)
-//    {
-//        if (ptms70c46cpu->info.m_idle_state)
-//        {
-//            ptms70c46cpu->info.m_icount -= 17;
-//            ptms70c46cpu->info.m_pc++;
-//            ptms70c46cpu->info.m_idle_state = false;
-//        }
-//        else
-//            ptms70c46cpu->info.m_icount -= 19;
-//    }
     CpcXXXX::run();
 
     return true;
@@ -296,12 +272,14 @@ bool Cti95::run()
         TurnON();
         pKEYB->LastKey = 0;
     }
-        if (ptms70c46cpu->info.m_idle_state)
-        {
-            ptms70c46cpu->info.m_icount -= 17;
-            ptms70c46cpu->info.m_pc++;
-            ptms70c46cpu->info.m_idle_state = false;
-        }
+
+    if (ptms70c46cpu->info.m_idle_state)
+    {
+        ptms70c46cpu->info.m_icount -= 17;
+        ptms70c46cpu->info.m_pc++;
+        ptms70c46cpu->info.m_idle_state = false;
+    }
+
     CpcXXXX::run();
 
     return true;
@@ -357,13 +335,10 @@ bool Cti74::LoadConfig(QXmlStreamReader *xmlIn)
 //#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 quint8 Cti74::getKey()
 {
-
     quint8 data=0;
 
     if ((pKEYB->LastKey>0))
     {
-
-
         if (ks & 0x01) {
             if (KEY('M'))			data|=0x01;
             if (KEY('K'))			data|=0x02;
@@ -470,15 +445,12 @@ quint8 Cti74::getKey()
 
 quint8 Cti95::getKey()
 {
-
     quint8 data=0;
 
     if ((pKEYB->LastKey>0))
     {
-
-
         if (ks & 0x01) {
-            if (KEY(K_POW_OFF))			data|=0x01;
+            if (KEY(K_POW_OFF))		data|=0x01;
             if (KEY('Q'))			data|=0x02;
             if (KEY('A'))			data|=0x04;
             if (KEY('Z'))			data|=0x08;
@@ -580,31 +552,12 @@ quint8 Cti95::getKey()
 
 }
 
-//void Cti74::keyReleaseEvent(QKeyEvent *event)
-//{
-////if (event->isAutoRepeat()) return;
-
-//    if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nKEY RELEASED= %c\n",event->key());
-//    CpcXXXX::keyReleaseEvent(event);
-//}
-
-
-//void Cti74::keyPressEvent(QKeyEvent *event)
-//{
-////    if (event->isAutoRepeat()) return;
-
-//    if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nKEY PRESSED= %c\n",event->key());
-//    CpcXXXX::keyPressEvent(event);
-//}
 
 bool Cti74::Get_Connector(void) {
-
-
     return true;
 }
+
 bool Cti74::Set_Connector(void) {
-
-
     return true;
 }
 
@@ -660,16 +613,11 @@ void Cti74::addModule(QString item,CPObject *pPC)
     Q_UNUSED(pPC)
 
     qWarning()<<"Add Module:"<< item;
-    if ( currentSlot!=3) return;
+    if ( currentSlot!=1) return;
 
     int _res = 0;
     QString moduleName;
-    if (item=="PASCAL") moduleName = P_RES(":/cc40/SnapBasic.bin");
-    if (item=="MEMO")   moduleName = P_RES(":/cc40/cc40_memoprocessor.bin");
-    if (item=="FINANCE") moduleName = P_RES(":/cc40/cc40_finance.bin");
-    if (item=="STAT")   moduleName = P_RES(":/cc40/cc40_statistics.bin");
-    if (item=="MATH")   moduleName = P_RES(":/cc40/cc40_mathematics.bin");
-    if (item=="GAMES")  moduleName = P_RES(":/cc40/cc40_games1.bin");
+    if (item=="PASCAL74") moduleName = P_RES(":/ti74/ti74_pascal.bin");
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,

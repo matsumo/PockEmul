@@ -10,5 +10,6 @@
         <file>ti74/ti74lcd.png</file>
         <file>ti74/cartimg/finance.png</file>
         <file>ti74/cartimg/pascal.png</file>
+        <file>ti74/ti74_pascal.bin</file>
     </qresource>
 </RCC>
