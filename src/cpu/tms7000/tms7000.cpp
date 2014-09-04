@@ -33,6 +33,7 @@
 #include "pcxxxx.h"
 #include "Log.h"
 #include "Inter.h"
+#include "Keyb.h"
 #include "Debug.h"
 #include "ui/cregsz80widget.h"
 
@@ -199,7 +200,7 @@ UINT8 Ctms70c46::pf_read(UINT32 offset)
         // d1: slave _BAV
         // d2: unused?
         // d3: IRQ active
-        return (pPC->LastKey>0)? 0x08:00;
+        return (pPC->pKEYB->LastKey>0)? 0x08:00;
     default:
         return Ctms7000::pf_read(offset);
         break;

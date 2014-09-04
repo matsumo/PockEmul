@@ -72,6 +72,7 @@ public:
     Cti95(CPObject *parent = 0);
     virtual ~Cti95();
 
+    virtual bool run();
     virtual quint8 getKey();
 };
 

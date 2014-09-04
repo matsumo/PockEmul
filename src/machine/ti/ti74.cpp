@@ -274,16 +274,34 @@ bool Cti74::run()
 //        pCPU->Check_Log();
 //    }
 
-    if (pKEYB->LastKey>0) {
+//    if (pKEYB->LastKey>0)
+//    {
+//        if (ptms70c46cpu->info.m_idle_state)
+//        {
+//            ptms70c46cpu->info.m_icount -= 17;
+//            ptms70c46cpu->info.m_pc++;
+//            ptms70c46cpu->info.m_idle_state = false;
+//        }
+//        else
+//            ptms70c46cpu->info.m_icount -= 19;
+//    }
+    CpcXXXX::run();
+
+    return true;
+}
+
+bool Cti95::run()
+{
+    if (pKEYB->LastKey == K_POW_ON) {
+        TurnON();
+        pKEYB->LastKey = 0;
+    }
         if (ptms70c46cpu->info.m_idle_state)
         {
             ptms70c46cpu->info.m_icount -= 17;
             ptms70c46cpu->info.m_pc++;
             ptms70c46cpu->info.m_idle_state = false;
         }
-        else
-            ptms70c46cpu->info.m_icount -= 19;
-    }
     CpcXXXX::run();
 
     return true;
@@ -593,12 +611,22 @@ bool Cti74::Set_Connector(void) {
 extern int ask(QWidget *parent,QString msg,int nbButton);
 void Cti74::ComputeKey()
 {
+    if (ptms70c46cpu->info.m_idle_state)
+    {
+        ptms70c46cpu->info.m_icount -= 17;
+        ptms70c46cpu->info.m_pc++;
+        ptms70c46cpu->info.m_idle_state = false;
+    }
+    else
+        ptms70c46cpu->info.m_icount -= 19;
 
     int _slot = -1;
     if (KEY(0x240)) _slot = 1;
 
-    qWarning()<<"ComputKey:"<<_slot;
+//    qWarning()<<"ComputKey:"<<_slot;
     pKEYB->keyPressedList.removeAll(0x240);
+
+
 
     if (_slot == -1) return;
     int _response = 0;

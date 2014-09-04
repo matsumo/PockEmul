@@ -1059,6 +1059,7 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
 
     pKEYB->keyPressedList.removeAll(mapKey(event));
 	pKEYB->LastKey = 0;
+    ComputeKey();
 
 }
 
@@ -1124,7 +1125,7 @@ int CPObject::mapKey(QKeyEvent * event) {
 
 void CPObject::keyPressEvent (QKeyEvent * event )
 {
-//    qWarning()<<"key pressed";
+    qWarning()<<"key pressed";
 //    if (event->isAutoRepeat()) return;
 	if (!pKEYB) return;	// if no Keyboard then return;
 
@@ -1137,6 +1138,7 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     if (pKEYB->LastKey>0) {
         // Add th key to Key pressed buffer
         if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) pKEYB->keyPressedList.append(pKEYB->LastKey);
+        ComputeKey();
     }
     else {
         event->ignore();
