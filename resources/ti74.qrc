@@ -2,7 +2,11 @@
     <qresource prefix="/">
         <file>ti74/ti74.png</file>
         <file>ti74/ti74.bin</file>
-        <file>ti74/ti74lcd.png</file>
         <file>ti74/tms70c46.bin</file>
+        <file>ti74/ti95.png</file>
+        <file>ti74/c70011.bin</file>
+        <file>ti74/hn61256pc95.bin</file>
+        <file>ti74/ti95lcd.png</file>
+        <file>ti74/ti74lcd.png</file>
     </qresource>
 </RCC>

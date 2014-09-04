@@ -60,7 +60,7 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     Lcd_Symb_X	= 50;//(int) (45 * 1.18);
     Lcd_Symb_Y	= 50;//(int) (35 * 1.18);
     Lcd_Symb_DX	= 210;
-    Lcd_Symb_DY	= 20;
+    Lcd_Symb_DY	= 23;
     Lcd_Symb_ratio_X	= 2;//1.18;
     Lcd_Symb_ratio_Y	= 2;//1.18;
 
@@ -81,7 +81,49 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 Cti74::~Cti74() {
 }
 
+Cti95::Cti95(CPObject *parent)	: Cti74(parent)
+{								//[constructor]
+    setfrequency( (int) 4000000);
+    setcfgfname(QString("ti95"));
 
+    SessionHeader	= "TI95PKM";
+    Initial_Session_Fname ="ti95.pkm";
+
+    BackGroundFname	= P_RES(":/ti74/ti95.png");
+    LcdFname		= P_RES(":/ti74/ti95lcd.png");
+    SymbFname		= P_RES("");;
+
+    memsize		= 0x20000;
+    InitMemValue	= 0x00;
+
+    SlotList.clear();
+    SlotList.append(CSlot(60  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/c70011.bin")  , ""	, CSlot::ROM , "ROM cpu"));
+    SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/hn61256pc95.bin")        , ""	, CSlot::ROM , "ROM"));
+
+
+    Lcd_X		= 142;
+    Lcd_Y		= 40;
+    Lcd_DX		= 130;
+    Lcd_DY		= 30;
+    Lcd_ratio_X	= 340.0/Lcd_DX;
+    Lcd_ratio_Y	= 75.0/Lcd_DY;
+
+    Lcd_Symb_X	= 50;//(int) (45 * 1.18);
+    Lcd_Symb_Y	= 50;//(int) (35 * 1.18);
+    Lcd_Symb_DX	= 210;
+    Lcd_Symb_DY	= 23;
+    Lcd_Symb_ratio_X	= 2;//1.18;
+    Lcd_Symb_ratio_Y	= 2;//1.18;
+
+    delete pLCDC;
+    pLCDC		= new Clcdc_ti95(this);
+    pKEYB->fn_KeyMap = "ti-95.map";
+
+}
+
+Cti95::~Cti95() {
+}
 
 void Cti74::power_w(UINT8 data)
 {

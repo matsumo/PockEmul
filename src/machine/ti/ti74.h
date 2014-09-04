@@ -57,5 +57,13 @@ public:
     void power_w(UINT8 data);
 };
 
+class Cti95 : public Cti74
+{
+    Q_OBJECT
+
+public:
+    Cti95(CPObject *parent = 0);
+    virtual ~Cti95();
+};
 
 #endif // TI74_H

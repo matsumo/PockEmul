@@ -7,8 +7,6 @@
 #define BIT(x,n) (((x)>>(n))&1)
 
 
-
-
 Clcdc_ti74::Clcdc_ti74(CPObject *parent)	: Clcdc(parent){						//[constructor]
 
     Color_Off.setRgb(
@@ -17,6 +15,9 @@ Clcdc_ti74::Clcdc_ti74(CPObject *parent)	: Clcdc(parent){						//[constructor]
                         (int) (99*contrast));
 }
 
+Clcdc_ti95::Clcdc_ti95(CPObject *parent)	: Clcdc_ti74(parent){
+
+}
 
 void Clcdc_ti74::disp_symb(void)
 {
@@ -28,43 +29,40 @@ void Clcdc_ti74::disp_symb(void)
 }
 
 #define COLOR(b)	( ( (b) ) ? Color_On : Color_Off)
-#if 1
 HD44780_PIXEL_UPDATE(Cti74_update_pixel_symb)
 {
     if (line == 1 && pos == 15)
     {
-        // the last char is used to control lcd indicators
-        // reference _________________...
-        // output#  |10  11     12     13     14      0      1      2      3   4
-        // above    | <  SHIFT  CTL    FN     DEG    RAD    GRAD   I/O    UCL  >
+        // TI-74 ref._________________...
+        // output#  |10     11     12     13     14      2      3      4
+        // above    | <    SHIFT   CTL    FN     I/O    UCL    _LOW    >
         // ---- raw lcd screen here ----
-        // under    |    ERROR   v      v      v      v      v      v    _LOW
-        // output#  |    60     61     62     63     50     51     52     53
+        // under    |      BASIC   CALC   DEG    RAD    GRAD   STAT
+        // output#  |       63     64      1     62     53     54
         int id = y*10+x;
         switch (id) {
-        case 0:  Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	140,	0); break;
-        case 1:  Clcdc::disp_one_symb(painter,S_G,   COLOR(state),	160,	0);
-                 Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	165,	0); break;
-        case 2:  Clcdc::disp_one_symb(painter,S_IO,  COLOR(state),	190,	0); break;
-        case 3:  Clcdc::disp_one_symb(painter,S_UCL, COLOR(state),	215,	0); break;
-        case 4:  Clcdc::disp_one_symb(painter,S_SUP, COLOR(state),	240,	0); break;
         case 10: Clcdc::disp_one_symb(painter,S_INF, COLOR(state),	  0,	0); break;
         case 11: Clcdc::disp_one_symb(painter,S_SHIFT, COLOR(state), 20,	0); break;
         case 12: Clcdc::disp_one_symb(painter,S_CTL, COLOR(state),	 50,	0); break;
         case 13: Clcdc::disp_one_symb(painter,S_FN,  COLOR(state),	 80,	0); break;
-        case 14: Clcdc::disp_one_symb(painter,S_DEG, COLOR(state),	110,	0); break;
+        case 14:  Clcdc::disp_one_symb(painter,S_IO,  COLOR(state),	110,	0); break;
+        case 2:  Clcdc::disp_one_symb(painter,S_UCL, COLOR(state),	140,	0); break;
+        case 3:  Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	170,	0); break;
+        case 4:  Clcdc::disp_one_symb(painter,S_SUP, COLOR(state),	205,	0); break;
 
-        case 50: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	140,	25); break;
-        case 51: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	165,	25); break;
-        case 52: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	190,	25); break;
-        case 53: Clcdc::disp_one_symb(painter,S_LOW, COLOR(state),	215,	25); break;
-        case 60: Clcdc::disp_one_symb(painter,S_ERROR, COLOR(state), 20,	25); break;
-        case 61: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	 50,	25); break;
-        case 62: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	 80,	25); break;
-        case 63: Clcdc::disp_one_symb(painter,S_DA, COLOR(state),	110,	25); break;
+
+//        case 63: Clcdc::disp_one_symb(painter,S_BASIC, COLOR(state), 20,	18); break;
+//        case 64: Clcdc::disp_one_symb(painter,S_CALC, COLOR(state),	 50,	18); break;
+        case 1: Clcdc::disp_one_symb(painter,S_DEG, COLOR(state),	 80,	18); break;
+        case 62: Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	110,	18); break;
+        case 53: Clcdc::disp_one_symb(painter,S_G,   COLOR(state),	140,	18);
+                 Clcdc::disp_one_symb(painter,S_RAD, COLOR(state),	145,	18); break;
+        case 54: Clcdc::disp_one_symb(painter,S_STAT, COLOR(state),	170,	18); break;
+
         }
     }
 }
+
 HD44780_PIXEL_UPDATE(Cti74_update_pixel)
 {
     // char size is 5x7 + cursor
@@ -81,7 +79,34 @@ HD44780_PIXEL_UPDATE(Cti74_update_pixel)
         painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
     }
 }
-#endif
+
+HD44780_PIXEL_UPDATE(Cti95_update_pixel)
+{
+    // char size is 5x7 + cursor
+    if (x > 4 || y > 7)
+        return;
+
+    if (line == 1 && pos == 15)
+    {
+    }
+    else if (line == 0 && pos < 16)
+    {
+        // 1st line is simply 16 chars
+        if (y == 7) y++;
+        painter->setPen(COLOR(state));
+        painter->drawPoint( 15 + pos*6 + x, 7 + y );
+    }
+    else if (line == 1 && pos < 15 && y < 7)
+    {
+        // 2nd line is segmented into 5 groups of 3 chars, there is no cursor
+        // note: the chars are smaller than on the 1st line (this is handled in .lay file)
+        const int gap = 6;
+        int group = pos / 3;
+        painter->setPen(COLOR(state));
+        painter->drawPoint( 9 + group*gap + pos*6 + x, 23 + y );
+    }
+}
+
 
 void Clcdc_ti74::disp(void)
 {
@@ -115,4 +140,33 @@ void Clcdc_ti74::disp(void)
 }
 
 
+void Clcdc_ti95::disp(void)
+{
+    CHD44780 * pHD44780 = ((Cti95*) pPC)->pHD44780;
+    if (!redraw) return;
+    if (!ready) return;
+    if (!pHD44780 ) return;
+    Refresh = true;
+    info = pHD44780->getInfo();
+//    disp_symb();
 
+
+    QPainter painter(pPC->LcdImage);
+    info->m_lines = 2;
+    info->m_chars = 16;
+    pHD44780->set_pixel_update_cb(&Cti95_update_pixel);
+    pHD44780->screen_update(&painter,Color_On,Color_Off);
+    painter.end();
+
+
+//    QPainter painterSymb(pPC->SymbImage);
+//    info->m_lines = 2;
+//    info->m_chars = 16;
+//    pHD44780->set_pixel_update_cb(&Cti95_update_pixel_symb);
+//    pHD44780->screen_update(&painterSymb,Color_On,Color_Off);
+//    painterSymb.end();
+
+
+    redraw = 0;
+
+}

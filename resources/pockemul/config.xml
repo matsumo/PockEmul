@@ -36,6 +36,7 @@
      <example brand="CANON" idpocket="Canon X-07" filename="./" name="Canon X-07" image=":/x07/x07.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="CC-40" filename="./" name="Texas Instruments CC-40" image=":/cc40/cc40.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="TI-74" filename="./" name="Texas Instruments TI-74" image=":/ti74/ti74.png"/>
+     <example brand="TEXAS INSTRUMENTS" idpocket="TI-95" filename="./" name="Texas Instruments TI-95" image=":/ti74/ti95.png"/>
      <example brand="SHARP" idpocket="PC-E500" filename="./" name="Sharp pc-E500" image=":/e500/pc-e500.png"/>
      <example brand="SHARP" idpocket="PC-E550" filename="./" name="Sharp pc-E550" image=":/e500/pc-e550.png"/>
      <example brand="SHARP" idpocket="PC-E500S" filename="./" name="Sharp pc-E500S" image=":/e500/pc-e500s.png"/>

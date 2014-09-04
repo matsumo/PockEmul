@@ -8,7 +8,7 @@
 
 class Clcdc_ti74:public Clcdc{
 public:
-    void disp(void);				//display LCDC data to screen
+    virtual void disp(void);				//display LCDC data to screen
     void disp_symb(void);
     const char*	GetClassName(){ return("Clcdc_ti74");}
 
@@ -22,6 +22,18 @@ public:
     }
 
     HD44780info *info;
+};
+
+class Clcdc_ti95:public Clcdc_ti74 {
+public:
+    const char*	GetClassName(){ return("Clcdc_ti95");}
+
+    virtual void disp(void);
+
+    Clcdc_ti95(CPObject *parent = 0);
+    virtual ~Clcdc_ti95()
+    {						//[constructor]
+    }
 };
 
 #endif // LCDC_TI74_H
