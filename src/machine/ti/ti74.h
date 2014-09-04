@@ -35,6 +35,8 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
+    virtual void ComputeKey();
+
     Ctms70c46 *ptms70c46cpu;
     CHD44780 *pHD44780;
 
@@ -55,6 +57,11 @@ public:
     void clock_w(UINT8 data);
     UINT8 clock_r();
     void power_w(UINT8 data);
+    bool slotChanged;
+    int currentSlot;
+
+protected slots:
+        void addModule(QString item, CPObject *pPC);
 };
 
 class Cti95 : public Cti74

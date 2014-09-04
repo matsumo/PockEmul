@@ -8,5 +8,7 @@
         <file>ti74/hn61256pc95.bin</file>
         <file>ti74/ti95lcd.png</file>
         <file>ti74/ti74lcd.png</file>
+        <file>ti74/cartimg/finance.png</file>
+        <file>ti74/cartimg/pascal.png</file>
     </qresource>
 </RCC>

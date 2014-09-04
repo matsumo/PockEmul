@@ -2,6 +2,8 @@
 #include <QString>
 
 #include "common.h"
+#include "fluidlauncher.h"
+
 #include "ti74.h"
 #include "tms7000/tms7000.h"
 #include "hd44780.h"
@@ -38,6 +40,8 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(60  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(32  , 0x4000 ,	""                  , ""	, CSlot::RAM , "CARTRIDGE"));
+
     SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/tms70c46.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/ti74.bin")        , ""	, CSlot::ROM , "ROM"));
 //    SlotList.append(CSlot(128 ,0x20000 ,	""                  , ""	, CSlot::RAM , "RAM"));
@@ -98,6 +102,7 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(60  , 0x0000 ,	""                  , ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(32  , 0x4000 ,	""                  , ""	, CSlot::RAM , "CARTRIDGE"));
     SlotList.append(CSlot(4  , 0xF000 ,	P_RES(":/ti74/c70011.bin")  , ""	, CSlot::ROM , "ROM cpu"));
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/hn61256pc95.bin")        , ""	, CSlot::ROM , "ROM"));
 
@@ -585,6 +590,94 @@ bool Cti74::Set_Connector(void) {
     return true;
 }
 
+extern int ask(QWidget *parent,QString msg,int nbButton);
+void Cti74::ComputeKey()
+{
 
+    int _slot = -1;
+    if (KEY(0x240)) _slot = 1;
 
+    qWarning()<<"ComputKey:"<<_slot;
+    pKEYB->keyPressedList.removeAll(0x240);
+
+    if (_slot == -1) return;
+    int _response = 0;
+    BYTE* capsule = &mem[0x4000];
+    if (!SlotList[_slot].isEmpty() || (capsule[0]!=0x00)) {
+        _response=ask(this,
+                      "The "+SlotList[_slot].getLabel()+ " capsule is already plugged in this slot.\nDo you want to unplug it ?",
+                      2);
+    }
+
+    if (_response == 1) {
+        SlotList[_slot].setEmpty(true);
+
+        memset((void *)capsule ,0x7f,0x4000);
+        SlotList[_slot].setLabel(QString("ROM bank %1").arg(_slot+1));
+
+    }
+    if (_response==2) return;
+    currentSlot = _slot;
+    FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                FluidLauncher::PictureFlowType,
+                                                "TI-74_Cartridge");
+    connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+    launcher->show();
+
+}
+
+void Cti74::addModule(QString item,CPObject *pPC)
+{
+    Q_UNUSED(pPC)
+
+    qWarning()<<"Add Module:"<< item;
+    if ( currentSlot!=3) return;
+
+    int _res = 0;
+    QString moduleName;
+    if (item=="PASCAL") moduleName = P_RES(":/cc40/SnapBasic.bin");
+    if (item=="MEMO")   moduleName = P_RES(":/cc40/cc40_memoprocessor.bin");
+    if (item=="FINANCE") moduleName = P_RES(":/cc40/cc40_finance.bin");
+    if (item=="STAT")   moduleName = P_RES(":/cc40/cc40_statistics.bin");
+    if (item=="MATH")   moduleName = P_RES(":/cc40/cc40_mathematics.bin");
+    if (item=="GAMES")  moduleName = P_RES(":/cc40/cc40_games1.bin");
+    if (item=="PANACAPSFILE") {
+        moduleName = QFileDialog::getOpenFileName(
+                    mainwindow,
+                    tr("Choose a Capsule file"),
+                    ".",
+                    tr("Module File (*.bin)"));
+//        customModule = CSlot::CUSTOM_ROM;
+    }
+
+    if (moduleName.isEmpty()) return;
+
+    bool result = true; // check this is a true capsule
+
+    qWarning()<<"loaded:"<<_res;
+    if (result) {
+        SlotList[currentSlot].setEmpty(false);
+        SlotList[currentSlot].setResID(moduleName);
+        Mem_Load(currentSlot);
+        // Analyse capsule
+        // 0x01 = 'C'
+        // 0x01 - 0x28 : Copyright
+        // 0x2C : title lenght
+        // 0x2D - .. : title
+
+        BYTE* capsule = &mem[currentSlot*0x4000];
+        if (capsule[1]=='C') {
+            QString copyright = QString::fromLocal8Bit(QByteArray((const char*)&capsule[1],0x26));
+            QString title  = QString::fromLocal8Bit(QByteArray((const char*)&capsule[0x2d],capsule[0x2c]));
+            qWarning()<<"title:"<<title;
+            SlotList[currentSlot].setLabel(title);
+        }
+
+        slotChanged = true;
+    }
+
+    currentSlot = -1;
+
+}
 
