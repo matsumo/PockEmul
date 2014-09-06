@@ -1125,7 +1125,7 @@ int CPObject::mapKey(QKeyEvent * event) {
 
 void CPObject::keyPressEvent (QKeyEvent * event )
 {
-    qWarning()<<"key pressed";
+
 //    if (event->isAutoRepeat()) return;
 	if (!pKEYB) return;	// if no Keyboard then return;
 

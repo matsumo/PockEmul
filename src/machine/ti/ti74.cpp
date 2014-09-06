@@ -411,7 +411,7 @@ quint8 Cti74::getKey()
             if (KEY('/'))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
             if (KEY(K_FN))			{
-#if 1
+#if 0
                 pCPU->logsw = true;
                 pCPU->Check_Log();
 #else
@@ -566,10 +566,17 @@ void Cti74::ComputeKey()
         ptms70c46cpu->info.m_icount -= 19;
 
     int _slot = -1;
-    if (KEY(0x240)) _slot = 1;
+    if (KEY(0x240)) {
+        _slot = 1;
+        pKEYB->keyPressedList.removeAll(0x240);
+        if (m_power == 1) {
+            ask(this, "Please turn off the pocket before unplugging the cartridge.",1);
+            return;
+        }
+    }
 
 //    qWarning()<<"ComputKey:"<<_slot;
-    pKEYB->keyPressedList.removeAll(0x240);
+
 
 
 
