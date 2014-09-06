@@ -53,7 +53,7 @@ public:
 
     void clock_w(UINT8 data);
     UINT8 clock_r();
-    void power_w(UINT8 data);
+
     bool slotChanged;
     int currentSlot;
 

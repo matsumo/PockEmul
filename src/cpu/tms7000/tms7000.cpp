@@ -413,10 +413,10 @@ void Ctms7000::Reset()
     if (chip_is_family_70x2())
         write_p(0x10, 0x00); // IOCNT1
 
-    write_mem16(0, info.m_pc); // previous PC
-    info.m_sp = 0x01;
-    info.m_pc = read_mem16(0xfffe);
-    info.m_icount -= 17;
+    info.m_sp = 0xff;
+    info.m_op = 0xff;
+    execute_one(info.m_op);
+    info.m_icount -= 3; // 17 total
 }
 
 

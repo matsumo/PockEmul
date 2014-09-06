@@ -230,6 +230,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_CETL      0x20e
 #define K_SEARCH    0x20f
 #define K_ENG       0x210
+#define K_OFF       0x211
 
 #define K_HELP      0x220
 #define K_IO        0x221

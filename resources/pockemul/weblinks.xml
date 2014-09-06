@@ -206,4 +206,9 @@
         <document desc="Programing Reference Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI74 Programming Reference Guide.pdf"/>
         <document desc="Learn Pascal User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Learn-Pascal-User-Guide.pdf"/>
         </model>
+    <model value="ti95">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/texas/ti-95_e.html"/>
+        <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI-95_US.pdf"/>
+        <document desc="Programing Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI-95_PG_US.pdf"/>
+     </model>
 </weblinks>

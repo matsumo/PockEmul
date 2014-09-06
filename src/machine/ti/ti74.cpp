@@ -70,7 +70,6 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     pKEYB		= new Ckeyb(this,"ti74.map");
     pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
-    ioFreq = 0;             // Mandatory for Centronics synchronization
     ptms70c46cpu = (Ctms70c46*)pCPU;
 
 }
@@ -123,17 +122,6 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 Cti95::~Cti95() {
 }
 
-void Cti74::power_w(UINT8 data)
-{
-    qWarning()<<"power_w:"<<data;
-    // d0: power-on hold latch
-    m_power = data & 1;
-
-    // stop running
-    if (!m_power)
-        ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
-}
-
 
 bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
 {
@@ -154,7 +142,7 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     if   (*d==0x1001) { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
     if ( (*d>=0x1000) && (*d<=0x1FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return true;	}  // CPU RAM
-    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return false; } // system ROM
+    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return true; } // system ROM
     if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF000) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
     return true;
@@ -199,7 +187,9 @@ UINT8 Cti74::out(UINT8 Port, UINT8 Value)
         if (~Value & 4 && m_power)
         {
             m_power = 0;
-            ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE); // stop running
+            TurnOFF();
+            qWarning()<<"POWER 0";
+//            ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE); // stop running
         }
         break;
     case TMS7000_PORTC: break;
@@ -287,21 +277,23 @@ bool Cti95::run()
 
 void Cti74::Reset()
 {
-    CpcXXXX::Reset();
 
     m_clock_control = 0;
     m_power = 1;
+    Power = true;
     ks = 0;
     m_banks = 0;
     RomBank = RamBank = 0;
 
     pHD44780->Reset();
+    CpcXXXX::Reset();
 }
 
 void Cti74::TurnON()
 {
     CpcXXXX::TurnON();
-//    pCPU->Reset();
+    m_power = 1;
+    pCPU->Reset();
 }
 
 void Cti74::TurnOFF()
@@ -406,7 +398,7 @@ quint8 Cti74::getKey()
             if (KEY('3'))			data|=0x02;
             if (KEY('6'))			data|=0x04;
             if (KEY('9'))			data|=0x08;
-            if (KEY(K_POW_OFF))		data|=0x10;
+            if (KEY(K_OFF))		data|=0x10;
             if (KEY('Q'))			data|=0x20;
             if (KEY('A'))			data|=0x40;
 //            if (KEY(''))			data|=0x80;
@@ -419,7 +411,7 @@ quint8 Cti74::getKey()
             if (KEY('/'))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
             if (KEY(K_FN))			{
-#if 0
+#if 1
                 pCPU->logsw = true;
                 pCPU->Check_Log();
 #else
@@ -593,7 +585,7 @@ void Cti74::ComputeKey()
     if (_response == 1) {
         SlotList[_slot].setEmpty(true);
 
-        memset((void *)capsule ,0x7f,0x4000);
+        memset((void *)capsule ,0x00,0x8000);
         SlotList[_slot].setLabel(QString("ROM bank %1").arg(_slot+1));
 
     }
@@ -613,11 +605,23 @@ void Cti74::addModule(QString item,CPObject *pPC)
     Q_UNUSED(pPC)
 
     qWarning()<<"Add Module:"<< item;
+    bool load = false;
     if ( currentSlot!=1) return;
 
     int _res = 0;
     QString moduleName;
-    if (item=="PASCAL74") moduleName = P_RES(":/ti74/ti74_pascal.bin");
+    if (item=="PASCAL74") {
+        moduleName = P_RES(":/ti74/ti74_pascal.bin");
+        load = true;
+    }
+    if (item=="RAM32K74") {
+        load = false;
+        SlotList[currentSlot].setEmpty(false);
+        SlotList[currentSlot].setResID("32Ko RAM module");
+        SlotList[currentSlot].setType(CSlot::RAM);
+        slotChanged = true;
+    }
+
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,
@@ -627,7 +631,7 @@ void Cti74::addModule(QString item,CPObject *pPC)
 //        customModule = CSlot::CUSTOM_ROM;
     }
 
-    if (moduleName.isEmpty()) return;
+    if (!load) return;
 
     bool result = true; // check this is a true capsule
 
@@ -635,6 +639,7 @@ void Cti74::addModule(QString item,CPObject *pPC)
     if (result) {
         SlotList[currentSlot].setEmpty(false);
         SlotList[currentSlot].setResID(moduleName);
+        SlotList[currentSlot].setType(CSlot::ROM);
         Mem_Load(currentSlot);
         // Analyse capsule
         // 0x01 = 'C'
