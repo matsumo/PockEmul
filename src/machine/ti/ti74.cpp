@@ -374,7 +374,7 @@ quint8 Cti74::getKey()
             if (KEY('C'))			data|=0x80;
         }
         if (ks & 0x10) {
-            if (KEY('?'))			data|=0x01;
+            if (KEY(K_SIGN))			data|=0x01;
             if (KEY('1'))			data|=0x02;
             if (KEY('4'))			data|=0x04;
             if (KEY('7'))			data|=0x08;
