@@ -625,7 +625,7 @@ void Cti74::addModule(QString item,CPObject *pPC)
         moduleName = P_RES(":/ti74/ti74_finance.bin");
         load = true;
     }
-    if (item=="MAHEMATICS74") {
+    if (item=="MATHEMATICS74") {
         moduleName = P_RES(":/ti74/ti74_mathematics.bin");
         load = true;
     }
