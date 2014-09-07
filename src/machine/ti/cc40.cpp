@@ -204,8 +204,10 @@ void Ccc40::power_w(UINT8 data)
     m_power = data & 1;
 
     // stop running
-    if (!m_power)
+    if (!m_power) {
+        TurnOFF();
         ptms7000cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE);
+    }
 }
 
 UINT8 Ccc40::sysram_r(UINT16 offset)
@@ -295,7 +297,8 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
 
     if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
-    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x1B000 + ( RamBank * 0x8000 );	return false; } // system ROM
+    if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x1B000 + ( RamBank * 0x8000 );
+        return (SlotList[3].getType()==CSlot::RAM ? true: false); } // system ROM
     if ( (*d>=0xD000) && (*d<=0xEFFF) )	{ *d += 0x3000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF800) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
 
@@ -462,21 +465,22 @@ bool Ccc40::run()
 
 void Ccc40::Reset()
 {
-    CpcXXXX::Reset();
-
     m_clock_control = 0;
     m_power = 1;
+    Power = true;
     ks = 0;
     m_banks = 0;
     RomBank = RamBank = 0;
 
     pHD44780->Reset();
+    CpcXXXX::Reset();
 }
 
 void Ccc40::TurnON()
 {
     CpcXXXX::TurnON();
-//    pCPU->Reset();
+    m_power = 1;
+    pCPU->Reset();
 }
 
 void Ccc40::TurnOFF()
@@ -595,14 +599,14 @@ quint8 Ccc40::getKey()
             if (KEY(K_RUN))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
             if (KEY(K_FN))			{
-#if 0
+#if 1
                 pCPU->logsw = true;
                 pCPU->Check_Log();
 #else
                 data|=0x20;
 #endif
             }
-            if (KEY(K_POW_OFF))			data|=0x40;
+            if (KEY(K_OFF))			data|=0x40;
 //            if (KEY(''))			data|=0x80;
         }
 
@@ -651,10 +655,14 @@ void Ccc40::ComputeKey()
 {
 
     int _slot = -1;
-    if (KEY(0x240)) _slot = 3;
-
-    qWarning()<<"ComputKey:"<<_slot;
-    pKEYB->keyPressedList.removeAll(0x240);
+    if (KEY(0x240)) {
+        _slot = 3;
+        pKEYB->keyPressedList.removeAll(0x240);
+        if (m_power == 1) {
+            ask(this, "Please turn off the pocket before unplugging the cartridge.",1);
+            return;
+        }
+    }
 
     if (_slot == -1) return;
     int _response = 0;
@@ -668,7 +676,7 @@ void Ccc40::ComputeKey()
     if (_response == 1) {
         SlotList[_slot].setEmpty(true);
 
-        memset((void *)capsule ,0x7f,0x20000);
+        memset((void *)capsule ,0x00,0x20000);
         SlotList[_slot].setLabel(QString("ROM bank %1").arg(_slot+1));
 
     }
@@ -688,26 +696,35 @@ void Ccc40::addModule(QString item,CPObject *pPC)
     Q_UNUSED(pPC)
 
     qWarning()<<"Add Module:"<< item;
+    bool load = false;
     if ( currentSlot!=3) return;
 
     int _res = 0;
     QString moduleName;
-    if (item=="PASCAL") moduleName = P_RES(":/cc40/SnapBasic.bin");
-    if (item=="MEMO")   moduleName = P_RES(":/cc40/cc40_memoprocessor.bin");
-    if (item=="FINANCE") moduleName = P_RES(":/cc40/cc40_finance.bin");
-    if (item=="STAT")   moduleName = P_RES(":/cc40/cc40_statistics.bin");
-    if (item=="MATH")   moduleName = P_RES(":/cc40/cc40_mathematics.bin");
-    if (item=="GAMES")  moduleName = P_RES(":/cc40/cc40_games1.bin");
-    if (item=="PANACAPSFILE") {
+//    if (item=="PASCALCC40") moduleName = P_RES(":/cc40/SnapBasic.bin");
+    if (item=="MEMOCC40")   { load = true; moduleName = P_RES(":/cc40/cc40_memoprocessor.bin"); }
+    if (item=="FINANCECC40") { load = true; moduleName = P_RES(":/cc40/cc40_finance.bin"); }
+    if (item=="STATCC40")   { load = true; moduleName = P_RES(":/cc40/cc40_statistics.bin"); }
+    if (item=="MATHCC40")   { load = true; moduleName = P_RES(":/cc40/cc40_mathematics.bin"); }
+    if (item=="GAMESCC40")  { load = true; moduleName = P_RES(":/cc40/cc40_games1.bin"); }
+    if (item=="RAM32KCC40") {
+        load = false;
+        SlotList[currentSlot].setEmpty(false);
+        SlotList[currentSlot].setResID("32Ko RAM module");
+        SlotList[currentSlot].setType(CSlot::RAM);
+        slotChanged = true;
+    }
+    if (item=="CC40FILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,
                     tr("Choose a Capsule file"),
                     ".",
                     tr("Module File (*.bin)"));
+        load = true;
 //        customModule = CSlot::CUSTOM_ROM;
     }
 
-    if (moduleName.isEmpty()) return;
+    if (!load) return;
 
     bool result = true; // check this is a true capsule
 

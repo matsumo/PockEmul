@@ -3,7 +3,7 @@
 <Keyboard>
     <KEY description="Cartridge Slot" height="167" left="627" masterscancode="0x00" modifier="" scancode="0x240" top="5" width="197"/>
     <KEY description="ON" height="20" left="730" masterscancode="0x00" modifier="" scancode="0xc7" top="235" width="45"/>
-    <KEY description="OFF" height="20" left="780" masterscancode="0x00" modifier="" scancode="0xc8" top="237" width="45"/>
+    <KEY description="OFF" height="20" left="780" masterscancode="0x00" modifier="" scancode="0x211" top="237" width="45"/>
     <KEY description="RUN" height="20" left="679" masterscancode="0x00" modifier="" scancode="0x23d" top="233" width="45"/>
     <KEY description="FN" height="29" left="636" masterscancode="0x00" modifier="" scancode="0x23e" top="472" width="39"/>
     <KEY description="-" height="22" left="788" masterscancode="0x00" modifier="" scancode="0x2d" top="432" width="32"/>

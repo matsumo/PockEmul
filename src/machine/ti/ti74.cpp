@@ -142,7 +142,7 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     if   (*d==0x1001) { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
     if ( (*d>=0x1000) && (*d<=0x1FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return true;	}  // CPU RAM
-    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return true; } // system ROM
+    if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return (SlotList[1].getType()==CSlot::RAM ? true: false); } // system ROM
     if ( (*d>=0xC000) && (*d<=0xDFFF) )	{ *d += 0x4000 + ( RomBank * 0x2000 );	return false; } // system ROM
     if ( (*d>=0xF000) && (*d<=0xFFFF) )	{ return false;	}                                       // CPU ROM
     return true;
@@ -629,12 +629,13 @@ void Cti74::addModule(QString item,CPObject *pPC)
         slotChanged = true;
     }
 
-    if (item=="PANACAPSFILE") {
+    if (item=="TI74FILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,
                     tr("Choose a Capsule file"),
                     ".",
                     tr("Module File (*.bin)"));
+        load = true;
 //        customModule = CSlot::CUSTOM_ROM;
     }
 

@@ -63,12 +63,13 @@
    <example brand="HEWLETT-PACKARD" idpocket="HP41MATHSTAT" filename="./" name="Math Stat" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP41PPC" filename="./" name="PPC-ROM" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP41MODFILE" filename="./" name="External MOD file" image=":/hp41/modimg/module.png" connectortype="hp41" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="PASCAL" filename="./" name="Pascal module" image=":/cc40/cartimg/pascal.png" connectortype="CC-40_Cartridge" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="MEMO" filename="./" name="Memo Processor module" image=":/cc40/cartimg/ss-3004.png" connectortype="CC-40_Cartridge" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="FINANCE" filename="./" name="Finance module" image=":/cc40/cartimg/ss-3006.png" connectortype="CC-40_Cartridge" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="STAT" filename="./" name="Statistic module" image=":/cc40/cartimg/ss-3008.png" connectortype="CC-40_Cartridge" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="MATH" filename="./" name="Mathematics module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="GAMES" filename="./" name="Game module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="PASCALCC40" filename="./" name="Pascal module" image=":/cc40/cartimg/pascal.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="MEMOCC40" filename="./" name="Memo Processor module" image=":/cc40/cartimg/ss-3004.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="FINANCECC40" filename="./" name="Finance module" image=":/cc40/cartimg/ss-3006.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="STATCC40" filename="./" name="Statistic module" image=":/cc40/cartimg/ss-3008.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="MATHCC40" filename="./" name="Mathematics module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="GAMESCC40" filename="./" name="Game module" image=":/cc40/cartimg/ss-3009.png" connectortype="CC-40_Cartridge" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="RAM32KCC40" filename="./" name="32Ko RAM" image=":/cc40/cartimg/ss-1000.png" connectortype="CC-40_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="PASCAL74" filename="./" name="Learn Pascal" image=":/ti74/cartimg/pascal.png" connectortype="TI-74_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="FINANCE74" filename="./" name="Finance" image=":/ti74/cartimg/finance.png" connectortype="TI-74_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="RAM32K74" filename="./" name="32Ko RAM" image=":/ti74/cartimg/finance.png" connectortype="TI-74_Cartridge" conngender="male"/>
