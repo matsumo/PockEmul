@@ -421,8 +421,8 @@ bool Ccc40::init()
     CpcXXXX::init();
     pHD44780->init();
 
-    init_sysram(0, 0x800); // default to 6KB
-    init_sysram(1, 0x800); // "
+    init_sysram(0, 0x2000); // default to 6KB
+    init_sysram(1, 0x2000); // "
 
     initExtension();
     Reset();

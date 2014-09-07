@@ -27,7 +27,7 @@
 
 #include "pcxxxx.h"
 
-class Chp41Cpu;
+class Chpnut;
 class CConnector;
 class Cctronics;
 class Cbus;
@@ -134,7 +134,7 @@ public:
   Chp41(CPObject *parent=0);
   ~Chp41();
 
-  Chp41Cpu *hp41cpu;
+  Chpnut *hp41cpu;
 
   bool Chk_Adr(UINT32 *d, UINT32 data);
   bool Chk_Adr_R(UINT32 *d, UINT32 *data);

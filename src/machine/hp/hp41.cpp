@@ -154,12 +154,19 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_hp41(this);
-    pCPU		= new Chp41Cpu(this);    hp41cpu = (Chp41Cpu*)pCPU;
+    pCPU		= new Chpnut(this);    hp41cpu = (Chpnut*)pCPU;
     pKEYB		= new Ckeyb(this,"hp41.map");
 
     fPrinter=fCardReader=fTimer=fWand=fHPIL=fInfrared=-1;
     for (int i=0;i<4;i++) slot[i].used=false;
     slotChanged = false;
+
+    // trace
+    hLogFile=NULL;
+    InstSetIndex=0;
+    TEFIndex=0;
+    fTrace=false;
+    memset(szTraceOut,0,sizeof(szTraceOut));
 }
 
 
@@ -226,13 +233,7 @@ bool Chp41::init()
     publish(pConnector[3]);
 
     for (int i=0;i<4;i++) {
-#if 1
         bus[i] = new Cbus();
-#else
-        pCENT[i]->pTIMER = pTIMER;
-        pCENT[i]->init();
-        pCENT[i]->setBufferSize(10);
-#endif
     }
     WatchPoint.remove(this);
     WatchPoint.add(&pConnector_value[0],64,15,this,"HP-41 Module 0");

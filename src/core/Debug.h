@@ -269,14 +269,14 @@ public:
         QString Tracing(TI57regs *r);
 };
 
-class Cdebug_hp41cpu:public Cdebug{
+class Cdebug_hpnut:public Cdebug{
     Q_OBJECT
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_hp41cpu(CPObject *parent)	: Cdebug(parent)
+        Cdebug_hpnut(CPObject *parent)	: Cdebug(parent)
         {
         }
-        virtual ~Cdebug_hp41cpu(){}
+        virtual ~Cdebug_hpnut(){}
 };
 #endif

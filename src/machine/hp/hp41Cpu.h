@@ -84,19 +84,19 @@ typedef struct {
     word CARRY,KEYDOWN,BATTERY;
     word PC_REG,RET_STK0,RET_STK1,RET_STK2,RET_STK3;
     word BASE;
-} HP41regs;
+} NUTregs;
 
 
 /****************************/
 // The HP-41 class
 /****************************/
-class Chp41Cpu:public CCPU{
+class Chpnut:public CCPU{
 
 //  friend class CMcodeDlg;
 //  friend class CBreakPointsDlg;
 public:
-  Chp41Cpu(CPObject *parent);
-  ~Chp41Cpu();
+  Chpnut(CPObject *parent);
+  ~Chpnut();
 
   Chp41* hp41;
 
@@ -127,7 +127,7 @@ public:
 
   // CPU registers
   RAM_REG *pRAM;
-  HP41regs *r;
+  NUTregs *r;
   word *PT_REG;                          // set to address of Q_REG or P_REG
 
   // CPU variables

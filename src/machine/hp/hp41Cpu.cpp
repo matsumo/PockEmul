@@ -40,19 +40,14 @@ word TypeA[]={3,4,5,10,8,6,11,0,2,9,7,13,1,12,0,0};
 /****************************/
 // Constructor
 /****************************/
-Chp41Cpu::Chp41Cpu(CPObject *parent):CCPU(parent)
+Chpnut::Chpnut(CPObject *parent):CCPU(parent)
 {
 
     hp41 = (Chp41*)pPC;
 
-    r = new HP41regs;
+    r = new NUTregs;
 
-    // trace
-    hp41->hLogFile=NULL;
-    hp41->InstSetIndex=0;
-    hp41->TEFIndex=0;
-    hp41->fTrace=false;
-    memset(hp41->szTraceOut,0,sizeof(hp41->szTraceOut));
+
 
     // ram registers
     //pRAM=(RAM_REG*)malloc(sizeof(RAM_REG)*MAX_RAM);
@@ -64,7 +59,7 @@ Chp41Cpu::Chp41Cpu(CPObject *parent):CCPU(parent)
     fBreakPtsEnable=false;
     fBreak=false;
     nBreakPts=0;
-    pDEBUG = new Cdebug_hp41cpu(pPC);
+    pDEBUG = new Cdebug_hpnut(pPC);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
 }
 
@@ -72,15 +67,15 @@ Chp41Cpu::Chp41Cpu(CPObject *parent):CCPU(parent)
 /****************************/
 // destructor
 /****************************/
-Chp41Cpu::~Chp41Cpu()
+Chpnut::~Chpnut()
 {
     //  if (GetTrace())
     //    StopTrace();
 
-    hp41->DeInitTimer();
+
 }
 
-bool Chp41Cpu::init()
+bool Chpnut::init()
 {
     pRAM = (RAM_REG*) (hp41->mem);
 
@@ -88,17 +83,17 @@ bool Chp41Cpu::init()
     return true;
 }
 
-bool Chp41Cpu::exit()
+bool Chpnut::exit()
 {
     return true;
 }
 
-void Chp41Cpu::step()
+void Chpnut::step()
 {
     Execute();
 }
 
-void Chp41Cpu::Reset()
+void Chpnut::Reset()
 {
     memset(pRAM,0,sizeof(RAM_REG)*MAX_RAM);
 
@@ -146,14 +141,14 @@ void Chp41Cpu::Reset()
 }
 
 
-void Chp41Cpu::Load_Internal(QXmlStreamReader *xmlIn)
+void Chpnut::Load_Internal(QXmlStreamReader *xmlIn)
 {
     qWarning()<<"Load internal hp41cpu";
     if (xmlIn->readNextStartElement()) {
         if ( (xmlIn->name()=="cpu") &&
              (xmlIn->attributes().value("model").toString() == "hp41cpu")) {
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
-            memcpy((char *) &r[0],ba_reg.data(),sizeof(HP41regs));
+            memcpy((char *) &r[0],ba_reg.data(),sizeof(NUTregs));
             //            QByteArray ba_mem = QByteArray::fromBase64(xmlIn->attributes().value("memory").toString().toLatin1());
             //            if (!ba_mem.isEmpty()) memcpy((char *) pRAM,ba_mem.data(),sizeof(RAM_REG)*MAX_RAM);
             qWarning()<<"regs read hp41cpu";
@@ -166,11 +161,11 @@ void Chp41Cpu::Load_Internal(QXmlStreamReader *xmlIn)
     }
 }
 
-void Chp41Cpu::save_internal(QXmlStreamWriter *xmlOut)
+void Chpnut::save_internal(QXmlStreamWriter *xmlOut)
 {
     xmlOut->writeStartElement("cpu");
     xmlOut->writeAttribute("model","hp41cpu");
-    QByteArray ba_reg((char*)&r[0],sizeof(HP41regs));
+    QByteArray ba_reg((char*)&r[0],sizeof(NUTregs));
     xmlOut->writeAttribute("registers",ba_reg.toBase64());
     if (PT_REG == &r->P_REG) xmlOut->writeAttribute("pt_reg","P");
     if (PT_REG == &r->Q_REG) xmlOut->writeAttribute("pt_reg","Q");
@@ -180,7 +175,7 @@ void Chp41Cpu::save_internal(QXmlStreamWriter *xmlOut)
 /*****************************/
 // wakeup if everything is ready
 /*****************************/
-void Chp41Cpu::Wakeup()
+void Chpnut::Wakeup()
 {
     //  if ((hp41->hp41->PageMatrix[0][0]==NULL)||(eKeyboard==eKeyboardNone))     // not fully initialized yet
     //    return;
@@ -194,7 +189,7 @@ void Chp41Cpu::Wakeup()
 /*****************************/
 // puts the processor to sleep if it is awake
 /*****************************/
-void Chp41Cpu::Sleep(int eNewMode)      // pass either Light or Deep sleep
+void Chpnut::Sleep(int eNewMode)      // pass either Light or Deep sleep
 {
     if (eSleepMode==eAwake)
         eSleepMode=eNewMode;
@@ -204,7 +199,7 @@ void Chp41Cpu::Sleep(int eNewMode)      // pass either Light or Deep sleep
 /*****************************/
 // returns 0 if awake, nonzero if sleeping
 /*****************************/
-int Chp41Cpu::IsSleeping()
+int Chpnut::IsSleeping()
 {
     return(eSleepMode);
 }
@@ -215,7 +210,7 @@ int Chp41Cpu::IsSleeping()
 
 
 /****************************/
-void Chp41Cpu::error_message(short num)
+void Chpnut::error_message(short num)
 {
     return;
     switch (num)
@@ -267,7 +262,7 @@ void Chp41Cpu::error_message(short num)
 /****************************/
 // executes one instruction
 /****************************/
-void Chp41Cpu::Execute()
+void Chpnut::Execute()
 {
     if (hp41->GetTrace()) hp41->TraceOut();
     hp41->PC_LAST=r->PC_REG;
@@ -326,7 +321,7 @@ void Chp41Cpu::Execute()
 /****************************/
 /* execute class 0 into subclasses */
 /****************************/
-void Chp41Cpu::Class0()
+void Chpnut::Class0()
 {
     Modifier=(Tyte1&0x03c0)>>6;
     switch ((Tyte1&0x003c)>>2)
@@ -384,7 +379,7 @@ void Chp41Cpu::Class0()
 
 
 /****************************/
-void Chp41Cpu::Subclass0()
+void Chpnut::Subclass0()
 {
     switch(Modifier)
     {
@@ -432,7 +427,7 @@ void Chp41Cpu::Subclass0()
 /****************************/
 // for absolute changes - always leaves page variables valid
 /****************************/
-void Chp41Cpu::set_PC(UINT32 addr)
+void Chpnut::set_PC(UINT32 addr)
 {
     ModulePage *pPage;
     UINT32  page;
@@ -450,12 +445,12 @@ void Chp41Cpu::set_PC(UINT32 addr)
     hp41->pCurPage=pPage;
 }
 
-UINT32 Chp41Cpu::get_PC(void) {
+UINT32 Chpnut::get_PC(void) {
     return r->PC_REG;
 }
 
 /****************************/
-void Chp41Cpu::Enbank(int BankSet)
+void Chpnut::Enbank(int BankSet)
 {
     uint page,bank;
     if (hp41->pCurPage==NULL || hp41->pCurPage->ActualBankGroup==0)
@@ -478,7 +473,7 @@ void Chp41Cpu::Enbank(int BankSet)
 
 
 /****************************/
-void Chp41Cpu::Subclass1()
+void Chpnut::Subclass1()
 {
     if (Modifier==7)
     {
@@ -501,7 +496,7 @@ void Chp41Cpu::Subclass1()
 
 
 /****************************/
-void Chp41Cpu::Subclass2()
+void Chpnut::Subclass2()
 {
     if (Modifier==7)
     {
@@ -530,7 +525,7 @@ void Chp41Cpu::Subclass2()
 
 
 /****************************/
-void Chp41Cpu::Subclass3()
+void Chpnut::Subclass3()
 {
     if (Modifier==7)
     {
@@ -553,7 +548,7 @@ void Chp41Cpu::Subclass3()
 
 
 /****************************/
-void Chp41Cpu::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
+void Chpnut::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
 {
     r->C_REG[*PT_REG]=(byte)Modifier;
     if (*PT_REG==0)
@@ -565,7 +560,7 @@ void Chp41Cpu::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
 
 
 /****************************/
-void Chp41Cpu::Subclass5()
+void Chpnut::Subclass5()
 {
     if (Modifier==7)
     {
@@ -588,7 +583,7 @@ void Chp41Cpu::Subclass5()
 
 
 /****************************/
-void Chp41Cpu::Subclass6()
+void Chpnut::Subclass6()
 {
     switch(Modifier)
     {
@@ -764,7 +759,7 @@ void Chp41Cpu::Subclass6()
 
 
 /****************************/
-void Chp41Cpu::Subclass7()
+void Chpnut::Subclass7()
 {
     if (Modifier==7)
     {
@@ -788,7 +783,7 @@ void Chp41Cpu::Subclass7()
 /****************************/
 /* MISC */
 /****************************/
-void Chp41Cpu::Subclass8()
+void Chpnut::Subclass8()
 {
     switch(Modifier)
     {
@@ -914,7 +909,7 @@ void Chp41Cpu::Subclass8()
 
 
 /****************************/
-void Chp41Cpu::Subclass9()
+void Chpnut::Subclass9()
 {
     r->CARRY=0;
     if (Modifier!=9)
@@ -933,7 +928,7 @@ void Chp41Cpu::Subclass9()
 
 
 /****************************/
-void Chp41Cpu::SubclassA()
+void Chpnut::SubclassA()
 {
     if (perph_selected==0 || ram_selected<=0x00F || ram_selected>=0x020)
     {
@@ -984,7 +979,7 @@ void Chp41Cpu::SubclassA()
 
 
 /****************************/
-void Chp41Cpu::SubclassB()
+void Chpnut::SubclassB()
 {
     if ((Modifier==7) || (Modifier==15))    // Not Used
         r->CARRY=0;
@@ -1009,7 +1004,7 @@ void Chp41Cpu::SubclassB()
 
 
 /****************************/
-void Chp41Cpu::SubclassC()
+void Chpnut::SubclassC()
 {
     switch(Modifier)
     {
@@ -1198,7 +1193,7 @@ void Chp41Cpu::SubclassC()
 
 
 /****************************/
-void Chp41Cpu::SubclassD()
+void Chpnut::SubclassD()
 {
     /* Not Used */
     r->CARRY=0;
@@ -1206,7 +1201,7 @@ void Chp41Cpu::SubclassD()
 
 
 /****************************/
-void Chp41Cpu::SubclassE()
+void Chpnut::SubclassE()
 {
     if (perph_selected==0 || ram_selected<=0x00F || ram_selected>=0x020)
     {
@@ -1259,7 +1254,7 @@ void Chp41Cpu::SubclassE()
 
 
 /****************************/
-void Chp41Cpu::SubclassF()
+void Chpnut::SubclassF()
 {
     if (Modifier==7)
     {
@@ -1291,7 +1286,7 @@ void Chp41Cpu::SubclassF()
 /****************************/
 /* WDATA */
 /****************************/
-void Chp41Cpu::wdata()
+void Chpnut::wdata()
 {
     if (hp41->RamExist(ram_selected))
     {
@@ -1304,7 +1299,7 @@ void Chp41Cpu::wdata()
 /****************************/
 /* RDATA */
 /****************************/
-void Chp41Cpu::rdata()
+void Chpnut::rdata()
 {
     if (hp41->RamExist(ram_selected))
     {
@@ -1322,7 +1317,7 @@ void Chp41Cpu::rdata()
 }
 
 /****************************/
-word Chp41Cpu::GetNextTyte()
+word Chpnut::GetNextTyte()
 {
     return(hp41->pCurPage->Image[r->PC_REG++&0xfff]);
 }
@@ -1335,7 +1330,7 @@ word Chp41Cpu::GetNextTyte()
 /****************************/
 /* execute class 1 into long jumps */
 /****************************/
-void Chp41Cpu::Class1()
+void Chpnut::Class1()
 {
     Tyte2=GetNextTyte();
     word addr=((Tyte2&0x03fc)<<6|(Tyte1&0x03fc)>>2);
@@ -1371,7 +1366,7 @@ void Chp41Cpu::Class1()
 
 
 /****************************/
-void Chp41Cpu::LongJump(word addr,flag fPush)
+void Chpnut::LongJump(word addr,flag fPush)
 {
     word page=(addr&0xf000)>>12;
     ModulePage *pPage=hp41->PageMatrix[page][hp41->active_bank[page]-1];
@@ -1388,7 +1383,7 @@ void Chp41Cpu::LongJump(word addr,flag fPush)
 
 
 /****************************/
-void Chp41Cpu::PushReturn(word addr)
+void Chpnut::PushReturn(word addr)
 {
     r->RET_STK3=r->RET_STK2;
     r->RET_STK2=r->RET_STK1;
@@ -1397,7 +1392,7 @@ void Chp41Cpu::PushReturn(word addr)
 }
 
 /****************************/
-word Chp41Cpu::PopReturn()
+word Chpnut::PopReturn()
 {
     word addr=r->RET_STK0;
     r->RET_STK0=r->RET_STK1;
@@ -1416,7 +1411,7 @@ word Chp41Cpu::PopReturn()
 /****************************/
 /* execute class 2 into subclasses */
 /****************************/
-void Chp41Cpu::Class2(void)
+void Chpnut::Class2(void)
 {
     r->CARRY=0;
     Modifier = (Tyte1>>2) & 0x07;
@@ -1663,7 +1658,7 @@ void Chp41Cpu::Class2(void)
 /****************************/
 // returns 1 if this is an arithmetic instruction that can set a carry
 /****************************/
-int Chp41Cpu::ArithCarry(unsigned short Tyte)
+int Chpnut::ArithCarry(unsigned short Tyte)
 {
     if ((Tyte&3)!=2)  // if not a class 2 TEF inst
         return(0);
@@ -1712,7 +1707,7 @@ int Chp41Cpu::ArithCarry(unsigned short Tyte)
 /* convert tef bits to start and end nybbles */
 /* starting from the least significant digit - FirstTEF is to the right of LastTEF */
 /****************************/
-void Chp41Cpu::ConvertTEF()
+void Chpnut::ConvertTEF()
 {
     switch(Modifier)
     {
@@ -1774,7 +1769,7 @@ void Chp41Cpu::ConvertTEF()
 /****************************/
 // digit Adder
 /****************************/
-byte Chp41Cpu::Adder(byte nib1,byte nib2) {
+byte Chpnut::Adder(byte nib1,byte nib2) {
     byte result = nib1 + nib2 + r->CARRY;
     if (result >= r->BASE)
     {
@@ -1791,7 +1786,7 @@ byte Chp41Cpu::Adder(byte nib1,byte nib2) {
 /****************************/
 // digit subtractor
 /****************************/
-byte Chp41Cpu::Subtractor( byte nib1, byte nib2) {
+byte Chpnut::Subtractor( byte nib1, byte nib2) {
     char result = nib1 - nib2 - r->CARRY;
     if (result < 0) {
         result += r->BASE;
@@ -1809,7 +1804,7 @@ byte Chp41Cpu::Subtractor( byte nib1, byte nib2) {
 /* ------------------------------------------------------------------------ */
 
 /****************************/
-void Chp41Cpu::Class3()
+void Chpnut::Class3()
 {
     short displacement;
     if (Tyte1&0x0200) displacement=((Tyte1>>3)&0x03f)-64;
