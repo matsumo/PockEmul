@@ -25,14 +25,16 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     InitMemValue	= 0xFF;
 
     SlotList.clear();
-    SlotList.append(CSlot(4 , 0x0000 ,	P_RES(":/ti57/ti57.bin"), ""	, CSlot::ROM , "ROM"));
-
+    SlotList.append(CSlot(4 , 0x3000 ,	P_RES(":/fx8000g/rom1a.bin"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(16 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(8 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
     setDXmm(78);
     setDYmm(148);
     setDZmm(36);
 
-    setDX(279);
-    setDY(529);
+    setDX(321);
+    setDY(687);
 
     Lcd_X		= 30;
     Lcd_Y		= 43;
@@ -49,7 +51,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
 //    pLCDC		= new Clcdc_fx8000g(this);
-    pCPU		= new CUPD1007(this);    fx8000gcpu = (CUPD1007*)pCPU;
+    pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));    fx8000gcpu = (CUPD1007*)pCPU;
     pKEYB		= new Ckeyb(this,"ti57.map");
 
     ioFreq = 0;
@@ -83,7 +85,18 @@ bool Cfx8000g::run() {
 }
 
 bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) { return false; }
-bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) { return true; }
+
+bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
+
+//    else if (address < 0x4000)  return &rom1[address];
+//    else if (address < 0x6000)  return &ram[address-0x4000];
+//    else if (address < 0x8000)  return &ram[address-0x6000];
+//    else if (address < 0xC000)  return &rom1[address-0x4000];
+//    else if (address < 0xE000)  return &ram[address-0xC000];
+//    else return &ram[address-0xE000];
+    return true;
+}
+
 UINT8 Cfx8000g::in(UINT8 Port) { return 0;}
 UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) { return 0; }
 bool Cfx8000g::Set_Connector() { return true; }

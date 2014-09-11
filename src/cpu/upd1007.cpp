@@ -6,6 +6,7 @@ This CPU core is based on documentations works done by:
 
 #include "upd1007.h"
 #include "ui/cregsz80widget.h"
+#include "pcxxxx.h"
 
 #define Lo(x) (x&0xff)
 #define Hi(x) ((x>>8)&0xff)
@@ -26,12 +27,19 @@ const BYTE CUPD1007::INT_enable[3] = { 0x10, 0x20, 0x40 };
 const BYTE CUPD1007::INT_serv[3] = { 0x20, 0x40, 0x80 };
 const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 
+#define RM(addr)  ((info.iereg & 0x03) ? 0x00 : pPC->Get_8(addr))
 
-CUPD1007::CUPD1007(CPObject *parent):CCPU(parent) {
+CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
 
 //    pDEBUG	= new Cdebug_upd1007(parent);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
+
+    QFile file;
+    file.setFileName(rom0fn);
+    file.open(QIODevice::ReadOnly);
+    QDataStream in(&file);
+    in.readRawData ((char *) &rom0,ROM0SIZE*3 );
 }
 
 CUPD1007::~CUPD1007() {
@@ -82,19 +90,6 @@ void CUPD1007::addState(int x) {
     info.cycles+=x;
 }
 
-/* returns the pointer to a read-type resource at specified address */
-BYTE *CUPD1007::SrcPtr (UINT16 address)
-{
-  if ((info.iereg & 0x03) != 0) return &dummysrc;
-  else if (address < 0x4000)  return &rom1[address];
-  else if (address < 0x6000)  return &ram[address-0x4000];
-  else if (address < 0x8000)  return &ram[address-0x6000];
-  else if (address < 0xC000)  return &rom1[address-0x4000];
-  else if (address < 0xE000)  return &ram[address-0xC000];
-  else return &ram[address-0xE000];
-
-  return &dummysrc;
-}
 
 /* 9-bit instruction info.opcode
   Note: accessing the internal ROM doesn't consume any clock cycles */
@@ -112,9 +107,9 @@ UINT16 CUPD1007::Fetchopcode()
   {
     saveie = info.iereg;
     info.iereg = 0;
-    info.opcode[0] = *SrcPtr(info.pc);
-    info.opcode[1] = *SrcPtr(info.pc+1);
-    info.opcode[2] = *SrcPtr(info.pc+2);
+    info.opcode[0] = RM(info.pc);
+    info.opcode[1] = RM(info.pc+1);
+    info.opcode[2] = RM(info.pc+2);
     info.iereg = saveie;
     addState(2);
   }
@@ -772,8 +767,8 @@ void CUPD1007::Rtn (void *op2 /*dummy*/)
 {
   BYTE saveie = info.iereg;
   info.iereg = 0;
-  BYTE x1 = *SrcPtr(PostIncw(SP,1));
-  BYTE x2 = *SrcPtr(PostIncw(SP,1));
+  BYTE x1 = RM(PostIncw(SP,1));
+  BYTE x2 = RM(PostIncw(SP,1));
   info.iereg = saveie;
   info.pc = (x1 << 8) | x2;
   addState(10);
@@ -811,7 +806,7 @@ void CUPD1007::Nop (void *op2 /*dummy*/)
 
 void CUPD1007::BlockCopy (void *op2)
 {
-  *DstPtr(((Func4) op2) (IZ,1)) = *SrcPtr(((Func4) op2) (IX,1));
+  *DstPtr(((Func4) op2) (IZ,1)) = RM(((Func4) op2) (IX,1));
   if ((info.mr[IX+56] != info.mr[IY+56]) |
       (info.mr[IX+120] != info.mr[IY+120]))
       info.pc = info.savepc;
@@ -922,7 +917,7 @@ void CUPD1007::StmRegOffsAry (void *op2)
 
 void CUPD1007::LdRegMemo (void *op2)
 {
-  info.mr[info.regbank | Reg1(FetchByte())] = *SrcPtr(((Func4)op2) (Ireg(),1));
+  info.mr[info.regbank | Reg1(FetchByte())] = RM(((Func4)op2) (Ireg(),1));
   addState(12);
 }
 
@@ -935,7 +930,7 @@ void CUPD1007::LdmAryMemo (void *op2)
   y = info.regbank | Rl1 (x, y);	/* index of the last processed register */
   x = info.regbank | Reg1 (x);	/* index of the first processed register */
   do {
-    info.mr[x] = *SrcPtr(Func4 (op2) (src,1));
+    info.mr[x] = RM(Func4 (op2) (src,1));
     addState(4);
     if (x == y) break;
     NextReg (&x);
@@ -949,7 +944,7 @@ void CUPD1007::LdRegImOffs (void *op2)
   ea = Wreg (Ireg(),0);
   BYTE x = Reg1 (FetchByte());
   ((Proc4)op2) (FetchByte());
-  info.mr[x] = *SrcPtr(ea);
+  info.mr[x] = RM(ea);
   addState(12);
 }
 
@@ -959,7 +954,7 @@ void CUPD1007::LdRegRegOffs (void *op2)
   ea = Wreg (Ireg(),0);
   ((Proc4)op2) (info.mr[Reg1 (FetchByte())]);
   BYTE x = Reg2 (FetchByte());
-  info.mr[x] = *SrcPtr(ea);
+  info.mr[x] = RM(ea);
   addState(12);
 }
 
@@ -973,7 +968,7 @@ void CUPD1007::LdmAryImOffs (void *op2)
   y = Rl1 (x, y);		/* index of the last processed register */
   x = Reg1 (x);		/* index of the first processed register */
   do {
-    info.mr[x] = *SrcPtr(ea);
+    info.mr[x] = RM(ea);
     addState(4);
     if (x == y) break;
     NextReg (&x);
@@ -993,7 +988,7 @@ void CUPD1007::LdmAryRegOffs (void *op2)
   BYTE last = Rl1 (x, y);
   x = Reg3 (x, y);		/* index of the first processed register */
   do{
-    info.mr[x] = *SrcPtr(ea);
+    info.mr[x] = RM(ea);
     addState(4);
     if (first == last) break;
     NextReg (&first);

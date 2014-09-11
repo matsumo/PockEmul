@@ -3,6 +3,7 @@
         <file>fx8000g/charset.bin</file>
         <file>fx8000g/fx8000g.png</file>
         <file>fx8000g/rom0.bin</file>
-        <file>fx8000g/rom1.bin</file>
+        <file>fx8000g/rom1a.bin</file>
+        <file>fx8000g/rom1b.bin</file>
     </qresource>
 </RCC>

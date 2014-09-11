@@ -100,7 +100,7 @@ public:
     BYTE dummydst;	//	{ free address space }
 
 
-    CUPD1007(CPObject *parent);
+    CUPD1007(CPObject *parent, QString rom0fn);
     virtual ~CUPD1007();
 
     upd1007_config info;
@@ -199,7 +199,6 @@ public:
             BYTE OpBnus(BYTE *x, BYTE y);
             BYTE OpLd(BYTE x, BYTE y);
             BYTE *DstPtr(UINT16 address);
-            BYTE *SrcPtr(UINT16 address);
             void StImOffsReg(void *op2);
             void StRegOffsReg(void *op2);
             void StmImOffsAry(void *op2);
