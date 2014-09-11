@@ -48,12 +48,14 @@
 #include "cx710.h"
 #include "sharp/e500.h"
 #include "sharp/g850v.h"
+
 #include "casio/pb1000.h"
 #include "casio/pb2000.h"
 #include "casio/md100.h"
 #include "casio/fp100.h"
 #include "casio/fp40.h"
 #include "casio/fp200.h"
+#include "casio/fx8000g.h"
 
 #include "casio/z1.h"
 #include "pc2001.h"

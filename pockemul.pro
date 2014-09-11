@@ -568,7 +568,9 @@ HEADERS += src/core/Connect.h \
     src/cpu/hd44780.h \
     src/lcd/Lcdc_cc40.h \
     src/machine/ti/ti74.h \
-    src/lcd/Lcdc_ti74.h
+    src/lcd/Lcdc_ti74.h \
+    src/cpu/upd1007.h \
+    src/machine/casio/fx8000g.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -641,7 +643,8 @@ RESOURCES +=  \
     resources/asmlibs.qrc \
     resources/core.qrc \
     resources/cc40.qrc \
-    resources/ti74.qrc
+    resources/ti74.qrc \
+    resources/fx8000g.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \
@@ -836,7 +839,9 @@ SOURCES +=  \
     src/cpu/hd44780.cpp \
     src/lcd/Lcdc_cc40.cpp \
     src/machine/ti/ti74.cpp \
-    src/lcd/Lcdc_ti74.cpp
+    src/lcd/Lcdc_ti74.cpp \
+    src/cpu/upd1007.cpp \
+    src/machine/casio/fx8000g.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

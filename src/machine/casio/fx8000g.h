@@ -1,0 +1,49 @@
+#ifndef FX8000G_H
+#define FX8000G_H
+
+
+
+class CPObject;
+class CUPD1007;
+class Cconnector;
+
+#include "pcxxxx.h"
+
+
+
+class Cfx8000g : public CpcXXXX
+{
+    Q_OBJECT
+
+public:
+    Cfx8000g(CPObject *parent = 0);
+    virtual ~Cfx8000g();
+
+    virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
+    virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
+    virtual UINT8 in(UINT8 address);
+    virtual UINT8 out(UINT8 address,UINT8 value);
+
+    virtual bool	Set_Connector(void);
+    virtual bool	Get_Connector(void);
+
+    quint16 kstrobe;
+
+    bool init();
+    virtual bool run();
+    virtual void Reset();
+
+    void TurnON();
+    void TurnOFF();
+    bool SaveConfig(QXmlStreamWriter *xmlOut);
+    bool LoadConfig(QXmlStreamReader *xmlIn);
+
+    UINT8 getKey();
+
+    CUPD1007 *fx8000gcpu;
+
+private:
+
+};
+
+#endif // FX8000G_H

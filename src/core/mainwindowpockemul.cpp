@@ -232,6 +232,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Casio FP-40"]=FP40;
     objtable["Casio FP-200"]=FP200;
     objtable["Casio FX-890P"]=FX890P;
+    objtable["Casio FX-8000G"]=FX8000G;
     objtable["Casio Z-1"]=Z1;
     objtable["Casio Z-1GR"]=Z1GR;
     objtable["Nec PC-2001"]=PC2001;
@@ -339,6 +340,7 @@ CPObject *pPC=0;
         case E500S  : pPC = new Ce500(0,E500S);      pPC->setName("PC-E500S"); break;
         case E550   : pPC = new Ce550;      pPC->setName("PC-E550"); break;
         case G850V  : pPC = new Cg850v;     pPC->setName("PC-G850V"); break;
+
         case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
         case PB2000 : pPC = new Cpb2000;    pPC->setName("Casio PB-2000C"); break;
         case FP200  : pPC = new Cfp200;     pPC->setName("Casio FP-200"); break;
@@ -348,6 +350,7 @@ CPObject *pPC=0;
         case FX890P : pPC = new Cz1(0,FX890P);  pPC->setName("Casio FX-890P"); break;
         case Z1     : pPC = new Cz1;            pPC->setName("Casio Z-1"); break;
         case Z1GR   : pPC = new Cz1(0,Z1GR);    pPC->setName("Casio Z-1GR"); break;
+        case FX8000G: pPC = new Cfx8000g;    pPC->setName("Casio FX-8000G"); break;
 
         case PC2001   : pPC = new Cpc2001;      pPC->setName("Nec PC-2001"); break;
         case PC2021   : pPC = new Cpc2021;      pPC->setName("Nec PC-2021"); break;

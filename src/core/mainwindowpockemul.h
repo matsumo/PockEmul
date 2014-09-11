@@ -137,7 +137,8 @@ enum Models {
     CE1560,
     CC40,
     TI74,
-    TI95
+    TI95,
+    FX8000G
 };
 
 class MainWindowPockemul : public QMainWindow, public Ui::MainWindow
