@@ -49,6 +49,7 @@ CUPD1007::~CUPD1007() {
 bool CUPD1007::init()
 {
 
+    return true;
 }
 
 bool CUPD1007::exit()

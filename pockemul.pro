@@ -570,7 +570,8 @@ HEADERS += src/core/Connect.h \
     src/machine/ti/ti74.h \
     src/lcd/Lcdc_ti74.h \
     src/cpu/upd1007.h \
-    src/machine/casio/fx8000g.h
+    src/machine/casio/fx8000g.h \
+    src/lcd/Lcdc_fx8000g.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -841,7 +842,8 @@ SOURCES +=  \
     src/machine/ti/ti74.cpp \
     src/lcd/Lcdc_ti74.cpp \
     src/cpu/upd1007.cpp \
-    src/machine/casio/fx8000g.cpp
+    src/machine/casio/fx8000g.cpp \
+    src/lcd/Lcdc_fx8000g.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

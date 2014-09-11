@@ -5,6 +5,7 @@
 
 class CPObject;
 class CUPD1007;
+class CHD44352;
 class Cconnector;
 
 #include "pcxxxx.h"
@@ -41,6 +42,7 @@ public:
     UINT8 getKey();
 
     CUPD1007 *fx8000gcpu;
+    CHD44352 *pHD44352;
 
 private:
 

@@ -2,6 +2,8 @@
 
 #include "fx8000g.h"
 #include "upd1007.h"
+#include "hd44352.h"
+#include "Lcdc_fx8000g.h"
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"
@@ -11,8 +13,8 @@
 
 Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 12500);  // 80µs per cycle
-    setcfgfname(QString("fx8000g7"));
+    setfrequency( (int) 910000);  // 80µs per cycle
+    setcfgfname(QString("fx8000g"));
 
     SessionHeader	= "FX8000GPKM";
     Initial_Session_Fname ="fx8000g.pkm";
@@ -50,9 +52,11 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     Lcd_Symb_ratio_X	= 1;
 
     pTIMER		= new Ctimer(this);
-//    pLCDC		= new Clcdc_fx8000g(this);
-    pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));    fx8000gcpu = (CUPD1007*)pCPU;
-    pKEYB		= new Ckeyb(this,"ti57.map");
+    pLCDC		= new Clcdc_fx8000g(this);
+    pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));
+    fx8000gcpu = (CUPD1007*)pCPU;
+    pKEYB		= new Ckeyb(this,"fx8000g.map");
+    pHD44352    = new CHD44352(P_RES(":/fx8000g/charset.bin"));
 
     ioFreq = 0;
 }
