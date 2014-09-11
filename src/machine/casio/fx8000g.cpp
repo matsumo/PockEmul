@@ -30,7 +30,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(4 , 0x3000 ,	P_RES(":/fx8000g/rom1a.bin"), ""	, CSlot::ROM , "ROM"));
     SlotList.append(CSlot(16 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(8 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
     setDXmm(78);
     setDYmm(148);
     setDZmm(36);
@@ -67,9 +67,9 @@ Cfx8000g::~Cfx8000g() {
 bool Cfx8000g::init(void)				// initialize
 {
 
-//pCPU->logsw = true;
+pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
-//    pCPU->logsw = true;
+    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
@@ -88,16 +88,18 @@ bool Cfx8000g::run() {
     return true;
 }
 
-bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) { return false; }
+bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) {
+
+    Q_UNUSED(data)
+
+    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ return(true);	}
+    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ return(true);	}
+
+    return false;
+}
 
 bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
 
-//    else if (address < 0x4000)  return &rom1[address];
-//    else if (address < 0x6000)  return &ram[address-0x4000];
-//    else if (address < 0x8000)  return &ram[address-0x6000];
-//    else if (address < 0xC000)  return &rom1[address-0x4000];
-//    else if (address < 0xE000)  return &ram[address-0xC000];
-//    else return &ram[address-0xE000];
     return true;
 }
 

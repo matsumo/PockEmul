@@ -50,9 +50,9 @@
 
 #include "pcxxxx.h"
 #include "Inter.h"
-#include "Debug.h"
 #include "i8085cpu.h"
 #include "i8085daa.h"
+#include "i8085_dasm.h"
 #include "ui/cregsz80widget.h"
 
 #define CPUTYPE_8080	0

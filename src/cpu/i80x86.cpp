@@ -5,7 +5,7 @@
 #include "i80x86.h"
 #include "pcxxxx.h"
 #include "Inter.h"
-#include "Debug.h"
+#include "i80x86_dasm.h"
 #include "ui/cregsz80widget.h"
 #include "Log.h"
 

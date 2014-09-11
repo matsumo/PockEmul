@@ -7,9 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "common.h"
-#include "Debug.h"
 #include "pcxxxx.h"
-#include "i80x86.h"
+#include "i80x86_dasm.h"
 
 #define RM_R8	1
 #define RM_R16	2

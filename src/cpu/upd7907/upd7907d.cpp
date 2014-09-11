@@ -6168,7 +6168,7 @@ UINT32 Cdebug_upd7810::DisAsm_1(UINT32 oldpc)
     sprintf(prefix,"%05X:",(uint)oldpc);
     if (nb<5)
         for(int i=0;i<nb;i++)
-            sprintf(prefix,"%s%02X",prefix,(uint8)pPC->Get_8(oldpc+i));
+            sprintf(prefix,"%s%02X",prefix,(quint8)pPC->Get_8(oldpc+i));
     int decal;
     if (nb<5) decal = nb;
     else	decal = 0;

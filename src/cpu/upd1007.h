@@ -24,9 +24,9 @@ typedef quint32 UINT32;
 #define V0  6
 #define SP  7
 
+#define INT_LATENCY 7
 
-
-
+typedef void   (*Proc2) (void *op);
 typedef void   (*Proc3) (UINT8 x, UINT8 y);
 typedef void   (*Proc4) (UINT8 x);
 typedef void   (*Proc5) (UINT8 *x, UINT8 ye);
@@ -257,8 +257,8 @@ public:
             BYTE Get_flag();
             BYTE Get_iereg();
             BYTE Get_ifreg();
-            void execute_one(UINT8 op);
 
+            void ExecInstr();
 protected:
 
 };

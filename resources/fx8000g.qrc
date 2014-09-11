@@ -5,5 +5,6 @@
         <file>fx8000g/rom0.bin</file>
         <file>fx8000g/rom1a.bin</file>
         <file>fx8000g/rom1b.bin</file>
+        <file>fx8000g/fx8000glcd.png</file>
     </qresource>
 </RCC>

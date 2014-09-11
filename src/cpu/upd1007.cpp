@@ -7,6 +7,8 @@ This CPU core is based on documentations works done by:
 #include "upd1007.h"
 #include "ui/cregsz80widget.h"
 #include "pcxxxx.h"
+#include "Inter.h"
+#include "upd1007d.h"
 
 #define Lo(x) (x&0xff)
 #define Hi(x) ((x>>8)&0xff)
@@ -28,12 +30,14 @@ const BYTE CUPD1007::INT_serv[3] = { 0x20, 0x40, 0x80 };
 const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 
 #define RM(addr)  ((info.iereg & 0x03) ? 0x00 : pPC->Get_8(addr))
+#define WM(addr,value) { if ((info.iereg & 0x03)== 0x00) pPC->Set_8(addr,value);}
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
 
-//    pDEBUG	= new Cdebug_upd1007(parent);
+    pDEBUG	= new Cdebug_upd1007(parent);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
+    fn_log="upd1007.log";
 
     QFile file;
     file.setFileName(rom0fn);
@@ -49,22 +53,79 @@ CUPD1007::~CUPD1007() {
 bool CUPD1007::init()
 {
 
+    Check_Log();
+    pDEBUG->init();
+
+    Reset();
+
     return true;
 }
 
 bool CUPD1007::exit()
 {
 
+    return true;
 }
 
 void CUPD1007::step()
 {
+//    { complete an optional I/O device write }
+//        if procptr <> nil then
+//        begin
+//          Proc1(procptr);
+//          procptr := nil;
+//        end {if};
+
+        info.cycles = 0;
+        if (info.CpuSleep)
+            addState(6);
+        else
+        {
+//    { interrupts }
+          int i = 0;		//{ a FOR loop cannot be used here, because the value }
+          while (i < 3)	//{ of the control variable is used outside the loop }
+          {
+//    { is there a pending interrupt request of higher priority than currently
+//      serviced? }
+            if ((info.ifreg & INT_serv[i]) != 0)
+            {
+              i = 3;
+            }
+            else if (info.irqcnt[i] > 0)
+//    { handle an interrupt }
+            {
+              info.ifreg |= INT_serv[i];
+              Call (info.mr[126-i], info.mr[62-i]);
+              addState(16);
+              break;
+            }
+            else
+//    { proceed with the next interrupt }
+            i++;
+          }
+//    { execute an instruction if there wasn't an interrupt to handle }
+          if (i == 3) ExecInstr();
+        }
+
+//    { update the interrupt request counters }
+        for (int i=0;i<3;i++)
+        {
+          if (info.irqcnt[i] < -INT_LATENCY) info.irqcnt[i] = -INT_LATENCY;
+          else if (info.irqcnt[i] < 0)  info.irqcnt[i]+= info.cycles;
+        }
 
 }
 
 void CUPD1007::Reset()
 {
 
+info.pc = 0x0000;
+info.koreg =info.kireg=info.asreg=info.flag=info.iereg=info.ifreg=0;
+info.irqcnt[0] = 0;
+info.irqcnt[1] = 0;
+info.irqcnt[2] = 0;
+info.acycles = 0;
+info.CpuSleep = false;
 }
 
 void CUPD1007::Load_Internal(QXmlStreamReader *)
@@ -79,7 +140,7 @@ void CUPD1007::save_internal(QXmlStreamWriter *)
 
 UINT32 CUPD1007::get_PC()
 {
-
+    return info.pc;
 }
 
 void CUPD1007::Regs_Info(UINT8)
@@ -89,6 +150,7 @@ void CUPD1007::Regs_Info(UINT8)
 
 void CUPD1007::addState(int x) {
     info.cycles+=x;
+    pPC->pTIMER->state += x;
 }
 
 
@@ -740,8 +802,8 @@ void CUPD1007::Call (BYTE x1, BYTE x2)
 {
   BYTE saveie = info.iereg;
   info.iereg = 0;
-  *DstPtr(PreDecw(SP,1)) = Lo (info.pc);
-  *DstPtr(PreDecw(SP,1)) = Hi (info.pc);
+  WM(PreDecw(SP,1) , Lo (info.pc));
+  WM(PreDecw(SP,1) , Hi (info.pc));
   info.iereg = saveie;
   info.pc = (x1 << 8) | x2;
   addState(6);
@@ -807,7 +869,7 @@ void CUPD1007::Nop (void *op2 /*dummy*/)
 
 void CUPD1007::BlockCopy (void *op2)
 {
-  *DstPtr(((Func4) op2) (IZ,1)) = RM(((Func4) op2) (IX,1));
+  WM(((Func4) op2) (IZ,1) , RM(((Func4) op2) (IX,1)));
   if ((info.mr[IX+56] != info.mr[IY+56]) |
       (info.mr[IX+120] != info.mr[IY+120]))
       info.pc = info.savepc;
@@ -817,7 +879,7 @@ void CUPD1007::BlockCopy (void *op2)
 
 void CUPD1007::BlockSearch (void *op2)
 {
-  if (*DstPtr(((Func4)op2) (Ireg(),1)) != info.mr[info.regbank | Reg1(FetchByte())])
+  if (RM(((Func4)op2) (Ireg(),1)) != info.mr[info.regbank | Reg1(FetchByte())])
   {
     if (Wreg(Ireg(),0) != Wreg(IY,0)) info.pc = info.savepc;
   }
@@ -827,14 +889,14 @@ void CUPD1007::BlockSearch (void *op2)
 
 void CUPD1007::StMemoReg (void *op2)
 {
-  *DstPtr(((Func4)op2) (Ireg(),1)) = info.mr[info.regbank | Reg1(FetchByte())];
+  WM(((Func4)op2) (Ireg(),1) , info.mr[info.regbank | Reg1(FetchByte())]);
   addState(12);
 }
 
 
 void CUPD1007::StMemoIm8 (void *op2)
 {
-  *DstPtr(((Func4)op2) (Ireg(),1)) = FetchByte();
+  WM(((Func4)op2) (Ireg(),1) , FetchByte());
   addState(6);
 }
 
@@ -847,7 +909,7 @@ void CUPD1007::StmMemoAry (void *op2)
   y = info.regbank | Rl1 (x, y);	/* index of the last processed register */
   x = info.regbank | Reg1 (x);	/* index of the first processed register */
   do{
-    *DstPtr(((Func4)op2) (dst,1)) = info.mr[x];
+    WM(((Func4)op2) (dst,1) , info.mr[x]);
     addState(4);
     if (x == y) break;
     NextReg (&x);
@@ -861,7 +923,7 @@ void CUPD1007::StImOffsReg ( void *op2)
   ea = Wreg (Ireg(),0);
   BYTE x = Reg1 (FetchByte());
   ((Proc4)op2) (FetchByte());
-  *DstPtr(ea) = info.mr[x];
+  WM(ea , info.mr[x]);
   addState(12);
 }
 
@@ -871,7 +933,7 @@ void CUPD1007::StRegOffsReg (void *op2)
   ea = Wreg (Ireg(),0);
   ((Proc4)op2) (info.mr[Reg1 (FetchByte())]);
   BYTE x = Reg2 (FetchByte());
-  *DstPtr(ea) = info.mr[x];
+  WM(ea , info.mr[x]);
   addState(12);
 }
 
@@ -885,7 +947,7 @@ void CUPD1007::StmImOffsAry (void *op2)
   y = Rl1 (x, y);		/* index of the last processed register */
   x = Reg1 (x);		/* index of the first processed register */
   do{
-    *DstPtr(ea) = info.mr[x];
+    WM(ea , info.mr[x]);
     addState(4);
     if (x == y) break;
     NextReg (&x);
@@ -905,7 +967,7 @@ void CUPD1007::StmRegOffsAry (void *op2)
   BYTE last = Rl1 (x, y);
   x = Reg3 (x, y);		/* index of the first processed register */
   do{
-    *DstPtr(ea) = info.mr[x];
+    WM(ea , info.mr[x]);
     addState(4);
     if (first == last) break;
     NextReg (&first);
@@ -1525,6 +1587,8 @@ BYTE CUPD1007::Get_ifreg() {
     return info.ifreg;
 }
 
+
+
 #if 1
 void* dtab2[2][2] = {
     {	(void*)&CUPD1007::Xreg,		(void*)&CUPD1007::OpAdb		},		// { code $00, ADB }
@@ -2051,9 +2115,12 @@ void* dtab[512][2] = {
 #endif
 
 
-void CUPD1007::execute_one(UINT8 op)
+void CUPD1007::ExecInstr()
 {
-
+    UINT16 kod = Fetchopcode();
+    info.regbank = (! info.opcode[0] << 3) & 0x40;	//{ default value }
+    info.regstep = 1;					//{ default value }
+    ((Proc2) dtab[kod][0]) (dtab[kod][1]);
 }
 
 void CUPD1007::DoPorts()

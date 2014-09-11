@@ -20,7 +20,7 @@
 #include "ops02.h"
 //#include "opsc02.h"
 
-void Cm6502::OP(uint8 code)
+void Cm6502::OP(quint8 code)
 {
     int tmp;
 

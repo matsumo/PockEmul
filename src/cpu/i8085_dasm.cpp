@@ -10,6 +10,7 @@
 #include "Debug.h"
 #include "pcxxxx.h"
 #include "i8085.h"
+#include "i8085_dasm.h"
 
 const char    *Cdebug_i8085::Op_Code[256]   =
    {
