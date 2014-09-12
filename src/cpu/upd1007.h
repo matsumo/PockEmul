@@ -8,6 +8,7 @@ This CPU core is based on documentations works done by:
 
 #include "cpu.h"
 
+class CpcXXXX;
 typedef quint32 UINT32;
 
 
@@ -26,19 +27,13 @@ typedef quint32 UINT32;
 
 #define INT_LATENCY 7
 
-typedef void   (*Proc2) (void *op);
-typedef void   (*Proc3) (UINT8 x, UINT8 y);
-typedef void   (*Proc4) (UINT8 x);
-typedef void   (*Proc5) (UINT8 *x, UINT8 ye);
-typedef UINT8  (*Func1)();
-typedef UINT8  (*Func2)(UINT8 x);
-typedef UINT8  (*Func3)(UINT8 x, UINT8 y);
-typedef UINT16 (*Func4)(UINT8 x, UINT8 y);
-typedef UINT16 (*Func5)(UINT8 *x, UINT8 y);
+
 
 // device config
 struct upd1007_config
 {
+    CpcXXXX *pPC;
+    UINT16 ea;  /* temporary pointer used in the indexed addressing mode */
     BYTE mr[0x80];	//{ main (general purpose) register file }
     BYTE koreg;//: byte;
     BYTE kireg;//: byte;
@@ -84,6 +79,15 @@ struct upd1007_config
                       //connected after the reset }
 };
 
+typedef void   (*Proc2) (upd1007_config *info,void *op);
+typedef void   (*Proc3) (upd1007_config *info,UINT8 x, UINT8 y);
+typedef void   (*Proc4) (upd1007_config *info,UINT8 x);
+typedef void   (*Proc5) (upd1007_config *info,UINT8 *x, UINT8 *y);
+typedef UINT8  (*Func1)(upd1007_config *info);
+typedef UINT8  (*Func2)(upd1007_config *info,UINT8 x);
+typedef UINT8  (*Func3)(upd1007_config *info,UINT8 x, UINT8 y);
+typedef UINT16 (*Func4)(upd1007_config *info,UINT8 x, UINT8 y);
+typedef UINT16 (*Func5)(upd1007_config *info,UINT8 *x, UINT8 y);
 
 #define ROM0SIZE 0x1800
 #define ROM1SIZE 0x8000
@@ -96,14 +100,10 @@ class CUPD1007 : public CCPU
 {
 public:
 
-    BYTE dummysrc; //	{ free adress space }
-    BYTE dummydst;	//	{ free address space }
-
-
     CUPD1007(CPObject *parent, QString rom0fn);
     virtual ~CUPD1007();
 
-    upd1007_config info;
+    upd1007_config reginfo;
 
     virtual	bool	init(void);						//initialize
     virtual	bool	exit(void);						//end
@@ -123,15 +123,8 @@ public:
     virtual	UINT32	get_PC(void);					//get Program Counter
     virtual void	Regs_Info(UINT8);
 
-            UINT8 Get_PD(void);
-            UINT8 Get_PE(void);
-
-
             BYTE rom0[ROM0SIZE][3];
-            BYTE rom1[ROM1SIZE];
-            BYTE ram[RAMSIZE];
 
-            UINT16 ea;  /* temporary pointer used in the indexed addressing mode */
             const static BYTE cc[8];
             /* bits of the IE register */
             const static BYTE INT_enable[3];
@@ -139,124 +132,123 @@ public:
             const static BYTE INT_serv[3];
             const static BYTE INT_input[3];
 
-            void addState(int x);
+            static void addState(upd1007_config *info, int x);
             UINT16 Fetchopcode();
-            BYTE FetchByte();
-            BYTE Reg1(BYTE x);
-            BYTE Reg2(BYTE x);
-            BYTE Reg3(BYTE x, BYTE y);
-            BYTE AsLimit(BYTE y);
-            BYTE Rl1(BYTE x, BYTE y);
-            BYTE Im6(BYTE x, BYTE y);
-            BYTE Ireg();
-            void NextReg(BYTE *x);
-            UINT16 Wreg(BYTE x, BYTE y);
-            UINT16 PostIncw(BYTE x, BYTE y);
-            UINT16 PostDecw(BYTE x, BYTE y);
-            UINT16 PreIncw(BYTE x, BYTE y);
-            UINT16 PreDecw(BYTE x, BYTE y);
-            void PlusOffset(BYTE x);
-            void MinusOffset(BYTE x);
-            void UnReg(void *op2);
-            void RotReg(void *op2);
-            void UnAry(void *op2);
-            void RotAry(void *op2);
-            void Mtbm(void *op2);
-            void Xreg(void *op2);
-            void Yreg(void *op2);
-            void TXreg(void *op2);
-            void TYreg(void *op2);
-            void ExchReg(void *op2);
-            void RegIm8(void *op2);
-            void TRegIm8(void *op2);
-            void Xary(void *op2);
-            void Yary(void *op2);
-            void TXary(void *op2);
-            void TYary(void *op2);
-            void ExchAry(void *op2);
-            void AryIm6(void *op2);
-            void TAryIm6(void *op2);
-            void Ldw(void *op2);
-            void AdwSbw(void *op2);
-            void Cond(void *op2);
-            void NotCond(void *op2);
-            void KeyCond(void *op2);
-            void NotKeyCond(void *op2);
-            void Jump(BYTE x1, BYTE x2);
-            void Call(BYTE x1, BYTE x2);
-            void Trap(void *op2);
-            void Ijmp(BYTE x1, BYTE x2);
-            void Rtn(void *op2);
-            void Cani(void *op2);
-            void Rti(void *op2);
-            void Nop(void *op2);
-            void BlockCopy(void *op2);
-            void BlockSearch(void *op2);
-            void StMemoReg(void *op2);
-            void StMemoIm8(void *op2);
-            void StmMemoAry(void *op2);
-            BYTE OpSwp1(BYTE *x, BYTE y);
-            BYTE OpBnus(BYTE *x, BYTE y);
-            BYTE OpLd(BYTE x, BYTE y);
-            BYTE *DstPtr(UINT16 address);
-            void StImOffsReg(void *op2);
-            void StRegOffsReg(void *op2);
-            void StmImOffsAry(void *op2);
-            void StmRegOffsAry(void *op2);
-            void LdRegMemo(void *op2);
-            void LdmAryMemo(void *op2);
-            void LdRegImOffs(void *op2);
-            void LdRegRegOffs(void *op2);
-            void LdmAryImOffs(void *op2);
-            void LdmAryRegOffs(void *op2);
-            void PstIm8(void *op2);
-            void PstReg(void *op2);
-            void Gst(void *op2);
-            void Off(void *op2);
-            void ZeroBits(BYTE x);
-            BYTE OpAd(BYTE x, BYTE y);
-            BYTE OpSb(BYTE x, BYTE y);
-            BYTE OpAdb(BYTE x, BYTE y);
-            BYTE OpSbb(BYTE x, BYTE y);
-            BYTE OpAn(BYTE x, BYTE y);
-            BYTE OpBit(BYTE x, BYTE y);
-            BYTE OpXr(BYTE x, BYTE y);
-            BYTE OpNa(BYTE x, BYTE y);
-            BYTE OpOr(BYTE x, BYTE y);
-            void DoPorts();
-            BYTE OpRod(BYTE *x, BYTE y);
-            BYTE OpRou(BYTE *x, BYTE y);
-            BYTE OpMtb(BYTE *x, BYTE y);
-            BYTE OpInv(BYTE *x, BYTE y);
-            BYTE OpCmp(BYTE *x, BYTE y);
-            BYTE OpCmpb(BYTE *x, BYTE y);
-            BYTE OpDiu(BYTE *x, BYTE y);
-            BYTE OpDid(BYTE *x, BYTE y);
-            BYTE OpByu(BYTE *x, BYTE y);
-            BYTE OpByd(BYTE *x, BYTE y);
-            void OpXc(BYTE *x, BYTE *y);
-            void OpXcls(BYTE *x, BYTE *y);
-            void OpXchs(BYTE *x, BYTE *y);
-            void OpSwp2(BYTE *x, BYTE *y);
-            void OpKo(BYTE x);
-            void OpIf(BYTE x);
-            void OpAs(BYTE x);
-            void OpIe(BYTE x);
-            void OpFl(BYTE x);
-            void Ldle(void *op2);
-            void Ldlo(void *op2);
-            void Stle(void *op2);
-            void Stlo(void *op2);
-            void Ldlem(void *op2);
-            void Ldlom(void *op2);
-            void Stlem(void *op2);
-            void Stlom(void *op2);
-            BYTE Get_kireg();
-            BYTE Get_koreg();
-            BYTE Get_asreg();
-            BYTE Get_flag();
-            BYTE Get_iereg();
-            BYTE Get_ifreg();
+            static BYTE FetchByte(upd1007_config *info);
+            static BYTE Reg1(BYTE x);
+            static BYTE Reg2(upd1007_config *info, BYTE x);
+            static BYTE Reg3(upd1007_config *info, BYTE x, BYTE y);
+            static BYTE AsLimit(upd1007_config *info, BYTE y);
+            static BYTE Rl1(BYTE x, BYTE y);
+            static BYTE Im6(BYTE x, BYTE y);
+            static BYTE Ireg(upd1007_config *info);
+            static void NextReg(upd1007_config *info,BYTE *x);
+            static UINT16 Wreg(upd1007_config *info, BYTE x, BYTE y);
+            static UINT16 PostIncw(upd1007_config *info,BYTE x, BYTE y);
+            static UINT16 PostDecw(upd1007_config *info,BYTE x, BYTE y);
+            static UINT16 PreIncw(upd1007_config *info,BYTE x, BYTE y);
+            static UINT16 PreDecw(upd1007_config *info, BYTE x, BYTE y);
+            static void PlusOffset(upd1007_config *info,BYTE x);
+            static void MinusOffset(upd1007_config *info,BYTE x);
+            static void UnReg(upd1007_config *info,void *op2);
+            static void RotReg(upd1007_config *info,void *op2);
+            static void UnAry(upd1007_config *info,void *op2);
+            static void RotAry(upd1007_config *info,void *op2);
+            static void Mtbm(upd1007_config *info,void *op2);
+            static void Xreg(upd1007_config *info,void *op2);
+            static void Yreg(upd1007_config *info,void *op2);
+            static void TXreg(upd1007_config *info,void *op2);
+            static void TYreg(upd1007_config *info,void *op2);
+            static void ExchReg(upd1007_config *info,void *op2);
+            static void RegIm8(upd1007_config *info,void *op2);
+            static void TRegIm8(upd1007_config *info,void *op2);
+            static void Xary(upd1007_config *info,void *op2);
+            static void Yary(upd1007_config *info,void *op2);
+            static void TXary(upd1007_config *info,void *op2);
+            static void TYary(upd1007_config *info,void *op2);
+            static void ExchAry(upd1007_config *info,void *op2);
+            static void AryIm6(upd1007_config *info,void *op2);
+            static void TAryIm6(upd1007_config *info,void *op2);
+            static void Ldw(upd1007_config *info,void *op2);
+            static void AdwSbw(upd1007_config *info,void *op2);
+            static void Cond(upd1007_config *info,void *op2);
+            static void NotCond(upd1007_config *info,void *op2);
+            static void KeyCond(upd1007_config *info,void *op2);
+            static void NotKeyCond(upd1007_config *info,void *op2);
+            static void Jump(upd1007_config *info, BYTE x1, BYTE x2);
+            static void Call(upd1007_config *info,BYTE x1, BYTE x2);
+            static void Trap(upd1007_config *info, void *op2);
+            static void Ijmp(upd1007_config *info, BYTE x1, BYTE x2);
+            static void Rtn(upd1007_config *info,void *op2);
+            static void Cani(upd1007_config *info,void *op2);
+            static void Rti(upd1007_config *info,void *op2);
+            static void Nop(upd1007_config *info,void *op2);
+            static void BlockCopy(upd1007_config *info,void *op2);
+            static void BlockSearch(upd1007_config *info,void *op2);
+            static void StMemoReg(upd1007_config *info,void *op2);
+            static void StMemoIm8(upd1007_config *info,void *op2);
+            static void StmMemoAry(upd1007_config *info,void *op2);
+            static BYTE OpSwp1(upd1007_config *info, BYTE *x, BYTE y);
+            static BYTE OpBnus(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpLd(upd1007_config *info,BYTE x, BYTE y);
+            static void StImOffsReg(upd1007_config *info,void *op2);
+            static void StRegOffsReg(upd1007_config *info,void *op2);
+            static void StmImOffsAry(upd1007_config *info,void *op2);
+            static void StmRegOffsAry(upd1007_config *info,void *op2);
+            static void LdRegMemo(upd1007_config *info,void *op2);
+            static void LdmAryMemo(upd1007_config *info,void *op2);
+            static void LdRegImOffs(upd1007_config *info,void *op2);
+            static void LdRegRegOffs(upd1007_config *info,void *op2);
+            static void LdmAryImOffs(upd1007_config *info,void *op2);
+            static void LdmAryRegOffs(upd1007_config *info,void *op2);
+            static void PstIm8(upd1007_config *info,void *op2);
+            static void PstReg(upd1007_config *info,void *op2);
+            static void Gst(upd1007_config *info,void *op2);
+            static void Off(upd1007_config *info,void *op2);
+            static void ZeroBits(upd1007_config *info,BYTE x);
+            static BYTE OpAd(upd1007_config *info, BYTE x, BYTE y);
+            static BYTE OpSb(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpAdb(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpSbb(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpAn(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpBit(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpXr(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpNa(upd1007_config *info,BYTE x, BYTE y);
+            static BYTE OpOr(upd1007_config *info,BYTE x, BYTE y);
+            static void DoPorts(upd1007_config *info);
+            static BYTE OpRod(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpRou(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpMtb(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpInv(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpCmp(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpCmpb(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpDiu(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpDid(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpByu(upd1007_config *info,BYTE *x, BYTE y);
+            static BYTE OpByd(upd1007_config *info,BYTE *x, BYTE y);
+            static void OpXc(upd1007_config *info,BYTE *x, BYTE *y);
+            static void OpXcls(upd1007_config *info,BYTE *x, BYTE *y);
+            static void OpXchs(upd1007_config *info,BYTE *x, BYTE *y);
+            static void OpSwp2(upd1007_config *info,BYTE *x, BYTE *y);
+            static void OpKo(upd1007_config *info,BYTE x);
+            static void OpIf(upd1007_config *info,BYTE x);
+            static void OpAs(upd1007_config *info,BYTE x);
+            static void OpIe(upd1007_config *info,BYTE x);
+            static void OpFl(upd1007_config *info,BYTE x);
+            static void Ldle(upd1007_config *info,void *op2);
+            static void Ldlo(upd1007_config *info,void *op2);
+            static void Stle(upd1007_config *info,void *op2);
+            static void Stlo(upd1007_config *info,void *op2);
+            static void Ldlem(upd1007_config *info,void *op2);
+            static void Ldlom(upd1007_config *info,void *op2);
+            static void Stlem(upd1007_config *info,void *op2);
+            static void Stlom(upd1007_config *info,void *op2);
+            static BYTE Get_kireg(upd1007_config *info);
+            static BYTE Get_koreg(upd1007_config *info);
+            static BYTE Get_asreg(upd1007_config *info);
+            static BYTE Get_flag(upd1007_config *info);
+            static BYTE Get_iereg(upd1007_config *info);
+            static BYTE Get_ifreg(upd1007_config *info);
 
             void ExecInstr();
 protected:

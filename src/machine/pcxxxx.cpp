@@ -630,6 +630,7 @@ bool CpcXXXX::run(void)
         if (  pCPU->logsw && pCPU->fp_log && checkTraceRange(pCPU->get_PC()))
 #endif
         {
+            fflush(pCPU->fp_log);
             //char	s[2000];
             sprintf(Log_String," ");
             pCPU->pDEBUG->DisAsm_1(pCPU->get_PC());

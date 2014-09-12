@@ -38,12 +38,12 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(321);
     setDY(687);
 
-    Lcd_X		= 30;
-    Lcd_Y		= 43;
-    Lcd_DX		= 220;
-    Lcd_DY		= 40;
-    Lcd_ratio_X	= 1;
-    Lcd_ratio_Y	= 1;
+    Lcd_X		= 90;
+    Lcd_Y		= 130;
+    Lcd_DX		= 192;//168;//144 ;
+    Lcd_DY		= 32;
+    Lcd_ratio_X	= 1;// * 1.18;
+    Lcd_ratio_Y	= 1;// * 1.18;
 
     Lcd_Symb_X	= 55;
     Lcd_Symb_Y	= 41;
@@ -62,18 +62,20 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 }
 
 Cfx8000g::~Cfx8000g() {
+    delete pHD44352;
 }
 
 bool Cfx8000g::init(void)				// initialize
 {
 
-pCPU->logsw = true;
+//pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
-    pCPU->logsw = true;
+//    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
 
+    pHD44352->init();
 
     return true;
 }
@@ -103,8 +105,31 @@ bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
     return true;
 }
 
-UINT8 Cfx8000g::in(UINT8 Port) { return 0;}
-UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) { return 0; }
+UINT8 Cfx8000g::in(UINT8 Port) {
+
+    switch (Port) {
+    case 1: {
+        BYTE ret = pHD44352->data_read();
+        qWarning()<<"HD44352 data_read:"<<ret;
+        return ret;
+    }
+    }
+
+    return 0;
+}
+
+UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
+    switch (Port) {
+    case 0:
+        qWarning()<<"HD44352 Ctrl_write:"<<x;
+        pHD44352->control_write(x); pLCDC->redraw = true; break;
+    case 1:
+        qWarning()<<"HD44352 Data_write:"<<x;pHD44352->data_write(x); pLCDC->redraw = true; break;
+    }
+
+    return 0;
+}
+
 bool Cfx8000g::Set_Connector() { return true; }
 bool Cfx8000g::Get_Connector() { return true; }
 

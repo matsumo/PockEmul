@@ -75,7 +75,7 @@ public:
         QString Mnemonic(UINT16 kod);
         QString Arguments(UINT16 kod);
         QString IntToStr(BYTE x);
-        QString IntToHex(BYTE x, BYTE size);
+        QString IntToHex(UINT32 x, BYTE size);
 };
 
 #endif // UPD1007D_H

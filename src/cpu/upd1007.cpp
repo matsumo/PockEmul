@@ -29,8 +29,8 @@ const BYTE CUPD1007::INT_enable[3] = { 0x10, 0x20, 0x40 };
 const BYTE CUPD1007::INT_serv[3] = { 0x20, 0x40, 0x80 };
 const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 
-#define RM(addr)  ((info.iereg & 0x03) ? 0x00 : pPC->Get_8(addr))
-#define WM(addr,value) { if ((info.iereg & 0x03)== 0x00) pPC->Set_8(addr,value);}
+#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00 : info->pPC->Get_8(addr))
+#define WM(info,addr,value) { if ((info->iereg & 0x03)== 0x00) info->pPC->Set_8(addr,value);}
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
@@ -44,6 +44,8 @@ CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
     in.readRawData ((char *) &rom0,ROM0SIZE*3 );
+
+    reginfo.pPC = pPC;
 }
 
 CUPD1007::~CUPD1007() {
@@ -76,9 +78,9 @@ void CUPD1007::step()
 //          procptr := nil;
 //        end {if};
 
-        info.cycles = 0;
-        if (info.CpuSleep)
-            addState(6);
+        reginfo.cycles = 0;
+        if (reginfo.CpuSleep)
+            addState(&reginfo,6);
         else
         {
 //    { interrupts }
@@ -87,16 +89,16 @@ void CUPD1007::step()
           {
 //    { is there a pending interrupt request of higher priority than currently
 //      serviced? }
-            if ((info.ifreg & INT_serv[i]) != 0)
+            if ((reginfo.ifreg & INT_serv[i]) != 0)
             {
               i = 3;
             }
-            else if (info.irqcnt[i] > 0)
+            else if (reginfo.irqcnt[i] > 0)
 //    { handle an interrupt }
             {
-              info.ifreg |= INT_serv[i];
-              Call (info.mr[126-i], info.mr[62-i]);
-              addState(16);
+              reginfo.ifreg |= INT_serv[i];
+              Call (&reginfo,reginfo.mr[126-i], reginfo.mr[62-i]);
+              addState(&reginfo,16);
               break;
             }
             else
@@ -110,8 +112,8 @@ void CUPD1007::step()
 //    { update the interrupt request counters }
         for (int i=0;i<3;i++)
         {
-          if (info.irqcnt[i] < -INT_LATENCY) info.irqcnt[i] = -INT_LATENCY;
-          else if (info.irqcnt[i] < 0)  info.irqcnt[i]+= info.cycles;
+          if (reginfo.irqcnt[i] < -INT_LATENCY) reginfo.irqcnt[i] = -INT_LATENCY;
+          else if (reginfo.irqcnt[i] < 0)  reginfo.irqcnt[i]+= reginfo.cycles;
         }
 
 }
@@ -119,13 +121,13 @@ void CUPD1007::step()
 void CUPD1007::Reset()
 {
 
-info.pc = 0x0000;
-info.koreg =info.kireg=info.asreg=info.flag=info.iereg=info.ifreg=0;
-info.irqcnt[0] = 0;
-info.irqcnt[1] = 0;
-info.irqcnt[2] = 0;
-info.acycles = 0;
-info.CpuSleep = false;
+    reginfo.pc = 0x0000;
+    reginfo.koreg =reginfo.kireg=reginfo.asreg=reginfo.flag=reginfo.iereg=reginfo.ifreg=0;
+    reginfo.irqcnt[0] = 0;
+    reginfo.irqcnt[1] = 0;
+    reginfo.irqcnt[2] = 0;
+    reginfo.acycles = 0;
+    reginfo.CpuSleep = false;
 }
 
 void CUPD1007::Load_Internal(QXmlStreamReader *)
@@ -140,7 +142,7 @@ void CUPD1007::save_internal(QXmlStreamWriter *)
 
 UINT32 CUPD1007::get_PC()
 {
-    return info.pc;
+    return reginfo.pc;
 }
 
 void CUPD1007::Regs_Info(UINT8)
@@ -148,108 +150,96 @@ void CUPD1007::Regs_Info(UINT8)
 
 }
 
-void CUPD1007::addState(int x) {
-    info.cycles+=x;
-    pPC->pTIMER->state += x;
+void CUPD1007::addState(upd1007_config *info,int x) {
+    info->cycles+=x;
+    info->pPC->pTIMER->state += x;
 }
 
 
-/* 9-bit instruction info.opcode
+/* 9-bit instruction info->opcode
   Note: accessing the internal ROM doesn't consume any clock cycles */
 UINT16 CUPD1007::Fetchopcode()
 {
   BYTE saveie;
 
-  info.savepc = info.pc;
-  if (info.pc < ROM0SIZE) {
-    info.opcode[0] = rom0[info.pc][0];
-    info.opcode[1] = rom0[info.pc][1];
-    info.opcode[2] = rom0[info.pc][2];
+  reginfo.savepc = reginfo.pc;
+  if (reginfo.pc < ROM0SIZE) {
+    reginfo.opcode[0] = rom0[reginfo.pc][0];
+    reginfo.opcode[1] = rom0[reginfo.pc][1];
+    reginfo.opcode[2] = rom0[reginfo.pc][2];
   }
   else
   {
-    saveie = info.iereg;
-    info.iereg = 0;
-    info.opcode[0] = RM(info.pc);
-    info.opcode[1] = RM(info.pc+1);
-    info.opcode[2] = RM(info.pc+2);
-    info.iereg = saveie;
-    addState(2);
+    saveie = reginfo.iereg;
+    reginfo.iereg = 0;
+    reginfo.opcode[0] = RM((&reginfo),reginfo.pc);
+    reginfo.opcode[1] = RM((&reginfo),reginfo.pc+1);
+    reginfo.opcode[2] = RM((&reginfo),reginfo.pc+2);
+    reginfo.iereg = saveie;
+    addState(&reginfo,2);
   }
-  info.opindex = 1;
-  info.pc++;
-  return info.opcode[0] | ((info.opcode[1] << 1) & 0x0100);
+  reginfo.opindex = 1;
+  reginfo.pc++;
+  return reginfo.opcode[0] | ((reginfo.opcode[1] << 1) & 0x0100);
 }
 
 /* subsequent bytes of the instruction */
-BYTE CUPD1007::FetchByte()
+BYTE CUPD1007::FetchByte(upd1007_config *info)
 {
-  BYTE result = info.opcode[info.opindex];
-  if (info.pc > ROM0SIZE) {
-    info.pc++;
-    addState(2);
+  BYTE result = info->opcode[info->opindex];
+  if (info->pc > ROM0SIZE) {
+    info->pc++;
+    addState(info,2);
   }
-  info.opindex++;
+  info->opindex++;
 
   return result;
 }
 
 
-/* returns the pointer to a write-type resource at specified address
-  Note: due to incomplete address decoding the RAM can be accessed at
-  following address ranges:
-  $4000..$5FFF, $6000..$7FFF, $C000..$DFFF, $E000..$FFFF */
-BYTE *CUPD1007::DstPtr (UINT16 address)
-{
-  if (((info.iereg & 0x03) == 0) && ((address & 0x4000) != 0))
-    return &ram[address & 0x1FFF];
-  else
-    return &dummydst;
-}
-
 BYTE CUPD1007::Reg1 (BYTE x){
     return ((x >>1) & 0x38) | (x & 0x07);
 }
 
-/* expects the third info.opcode byte (specification of a general purpose register
+/* expects the third info->opcode byte (specification of a general purpose register
   in the bank 1, direct | indirect),
   returns the address (index) of the general purpose register */
-BYTE CUPD1007::Reg2 (BYTE x) {
+BYTE CUPD1007::Reg2 (upd1007_config *info,BYTE x) {
     if ( (x & 0x10) == 0) {	// directly specified register
         x = (x >> 5) | ((x << 3) & 0x38);
     }
-    else if ( (info.asreg & 0x01) == 0)
-        x = (info.asreg >> 1) & 0x3F;
+    else if ( (info->asreg & 0x01) == 0)
+        x = (info->asreg >> 1) & 0x3F;
     else
-        x = ((info.asreg >> 1) & 0x07) | ((x << 3) & 0x38);
+        x = ((info->asreg >> 1) & 0x07) | ((x << 3) & 0x38);
 
     return (x | 0x40);
 }
 
-/* expects the second & third info.opcode byte (specification of a general purpose
+/* expects the second & third info->opcode byte (specification of a general purpose
   register in the bank 1, direct | indirect),
   returns the first register of an array in the bank 1 */
-BYTE CUPD1007::Reg3 (BYTE x, BYTE y)
+BYTE CUPD1007::Reg3 (upd1007_config *info,BYTE x, BYTE y)
 {
     if ((y & 0x10) == 0) //	{ directly specified array */
         x = (x & 0x07) | ((y << 3) & 0x38);
-    else if ((info.asreg & 0x01) == 0)
-        x = (info.asreg >> 1) & 0x3F;
+    else if ((info->asreg & 0x01) == 0)
+        x = (info->asreg >> 1) & 0x3F;
     else
-        x = ((info.asreg >> 1) & 0x07) | ((y << 3) & 0x38);
+        x = ((info->asreg >> 1) & 0x07) | ((y << 3) & 0x38);
 
     return ( x | 0x40);
 }
 
 // optional last register of an indirectly specified array
-BYTE CUPD1007::AsLimit (BYTE y)
+BYTE CUPD1007::AsLimit (upd1007_config *info,BYTE y)
 {
     if ((y & 0x10) == 0)
         return NONE_REG; //	{ directly specified array, no limit */
-    else if ((info.asreg & 0x01) == 0)
-        return ((info.asreg >> 1) & 0x3F) | 0x47;
+    else if ((info->asreg & 0x01) == 0)
+        return ((info->asreg >> 1) & 0x3F) | 0x47;
     else
-        return ((info.asreg >> 4) & 0x07) | ((y << 3) & 0x38) | 0x40;
+        return ((info->asreg >> 4) & 0x07) | ((y << 3) & 0x38) | 0x40;
 }
 
 BYTE CUPD1007::Rl1 (BYTE x, BYTE y)
@@ -260,40 +250,42 @@ BYTE CUPD1007::Rl1 (BYTE x, BYTE y)
 
 BYTE CUPD1007::Im6 (BYTE x, BYTE y)
 {
-    return (y & 0x1F) | ((not x << 2) & 0x20);
+    return (y & 0x1F) | (((~x) << 2) & 0x20);
 }
 
 
-BYTE CUPD1007::Ireg()
+BYTE CUPD1007::Ireg(upd1007_config *info)
 {
-    BYTE Result = info.opcode[0] & 0x03;
+    BYTE Result = info->opcode[0] & 0x03;
     if (Result > IZ)  Result = SP;
+
+    return Result;
 }
 
 
 // next processed register in an array */
-void CUPD1007::NextReg (BYTE *x)
+void CUPD1007::NextReg (upd1007_config *info,BYTE *x)
 {
-    *x = (*x & 0xF8) | ((*x + info.regstep) & 0x07);
+    *x = (*x & 0xF8) | ((*x + info->regstep) & 0x07);
 }
 
 
 /* returns the contents of a 16-bit register 'x',
   'y' is a dummy variable */
-UINT16 CUPD1007::Wreg (BYTE x, BYTE y)
+UINT16 CUPD1007::Wreg (upd1007_config *info,BYTE x, BYTE y)
 {
-    return (info.mr[x | 0x78] << 8) | info.mr[x | 0x38];
+    return (info->mr[x | 0x78] << 8) | info->mr[x | 0x38];
 }
 
 
 /* return the contents of the 16-bit register 'x',
   then add 8-bit value 'y' to this 16-bit register */
-UINT16 CUPD1007::PostIncw (BYTE x, BYTE y)
+UINT16 CUPD1007::PostIncw (upd1007_config *info, BYTE x, BYTE y)
 {
-    UINT16 Result = Wreg(x,0);
+    UINT16 Result = Wreg(info,x,0);
     UINT16 z = Result + y;
-    info.mr[x | 0x38] = Lo (z);
-    info.mr[x | 0x78] = Hi (z);
+    info->mr[x | 0x38] = Lo (z);
+    info->mr[x | 0x78] = Hi (z);
 
     return Result;
 }
@@ -301,13 +293,13 @@ UINT16 CUPD1007::PostIncw (BYTE x, BYTE y)
 
 /* return the contents of the 16-bit register 'x',
   then subtract 8-bit value 'y' from this 16-bit register */
-UINT16 CUPD1007::PostDecw (BYTE x, BYTE y)
+UINT16 CUPD1007::PostDecw (upd1007_config *info, BYTE x, BYTE y)
 {
-  info.regstep = -1;
-  UINT16 Result = Wreg(x,0);
+  info->regstep = -1;
+  UINT16 Result = Wreg(info,x,0);
   UINT16 z = Result - y;
-  info.mr[x | 0x38] = Lo (z);
-  info.mr[x | 0x78] = Hi (z);
+  info->mr[x | 0x38] = Lo (z);
+  info->mr[x | 0x78] = Hi (z);
 
   return Result;
 }
@@ -315,11 +307,11 @@ UINT16 CUPD1007::PostDecw (BYTE x, BYTE y)
 
 /* add 8-bit value 'y' to the 16-bit register 'x',
   then return the contents of this 16-bit register*/
-UINT16 CUPD1007::PreIncw (BYTE x, BYTE y)
+UINT16 CUPD1007::PreIncw (upd1007_config *info, BYTE x, BYTE y)
 {
-  UINT16 Result = Wreg(x,0) + y;
-  info.mr[x | 0x38] = Lo (Result);
-  info.mr[x | 0x78] = Hi (Result);
+  UINT16 Result = Wreg(info,x,0) + y;
+  info->mr[x | 0x38] = Lo (Result);
+  info->mr[x | 0x78] = Hi (Result);
 
   return Result;
 }
@@ -327,61 +319,61 @@ UINT16 CUPD1007::PreIncw (BYTE x, BYTE y)
 
 /* subtract 8-bit value 'y' from the 16-bit register 'x',
   then return the contents of this 16-bit register */
-UINT16 CUPD1007::PreDecw (BYTE x, BYTE y)
+UINT16 CUPD1007::PreDecw (upd1007_config *info,BYTE x, BYTE y)
 {
-  info.regstep = -1;
-  UINT16 Result = Wreg(x,0) - y;
-  info.mr[x | 0x38] = Lo (Result);
-  info.mr[x | 0x78] = Hi (Result);
+  info->regstep = -1;
+  UINT16 Result = Wreg(info,x,0) - y;
+  info->mr[x | 0x38] = Lo (Result);
+  info->mr[x | 0x78] = Hi (Result);
 
   return Result;
 }
 
 
 /* add the 8-bit value 'x' to the 16-bit variable 'ea' */
-void CUPD1007::PlusOffset (BYTE x)
+void CUPD1007::PlusOffset (upd1007_config *info, BYTE x)
 {
-  ea += x;
+  info->ea += x;
 }
 
 
 /* subtract the 8-bit value 'x' from the 16-bit variable 'ea' */
-void CUPD1007::MinusOffset (BYTE x)
+void CUPD1007::MinusOffset (upd1007_config *info, BYTE x)
 {
-  info.regstep = -1;
-  ea -= x;
+  info->regstep = -1;
+  info->ea -= x;
 }
 
 
 /* unary operation on a register */
-void CUPD1007::UnReg (void *op2)
+void CUPD1007::UnReg (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpSwp1) info.flag = 0;
-  BYTE _temp = info.mr[info.regbank | Reg1 (FetchByte())];
-  ((Func5) (op2)) (&_temp, 0);
+  if (op2 != (void*)&CUPD1007::OpSwp1) info->flag = 0;
+  BYTE _temp = info->mr[info->regbank | Reg1 (FetchByte(info))];
+  ((Func5) (op2)) (info,&_temp, 0);
 }
 
 
 /* register rotation through Carry */
-void CUPD1007::RotReg (void *op2)
+void CUPD1007::RotReg (upd1007_config *info,void *op2)
 {
-  info.flag = info.flag & C_bit;
-  BYTE _temp = info.mr[info.regbank | Reg1 (FetchByte())];
-  ((Func5)(op2)) (&_temp, 0);
+  info->flag = info->flag & C_bit;
+  BYTE _temp = info->mr[info->regbank | Reg1 (FetchByte(info))];
+  ((Func5)(op2)) (info,&_temp, 0);
 }
 
 
 /* unary operation on an array */
-void CUPD1007::UnAry ( void *op2)
+void CUPD1007::UnAry (upd1007_config *info, void *op2)
 {
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
   BYTE dstf,dstl,z;
 
-  if (info.regbank != 0)
+  if (info->regbank != 0)
   {
-    dstf = Reg3 (x, y);
-    dstl = AsLimit (y);
+    dstf = Reg3 (info,x, y);
+    dstl = AsLimit (info,y);
   }
   else
   {
@@ -391,43 +383,43 @@ void CUPD1007::UnAry ( void *op2)
   x = x & 0x07;
   y = y >> 5;
   if (op2 == (void*)&CUPD1007::OpBnus)  {
-      z = info.mr[dstf];
+      z = info->mr[dstf];
   }
   else
   {
-    info.flag = 0;
+    info->flag = 0;
     z = 0;
   } // {if};
   do {
-    z = ((Func5) op2) (&info.mr[dstf], z);
-    addState(4);
+    z = ((Func5) op2) (info,&info->mr[dstf], z);
+    addState(info,4);
     if (x == y) return;
-    if (dstf == (dstl ^ ((info.regstep >> 1) & 0x07)))
+    if (dstf == (dstl ^ ((info->regstep >> 1) & 0x07)))
     do {
-      NextReg (&x);
+      NextReg (info,&x);
       dstf = 0;
-      z = ((Func5)op2) (&dstf, z);
-      addState(4);
+      z = ((Func5)op2) (info,&dstf, z);
+      addState(info,4);
       if (x == y) return;
     } while(true);
-    NextReg (&x);
-    NextReg (&dstf);
+    NextReg (info,&x);
+    NextReg (info,&dstf);
   } while(true);
 }
 
 
 /* array rotation through Carry */
-void CUPD1007::RotAry (void *op2)
+void CUPD1007::RotAry (upd1007_config *info,void *op2)
 {
-  info.flag = info.flag & C_bit;
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
+  info->flag = info->flag & C_bit;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
   BYTE dstf,dstl,z;
 
-  if (info.regbank != 0)
+  if (info->regbank != 0)
   {
-    dstf = Reg3 (x, y);
-    dstl = AsLimit (y);
+    dstf = Reg3 (info,x, y);
+    dstl = AsLimit (info,y);
   }
   else
   {
@@ -438,664 +430,665 @@ void CUPD1007::RotAry (void *op2)
   y = y >> 5;
   z = 0;
   do {
-    z = ((Func5)op2) (&info.mr[dstf], z);
-    addState(4);
+    z = ((Func5)op2) (info,&info->mr[dstf], z);
+    addState(info,4);
     if (x == y) return;
-    if (dstf == (dstl xor ((info.regstep >> 1) & 0x07)))
+    if (dstf == (dstl xor ((info->regstep >> 1) & 0x07)))
     do {
-      NextReg (&x);
+      NextReg (info,&x);
       dstf = 0;
-      z = ((Func5)op2) (&dstf, z);
-      addState(4);
+      z = ((Func5)op2) (info,&dstf, z);
+      addState(info,4);
       if (x == y) return;
     } while (true);
-    NextReg (&x);
-    NextReg (&dstf);
+    NextReg (info,&x);
+    NextReg (info,&dstf);
   } while (true);
 }
 
 
-void CUPD1007::Mtbm (void *op2)
+void CUPD1007::Mtbm (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  y = info.regbank | Rl1(x,y);
-  x = info.regbank | Reg1(x);
+  info->flag = 0;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  y = info->regbank | Rl1(x,y);
+  x = info->regbank | Reg1(x);
   BYTE z = 0;
   do {
-    z = ((Func5)op2) (&info.mr[x], z);
-    addState(4);
+    z = ((Func5)op2) (info,&info->mr[x], z);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
+    NextReg (info,&x);
   } while (true);
 }
 
 
 /* destination_register <- destination_register op2 source_register
   source register in the bank 0, destination register in the bank 1 */
-void CUPD1007::Xreg (void *op2)
+void CUPD1007::Xreg (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd) info.flag = 0;
-  BYTE src = Reg1 (FetchByte());	/* index of the source register */
-  BYTE dst = Reg2 (FetchByte());	/* index of the destination register */
-  info.mr[dst] = ((Func3) op2) (info.mr[dst], info.mr[src]);
-  addState(4);
+  if (op2 != (void*)&CUPD1007::OpLd) info->flag = 0;
+  BYTE src = Reg1 (FetchByte(info));	/* index of the source register */
+  BYTE dst = Reg2 (info,FetchByte(info));	/* index of the destination register */
+  info->mr[dst] = ((Func3) op2) (info,info->mr[dst], info->mr[src]);
+  addState(info,4);
 }
 
 
 /* destination_register <- destination_register op2 source_register
   source register in the bank 1, destination register in the bank 0 */
-void CUPD1007::Yreg (void *op2)
+void CUPD1007::Yreg (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd) info.flag = 0;
-  BYTE dst = Reg1 (FetchByte());	/* index of the destination register */
-  BYTE src = Reg2 (FetchByte());	/* index of the source register */
-  info.mr[dst] = ((Func3) op2) (info.mr[dst], info.mr[src]);
-  addState(4);
+  if (op2 != (void*)&CUPD1007::OpLd) info->flag = 0;
+  BYTE dst = Reg1 (FetchByte(info));	/* index of the destination register */
+  BYTE src = Reg2 (info,FetchByte(info));	/* index of the source register */
+  info->mr[dst] = ((Func3) op2) (info,info->mr[dst], info->mr[src]);
+  addState(info,4);
 }
 
 
 /* check flags of the operation: destination_register op2 source_register
   source register in the bank 0, destination register in the bank 1 */
-void CUPD1007::TXreg (void *op2)
+void CUPD1007::TXreg (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE src = Reg1 (FetchByte());	/* index of the source register */
-  BYTE dst = Reg2 (FetchByte());	/* index of the destination register */
-  ((Func3)op2) (info.mr[dst], info.mr[src]);
-  addState(4);
+  info->flag = 0;
+  BYTE src = Reg1 (FetchByte(info));	/* index of the source register */
+  BYTE dst = Reg2 (info,FetchByte(info));	/* index of the destination register */
+  ((Func3)op2) (info,info->mr[dst], info->mr[src]);
+  addState(info,4);
 }
 
 
 /* check flags of the operation: destination_register op2 source_register
   source register in the bank 1, destination register in the bank 0 */
- void CUPD1007::TYreg (void *op2)
+ void CUPD1007::TYreg (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE dst = Reg1 (FetchByte());	/* index of the destination register */
-  BYTE src = Reg2 (FetchByte());	/* index of the source register */
-  ((Func3)op2)(info.mr[dst], info.mr[src]);
-  addState(4);
+  info->flag = 0;
+  BYTE dst = Reg1 (FetchByte(info));	/* index of the destination register */
+  BYTE src = Reg2 (info,FetchByte(info));	/* index of the source register */
+  ((Func3)op2)(info,info->mr[dst], info->mr[src]);
+  addState(info,4);
 }
 
 
-void CUPD1007::ExchReg (void *op2)
+void CUPD1007::ExchReg (upd1007_config *info,void *op2)
 {
-  BYTE y = Reg1 (FetchByte());
-  BYTE x = Reg2 (FetchByte());
-  ((Proc5)op2) (&info.mr[x], info.mr[y]);
-  addState(4);
+  BYTE y = Reg1 (FetchByte(info));
+  BYTE x = Reg2 (info,FetchByte(info));
+  ((Proc5)op2) (info,&info->mr[x], &info->mr[y]);
+  addState(info,4);
 }
 
 
 /* register <- register op2 immediate_byte */
-void CUPD1007::RegIm8 (void *op2)
+void CUPD1007::RegIm8 (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd)  info.flag = 0;
-  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-  info.mr[x] = ((Func3)op2) (info.mr[x], FetchByte());
-  addState(4);
+  if (op2 != (void*)&CUPD1007::OpLd)  info->flag = 0;
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+  info->mr[x] = ((Func3)op2) (info,info->mr[x], FetchByte(info));
+  addState(info,4);
 }
 
 
-/* check info.flag of the operation: register op2 immediate_byte */
-void CUPD1007::TRegIm8 (void *op2)
+/* check info->flag of the operation: register op2 immediate_byte */
+void CUPD1007::TRegIm8 (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-   ((Func3)op2) (info.mr[x], FetchByte());
-  addState(4);
+  info->flag = 0;
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+   ((Func3)op2) (info,info->mr[x], FetchByte(info));
+  addState(info,4);
 }
 
 
 /* destination_array <- destination_array op2 source_array
   source array in the bank 0, destination array in the bank 1 */
-void CUPD1007::Xary (void *op2)
+void CUPD1007::Xary (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd) info.flag = 0;
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
+  if (op2 != (void*)&CUPD1007::OpLd) info->flag = 0;
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
   BYTE srcf = Reg1 (x1);		/* index of the first source register */
   BYTE srcl = Rl1 (x1, x2);		/* index of the last source register */
-  BYTE dstf = Reg3 (x1, x2);	/* index of the first destination register */
-  BYTE dstl = AsLimit (x2);		/* index of the last destination register */
+  BYTE dstf = Reg3 (info,x1, x2);	/* index of the first destination register */
+  BYTE dstl = AsLimit (info,x2);		/* index of the last destination register */
   do {
-    info.mr[dstf] = ((Func3)op2) (info.mr[dstf], info.mr[srcf]);
-    addState(4);
+    info->mr[dstf] = ((Func3)op2) (info,info->mr[dstf], info->mr[srcf]);
+    addState(info,4);
     if (srcf == srcl) return;
     if (dstf == dstl)
     do {
-      NextReg (&srcf);
-      ((Func3)op2) (0, info.mr[srcf]);
-      addState(4);
+      NextReg (info,&srcf);
+      ((Func3)op2) (info,0, info->mr[srcf]);
+      addState(info,4);
       if (srcf == srcl) return;
     } while (true);
-    NextReg (&srcf);
-    NextReg (&dstf);
+    NextReg (info,&srcf);
+    NextReg (info,&dstf);
   } while (true);
 }
 
 
 /* destination_array <- destination_array op2 source_array
   source array in the bank 1, destination array in the bank 0 */
-void CUPD1007::Yary (void *op2)
+void CUPD1007::Yary (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd) info.flag = 0;
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
+  if (op2 != (void*)&CUPD1007::OpLd) info->flag = 0;
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
   BYTE dstf = Reg1 (x1);		/* index of the first destination register */
   BYTE dstl = Rl1 (x1, x2);		/* index of the last destination register */
-  BYTE srcf = Reg3 (x1, x2);	/* index of the first source register */
-  BYTE srcl = AsLimit (x2);		/* index of the last source register */
+  BYTE srcf = Reg3 (info,x1, x2);	/* index of the first source register */
+  BYTE srcl = AsLimit (info,x2);		/* index of the last source register */
   do {
-    info.mr[dstf] =  ((Func3)op2) (info.mr[dstf], info.mr[srcf]);
-    addState(4);
+    info->mr[dstf] =  ((Func3)op2) (info,info->mr[dstf], info->mr[srcf]);
+    addState(info,4);
     if (dstf == dstl) return;
     if (srcf == srcl)
     do {
-      NextReg (&dstf);
-      info.mr[dstf] =  ((Func3)op2) (info.mr[dstf], 0);
-      addState(4);
+      NextReg (info,&dstf);
+      info->mr[dstf] =  ((Func3)op2) (info,info->mr[dstf], 0);
+      addState(info,4);
       if (dstf == dstl) return;
     } while (true);
-    NextReg (&srcf);
-    NextReg (&dstf);
+    NextReg (info,&srcf);
+    NextReg (info,&dstf);
   } while (true);
 }
 
 
 /* destination_array <- destination_array op2 source_array
   source array in the bank 0, destination array in the bank 1 */
-void CUPD1007::TXary (void *op2)
+void CUPD1007::TXary (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
+  info->flag = 0;
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
   BYTE srcf = Reg1 (x1);		/* index of the first source register */
   BYTE srcl = Rl1 (x1, x2);		/* index of the last source register */
-  BYTE dstf = Reg3 (x1, x2);	/* index of the first destination register */
-  BYTE dstl = AsLimit (x2);		/* index of the last destination register */
+  BYTE dstf = Reg3 (info,x1, x2);	/* index of the first destination register */
+  BYTE dstl = AsLimit (info,x2);		/* index of the last destination register */
   do {
-    ((Func3)op2) (info.mr[dstf], info.mr[srcf]);
-    addState(4);
+    ((Func3)op2) (info,info->mr[dstf], info->mr[srcf]);
+    addState(info,4);
     if (srcf == srcl) return;
     if (dstf == dstl)
     do {
-      NextReg (&srcf);
-      ((Func3) op2) (0, info.mr[srcf]);
-      addState(4);
+      NextReg (info,&srcf);
+      ((Func3) op2) (info,0, info->mr[srcf]);
+      addState(info,4);
       if (srcf == srcl) return;
     } while(true);
-    NextReg (&srcf);
-    NextReg (&dstf);
+    NextReg (info,&srcf);
+    NextReg (info,&dstf);
   } while(true);
 }
 
 
 /* destination_array <- destination_array op2 source_array
   source array in the bank 1, destination array in the bank 0 */
-void CUPD1007::TYary (void *op2)
+void CUPD1007::TYary (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
+  info->flag = 0;
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
   BYTE dstf = Reg1 (x1);		/* index of the first destination register */
   BYTE dstl = Rl1 (x1, x2);		/* index of the last destination register */
-  BYTE srcf = Reg3 (x1, x2);	/* index of the first source register */
-  BYTE srcl = AsLimit (x2);		/* index of the last source register */
+  BYTE srcf = Reg3 (info,x1, x2);	/* index of the first source register */
+  BYTE srcl = AsLimit (info,x2);		/* index of the last source register */
   do {
-    ((Func3) op2) (info.mr[dstf], info.mr[srcf]);
-    addState(4);
+    ((Func3) op2) (info,info->mr[dstf], info->mr[srcf]);
+    addState(info,4);
     if (dstf == dstl) return;
     if (srcf == srcl)
     {
-      NextReg (&dstf);
-      ((Func3) op2) (info.mr[dstf], 0);
-      addState(4);
+      NextReg (info,&dstf);
+      ((Func3) op2) (info,info->mr[dstf], 0);
+      addState(info,4);
       if (dstf == dstl) return;
     } while(true);
-    NextReg (&srcf);
-    NextReg (&dstf);
+    NextReg (info,&srcf);
+    NextReg (info,&dstf);
   } while(true);
 }
 
 
-void CUPD1007::ExchAry (void *op2)
+void CUPD1007::ExchAry (upd1007_config *info,void *op2)
 {
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
   BYTE srcf = Reg1 (x1);		/* index of the first source register */
   BYTE srcl = Rl1 (x1, x2);		/* index of the last source register */
-  BYTE dstf = Reg3 (x1, x2);	/* index of the first destination register */
-  BYTE dstl = AsLimit (x2);		/* index of the last destination register */
+  BYTE dstf = Reg3 (info,x1, x2);	/* index of the first destination register */
+  BYTE dstl = AsLimit (info,x2);		/* index of the last destination register */
   do {
-    ((Proc5) op2) (&info.mr[dstf], info.mr[srcf]);
-    addState(4);
+    ((Proc5) op2) (info,&info->mr[dstf], &info->mr[srcf]);
+    addState(info,4);
     if (srcf == srcl) return;
     if (dstf == dstl)
     do {
-      NextReg (&srcf);
+      NextReg (info,&srcf);
       dstf = 0;
-      ((Proc5) op2) (&dstf, info.mr[srcf]);
-      addState(4);
+      ((Proc5) op2) (info,&dstf, &info->mr[srcf]);
+      addState(info,4);
       if (srcf == srcl) return;
     } while(true);
-    NextReg (&srcf);
-    NextReg (&dstf);
+    NextReg (info,&srcf);
+    NextReg (info,&dstf);
   } while(true);
 }
 
 
 /* array <- array op2 immediate_value */
-void CUPD1007::AryIm6 (void *op2)
+void CUPD1007::AryIm6 (upd1007_config *info,void *op2)
 {
-  if (op2 != (void*)&CUPD1007::OpLd) info.flag = 0;
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
+  if (op2 != (void*)&CUPD1007::OpLd) info->flag = 0;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
   BYTE z = Im6 (x,y);
-  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-  x = info.regbank | Reg1 (x);	/* index of the first processed register */
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do{
-    info.mr[x] = ((Func3) op2) (info.mr[x], z);
-    addState(4);
+    info->mr[x] = ((Func3) op2) (info,info->mr[x], z);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
+    NextReg (info,&x);
     if (op2 != (void*)&CUPD1007::OpLd) z = 0;
  } while(true);
 }
 
 
 /* check flags of the operation: array op2 immediate_value */
-void CUPD1007::TAryIm6 (void *op2)
+void CUPD1007::TAryIm6 (upd1007_config *info,void *op2)
 {
-  info.flag = 0;
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
+  info->flag = 0;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
   BYTE z = Im6 (x,y);
-  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-  x = info.regbank | Reg1 (x);	/* index of the first processed register */
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
-    ((Func3) op2) (info.mr[x], z);
-    addState(4);
+    ((Func3) op2) (info,info->mr[x], z);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
+    NextReg (info,&x);
     z = 0;
   } while (true);
 }
 
 
-void CUPD1007::Ldw (void *op2 /*dummy*/)
+void CUPD1007::Ldw (upd1007_config *info,void *op2 /*dummy*/)
 {
-  BYTE dst = (info.opcode[0] & 0x07) | 0x38;
-  info.mr[dst | 0x40] = FetchByte();
-  info.mr[dst] = FetchByte();
-  addState(4);
+  BYTE dst = (info->opcode[0] & 0x07) | 0x38;
+  info->mr[dst | 0x40] = FetchByte(info);
+  info->mr[dst] = FetchByte(info);
+  addState(info,4);
 }
 
 
-void CUPD1007::AdwSbw (void *op2)
+void CUPD1007::AdwSbw (upd1007_config *info,void *op2)
 {
-  ((Proc3) op2) (Ireg(), FetchByte());
-  addState(6);
+  ((Proc3) op2) (info,Ireg(info), FetchByte(info));
+  addState(info,6);
 }
 
 
 /* conditional execution (when true) of 'op2' */
-void CUPD1007::Cond (void *op2)
+void CUPD1007::Cond (upd1007_config *info,void *op2)
 {
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
-  if ((info.flag & cc[info.opcode[0] & 0x07]) != 0)
-      ((Proc3) op2) (x1, x2);
-  addState(4);
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
+  if ((info->flag & cc[info->opcode[0] & 0x07]) != 0)
+      ((Proc3) op2) (info,x1, x2);
+  addState(info,4);
 }
 
 
 /* conditional execution (when false) of 'op2' */
-void CUPD1007::NotCond (void *op2)
+void CUPD1007::NotCond (upd1007_config *info,void *op2)
 {
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
-  if ((info.flag & cc[info.opcode[0] & 0x07]) == 0)
-      ((Proc3) op2) (x1, x2);
-  addState(4);
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
+  if ((info->flag & cc[info->opcode[0] & 0x07]) == 0)
+      ((Proc3) op2) (info,x1, x2);
+  addState(info,4);
 }
 
 
 /* conditional execution (when key pressed) of 'op2' */
-void CUPD1007::KeyCond (void *op2)
+void CUPD1007::KeyCond (upd1007_config *info,void *op2)
 {
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
-  if (info.kireg != 0)
-      ((Proc3)op2) (x1, x2);
-  addState(4);
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
+  if (info->kireg != 0)
+      ((Proc3)op2) (info,x1, x2);
+  addState(info,4);
 }
 
 
 /* conditional execution (when key not pressed) of 'op2' */
-void CUPD1007::NotKeyCond (void *op2)
+void CUPD1007::NotKeyCond (upd1007_config *info,void *op2)
 {
-  BYTE x1 = FetchByte();
-  BYTE x2 = FetchByte();
-  if (info.kireg == 0)
-      ((Proc3) op2) (x1, x2);
-  addState(4);
+  BYTE x1 = FetchByte(info);
+  BYTE x2 = FetchByte(info);
+  if (info->kireg == 0)
+      ((Proc3) op2) (info,x1, x2);
+  addState(info,4);
 }
 
 
-void CUPD1007::Jump (BYTE x1, BYTE x2)
+void CUPD1007::Jump (upd1007_config *info,BYTE x1, BYTE x2)
 {
-  info.pc = (x1 << 8) | x2;
+    UINT16 _temp = (x1 << 8) | x2;
+  info->pc = _temp;
 /* Alternatively, the above statement could be replaced with following ones:
-  ptrb(PChar(&CUPD1007::info.pc)+1)^ = x1;
-  ptrb(&CUPD1007::info.pc)^ = x2;
+  ptrb(PChar(&CUPD1007::info->pc)+1)^ = x1;
+  ptrb(&CUPD1007::info->pc)^ = x2;
   Perhaps they would be more effective, especially if the left sides would
-  evaluate to constants. Unfortunately, the pointer to the 'info.pc' variable is
+  evaluate to constants. Unfortunately, the pointer to the 'info->pc' variable is
   probably unknown at the compile state. Also they have a disadvantage to be
   less portable, because little endian order of bytes is assumed. */
 }
 
 
-void CUPD1007::Call (BYTE x1, BYTE x2)
+void CUPD1007::Call (upd1007_config *info, BYTE x1, BYTE x2)
 {
-  BYTE saveie = info.iereg;
-  info.iereg = 0;
-  WM(PreDecw(SP,1) , Lo (info.pc));
-  WM(PreDecw(SP,1) , Hi (info.pc));
-  info.iereg = saveie;
-  info.pc = (x1 << 8) | x2;
-  addState(6);
+  BYTE saveie = info->iereg;
+  info->iereg = 0;
+  WM(info,PreDecw(info,SP,1) , Lo (info->pc));
+  WM(info,PreDecw(info,SP,1) , Hi (info->pc));
+  info->iereg = saveie;
+  info->pc = (x1 << 8) | x2;
+  addState(info,6);
 }
 
 
-void CUPD1007::Trap (void *op2 /*dummy*/)
+void CUPD1007::Trap (upd1007_config *info,void *op2 /*dummy*/)
 {
-  FetchByte();
-  Call (info.mr[V3 | 0x78], info.mr[V3 | 0x38]);
-  addState(6);
+  FetchByte(info);
+  Call (info,info->mr[V3 | 0x78], info->mr[V3 | 0x38]);
+  addState(info,6);
 }
 
 
 /* for illegal operands the emulation may differ from the actual hardware */
-void CUPD1007::Ijmp (BYTE x1, BYTE x2)
+void CUPD1007::Ijmp (upd1007_config *info,BYTE x1, BYTE x2)
 {
-  info.pc = (info.mr[Reg2(x2)] << 8) | info.mr[Reg1(x1)];
-  addState(2);
+  info->pc = (info->mr[Reg2(info,x2)] << 8) | info->mr[Reg1(x1)];
+  addState(info,2);
 }
 
 
-void CUPD1007::Rtn (void *op2 /*dummy*/)
+void CUPD1007::Rtn (upd1007_config *info,void *op2 /*dummy*/)
 {
-  BYTE saveie = info.iereg;
-  info.iereg = 0;
-  BYTE x1 = RM(PostIncw(SP,1));
-  BYTE x2 = RM(PostIncw(SP,1));
-  info.iereg = saveie;
-  info.pc = (x1 << 8) | x2;
-  addState(10);
+  BYTE saveie = info->iereg;
+  info->iereg = 0;
+  BYTE x1 = RM(info,PostIncw(info,SP,1));
+  BYTE x2 = RM(info,PostIncw(info,SP,1));
+  info->iereg = saveie;
+  info->pc = (x1 << 8) | x2;
+  addState(info,10);
 }
 
 
-void CUPD1007::Cani (void *op2 /*dummy*/)
+void CUPD1007::Cani (upd1007_config *info,void *op2 /*dummy*/)
 {
   for (int i=0;i<=2;i++)
   {
-    if (info.irqcnt[i] != 0)
+    if (info->irqcnt[i] != 0)
     {
-      info.ifreg = info.ifreg & not INT_serv[i];
-      info.irqcnt[i] = 0;
+      info->ifreg = info->ifreg & not INT_serv[i];
+      info->irqcnt[i] = 0;
       break;
     }
   }
-  addState(4);
+  addState(info,4);
 }
 
 
-void CUPD1007::Rti (void *op2 /*dummy*/)
+void CUPD1007::Rti (upd1007_config *info,void *op2 /*dummy*/)
 {
-  Cani (NULL);
-  Rtn (NULL);
-  addState(-4);
+  Cani (info,NULL);
+  Rtn (info,NULL);
+  addState(info,-4);
 }
 
 
-void CUPD1007::Nop (void *op2 /*dummy*/)
+void CUPD1007::Nop (upd1007_config *info,void *op2 /*dummy*/)
 {
-  addState(4);
+  addState(info,4);
 }
 
 
-void CUPD1007::BlockCopy (void *op2)
+void CUPD1007::BlockCopy (upd1007_config *info,void *op2)
 {
-  WM(((Func4) op2) (IZ,1) , RM(((Func4) op2) (IX,1)));
-  if ((info.mr[IX+56] != info.mr[IY+56]) |
-      (info.mr[IX+120] != info.mr[IY+120]))
-      info.pc = info.savepc;
-  addState(14);
+  WM(info,((Func4) op2) (info,IZ,1) , RM(info,((Func4) op2) (info,IX,1)));
+  if ((info->mr[IX+56] != info->mr[IY+56]) |
+      (info->mr[IX+120] != info->mr[IY+120]))
+      info->pc = info->savepc;
+  addState(info,14);
 }
 
 
-void CUPD1007::BlockSearch (void *op2)
+void CUPD1007::BlockSearch (upd1007_config *info,void *op2)
 {
-  if (RM(((Func4)op2) (Ireg(),1)) != info.mr[info.regbank | Reg1(FetchByte())])
+  if (RM(info,((Func4)op2) (info,Ireg(info),1)) != info->mr[info->regbank | Reg1(FetchByte(info))])
   {
-    if (Wreg(Ireg(),0) != Wreg(IY,0)) info.pc = info.savepc;
+    if (Wreg(info,Ireg(info),0) != Wreg(info,IY,0)) info->pc = info->savepc;
   }
-  addState(16);
+  addState(info,16);
 }
 
 
-void CUPD1007::StMemoReg (void *op2)
+void CUPD1007::StMemoReg (upd1007_config *info,void *op2)
 {
-  WM(((Func4)op2) (Ireg(),1) , info.mr[info.regbank | Reg1(FetchByte())]);
-  addState(12);
+  WM(info,((Func4)op2) (info,Ireg(info),1) , info->mr[info->regbank | Reg1(FetchByte(info))]);
+  addState(info,12);
 }
 
 
-void CUPD1007::StMemoIm8 (void *op2)
+void CUPD1007::StMemoIm8 (upd1007_config *info,void *op2)
 {
-  WM(((Func4)op2) (Ireg(),1) , FetchByte());
-  addState(6);
+  WM(info,((Func4)op2) (info,Ireg(info),1) , FetchByte(info));
+  addState(info,6);
 }
 
 
-void CUPD1007::StmMemoAry (void *op2)
+void CUPD1007::StmMemoAry (upd1007_config *info,void *op2)
 {
-  BYTE dst = Ireg();
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  y = info.regbank | Rl1 (x, y);	/* index of the last processed register */
-  x = info.regbank | Reg1 (x);	/* index of the first processed register */
+  BYTE dst = Ireg(info);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  y = info->regbank | Rl1 (x, y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do{
-    WM(((Func4)op2) (dst,1) , info.mr[x]);
-    addState(4);
+    WM(info,((Func4)op2) (info,dst,1) , info->mr[x]);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
+    NextReg (info,&x);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::StImOffsReg ( void *op2)
+void CUPD1007::StImOffsReg (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = Reg1 (FetchByte());
-  ((Proc4)op2) (FetchByte());
-  WM(ea , info.mr[x]);
-  addState(12);
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = Reg1 (FetchByte(info));
+  ((Proc4)op2) (info,FetchByte(info));
+  WM(info,info->ea , info->mr[x]);
+  addState(info,12);
 }
 
 
-void CUPD1007::StRegOffsReg (void *op2)
+void CUPD1007::StRegOffsReg (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  ((Proc4)op2) (info.mr[Reg1 (FetchByte())]);
-  BYTE x = Reg2 (FetchByte());
-  WM(ea , info.mr[x]);
-  addState(12);
+  info->ea = Wreg (info,Ireg(info),0);
+  ((Proc4)op2) (info,info->mr[Reg1 (FetchByte(info))]);
+  BYTE x = Reg2 (info,FetchByte(info));
+  WM(info,info->ea , info->mr[x]);
+  addState(info,12);
 }
 
 
-void CUPD1007::StmImOffsAry (void *op2)
+void CUPD1007::StmImOffsAry (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  ((Proc4)op2) (Im6 (x,y));
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  ((Proc4)op2) (info,Im6 (x,y));
   y = Rl1 (x, y);		/* index of the last processed register */
   x = Reg1 (x);		/* index of the first processed register */
   do{
-    WM(ea , info.mr[x]);
-    addState(4);
+    WM(info,info->ea , info->mr[x]);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
-    ((Proc4)op2) (1);
+    NextReg (info,&x);
+    ((Proc4)op2) (info,1);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::StmRegOffsAry (void *op2)
+void CUPD1007::StmRegOffsAry (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  ((Proc4)op2) (info.mr[Reg1 (x)]);
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  ((Proc4)op2) (info,info->mr[Reg1 (x)]);
   BYTE first = Reg1 (x);
   BYTE last = Rl1 (x, y);
-  x = Reg3 (x, y);		/* index of the first processed register */
+  x = Reg3 (info,x, y);		/* index of the first processed register */
   do{
-    WM(ea , info.mr[x]);
-    addState(4);
+    WM(info,info->ea , info->mr[x]);
+    addState(info,4);
     if (first == last) break;
-    NextReg (&first);
-    NextReg (&x);
-    ((Proc4)op2) (1);
+    NextReg (info,&first);
+    NextReg (info,&x);
+    ((Proc4)op2) (info,1);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::LdRegMemo (void *op2)
+void CUPD1007::LdRegMemo (upd1007_config *info,void *op2)
 {
-  info.mr[info.regbank | Reg1(FetchByte())] = RM(((Func4)op2) (Ireg(),1));
-  addState(12);
+  info->mr[info->regbank | Reg1(FetchByte(info))] = RM(info,((Func4)op2) (info,Ireg(info),1));
+  addState(info,12);
 }
 
 
-void CUPD1007::LdmAryMemo (void *op2)
+void CUPD1007::LdmAryMemo (upd1007_config *info,void *op2)
 {
-  BYTE src = Ireg();
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  y = info.regbank | Rl1 (x, y);	/* index of the last processed register */
-  x = info.regbank | Reg1 (x);	/* index of the first processed register */
+  BYTE src = Ireg(info);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  y = info->regbank | Rl1 (x, y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
-    info.mr[x] = RM(Func4 (op2) (src,1));
-    addState(4);
+    info->mr[x] = RM(info,Func4 (op2) (info,src,1));
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
+    NextReg (info,&x);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::LdRegImOffs (void *op2)
+void CUPD1007::LdRegImOffs (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = Reg1 (FetchByte());
-  ((Proc4)op2) (FetchByte());
-  info.mr[x] = RM(ea);
-  addState(12);
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = Reg1 (FetchByte(info));
+  ((Proc4)op2) (info,FetchByte(info));
+  info->mr[x] = RM(info,info->ea);
+  addState(info,12);
 }
 
 
-void CUPD1007::LdRegRegOffs (void *op2)
+void CUPD1007::LdRegRegOffs (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  ((Proc4)op2) (info.mr[Reg1 (FetchByte())]);
-  BYTE x = Reg2 (FetchByte());
-  info.mr[x] = RM(ea);
-  addState(12);
+  info->ea = Wreg (info,Ireg(info),0);
+  ((Proc4)op2) (info,info->mr[Reg1 (FetchByte(info))]);
+  BYTE x = Reg2 (info,FetchByte(info));
+  info->mr[x] = RM(info,info->ea);
+  addState(info,12);
 }
 
 
-void CUPD1007::LdmAryImOffs (void *op2)
+void CUPD1007::LdmAryImOffs (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  ((Proc4) op2) (Im6 (x,y));
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  ((Proc4) op2) (info,Im6 (x,y));
   y = Rl1 (x, y);		/* index of the last processed register */
   x = Reg1 (x);		/* index of the first processed register */
   do {
-    info.mr[x] = RM(ea);
-    addState(4);
+    info->mr[x] = RM(info,info->ea);
+    addState(info,4);
     if (x == y) break;
-    NextReg (&x);
-    ((Proc4)op2) (1);
+    NextReg (info,&x);
+    ((Proc4)op2) (info,1);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::LdmAryRegOffs (void *op2)
+void CUPD1007::LdmAryRegOffs (upd1007_config *info,void *op2)
 {
-  ea = Wreg (Ireg(),0);
-  BYTE x = FetchByte();
-  BYTE y = FetchByte();
-  ((Proc4)op2) (info.mr[Reg1 (x)]);
+  info->ea = Wreg (info,Ireg(info),0);
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+  ((Proc4)op2) (info,info->mr[Reg1 (x)]);
   BYTE first = Reg1 (x);
   BYTE last = Rl1 (x, y);
-  x = Reg3 (x, y);		/* index of the first processed register */
+  x = Reg3 (info,x, y);		/* index of the first processed register */
   do{
-    info.mr[x] = RM(ea);
-    addState(4);
+    info->mr[x] = RM(info,info->ea);
+    addState(info,4);
     if (first == last) break;
-    NextReg (&first);
-    NextReg (&x);
-    ((Proc4) op2) (1);
+    NextReg (info,&first);
+    NextReg (info,&x);
+    ((Proc4) op2) (info,1);
   } while(true);
-  addState(8);
+  addState(info,8);
 }
 
 
-void CUPD1007::PstIm8 (void *op2)
+void CUPD1007::PstIm8 (upd1007_config *info,void *op2)
 {
-  ((Proc4)op2) (FetchByte());
-  addState(4);
+  ((Proc4)op2) (info,FetchByte(info));
+  addState(info,4);
 }
 
 
-void CUPD1007::PstReg (void *op2)
+void CUPD1007::PstReg (upd1007_config *info,void *op2)
 {
-  ((Proc4) op2) (info.mr[info.regbank | Reg1(FetchByte())]);
-  addState(4);
+  ((Proc4) op2) (info,info->mr[info->regbank | Reg1(FetchByte(info))]);
+  addState(info,4);
 }
 
 
-void CUPD1007::Gst (void *op2)
+void CUPD1007::Gst (upd1007_config *info,void *op2)
 {
-  info.mr[info.regbank | Reg1(FetchByte())] = ((Func1)op2)();
-  addState(4);
+  info->mr[info->regbank | Reg1(FetchByte(info))] = ((Func1)op2)(info);
+  addState(info,4);
 }
 
 
-void CUPD1007::Off (void *op2)
+void CUPD1007::Off (upd1007_config *info,void *op2)
 {
 //  CpuSleep = True;
-  info.pc = 0x0000;
-  info.iereg = 0;
-  info.ifreg = 0x00;
-  info.irqcnt[0] = 0;
-  info.irqcnt[1] = 0;
-  info.irqcnt[2] = 0;
+  info->pc = 0x0000;
+  info->iereg = 0;
+  info->ifreg = 0x00;
+  info->irqcnt[0] = 0;
+  info->irqcnt[1] = 0;
+  info->irqcnt[2] = 0;
 //  lcdctrl = 0;
 //  LcdInit;
-  DoPorts();
-  info.koreg = 0x41;
+  DoPorts(info);
+  info->koreg = 0x41;
 //  KeyHandle;
 }
 
@@ -1104,94 +1097,94 @@ void CUPD1007::Off (void *op2)
 /* ARITHMETICAL & LOGICAL OPERATIONS */
 
 
-void CUPD1007::ZeroBits (BYTE x)
+void CUPD1007::ZeroBits (upd1007_config *info,BYTE x)
 {
-  if (x != 0) info.flag |= NZ_bit;
-  if ((x & 0xF0) == 0) info.flag |= UZ_bit;
-  if ((x & 0x0F) == 0) info.flag |= LZ_bit;
+  if (x != 0) info->flag |= NZ_bit;
+  if ((x & 0xF0) == 0) info->flag |= UZ_bit;
+  if ((x & 0x0F) == 0) info->flag |= LZ_bit;
 }
 
 
 /* binary operations */
 
 /* addition with carry */
-BYTE CUPD1007::OpAd (BYTE x, BYTE y)
+BYTE CUPD1007::OpAd (upd1007_config *info,BYTE x, BYTE y)
 {
   int in1 = x;
   int in2 = y;
   int out = in1 + in2;
-  if ((info.flag & C_bit) != 0) out++;
+  if ((info->flag & C_bit) != 0) out++;
   int  temp = in1 xor in2 xor out;
-  info.flag = info.flag & NZ_bit;
-  if (out > 0xFF) info.flag |= C_bit;
-  if ((temp & 0x10) != 0) info.flag |= H_bit;
-  if ((temp & 0x80) != 0) info.flag |= V_bit;
-  ZeroBits (out);
+  info->flag = info->flag & NZ_bit;
+  if (out > 0xFF) info->flag |= C_bit;
+  if ((temp & 0x10) != 0) info->flag |= H_bit;
+  if ((temp & 0x80) != 0) info->flag |= V_bit;
+  ZeroBits (info,out);
   return out;
 }
 
 
 /* subtraction with borrow */
-BYTE CUPD1007::OpSb (BYTE x, BYTE y)
+BYTE CUPD1007::OpSb (upd1007_config *info,BYTE x, BYTE y)
 {
   int in1 = x;
   int in2 = y;
   int out = in1 - in2;
-  if ((info.flag & C_bit) != 0) out--;
+  if ((info->flag & C_bit) != 0) out--;
   int temp = in1 xor in2 xor out;
-  info.flag = info.flag & NZ_bit;
-  if (out > 0xFF)  info.flag |= C_bit;
-  if ((temp & 0x10) != 0) info.flag |= H_bit;
-  if ((temp & 0x80) != 0) info.flag |= V_bit;
-  ZeroBits (out);
+  info->flag = info->flag & NZ_bit;
+  if (out > 0xFF)  info->flag |= C_bit;
+  if ((temp & 0x10) != 0) info->flag |= H_bit;
+  if ((temp & 0x80) != 0) info->flag |= V_bit;
+  ZeroBits (info,out);
   return out;
 }
 
 
 /* BCD addition with carry */
-BYTE CUPD1007::OpAdb (BYTE x, BYTE y)
+BYTE CUPD1007::OpAdb (upd1007_config *info,BYTE x, BYTE y)
 {
   int in1 = x;
   int in2 = y;
 /* lower nibble */
   int out = (in1 & 0x0F) + (in2 & 0x0F);
-  if ((info.flag & C_bit) != 0)  out++;
-  info.flag = info.flag & NZ_bit;
+  if ((info->flag & C_bit) != 0)  out++;
+  info->flag = info->flag & NZ_bit;
 /* decimal adjustement */
   if (out > 0x09)
   {
     out = ((out + 0x06) & 0x0F) | 0x10;
     if (out > 0x1F) out-=0x10;
-    info.flag = info.flag | H_bit;
+    info->flag = info->flag | H_bit;
   }
 /* upper nibble */
   out+= (in1 & 0xF0) + (in2 & 0xF0);
-  if (((in1 ^ in2 ^ out) & 0x80) != 0)  info.flag |= V_bit;
+  if (((in1 ^ in2 ^ out) & 0x80) != 0)  info->flag |= V_bit;
 /* decimal adjustement */
   if (out > 0x9F)
   {
     out+=0x60;
-    info.flag |= C_bit;
+    info->flag |= C_bit;
   }
-  ZeroBits (out);
+  ZeroBits (info,out);
   return out;
 }
 
 
 /* BCD subtraction with borrow */
-BYTE CUPD1007::OpSbb (BYTE x, BYTE y)
+BYTE CUPD1007::OpSbb (upd1007_config *info,BYTE x, BYTE y)
 {
   int in1 = (x);
   int in2 = (y);
 /* lower nibble */
   int out = (in1 & 0x0F) - (in2 & 0x0F);
-  if ((info.flag & C_bit) != 0) out--;
-  info.flag &= NZ_bit;
+  if ((info->flag & C_bit) != 0) out--;
+  info->flag &= NZ_bit;
 /* decimal adjustement */
   if (out > 0x09)
   {
     out = (out - 0x06) | (-0x10);
-    info.flag |= H_bit;
+    info->flag |= H_bit;
   }
 /* upper nibble */
   out += (in1 & 0xF0) - (in2 & 0xF0);
@@ -1199,58 +1192,58 @@ BYTE CUPD1007::OpSbb (BYTE x, BYTE y)
   if (out > 0x9F)
   {
     out -= 0x60;
-    info.flag = info.flag | C_bit;
+    info->flag = info->flag | C_bit;
   }
-  ZeroBits (out);
+  ZeroBits (info,out);
   return out;
 }
 
 
-BYTE CUPD1007::OpAn (BYTE x, BYTE y)
+BYTE CUPD1007::OpAn (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = x & y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (Result);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,Result);
   return Result;
 }
 
 
-BYTE CUPD1007::OpBit (BYTE x, BYTE y)
+BYTE CUPD1007::OpBit (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = not x & y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (Result);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,Result);
   return Result;
 }
 
 
-BYTE CUPD1007::OpXr (BYTE x, BYTE y)
+BYTE CUPD1007::OpXr (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = x xor y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (Result);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,Result);
   return Result;
 }
 
 
-BYTE CUPD1007::OpNa (BYTE x, BYTE y)
+BYTE CUPD1007::OpNa (upd1007_config *info,BYTE x, BYTE y)
 {
- BYTE result = ! (x & y);
-  info.flag = (info.flag & NZ_bit) | (C_bit | V_bit | H_bit);
+ BYTE result = ~(x & y);
+  info->flag = (info->flag & NZ_bit) | (C_bit | V_bit | H_bit);
   return result;
 }
 
 
-BYTE CUPD1007::OpOr (BYTE x, BYTE y)
+BYTE CUPD1007::OpOr (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = x | y;
-  info.flag = (info.flag & NZ_bit) | (C_bit | V_bit | H_bit);
-  ZeroBits (Result);
+  info->flag = (info->flag & NZ_bit) | (C_bit | V_bit | H_bit);
+  ZeroBits (info,Result);
   return Result;
 }
 
 
-BYTE CUPD1007::OpLd (BYTE x, BYTE y)
+BYTE CUPD1007::OpLd (upd1007_config *info,BYTE x, BYTE y)
 {
   return y;
 }
@@ -1259,57 +1252,57 @@ BYTE CUPD1007::OpLd (BYTE x, BYTE y)
 /* unary operations, dummy second operand & returned value */
 
 
-BYTE CUPD1007::OpRod (BYTE *x, BYTE y)
+BYTE CUPD1007::OpRod (upd1007_config *info,BYTE *x, BYTE y)
 {
-  info.regstep = -1;
+  info->regstep = -1;
   BYTE z = *x;
   *x = *x >> 1;
-  if ((info.flag & C_bit) != 0)  *x |= 0x80;
-  info.flag &= NZ_bit;
-  if ((z & 0x01) != 0) info.flag |= C_bit;
-  ZeroBits (*x);
+  if ((info->flag & C_bit) != 0)  *x |= 0x80;
+  info->flag &= NZ_bit;
+  if ((z & 0x01) != 0) info->flag |= C_bit;
+  ZeroBits (info,*x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpRou (BYTE *x, BYTE y)
+BYTE CUPD1007::OpRou (upd1007_config *info,BYTE *x, BYTE y)
 {
-  *x = OpAd (*x, *x);
+  *x = OpAd (info,*x, *x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpMtb (BYTE *x, BYTE y)
+BYTE CUPD1007::OpMtb (upd1007_config *info,BYTE *x, BYTE y)
 {
-  *x = OpAdb (*x, *x);
+  *x = OpAdb (info,*x, *x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpInv (BYTE *x, BYTE y)
+BYTE CUPD1007::OpInv (upd1007_config *info,BYTE *x, BYTE y)
 {
-  *x = ! *x;
-  info.flag = (info.flag & NZ_bit) | (C_bit | V_bit | H_bit);
-  ZeroBits (*x);
+  *x = ~(*x);
+  info->flag = (info->flag & NZ_bit) | (C_bit | V_bit | H_bit);
+  ZeroBits (info,*x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpCmp (BYTE *x, BYTE y)
+BYTE CUPD1007::OpCmp (upd1007_config *info,BYTE *x, BYTE y)
 {
-  *x = OpSb (0, *x);
+  *x = OpSb (info,0, *x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpCmpb (BYTE *x, BYTE y)
+BYTE CUPD1007::OpCmpb (upd1007_config *info,BYTE *x, BYTE y)
 {
-  *x = OpSbb (0, *x);
+  *x = OpSbb (info,0, *x);
   return 0;
 }
 
 
-BYTE CUPD1007::OpSwp1 (BYTE *x, BYTE y)
+BYTE CUPD1007::OpSwp1 (upd1007_config *info,BYTE *x, BYTE y)
 {
   *x = (*x << 4) | (*x >> 4);
   return 0;
@@ -1318,49 +1311,49 @@ BYTE CUPD1007::OpSwp1 (BYTE *x, BYTE y)
 
 /* shifts by 4 & 8 bits */
 
-BYTE CUPD1007::OpDiu (BYTE *x, BYTE y)
+BYTE CUPD1007::OpDiu (upd1007_config *info,BYTE *x, BYTE y)
 {
   BYTE result = *x >> 4;
   *x = (*x << 4) | y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (*x);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,*x);
   return result;
 }
 
 
-BYTE CUPD1007::OpDid (BYTE *x, BYTE y)
+BYTE CUPD1007::OpDid (upd1007_config *info,BYTE *x, BYTE y)
 {
-  info.regstep = -1;
+  info->regstep = -1;
   BYTE result= *x << 4;
   *x = (*x >> 4) | y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (*x);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,*x);
   return result;
 }
 
 
-BYTE CUPD1007::OpByu(BYTE *x, BYTE y)
+BYTE CUPD1007::OpByu(upd1007_config *info,BYTE *x, BYTE y)
 {
   BYTE result = *x;
   *x = y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (*x);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,*x);
   return result;
 }
 
 
-BYTE CUPD1007::OpByd (BYTE *x, BYTE y)
+BYTE CUPD1007::OpByd (upd1007_config *info,BYTE *x, BYTE y)
 {
-  info.regstep = -1;
+  info->regstep = -1;
   BYTE result = *x;
   *x = y;
-  info.flag = info.flag & NZ_bit;
-  ZeroBits (*x);
+  info->flag = info->flag & NZ_bit;
+  ZeroBits (info,*x);
   return result;
 }
 
 
-BYTE CUPD1007::OpBnus (BYTE *x, BYTE y)
+BYTE CUPD1007::OpBnus (upd1007_config *info, BYTE *x, BYTE y)
 {
   BYTE _result = *x;
   *x = (y << 4) | (y >> 4);
@@ -1372,7 +1365,7 @@ BYTE CUPD1007::OpBnus (BYTE *x, BYTE y)
 /* exchanges */
 
 /* exchange of two bytes */
-void CUPD1007::OpXc (BYTE *x, BYTE *y)
+void CUPD1007::OpXc (upd1007_config *info,BYTE *x, BYTE *y)
 {
   BYTE temp = *x;
   *x = *y;
@@ -1381,7 +1374,7 @@ void CUPD1007::OpXc (BYTE *x, BYTE *y)
 
 
 /* rotation of four digits (nibbles) counterclockwise */
-void CUPD1007::OpXcls (BYTE *x, BYTE *y)
+void CUPD1007::OpXcls (upd1007_config *info,BYTE *x, BYTE *y)
 {
   BYTE temp = (*y >> 4) | (*x & 0xF0);
   *x = (*x << 4) | (*y & 0x0F);
@@ -1390,7 +1383,7 @@ void CUPD1007::OpXcls (BYTE *x, BYTE *y)
 
 
 /* rotation of four digits (nibbles) clockwise */
-void CUPD1007::OpXchs (BYTE *x, BYTE *y)
+void CUPD1007::OpXchs (upd1007_config *info,BYTE *x, BYTE *y)
 {
   BYTE temp = (*y << 4) | (*x & 0x0F);
   *x = (*x >> 4) | (*y & 0xF0);
@@ -1399,7 +1392,7 @@ void CUPD1007::OpXchs (BYTE *x, BYTE *y)
 
 
 /* swap nibbles in two bytes */
-void CUPD1007::OpSwp2 (BYTE *x, BYTE *y)
+void CUPD1007::OpSwp2 (upd1007_config *info,BYTE *x, BYTE *y)
 {
   *x = (*x << 4) | (*x >> 4);
   *y = (*y << 4) | (*y >> 4);
@@ -1410,43 +1403,43 @@ void CUPD1007::OpSwp2 (BYTE *x, BYTE *y)
 /* WRITING TO THE STATUS REGISTERS */
 
 
-void CUPD1007::OpKo (BYTE x)
+void CUPD1007::OpKo (upd1007_config *info,BYTE x)
 {
-  info.koreg = x;
+  info->koreg = x;
 //  KeyHandle;
 }
 
 
-void CUPD1007::OpIf (BYTE x)
+void CUPD1007::OpIf (upd1007_config *info,BYTE x)
 {
-  info.ifreg = (info.ifreg & 0xEE) | (x & 0x11);
-  DoPorts();
+  info->ifreg = (info->ifreg & 0xEE) | (x & 0x11);
+  DoPorts(info);
 }
 
 
-void CUPD1007::OpAs (BYTE x)
+void CUPD1007::OpAs (upd1007_config *info,BYTE x)
 {
-  info.asreg = x;
+  info->asreg = x;
 }
 
 
-void CUPD1007::OpIe (BYTE x)
+void CUPD1007::OpIe (upd1007_config *info,BYTE x)
 {
-  info.iereg = x;
+  info->iereg = x;
   for (int i=0;i<3;i++)
   {
     if ((x & INT_enable[i]) == 0)
     {
-      info.ifreg = info.ifreg & ! INT_serv[i];
-      info.irqcnt[i] = 0;
+      info->ifreg &= (~INT_serv[i]);
+      info->irqcnt[i] = 0;
     }
   }
 }
 
 
-void CUPD1007::OpFl (BYTE x)
+void CUPD1007::OpFl (upd1007_config *info,BYTE x)
 {
-  info.flag = x;
+  info->flag = x;
 }
 
 
@@ -1454,146 +1447,150 @@ void CUPD1007::OpFl (BYTE x)
 /* LCD TRANSFER */
 
 
-void CUPD1007::Ldle (void* op2)
+void CUPD1007::Ldle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-//  lcdctrl = (lcdctrl & ! 0x3F) | (FetchByte() & 0x3F);
-//  info.mr[x] = LcdTransfer (0);
-//  addState(8);
-//  info.mr[x] = info.mr[x] | (LcdTransfer (0) << 4);
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+  info->pPC->out(0,FetchByte(info));
+//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->mr[x] = info->pPC->in(1);
+  addState(info,8);
+  info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
 }
 
 
-void CUPD1007::Ldlo (void* op2)
+void CUPD1007::Ldlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-//  lcdctrl = (lcdctrl & not 0x3F) | (FetchByte() & 0x3F);
-//  info.mr[x] = LcdTransfer (0);
-//  addState(8);
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,FetchByte(info));
+  info->mr[x] = info->pPC->in(1);
+  addState(info,8);
 }
 
 
-void CUPD1007::Stle (void* op2)
+void CUPD1007::Stle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-//  lcdctrl = (lcdctrl & not 0x3F) | (FetchByte() & 0x3F);
-//  LcdTransfer (info.mr[x]);
-//  addState(8);
-//  LcdTransfer (info.mr[x] >> 4);
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,FetchByte(info));
+  info->pPC->out(1,info->mr[x]);
+  addState(info,8);
+  info->pPC->out(1,info->mr[x] >> 4);
 }
 
 
-void CUPD1007::Stlo (void* op2)
+void CUPD1007::Stlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = info.regbank | Reg1 (FetchByte());	/* index of the register */
-//  lcdctrl = (lcdctrl & not 0x3F) | (FetchByte() & 0x3F);
-//  LcdTransfer (info.mr[x]);
-//  addState(8);
+  BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
+//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,FetchByte(info));
+  info->pPC->out(1,info->mr[x]);
+  addState(info,8);
 }
 
 
-void CUPD1007::Ldlem (void* op2)
+void CUPD1007::Ldlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = FetchByte();
-//  BYTE y = FetchByte();
-//  lcdctrl = (lcdctrl & not 0x3F) | Im6 (x,y);
-//  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-//  x = info.regbank | Reg1 (x);	/* index of the first processed register */
-//  repeat
-//    info.mr[x] = LcdTransfer (0);
-//    addState(8);
-//    info.mr[x] = info.mr[x] | (LcdTransfer (0) << 4);
-//    if x = y then Break;
-//    NextReg (x);
-//  until FALSE;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,Im6 (x,y));
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
+  do {
+    info->mr[x] = info->pPC->in(1);
+    addState(info,8);
+    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+    if (x == y) break;
+    NextReg (info,&x);
+  } while(true);
 }
 
 
-void CUPD1007::Ldlom (void* op2)
+void CUPD1007::Ldlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = FetchByte();
-//  BYTE y = FetchByte();
-//  lcdctrl = (lcdctrl & not 0x3F) | Im6 (x,y);
-//  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-//  x = info.regbank | Reg1 (x);	/* index of the first processed register */
-//  repeat
-//    info.mr[x] = LcdTransfer (0);
-//    addState(8);
-//    if x = y then Break;
-//    info.mr[x] = info.mr[x] | (LcdTransfer (0) << 4);
-//    NextReg (x);
-//  until FALSE;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,Im6 (x,y));
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
+  do {
+    info->mr[x] = info->pPC->in(1);
+    addState(info,8);
+    if (x == y)  break;
+    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+    NextReg (info,&x);
+  } while(true);
 }
 
 
-void CUPD1007::Stlem (void* op2)
+void CUPD1007::Stlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = FetchByte();
-//  BYTE y = FetchByte();
-//  lcdctrl = (lcdctrl & not 0x3F) | Im6 (x,y);
-//  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-//  x = info.regbank | Reg1 (x);	/* index of the first processed register */
-//  repeat
-//    LcdTransfer (info.mr[x]);
-//    addState(8);
-//    LcdTransfer (info.mr[x] >> 4);
-//    if x = y then Break;
-//    NextReg (x);
-//  until FALSE;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,Im6 (x,y));
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
+  do {
+    info->pPC->out(1,info->mr[x]);
+    addState(info,8);
+    info->pPC->out(1,info->mr[x] >> 4);
+    if (x == y) break;
+    NextReg (info,&x);
+  } while(true);
 }
 
 
-void CUPD1007::Stlom (void* op2)
+void CUPD1007::Stlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-//  BYTE x = FetchByte();
-//  BYTE y = FetchByte();
-//  lcdctrl = (lcdctrl & not 0x3F) | Im6 (x,y);
-//  y = info.regbank | Rl1 (x,y);	/* index of the last processed register */
-//  x = info.regbank | Reg1 (x);	/* index of the first processed register */
-//  repeat
-//    LcdTransfer (info.mr[x]);
-//    addState(8);
-//    if x = y then Break;
-//    LcdTransfer (info.mr[x] >> 4);
-//    NextReg (x);
-//  until FALSE;
+  BYTE x = FetchByte(info);
+  BYTE y = FetchByte(info);
+//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,Im6 (x,y));
+  y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
+  x = info->regbank | Reg1 (x);	/* index of the first processed register */
+  do {
+    info->pPC->out(1,info->mr[x]);
+    addState(info,8);
+    if (x == y) break;
+    info->pPC->out(1,info->mr[x] >> 4);
+    NextReg (info,&x);
+  } while(true);
 }
 
-BYTE CUPD1007::Get_kireg() {
-    return info.kireg;
+BYTE CUPD1007::Get_kireg(upd1007_config *info) {
+    return info->kireg;
 }
 
-BYTE CUPD1007::Get_koreg() {
-    return info.koreg;
+BYTE CUPD1007::Get_koreg(upd1007_config *info) {
+    return info->koreg;
 }
-BYTE CUPD1007::Get_asreg() {
-    return info.asreg;
+BYTE CUPD1007::Get_asreg(upd1007_config *info) {
+    return info->asreg;
 }
-BYTE CUPD1007::Get_flag() {
-    return info.flag;
+BYTE CUPD1007::Get_flag(upd1007_config *info) {
+    return info->flag;
 }
-BYTE CUPD1007::Get_iereg() {
-    return info.iereg;
+BYTE CUPD1007::Get_iereg(upd1007_config *info) {
+    return info->iereg;
 }
-BYTE CUPD1007::Get_ifreg() {
-    return info.ifreg;
+BYTE CUPD1007::Get_ifreg(upd1007_config *info) {
+    return info->ifreg;
 }
 
 
 
 #if 1
-void* dtab2[2][2] = {
-    {	(void*)&CUPD1007::Xreg,		(void*)&CUPD1007::OpAdb		},		// { code $00, ADB }
-    {	(void*)&CUPD1007::Xreg,		(void*)&CUPD1007::OpSbb		}		// { code $01, SBB }
-};
 
     //{ bit 7 of the second byte cleared }
 void* dtab[512][2] = {
@@ -1831,7 +1828,7 @@ void* dtab[512][2] = {
     {	(void*)&CUPD1007::RotAry,	(void*)&CUPD1007::OpRou		},		// { code $E7, ROUM }
     {	(void*)&CUPD1007::UnReg,		(void*)&CUPD1007::OpCmp		},		// { code $E8, CMP }
     {	(void*)&CUPD1007::UnAry,		(void*)&CUPD1007::OpCmp		},		// { code $E9, CMPM }
-    {	(void*)&CUPD1007::Nop,		NULL		},		// { code $EA, unsupported }
+    {	(void*)&CUPD1007::Nop,		NULL		},		// { code $ea, unsupported }
     {   (void*)&CUPD1007::UnAry,		(void*)&CUPD1007::OpByu		},		// { code $EB, BYUM }
     {	(void*)&CUPD1007::UnReg,		(void*)&CUPD1007::OpCmpb		},		// { code $EC, CMPB }
     {	(void*)&CUPD1007::UnAry,		(void*)&CUPD1007::OpDiu		},		// { code $ED, DIUM }
@@ -2089,7 +2086,7 @@ void* dtab[512][2] = {
             {	(void*)&CUPD1007::	Trap,		NULL		},	//	{ code $E7, TRP }
             {	(void*)&CUPD1007::	UnReg,		(void*)&CUPD1007::	OpSwp1		},	//	{ code $E8, SWP }
             {	(void*)&CUPD1007::	Nop,		NULL		},	//	{ code $E9, unsupported }
-            {	(void*)&CUPD1007::	Nop,		NULL		},	//	{ code $EA, unsupported }
+            {	(void*)&CUPD1007::	Nop,		NULL		},	//	{ code $ea, unsupported }
             {	(void*)&CUPD1007::	UnReg,		(void*)&CUPD1007::	OpByu		},	//	{ code $EB, BYU }
             {	(void*)&CUPD1007::	UnReg,		(void*)&CUPD1007::	OpRou		},	//	{ code $EC, BIU }
             {	(void*)&CUPD1007::	UnReg,		(void*)&CUPD1007::	OpDiu		},	//	{ code $ED, DIU }
@@ -2118,30 +2115,30 @@ void* dtab[512][2] = {
 void CUPD1007::ExecInstr()
 {
     UINT16 kod = Fetchopcode();
-    info.regbank = (! info.opcode[0] << 3) & 0x40;	//{ default value }
-    info.regstep = 1;					//{ default value }
-    ((Proc2) dtab[kod][0]) (dtab[kod][1]);
+    reginfo.regbank = ((~reginfo.opcode[0]) << 3) & 0x40;	//{ default value }
+    reginfo.regstep = 1;					//{ default value }
+    ((Proc2) dtab[kod][0]) (&reginfo,dtab[kod][1]);
 }
 
-void CUPD1007::DoPorts()
+void CUPD1007::DoPorts(upd1007_config *info)
 {
 ///* the EN1 output controls the LCD power supply */
-//  if ((info.ifreg & EN1_bit) != 0)
+//  if ((info->ifreg & EN1_bit) != 0)
 //    lcdctrl = lcdctrl | VDD2_bit
 //  else
 //  {
 //    if ((lcdctrl & VDD2_bit) != 0) LcdInit();
 //    lcdctrl = lcdctrl & !VDD2_bit;
-//    info.ifreg = info.ifreg & !INT_input[1];
+//    info->ifreg = info->ifreg & !INT_input[1];
 //   }
 ///* the EN2 output is wired to the INT0 input */
-//  if ((info.ifreg & EN2_bit) != 0)
+//  if ((info->ifreg & EN2_bit) != 0)
 //  {
-//    if ((info.ifreg & INT_input[0]) == 0) IntReq(0);
-//    info.ifreg = info.ifreg | INT_input[0];
+//    if ((info->ifreg & INT_input[0]) == 0) IntReq(0);
+//    info->ifreg = info->ifreg | INT_input[0];
 //  }
 //  else
-//    info.ifreg = info.ifreg & !INT_input[0];
+//    info->ifreg = info->ifreg & !INT_input[0];
 }
 
 #endif

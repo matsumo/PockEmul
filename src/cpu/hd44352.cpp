@@ -1,4 +1,6 @@
 #include <QFile>
+#include <QDebug>
+
 #include "hd44352.h"
 
 
@@ -42,6 +44,7 @@ CHD44352::CHD44352(QString fnCharSet,QObject *parent) :
 
 bool CHD44352::init()
 {
+    qWarning()<<"CHD44352::init";
     Reset();
 
     QFile file;

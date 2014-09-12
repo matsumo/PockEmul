@@ -1,23 +1,12 @@
+#include <QDebug>
+
 #include "upd1007.h"
 #include "upd1007d.h"
 
 #include "Debug.h"
 #include "pcxxxx.h"
 
-
-#define EXT_ROM		(pc > 0x0c00)
-#define INC_POS		pos++;//pos += (type+1)
-#define POS			pos //(pos + type)
 #define BIT(x,n) (((x)>>(n))&1)
-
-
-//const char *const Cdebug_upd1007::reg_5b[4] =  {"sx", "sy", "sz", "sz"};
-//const char *const Cdebug_upd1007::reg_8b[8] =  {"pe", "pd", "ib", "ua", "ia", "ie", "tm", "tm"};
-//const char *const Cdebug_upd1007::reg_16b[8] = {"ix", "iy", "iz", "us", "ss", "ky", "ky", "ky"};
-//const char *const Cdebug_upd1007::jp_cond[8] = {"z", "nc", "lz", "uz", "nz", "c", "nlz"};
-
-
-
 
 
 const upd1007_dasm Cdebug_upd1007::mnem[512] = {
@@ -559,7 +548,7 @@ QString Cdebug_upd1007::IntToStr(BYTE x) {
     return QString("%1").arg(x);
 }
 
-QString Cdebug_upd1007::IntToHex(BYTE x,BYTE size) {
+QString Cdebug_upd1007::IntToHex(UINT32 x,BYTE size) {
     return QString("%1").arg(x,size,16,QChar('0'));
 }
 
@@ -589,7 +578,7 @@ BYTE Cdebug_upd1007::Rf2 (BYTE x, BYTE y){
 
 
 BYTE Cdebug_upd1007::Im6 (BYTE x, BYTE y) {
-    return (y & 0x1F) | ((! x << 2) & 0x20);
+    return (y & 0x1F) | (((~x) << 2) & 0x20);
 }
 
 
@@ -602,250 +591,239 @@ QString Cdebug_upd1007::Mnemonic (UINT16 kod)
 
 /* returns the arguments */
 QString Cdebug_upd1007::Arguments (UINT16 kod) {
-#if 1
+
     BYTE x,y,z;
 
-QString sign, name;
-QString Result;
-sign =  (kod & 0x04) ? "-" : "+";
-z = (! kod << 3) & 0x40;
+    QString sign, name;
+    QString Result;
+    sign =  (kod & 0x04) ? "-" : "+";
+    z = ((~kod) << 3) & 0x40;
 
-switch (mnem[kod].kind) {
+    switch (mnem[kod].kind) {
 
-  case NONE:
-    Result = "";
-
-  case DROP1:
+    case NONE: Result = ""; break;
+    case DROP1:CUPD1007::FetchByte(&(pupd1007->reginfo)); Result = ""; break;
+    case CCIM16:
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = cc_tab[kod & 0x0F] + CaHexB(x) + IntToHex(y,2);
+        break;
+    case WRIM16:
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = wr_tab[kod & 0x07] + "," + CaHexB(x) + IntToHex(y,2);
+        break;
+    case IRIM8:
+        Result = ir_tab[kod & 0x03] + "," + CaHexB(CUPD1007::FetchByte(&(pupd1007->reginfo)));
+        break;
+    case SMEMOIM8:
     {
-      pupd1007->FetchByte();
-      Result = "";
+        if ((kod & 0x10) == 0) sign = "+"; else sign = "-";
+        Result = sign + "(" + ir_tab[kod & 0x03] + ")," + CaHexB(CUPD1007::FetchByte(&(pupd1007->reginfo)));
     }
-
-  case CCIM16:
+        break;
+    case MEMOIM8:
+        Result = "(" + ir_tab[kod & 0x03] + ")," + CaHexB(CUPD1007::FetchByte(&(pupd1007->reginfo)));
+        break;
+    case XREG:
     {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = cc_tab[kod & 0x0F] + CaHexB(x) + IntToHex(y,2);
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        name = (y & 0x10) ? "i" : "r";
+        Result = name + IntToStr(Reg2(y) | 0x40) + ",r" + IntToStr(Reg1(x));
     }
-
-  case WRIM16:
+        break;
+    case YREG:
     {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = wr_tab[kod & 0x07] + "," + CaHexB(x) + IntToHex(y,2);
-    }
-
-  case IRIM8:
-    Result = ir_tab[kod & 0x03] + "," + CaHexB(pupd1007->FetchByte());
-
-  case SMEMOIM8:
-    {
-      if ((kod & 0x10) == 0) sign = "+"; else sign = "-";
-      Result = sign + "(" + ir_tab[kod & 0x03] + ")," + CaHexB(pupd1007->FetchByte());
-    }
-
-  case MEMOIM8:
-    Result = "(" + ir_tab[kod & 0x03] + ")," + CaHexB(pupd1007->FetchByte());
-
-  case XREG:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      name = (y & 0x10) ? "i" : "r";
-      Result = name + IntToStr(Reg2(y) | 0x40) + ",r" + IntToStr(Reg1(x));
-    }
-
-  case YREG:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0)  name = "i"; else name = "r";
-      Result = "r" + IntToStr(Reg1(x)) + "," +
-      name + IntToStr(Reg2(y) | 0x40);
-    }
-
-  case REGIM8:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = "r" + IntToStr(Reg1(x) | z) + "," + CaHexB(y);
-    }
-
-  case XARY:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0)  name = "i"; else name = "r";
-      Result= name + IntToStr(Rf2(x,y) | 0x40) + ".." +
-              name + IntToStr(Reg2(y) | 0x40) +
-              ",r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
-    }
-
-  case YARY:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0)  name = "i"; else name = "r";
-      Result= "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y)) +
-              "," + name + IntToStr(Rf2(x,y) | 0x40) +
-              ".." + name + IntToStr(Reg2(y) | 0x40);
-    }
-
-  case ARYIM6:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result= "r" + IntToStr(Reg1(x) | z) +
-              "..r" + IntToStr(Rl1(x,y) | z) + "," + CaHexB(Im6(x,y));
-    }
-
-  case MEMOREG:
-    Result = sign + "(" + ir_tab[kod & 0x03] + "),r" +
-      IntToStr(Reg1(pupd1007->FetchByte()) | z);
-
-  case REG:
-    Result = "r" + IntToStr(Reg1(pupd1007->FetchByte()) | z);
-
-  case OFFSREG:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0) name = "i"; else name = "r";
-      Result = "(" + ir_tab[kod & 0x03] + sign;
-      if ((kod & 0x08) == 0)
-        Result = Result + "r" + IntToStr(Reg1(x)) + ")," +
-      name + IntToStr(Reg2(y) | 0x40);
-      else
-        Result = Result + CaHexB(y) + "),r" + IntToStr(Reg1(x));
-    }
-
-  case REGMEMO:
-    {
-      x = pupd1007->FetchByte();
-      Result = "r" + IntToStr(Reg1(x) | z) +
-      ",(" + ir_tab[kod & 0x03] + ")" + sign;
-    }
-
-  case REGOFFS:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0) name = "i"; else name = "r";
-      if ((kod & 0x08) == 0)
-        Result = name + IntToStr(Reg2(y) | 0x40) + ",(" +
-      ir_tab[kod & 0x03] + sign + "r" + IntToStr(Reg1(x)) + ")";
-      else
-        Result = "r" + IntToStr(Reg1(x)) + ",(" +
-      ir_tab[kod & 0x03] + sign + CaHexB(y) + ")";
-    }
-
-  case MEMOARY:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = sign + "(" + ir_tab[kod & 0x03] + "),r" +
-      IntToStr(Reg1(x) | z) + "..r" + IntToStr(Rl1(x,y) | z);
-    }
-
-  case OFFSARY:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-//{ indirect is illegal }
-      if ((y & 0x10) != 0) name = "?"; else name = "r";
-      Result = "(" + ir_tab[kod & 0x03] + sign;
-      if ((kod & 0x08) == 0)
-        Result = Result + "r" + IntToStr(Reg1(x)) + ")," +
-                  name + IntToStr(Rf2(x,y) | 0x40) + ".." +
-                  name + IntToStr(Reg2(y) | 0x40);
-      else
-        Result = Result + CaHexB(Im6(x,y)) + "),r" +
-                  IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
-    }
-
-  case ARY:
-    {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0)  name = "i"; else name = "r";
-      if ((kod & 0x08) == 0)
-        Result = name + IntToStr(Rf2(x,y) | 0x40) + ".." +
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0)  name = "i"; else name = "r";
+        Result = "r" + IntToStr(Reg1(x)) + "," +
                 name + IntToStr(Reg2(y) | 0x40);
-      else
-        Result = "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
     }
-
-  case ARYMTBM:
+        break;
+    case REGIM8:
     {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = "r" + IntToStr(Reg1(x) | z) +
-      "..r" + IntToStr(Rl1(x,y) | z);
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = "r" + IntToStr(Reg1(x) | z) + "," + CaHexB(y);
     }
-
-  case ARYMEMO:
+        break;
+    case XARY:
     {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      Result = "r" + IntToStr(Reg1(x) | z) +
-      "..r" + IntToStr(Rl1(x,y) | z) +
-      ",(" + ir_tab[kod & 0x03] + ")" + sign;
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0)  name = "i"; else name = "r";
+        Result= name + IntToStr(Rf2(x,y) | 0x40) + ".." +
+                name + IntToStr(Reg2(y) | 0x40) +
+                ",r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
     }
-
-  case ARYOFFS:
+        break;
+    case YARY:
     {
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-//{ indirect is illegal }
-      if ((y & 0x10) != 0)  name = "?"; else name = "r";
-      if ((kod & 0x08) == 0)
-        Result = name + IntToStr(Rf2(x,y) | 0x40) + ".." +
-                  name + IntToStr(Reg2(y) | 0x40) + ",(" + ir_tab[kod & 0x03] +
-                  sign + "r" + IntToStr(Reg1(x)) + ")";
-      else
-        Result = "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y)) +
-      ",(" + ir_tab[kod & 0x03] + sign + CaHexB(Im6(x,y)) + ")";
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0)  name = "i"; else name = "r";
+        Result= "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y)) +
+                "," + name + IntToStr(Rf2(x,y) | 0x40) +
+                ".." + name + IntToStr(Reg2(y) | 0x40);
     }
-
-  case STREG:
-    Result = st_tab[kod & 0x07] + ",r" + IntToStr(Reg1(pupd1007->FetchByte()) | z);
-
-  case STIM8:
-    Result = st_tab[kod & 0x07] + "," + CaHexB(pupd1007->FetchByte());
-
-  case REGST:
-    Result = "r" + IntToStr(Reg1(pupd1007->FetchByte()) | z) + "," +
-      st_tab[kod & 0x07];
-
-  case REGIF:
-    Result = "r" + IntToStr(Reg1(pupd1007->FetchByte()) | z) + ",if";
-
-  case REGKI:
-    Result = "r" + IntToStr(Reg1(pupd1007->FetchByte()) | z) + ",ki";
-
-  case CCINDIR:
+        break;
+    case ARYIM6:
     {
-      Result = cc_tab[kod & 0x0F];
-      x = pupd1007->FetchByte();
-      y = pupd1007->FetchByte();
-      if ((y & 0x10) != 0) name = "i"; else name = "r";
-      if ((Reg1(x) == Reg2(y)) & ((y & 0x1F) == 0x07) & (name == "r"))
-        Result = Result + wr_tab[x & 0x07];
-      else
-        Result = Result + name + IntToStr(Reg2(y) | 0x40) +
-      ",r" + IntToStr(Reg1(x));
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result= "r" + IntToStr(Reg1(x) | z) +
+                "..r" + IntToStr(Rl1(x,y) | z) + "," + CaHexB(Im6(x,y));
+    }
+        break;
+    case MEMOREG:
+        Result = sign + "(" + ir_tab[kod & 0x03] + "),r" +
+                IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z);
+        break;
+    case REG:
+        Result = "r" + IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z);
+        break;
+    case OFFSREG:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0) name = "i"; else name = "r";
+        Result = "(" + ir_tab[kod & 0x03] + sign;
+        if ((kod & 0x08) == 0)
+            Result = Result + "r" + IntToStr(Reg1(x)) + ")," +
+                    name + IntToStr(Reg2(y) | 0x40);
+        else
+            Result = Result + CaHexB(y) + "),r" + IntToStr(Reg1(x));
+    }
+        break;
+    case REGMEMO:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = "r" + IntToStr(Reg1(x) | z) +
+                ",(" + ir_tab[kod & 0x03] + ")" + sign;
+    }
+        break;
+    case REGOFFS:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0) name = "i"; else name = "r";
+        if ((kod & 0x08) == 0)
+            Result = name + IntToStr(Reg2(y) | 0x40) + ",(" +
+                    ir_tab[kod & 0x03] + sign + "r" + IntToStr(Reg1(x)) + ")";
+        else
+            Result = "r" + IntToStr(Reg1(x)) + ",(" +
+                    ir_tab[kod & 0x03] + sign + CaHexB(y) + ")";
+    }
+        break;
+    case MEMOARY:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = sign + "(" + ir_tab[kod & 0x03] + "),r" +
+                IntToStr(Reg1(x) | z) + "..r" + IntToStr(Rl1(x,y) | z);
+    }
+        break;
+    case OFFSARY:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        //{ indirect is illegal }
+        if ((y & 0x10) != 0) name = "?"; else name = "r";
+        Result = "(" + ir_tab[kod & 0x03] + sign;
+        if ((kod & 0x08) == 0)
+            Result = Result + "r" + IntToStr(Reg1(x)) + ")," +
+                    name + IntToStr(Rf2(x,y) | 0x40) + ".." +
+                    name + IntToStr(Reg2(y) | 0x40);
+        else
+            Result = Result + CaHexB(Im6(x,y)) + "),r" +
+                    IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
+    }
+        break;
+    case ARY:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0)  name = "i"; else name = "r";
+        if ((kod & 0x08) == 0)
+            Result = name + IntToStr(Rf2(x,y) | 0x40) + ".." +
+                    name + IntToStr(Reg2(y) | 0x40);
+        else
+            Result = "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y));
+    }
+        break;
+    case ARYMTBM:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = "r" + IntToStr(Reg1(x) | z) +
+                "..r" + IntToStr(Rl1(x,y) | z);
+    }
+        break;
+    case ARYMEMO:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        Result = "r" + IntToStr(Reg1(x) | z) +
+                "..r" + IntToStr(Rl1(x,y) | z) +
+                ",(" + ir_tab[kod & 0x03] + ")" + sign;
+    }
+        break;
+    case ARYOFFS:
+    {
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        //{ indirect is illegal }
+        if ((y & 0x10) != 0)  name = "?"; else name = "r";
+        if ((kod & 0x08) == 0)
+            Result = name + IntToStr(Rf2(x,y) | 0x40) + ".." +
+                    name + IntToStr(Reg2(y) | 0x40) + ",(" + ir_tab[kod & 0x03] +
+                    sign + "r" + IntToStr(Reg1(x)) + ")";
+        else
+            Result = "r" + IntToStr(Reg1(x)) + "..r" + IntToStr(Rl1(x,y)) +
+                    ",(" + ir_tab[kod & 0x03] + sign + CaHexB(Im6(x,y)) + ")";
+    }
+        break;
+    case STREG:
+        Result = st_tab[kod & 0x07] + ",r" + IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z);
+        break;
+    case STIM8:
+        Result = st_tab[kod & 0x07] + "," + CaHexB(CUPD1007::FetchByte(&(pupd1007->reginfo)));
+        break;
+    case REGST:
+        Result = "r" + IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z) + "," +
+                st_tab[kod & 0x07];
+        break;
+    case REGIF:
+        Result = "r" + IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z) + ",if";
+        break;
+    case REGKI:
+        Result = "r" + IntToStr(Reg1(CUPD1007::FetchByte(&(pupd1007->reginfo))) | z) + ",ki";
+        break;
+    case CCINDIR:
+    {
+        Result = cc_tab[kod & 0x0F];
+        x = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        y = CUPD1007::FetchByte(&(pupd1007->reginfo));
+        if ((y & 0x10) != 0) name = "i"; else name = "r";
+        if ((Reg1(x) == Reg2(y)) & ((y & 0x1F) == 0x07) & (name == "r"))
+            Result = Result + wr_tab[x & 0x07];
+        else
+            Result = Result + name + IntToStr(Reg2(y) | 0x40) +
+                    ",r" + IntToStr(Reg1(x));
+    }
+        break;
+    case DATA1:
+        Result = "[" + IntToHex(CUPD1007::FetchByte(&(pupd1007->reginfo)),2) + "]";
+        break;
+    default:
+        Result = "";
+        break;
     }
 
-  case DATA1:
-    Result = "[" + IntToHex(pupd1007->FetchByte(),2) + "]";
 
-default:
-  Result = "";
-
-}
-#endif
-
-return Result;
+    return Result;
 }
 
 
@@ -854,31 +832,18 @@ UINT32 Cdebug_upd1007::DisAsm_1(UINT32 adr)
     pupd1007 = (CUPD1007 *)(pPC->pCPU);
     DasmAdr = adr;
 
-    const upd1007_dasm *inst;
-    UINT32 dasmflags = 0;
-    UINT8 op, op1;
+    pupd1007->reginfo.savepc = pupd1007->reginfo.pc;
+    pupd1007->reginfo.pc = adr;
 
-    int pos =adr;//(adr>0x0C00);
-    if (adr<0x0C00) pos<<=1;
-
-    char *buffer = (char *)malloc(200);
-    char *startbuffer = buffer;
-
-    buffer[0] = '\0';
-
-    pupd1007->info.savepc = pupd1007->info.pc;
-    pupd1007->info.pc = adr;
-
-    sprintf(Buffer,"%s",QString(IntToHex(pupd1007->info.pc, 4) + ":").toLatin1().data());
+    sprintf(Buffer,"%s",QString(IntToHex(pupd1007->reginfo.pc, 4) + ":").toLatin1().data());
     UINT16 index = pupd1007->Fetchopcode();
-    sprintf(Buffer,"%s%s",Buffer,Mnemonic (index).toLatin1().data());
-    sprintf(Buffer,"%s%s",Buffer,Arguments (index).toLatin1().data());
+    sprintf(Buffer,"%s %s",Buffer,Mnemonic (index).toLatin1().data());
+    sprintf(Buffer,"%s %s",Buffer,Arguments (index).toLatin1().data());
 
-    NextDasmAdr = pupd1007->info.pc;
-    pupd1007->info.pc = pupd1007->info.savepc;
-    return NextDasmAdr;
+    NextDasmAdr = pupd1007->reginfo.pc;
+    pupd1007->reginfo.pc = pupd1007->reginfo.savepc;
 
-
+//    qWarning()<<QString(Buffer);
     debugged = true;
 
     return(NextDasmAdr);

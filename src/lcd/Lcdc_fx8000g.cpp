@@ -35,6 +35,7 @@ void Clcdc_fx8000g::disp(void)
     info = ((Cfx8000g*) pPC)->pHD44352->getInfo();
 //    disp_symb();
 
+    qWarning()<<"PAINT";
     QPainter painter(pPC->LcdImage);
 
     UINT8 cw = info.m_char_width;
