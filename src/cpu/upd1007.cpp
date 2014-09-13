@@ -41,7 +41,7 @@ const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 #define     CE1_bit	 0x01;
 #define     LCDCE	 CE1_bit;
 
-#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00*(addr) : info->pPC->Get_8(addr))
+#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00*(addr)+0xFF : info->pPC->Get_8(addr))
 #define WM(info,addr,value) { UINT32 _a = addr; UINT8 _v=value;if ((info->iereg & 0x03)== 0x00) info->pPC->Set_8(_a,_v);}
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
@@ -87,11 +87,11 @@ void CUPD1007::step()
 {
     // lcd test fire int1 each 20ms
 #if 1
-    if ((reginfo.iereg & INT_enable[1]) && (pPC->pTIMER->msElapsed(_refState)>20)) {
+    if (pPC->pTIMER->msElapsed(_refState)>20) {
         reginfo.ifreg ^= INT_input[1];
         if ((reginfo.ifreg & INT_input[1]) !=0) {
             IntReq(&reginfo,1);
-            qWarning()<<"INT1";
+//            qWarning()<<"INT1";
         }
         _refState = pPC->pTIMER->state;
     }
@@ -212,7 +212,7 @@ void CUPD1007::Regs_Info(UINT8 Type)
                     reginfo.flag & LZ_bit ? "LZ ":"NLZ"
                     );
 
-        for (int i=0;i<0x20;i++)
+        for (int i=0;i<0x80;i++)
             sprintf(Regs_String,"%s%02X ",Regs_String,reginfo.mr[i]);
         sprintf(Regs_String,"%s    ",Regs_String);
         break;
@@ -868,7 +868,7 @@ void CUPD1007::Call (upd1007_config *info, BYTE x1, BYTE x2)
   info->iereg = saveie;
   info->pc = (x1 << 8) | x2;
   addState(info,6);
-  info->pPC->pCPU->CallSubLevel++;
+//  info->pPC->pCPU->CallSubLevel++;
 }
 
 
@@ -897,7 +897,7 @@ void CUPD1007::Rtn (upd1007_config *info,void *op2 /*dummy*/)
   info->iereg = saveie;
   info->pc = (x1 << 8) | x2;
   addState(info,10);
-  info->pPC->pCPU->CallSubLevel--;
+//  info->pPC->pCPU->CallSubLevel--;
 }
 
 
@@ -1056,7 +1056,7 @@ void CUPD1007::LdmAryMemo (upd1007_config *info,void *op2)
   y = info->regbank | Rl1 (x, y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
-    info->mr[x] = RM(info,Func4 (op2) (info,src,1));
+    info->mr[x] = RM(info,((Func4)op2) (info,src,1));
     addState(info,4);
     if (x == y) break;
     NextReg (info,&x);
@@ -2206,11 +2206,13 @@ void CUPD1007::DoPorts(upd1007_config *info)
 /* the EN1 output controls the LCD power supply */
   if ((info->ifreg & EN1_bit) != 0) {
     info->lcdctrl = info->lcdctrl | VDD2_bit;
+//    info->pPC->out(0,info->lcdctrl);
   }
   else
   {
 //    if ((info->lcdctrl & VDD2_bit) != 0) LcdInit();
     info->lcdctrl = info->lcdctrl & ~VDD2_bit;
+//    info->pPC->out(0,info->lcdctrl);
     info->ifreg = info->ifreg & ~INT_input[1];
    }
 /* the EN2 output is wired to the INT0 input */

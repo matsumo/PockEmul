@@ -25,7 +25,7 @@ typedef quint32 UINT32;
 #define V0  6
 #define SP  7
 
-#define INT_LATENCY 3
+#define INT_LATENCY 7
 
 
 

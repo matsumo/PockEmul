@@ -69,7 +69,7 @@ Cfx8000g::~Cfx8000g() {
 bool Cfx8000g::init(void)				// initialize
 {
 
-//pCPU->logsw = true;
+pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
@@ -127,7 +127,7 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
         pHD44352->control_write(x); pLCDC->redraw = true; break;
     case 1:
         qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
-        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
+//        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
         pHD44352->data_write(x);
         pLCDC->redraw = true;
         break;
@@ -185,11 +185,21 @@ UINT8 Cfx8000g::getKey()
 
     UINT32 ks = fx8000gcpu->reginfo.koreg;
 
-//    if (ks<0x40) return 0;
+    if (ks<0x40) return 0;
 
     if ((pKEYB->LastKey) )
     {
         AddLog(LOG_KEYBOARD,tr("GetKEY : %1").arg(ks,4,16,QChar('0')));
+        if ((ks & 0x41)==0x41) {
+            if (KEY(K_CE))     data|=0x01;
+//            if (KEY(K_ALPHA))	data|=0x02;
+//            if (KEY(K_MOD))		data|=0x04;
+//            if (KEY(K_RET))		data|=0x08;
+////            if (KEY(''))		data|=0x10;
+////            if (KEY(''))		data|=0x20;
+//            if (KEY(K_POW_OFF))	data|=0x40;
+//            if (KEY(K_INIT))	data|=0x80;			// UP ARROW
+        }
         if ((ks & 0x42)==0x42) {
             if (KEY(K_SHT))     data|=0x01;
             if (KEY(K_ALPHA))	data|=0x02;
