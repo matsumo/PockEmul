@@ -24,7 +24,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     SymbFname		= "";
 
     memsize		= 0xFFFF;
-    InitMemValue	= 0xFF;
+    InitMemValue	= 0x00;
 
     SlotList.clear();
     SlotList.append(CSlot(4 , 0x3000 ,	P_RES(":/fx8000g/rom1a.bin"), ""	, CSlot::ROM , "ROM"));
@@ -126,6 +126,7 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
         pHD44352->control_write(x); pLCDC->redraw = true; break;
     case 1:
         qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
+        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
         pHD44352->data_write(x);
         pLCDC->redraw = true;
         break;

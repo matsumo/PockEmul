@@ -322,7 +322,7 @@ qWarning()<<"state="<<info.m_state;
     }
     else
     {
-        qWarning()<<"data:"<<info.m_par[0];
+        qWarning()<<"data:"<<info.m_par[0]<<"  control:"<<info.m_control_lines;
         switch (info.m_par[0] & 0x0f)
         {
             case LCD_BYTE_INPUT:

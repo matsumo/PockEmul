@@ -419,8 +419,7 @@ void CUPD1007::MinusOffset (upd1007_config *info, BYTE x)
 void CUPD1007::UnReg (upd1007_config *info,void *op2)
 {
   if (op2 != (void*)&CUPD1007::OpSwp1) info->flag = 0;
-  BYTE _temp = info->mr[info->regbank | Reg1 (FetchByte(info))];
-  ((Func5) (op2)) (info,&_temp, 0);
+  ((Func5) (op2)) (info,&(info->mr[info->regbank | Reg1 (FetchByte(info))]), 0);
 }
 
 
@@ -428,8 +427,7 @@ void CUPD1007::UnReg (upd1007_config *info,void *op2)
 void CUPD1007::RotReg (upd1007_config *info,void *op2)
 {
   info->flag = info->flag & C_bit;
-  BYTE _temp = info->mr[info->regbank | Reg1 (FetchByte(info))];
-  ((Func5)(op2)) (info,&_temp, 0);
+  ((Func5)(op2)) (info,&(info->mr[info->regbank | Reg1 (FetchByte(info))]), 0);
 }
 
 
@@ -1418,11 +1416,10 @@ BYTE CUPD1007::OpByu(upd1007_config *info,BYTE *x, BYTE y)
 BYTE CUPD1007::OpByd (upd1007_config *info,BYTE *x, BYTE y)
 {
   info->regstep = -1;
-  BYTE result = *x;
   *x = y;
   info->flag = info->flag & NZ_bit;
   ZeroBits (info,*x);
-  return result;
+  return *x;
 }
 
 
@@ -1529,7 +1526,7 @@ void CUPD1007::Ldle (upd1007_config *info,void* op2)
   info->pPC->out(0,info->lcdctrl);
   info->mr[x] = info->pPC->in(1);
   addState(info,8);
-  info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+//  info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
 }
 
 
@@ -1554,7 +1551,7 @@ void CUPD1007::Stle (upd1007_config *info,void* op2)
   info->pPC->out(0,info->lcdctrl);
   info->pPC->out(1,info->mr[x]);
   addState(info,8);
-  info->pPC->out(1,info->mr[x] >> 4);
+//  info->pPC->out(1,info->mr[x] >> 4);
 }
 
 
@@ -1583,7 +1580,7 @@ void CUPD1007::Ldlem (upd1007_config *info,void* op2)
   do {
     info->mr[x] = info->pPC->in(1);
     addState(info,8);
-    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+//    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
     if (x == y) break;
     NextReg (info,&x);
   } while(true);
@@ -1603,7 +1600,7 @@ void CUPD1007::Ldlom (upd1007_config *info,void* op2)
   do {
     info->mr[x] = info->pPC->in(1);
     addState(info,8);
-    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+//    info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
     if (x == y)  break;
     NextReg (info,&x);
   } while(true);
@@ -1624,7 +1621,7 @@ void CUPD1007::Stlem (upd1007_config *info,void* op2)
       qWarning()<<"Stlem Loop";
     info->pPC->out(1,info->mr[x]);
     addState(info,8);
-    info->pPC->out(1,info->mr[x] >> 4);
+//    info->pPC->out(1,info->mr[x] >> 4);
     if (x == y) break;
     NextReg (info,&x);
   } while(true);
@@ -1646,7 +1643,7 @@ void CUPD1007::Stlom (upd1007_config *info,void* op2)
   do {
     info->pPC->out(1,info->mr[x]);
     addState(info,8);
-    info->pPC->out(1,info->mr[x] >> 4);
+//    info->pPC->out(1,info->mr[x] >> 4);
     if (x == y) break;
     NextReg (info,&x);
   } while(true);
