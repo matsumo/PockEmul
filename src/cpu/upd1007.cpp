@@ -86,7 +86,7 @@ bool CUPD1007::exit()
 void CUPD1007::step()
 {
     // lcd test fire int1 each 20ms
-#if 0
+#if 1
     if ((reginfo.iereg & INT_enable[1]) && (pPC->pTIMER->msElapsed(_refState)>20)) {
         reginfo.ifreg ^= INT_input[1];
         if ((reginfo.ifreg & INT_input[1]) !=0) {
