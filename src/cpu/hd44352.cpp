@@ -45,7 +45,7 @@ CHD44352::CHD44352(QString fnCharSet,QObject *parent) :
 
 bool CHD44352::init()
 {
-    qWarning()<<"CHD44352::init"<<fncharset;
+//    qWarning()<<"CHD44352::init"<<fncharset;
     Reset();
 
     QFile file;
@@ -183,7 +183,7 @@ void CHD44352::data_write(UINT8 data)
 {
     // verify that controller is active
     if (!(info.m_control_lines & 0x80)) {
-        qWarning()<<"inactive";
+//        qWarning()<<"inactive";
         return;
     }
 
@@ -191,7 +191,7 @@ void CHD44352::data_write(UINT8 data)
     {
 //        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
 //            return;
-qWarning()<<"state="<<info.m_state;
+//qWarning()<<"state="<<info.m_state;
         switch (info.m_state)
         {
             case 0:		//parameter 0
@@ -322,7 +322,7 @@ qWarning()<<"state="<<info.m_state;
     }
     else
     {
-        qWarning()<<"data:"<<info.m_par[0]<<"  control:"<<info.m_control_lines;
+//        qWarning()<<"data:"<<info.m_par[0]<<"  control:"<<info.m_control_lines;
         switch (info.m_par[0] & 0x0f)
         {
             case LCD_BYTE_INPUT:

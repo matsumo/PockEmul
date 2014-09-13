@@ -87,7 +87,7 @@ void CUPD1007::step()
 {
     // lcd test fire int1 each 20ms
 #if 1
-    if (pPC->pTIMER->msElapsed(_refState)>20) {
+    if (pPC->pTIMER->usElapsed(_refState)>1000) {
         reginfo.ifreg ^= INT_input[1];
         if ((reginfo.ifreg & INT_input[1]) !=0) {
             IntReq(&reginfo,1);
@@ -1520,7 +1520,7 @@ void CUPD1007::OpFl (upd1007_config *info,BYTE x)
 void CUPD1007::Ldle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Ldle";
+//    qWarning()<<"Ldle";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
   info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
   info->pPC->out(0,info->lcdctrl);
@@ -1533,7 +1533,7 @@ void CUPD1007::Ldle (upd1007_config *info,void* op2)
 void CUPD1007::Ldlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Ldlo";
+//    qWarning()<<"Ldlo";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
   info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
   info->pPC->out(0,info->lcdctrl);
@@ -1545,7 +1545,7 @@ void CUPD1007::Ldlo (upd1007_config *info,void* op2)
 void CUPD1007::Stle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Stle";
+//    qWarning()<<"Stle";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
   info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
   info->pPC->out(0,info->lcdctrl);
@@ -1558,7 +1558,7 @@ void CUPD1007::Stle (upd1007_config *info,void* op2)
 void CUPD1007::Stlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Stlo";
+//    qWarning()<<"Stlo";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
   info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
   info->pPC->out(0,info->lcdctrl);
@@ -1570,7 +1570,7 @@ void CUPD1007::Stlo (upd1007_config *info,void* op2)
 void CUPD1007::Ldlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Ldlem";
+//    qWarning()<<"Ldlem";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
   info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
@@ -1590,7 +1590,7 @@ void CUPD1007::Ldlem (upd1007_config *info,void* op2)
 void CUPD1007::Ldlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Ldlom";
+//    qWarning()<<"Ldlom";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
   info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
@@ -1610,7 +1610,7 @@ void CUPD1007::Ldlom (upd1007_config *info,void* op2)
 void CUPD1007::Stlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Stlem";
+//    qWarning()<<"Stlem";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
   info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
@@ -1618,21 +1618,21 @@ void CUPD1007::Stlem (upd1007_config *info,void* op2)
   y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
-      qWarning()<<"Stlem Loop";
+//      qWarning()<<"Stlem Loop";
     info->pPC->out(1,info->mr[x]);
     addState(info,8);
 //    info->pPC->out(1,info->mr[x] >> 4);
     if (x == y) break;
     NextReg (info,&x);
   } while(true);
-  qWarning()<<"Stlem End";
+//  qWarning()<<"Stlem End";
 }
 
 // Control write
 void CUPD1007::Stlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
-    qWarning()<<"Stlom";
+//    qWarning()<<"Stlom";
 
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);

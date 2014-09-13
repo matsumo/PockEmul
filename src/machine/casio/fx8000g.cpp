@@ -69,7 +69,7 @@ Cfx8000g::~Cfx8000g() {
 bool Cfx8000g::init(void)				// initialize
 {
 
-pCPU->logsw = true;
+//pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
@@ -270,7 +270,7 @@ UINT8 Cfx8000g::getKey()
             if (KEY(K_DEL))			data|=0x40;
             if (KEY(K_ANS))			data|=0x80;
         }
-    qWarning()<<"ko="<<QString("%1").arg(ks,2,16,QChar('0'))<< "   ki="<<QString("%1").arg(data,2,16,QChar('0'));
+//    qWarning()<<"ko="<<QString("%1").arg(ks,2,16,QChar('0'))<< "   ki="<<QString("%1").arg(data,2,16,QChar('0'));
 
     }
     fx8000gcpu->reginfo.kireg = data;
