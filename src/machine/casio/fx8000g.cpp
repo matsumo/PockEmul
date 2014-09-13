@@ -57,6 +57,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     fx8000gcpu = (CUPD1007*)pCPU;
     pKEYB		= new Ckeyb(this,"fx8000g.map");
     pHD44352    = new CHD44352(P_RES(":/fx8000g/charset.bin"));
+    pHD44352->OP_bit = 0x20;
 
     ioFreq = 0;
 }
@@ -68,7 +69,7 @@ Cfx8000g::~Cfx8000g() {
 bool Cfx8000g::init(void)				// initialize
 {
 
-//pCPU->logsw = true;
+pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
@@ -121,10 +122,13 @@ UINT8 Cfx8000g::in(UINT8 Port) {
 UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
     switch (Port) {
     case 0:
-        qWarning()<<"HD44352 Ctrl_write:"<<x;
+//        qWarning()<<"HD44352 Ctrl_write:"<<(x);
         pHD44352->control_write(x); pLCDC->redraw = true; break;
     case 1:
-        qWarning()<<"HD44352 Data_write:"<<x;pHD44352->data_write(x); pLCDC->redraw = true; break;
+        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
+        pHD44352->data_write(x);
+        pLCDC->redraw = true;
+        break;
     }
 
     return 0;

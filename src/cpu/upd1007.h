@@ -25,7 +25,7 @@ typedef quint32 UINT32;
 #define V0  6
 #define SP  7
 
-#define INT_LATENCY 7
+#define INT_LATENCY 3
 
 
 
@@ -34,6 +34,7 @@ struct upd1007_config
 {
     CpcXXXX *pPC;
     UINT16 ea;  /* temporary pointer used in the indexed addressing mode */
+    BYTE lcdctrl;
     BYTE mr[0x80];	//{ main (general purpose) register file }
     BYTE koreg;//: byte;
     BYTE kireg;//: byte;
@@ -121,7 +122,7 @@ public:
     virtual	void	Set_Xout(bool){}
 
     virtual	UINT32	get_PC(void);					//get Program Counter
-    virtual void	Regs_Info(UINT8);
+    virtual void	Regs_Info(UINT8 Type);
 
             BYTE rom0[ROM0SIZE][3];
 
@@ -251,7 +252,10 @@ public:
             static BYTE Get_ifreg(upd1007_config *info);
 
             void ExecInstr();
+            static void IntReq(upd1007_config *info, int i);
 protected:
+
+            quint64 _refState;
 
 };
 

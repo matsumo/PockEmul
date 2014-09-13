@@ -3,6 +3,7 @@
 This CPU core is based on documentations works done by:
 - Piotr Piatek ( http://www.pisi.com.pl/piotr433/fx8000ee.htm )
 */
+#include <QDebug>
 
 #include "upd1007.h"
 #include "ui/cregsz80widget.h"
@@ -28,9 +29,20 @@ const BYTE CUPD1007::INT_enable[3] = { 0x10, 0x20, 0x40 };
 /* bits of the IF register */
 const BYTE CUPD1007::INT_serv[3] = { 0x20, 0x40, 0x80 };
 const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
+#define EN2_bit	0x10
+#define EN1_bit 0x01
 
-#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00 : info->pPC->Get_8(addr))
-#define WM(info,addr,value) { if ((info->iereg & 0x03)== 0x00) info->pPC->Set_8(addr,value);}
+/* bits of the LCD control port in the immediate operand of the LDL /STL
+  instructions */
+#define     VDD2_bit 0x80;	/* port EN1 controlled by bit 0 of the IF register */
+#define     OP_bit	 0x20;
+#define     CE3_bit	 0x04;
+#define     CE2_bit	 0x02;
+#define     CE1_bit	 0x01;
+#define     LCDCE	 CE1_bit;
+
+#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00*(addr) : info->pPC->Get_8(addr))
+#define WM(info,addr,value) { UINT32 _a = addr; UINT8 _v=value;if ((info->iereg & 0x03)== 0x00) info->pPC->Set_8(_a,_v);}
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
@@ -45,6 +57,7 @@ CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
     QDataStream in(&file);
     in.readRawData ((char *) &rom0,ROM0SIZE*3 );
 
+    memset((char*)&reginfo,0,sizeof(reginfo));
     reginfo.pPC = pPC;
 }
 
@@ -57,6 +70,7 @@ bool CUPD1007::init()
 
     Check_Log();
     pDEBUG->init();
+
 
     Reset();
 
@@ -71,6 +85,19 @@ bool CUPD1007::exit()
 
 void CUPD1007::step()
 {
+    // lcd test fire int1 each 20ms
+#if 0
+    if ((reginfo.iereg & INT_enable[1]) && (pPC->pTIMER->msElapsed(_refState)>20)) {
+        reginfo.ifreg ^= INT_input[1];
+        if ((reginfo.ifreg & INT_input[1]) !=0) {
+            IntReq(&reginfo,1);
+            qWarning()<<"INT1";
+        }
+        _refState = pPC->pTIMER->state;
+    }
+#endif
+
+
 //    { complete an optional I/O device write }
 //        if procptr <> nil then
 //        begin
@@ -113,7 +140,9 @@ void CUPD1007::step()
         for (int i=0;i<3;i++)
         {
           if (reginfo.irqcnt[i] < -INT_LATENCY) reginfo.irqcnt[i] = -INT_LATENCY;
-          else if (reginfo.irqcnt[i] < 0)  reginfo.irqcnt[i]+= reginfo.cycles;
+          else
+              if (reginfo.irqcnt[i] < 0)
+                  reginfo.irqcnt[i]+= reginfo.cycles;
         }
 
 }
@@ -128,6 +157,10 @@ void CUPD1007::Reset()
     reginfo.irqcnt[2] = 0;
     reginfo.acycles = 0;
     reginfo.CpuSleep = false;
+    halt = false;
+
+    _refState = pPC->pTIMER->state;
+    reginfo.lcdctrl = 0;
 }
 
 void CUPD1007::Load_Internal(QXmlStreamReader *)
@@ -145,8 +178,45 @@ UINT32 CUPD1007::get_PC()
     return reginfo.pc;
 }
 
-void CUPD1007::Regs_Info(UINT8)
+void CUPD1007::Regs_Info(UINT8 Type)
 {
+    sprintf(Regs_String,"EMPTY");
+
+    switch(Type)
+    {
+    case 0:			// Monitor Registers Dialog
+        sprintf(
+                    Regs_String,
+                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X %s%s%s%s%s%s ",
+                    reginfo.pc, reginfo.koreg,reginfo.kireg,
+                    reginfo.iereg,reginfo.ifreg,reginfo.asreg,
+                    reginfo.flag & C_bit  ? "C " :"NC",
+                    reginfo.flag & V_bit  ? "V " :"NV",
+                    reginfo.flag & UZ_bit ? "UZ ":"NUZ",
+                    reginfo.flag & H_bit  ? "H " :"NH",
+                    reginfo.flag & NZ_bit ? "NZ" :"Z ",
+                    reginfo.flag & LZ_bit ? "LZ ":"NLZ"
+                    );
+        break;
+    case 1:			// Log File
+        sprintf(
+                    Regs_String,
+                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X %s%s%s%s%s%s ",
+                    reginfo.pc, reginfo.koreg,reginfo.kireg,
+                    reginfo.iereg,reginfo.ifreg,reginfo.asreg,
+                    reginfo.flag & C_bit  ? "C " :"NC",
+                    reginfo.flag & V_bit  ? "V " :"NV",
+                    reginfo.flag & UZ_bit ? "UZ ":"NUZ",
+                    reginfo.flag & H_bit  ? "H " :"NH",
+                    reginfo.flag & NZ_bit ? "NZ" :"Z ",
+                    reginfo.flag & LZ_bit ? "LZ ":"NLZ"
+                    );
+
+        for (int i=0;i<0x20;i++)
+            sprintf(Regs_String,"%s%02X ",Regs_String,reginfo.mr[i]);
+        sprintf(Regs_String,"%s    ",Regs_String);
+        break;
+    }
 
 }
 
@@ -433,7 +503,7 @@ void CUPD1007::RotAry (upd1007_config *info,void *op2)
     z = ((Func5)op2) (info,&info->mr[dstf], z);
     addState(info,4);
     if (x == y) return;
-    if (dstf == (dstl xor ((info->regstep >> 1) & 0x07)))
+    if (dstf == (dstl ^ ((info->regstep >> 1) & 0x07)))
     do {
       NextReg (info,&x);
       dstf = 0;
@@ -800,6 +870,7 @@ void CUPD1007::Call (upd1007_config *info, BYTE x1, BYTE x2)
   info->iereg = saveie;
   info->pc = (x1 << 8) | x2;
   addState(info,6);
+  info->pPC->pCPU->CallSubLevel++;
 }
 
 
@@ -828,6 +899,7 @@ void CUPD1007::Rtn (upd1007_config *info,void *op2 /*dummy*/)
   info->iereg = saveie;
   info->pc = (x1 << 8) | x2;
   addState(info,10);
+  info->pPC->pCPU->CallSubLevel--;
 }
 
 
@@ -837,7 +909,7 @@ void CUPD1007::Cani (upd1007_config *info,void *op2 /*dummy*/)
   {
     if (info->irqcnt[i] != 0)
     {
-      info->ifreg = info->ifreg & not INT_serv[i];
+      info->ifreg = info->ifreg & ~INT_serv[i];
       info->irqcnt[i] = 0;
       break;
     }
@@ -1078,14 +1150,15 @@ void CUPD1007::Gst (upd1007_config *info,void *op2)
 
 void CUPD1007::Off (upd1007_config *info,void *op2)
 {
-//  CpuSleep = True;
+  info->CpuSleep = true;
+  info->pPC->pCPU->halt = true;
   info->pc = 0x0000;
   info->iereg = 0;
   info->ifreg = 0x00;
   info->irqcnt[0] = 0;
   info->irqcnt[1] = 0;
   info->irqcnt[2] = 0;
-//  lcdctrl = 0;
+  info->lcdctrl = 0;
 //  LcdInit;
   DoPorts(info);
   info->koreg = 0x41;
@@ -1110,11 +1183,11 @@ void CUPD1007::ZeroBits (upd1007_config *info,BYTE x)
 /* addition with carry */
 BYTE CUPD1007::OpAd (upd1007_config *info,BYTE x, BYTE y)
 {
-  int in1 = x;
-  int in2 = y;
-  int out = in1 + in2;
+  unsigned int in1 = x;
+  unsigned int in2 = y;
+  unsigned int out = in1 + in2;
   if ((info->flag & C_bit) != 0) out++;
-  int  temp = in1 xor in2 xor out;
+  unsigned int  temp = in1 ^ in2 ^ out;
   info->flag = info->flag & NZ_bit;
   if (out > 0xFF) info->flag |= C_bit;
   if ((temp & 0x10) != 0) info->flag |= H_bit;
@@ -1127,12 +1200,12 @@ BYTE CUPD1007::OpAd (upd1007_config *info,BYTE x, BYTE y)
 /* subtraction with borrow */
 BYTE CUPD1007::OpSb (upd1007_config *info,BYTE x, BYTE y)
 {
-  int in1 = x;
-  int in2 = y;
-  int out = in1 - in2;
+  unsigned int in1 = x;
+  unsigned int in2 = y;
+  unsigned int out = in1 - in2;
   if ((info->flag & C_bit) != 0) out--;
-  int temp = in1 xor in2 xor out;
-  info->flag = info->flag & NZ_bit;
+  unsigned int temp = in1 ^ in2 ^ out;
+  info->flag &= NZ_bit;
   if (out > 0xFF)  info->flag |= C_bit;
   if ((temp & 0x10) != 0) info->flag |= H_bit;
   if ((temp & 0x80) != 0) info->flag |= V_bit;
@@ -1144,10 +1217,10 @@ BYTE CUPD1007::OpSb (upd1007_config *info,BYTE x, BYTE y)
 /* BCD addition with carry */
 BYTE CUPD1007::OpAdb (upd1007_config *info,BYTE x, BYTE y)
 {
-  int in1 = x;
-  int in2 = y;
+  unsigned int in1 = x;
+  unsigned int in2 = y;
 /* lower nibble */
-  int out = (in1 & 0x0F) + (in2 & 0x0F);
+  unsigned int out = (in1 & 0x0F) + (in2 & 0x0F);
   if ((info->flag & C_bit) != 0)  out++;
   info->flag = info->flag & NZ_bit;
 /* decimal adjustement */
@@ -1174,16 +1247,16 @@ BYTE CUPD1007::OpAdb (upd1007_config *info,BYTE x, BYTE y)
 /* BCD subtraction with borrow */
 BYTE CUPD1007::OpSbb (upd1007_config *info,BYTE x, BYTE y)
 {
-  int in1 = (x);
-  int in2 = (y);
+  unsigned int in1 = (x);
+  unsigned int in2 = (y);
 /* lower nibble */
-  int out = (in1 & 0x0F) - (in2 & 0x0F);
+  unsigned int out = (in1 & 0x0F) - (in2 & 0x0F);
   if ((info->flag & C_bit) != 0) out--;
   info->flag &= NZ_bit;
 /* decimal adjustement */
   if (out > 0x09)
   {
-    out = (out - 0x06) | (-0x10);
+    out = (out - 0x06) | (unsigned int)(-0x10);
     info->flag |= H_bit;
   }
 /* upper nibble */
@@ -1210,7 +1283,7 @@ BYTE CUPD1007::OpAn (upd1007_config *info,BYTE x, BYTE y)
 
 BYTE CUPD1007::OpBit (upd1007_config *info,BYTE x, BYTE y)
 {
-  BYTE Result = not x & y;
+  BYTE Result = (~x) & y;
   info->flag = info->flag & NZ_bit;
   ZeroBits (info,Result);
   return Result;
@@ -1219,7 +1292,7 @@ BYTE CUPD1007::OpBit (upd1007_config *info,BYTE x, BYTE y)
 
 BYTE CUPD1007::OpXr (upd1007_config *info,BYTE x, BYTE y)
 {
-  BYTE Result = x xor y;
+  BYTE Result = x ^ y;
   info->flag = info->flag & NZ_bit;
   ZeroBits (info,Result);
   return Result;
@@ -1450,9 +1523,10 @@ void CUPD1007::OpFl (upd1007_config *info,BYTE x)
 void CUPD1007::Ldle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Ldle";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
-  info->pPC->out(0,FetchByte(info));
-//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,info->lcdctrl);
   info->mr[x] = info->pPC->in(1);
   addState(info,8);
   info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
@@ -1462,9 +1536,10 @@ void CUPD1007::Ldle (upd1007_config *info,void* op2)
 void CUPD1007::Ldlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Ldlo";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
-//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
-  info->pPC->out(0,FetchByte(info));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,info->lcdctrl);
   info->mr[x] = info->pPC->in(1);
   addState(info,8);
 }
@@ -1473,9 +1548,10 @@ void CUPD1007::Ldlo (upd1007_config *info,void* op2)
 void CUPD1007::Stle (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Stle";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
-//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
-  info->pPC->out(0,FetchByte(info));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,info->lcdctrl);
   info->pPC->out(1,info->mr[x]);
   addState(info,8);
   info->pPC->out(1,info->mr[x] >> 4);
@@ -1485,9 +1561,10 @@ void CUPD1007::Stle (upd1007_config *info,void* op2)
 void CUPD1007::Stlo (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Stlo";
   BYTE x = info->regbank | Reg1 (FetchByte(info));	/* index of the register */
-//  lcdctrl = (lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
-  info->pPC->out(0,FetchByte(info));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | (FetchByte(info) & 0x3F);
+  info->pPC->out(0,info->lcdctrl);
   info->pPC->out(1,info->mr[x]);
   addState(info,8);
 }
@@ -1496,10 +1573,11 @@ void CUPD1007::Stlo (upd1007_config *info,void* op2)
 void CUPD1007::Ldlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Ldlem";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
-//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
-  info->pPC->out(0,Im6 (x,y));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,info->lcdctrl);
   y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
@@ -1515,55 +1593,61 @@ void CUPD1007::Ldlem (upd1007_config *info,void* op2)
 void CUPD1007::Ldlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Ldlom";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
-//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
-  info->pPC->out(0,Im6 (x,y));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,info->lcdctrl);
   y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
     info->mr[x] = info->pPC->in(1);
     addState(info,8);
-    if (x == y)  break;
     info->mr[x] = info->mr[x] | (info->pPC->in(1) << 4);
+    if (x == y)  break;
     NextReg (info,&x);
   } while(true);
 }
 
-
+// Data write
 void CUPD1007::Stlem (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Stlem";
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
-//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
-  info->pPC->out(0,Im6 (x,y));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,info->lcdctrl);
   y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
+      qWarning()<<"Stlem Loop";
     info->pPC->out(1,info->mr[x]);
     addState(info,8);
     info->pPC->out(1,info->mr[x] >> 4);
     if (x == y) break;
     NextReg (info,&x);
   } while(true);
+  qWarning()<<"Stlem End";
 }
 
-
+// Control write
 void CUPD1007::Stlom (upd1007_config *info,void* op2)
 {
 //  LcdSync;
+    qWarning()<<"Stlom";
+
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
-//  lcdctrl = (lcdctrl & ~0x3F) | Im6 (x,y);
-  info->pPC->out(0,Im6 (x,y));
+  info->lcdctrl = (info->lcdctrl & ~0x3F) | Im6 (x,y);
+  info->pPC->out(0,info->lcdctrl);
   y = info->regbank | Rl1 (x,y);	/* index of the last processed register */
   x = info->regbank | Reg1 (x);	/* index of the first processed register */
   do {
     info->pPC->out(1,info->mr[x]);
     addState(info,8);
-    if (x == y) break;
     info->pPC->out(1,info->mr[x] >> 4);
+    if (x == y) break;
     NextReg (info,&x);
   } while(true);
 }
@@ -2122,23 +2206,30 @@ void CUPD1007::ExecInstr()
 
 void CUPD1007::DoPorts(upd1007_config *info)
 {
-///* the EN1 output controls the LCD power supply */
-//  if ((info->ifreg & EN1_bit) != 0)
-//    lcdctrl = lcdctrl | VDD2_bit
-//  else
-//  {
-//    if ((lcdctrl & VDD2_bit) != 0) LcdInit();
-//    lcdctrl = lcdctrl & !VDD2_bit;
-//    info->ifreg = info->ifreg & !INT_input[1];
-//   }
-///* the EN2 output is wired to the INT0 input */
-//  if ((info->ifreg & EN2_bit) != 0)
-//  {
-//    if ((info->ifreg & INT_input[0]) == 0) IntReq(0);
-//    info->ifreg = info->ifreg | INT_input[0];
-//  }
-//  else
-//    info->ifreg = info->ifreg & !INT_input[0];
+/* the EN1 output controls the LCD power supply */
+  if ((info->ifreg & EN1_bit) != 0) {
+    info->lcdctrl = info->lcdctrl | VDD2_bit;
+  }
+  else
+  {
+//    if ((info->lcdctrl & VDD2_bit) != 0) LcdInit();
+    info->lcdctrl = info->lcdctrl & ~VDD2_bit;
+    info->ifreg = info->ifreg & ~INT_input[1];
+   }
+/* the EN2 output is wired to the INT0 input */
+  if ((info->ifreg & EN2_bit) != 0)
+  {
+    if ((info->ifreg & INT_input[0]) == 0) IntReq(info,0);
+    info->ifreg = info->ifreg | INT_input[0];
+  }
+  else
+    info->ifreg = info->ifreg & ~INT_input[0];
+}
+
+/* interrupt request */
+void CUPD1007::IntReq (upd1007_config *info,int i) {
+    if (((info->iereg & INT_enable[i]) != 0) && (info->irqcnt[i] == 0))
+        info->irqcnt[i] = -INT_LATENCY-1;	/* any value less than -INT_LATENCY */
 }
 
 #endif

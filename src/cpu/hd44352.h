@@ -70,12 +70,14 @@ static UINT8 compute_newval(UINT8 type, UINT8 oldval, UINT8 newval);
     void	Reset(void);
     bool	step(void);
 
+    BYTE OP_bit;
 private:
 
     UINT8 get_char(UINT16 pos);
 
     HD44352info info;
     UINT8 charset[0x800];
+
 
 
 };

@@ -35,6 +35,7 @@ CHD44352::CHD44352(QString fnCharSet,QObject *parent) :
     QObject(parent)
 {
     this->fncharset = fnCharSet;
+    OP_bit = 0x01;
     Reset();
 }
 
@@ -44,14 +45,15 @@ CHD44352::CHD44352(QString fnCharSet,QObject *parent) :
 
 bool CHD44352::init()
 {
-    qWarning()<<"CHD44352::init";
+    qWarning()<<"CHD44352::init"<<fncharset;
     Reset();
 
     QFile file;
     file.setFileName(fncharset);
     file.open(QIODevice::ReadOnly);
     QDataStream in(&file);
-    in.readRawData ((char *) &charset,0x800 );
+    int _result = in.readRawData ((char *) &charset,0x800 );
+
     return true;
 }
 
@@ -180,14 +182,16 @@ UINT8 CHD44352::get_char(UINT16 pos)
 void CHD44352::data_write(UINT8 data)
 {
     // verify that controller is active
-    if (!(info.m_control_lines&0x80))
+    if (!(info.m_control_lines & 0x80)) {
+        qWarning()<<"inactive";
         return;
+    }
 
-    if (info.m_control_lines & 0x01)
+    if (info.m_control_lines & OP_bit)
     {
-        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
-            return;
-
+//        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
+//            return;
+qWarning()<<"state="<<info.m_state;
         switch (info.m_state)
         {
             case 0:		//parameter 0
@@ -318,6 +322,7 @@ void CHD44352::data_write(UINT8 data)
     }
     else
     {
+        qWarning()<<"data:"<<info.m_par[0];
         switch (info.m_par[0] & 0x0f)
         {
             case LCD_BYTE_INPUT:
