@@ -54,6 +54,7 @@
         <file>keymap/cc40.map</file>
         <file>keymap/ti74.map</file>
         <file>keymap/ti95.map</file>
+        <file>keymap/fx8000g.map</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

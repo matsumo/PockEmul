@@ -55,7 +55,7 @@ void Clcdc_fx8000g::disp(void)
                             for (int b=0; b<8; b++)
                             {
                                 painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+                                painter.drawPoint( /*a*cw*16*/ + px*cw + c, a*32 + py*8 + b );
                             }
                         }
                     }
@@ -67,7 +67,7 @@ void Clcdc_fx8000g::disp(void)
                             for (int b=0; b<8; b++)
                             {
                                 painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+                                painter.drawPoint( /*a*cw*16*/ + px*cw + c, a*32 + py*8 + b );
                             }
                         }
                     }

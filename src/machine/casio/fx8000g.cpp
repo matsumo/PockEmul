@@ -38,12 +38,12 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(321);
     setDY(687);
 
-    Lcd_X		= 90;
-    Lcd_Y		= 130;
-    Lcd_DX		= 192;//168;//144 ;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 1;// * 1.18;
-    Lcd_ratio_Y	= 1;// * 1.18;
+    Lcd_X		= 64;
+    Lcd_Y		= 54;
+    Lcd_DX		= 96;// 194x134
+    Lcd_DY		= 64;
+    Lcd_ratio_X	= 2;
+    Lcd_ratio_Y	= 2;
 
     Lcd_Symb_X	= 55;
     Lcd_Symb_Y	= 41;
@@ -69,7 +69,7 @@ Cfx8000g::~Cfx8000g() {
 bool Cfx8000g::init(void)				// initialize
 {
 
-pCPU->logsw = true;
+//pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
@@ -85,6 +85,7 @@ pCPU->logsw = true;
 
 bool Cfx8000g::run() {
 
+    getKey();
 
     CpcXXXX::run();
 
@@ -175,60 +176,97 @@ bool Cfx8000g::SaveConfig(QXmlStreamWriter *xmlOut)
     return true;
 }
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
+
+#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 UINT8 Cfx8000g::getKey()
 {
-    UINT8 code = 0;
-    if (pKEYB->LastKey)
+    UINT8 data=0;
+
+    UINT32 ks = fx8000gcpu->reginfo.koreg;
+
+//    if (ks<0x40) return 0;
+
+    if ((pKEYB->LastKey) )
     {
-        if (KEY('0'))			code = 0x27;
-        if (KEY('1'))			code = 0x26;
-        if (KEY('2'))			code = 0x36;
-        if (KEY('3'))			code = 0x46;
-        if (KEY('4'))			code = 0x25;
-        if (KEY('5'))			code = 0x35;
-        if (KEY('6'))			code = 0x45;
-        if (KEY('7'))			code = 0x24;
-        if (KEY('8'))			code = 0x34;
-        if (KEY('9'))			code = 0x44;
-
-        if (KEY('.'))			code = 0x37;
-        if (KEY('+'))			code = 0x56;
-        if (KEY('('))			code = 51;
-        if (KEY(')'))			code = 67;
-        if (KEY('-'))			code = 0x55;
-        if (KEY('*'))			code = 0x54;
-        if (KEY('/'))			code = 0x53;
-        if (KEY('='))			code = 0x57;
-
-        if (KEY(K_CCE))			code = 80;  // CLR
-        if (KEY(K_LN))			code = 48;
-        if (KEY(K_CE))			code = 64;
-        if (KEY(K_GTO))			code = 20;
-        if (KEY(K_SBR))			code = 21;
-        if (KEY(K_RST))			code = 22;
-        if (KEY(K_SHT))			code = 0x10;  // 2nd
-        if (KEY(K_DEF))			code = 0x20;  // INV
-        if (KEY(K_RS))			code = 23;
-        if (KEY(K_SIGN))		code = 71;
-        if (KEY(K_LRN))			code = 17;
-        if (KEY(K_XT))			code = 33;
-
-        if (KEY(K_SQR))			code = 49;
-        if (KEY(K_ROOT))		code = 65;
-        if (KEY(K_1X))			code = 81;
-        if (KEY(K_SST))			code = 18;
-        if (KEY(K_STO))			code = 34;
-        if (KEY(K_RCL))			code = 50;
-        if (KEY(K_SUM))			code = 66;
-        if (KEY(K_POT))			code = 82;  // X^Y
-        if (KEY(K_BST))			code = 19;
-        if (KEY(K_EE))			code = 35;
+        AddLog(LOG_KEYBOARD,tr("GetKEY : %1").arg(ks,4,16,QChar('0')));
+        if ((ks & 0x42)==0x42) {
+            if (KEY(K_SHT))     data|=0x01;
+            if (KEY(K_ALPHA))	data|=0x02;
+            if (KEY(K_MOD))		data|=0x04;
+            if (KEY(K_RET))		data|=0x08;
+//            if (KEY(''))		data|=0x10;
+//            if (KEY(''))		data|=0x20;
+            if (KEY(K_POW_OFF))	data|=0x40;
+            if (KEY(K_INIT))	data|=0x80;			// UP ARROW
+        }
+        if ((ks & 0x44)==0x44) {
+            if (KEY(K_DISP))	data|=0x01;
+            if (KEY(K_GRAPH))	data|=0x02;
+            if (KEY(K_RANGE))	data|=0x04;			// OFF
+            if (KEY(K_LA))		data|=0x08;
+            if (KEY(K_RA))		data|=0x10;
+            if (KEY(K_UA))		data|=0x20;
+            if (KEY(K_DA))		data|=0x40;
+            if (KEY(K_GT))		data|=0x80;
+        }
+        if ((ks & 0x50)==0x50) {   // KO5
+            if (KEY(':'))		data|=0x01;
+            if (KEY(K_ENG))		data|=0x02;
+            if (KEY(K_PROG))	data|=0x04;
+            if (KEY(K_ROOT))	data|=0x08;
+            if (KEY(K_SQR))		data|=0x10;
+            if (KEY(K_LOG))		data|=0x20;
+            if (KEY(K_LN))		data|=0x40;
+            if (KEY(K_TAN))		data|=0x80;
+        }
+        if ((ks & 0x60)==0x60) {
+            if (KEY('-'))		data|=0x01;
+            if (KEY(K_1X))		data|=0x02;
+            if (KEY(K_DEG))		data|=0x04;
+            if (KEY(K_HYP))		data|=0x08;
+            if (KEY(K_SIN))		data|=0x10;
+            if (KEY(K_COS))		data|=0x20;
+            if (KEY(K_POT))		data|=0x40;
+            if (KEY(K_XROOT))  	data|=0x80;
+        }
+        if ((ks & 0x81)==0x81) {
+            if (KEY('7'))			data|=0x01;			// +
+            if (KEY('8'))			data|=0x02;			// *
+            if (KEY('9'))			data|=0x04;			// /
+            if (KEY('4'))			data|=0x08;
+            if (KEY('5'))			data|=0x10;			// Key F2
+            if (KEY('6'))			data|=0x20;
+            if (KEY('*'))			data|=0x40;
+            if (KEY('/'))			data|=0x80;
+        }
+        if ((ks & 0x82)==0x82) {
+            if (KEY('1'))			data|=0x01;			// =
+            if (KEY('2'))			data|=0x02;			// LEFT ARROW
+            if (KEY('3'))			data|=0x04;
+            if (KEY('0'))			data|=0x08;
+            if (KEY('.'))			data|=0x10;
+            if (KEY(K_EXP))			data|=0x20;
+            if (KEY('+'))			data|=0x40;
+            if (KEY('-'))			data|=0x80;
+        }
+        if ((ks & 0x84)==0x84) {
+//            if (KEY(''))			data|=0x01;			// R ARROW
+//            if (KEY(''))			data|=0x02;			// MODE
+//            if (KEY(''))			data|=0x04;			// CLS
+            if (KEY(K_FIX))			data|=0x08;
+            if (KEY('('))			data|=0x10;
+            if (KEY(')'))			data|=0x20;
+            if (KEY(K_DEL))			data|=0x40;
+            if (KEY(K_ANS))			data|=0x80;
+        }
+    qWarning()<<"ko="<<QString("%1").arg(ks,2,16,QChar('0'))<< "   ki="<<QString("%1").arg(data,2,16,QChar('0'));
 
     }
+    fx8000gcpu->reginfo.kireg = data;
+    if (data) fx8000gcpu->reginfo.CpuSleep = fx8000gcpu->halt = false;
 
-    return code;
+    return data;
 
 }
 

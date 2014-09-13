@@ -1070,7 +1070,8 @@ OTHER_FILES += \
     android/src/org/qtproject/pockemul/PockemulActivity.java \
     resources/keymap/cc40.map \
     resources/keymap/ti74.map \
-    resources/keymap/ti95.map
+    resources/keymap/ti95.map \
+    resources/keymap/fx8000g.map
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
