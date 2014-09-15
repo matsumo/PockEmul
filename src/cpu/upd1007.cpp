@@ -85,17 +85,7 @@ bool CUPD1007::exit()
 
 void CUPD1007::step()
 {
-    // lcd test fire int1 each 20ms
-#if 1
-    if (pPC->pTIMER->usElapsed(_refState)>1000) {
-        reginfo.ifreg ^= INT_input[1];
-        if ((reginfo.ifreg & INT_input[1]) !=0) {
-            IntReq(&reginfo,1);
-//            qWarning()<<"INT1";
-        }
-        _refState = pPC->pTIMER->state;
-    }
-#endif
+
 
 
 //    { complete an optional I/O device write }
@@ -1148,6 +1138,7 @@ void CUPD1007::Gst (upd1007_config *info,void *op2)
 
 void CUPD1007::Off (upd1007_config *info,void *op2)
 {
+    qWarning()<<"Off";
   info->CpuSleep = true;
   info->pPC->pCPU->halt = true;
   info->pc = 0x0000;

@@ -12,6 +12,13 @@
 ***************************************************************************/
 
 typedef struct {
+    UINT8 m_cursor[8];
+    UINT8 m_cursor_x;
+    UINT8 m_cursor_y;
+    UINT8 m_cursor_lcd;
+} HD44352_cursor;
+
+typedef struct {
     UINT8 m_video_ram[2][0x180];
     UINT8 m_control_lines;
     UINT8 m_data_bus;
@@ -27,11 +34,11 @@ typedef struct {
     UINT8 m_custom_char[4][8];		// 4 chars * 8 bytes
     UINT8 m_byte_count;
     UINT8 m_cursor_status;
-    UINT8 m_cursor[8];
-    UINT8 m_cursor_x;
-    UINT8 m_cursor_y;
-    UINT8 m_cursor_lcd;
+
+    HD44352_cursor cursor[2];
 } HD44352info;
+
+
 
 //**************************************************************************
 //  TYPE DEFINITIONS

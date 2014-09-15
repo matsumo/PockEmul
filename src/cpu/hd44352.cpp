@@ -67,7 +67,7 @@ void CHD44352::Reset()
     memset(info.m_video_ram, 0x00, sizeof(info.m_video_ram));
     memset(info.m_par, 0x00, sizeof(info.m_par));
     memset(info.m_custom_char, 0x00, sizeof(info.m_custom_char));
-    memset(info.m_cursor, 0x00, sizeof(info.m_cursor));
+    memset(info.cursor, 0x00, sizeof(info.cursor));
     info.m_control_lines = 0;
     info.m_data_bus = 0xff;
     info.m_state = 0;
@@ -78,63 +78,16 @@ void CHD44352::Reset()
     info.m_scroll = 0;
     info.m_byte_count = 0;
     info.m_cursor_status = 0;
-    info.m_cursor_x = 0;
-    info.m_cursor_y = 0;
-    info.m_cursor_lcd = 0;
     info.m_contrast = 0;
     on_timer_rate = 8192;
 }
 
 
 
-//**************************************************************************
-//  device interface
-//**************************************************************************
-#if 0
-int CHD44352::video_update(bitmap_t &bitmap, const rectangle &cliprect)
-{
-    UINT8 cw = info.m_char_width;
-
-    bitmap_fill(&bitmap, &cliprect, 0);
-
-    if (info.m_control_lines&0x80 && info.m_lcd_on)
-    {
-        for (int a=0; a<2; a++)
-            for (int py=0; py<4; py++)
-                for (int px=0; px<16; px++)
-                    if (BIT(info.m_cursor_status, 4) && px == info.m_cursor_x && py == info.m_cursor_y && a == info.m_cursor_lcd)
-                    {
-                        //draw the cursor
-                        for (int c=0; c<cw; c++)
-                        {
-                            UINT8 d = compute_newval((info.m_cursor_status>>5) & 0x07, info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48], info.m_cursor[c]);
-                            for (int b=0; b<8; b++)
-                            {
-                                *BITMAP_ADDR16(&bitmap, py*8 + b, a*cw*16 + px*cw + c) = BIT(d, 7-b);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        for (int c=0; c<cw; c++)
-                        {
-                            UINT8 d = info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48];
-                            for (int b=0; b<8; b++)
-                            {
-                                *BITMAP_ADDR16(&bitmap, py*8 + b, a*cw*16 + px*cw + c) = BIT(d, 7-b);
-                            }
-                        }
-                    }
-    }
-
-    return 0;
-}
-#endif
-
 void CHD44352::control_write(UINT8 data)
 {
-    if(info.m_control_lines == data)
-        info.m_state = 0;
+//    if(info.m_control_lines == data)
+//        info.m_state = 0;
 
     info.m_control_lines = data;
 }
@@ -191,7 +144,7 @@ void CHD44352::data_write(UINT8 data)
     {
 //        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
 //            return;
-//qWarning()<<"state="<<info.m_state;
+qWarning()<<"state="<<info.m_state<<"  data="<<QString("%1").arg(data,2,16,QChar('0'));
         switch (info.m_state)
         {
             case 0:		//parameter 0
@@ -250,8 +203,10 @@ void CHD44352::data_write(UINT8 data)
                 break;
             case LCD_CURSOR_STATUS:
                 {
-                    if (info.m_state == 1)
+                    if (info.m_state == 1) {
                         info.m_cursor_status = data;
+//                        qWarning()<<"LCD_CURSOR_STATUS:"<<data;
+                    }
                     info.m_data_bus = 0xff;
                     info.m_state = 0;
                 }
@@ -302,16 +257,18 @@ void CHD44352::data_write(UINT8 data)
                 break;
             case LCD_CURSOR_POSITION:
                 {
+                     int _cursorId = (info.m_par[0]>>4)&0x01;
                     if (info.m_state == 1)
-                        info.m_cursor_lcd = BIT(data, 4);	//0:left lcd 1:right lcd;
+                        info.cursor[_cursorId].m_cursor_lcd = BIT(data, 4);	//0:left lcd 1:right lcd;
                     else if (info.m_state == 2)
-                        info.m_cursor_x = ((data>>1)&0x3f) % 48 + (BIT(data,7) * 48);
+                        info.cursor[_cursorId].m_cursor_x = ((data>>1)&0x3f) % 48;// + (BIT(data,7) * 48);
                     else if (info.m_state == 3)
                     {
-                        info.m_cursor_y = data & 0x03;
+                        info.cursor[_cursorId].m_cursor_y = data & 0x03;
                         info.m_state = 0;
                     }
 
+                    qWarning()<<"LCD_CURSOR_POSITION:"<<info.cursor[_cursorId].m_cursor_x<<info.cursor[_cursorId].m_cursor_y<<" page:"<<info.cursor[_cursorId].m_cursor_lcd;
                     info.m_data_bus = 0xff;
                 }
                 break;
@@ -338,8 +295,12 @@ void CHD44352::data_write(UINT8 data)
             case LCD_BYTE_OUTPUT:
                 {
                     info.m_offset %= 0x180;
-                    info.m_video_ram[info.m_bank][info.m_offset] = compute_newval((info.m_par[0]>>5) & 0x07, info.m_video_ram[info.m_bank][info.m_offset], data);
-                    info.m_offset++; info.m_byte_count++;
+                    info.m_video_ram[info.m_bank][info.m_offset] =
+                            compute_newval((info.m_par[0]>>5) & 0x07,
+                                            info.m_video_ram[info.m_bank][info.m_offset],
+                                            data);
+                    info.m_offset++;
+                    info.m_byte_count++;
 
                     info.m_data_bus = 0xff;
                 }
@@ -362,7 +323,8 @@ void CHD44352::data_write(UINT8 data)
             case LCD_CURSOR_GRAPHIC:
                 if (info.m_byte_count<8)
                 {
-                    info.m_cursor[info.m_byte_count] = data;
+                    int _cursorId = (info.m_par[0]>>4)&0x01;
+                    info.cursor[_cursorId].m_cursor[info.m_byte_count] = data;
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;
                 }
@@ -370,10 +332,11 @@ void CHD44352::data_write(UINT8 data)
             case LCD_CURSOR_CHAR:
                 if (info.m_byte_count<1)
                 {
+                    int _cursorId = (info.m_par[0]>>4)&0x01;
                     UINT8 char_code = ((data<<4)&0xf0) | ((data>>4)&0x0f);
 
                     for (int i=0; i<8; i++)
-                        info.m_cursor[i] = get_char(char_code*8 + i);
+                        info.cursor[_cursorId].m_cursor[i] = get_char(char_code*8 + i);
 
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;

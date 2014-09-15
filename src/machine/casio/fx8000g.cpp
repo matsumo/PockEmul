@@ -66,24 +66,39 @@ Cfx8000g::~Cfx8000g() {
     delete pHD44352;
 }
 
+#define LCD_TIMER 3
+
 bool Cfx8000g::init(void)				// initialize
 {
 
 //pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
-//    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
+//    if (!fp_log) fp_log=fopen("fx8000g.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
 
     pHD44352->init();
 
+    pTIMER->resetTimer(LCD_TIMER);
     return true;
 }
 
 
 
 bool Cfx8000g::run() {
+
+#if 1
+    // lcd test fire int1 each 20ms
+    if (pTIMER->stElapsedId(LCD_TIMER) >= pHD44352->on_timer_rate) {
+        fx8000gcpu->reginfo.ifreg ^= fx8000gcpu->INT_input[1];
+        if ((fx8000gcpu->reginfo.ifreg & fx8000gcpu->INT_input[1]) !=0) {
+            fx8000gcpu->IntReq(&fx8000gcpu->reginfo,1);
+//            qWarning()<<"INT1";
+        }
+        pTIMER->resetTimer(LCD_TIMER);
+    }
+#endif
 
     getKey();
 
@@ -126,7 +141,7 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
 //        qWarning()<<"HD44352 Ctrl_write:"<<(x);
         pHD44352->control_write(x); pLCDC->redraw = true; break;
     case 1:
-        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
+//        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
 //        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
         pHD44352->data_write(x);
         pLCDC->redraw = true;
