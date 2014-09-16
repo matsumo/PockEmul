@@ -41,8 +41,12 @@ const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 #define     CE1_bit	 0x01;
 #define     LCDCE	 CE1_bit;
 
-#define RM(info,addr)  ((info->iereg & 0x03) ? 0x00*(addr)+0xFF : info->pPC->Get_8(addr))
-#define WM(info,addr,value) { UINT32 _a = addr; UINT8 _v=value;if ((info->iereg & 0x03)== 0x00) info->pPC->Set_8(_a,_v);}
+#define RM(info,addr)  (((info->iereg & 0x03)!= 0x00) ? 0x00*(addr)+0xFF : info->pPC->Get_8(addr))
+#define WM(info,addr,value) { UINT32 _a = addr; \
+                              UINT8 _v=value;   \
+                              if ((info->iereg & 0x03)== 0x00) \
+                                    info->pPC->Set_8(_a,_v);   \
+                             }
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
@@ -177,9 +181,10 @@ void CUPD1007::Regs_Info(UINT8 Type)
     case 0:			// Monitor Registers Dialog
         sprintf(
                     Regs_String,
-                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X %s%s%s%s%s%s ",
+                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X SP:%04X %s%s%s%s%s%s ",
                     reginfo.pc, reginfo.koreg,reginfo.kireg,
                     reginfo.iereg,reginfo.ifreg,reginfo.asreg,
+                    Wreg(&reginfo,SP,0),
                     reginfo.flag & C_bit  ? "C " :"NC",
                     reginfo.flag & V_bit  ? "V " :"NV",
                     reginfo.flag & UZ_bit ? "UZ ":"NUZ",
@@ -191,9 +196,10 @@ void CUPD1007::Regs_Info(UINT8 Type)
     case 1:			// Log File
         sprintf(
                     Regs_String,
-                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X %s%s%s%s%s%s ",
+                    "PC:%04X KO:%02X KI:%02X IE:%02X IF:%02X AS:%02X SP:%04X %s%s%s%s%s%s ",
                     reginfo.pc, reginfo.koreg,reginfo.kireg,
                     reginfo.iereg,reginfo.ifreg,reginfo.asreg,
+                    Wreg(&reginfo,SP,0),
                     reginfo.flag & C_bit  ? "C " :"NC",
                     reginfo.flag & V_bit  ? "V " :"NV",
                     reginfo.flag & UZ_bit ? "UZ ":"NUZ",
@@ -416,7 +422,7 @@ void CUPD1007::UnReg (upd1007_config *info,void *op2)
 /* register rotation through Carry */
 void CUPD1007::RotReg (upd1007_config *info,void *op2)
 {
-  info->flag = info->flag & C_bit;
+  info->flag &= C_bit;
   ((Func5)(op2)) (info,&(info->mr[info->regbank | Reg1 (FetchByte(info))]), 0);
 }
 
@@ -449,7 +455,7 @@ void CUPD1007::UnAry (upd1007_config *info, void *op2)
     z = 0;
   } // {if};
   do {
-    z = ((Func5) op2) (info,&info->mr[dstf], z);
+    z = ((Func5) op2) (info,&(info->mr[dstf]), z);
     addState(info,4);
     if (x == y) return;
     if (dstf == (dstl ^ ((info->regstep >> 1) & 0x07)))
@@ -469,7 +475,7 @@ void CUPD1007::UnAry (upd1007_config *info, void *op2)
 /* array rotation through Carry */
 void CUPD1007::RotAry (upd1007_config *info,void *op2)
 {
-  info->flag = info->flag & C_bit;
+  info->flag &= C_bit;
   BYTE x = FetchByte(info);
   BYTE y = FetchByte(info);
   BYTE dstf,dstl,z;
@@ -488,7 +494,7 @@ void CUPD1007::RotAry (upd1007_config *info,void *op2)
   y = y >> 5;
   z = 0;
   do {
-    z = ((Func5)op2) (info,&info->mr[dstf], z);
+    z = ((Func5)op2) (info,&(info->mr[dstf]), z);
     addState(info,4);
     if (x == y) return;
     if (dstf == (dstl ^ ((info->regstep >> 1) & 0x07)))
@@ -514,7 +520,7 @@ void CUPD1007::Mtbm (upd1007_config *info,void *op2)
   x = info->regbank | Reg1(x);
   BYTE z = 0;
   do {
-    z = ((Func5)op2) (info,&info->mr[x], z);
+    z = ((Func5)op2) (info,&(info->mr[x]), z);
     addState(info,4);
     if (x == y) break;
     NextReg (info,&x);
@@ -574,7 +580,7 @@ void CUPD1007::ExchReg (upd1007_config *info,void *op2)
 {
   BYTE y = Reg1 (FetchByte(info));
   BYTE x = Reg2 (info,FetchByte(info));
-  ((Proc5)op2) (info,&info->mr[x], &info->mr[y]);
+  ((Proc5)op2) (info,&(info->mr[x]), &info->mr[y]);
   addState(info,4);
 }
 
@@ -699,7 +705,7 @@ void CUPD1007::TYary (upd1007_config *info,void *op2)
     addState(info,4);
     if (dstf == dstl) return;
     if (srcf == srcl)
-    {
+    do {
       NextReg (info,&dstf);
       ((Func3) op2) (info,info->mr[dstf], 0);
       addState(info,4);
@@ -1177,7 +1183,7 @@ BYTE CUPD1007::OpAd (upd1007_config *info,BYTE x, BYTE y)
   unsigned int out = in1 + in2;
   if ((info->flag & C_bit) != 0) out++;
   unsigned int  temp = in1 ^ in2 ^ out;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   if (out > 0xFF) info->flag |= C_bit;
   if ((temp & 0x10) != 0) info->flag |= H_bit;
   if ((temp & 0x80) != 0) info->flag |= V_bit;
@@ -1264,7 +1270,7 @@ BYTE CUPD1007::OpSbb (upd1007_config *info,BYTE x, BYTE y)
 BYTE CUPD1007::OpAn (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = x & y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,Result);
   return Result;
 }
@@ -1273,7 +1279,7 @@ BYTE CUPD1007::OpAn (upd1007_config *info,BYTE x, BYTE y)
 BYTE CUPD1007::OpBit (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = (~x) & y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,Result);
   return Result;
 }
@@ -1282,7 +1288,7 @@ BYTE CUPD1007::OpBit (upd1007_config *info,BYTE x, BYTE y)
 BYTE CUPD1007::OpXr (upd1007_config *info,BYTE x, BYTE y)
 {
   BYTE Result = x ^ y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,Result);
   return Result;
 }
@@ -1377,7 +1383,7 @@ BYTE CUPD1007::OpDiu (upd1007_config *info,BYTE *x, BYTE y)
 {
   BYTE result = *x >> 4;
   *x = (*x << 4) | y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,*x);
   return result;
 }
@@ -1388,7 +1394,7 @@ BYTE CUPD1007::OpDid (upd1007_config *info,BYTE *x, BYTE y)
   info->regstep = -1;
   BYTE result= *x << 4;
   *x = (*x >> 4) | y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,*x);
   return result;
 }
@@ -1407,10 +1413,11 @@ BYTE CUPD1007::OpByu(upd1007_config *info,BYTE *x, BYTE y)
 BYTE CUPD1007::OpByd (upd1007_config *info,BYTE *x, BYTE y)
 {
   info->regstep = -1;
+  BYTE result = *x;
   *x = y;
-  info->flag = info->flag & NZ_bit;
+  info->flag &= NZ_bit;
   ZeroBits (info,*x);
-  return *x;
+  return result;
 }
 
 

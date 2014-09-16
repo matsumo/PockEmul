@@ -35,7 +35,7 @@ struct upd1007_config
     CpcXXXX *pPC;
     UINT16 ea;  /* temporary pointer used in the indexed addressing mode */
     BYTE lcdctrl;
-    BYTE mr[0x80];	//{ main (general purpose) register file }
+    BYTE mr[0x100];	//{ main (general purpose) register file }
     BYTE koreg;//: byte;
     BYTE kireg;//: byte;
     BYTE iereg;//: byte;
@@ -43,7 +43,7 @@ struct upd1007_config
     BYTE asreg;//: byte;	{ 'as' is a reserved word in Pascal }
 
     quint8 regbank; //	{ $00 when RB0, $40 when RB1 }
-    int regstep;	// { determines the order of processed registers
+    BYTE regstep;	// { determines the order of processed registers
 //			  in a register array,
 //			  +1 if the register index is incremented (default),
 //			  -1 if the register index is decremented }

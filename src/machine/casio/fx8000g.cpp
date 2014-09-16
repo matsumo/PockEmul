@@ -28,9 +28,9 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(4 , 0x3000 ,	P_RES(":/fx8000g/rom1a.bin"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(16 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(8 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
+//    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
     setDXmm(78);
     setDYmm(148);
     setDZmm(36);
@@ -102,6 +102,9 @@ bool Cfx8000g::run() {
 
     getKey();
 
+    if (fx8000gcpu->reginfo.pc==0x516) {
+        qWarning()<<"ok";
+    }
     CpcXXXX::run();
 
     return true;
@@ -111,13 +114,21 @@ bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) {
 
     Q_UNUSED(data)
 
-    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ return(true);	}
-    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ return(true);	}
+#if 0
 
+    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+#else
+    if (*d & 0x4000) {    *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+#endif
     return false;
 }
 
 bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
+
+    if ( (*d>=0x0000) && (*d<=0x2FFF) )	{ *data = 0xff; return false; }
+    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
 
     return true;
 }
@@ -217,7 +228,14 @@ UINT8 Cfx8000g::getKey()
         }
         if ((ks & 0x42)==0x42) {
             if (KEY(K_SHT))     data|=0x01;
-            if (KEY(K_ALPHA))	data|=0x02;
+            if (KEY(K_ALPHA))	{
+#if 1
+                pCPU->logsw = true;
+                pCPU->Check_Log();
+#else
+                data|=0x02;
+#endif
+            }
             if (KEY(K_MOD))		data|=0x04;
             if (KEY(K_RET))		data|=0x08;
 //            if (KEY(''))		data|=0x10;

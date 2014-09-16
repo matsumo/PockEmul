@@ -433,6 +433,9 @@ void CpcXXXX::Set_8(UINT32 adr,BYTE d)
 {
     if(Chk_Adr(&adr,d)) {
         checkBreakWrite(adr,d);
+        if (adr > memsize) {
+            qWarning()<<"ERROR MEMORY WRITE OUT RANGE";
+        }
 		mem[adr]=d;
     }
     else checkBreakWrite(adr,d);
