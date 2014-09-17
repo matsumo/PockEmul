@@ -211,4 +211,8 @@
         <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI-95_US.pdf"/>
         <document desc="Programing Guide (en)" link="http://pockemul.free.fr/Documents/userguide/TI-95_PG_US.pdf"/>
      </model>
+     <model value="fx8000g">
+         <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=89"/>
+         <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/fx8000g/FX-8000G_user_guide_FR.pdf"/>
+      </model>
 </weblinks>

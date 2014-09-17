@@ -213,7 +213,7 @@ void CpcXXXX::TurnON(void)
          qWarning()<<"power ON:";
         AddLog(LOG_MASTER,"Power ON");
         if (!hardreset) {
-//            Initial_Session_Load();
+            Initial_Session_Load();
         }
         else hardreset = false;
         off = 0;

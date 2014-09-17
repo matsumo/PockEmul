@@ -34,9 +34,9 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(8 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
 //    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
-    setDXmm(78);
-    setDYmm(148);
-    setDZmm(36);
+    setDXmm(82);
+    setDYmm(165);
+    setDZmm(15);
 
     setDX(321);
     setDY(687);
@@ -181,11 +181,9 @@ void Cfx8000g::TurnOFF(void) {
 void Cfx8000g::TurnON(void){
     CpcXXXX::TurnON();
 
-//    ti57cpu->r->Run = true;
-//    ti57cpu->r->Power = !ti57cpu->r->Power;
-//    ti57cpu->halt = !ti57cpu->halt;
 //    pLCDC->updated = true;
 
+    Reset();
 
 }
 

@@ -157,14 +157,29 @@ void CUPD1007::Reset()
     reginfo.lcdctrl = 0;
 }
 
-void CUPD1007::Load_Internal(QXmlStreamReader *)
+void CUPD1007::Load_Internal(QXmlStreamReader *xmlIn)
 {
+    if (xmlIn->readNextStartElement()) {
+        if ( (xmlIn->name()=="cpu") &&
+             (xmlIn->attributes().value("model").toString() == "upd1007")) {
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) &reginfo,ba_reg.data(),sizeof(upd1007_config));
 
+            reginfo.pPC = pPC;
+
+        }
+        xmlIn->skipCurrentElement();
+    }
 }
 
-void CUPD1007::save_internal(QXmlStreamWriter *)
+void CUPD1007::save_internal(QXmlStreamWriter *xmlOut)
 {
 
+    xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","upd1007");
+        QByteArray ba_reg((char*)&reginfo,sizeof(upd1007_config));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+    xmlOut->writeEndElement();
 }
 
 UINT32 CUPD1007::get_PC()
