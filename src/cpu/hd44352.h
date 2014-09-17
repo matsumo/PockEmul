@@ -16,13 +16,14 @@ typedef struct {
     UINT8 m_cursor_x;
     UINT8 m_cursor_y;
     UINT8 m_cursor_lcd;
+    UINT8 offset;
 } HD44352_cursor;
 
 typedef struct {
-    UINT8 m_video_ram[2][0x180];
+    UINT8 m_video_ram[2][0x300];
     UINT8 m_control_lines;
     UINT8 m_data_bus;
-    UINT8 m_par[3];
+    UINT8 m_par[6];
     UINT8 m_state;
     UINT16 m_bank;
     UINT16 m_offset;
@@ -65,7 +66,9 @@ public:
     UINT8 data_read();
     void data_write(UINT8 data);
     void control_write(UINT8 data);
+    void data_write4(UINT8 data);
     HD44352info getInfo();
+    void sync();
 
     quint64 on_timer_rate;
 //    int video_update(bitmap_t &bitmap, const rectangle &cliprect);
@@ -78,12 +81,18 @@ static UINT8 compute_newval(UINT8 type, UINT8 oldval, UINT8 newval);
     bool	step(void);
 
     BYTE OP_bit;
+    BYTE byteLenght;
+    BYTE nibble;
+    BYTE DataByte;
+
+
 private:
 
     UINT8 get_char(UINT16 pos);
+    UINT8 get_char4(BYTE car, BYTE col);
 
     HD44352info info;
-    UINT8 charset[0x800];
+    UINT8 charset[0x1000];
 
 
 

@@ -31,7 +31,7 @@ void Clcdc_fx8000g::disp(void)
     if (!redraw) return;
     if (!ready) return;
     if (!((Cfx8000g *)pPC)->pHD44352 ) return;
-    Refresh = true;
+    redraw = 0;
     info = ((Cfx8000g*) pPC)->pHD44352->getInfo();
 //    disp_symb();
 
@@ -55,13 +55,17 @@ void Clcdc_fx8000g::disp(void)
                         //draw the cursor
                         for (int c=0; c<cw; c++)
                         {
-                            UINT8 d = CHD44352::compute_newval((info.m_cursor_status>>5) & 0x07,
-                                                               info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48],
+                            UINT8 d1 = CHD44352::compute_newval((info.m_cursor_status>>5) & 0x07,
+                                                               info.m_video_ram[a][2*(py*16*cw*2 + px*cw*2 + c + info.m_scroll * 48)],
                                                                 info.cursor[a].m_cursor[c]);
+                            UINT8 d2 = CHD44352::compute_newval((info.m_cursor_status>>5) & 0x07,
+                                                               info.m_video_ram[a][2*(py*16*cw*2 + px*cw*2 + c + info.m_scroll * 48)+1],
+                                                                info.cursor[a].m_cursor[c]);
+                            UINT8 d = d1 | (d2<<4);
                             for (int b=0; b<8; b++)
                             {
                                 painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( /*a*cw*16*/ + px*cw + c, a*32 + py*8 + b );
+                                painter.drawPoint( px*cw + c, a*32 + py*8 + b );
                             }
                         }
                     }
@@ -69,17 +73,20 @@ void Clcdc_fx8000g::disp(void)
                     {
                         for (int c=0; c<cw; c++)
                         {
-                            UINT8 d = info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48];
+                            UINT8 d1 = info.m_video_ram[a][2*(py*16*cw + px*cw + c + info.m_scroll * 48)] & 0x0f;
+                            UINT8 d2 = info.m_video_ram[a][2*(py*16*cw + px*cw + c + info.m_scroll * 48)+1] & 0x0f;
+                            UINT8 d = d1 | (d2<<4);
                             for (int b=0; b<8; b++)
                             {
                                 painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( /*a*cw*16*/ + px*cw + c, a*32 + py*8 + b );
+                                painter.drawPoint( px*cw + c, a*32 + py*8 + b );
                             }
                         }
                     }
     }
 
-    redraw = 0;
+    Refresh = true;
+
     painter.end();
 }
 

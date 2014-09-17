@@ -21,7 +21,10 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 
     BackGroundFname	= P_RES(":/fx8000g/fx8000g.png");
     LcdFname		= P_RES(":/fx8000g/fx8000glcd.png");
-    SymbFname		= "";
+    SymbFname	= "";
+
+    LeftFname   = P_RES(":/fx8000g/fx8000gleft.png");
+    BackFname   = P_RES(":/fx8000g/fx8000gback.png");
 
     memsize		= 0xFFFF;
     InitMemValue	= 0x00;
@@ -58,6 +61,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     pKEYB		= new Ckeyb(this,"fx8000g.map");
     pHD44352    = new CHD44352(P_RES(":/fx8000g/charset.bin"));
     pHD44352->OP_bit = 0x20;
+    pHD44352->byteLenght = 4;
 
     ioFreq = 0;
 }
@@ -102,9 +106,6 @@ bool Cfx8000g::run() {
 
     getKey();
 
-    if (fx8000gcpu->reginfo.pc==0x516) {
-        qWarning()<<"ok";
-    }
     CpcXXXX::run();
 
     return true;
@@ -154,9 +155,12 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
     case 1:
 //        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
 //        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
-        pHD44352->data_write(x);
+        pHD44352->data_write4(x & 0x0F);
         pLCDC->redraw = true;
         break;
+    case 2:
+//        qWarning()<<"HD44352 Ctrl_write:"<<(x);
+        pHD44352->sync(); break;
     }
 
     return 0;
@@ -218,18 +222,12 @@ UINT8 Cfx8000g::getKey()
         AddLog(LOG_KEYBOARD,tr("GetKEY : %1").arg(ks,4,16,QChar('0')));
         if ((ks & 0x41)==0x41) {
             if (KEY(K_CE))     data|=0x01;
-//            if (KEY(K_ALPHA))	data|=0x02;
-//            if (KEY(K_MOD))		data|=0x04;
-//            if (KEY(K_RET))		data|=0x08;
-////            if (KEY(''))		data|=0x10;
-////            if (KEY(''))		data|=0x20;
-//            if (KEY(K_POW_OFF))	data|=0x40;
-//            if (KEY(K_INIT))	data|=0x80;			// UP ARROW
         }
+
         if ((ks & 0x42)==0x42) {
             if (KEY(K_SHT))     data|=0x01;
             if (KEY(K_ALPHA))	{
-#if 1
+#if 0
                 pCPU->logsw = true;
                 pCPU->Check_Log();
 #else
