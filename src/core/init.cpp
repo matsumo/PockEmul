@@ -28,7 +28,7 @@
 
 
 extern QList<CPObject *> listpPObject;  
-extern QTimer *timer;
+//extern QTimer *timer;
 
 CWatchPoint WatchPoint;
 

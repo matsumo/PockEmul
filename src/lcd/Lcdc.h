@@ -22,7 +22,7 @@ public:
 	bool	redraw;
 	void	check(void);			// LCDC access check
 	void	TurnON(void);			// LCD On
-	void	TurnOFF(void);			// LCD Off
+    virtual void	TurnOFF(void);			// LCD Off
 
 	bool	On;
 	bool	Refresh;

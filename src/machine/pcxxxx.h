@@ -262,6 +262,7 @@ public:
 
 	
 	bool	Japan;
+    int     timerRate;
 
 
 	CpcXXXX(CPObject *parent = 0);

@@ -382,8 +382,8 @@ void CHD44352::data_write4(UINT8 data)
         if (info.m_state>6)
             qWarning()<<"STATE 7!!!!";
 
-        qWarning()<<"cmd="<<QString("%1").arg(info.m_par[0],2,16,QChar('0'))
-                <<"  state="<<info.m_state<<"  data="<<QString("%1").arg(data,2,16,QChar('0'));
+//        qWarning()<<"cmd="<<QString("%1").arg(info.m_par[0],2,16,QChar('0'))
+//                <<"  state="<<info.m_state<<"  data="<<QString("%1").arg(data,2,16,QChar('0'));
 
         switch (info.m_par[0])
         {
@@ -523,7 +523,7 @@ void CHD44352::data_write4(UINT8 data)
 //                DataByte = DataByte << 4;
 //                DataByte += data;
                 //      {$endif}
-                qWarning()<<"OUTPUT CHAR:"<<DataByte<<QChar(DataByte);
+//                qWarning()<<"OUTPUT CHAR:"<<DataByte<<QChar(DataByte);
                 for (int i = 0;i<= 2*info.m_char_width-1;i++) {
                     info.m_offset %= 768;
                     info.m_video_ram [info.m_par[1]&1] [info.m_offset] =
@@ -586,4 +586,8 @@ UINT8 CHD44352::data_read()
 HD44352info CHD44352::getInfo()
 {
     return info;
+}
+HD44352info* CHD44352::getInfoRef()
+{
+    return &info;
 }

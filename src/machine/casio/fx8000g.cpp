@@ -92,16 +92,27 @@ bool Cfx8000g::init(void)				// initialize
 
 bool Cfx8000g::run() {
 
+    timerRate = pHD44352->on_timer_rate;
+
 #if 1
-    // lcd test fire int1 each 20ms
-    if (pTIMER->stElapsedId(LCD_TIMER) >= pHD44352->on_timer_rate) {
-        fx8000gcpu->reginfo.ifreg ^= fx8000gcpu->INT_input[1];
-        if ((fx8000gcpu->reginfo.ifreg & fx8000gcpu->INT_input[1]) !=0) {
-            fx8000gcpu->IntReq(&fx8000gcpu->reginfo,1);
-//            qWarning()<<"INT1";
-        }
+    if ((( fx8000gcpu->reginfo.lcdctrl & 0x80) == 0) |
+        (( fx8000gcpu->reginfo.iereg & 0x84) == 0x84)) {
+        fx8000gcpu->reginfo.ifreg = fx8000gcpu->reginfo.ifreg & ~fx8000gcpu->INT_input[1];
         pTIMER->resetTimer(LCD_TIMER);
     }
+    else {
+        // lcd test fire int1 each 20ms
+        if (pTIMER->stElapsedId(LCD_TIMER) >= 2*timerRate) {
+            fx8000gcpu->reginfo.ifreg ^= fx8000gcpu->INT_input[1];
+            if ((fx8000gcpu->reginfo.ifreg & fx8000gcpu->INT_input[1]) !=0) {
+                fx8000gcpu->IntReq(&fx8000gcpu->reginfo,1);
+                //            qWarning()<<"INT1";
+            }
+            pTIMER->resetTimer(LCD_TIMER);
+        }
+    }
+#else
+
 #endif
 
     getKey();
@@ -257,45 +268,58 @@ UINT8 Cfx8000g::getKey()
             if (KEY(K_SQR))		data|=0x10;
             if (KEY(K_LOG))		data|=0x20;
             if (KEY(K_LN))		data|=0x40;
-            if (KEY(K_TAN))		data|=0x80;
+            if (KEY('F'))		data|=0x80;
         }
         if ((ks & 0x60)==0x60) {
-            if (KEY('-'))		data|=0x01;
-            if (KEY(K_1X))		data|=0x02;
-            if (KEY(K_DEG))		data|=0x04;
-            if (KEY(K_HYP))		data|=0x08;
-            if (KEY(K_SIN))		data|=0x10;
-            if (KEY(K_COS))		data|=0x20;
-            if (KEY(K_POT))		data|=0x40;
-            if (KEY(K_XROOT))  	data|=0x80;
+            if (KEY('G'))		data|=0x01;
+            if (KEY('A'))		data|=0x02;
+            if (KEY('B'))		data|=0x04;
+            if (KEY('C'))		data|=0x08;
+            if (KEY('D'))		data|=0x10;
+            if (KEY('E'))		data|=0x20;
+            if (KEY('K'))		data|=0x40;
+            if (KEY('L'))       data|=0x80;
         }
         if ((ks & 0x81)==0x81) {
-            if (KEY('7'))			data|=0x01;			// +
-            if (KEY('8'))			data|=0x02;			// *
-            if (KEY('9'))			data|=0x04;			// /
+            if (KEY('7'))			data|=0x01;
+            if (KEY('M'))			data|=0x01;
+            if (KEY('8'))			data|=0x02;
+            if (KEY('N'))			data|=0x02;
+            if (KEY('9'))			data|=0x04;
+            if (KEY('O'))			data|=0x04;
             if (KEY('4'))			data|=0x08;
-            if (KEY('5'))			data|=0x10;			// Key F2
+            if (KEY('P'))			data|=0x08;
+            if (KEY('5'))			data|=0x10;
+            if (KEY('Q'))			data|=0x10;
             if (KEY('6'))			data|=0x20;
+            if (KEY('R'))			data|=0x20;
             if (KEY('*'))			data|=0x40;
+            if (KEY('S'))			data|=0x40;
             if (KEY('/'))			data|=0x80;
+            if (KEY('T'))			data|=0x80;
         }
         if ((ks & 0x82)==0x82) {
-            if (KEY('1'))			data|=0x01;			// =
-            if (KEY('2'))			data|=0x02;			// LEFT ARROW
+            if (KEY('1'))			data|=0x01;
+            if (KEY('U'))			data|=0x01;
+            if (KEY('2'))			data|=0x02;
+            if (KEY('V'))			data|=0x02;
             if (KEY('3'))			data|=0x04;
+            if (KEY('W'))			data|=0x04;
             if (KEY('0'))			data|=0x08;
             if (KEY('.'))			data|=0x10;
             if (KEY(K_EXP))			data|=0x20;
             if (KEY('+'))			data|=0x40;
+            if (KEY('X'))			data|=0x40;
             if (KEY('-'))			data|=0x80;
+            if (KEY('Y'))			data|=0x80;
         }
         if ((ks & 0x84)==0x84) {
 //            if (KEY(''))			data|=0x01;			// R ARROW
 //            if (KEY(''))			data|=0x02;			// MODE
 //            if (KEY(''))			data|=0x04;			// CLS
-            if (KEY(K_FIX))			data|=0x08;
-            if (KEY('('))			data|=0x10;
-            if (KEY(')'))			data|=0x20;
+            if (KEY('H'))			data|=0x08;
+            if (KEY('I'))			data|=0x10;
+            if (KEY('J'))			data|=0x20;
             if (KEY(K_DEL))			data|=0x40;
             if (KEY(K_ANS))			data|=0x80;
         }

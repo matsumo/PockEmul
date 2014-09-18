@@ -52,6 +52,7 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     RomBank=RamBank=ProtectMemory=0;
 
     Japan		= false;
+    timerRate   = 1;
 
     Pc_Offset_X	= 0;
     Pc_Offset_Y	= 0;
@@ -213,7 +214,7 @@ void CpcXXXX::TurnON(void)
          qWarning()<<"power ON:";
         AddLog(LOG_MASTER,"Power ON");
         if (!hardreset) {
-            Initial_Session_Load();
+//            Initial_Session_Load();
         }
         else hardreset = false;
         off = 0;
@@ -575,6 +576,7 @@ bool CpcXXXX::init(void)
         dialogdasm->hide();
     }
 
+    Initial_Session_Load();
 	return(1);
 }
 

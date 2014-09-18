@@ -12,9 +12,8 @@ public:
     void disp_symb(void);
     const char*	GetClassName(){ return("Clcdc_fx8000g");}
 
-//    int computeSL(CHD61102* pCtrl,int ord);
-    int symbSL(int x);
-    int x2a[100];
+    virtual bool	init(void);
+    virtual void	TurnOFF(void);			// LCD Off
 
 
     Clcdc_fx8000g(CPObject *parent = 0);

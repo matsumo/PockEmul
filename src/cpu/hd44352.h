@@ -68,6 +68,7 @@ public:
     void control_write(UINT8 data);
     void data_write4(UINT8 data);
     HD44352info getInfo();
+    HD44352info *getInfoRef();
     void sync();
 
     quint64 on_timer_rate;
@@ -84,6 +85,7 @@ static UINT8 compute_newval(UINT8 type, UINT8 oldval, UINT8 newval);
     BYTE byteLenght;
     BYTE nibble;
     BYTE DataByte;
+
 
 
 private:

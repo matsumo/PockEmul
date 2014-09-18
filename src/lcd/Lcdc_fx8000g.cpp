@@ -24,6 +24,24 @@ void Clcdc_fx8000g::disp_symb(void)
     Clcdc::disp_symb();
 }
 
+bool Clcdc_fx8000g::init()
+{
+    Clcdc::init();
+    ((Cfx8000g*) pPC)->pHD44352->Reset();
+    return true;
+}
+
+void Clcdc_fx8000g::TurnOFF()
+{
+    Clcdc::TurnOFF();
+
+    ((Cfx8000g*) pPC)->pHD44352->getInfoRef()->m_lcd_on = 0;
+    Refresh = true;
+    redraw = true;
+    pPC->InitDisplay();
+
+}
+
 
 
 void Clcdc_fx8000g::disp(void)

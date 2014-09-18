@@ -10,6 +10,7 @@ This CPU core is based on documentations works done by:
 #include "pcxxxx.h"
 #include "Inter.h"
 #include "upd1007d.h"
+#include "Lcdc.h"
 
 #define Lo(x) (x&0xff)
 #define Hi(x) ((x>>8)&0xff)
@@ -34,12 +35,12 @@ const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 
 /* bits of the LCD control port in the immediate operand of the LDL /STL
   instructions */
-#define     VDD2_bit 0x80;	/* port EN1 controlled by bit 0 of the IF register */
-#define     OP_bit	 0x20;
-#define     CE3_bit	 0x04;
-#define     CE2_bit	 0x02;
-#define     CE1_bit	 0x01;
-#define     LCDCE	 CE1_bit;
+#define     VDD2_bit 0x80	/* port EN1 controlled by bit 0 of the IF register */
+#define     OP_bit	 0x20
+#define     CE3_bit	 0x04
+#define     CE2_bit	 0x02
+#define     CE1_bit	 0x01
+#define     LCDCE	 CE1_bit
 
 #define RM(info,addr)  (((info->iereg & 0x03)!= 0x00) ? 0x00*(addr)+0xFF : info->pPC->Get_8(addr))
 #define WM(info,addr,value) { UINT32 _a = addr; \
@@ -89,8 +90,6 @@ bool CUPD1007::exit()
 
 void CUPD1007::step()
 {
-
-
 
 //    { complete an optional I/O device write }
 //        if procptr <> nil then
@@ -232,6 +231,17 @@ void CUPD1007::Regs_Info(UINT8 Type)
 }
 
 void CUPD1007::addState(upd1007_config *info,int x) {
+
+    /* clock modes */
+    int ratio = 1;
+    switch (info->iereg & 0x84) {
+    case 0x80: ratio = 2; break;		/* slow mode */
+    case 0x84: ratio = 4 * info->pPC->timerRate; break;	/* external clock */
+    default:  ratio = 1;	break;	/* fast mode */
+    }
+
+    x *= ratio;
+
     info->cycles+=x;
     info->pPC->pTIMER->state += x;
 }
@@ -1169,7 +1179,7 @@ void CUPD1007::Off (upd1007_config *info,void *op2)
   info->irqcnt[1] = 0;
   info->irqcnt[2] = 0;
   info->lcdctrl = 0;
-//  LcdInit;
+  info->pPC->pLCDC->TurnOFF();
   DoPorts(info);
   info->koreg = 0x41;
 //  KeyHandle;
