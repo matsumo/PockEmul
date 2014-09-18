@@ -160,8 +160,8 @@ void CHD44352::data_write(UINT8 data)
 
     if (info.m_control_lines & OP_bit)
     {
-//        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
-//            return;
+        if (!(info.m_control_lines&0x02) && !(info.m_control_lines&0x04))
+            return;
 //qWarning()<<"state="<<info.m_state<<"  data="<<QString("%1").arg(data,2,16,QChar('0'));
         switch (info.m_state)
         {
@@ -198,8 +198,9 @@ void CHD44352::data_write(UINT8 data)
             case 1: info.m_lcd_on = BIT(data, 4); break;
             default: break;
             }
+//            qWarning()<<"LCD_ON_OFF:"<<data<<info.m_lcd_on;
             info.m_data_bus = 0xff;
-//            info.m_state = 0;
+            info.m_state = 0;
             break;
 
         case LCD_SCROLL_CHAR_WIDTH:
@@ -360,7 +361,7 @@ void CHD44352::data_write(UINT8 data)
                 info.m_data_bus = 0xff;
         }
 
-//        info.m_state=0;
+        info.m_state=0;
     }
 }
 

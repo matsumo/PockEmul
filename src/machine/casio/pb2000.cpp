@@ -249,15 +249,15 @@ bool Cpb2000::Chk_Adr(UINT32 *d, UINT32 data)
             }
         }
         if ((*d==0xC04) && (mem[*d]!=data)){
-            qWarning("[%02X] Write 0C04 : %02X",pdi,data);
+//            qWarning("[%02X] Write 0C04 : %02X",pdi,data);
             AddLog(LOG_PRINTER,tr("Write 0C04 : %1").arg(data,0,16,QChar('0')));
         }
         if (*d==0xC05) {
-            qWarning("[%02X] Write 0C05 : %02X",pdi,data);
+//            qWarning("[%02X] Write 0C05 : %02X",pdi,data);
             AddLog(LOG_PRINTER,tr("Write 0C05 : %1").arg(data,0,16,QChar('0')));
         }
         if (*d==0xC06) {
-            qWarning("[%02X] Write 0C06 : %02X",pdi,data);
+//            qWarning("[%02X] Write 0C06 : %02X",pdi,data);
             AddLog(LOG_PRINTER,tr("Write 0C06 : %1").arg(data,0,16,QChar('0')));
         }
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"Write port [%05X] = %02X\n",*d,data);
