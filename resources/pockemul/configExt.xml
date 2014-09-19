@@ -24,6 +24,7 @@
      <example idpocket="Simulator" filename="./" name="Simulator" image=":/ext/simu.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="11Pins Cable" filename="./" name="Sharp EA-129C" image=":/ext/cable.png" connectortype="Sharp_9" conngender="female"/>
      <example brand="CASIO" idpocket="Casio MD-100" filename="./" name="Casio MD-100" image=":/ext/md-100.png" connectortype="Casio_30" conngender="female"/>
+     <example brand="CASIO" idpocket="Casio FA-80" filename="./" name="Casio FA-80" image=":/fx8000g/fa80.png" connectortype="Casio_30" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FP-100" filename="./" name="Casio FP-100" image=":/ext/fp100.png" connectortype="Centronics_36" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FP-40" filename="./" name="Casio FP-40" image=":/ext/fp40.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Nec PC-2021" filename="./" name="Nec PC-2021" image=":/ext/pc-2021.png" connectortype="Sharp_9" conngender="female"/>

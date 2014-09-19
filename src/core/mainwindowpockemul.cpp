@@ -28,7 +28,7 @@ PockEmul is a Sharp Pocket Computer Emulator.
 #include "qcommandline.h"
 
 #include "mainwindowpockemul.h"
-
+#include "modelids.h"
 #ifdef P_AVOID
 #include "libavoid.h"
 #endif
@@ -227,6 +227,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["PC-G850V"]=G850V;
     objtable["Casio PB-1000"]=PB1000;
     objtable["Casio PB-2000C"]=PB2000;
+    objtable["Casio FA-80"]=FA80;
     objtable["Casio MD-100"]=MD100;
     objtable["Casio FP-100"]=FP100;
     objtable["Casio FP-40"]=FP40;
@@ -344,6 +345,7 @@ CPObject *pPC=0;
         case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
         case PB2000 : pPC = new Cpb2000;    pPC->setName("Casio PB-2000C"); break;
         case FP200  : pPC = new Cfp200;     pPC->setName("Casio FP-200"); break;
+        case FA80   : pPC = new Cfa80;      pPC->setName("Casio FA-80"); break;
         case MD100  : pPC = new Cmd100;     pPC->setName("Casio MD-100"); break;
         case FP100  : pPC = new Cfp100;     pPC->setName("Casio FP-100"); break;
         case FP40   : pPC = new Cfp40;      pPC->setName("Casio FP-40"); break;

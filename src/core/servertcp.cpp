@@ -5,6 +5,7 @@
 #include "mainwindowpockemul.h"
 #include "pobject.h"
 #include "cloud/cloudwindow.h"
+#include "modelids.h"
 
 extern MainWindowPockemul *mainwindow;
 extern QList<CPObject *> listpPObject;
@@ -79,7 +80,7 @@ void ServeurTcp::cmd_help(QTextStream *sock,QString subcmd)
     else if(subcmd=="start") {
         *sock << "Help start" << endl << "==========" << endl;
         *sock << "  start ModelName" << endl;
-        QHashIterator<QString, Models> i(mainwindow->objtable);
+        QHashIterator<QString, int> i(mainwindow->objtable);
         while (i.hasNext()) {
             i.next();
             *sock << i.key() << " , " ;

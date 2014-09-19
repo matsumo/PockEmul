@@ -344,7 +344,7 @@ Vibrate();
 #endif
 
      if (Type == PictureFlowType) {
-         int result = EMPTY;
+         int result = 0; //EMPTY;
          QString ItemText = demoList[index]->getIdPocket();
 
          //TODO: try to implement sub level
@@ -357,7 +357,7 @@ Vibrate();
          if (mainwindow->objtable.contains(ItemText))
              result = mainwindow->objtable.value(ItemText);
 
-         if (result != EMPTY)	{
+         if (result != 0)	{
              _pc=mainwindow->LoadPocket(result);
              //         parentWidget()->close();
          }

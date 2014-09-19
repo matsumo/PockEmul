@@ -2,7 +2,7 @@
 #define E500_H
 
 #include "pcxxxx.h"
-#include "mainwindowpockemul.h"
+#include "modelids.h"
 
 class CHD61102;
 //class CRP5C01;

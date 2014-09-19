@@ -253,6 +253,9 @@ public:
 
             void ExecInstr();
             static void IntReq(upd1007_config *info, int i);
+
+            static UINT8 RM(upd1007_config *info, UINT16 addr);
+            static void WM(upd1007_config *info, UINT16 addr, UINT8 value);
 protected:
 
             quint64 _refState;

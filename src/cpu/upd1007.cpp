@@ -42,12 +42,15 @@ const BYTE CUPD1007::INT_input[3]= { 0x02, 0x04, 0x08 };
 #define     CE1_bit	 0x01
 #define     LCDCE	 CE1_bit
 
-#define RM(info,addr)  (((info->iereg & 0x03)!= 0x00) ? 0x00*(addr)+0xFF : info->pPC->Get_8(addr))
-#define WM(info,addr,value) { UINT32 _a = addr; \
-                              UINT8 _v=value;   \
-                              if ((info->iereg & 0x03)== 0x00) \
-                                    info->pPC->Set_8(_a,_v);   \
-                             }
+
+UINT8 CUPD1007::RM(upd1007_config *info,UINT16 addr) {
+    return info->pPC->Get_8(addr);
+}
+
+void CUPD1007::WM(upd1007_config *info, UINT16 addr, UINT8 value)
+{
+        info->pPC->Set_8(addr,value);
+}
 
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 

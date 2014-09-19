@@ -51,6 +51,7 @@
 
 #include "casio/pb1000.h"
 #include "casio/pb2000.h"
+#include "casio/fa80.h"
 #include "casio/md100.h"
 #include "casio/fp100.h"
 #include "casio/fp40.h"

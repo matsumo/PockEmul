@@ -34,14 +34,14 @@ void DialogStartup::on_listWidget_3_itemDoubleClicked()
 
 void DialogStartup::create(QString ItemText)
 {
-    int result = EMPTY;
+    int result = 0;
 
     if (mainwindow->objtable.contains(ItemText))
         result = mainwindow->objtable.value(ItemText);
 
 
 
-    if (result != EMPTY)	{
+    if (result != 0)	{
 		this->done(result);
 	}
 //	else

@@ -1,3 +1,17 @@
+
+
+/*
+ * FA-80
+ * &7FF3    read the FA-80 option byte
+ * &7FF4    printer status port
+ * &7FF5    data out printer
+ * &7FF6    Printer control ???   fe,fb after each char printed
+ *
+ */
+
+
+
+
 #include <QDebug>
 
 #include "fx8000g.h"
@@ -8,6 +22,7 @@
 #include "Keyb.h"
 #include "Inter.h"
 #include "Connect.h"
+#include "bus.h"
 
 
 
@@ -63,6 +78,8 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     pHD44352->OP_bit = 0x20;
     pHD44352->byteLenght = 4;
 
+    bus = new Cbus();
+
     ioFreq = 0;
 }
 
@@ -85,6 +102,33 @@ bool Cfx8000g::init(void)				// initialize
     pHD44352->init();
 
     pTIMER->resetTimer(LCD_TIMER);
+
+    pCONNECTOR	= new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",false,QPoint(668,415));	publish(pCONNECTOR);
+
+    QHash<int,QString> lbl;
+    lbl[12]="A0";
+    lbl[27]="A1";
+    lbl[13]="A2";
+    lbl[20]="A15";
+
+    lbl[26]="I00";
+    lbl[11]="I01";
+    lbl[25]="I02";
+    lbl[28]="I03";
+    lbl[14]="I04";
+    lbl[29]="I05";
+    lbl[15]="I06";
+    lbl[10]="I07";
+
+//    lbl[25]="P0";
+//    lbl[11]="P1";
+//    lbl[26]="P2";
+//    lbl[12]="P3";
+//    lbl[27]="P4";
+
+    WatchPoint.remove(this);
+    WatchPoint.add(&pCONNECTOR_value,64,30,this,"30 pins connector",lbl);
+
     return true;
 }
 
@@ -125,24 +169,55 @@ bool Cfx8000g::run() {
 bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) {
 
     Q_UNUSED(data)
+    switch (fx8000gcpu->reginfo.iereg & 0x03) {
+    case 0:
+        if (*d & 0x4000) {    *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+        return false;
+    case 1:
+        qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
+                  <<"  write["<<QString("%1").arg(*d,4,16,QChar('0'))<<"]="<<QString("%1").arg(data,2,16,QChar('0'))<<QChar(data)
+                  << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
+        *d &= 0x07;
+        writeBus(d,data);
+        break;
 
-#if 0
+    default:
+       qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
+                 <<"  write["<<QString("%1").arg(*d,4,16,QChar('0'))<<"]="<<QString("%1").arg(data,2,16,QChar('0'))<<QChar(data)
+                 << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
+       break;
+    }
 
-    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
-    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
-#else
-    if (*d & 0x4000) {    *d = (*d & 0x1FFF) + 0x4000; return(true);	}
-#endif
     return false;
 }
 
 bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
 
-    if ( (*d>=0x0000) && (*d<=0x2FFF) )	{ *data = 0xff; return false; }
-    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
-    if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+    switch (fx8000gcpu->reginfo.iereg & 0x03) {
+    case 0:
+        if ( (*d>=0x0000) && (*d<=0x2FFF) )	{ *data = 0xff; return false; }
+        if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+        if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
+        return true;
+    case 1:
+        qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
+                  <<"  read:"<<QString("%1").arg(*d,4,16,QChar('0'))
+                  << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
 
-    return true;
+        *d &= 0x07;
+        readBus(d,data);
+        return false;
+        if (*d==0x7FF3) { *data = 0xF4; return false; }
+        if (*d==0x7FF4) { *data = 0x02; return false; }     // F2:PRINTER  F8:I/O
+        break;
+     default:
+        qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
+                  <<"  read:"<<QString("%1").arg(*d,4,16,QChar('0'))
+                  << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
+        break;
+    }
+
+    return false;
 }
 
 UINT8 Cfx8000g::in(UINT8 Port) {
@@ -177,8 +252,15 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
     return 0;
 }
 
-bool Cfx8000g::Set_Connector() { return true; }
-bool Cfx8000g::Get_Connector() { return true; }
+bool Cfx8000g::Set_Connector() {
+    pCONNECTOR->Set_values(bus->toUInt64());
+    return true;
+}
+
+bool Cfx8000g::Get_Connector() {
+    bus->fromUInt64(pCONNECTOR->Get_values());
+    return true;
+}
 
 
 void Cfx8000g::TurnOFF(void) {
@@ -322,6 +404,7 @@ UINT8 Cfx8000g::getKey()
             if (KEY('J'))			data|=0x20;
             if (KEY(K_DEL))			data|=0x40;
             if (KEY(K_ANS))			data|=0x80;
+            if (KEY(' '))			data|=0x80;
         }
 //    qWarning()<<"ko="<<QString("%1").arg(ks,2,16,QChar('0'))<< "   ki="<<QString("%1").arg(data,2,16,QChar('0'));
 

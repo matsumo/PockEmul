@@ -3,7 +3,7 @@
 
 #include "pobject.h"
 
-#include "mainwindowpockemul.h"
+#include "modelids.h"
 
 class Crlp9001:public CPObject {
     Q_OBJECT
