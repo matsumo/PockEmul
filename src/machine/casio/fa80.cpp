@@ -244,8 +244,8 @@ bool Cfa80::run(void)
         case 0x00: break;
         case 0x01: break;
         case 0x02: break;
-        case 0x03: bus->setData(0xF4); break;
-        case 0x04: bus->setData(0x02); break;
+        case 0x03: break;
+        case 0x04: break;
         case 0x05: LOG;
             printerDataPort(data);
             break;

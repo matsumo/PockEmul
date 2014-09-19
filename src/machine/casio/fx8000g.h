@@ -40,12 +40,13 @@ public:
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
     UINT8 getKey();
+    virtual bool UpdateFinalImage(void);
 
     CUPD1007 *fx8000gcpu;
     CHD44352 *pHD44352;
 
 private:
-
+    bool hdFlag;
 };
 
 #endif // FX8000G_H

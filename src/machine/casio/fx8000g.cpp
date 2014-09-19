@@ -13,6 +13,7 @@
 
 
 #include <QDebug>
+#include <QPainter>
 
 #include "fx8000g.h"
 #include "upd1007.h"
@@ -49,15 +50,15 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(8 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
 //    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
-    setDXmm(82);
-    setDYmm(165);
-    setDZmm(15);
+    setDXmm(84);
+    setDYmm(180);
+    setDZmm(18);
 
-    setDX(321);
-    setDY(687);
+    setDX(300);
+    setDY(643);
 
-    Lcd_X		= 64;
-    Lcd_Y		= 54;
+    Lcd_X		= 55;
+    Lcd_Y		= 47;
     Lcd_DX		= 96;// 194x134
     Lcd_DY		= 64;
     Lcd_ratio_X	= 2;
@@ -129,14 +130,35 @@ bool Cfx8000g::init(void)				// initialize
     WatchPoint.remove(this);
     WatchPoint.add(&pCONNECTOR_value,64,30,this,"30 pins connector",lbl);
 
+    hdFlag = false;
+
     return true;
 }
 
+bool Cfx8000g::UpdateFinalImage(void) {
 
+    CpcXXXX::UpdateFinalImage();
+
+    // Draw switch by 180� rotation
+    QPainter painter;
+    painter.begin(FinalImage);
+
+    // POWER SWITCH
+//    painter.drawImage(0,29,BackgroundImageBackup->copy(0,29,10,95).mirrored(false,!off));
+
+    painter.end();
+
+    return true;
+}
 
 bool Cfx8000g::run() {
 
     timerRate = pHD44352->on_timer_rate;
+
+    if (pKEYB->LastKey == K_DEF) {
+        hdFlag = !hdFlag;
+        pKEYB->LastKey = 0;
+    }
 
 #if 1
     if ((( fx8000gcpu->reginfo.lcdctrl & 0x80) == 0) |
@@ -402,6 +424,9 @@ UINT8 Cfx8000g::getKey()
             if (KEY(K_DEL))			data|=0x40;
             if (KEY(K_ANS))			data|=0x80;
             if (KEY(' '))			data|=0x80;
+        }
+        if ((ks & 0xa0)==0xa0) {
+            if (hdFlag)		data|=0x80;
         }
 //    qWarning()<<"ko="<<QString("%1").arg(ks,2,16,QChar('0'))<< "   ki="<<QString("%1").arg(data,2,16,QChar('0'));
 
