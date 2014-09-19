@@ -29,14 +29,15 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 
     pTIMER		= new Ctimer(this);
 
-    setDX(714);//Pc_DX	= 620;//480;
-    setDY(693);//Pc_DY	= 488;//420;
+    setDX(714);
+    setDY(693);
 
     setDXmm(200);
     setDYmm(194);
     setDZmm(37);
 
     port = 0x08;
+    bus = new Cbus();
     adrBus=prev_adrBus=0;
 
 }
@@ -215,16 +216,23 @@ bool Cfa80::Set_MainConnector(void) {
 #define DOWN	0
 #define UP		1
 
-#define PRT(x)  ((port >> (x)) & 0x01)
-#define P0  PRT(0)
-#define P1  PRT(1)
-#define P2  PRT(2)
-#define P3  PRT(3)
-#define P4  PRT(4)
+#define LOG { \
+    qWarning()<<(bus->isWrite()?"WRITE ":"READ :")<<QString("%1").arg(adrBus,4,16,QChar('0')) \
+              << "data:"<<QString("%1").arg(data,4,16,QChar('0'))<<QChar(data); \
+        }
+
 bool Cfa80::run(void)
 {
     Get_Connector();
 
+    if (!bus->isEnable()) {
+//        if (keyEvent) {
+//            pLH5810->step();
+//            bus->setINT(pLH5810->INT);
+//            pCONNECTOR->Set_values(bus->toUInt64());
+//        }
+        return true;
+    }
     pCONNECTOR_value = pCONNECTOR->Get_values();
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();
 
@@ -235,11 +243,15 @@ bool Cfa80::run(void)
         switch (adrBus) {
         case 0x00: break;
         case 0x01: break;
+        case 0x02: break;
         case 0x03: bus->setData(0xF4); break;
         case 0x04: bus->setData(0x02); break;
-        case 0x05: qWarning()<<"P5 received:"<<QString("%1").arg(data,2,16,QChar('0'))<<QChar(data);
-                               break;
-        case 0x06: break;
+        case 0x05: LOG;
+            printerDataPort(data);
+            break;
+        case 0x06:
+            printerControlPort(data);
+            break;
         case 0x07: break;
         }
     }
@@ -247,8 +259,9 @@ bool Cfa80::run(void)
         switch (adrBus) {
         case 0x00: break;
         case 0x01: break;
+        case 0x02: break;
         case 0x03: bus->setData(0xF4); break;
-        case 0x04: bus->setData(0x02); break;
+        case 0x04: bus->setData(printerStatusPort()); break;   // 0x02
         case 0x05: break;
         case 0x06: break;
         case 0x07: break;

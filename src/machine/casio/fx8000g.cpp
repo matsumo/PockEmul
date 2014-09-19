@@ -174,11 +174,10 @@ bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) {
         if (*d & 0x4000) {    *d = (*d & 0x1FFF) + 0x4000; return(true);	}
         return false;
     case 1:
-        qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
-                  <<"  write["<<QString("%1").arg(*d,4,16,QChar('0'))<<"]="<<QString("%1").arg(data,2,16,QChar('0'))<<QChar(data)
-                  << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
+
         *d &= 0x07;
         writeBus(d,data);
+        return false;
         break;
 
     default:
@@ -200,9 +199,7 @@ bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
         if ( (*d>=0xC000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) + 0x4000; return(true);	}
         return true;
     case 1:
-        qWarning()<<"CS:"<<(fx8000gcpu->reginfo.iereg & 0x03)
-                  <<"  read:"<<QString("%1").arg(*d,4,16,QChar('0'))
-                  << "  pc:"<<QString("%1").arg(fx8000gcpu->reginfo.pc,4,16,QChar('0'));
+
 
         *d &= 0x07;
         readBus(d,data);
