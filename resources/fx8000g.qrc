@@ -9,5 +9,7 @@
         <file>fx8000g/fx8000gback.png</file>
         <file>fx8000g/fx8000gleft.png</file>
         <file>fx8000g/fa80.png</file>
+        <file>fx8000g/fa80top.png</file>
+        <file>fx8000g/fa80left.png</file>
     </qresource>
 </RCC>

@@ -104,7 +104,7 @@ bool Cfx8000g::init(void)				// initialize
 
     pTIMER->resetTimer(LCD_TIMER);
 
-    pCONNECTOR	= new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",false,QPoint(668,415));	publish(pCONNECTOR);
+    pCONNECTOR	= new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",false,QPoint(2,350));	publish(pCONNECTOR);
 
     QHash<int,QString> lbl;
     lbl[12]="A0";

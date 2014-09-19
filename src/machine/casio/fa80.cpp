@@ -25,7 +25,8 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
     BackGroundFname	= P_RES(":/fx8000g/fa80.png");
     setcfgfname("fa80");
 
-
+    TopFname = P_RES(":/fx8000g/fa80top.png");
+    LeftFname = P_RES(":/fx8000g/fa80left.png");
 
     pTIMER		= new Ctimer(this);
 
@@ -73,7 +74,7 @@ bool Cfa80::init(void)
 
     setfrequency( 0);
 
-    pCONNECTOR	   = new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",true,QPoint(666,540));	publish(pCONNECTOR);
+    pCONNECTOR	   = new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",true,QPoint(414,375));	publish(pCONNECTOR);
     pCENTCONNECTOR = new Cconnector(this,36,1,Cconnector::Centronics_36,"Centronic 36 pins",false,QPoint(417,13)); publish(pCENTCONNECTOR);
 
     WatchPoint.add(&pCONNECTOR_value,64,30,this,"Standard 30pins connector");
