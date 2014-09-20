@@ -26,11 +26,13 @@ public:
     virtual bool	Get_Connector(void);
 
     virtual bool UpdateFinalImage(void);
-
+    virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
+    virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
     Cconnector	*pCENTCONNECTOR;	qint64 pCENTCONNECTOR_value;
 //    Cconnector	*pSIOCONNECTOR;     qint64 pSIOCONNECTOR_value;
+    Cconnector  *pTAPECONNECTOR;    qint64 pTAPECONNECTOR_value;
 
     CHD61710 *pHD61710;
 
@@ -42,8 +44,6 @@ public:
 private:
     bool Get_MainConnector(void);
     bool Set_MainConnector(void);
-    void Get_CentConnector(void);
-    void Set_CentConnecor(void);
 
     BYTE port,data;
     qint64 adrBus;

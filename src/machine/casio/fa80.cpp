@@ -31,7 +31,7 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 
     pTIMER		= new Ctimer(this);
 
-    pHD61710 = new CHD61710(this);
+    pHD61710 = 0;
 
 
     setDX(714);
@@ -69,6 +69,18 @@ bool Cfa80::UpdateFinalImage(void) {
 
 }
 
+bool Cfa80::SaveSession_File(QXmlStreamWriter *xmlOut)
+{
+    pHD61710->save_internal(xmlOut);
+    return true;
+}
+
+bool Cfa80::LoadSession_File(QXmlStreamReader *xmlIn)
+{
+    pHD61710->Load_Internal(xmlIn);
+    return true;
+}
+
 
 
 bool Cfa80::init(void)
@@ -79,9 +91,13 @@ bool Cfa80::init(void)
 
     pCONNECTOR	   = new Cconnector(this,30,0,Cconnector::Casio_30,"Connector 30 pins",true,QPoint(414,375));	publish(pCONNECTOR);
     pCENTCONNECTOR = new Cconnector(this,36,1,Cconnector::Centronics_36,"Centronic 36 pins",false,QPoint(417,13)); publish(pCENTCONNECTOR);
+    pTAPECONNECTOR	= new Cconnector(this,3,1,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
+
+    pHD61710 = new CHD61710(this,pCENTCONNECTOR,pTAPECONNECTOR,NULL);
 
     WatchPoint.add(&pCONNECTOR_value,64,30,this,"Standard 30pins connector");
     WatchPoint.add(&pCENTCONNECTOR_value,64,36,this,"Centronic 36pins connector");
+    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
 
     AddLog(LOG_PRINTER,tr("FA-80 initializing..."));
 
@@ -107,26 +123,19 @@ bool Cfa80::exit(void)
 
 bool Cfa80::Get_Connector(void) {
     Get_MainConnector();
-    Get_CentConnector();
+    pHD61710->Get_CentConnector();
+    pHD61710->Get_TAPEConnector();
 
     return true;
 }
 bool Cfa80::Set_Connector(void) {
-    Set_CentConnecor();
+    pHD61710->Set_CentConnector();
+    pHD61710->Set_TAPEConnector();
     Set_MainConnector();
 
     return true;
 }
 
-void Cfa80::Get_CentConnector(void) {
-    pHD61710->Get_CentConnector(pCENTCONNECTOR);
-
-}
-
-void Cfa80::Set_CentConnecor(void) {
-    pHD61710->Set_CentConnecor(pCENTCONNECTOR);
-
-}
 
 #define PIN(x)    (pCONNECTOR->Get_pin(x))
 bool Cfa80::Get_MainConnector(void) {

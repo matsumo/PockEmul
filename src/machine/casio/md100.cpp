@@ -5,6 +5,8 @@
  */
 
 // BUG: Centronics seems not working
+// TODO: use CHD61710 for SERIAL AND //
+
 
 #include <QPainter>
 #include <QTime>

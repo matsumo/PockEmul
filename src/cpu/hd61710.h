@@ -8,12 +8,9 @@
 #include "Log.h"
 
 typedef struct {
-    BYTE    on_off;
-    BYTE    displaySL;
-    BYTE    Xadr;
-    BYTE    Yadr;
-    BYTE    status;
-    BYTE    imem[0x200];
+    bool printerACK,printerBUSY,printerSTROBE,printerINIT,printerERROR,prev_printerSTROBE,prev_printerINIT;
+    BYTE printerDATA;
+    BYTE prev_printerStatusPort;
 } HD61710info;
 
 class CHD61710:public QObject{
@@ -21,7 +18,7 @@ class CHD61710:public QObject{
 
 
 public:
-    CHD61710(CPObject *parent);
+    CHD61710(CPObject *parent, Cconnector *pCENT, Cconnector* pTAPE, Cconnector *pSIO);
     ~CHD61710();
 
     const char*	GetClassName(){ return("CHD61710");}
@@ -40,17 +37,23 @@ public:
     void	Load_Internal(QXmlStreamReader *);
     void	save_internal(QXmlStreamWriter *);
 
-    void Set_CentConnecor(Cconnector *pCENTCONNECTOR);
-    void Get_CentConnector(Cconnector *pCENTCONNECTOR);
+    void Set_CentConnector(void);
+    void Get_CentConnector(void);
+    void Set_TAPEConnector(void);
+    void Get_TAPEConnector(void);
+    void Set_SIOConnector(void);
+    void Get_SIOConnector(void);
+
+    Cconnector	*pCENTCONNECTOR;
+    Cconnector	*pSIOCONNECTOR;
+    Cconnector  *pTAPECONNECTOR;
 
 private:
     void printerControlPort(BYTE);
     BYTE printerStatusPort();
     void printerDataPort(BYTE);
 
-    bool printerACK,printerBUSY,printerSTROBE,printerINIT,printerERROR,prev_printerSTROBE,prev_printerINIT;
-    BYTE printerDATA;
-    BYTE prev_printerStatusPort;
+
 };
 
 

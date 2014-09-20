@@ -5,8 +5,11 @@
 #include "dialoganalog.h"
 #include "Connect.h"
 
-CHD61710::CHD61710(CPObject *parent) {
+CHD61710::CHD61710(CPObject *parent, Cconnector *pCENT, Cconnector *pTAPE, Cconnector *pSIO) {
     pPC = parent;
+    pCENTCONNECTOR = pCENT;
+    pTAPECONNECTOR = pTAPE;
+    pSIOCONNECTOR = pSIO;
 }
 
 CHD61710::~CHD61710()
@@ -181,18 +184,18 @@ void CHD61710::printerControlPort(BYTE value)
     AddLog(LOG_PRINTER,tr("PRINTER controlPort= %1").arg(value,2,16,QChar('0')));
     if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(8);
 
-    printerSTROBE = (value & 0x01)?true:false;
-    printerINIT = (value & 0x02)?true:false;
+    info.printerSTROBE = (value & 0x01)?true:false;
+    info.printerINIT = (value & 0x02)?true:false;
 
 
     if (value & 0x04) {
-        printerACK = false;
+        info.printerACK = false;
 //        pTIMER->resetTimer(9);
         AddLog(LOG_PRINTER,tr("PRINTER controlPort RESET ACK"))
     }
 
-    prev_printerSTROBE = printerSTROBE;
-    prev_printerINIT = printerINIT;
+    info.prev_printerSTROBE = info.printerSTROBE;
+    info.prev_printerINIT = info.printerINIT;
 }
 
 BYTE CHD61710::printerStatusPort()
@@ -205,14 +208,14 @@ BYTE CHD61710::printerStatusPort()
     if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(9);
     BYTE ret = 0;
 
-    if (printerBUSY) ret |= 0x01;
+    if (info.printerBUSY) ret |= 0x01;
 //    if (printerERROR)
         ret |= 0x02;        // FAULT to 1
-    if (!printerACK) ret |= 0x04;
+    if (!info.printerACK) ret |= 0x04;
 
-    if (ret != prev_printerStatusPort) {
+    if (ret != info.prev_printerStatusPort) {
         AddLog(LOG_PRINTER,tr("PRINTER return status PORT : %1").arg(ret,2,16,QChar('0')));
-        prev_printerStatusPort = ret;
+        info.prev_printerStatusPort = ret;
     }
 
     return (ret & 0x07);
@@ -223,30 +226,80 @@ void CHD61710::printerDataPort(BYTE value)
     if (value != 0xff) {
         AddLog(LOG_PRINTER,tr("PRINTER data : %1").arg(value,2,16,QChar('0')));
         if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
-        printerDATA = value;
+        info.printerDATA = value;
     }
 }
 
-void CHD61710::Get_CentConnector(Cconnector *pCENTCONNECTOR) {
-
-    printerACK = pCENTCONNECTOR->Get_pin(10);
-    printerBUSY = pCENTCONNECTOR->Get_pin(11);
-    printerERROR=pCENTCONNECTOR->Get_pin(32);
+void CHD61710::Get_CentConnector(void) {
+    if (pCENTCONNECTOR) {
+        info.printerACK = pCENTCONNECTOR->Get_pin(10);
+        info.printerBUSY = pCENTCONNECTOR->Get_pin(11);
+        info.printerERROR=pCENTCONNECTOR->Get_pin(32);
+    }
 }
 
-void CHD61710::Set_CentConnecor(Cconnector *pCENTCONNECTOR) {
+void CHD61710::Set_CentConnector(void) {
 
-    pCENTCONNECTOR->Set_pin((1) ,printerSTROBE);
+    if (pCENTCONNECTOR) {
+        pCENTCONNECTOR->Set_pin((1) ,info.printerSTROBE);
 
-    pCENTCONNECTOR->Set_pin(2	,READ_BIT(printerDATA,0));
-    pCENTCONNECTOR->Set_pin(3	,READ_BIT(printerDATA,1));
-    pCENTCONNECTOR->Set_pin(4	,READ_BIT(printerDATA,2));
-    pCENTCONNECTOR->Set_pin(5	,READ_BIT(printerDATA,3));
-    pCENTCONNECTOR->Set_pin(6	,READ_BIT(printerDATA,4));
-    pCENTCONNECTOR->Set_pin(7	,READ_BIT(printerDATA,5));
-    pCENTCONNECTOR->Set_pin(8	,READ_BIT(printerDATA,6));
-    pCENTCONNECTOR->Set_pin(9	,READ_BIT(printerDATA,7));
+        pCENTCONNECTOR->Set_pin(2	,READ_BIT(info.printerDATA,0));
+        pCENTCONNECTOR->Set_pin(3	,READ_BIT(info.printerDATA,1));
+        pCENTCONNECTOR->Set_pin(4	,READ_BIT(info.printerDATA,2));
+        pCENTCONNECTOR->Set_pin(5	,READ_BIT(info.printerDATA,3));
+        pCENTCONNECTOR->Set_pin(6	,READ_BIT(info.printerDATA,4));
+        pCENTCONNECTOR->Set_pin(7	,READ_BIT(info.printerDATA,5));
+        pCENTCONNECTOR->Set_pin(8	,READ_BIT(info.printerDATA,6));
+        pCENTCONNECTOR->Set_pin(9	,READ_BIT(info.printerDATA,7));
 
-    pCENTCONNECTOR->Set_pin(31	,printerINIT);
+        pCENTCONNECTOR->Set_pin(31	,info.printerINIT);
+    }
+}
 
+void CHD61710::Get_TAPEConnector(void) {
+    if (pTAPECONNECTOR) {
+
+    }
+}
+
+void CHD61710::Set_TAPEConnector(void) {
+
+    if (pTAPECONNECTOR) {
+
+    }
+}
+
+
+void CHD61710::Get_SIOConnector(void) {
+    if (pSIOCONNECTOR) {
+
+    }
+}
+
+void CHD61710::Set_SIOConnector(void) {
+
+    if (pSIOCONNECTOR) {
+
+    }
+}
+
+void CHD61710::Load_Internal(QXmlStreamReader *xmlIn)
+{
+    if (xmlIn->readNextStartElement()) {
+        if ( (xmlIn->name()=="cpu") &&
+             (xmlIn->attributes().value("model").toString() == "hd61710")) {
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) &info,ba_reg.data(),sizeof(info));
+        }
+        xmlIn->skipCurrentElement();
+    }
+}
+
+void CHD61710::save_internal(QXmlStreamWriter *xmlOut)
+{
+    xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","hd61710");
+        QByteArray ba_reg((char*)&info,sizeof(info));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+    xmlOut->writeEndElement();
 }
