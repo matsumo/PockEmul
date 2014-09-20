@@ -576,7 +576,8 @@ HEADERS += src/core/Connect.h \
     src/cpu/i8085_dasm.h \
     src/cpu/i80x86_dasm.h \
     src/machine/casio/fa80.h \
-    src/core/modelids.h
+    src/core/modelids.h \
+    src/cpu/hd61710.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -850,7 +851,8 @@ SOURCES +=  \
     src/machine/casio/fx8000g.cpp \
     src/lcd/Lcdc_fx8000g.cpp \
     src/cpu/upd1007d.cpp \
-    src/machine/casio/fa80.cpp
+    src/machine/casio/fa80.cpp \
+    src/cpu/hd61710.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

@@ -16,6 +16,7 @@
 #include "Log.h"
 #include "dialoganalog.h"
 #include "bus.h"
+#include "hd61710.h"
 
 
 Cfa80::Cfa80(CPObject *parent):CPObject(parent)
@@ -30,6 +31,9 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 
     pTIMER		= new Ctimer(this);
 
+    pHD61710 = new CHD61710(this);
+
+
     setDX(714);
     setDY(693);
 
@@ -39,14 +43,13 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 
     port = 0x08;
     bus = new Cbus();
-    adrBus=prev_adrBus=0;
+    adrBus=0;
 
 }
 
 Cfa80::~Cfa80() {
     delete pCONNECTOR;
     delete pCENTCONNECTOR;
-//    delete pSIOCONNECTOR;
 }
 
 bool Cfa80::UpdateFinalImage(void) {
@@ -57,9 +60,9 @@ bool Cfa80::UpdateFinalImage(void) {
     painter.begin(FinalImage);
 
     // POWER LED
-    if (READ_BIT(port,3)==0) {
-        painter.fillRect(698,550,18,9,QColor(Qt::green));
-    }
+//    if (READ_BIT(port,3)==0) {
+//        painter.fillRect(698,550,18,9,QColor(Qt::green));
+//    }
 
     painter.end();
     return true;
@@ -78,7 +81,6 @@ bool Cfa80::init(void)
     pCENTCONNECTOR = new Cconnector(this,36,1,Cconnector::Centronics_36,"Centronic 36 pins",false,QPoint(417,13)); publish(pCENTCONNECTOR);
 
     WatchPoint.add(&pCONNECTOR_value,64,30,this,"Standard 30pins connector");
-
     WatchPoint.add(&pCENTCONNECTOR_value,64,36,this,"Centronic 36pins connector");
 
     AddLog(LOG_PRINTER,tr("FA-80 initializing..."));
@@ -87,68 +89,10 @@ bool Cfa80::init(void)
 
 
     data = 0;
-    sendData = false;
 
     return true;
 }
 
-
-
-#define TIMER_ACK 9
-#define TIMER_BUSY 8
-void Cfa80::printerControlPort(BYTE value)
-{
-//    bit 0 - state of the STROBE output
-//    bit 1 - state of the INIT output
-//    bit 2 - logical 1 resets the ACK latch
-    AddLog(LOG_PRINTER,tr("PRINTER controlPort= %1").arg(value,2,16,QChar('0')));
-    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(8);
-
-    printerSTROBE = (value & 0x01)?true:false;
-    printerINIT = (value & 0x02)?true:false;
-
-
-    if (value & 0x04) {
-        printerACK = false;
-//        pTIMER->resetTimer(9);
-        AddLog(LOG_PRINTER,tr("PRINTER controlPort RESET ACK"));
-    }
-
-    prev_printerSTROBE = printerSTROBE;
-    prev_printerINIT = printerINIT;
-}
-
-BYTE Cfa80::printerStatusPort()
-{
-//    bit 0 - state of the BUSY input
-//    bit 1 - state of the FAULT input
-//    bit 2 - set by a pulse on the ACK input, reset by writing logical 1 to the bit 2 of register 110
-
-
-    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(9);
-    BYTE ret = 0;
-
-    if (printerBUSY) ret |= 0x01;
-//    if (printerERROR)
-        ret |= 0x02;        // FAULT to 1
-    if (!printerACK) ret |= 0x04;
-
-    if (ret != prev_printerStatusPort) {
-        AddLog(LOG_PRINTER,tr("PRINTER return status PORT : %1").arg(ret,2,16,QChar('0')));
-        prev_printerStatusPort = ret;
-    }
-
-    return (ret & 0x07);
-}
-
-void Cfa80::printerDataPort(BYTE value)
-{
-    if (value != 0xff) {
-        AddLog(LOG_PRINTER,tr("PRINTER data : %1").arg(value,2,16,QChar('0')));
-        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
-        printerDATA = value;
-    }
-}
 
 /*****************************************************/
 /* Exit PRINTER										 */
@@ -175,26 +119,12 @@ bool Cfa80::Set_Connector(void) {
 }
 
 void Cfa80::Get_CentConnector(void) {
+    pHD61710->Get_CentConnector(pCENTCONNECTOR);
 
-    printerACK = pCENTCONNECTOR->Get_pin(10);
-    printerBUSY = pCENTCONNECTOR->Get_pin(11);
-    printerERROR=pCENTCONNECTOR->Get_pin(32);
 }
 
 void Cfa80::Set_CentConnecor(void) {
-
-    pCENTCONNECTOR->Set_pin((1) ,printerSTROBE);
-
-    pCENTCONNECTOR->Set_pin(2	,READ_BIT(printerDATA,0));
-    pCENTCONNECTOR->Set_pin(3	,READ_BIT(printerDATA,1));
-    pCENTCONNECTOR->Set_pin(4	,READ_BIT(printerDATA,2));
-    pCENTCONNECTOR->Set_pin(5	,READ_BIT(printerDATA,3));
-    pCENTCONNECTOR->Set_pin(6	,READ_BIT(printerDATA,4));
-    pCENTCONNECTOR->Set_pin(7	,READ_BIT(printerDATA,5));
-    pCENTCONNECTOR->Set_pin(8	,READ_BIT(printerDATA,6));
-    pCENTCONNECTOR->Set_pin(9	,READ_BIT(printerDATA,7));
-
-    pCENTCONNECTOR->Set_pin(31	,printerINIT);
+    pHD61710->Set_CentConnecor(pCENTCONNECTOR);
 
 }
 
@@ -240,32 +170,110 @@ bool Cfa80::run(void)
     adrBus = bus->getAddr();
     data = bus->getData();
 
+/*
+Register addresses
+
+A2	A1	A0	Access	Function
+0	0	0	Write	serial port control register
+                    bit 0 - MT/RS232C
+                    bit 1 - Odd/Even parity
+                    bit 2 - parity OFF/ON
+                    bit 3 - 7/8 data length
+                    bit 4 - 1/2 stop bit
+                    bits 5..7 - baud rate
+0	0	0	Read	serial port status register
+                    bit 0 - set when TX buffer full, cleared after the byte has been transmitted
+                    bit 1 - set when RX buffer full, cleared after reading the RX data register 010
+                    bit 2 - state of the CTS input
+                    bit 3 - state of the DSR input
+                    bit 4 - state of the DCD input
+0	0	1	Write	serial port control register
+                    bit 0 - transmitter enable
+                    bit 1 - receiver enable
+                    bit 2 - state of the RTS output
+                    bit 3 - state of the DTR output
+0	0	1	Read	serial port status register
+                    bit 0 - set when RX parity error
+                    bit 1 - cleared when RX framing or overrun error
+                    bit 3 - state of the SW0 input
+                    bit 4 - state of the SW1 input
+                    bit 5 - state of the SW2 input
+0	1	0	Write	serial port control register
+0	1	0	Read	serial port receive data register
+0	1	1	Write	serial port transmit data register
+0	1	1	Read	general purpose input port PA
+1	0	0	Write	general purpose output port PB
+1	0	0	Read	printer status port
+                    bit 0 - state of the BUSY input
+                    bit 1 - state of the FAULT input
+                    bit 2 - set by a pulse on the ACK input, reset by writing logical 1 to the bit 2 of register 110
+1	0	1	Write	printer data port PD
+1	1	0	Write	printer control port
+                    bit 0 - state of the STROBE output
+                    bit 1 - state of the INIT output
+                    bit 2 - logical 1 resets the ACK latch
+
+
+1. La fréquence du porteuse (lead-in) est 4800 Hz (sinus).
+2. Le zéro est une seule onde à 2400 Hz.
+3. Le un est compris de deux ondes à 4800 Hz.
+4. La vitesse résultante est donc 2400 baud
+
+*/
+
     if (bus->isWrite()) {
+#if 1
+        pHD61710->regWrite(adrBus,data);
+#else
         switch (adrBus) {
-        case 0x00: break;
+        case 0x00: // 01:MT, 40:2400bds
+//            0	0	0	Write	serial port control register
+//                                bit 0 - MT/RS232C
+//                                bit 1 - Odd/Even parity
+//                                bit 2 - parity OFF/ON
+//                                bit 3 - 7/8 data length
+//                                bit 4 - 1/2 stop bit
+//                                bits 5..7 - baud rate
+//                                        Baud rate selects
+//                                        000	9600 baud
+//                                        001	4800 baud
+//                                        010	2400 baud
+//                                        011	1200 baud
+//                                        100	600 baud
+//                                        101	300 baud
+//                                        110	150 baud
+//                                        111	75 baud
+
+            break;
         case 0x01: break;
-        case 0x02: break;
-        case 0x03: break;
+        case 0x02: // serial port control register
+            break;
+        case 0x03: // serial port transmit data register
+            break;
         case 0x04: break;
         case 0x05: LOG;
             printerDataPort(data);
             break;
-        case 0x06:
+        case 0x06: LOG;
             printerControlPort(data);
             break;
         case 0x07: break;
         }
+#endif
     }
+#if 1
+    bus->setData(pHD61710->regRead(adrBus));
+#else
     else {
         switch (adrBus) {
-        case 0x00: break;
-        case 0x01: break;
-        case 0x02: break;
-        case 0x03: bus->setData(0xF4); break;
-        case 0x04: bus->setData(printerStatusPort()); break;   // 0x02
-        case 0x05: break;
-        case 0x06: break;
-        case 0x07: break;
+        case 0x00: LOG;break;
+        case 0x01: LOG;break;
+        case 0x02: LOG;break;
+        case 0x03: LOG;bus->setData(0xF4); break;
+        case 0x04: LOG;bus->setData(printerStatusPort()); break;   // 0x02
+        case 0x05: LOG;break;
+        case 0x06: LOG;break;
+        case 0x07: LOG;break;
         }
     }
 //        else if (adrBus==0x05) {
@@ -282,7 +290,7 @@ bool Cfa80::run(void)
 //            data = printerStatusPort();
 //        }
 //        else if (adrBus == 0x00) {
-
+#endif
 
     Set_Connector();
     pCONNECTOR_value = pCONNECTOR->Get_values();
