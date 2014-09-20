@@ -31,7 +31,6 @@ public:
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
     Cconnector	*pCENTCONNECTOR;	qint64 pCENTCONNECTOR_value;
-//    Cconnector	*pSIOCONNECTOR;     qint64 pSIOCONNECTOR_value;
     Cconnector  *pTAPECONNECTOR;    qint64 pTAPECONNECTOR_value;
 
     CHD61710 *pHD61710;

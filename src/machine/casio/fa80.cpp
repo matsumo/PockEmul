@@ -175,136 +175,22 @@ bool Cfa80::run(void)
     }
     pCONNECTOR_value = pCONNECTOR->Get_values();
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();
+    pTAPECONNECTOR_value = pTAPECONNECTOR->Get_values();
 
     adrBus = bus->getAddr();
     data = bus->getData();
 
-/*
-Register addresses
-
-A2	A1	A0	Access	Function
-0	0	0	Write	serial port control register
-                    bit 0 - MT/RS232C
-                    bit 1 - Odd/Even parity
-                    bit 2 - parity OFF/ON
-                    bit 3 - 7/8 data length
-                    bit 4 - 1/2 stop bit
-                    bits 5..7 - baud rate
-0	0	0	Read	serial port status register
-                    bit 0 - set when TX buffer full, cleared after the byte has been transmitted
-                    bit 1 - set when RX buffer full, cleared after reading the RX data register 010
-                    bit 2 - state of the CTS input
-                    bit 3 - state of the DSR input
-                    bit 4 - state of the DCD input
-0	0	1	Write	serial port control register
-                    bit 0 - transmitter enable
-                    bit 1 - receiver enable
-                    bit 2 - state of the RTS output
-                    bit 3 - state of the DTR output
-0	0	1	Read	serial port status register
-                    bit 0 - set when RX parity error
-                    bit 1 - cleared when RX framing or overrun error
-                    bit 3 - state of the SW0 input
-                    bit 4 - state of the SW1 input
-                    bit 5 - state of the SW2 input
-0	1	0	Write	serial port control register
-0	1	0	Read	serial port receive data register
-0	1	1	Write	serial port transmit data register
-0	1	1	Read	general purpose input port PA
-1	0	0	Write	general purpose output port PB
-1	0	0	Read	printer status port
-                    bit 0 - state of the BUSY input
-                    bit 1 - state of the FAULT input
-                    bit 2 - set by a pulse on the ACK input, reset by writing logical 1 to the bit 2 of register 110
-1	0	1	Write	printer data port PD
-1	1	0	Write	printer control port
-                    bit 0 - state of the STROBE output
-                    bit 1 - state of the INIT output
-                    bit 2 - logical 1 resets the ACK latch
-
-
-1. La fréquence du porteuse (lead-in) est 4800 Hz (sinus).
-2. Le zéro est une seule onde à 2400 Hz.
-3. Le un est compris de deux ondes à 4800 Hz.
-4. La vitesse résultante est donc 2400 baud
-
-*/
-
     if (bus->isWrite()) {
-#if 1
         pHD61710->regWrite(adrBus,data);
-#else
-        switch (adrBus) {
-        case 0x00: // 01:MT, 40:2400bds
-//            0	0	0	Write	serial port control register
-//                                bit 0 - MT/RS232C
-//                                bit 1 - Odd/Even parity
-//                                bit 2 - parity OFF/ON
-//                                bit 3 - 7/8 data length
-//                                bit 4 - 1/2 stop bit
-//                                bits 5..7 - baud rate
-//                                        Baud rate selects
-//                                        000	9600 baud
-//                                        001	4800 baud
-//                                        010	2400 baud
-//                                        011	1200 baud
-//                                        100	600 baud
-//                                        101	300 baud
-//                                        110	150 baud
-//                                        111	75 baud
-
-            break;
-        case 0x01: break;
-        case 0x02: // serial port control register
-            break;
-        case 0x03: // serial port transmit data register
-            break;
-        case 0x04: break;
-        case 0x05: LOG;
-            printerDataPort(data);
-            break;
-        case 0x06: LOG;
-            printerControlPort(data);
-            break;
-        case 0x07: break;
-        }
-#endif
     }
-#if 1
-    bus->setData(pHD61710->regRead(adrBus));
-#else
     else {
-        switch (adrBus) {
-        case 0x00: LOG;break;
-        case 0x01: LOG;break;
-        case 0x02: LOG;break;
-        case 0x03: LOG;bus->setData(0xF4); break;
-        case 0x04: LOG;bus->setData(printerStatusPort()); break;   // 0x02
-        case 0x05: LOG;break;
-        case 0x06: LOG;break;
-        case 0x07: LOG;break;
-        }
+        bus->setData(pHD61710->regRead(adrBus));
     }
-//        else if (adrBus==0x05) {
-//            printerDataPort(data);
-//        }
-//        else if ((adrBus==0x06))//&&(P2==UP))
-//        {
-//            printerControlPort(data);
-//        }
-//        else if (adrBus==0x04) {
-//            // Send the printerStatusPort
-//            sendData = true;
-//            out_adrBus = 0x04;
-//            data = printerStatusPort();
-//        }
-//        else if (adrBus == 0x00) {
-#endif
 
     Set_Connector();
     pCONNECTOR_value = pCONNECTOR->Get_values();
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();
-//    pSIOCONNECTOR_value = pSIOCONNECTOR->Get_values();
+    pTAPECONNECTOR_value = pTAPECONNECTOR->Get_values();
 
     return true;
 }
