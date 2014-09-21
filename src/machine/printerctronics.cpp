@@ -25,7 +25,7 @@
 CprinterCtronics::CprinterCtronics(CPObject *parent):Cprinter(parent)
 {
     pTIMER = new Ctimer(this);
-    setfrequency( 10000000);
+    setfrequency( 100000);
     printerACK = false;
     printerBUSY = false;
     printerbuf	= 0;//new QImage(QSize(0, 0),QImage::Format_ARGB32);

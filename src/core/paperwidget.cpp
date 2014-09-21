@@ -8,7 +8,6 @@
 #include "paperwidget.h"
 #include "cprinter.h"
 #include "Log.h"
-#include "tapandholdgesture.h"
 
 CpaperWidget::CpaperWidget(QRect rect,QImage * buffer,QWidget * parent):QWidget(parent)
 {
@@ -21,35 +20,35 @@ CpaperWidget::CpaperWidget(QRect rect,QImage * buffer,QWidget * parent):QWidget(
     move(rect.x(),rect.y());
     Offset = QPoint(0,0);
     this->baseRect = rect;
-    _gestureHandler = new TapAndHoldGesture(this);
-    connect(_gestureHandler,SIGNAL(handleTapAndHold(QMouseEvent*)),this,SLOT(tapAndHold(QMouseEvent*)));
+    grabGesture(Qt::TapAndHoldGesture);
     updated = true;
 }
 
-void CpaperWidget::tapAndHold(QMouseEvent * event)
+bool CpaperWidget::event(QEvent *event)
 {
-#ifdef Q_OS_ANDROIS
-    QContextMenuEvent *cme = new QContextMenuEvent(QContextMenuEvent::Mouse,QPoint(0,0),QPoint(0,0));
-#else
-    QContextMenuEvent *cme = new QContextMenuEvent(QContextMenuEvent::Mouse,event->pos(),event->globalPos());
-#endif
 
-    contextMenuEvent(cme);
-}
+    if (event->type() == QEvent::Gesture) {
 
-void CpaperWidget::mousePressEvent(QMouseEvent *event)
-{
-    _gestureHandler->handleEvent( event );
-}
+        if (QGesture *tap = (static_cast<QGestureEvent*>(event))->gesture(Qt::TapAndHoldGesture)) {
+            const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
+            //             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
+            if (tap->state() == Qt::GestureStarted) {
+                QContextMenuEvent *cme = new QContextMenuEvent(
+                            QContextMenuEvent::Mouse,
+                            pos,
+                            (pos));
+                QApplication::sendEvent(this,cme);
 
-void CpaperWidget::mouseReleaseEvent(QMouseEvent *event)
-{
-    _gestureHandler->handleEvent( event );
-}
+                setCursor(Qt::ArrowCursor);
 
-void CpaperWidget::mouseMoveEvent( QMouseEvent * event )
-{
-    _gestureHandler->handleEvent( event );
+                event->accept();
+            }
+        }
+
+        event->accept();
+        return true;
+    }
+    return QWidget::event(event);
 }
 
 void CpaperWidget::setOffset(QPoint val)

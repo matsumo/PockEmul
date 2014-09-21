@@ -4,7 +4,6 @@
 #include <QWidget>
 
 class CPObject;
-class TapAndHoldGesture;
 
 class CpaperWidget:public QWidget{
 Q_OBJECT
@@ -23,24 +22,22 @@ public:
 	{
 
 	}
+
+    bool event(QEvent *event);
+
 private slots:
 	void contextMenuEvent ( QContextMenuEvent * event );
 	void paperCopy();
     void paperCopyText();
 	void paperCut();
 	void paperSaveImage();
-	void paperSaveText();
-    void tapAndHold(QMouseEvent *);
+    void paperSaveText();
 
 protected:
-    void mousePressEvent(QMouseEvent *event);
-    void mouseReleaseEvent(QMouseEvent *event);
-    void mouseMoveEvent( QMouseEvent * event );
 	void paintEvent(QPaintEvent *);
 	
 private:
-	QPoint Offset;
-    TapAndHoldGesture* _gestureHandler;
+    QPoint Offset;
 };
 
 

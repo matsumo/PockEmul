@@ -481,7 +481,6 @@ HEADERS += src/core/Connect.h \
     pictureflow/launcher.h \
     pictureflow/slideshow.h \
     src/core/launchbuttonwidget.h \
-    src/core/tapandholdgesture.h \
     src/machine/casio/pb1000.h \
     src/machine/casio/pb2000.h \
     src/machine/casio/md100.h \
@@ -784,7 +783,6 @@ SOURCES +=  \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
     src/core/launchbuttonwidget.cpp \
-    src/core/tapandholdgesture.cpp \
     src/cpu/sed1560.cpp \
     src/lcd/Lcdc_g850.cpp \
     src/lcd/Lcdc_fp200.cpp \

@@ -13,6 +13,7 @@
 #include <QPainter>
 #include <iostream>
 #include <QtNetwork>
+#include <QInputMethod>
 
 
 /** \mainpage
@@ -676,6 +677,8 @@ void MainWindowPockemul::IDE()
 #ifdef P_IDE
         if (windowide==0) windowide = new WindowIDE(this);
         windowide->show();
+#else
+    QGuiApplication::inputMethod()->show();
 #endif
 }
 
@@ -1040,8 +1043,9 @@ bool MainWindowPockemul::gestureEvent(QGestureEvent *event)
 //        panTriggered(static_cast<QPanGesture *>(pan));
     if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
         startPosDrag = false;
-        pinchTriggered(static_cast<QPinchGesture *>(pinch));
         event->accept();
+        pinchTriggered(static_cast<QPinchGesture *>(pinch));
+
     }
     return true;
 }

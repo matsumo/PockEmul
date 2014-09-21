@@ -29,7 +29,6 @@ class DialogKeyList;
 class DialogDump;
 class DialogDasm;
 class DialogVKeyboard;
-class TapAndHoldGesture;
 class QSwipeGesture;
 class Cbus;
 
@@ -112,14 +111,10 @@ public:
 
     void    MoveWithLinked(QPoint);
 
-
 	QImage* BackgroundImageBackup;
 	QImage* BackgroundImage;
 	QImage* LcdImage;
 	QImage* SymbImage;
-
-
-
 
     int		getfrequency() { return frequency; }
     void	setfrequency(int f);
@@ -153,15 +148,12 @@ public:
     bool fullscreenMode;
 	
 	void fillSoundBuffer(BYTE val);
-
     QList<unsigned char> soundBuffer;
-
 #ifndef NO_SOUND
     QAudioDeviceInfo* m_device;
     QAudioFormat    m_format;
     QAudioOutput*   m_audioOutput;
 #endif
-
     QIODevice*      m_output;
     int DataFrequencyHz;
     int BufferSize;
@@ -173,12 +165,10 @@ public:
     DialogDasm      *dialogdasm;
     DialogVKeyboard  *dialogVKeyboard;
 
-
-
 	void setCpu(int );
 
 	bool	Power;
-    qint8		PowerSwitch;
+    qint8	PowerSwitch;
 
     bool forceStackOver,forceStackUnder;
 
@@ -288,9 +278,6 @@ private:
     bool disp_onRaised;
 
     quint64 resetAt,hardresetAt;
-
-
-    TapAndHoldGesture* _gestureHandler;
 
 };
 

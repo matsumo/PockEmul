@@ -6,21 +6,32 @@
 
 #include "pobject.h"
 #include "Log.h"
+#include "uart.h"
 
 typedef struct {
     bool printerACK,printerBUSY,printerSTROBE,printerINIT,printerERROR,prev_printerSTROBE,prev_printerINIT;
     BYTE printerDATA;
     BYTE prev_printerStatusPort;
+    BYTE sioCTRLReg;
+    BYTE sioMode;
+    BYTE sioParity;
+    BYTE sioParityEnabled;
+    BYTE sioDataLength;
+    BYTE sioStopBit;
+    bool sioTransEnabled,sioReceiEnabled;
+    UINT16 sioBds;
 } HD61710info;
+
 
 class CHD61710:public QObject{
 
 
 
 public:
-    CHD61710(CPObject *parent, Cconnector *pCENT, Cconnector* pTAPE, Cconnector *pSIO);
+    CHD61710(CPObject *parent, Cconnector *pCENT=NULL, Cconnector* pTAPE=NULL, Cconnector *pSIO=NULL);
     ~CHD61710();
 
+    void linkConnectors(Cconnector *pCENT=NULL, Cconnector* pTAPE=NULL, Cconnector *pSIO=NULL);
     const char*	GetClassName(){ return("CHD61710");}
     CPObject		*pPC;
 
@@ -34,8 +45,8 @@ public:
 
     HD61710info info;
 
-    void	Load_Internal(QXmlStreamReader *);
-    void	save_internal(QXmlStreamWriter *);
+    void	Load_Internal(QXmlStreamReader *xmlIn);
+    void	save_internal(QXmlStreamWriter *xmlOut);
 
     void Set_CentConnector(void);
     void Get_CentConnector(void);
@@ -48,12 +59,15 @@ public:
     Cconnector	*pSIOCONNECTOR;
     Cconnector  *pTAPECONNECTOR;
 
+
 private:
-    void printerControlPort(BYTE);
-    BYTE printerStatusPort();
-    void printerDataPort(BYTE);
+    void WriteSioInitReg(BYTE data);
 
+    void WritePrtCrlPort(BYTE);
+    BYTE ReadPrtStatusPort();
+    void WritePrtDataPort(BYTE);
 
+    Cuart uart;
 };
 
 

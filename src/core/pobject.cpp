@@ -29,7 +29,6 @@
 #include "dialoganalog.h"
 #include "weblinksparser.h"
 
-#include "tapandholdgesture.h"
 #include "fluidlauncher.h"
 
 #include "mainwindowpockemul.h"
@@ -100,12 +99,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
         hardresetAt = 0;
         hardreset = false;
 		
-//        _gestureHandler = new TapAndHoldGesture(this);
-//        connect(_gestureHandler,SIGNAL(handleTapAndHold(QMouseEvent*)),this,SLOT(tapAndHold(QMouseEvent*)));
-
         grabGesture(Qt::TapAndHoldGesture);
-
-
 
         // ERROR MESSAGE
         connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
@@ -543,25 +537,29 @@ bool CPObject::event(QEvent *event)
  {
 
      if (event->type() == QEvent::Gesture) {
-         if (QGesture *swipe = (static_cast<QGestureEvent*>(event))->gesture(Qt::SwipeGesture))
+         if (QGesture *swipe = (static_cast<QGestureEvent*>(event))->gesture(Qt::SwipeGesture)) {
              swipeTriggered(static_cast<QSwipeGesture *>(swipe));
-         else
-         if (QGesture *tap =  (static_cast<QGestureEvent*>(event))->gesture(Qt::TapAndHoldGesture)) {
-             const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
-//             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
-             if (tap->state() == Qt::GestureStarted) {
-             QContextMenuEvent *cme = new QContextMenuEvent(
-                         QContextMenuEvent::Mouse,
-                         pos,
-                         (pos));
-             //contextMenuEvent(cme);
-             QApplication::sendEvent(this,cme);
-
-             setCursor(Qt::ArrowCursor);
-
              event->accept();
+         }
+         else {
+             if (QGesture *tap = (static_cast<QGestureEvent*>(event))->gesture(Qt::TapAndHoldGesture)) {
+                 const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
+                 //             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
+                 if (tap->state() == Qt::GestureStarted) {
+                     QContextMenuEvent *cme = new QContextMenuEvent(
+                                 QContextMenuEvent::Mouse,
+                                 pos,
+                                 (pos));
+                     //contextMenuEvent(cme);
+                     QApplication::sendEvent(this,cme);
+
+                     setCursor(Qt::ArrowCursor);
+
+                     event->accept();
+                 }
              }
          }
+         event->accept();
          return true;
      }
      return QWidget::event(event);

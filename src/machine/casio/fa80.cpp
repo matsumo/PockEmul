@@ -21,7 +21,7 @@
 
 Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 {								//[constructor]
-    setfrequency( 0);
+    setfrequency( 1000000);
 
     BackGroundFname	= P_RES(":/fx8000g/fa80.png");
     setcfgfname("fa80");
@@ -31,7 +31,7 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 
     pTIMER		= new Ctimer(this);
 
-    pHD61710 = 0;
+    pHD61710 = new CHD61710(this);
 
 
     setDX(714);
@@ -50,6 +50,7 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 Cfa80::~Cfa80() {
     delete pCONNECTOR;
     delete pCENTCONNECTOR;
+    delete pHD61710;
 }
 
 bool Cfa80::UpdateFinalImage(void) {
@@ -93,7 +94,9 @@ bool Cfa80::init(void)
     pCENTCONNECTOR = new Cconnector(this,36,1,Cconnector::Centronics_36,"Centronic 36 pins",false,QPoint(417,13)); publish(pCENTCONNECTOR);
     pTAPECONNECTOR	= new Cconnector(this,3,1,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
 
-    pHD61710 = new CHD61710(this,pCENTCONNECTOR,pTAPECONNECTOR,NULL);
+    pHD61710->linkConnectors(pCENTCONNECTOR,pTAPECONNECTOR,NULL);
+
+    pHD61710->init();
 
     WatchPoint.add(&pCONNECTOR_value,64,30,this,"Standard 30pins connector");
     WatchPoint.add(&pCENTCONNECTOR_value,64,36,this,"Centronic 36pins connector");
@@ -102,6 +105,7 @@ bool Cfa80::init(void)
     AddLog(LOG_PRINTER,tr("FA-80 initializing..."));
 
     if(pTIMER)	pTIMER->init();
+
 
 
     data = 0;
@@ -164,6 +168,10 @@ bool Cfa80::Set_MainConnector(void) {
 bool Cfa80::run(void)
 {
     Get_Connector();
+
+    // Manage sio
+    pHD61710->step();
+
 
     if (!bus->isEnable()) {
 //        if (keyEvent) {
