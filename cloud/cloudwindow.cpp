@@ -37,6 +37,7 @@
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
+extern bool soundEnabled;
 
 CloudWindow::CloudWindow(QWidget *parent)
     : QWidget(parent)
@@ -284,6 +285,8 @@ void CloudWindow::saveValueFor(const QString &objectName, const QString &inputVa
     QSettings settings(workDir+"config.ini",QSettings::IniFormat);
     settings.setValue(objectName, QVariant(inputValue));
 //    qWarning()<<"saveValue("<<objectName<<","<<inputValue<<") in "<<workDir+"config.ini";
+
+    if (objectName == "soundEnabled") soundEnabled =  (inputValue=="on") ? true : false;
 }
 
 QByteArray CloudWindow::generateKey(QString username,QString password) {

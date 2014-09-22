@@ -41,6 +41,7 @@ FILE	*fp_tmp=NULL;
 
 extern MainWindowPockemul* mainwindow;
 extern int ask(QWidget *parent,QString msg,int nbButton);
+extern bool soundEnabled;
 
 CPObject::CPObject(CPObject *parent):CViewObject(parent)
     {
@@ -432,6 +433,8 @@ int CPObject::exitsound()
 //FIXME: The piezo doesn't produce sounf for frequency < 1Khz
 void CPObject::fillSoundBuffer(BYTE val)
 {
+    if (!soundEnabled) return;
+
 #ifndef NO_SOUND
 //    quint64 new_state;
     quint64 delta_state;

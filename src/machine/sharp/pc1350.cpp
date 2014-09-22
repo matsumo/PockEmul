@@ -56,8 +56,8 @@ bool Cpc13XX::init(void)
 #ifndef QT_NO_DEBUG
     //pCPU->logsw = true;
 #endif
-	CpcXXXX::init();
     initExtension();
+    CpcXXXX::init();
     pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(0,90));	publish(pCONNECTOR);
     pSIOCONNECTOR	= new Cconnector(this,15,1,Cconnector::Sharp_15,"Connector 15 pins",false,QPoint(633,105));	publish(pSIOCONNECTOR);
 

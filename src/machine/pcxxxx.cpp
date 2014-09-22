@@ -1019,6 +1019,7 @@ bool CpcXXXX::Chk_Adr_R(UINT32 *d,UINT32 *data) { Q_UNUSED(d) Q_UNUSED(data) ret
 
 bool CpcXXXX::Initial_Session_Load()
 {
+    qWarning()<<"Initial_Session_Load start";
 	QFile file(Initial_Session_Fname);
 
 	if (file.open(QIODevice::ReadOnly))

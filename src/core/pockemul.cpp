@@ -14,6 +14,7 @@
 #include "pobject.h"
 #include "dialogstartup.h"
 #include "init.h"
+#include "cloud/cloudwindow.h"
 
 #ifdef P_AVOID
 #include "libavoid.h"
@@ -34,6 +35,8 @@
 
 MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
+
+bool soundEnabled=true;
 
 
 
@@ -140,6 +143,8 @@ mainwindow = new MainWindowPockemul();
         downloadManager->targetDir = "/sdcard/pockemul/documents";
 #   endif
 #endif
+
+        soundEnabled =  (CloudWindow::getValueFor("soundEnabled","on")=="on") ? true : false;
 
     float ratio = MAX(1,QGuiApplication::primaryScreen()->logicalDotsPerInch()/150);
     int iconSize = 48*ratio;
