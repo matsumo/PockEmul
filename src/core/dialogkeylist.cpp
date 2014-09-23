@@ -99,7 +99,12 @@ QRect DialogKeyList::getkeyFoundRect(void)
 {
 	if (!keyFound) return QRect();
 
-	return i->Rect;
+    QRect _result;
+    _result.setTop(i->Rect.top() * mainwindow->zoom/100);
+    _result.setLeft(i->Rect.left() * mainwindow->zoom/100);
+    _result.setWidth(i->Rect.width() * mainwindow->zoom/100);
+    _result.setHeight(i->Rect.height() * mainwindow->zoom/100);
+    return _result;
 }
 
 void DialogKeyList::closeEvent(QCloseEvent *event)
