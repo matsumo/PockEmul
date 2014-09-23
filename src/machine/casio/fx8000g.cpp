@@ -49,7 +49,6 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(4 , 0x3000 ,	P_RES(":/fx8000g/rom1a.bin"), ""	, CSlot::ROM , "ROM"));
     SlotList.append(CSlot(8 ,0x4000 ,	"", ""	, CSlot::RAM , "RAM"));
     SlotList.append(CSlot(16 ,0x8000 ,	P_RES(":/fx8000g/rom1b.bin"), ""	, CSlot::ROM , "ROM"));
-//    SlotList.append(CSlot(16 , 0xC000 ,	"", ""	, CSlot::RAM , "RAM"));
     setDXmm(84);
     setDYmm(180);
     setDZmm(18);
@@ -57,9 +56,9 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(300);
     setDY(643);
 
-    Lcd_X		= 55;
-    Lcd_Y		= 47;
-    Lcd_DX		= 96;// 194x134
+    Lcd_X		= 52;
+    Lcd_Y		= 45;
+    Lcd_DX		= 96;
     Lcd_DY		= 64;
     Lcd_ratio_X	= 2;
     Lcd_ratio_Y	= 2;

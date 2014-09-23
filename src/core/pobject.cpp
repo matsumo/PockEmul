@@ -1,3 +1,6 @@
+// TODO: move MemSave and MemLoad ti CSlot object
+
+
 #include <qglobal.h>
 #if QT_VERSION >= 0x050000
 #   include <QtWidgets>
@@ -63,6 +66,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		LcdImage = 0;
 		SymbImage = 0;
         TopImage=LeftImage=RightImage=BottomImage=BackImage = 0;
+        internalImageRatio = 1;
         flipping = false;
         currentView = FRONTview;
 		extensionArray[0] = 0;
@@ -1369,8 +1373,13 @@ bool CPObject::InitDisplay(void)
 //    qWarning("INIT DISPLAY");
     delete BackgroundImageBackup;
 //    qWarning()<<BackGroundFname;
-
+#if 0
     BackgroundImageBackup = CreateImage(QSize(Pc_DX, Pc_DY),BackGroundFname);
+#else
+    BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
+    internalImageRatio = (float) BackgroundImageBackup->size().width() / Pc_DX;
+#endif
+
     delete BackgroundImage;
     BackgroundImage = new QImage(*BackgroundImageBackup);
     delete FinalImage;

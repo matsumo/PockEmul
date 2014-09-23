@@ -26,14 +26,7 @@
 #define TOUPPER( a )	(  ((a >= 'a' && a <= 'z') ? a-('a'-'A') : a ) )
 #define TOLOWER( a )	(  ((a >= 'A' && a <= 'Z') ? a+('a'-'A') : a ) )
 
-
-#ifdef LOCRES
-extern QString appDir;
-#define P_RES(a) QString(a).replace(":",appDir+"/res")
-#else
-#define P_RES(a) a
-#endif
-
+extern QString P_RES(QString);
 
 
 #define MIN(x,y) ((x)<(y)?(x):(y))

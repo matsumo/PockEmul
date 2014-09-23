@@ -116,6 +116,8 @@ public:
 	QImage* LcdImage;
 	QImage* SymbImage;
 
+    float internalImageRatio;
+
     int		getfrequency() { return frequency; }
     void	setfrequency(int f);
 

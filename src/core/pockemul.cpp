@@ -105,6 +105,7 @@ int main(int argc, char *argv[])
 mainwindow = new MainWindowPockemul();
 
     appDir = app->applicationDirPath();
+    qWarning()<<appDir;
 
 #ifdef Q_OS_ANDROID
 //    QSplashScreen splash;
@@ -356,6 +357,23 @@ void m_addShortcut(QString name, QString param) {
 #endif
 }
 
+QString P_RES(QString _name) {
+QString _locName = _name;
+_locName.replace(":",appDir+"/res");
+
+#ifdef LOCRES
+    return _locName;
+#else
+    // if file exists, rename it
+if (QFile::exists(_locName)) {
+    return _locName;
+}
+else {
+    return _name;
+}
+#endif
+}
+
 #if QT_VERSION >= 0x050000
 QString Orientation(Qt::ScreenOrientation orientation)
 {
@@ -394,3 +412,4 @@ void test() {
         }
 }
 #endif
+
