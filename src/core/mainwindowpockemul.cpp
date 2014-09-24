@@ -988,7 +988,7 @@ void MainWindowPockemul::updateTimer()
 void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
 
     if (((zoom >= 20) && (delta<0)) ||
-        ((zoom <300) && (delta >0))){
+        ((zoom <500) && (delta >0))){
         int d = (delta>0) ? step : -step;
         delta = ((zoom+d)/zoom - 1)*100;
         zoom += d;

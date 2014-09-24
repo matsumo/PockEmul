@@ -99,15 +99,16 @@ bool Cpc1250::UpdateFinalImage(void)
     QPainter painter;
     painter.begin(FinalImage);
 
-    QPoint ptPower(446,28);
+    QPoint ptPower(446*internalImageRatio,28*internalImageRatio);
 
+    QSize _size= iPowerRUN.size()*internalImageRatio;
 
     switch (PowerSwitch)
     {
-    case PS_RUN :	painter.drawImage(ptPower,iPowerRUN); break;
-    case PS_PRO :	painter.drawImage(ptPower,iPowerPRO); break;
-    case PS_RSV :	painter.drawImage(ptPower,iPowerRSV); break;
-    case PS_OFF :	painter.drawImage(ptPower,iPowerOFF); break;
+    case PS_RUN :	painter.drawImage(ptPower,iPowerRUN.scaled(_size)); break;
+    case PS_PRO :	painter.drawImage(ptPower,iPowerPRO.scaled(_size)); break;
+    case PS_RSV :	painter.drawImage(ptPower,iPowerRSV.scaled(_size)); break;
+    case PS_OFF :	painter.drawImage(ptPower,iPowerOFF.scaled(_size)); break;
     }
 
     painter.end();

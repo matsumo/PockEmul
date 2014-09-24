@@ -82,6 +82,7 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     delete pLCDC;	pLCDC		= new Clcdc_pc1403(this);
     delete pKEYB;	pKEYB		= new Ckeyb(this,"pc1403.map",scandef_pc1403);
 
+
     Lcd_X	= 116;
     Lcd_Y	= 53;
     Lcd_DX	= 144;

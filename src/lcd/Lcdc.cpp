@@ -111,6 +111,7 @@ bool	Clcdc::init(void)
 	On = false;
     ready = true;
     redraw = true;
+
 	
     AddLog(LOG_MASTER,"Lcd INIT");
 	return(true);
@@ -982,7 +983,7 @@ static const struct {
 
 void Clcdc_pc1403::disp_symb(void)
 {
-	
+
 
 	if (DirtyBuf[SYMB1_ADR_1403-0x3000] || DirtyBuf[SYMB2_ADR_1403-0x3000] || DirtyBuf[SYMB3_ADR_1403-0x3000])
 	{

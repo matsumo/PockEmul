@@ -173,6 +173,12 @@ bool CpcXXXX::InitDisplay(void)
         delete SymbImage;
         SymbImage	= CreateImage(QSize(Lcd_Symb_DX, Lcd_Symb_DY),SymbFname);
     }
+
+    QRgb _rgb = LcdImage->pixel(0,0);
+    pLCDC->Color_Off.setRgb(qRed(_rgb)*pLCDC->contrast,
+                            qGreen(_rgb)*pLCDC->contrast,
+                            qBlue(_rgb)*pLCDC->contrast);
+
     UpdateDisplayRunning = true;
     return(1);
 }
