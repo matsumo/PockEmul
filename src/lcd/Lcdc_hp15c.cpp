@@ -204,7 +204,9 @@ void Clcdc_hp15c::disp(void)
 #if 1
     int x = 0;
     int y = 0;
-    painter.drawImage(x,y,minus->copy(1,1,157,182));
+    if (info->display_segments[0] & (1<<6)) {
+        painter.drawImage(x,y,minus->copy(1,1,157,182));
+    }
     for (int digit=1 ; digit < 11; digit++) {
         x = 160 * digit - 30;
         y = 0;
