@@ -221,7 +221,7 @@ void Clcdc_hp15c::disp(void)
 
             }
         }
-        if (segments & (1 << 10)) {
+        if (segments & (1 << 17)) {
             switch (digit) {
             case 2: painter.drawImage(215,190,*ann_user); break;
             case 3: painter.drawImage(480,190,*ann_f); break;

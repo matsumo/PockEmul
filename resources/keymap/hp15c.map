@@ -26,5 +26,8 @@
     <KEY description="ENTER" height="68" left="237" masterscancode="0x00" modifier="" scancode="0x0d" top="193" width="28"/>
     <KEY description="." height="25" left="320" masterscancode="0x00" modifier="" scancode="0x2e" top="235" width="28"/>
     <KEY description="R/S" height="25" left="35" masterscancode="0x00" modifier="" scancode="0x233" top="191" width="28"/>
+    <KEY description="Tan" height="25" left="201" masterscancode="0x00" modifier="" scancode="0xf1" top="149" width="28"/>
+    <KEY description="Cos" height="25" left="158" masterscancode="0x00" modifier="" scancode="0xf2" top="148" width="28"/>
+    <KEY description="Sin" height="25" left="118" masterscancode="0x00" modifier="" scancode="0xf3" top="150" width="28"/>
 </Keyboard>
 </KEYBMAP>

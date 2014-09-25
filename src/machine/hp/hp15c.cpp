@@ -539,7 +539,7 @@ UINT8 Chp15c::getKey()
         if (KEY('G'))			code = 0x78;    // g
         if (KEY(K_STO))			code = 0xC8;    // STO
         if (KEY(K_RCL))			code = 0x88;    // RCL
-        if (KEY(K_RET))			code = 0x85;    // ENTER
+//        if (KEY(K_RET))			code = 0x85;    // ENTER
         if (KEY('0'))			code = 0xC5;    // 0
         if (KEY('.'))			code = 0x75;    // .
         if (KEY(K_SUM))			code = 0x35;    // sigma
