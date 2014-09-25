@@ -19,17 +19,9 @@
  MA 02111, USA.
  */
 
-//
-// any changes since 0.77 copyright 2005-2012 Maciej Bartosiak
-//
 
-//#include <inttypes.h>
-//#include <stdbool.h>
-//#include <stdint.h>
-//#include <stdio.h>
-//#include <stdlib.h>
-//#include <string.h>
 #include <QFile>
+#include <QDebug>
 
 #include "hpnut.h"
 #include "debug.h"
@@ -1353,11 +1345,11 @@ cpu_t * CHPNUT::nut_new_processor (int ram_size)
     nut_init_ops (nut_reg);
 
     nut_new_ram_addr_space (nut_reg, 256);
-#ifdef NONPAREIL_15C
+//#ifdef NONPAREIL_15C
     nut_new_rom_addr_space(nut_reg, 14336);
-#else
-    nut_new_rom_addr_space(nut_reg, 6144);
-#endif
+//#else
+//    nut_new_rom_addr_space(nut_reg, 6144);
+//#endif
 
     nut_new_ram (nut_reg, 0x000, 11);
     ram_size -= 8;
@@ -1462,9 +1454,11 @@ bool CHPNUT::nut_read_object_file (cpu_t *nut_reg, QString fn)
     int addr;
     rom_word_t opcode;
     while (!file.atEnd()) {
-        QByteArray line = file.readLine();
-        if (nut_parse_object_line (line, & addr, & opcode))
+        QByteArray line = file.readLine().trimmed();
+        if (nut_parse_object_line (line, & addr, & opcode)) {
             nut_reg->rom [addr] = opcode;
+            qWarning()<<QString("rom[%1]=%2").arg(addr,4,16,QChar('0')).arg(opcode,3,16,QChar('0'));
+        }
     }
 
 

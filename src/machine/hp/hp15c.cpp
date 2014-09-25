@@ -126,9 +126,9 @@ bool Chp15c::init()
 
     CpcXXXX::init();
 
-    pLCDC->updated = true;
-    pLCDC->Refresh = true;
-    pLCDC->disp();
+//    pLCDC->updated = true;
+//    pLCDC->Refresh = true;
+//    pLCDC->disp();
 
     WatchPoint.remove(this);
 
@@ -221,6 +221,12 @@ bool Chp15c::run()
 
     pLCDC->updated = true;
 
+    if (pKEYB->LastKey!=0) {
+       nutcpu->nut_press_key (nutcpu->reg, 15);
+    }
+    else {
+        nutcpu->nut_release_key(nutcpu->reg);
+    }
     if (pTIMER->usElapsedId(0)>=10000) {
         pTIMER->resetTimer(0);
 //        TimerProc();
