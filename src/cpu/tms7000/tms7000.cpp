@@ -127,7 +127,6 @@ Ctms7000::Ctms7000(CPObject *parent, TMS7000_Models mod)
 {
 
     pDEBUG = new Cdebug_tms7000(parent);
-    fn_status="tms7000.sta";
     fn_log="tms7000.log";
 
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);

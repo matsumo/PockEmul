@@ -114,7 +114,6 @@ public:
 
     virtual	void	Load_Internal(QXmlStreamReader *);
     virtual	void	save_internal(QXmlStreamWriter *);
-            void	save(void);
 
     virtual	bool	Get_Xin(void){ return true;}
     virtual	void	Set_Xin(bool){}

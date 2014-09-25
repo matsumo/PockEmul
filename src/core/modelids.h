@@ -95,6 +95,7 @@ enum Models {
     POSTIT,
     TI57,
     HP41,
+    HP15,
     HP82143A,
     CE1560,
     CC40,

@@ -40,7 +40,7 @@ word TypeA[]={3,4,5,10,8,6,11,0,2,9,7,13,1,12,0,0};
 /****************************/
 // Constructor
 /****************************/
-Chpnut::Chpnut(CPObject *parent):CCPU(parent)
+Chp41cpu::Chp41cpu(CPObject *parent):CCPU(parent)
 {
 
     hp41 = (Chp41*)pPC;
@@ -67,7 +67,7 @@ Chpnut::Chpnut(CPObject *parent):CCPU(parent)
 /****************************/
 // destructor
 /****************************/
-Chpnut::~Chpnut()
+Chp41cpu::~Chp41cpu()
 {
     //  if (GetTrace())
     //    StopTrace();
@@ -75,25 +75,25 @@ Chpnut::~Chpnut()
 
 }
 
-bool Chpnut::init()
+bool Chp41cpu::init()
 {
-    pRAM = (RAM_REG*) (hp41->mem);
+    pRAM = (RAM_REG*) (pPC->mem);
 
     Reset();
     return true;
 }
 
-bool Chpnut::exit()
+bool Chp41cpu::exit()
 {
     return true;
 }
 
-void Chpnut::step()
+void Chp41cpu::step()
 {
     Execute();
 }
 
-void Chpnut::Reset()
+void Chp41cpu::Reset()
 {
     memset(pRAM,0,sizeof(RAM_REG)*MAX_RAM);
 
@@ -141,7 +141,7 @@ void Chpnut::Reset()
 }
 
 
-void Chpnut::Load_Internal(QXmlStreamReader *xmlIn)
+void Chp41cpu::Load_Internal(QXmlStreamReader *xmlIn)
 {
     qWarning()<<"Load internal hp41cpu";
     if (xmlIn->readNextStartElement()) {
@@ -161,7 +161,7 @@ void Chpnut::Load_Internal(QXmlStreamReader *xmlIn)
     }
 }
 
-void Chpnut::save_internal(QXmlStreamWriter *xmlOut)
+void Chp41cpu::save_internal(QXmlStreamWriter *xmlOut)
 {
     xmlOut->writeStartElement("cpu");
     xmlOut->writeAttribute("model","hp41cpu");
@@ -175,7 +175,7 @@ void Chpnut::save_internal(QXmlStreamWriter *xmlOut)
 /*****************************/
 // wakeup if everything is ready
 /*****************************/
-void Chpnut::Wakeup()
+void Chp41cpu::Wakeup()
 {
     //  if ((hp41->hp41->PageMatrix[0][0]==NULL)||(eKeyboard==eKeyboardNone))     // not fully initialized yet
     //    return;
@@ -189,7 +189,7 @@ void Chpnut::Wakeup()
 /*****************************/
 // puts the processor to sleep if it is awake
 /*****************************/
-void Chpnut::Sleep(int eNewMode)      // pass either Light or Deep sleep
+void Chp41cpu::Sleep(int eNewMode)      // pass either Light or Deep sleep
 {
     if (eSleepMode==eAwake)
         eSleepMode=eNewMode;
@@ -199,7 +199,7 @@ void Chpnut::Sleep(int eNewMode)      // pass either Light or Deep sleep
 /*****************************/
 // returns 0 if awake, nonzero if sleeping
 /*****************************/
-int Chpnut::IsSleeping()
+int Chp41cpu::IsSleeping()
 {
     return(eSleepMode);
 }
@@ -210,7 +210,7 @@ int Chpnut::IsSleeping()
 
 
 /****************************/
-void Chpnut::error_message(short num)
+void Chp41cpu::error_message(short num)
 {
     return;
     switch (num)
@@ -262,7 +262,7 @@ void Chpnut::error_message(short num)
 /****************************/
 // executes one instruction
 /****************************/
-void Chpnut::Execute()
+void Chp41cpu::Execute()
 {
     if (hp41->GetTrace()) hp41->TraceOut();
     hp41->PC_LAST=r->PC_REG;
@@ -273,19 +273,8 @@ void Chpnut::Execute()
 
     if (perph_in_control)
     {
-        switch (control_perph)
-        {
-        case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
-            // HP-IL
-            hp41->exec_perph_hpil();
-            break;
-        case 9:    // printer
-            hp41->exec_perph_printer();
-            break;
-        default:
-            error_message(30);
-            break;
-        }
+        pPC->out(control_perph,0);
+
         perph_in_control=!(Tyte1&0x001);
     }
     else              /* execute mcode */
@@ -321,7 +310,7 @@ void Chpnut::Execute()
 /****************************/
 /* execute class 0 into subclasses */
 /****************************/
-void Chpnut::Class0()
+void Chp41cpu::Class0()
 {
     Modifier=(Tyte1&0x03c0)>>6;
     switch ((Tyte1&0x003c)>>2)
@@ -379,7 +368,7 @@ void Chpnut::Class0()
 
 
 /****************************/
-void Chpnut::Subclass0()
+void Chp41cpu::Subclass0()
 {
     switch(Modifier)
     {
@@ -427,7 +416,7 @@ void Chpnut::Subclass0()
 /****************************/
 // for absolute changes - always leaves page variables valid
 /****************************/
-void Chpnut::set_PC(UINT32 addr)
+void Chp41cpu::set_PC(UINT32 addr)
 {
     ModulePage *pPage;
     UINT32  page;
@@ -445,12 +434,12 @@ void Chpnut::set_PC(UINT32 addr)
     hp41->pCurPage=pPage;
 }
 
-UINT32 Chpnut::get_PC(void) {
+UINT32 Chp41cpu::get_PC(void) {
     return r->PC_REG;
 }
 
 /****************************/
-void Chpnut::Enbank(int BankSet)
+void Chp41cpu::Enbank(int BankSet)
 {
     uint page,bank;
     if (hp41->pCurPage==NULL || hp41->pCurPage->ActualBankGroup==0)
@@ -473,7 +462,7 @@ void Chpnut::Enbank(int BankSet)
 
 
 /****************************/
-void Chpnut::Subclass1()
+void Chp41cpu::Subclass1()
 {
     if (Modifier==7)
     {
@@ -496,7 +485,7 @@ void Chpnut::Subclass1()
 
 
 /****************************/
-void Chpnut::Subclass2()
+void Chp41cpu::Subclass2()
 {
     if (Modifier==7)
     {
@@ -525,7 +514,7 @@ void Chpnut::Subclass2()
 
 
 /****************************/
-void Chpnut::Subclass3()
+void Chp41cpu::Subclass3()
 {
     if (Modifier==7)
     {
@@ -548,7 +537,7 @@ void Chpnut::Subclass3()
 
 
 /****************************/
-void Chpnut::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
+void Chp41cpu::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
 {
     r->C_REG[*PT_REG]=(byte)Modifier;
     if (*PT_REG==0)
@@ -560,7 +549,7 @@ void Chpnut::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
 
 
 /****************************/
-void Chpnut::Subclass5()
+void Chp41cpu::Subclass5()
 {
     if (Modifier==7)
     {
@@ -583,7 +572,7 @@ void Chpnut::Subclass5()
 
 
 /****************************/
-void Chpnut::Subclass6()
+void Chp41cpu::Subclass6()
 {
     switch(Modifier)
     {
@@ -759,7 +748,7 @@ void Chpnut::Subclass6()
 
 
 /****************************/
-void Chpnut::Subclass7()
+void Chp41cpu::Subclass7()
 {
     if (Modifier==7)
     {
@@ -783,7 +772,7 @@ void Chpnut::Subclass7()
 /****************************/
 /* MISC */
 /****************************/
-void Chpnut::Subclass8()
+void Chp41cpu::Subclass8()
 {
     switch(Modifier)
     {
@@ -909,7 +898,7 @@ void Chpnut::Subclass8()
 
 
 /****************************/
-void Chpnut::Subclass9()
+void Chp41cpu::Subclass9()
 {
     r->CARRY=0;
     if (Modifier!=9)
@@ -928,7 +917,7 @@ void Chpnut::Subclass9()
 
 
 /****************************/
-void Chpnut::SubclassA()
+void Chp41cpu::SubclassA()
 {
     if (perph_selected==0 || ram_selected<=0x00F || ram_selected>=0x020)
     {
@@ -979,7 +968,7 @@ void Chpnut::SubclassA()
 
 
 /****************************/
-void Chpnut::SubclassB()
+void Chp41cpu::SubclassB()
 {
     if ((Modifier==7) || (Modifier==15))    // Not Used
         r->CARRY=0;
@@ -1004,7 +993,7 @@ void Chpnut::SubclassB()
 
 
 /****************************/
-void Chpnut::SubclassC()
+void Chp41cpu::SubclassC()
 {
     switch(Modifier)
     {
@@ -1193,7 +1182,7 @@ void Chpnut::SubclassC()
 
 
 /****************************/
-void Chpnut::SubclassD()
+void Chp41cpu::SubclassD()
 {
     /* Not Used */
     r->CARRY=0;
@@ -1201,7 +1190,7 @@ void Chpnut::SubclassD()
 
 
 /****************************/
-void Chpnut::SubclassE()
+void Chp41cpu::SubclassE()
 {
     if (perph_selected==0 || ram_selected<=0x00F || ram_selected>=0x020)
     {
@@ -1254,7 +1243,7 @@ void Chpnut::SubclassE()
 
 
 /****************************/
-void Chpnut::SubclassF()
+void Chp41cpu::SubclassF()
 {
     if (Modifier==7)
     {
@@ -1286,7 +1275,7 @@ void Chpnut::SubclassF()
 /****************************/
 /* WDATA */
 /****************************/
-void Chpnut::wdata()
+void Chp41cpu::wdata()
 {
     if (hp41->RamExist(ram_selected))
     {
@@ -1299,7 +1288,7 @@ void Chpnut::wdata()
 /****************************/
 /* RDATA */
 /****************************/
-void Chpnut::rdata()
+void Chp41cpu::rdata()
 {
     if (hp41->RamExist(ram_selected))
     {
@@ -1317,7 +1306,7 @@ void Chpnut::rdata()
 }
 
 /****************************/
-word Chpnut::GetNextTyte()
+word Chp41cpu::GetNextTyte()
 {
     return(hp41->pCurPage->Image[r->PC_REG++&0xfff]);
 }
@@ -1330,7 +1319,7 @@ word Chpnut::GetNextTyte()
 /****************************/
 /* execute class 1 into long jumps */
 /****************************/
-void Chpnut::Class1()
+void Chp41cpu::Class1()
 {
     Tyte2=GetNextTyte();
     word addr=((Tyte2&0x03fc)<<6|(Tyte1&0x03fc)>>2);
@@ -1366,7 +1355,7 @@ void Chpnut::Class1()
 
 
 /****************************/
-void Chpnut::LongJump(word addr,flag fPush)
+void Chp41cpu::LongJump(word addr,flag fPush)
 {
     word page=(addr&0xf000)>>12;
     ModulePage *pPage=hp41->PageMatrix[page][hp41->active_bank[page]-1];
@@ -1383,7 +1372,7 @@ void Chpnut::LongJump(word addr,flag fPush)
 
 
 /****************************/
-void Chpnut::PushReturn(word addr)
+void Chp41cpu::PushReturn(word addr)
 {
     r->RET_STK3=r->RET_STK2;
     r->RET_STK2=r->RET_STK1;
@@ -1392,7 +1381,7 @@ void Chpnut::PushReturn(word addr)
 }
 
 /****************************/
-word Chpnut::PopReturn()
+word Chp41cpu::PopReturn()
 {
     word addr=r->RET_STK0;
     r->RET_STK0=r->RET_STK1;
@@ -1411,7 +1400,7 @@ word Chpnut::PopReturn()
 /****************************/
 /* execute class 2 into subclasses */
 /****************************/
-void Chpnut::Class2(void)
+void Chp41cpu::Class2(void)
 {
     r->CARRY=0;
     Modifier = (Tyte1>>2) & 0x07;
@@ -1658,7 +1647,7 @@ void Chpnut::Class2(void)
 /****************************/
 // returns 1 if this is an arithmetic instruction that can set a carry
 /****************************/
-int Chpnut::ArithCarry(unsigned short Tyte)
+int Chp41cpu::ArithCarry(unsigned short Tyte)
 {
     if ((Tyte&3)!=2)  // if not a class 2 TEF inst
         return(0);
@@ -1707,7 +1696,7 @@ int Chpnut::ArithCarry(unsigned short Tyte)
 /* convert tef bits to start and end nybbles */
 /* starting from the least significant digit - FirstTEF is to the right of LastTEF */
 /****************************/
-void Chpnut::ConvertTEF()
+void Chp41cpu::ConvertTEF()
 {
     switch(Modifier)
     {
@@ -1769,7 +1758,7 @@ void Chpnut::ConvertTEF()
 /****************************/
 // digit Adder
 /****************************/
-byte Chpnut::Adder(byte nib1,byte nib2) {
+byte Chp41cpu::Adder(byte nib1,byte nib2) {
     byte result = nib1 + nib2 + r->CARRY;
     if (result >= r->BASE)
     {
@@ -1786,7 +1775,7 @@ byte Chpnut::Adder(byte nib1,byte nib2) {
 /****************************/
 // digit subtractor
 /****************************/
-byte Chpnut::Subtractor( byte nib1, byte nib2) {
+byte Chp41cpu::Subtractor( byte nib1, byte nib2) {
     char result = nib1 - nib2 - r->CARRY;
     if (result < 0) {
         result += r->BASE;
@@ -1804,7 +1793,7 @@ byte Chpnut::Subtractor( byte nib1, byte nib2) {
 /* ------------------------------------------------------------------------ */
 
 /****************************/
-void Chpnut::Class3()
+void Chp41cpu::Class3()
 {
     short displacement;
     if (Tyte1&0x0200) displacement=((Tyte1>>3)&0x03f)-64;

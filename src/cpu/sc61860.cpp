@@ -34,9 +34,6 @@ CSC61860::CSC61860(CPObject *parent)	: CCPU(parent)
     end=0;				//program end?(0:none, 1:end)
     cpulog=0;				//execute log?(0:off, 1:on)
     logsw=false;			//log mode?(0:off, 1:on)
-    usestatus=0;
-    fp_status=0;
-    fn_status="pc1350.sta";
     fn_log="sc61860.log";
     CallSubLevel=0;
 
@@ -2760,33 +2757,7 @@ bool CSC61860::init(void)
  
 	AddLog(0x01,"done.\n");
  
-	char t[16];
-	if(usestatus){
-		if((fp_status=fopen(fn_status,"rb"))!=NULL)
-		{
-			fread(t, 1, HEAD_LEN, fp_status);
-			if ((strncmp(t,HEAD_STR,HEAD_LEN) * strncmp(t,OLD_HEAD_STR,HEAD_LEN))!=0)
-			{		//bad image
-				fclose(fp_status); fp_status=0;
-			}
-		}
-	}
-	if(fp_status)
-	{
-		AddLog(0x01," Restore status...");
-		fseek(fp_status, REG_BGN, SEEK_SET);		//restore status
-		fread(&reg,1,REG_LEN,fp_status);
-		fseek(fp_status, IMEM_BGN, SEEK_SET);
-		fread(imem,1,IMEM_LEN,fp_status);
-		fclose(fp_status); fp_status=0;
-		pPC->pLCDC->Update();
-		AddLog(0x01,"done.");
-	}
-	else
-	{
-        Reset();
-	}
-
+    Reset();
 
     //if(logsw) fp_log=fopen("sc61860.log","wt");			//open log file
 #ifndef EMSCRIPTEN
@@ -2874,10 +2845,6 @@ bool CSC61860::exit(void)
 
 	pDEBUG->exit();
 
-	if(usestatus)
-	{
-        save();
-	}
 	return true;
 }
 

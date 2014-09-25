@@ -14,8 +14,6 @@ CCPU::CCPU(CPObject *parent)
     cpulog=0;				//execute log?(0:off, 1:on)
     logsw=false;			//log mode?(0:off, 1:on)
     resetFlag = false;
-    usestatus=0;
-    fp_status=0;
     fp_log=0;
     fn_log="cpu.log";
     CallSubLevel=prevCallSubLevel=0;
@@ -34,18 +32,6 @@ CCPU::~CCPU() {
     delete pDEBUG;
 }
 
-void CCPU::save(void)
-{
-	AddLog(LOG_MASTER,tr("Save status..."));
-	QFile file(fn_status);
-	
-	if (file.open(QIODevice::WriteOnly)) {
-		save_internal(&file);
-		file.close();
-		AddLog(LOG_MASTER,"done.");
-	}
-	else AddLog(0x01,tr("write error!"));
-}
  
 void CCPU::Check_Log(void)
 {
@@ -59,10 +45,6 @@ bool CCPU::exit(void)
 
 	pDEBUG->exit();
 
-	if(usestatus)
-	{
-		save();
-	}
 	return true;
 }
 

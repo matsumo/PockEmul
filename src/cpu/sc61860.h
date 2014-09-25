@@ -133,7 +133,6 @@ private:
     bool	div500;
     bool	div2;
 	bool	Xin,Xout;
-	FILE	*fp_status;		//pointer to status file
 
 	BYTE	Get_i8(BYTE adr);					//get i-mem 8bits
 	WORD	Get_i16(BYTE adr);					//get i-mem 16bits

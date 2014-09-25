@@ -576,7 +576,10 @@ HEADERS += src/core/Connect.h \
     src/cpu/i80x86_dasm.h \
     src/machine/casio/fa80.h \
     src/core/modelids.h \
-    src/cpu/hd61710.h
+    src/cpu/hd61710.h \
+    src/machine/hp/hp15c.h \
+    src/cpu/hpnut.h \
+    src/lcd/Lcdc_hp15c.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -650,7 +653,8 @@ RESOURCES +=  \
     resources/core.qrc \
     resources/cc40.qrc \
     resources/ti74.qrc \
-    resources/fx8000g.qrc
+    resources/fx8000g.qrc \
+    resources/hp15c.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \
@@ -850,7 +854,10 @@ SOURCES +=  \
     src/lcd/Lcdc_fx8000g.cpp \
     src/cpu/upd1007d.cpp \
     src/machine/casio/fa80.cpp \
-    src/cpu/hd61710.cpp
+    src/cpu/hd61710.cpp \
+    src/machine/hp/hp15c.cpp \
+    src/cpu/hpnut.cpp \
+    src/lcd/Lcdc_hp15c.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

@@ -78,7 +78,6 @@ public:
     virtual	void	Load_Internal(QXmlStreamReader *) =0;
     virtual	void	save_internal(QFile *){}
     virtual	void	save_internal(QXmlStreamWriter *) =0;
-			void	save(void);
 
     virtual	UINT32	get_mem(UINT32 adr,int size);		//get memory
     virtual	void	set_mem(UINT32 adr,int size,UINT32 data);	//set memory
@@ -92,8 +91,8 @@ public:
     virtual	void	set_PC(UINT32 ) {}					//set Program Counter
 	virtual void	Regs_Info(UINT8) =0;
 
-    const char	*fn_status;					//status file name
-	bool	usestatus;						//use status file(0:no,1:yes)
+
+
 	bool	halt;					//halt,off flag
     bool	end,savesw, cpulog,logsw;	//etc.flag
     bool    resetFlag;
@@ -125,8 +124,6 @@ signals:
     void msgError(QString);
     void showDasm();
 
-private:
-	FILE *fp_status;		//pointer to status file
 };
 
 

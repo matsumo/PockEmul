@@ -214,10 +214,10 @@ bool Cti74::init()
 #ifndef QT_NO_DEBUG
     pCPU->logsw = false;
 #endif
+    initExtension();
     CpcXXXX::init();
     pHD44780->init();
 
-    initExtension();
     Reset();
 
     return true;

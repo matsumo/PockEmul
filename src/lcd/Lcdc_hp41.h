@@ -29,7 +29,7 @@ public:
     }
 
     Chp41 *hp41;
-    Chpnut *hp41cpu;
+    Chp41cpu *hp41cpu;
 
 
     QString GetLCD();

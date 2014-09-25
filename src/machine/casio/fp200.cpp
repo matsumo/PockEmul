@@ -56,10 +56,10 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
 
     Lcd_X		= 158;
     Lcd_Y		= 57;
-    Lcd_DX		= 160;//168;//144 ;
+    Lcd_DX		= 160;
     Lcd_DY		= 64;
-    Lcd_ratio_X	= 2;// * 1.18;
-    Lcd_ratio_Y	= 2;// * 1.18;
+    Lcd_ratio_X	= 2;
+    Lcd_ratio_Y	= 2;
 
     pLCDC		= new Clcdc_fp200(this);
     pCPU		= new Ci8085(this);
@@ -69,12 +69,13 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
     pCENT       = new Cctronics(this);
     pRP5C01     = new CRP5C01(this);
 
-
     lastKeyBufSize = 0;
     newKey = false;
 
     ioFreq = 0;             // Mandatory for Centronics synchronization
     i85cpu = (Ci8085*)pCPU;
+
+    initExtension();
 }
 
 Cfp200::~Cfp200() {
@@ -263,7 +264,6 @@ bool Cfp200::init()
     pCPU->logsw = false;
 #endif
     CpcXXXX::init();
-    initExtension();
     Reset();
     Cetl = false;
     sid = 0;

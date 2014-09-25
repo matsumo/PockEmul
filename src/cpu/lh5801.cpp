@@ -74,7 +74,6 @@ INLINE void Log_Oper(int set,int oper)
 CLH5801::CLH5801(CPObject *parent)	: CCPU(parent)
 {
     pDEBUG = new Cdebug_lh5801(parent);
-    fn_status="LH5801.sta";
     fn_log = "lh5801.log";
 
     Is_Timer_Reached=false;

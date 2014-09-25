@@ -148,8 +148,6 @@ public:
     UINT32	get_PC(void);
     void    OpExec(BYTE Op);
 
-    char *fn_status;					//status file name
-    bool usestatus;						//use status file(0:no,1:yes)
     bool *SlotName[4];					//slot filename
     bool	off;					//halt,off flag
     bool	end,save, e6, cpulog,logsw;	//etc.flag
@@ -172,8 +170,6 @@ private:
     bool	Xin,Xout;
     qint64	start2khz;
     qint64	start4khz;
-    //FILE *fp_log;			// file pointer to log file
-	FILE *fp_status;		//pointer to status file
 
     BYTE	pre_1,pre_2;		/* pre byte mode */
     SCREG	reg;				/* register structure */

@@ -11902,7 +11902,6 @@ Cupd7907::Cupd7907(CPObject *parent):CCPU(parent)
 {
 
     pDEBUG = new Cdebug_upd7810(parent);
-    fn_status="upd7907.sta";
     fn_log="upd7907.log";
 
 

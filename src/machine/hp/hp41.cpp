@@ -154,7 +154,7 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_hp41(this);
-    pCPU		= new Chpnut(this);    hp41cpu = (Chpnut*)pCPU;
+    pCPU		= new Chp41cpu(this);    hp41cpu = (Chp41cpu*)pCPU;
     pKEYB		= new Ckeyb(this,"hp41.map");
 
     fPrinter=fCardReader=fTimer=fWand=fHPIL=fInfrared=-1;
@@ -406,6 +406,19 @@ UINT8 Chp41::in(UINT8 address)
 
 UINT8 Chp41::out(UINT8 address, UINT8 value)
 {
+    switch (address)
+    {
+    case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+        // HP-IL
+        exec_perph_hpil();
+        break;
+    case 9:    // printer
+        exec_perph_printer();
+        break;
+    default:
+//        error_message(30);
+        break;
+    }
     return 0;
 }
 

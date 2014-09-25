@@ -1131,7 +1131,6 @@ CZ80::CZ80(CPObject *parent)	: CCPU(parent)
 {				//[constructor]
 
     pDEBUG = new Cdebug_z80(parent);
-    fn_status="Z80.sta";
     fn_log="z80.log";
 
     Is_Timer_Reached=false;

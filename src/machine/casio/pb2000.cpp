@@ -162,9 +162,11 @@ bool Cpb2000::init(void)				// initialize
 #ifndef QT_NO_DEBUG
     pCPU->logsw = true;
 #endif
+
+    initExtension();
     Cpb1000::init();
     pCONNECTOR->setSnap(QPoint(668,77));
-    initExtension();
+
     pdi = 0xfb;
     return true;
 }

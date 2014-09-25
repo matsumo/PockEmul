@@ -339,7 +339,6 @@ void Clcdc_fp200::disp_symb(void)
 
 bool Clcdc_fp200::init()
 {
-    Clcdc::init();
 
     QFile file;
     file.setFileName(":/fp200/chr.bin");
@@ -349,6 +348,8 @@ bool Clcdc_fp200::init()
 
     displaySL[0] = 0;//-16;
     displaySL[1] = 0;//-16;
+
+    Clcdc::init();
 
     return true;
 }

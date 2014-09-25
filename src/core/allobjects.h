@@ -82,6 +82,7 @@
 
 #include "hp/hp41.h"
 #include "hp/hp82143A.h"
+#include "hp/hp15c.h"
 
 #include "postit.h"
 

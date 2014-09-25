@@ -769,6 +769,7 @@ bool CpcXXXX::LoadSession_File(QXmlStreamReader *xmlIn) {
             }
 
             if (pCPU) pCPU->Load_Internal(xmlIn);
+
             AddLog(LOG_MASTER,"Loadmemory:"+xmlIn->name().toString());
             if (xmlIn->readNextStartElement() && xmlIn->name() == "memory" ) {
                 AddLog(LOG_MASTER,"Load Memory");
@@ -1030,6 +1031,7 @@ bool CpcXXXX::Initial_Session_Load()
 
 	if (file.open(QIODevice::ReadOnly))
 	{
+
         QXmlStreamReader xmlIn;
         xmlIn.setDevice(&file);
         if (LoadSession_File(&xmlIn) && pLCDC)

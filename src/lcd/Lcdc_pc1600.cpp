@@ -63,7 +63,6 @@ void Clcdc_pc1600::disp_symb(void)
 }
 INLINE int Clcdc_pc1600::symbSL(int x)
 {
-    Cpc1600 *p = (Cpc1600 *)pPC;
     int l=(x+((Cpc1600 *)pPC)->pHD61102_2->info.displaySL/8);
     l = (l>=8) ? l-8 : l;
     return l*0x40+63;

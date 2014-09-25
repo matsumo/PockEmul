@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hp15c/hp15c.png</file>
+        <file>hp15c/hp15c.bin</file>
+        <file>hp15c/hp15c.obj</file>
+        <file>hp15c/a.png</file>
+        <file>hp15c/b.png</file>
+        <file>hp15c/c.png</file>
+        <file>hp15c/d.png</file>
+        <file>hp15c/e.png</file>
+        <file>hp15c/f.png</file>
+        <file>hp15c/g.png</file>
+        <file>hp15c/h.png</file>
+        <file>hp15c/i.png</file>
+        <file>hp15c/hp15clcd.png</file>
+        <file>hp15c/minus.png</file>
+        <file>hp15c/ann_user.png</file>
+        <file>hp15c/ann_f.png</file>
+        <file>hp15c/ann_prgm.png</file>
+        <file>hp15c/ann_c.png</file>
+        <file>hp15c/ann_dmy.png</file>
+        <file>hp15c/ann_rad.png</file>
+        <file>hp15c/ann_ggrad.png</file>
+        <file>hp15c/ann_begin.png</file>
+        <file>hp15c/ann_g.png</file>
+    </qresource>
+</RCC>

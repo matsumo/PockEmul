@@ -1,3 +1,6 @@
+#ifndef LCD_SYMB
+#define LCD_SYMB
+
 #include <QtCore>
 
 static const char
@@ -446,3 +449,4 @@ static const char
 ;
 
 
+#endif

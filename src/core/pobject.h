@@ -234,7 +234,6 @@ public slots:
 
     void maximizeWidth();
     void maximizeHeight();
-    void tapAndHold(QMouseEvent *);
     void contextMenuEvent ( QContextMenuEvent * event );
 	void slotExit();
 	void KeyList();

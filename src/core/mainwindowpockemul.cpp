@@ -261,6 +261,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Post-it"]=POSTIT;
     objtable["TI-57"]=TI57;
     objtable["HP-41"]=HP41;
+    objtable["HP-15C"]=HP15;
     objtable["HP82143A"]=HP82143A;
     objtable["CE-1560"]= CE1560;
 
@@ -383,6 +384,7 @@ CPObject *pPC=0;
 
         case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
         case HP41 : pPC = new Chp41;      pPC->setName("HP-41"); break;
+        case HP15 : pPC = new Chp15c;      pPC->setName("HP-15C"); break;
         case HP82143A : pPC = new Chp82143A;      pPC->setName("HP82143A"); break;
 
         case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;

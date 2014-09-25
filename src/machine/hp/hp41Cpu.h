@@ -90,13 +90,13 @@ typedef struct {
 /****************************/
 // The HP-41 class
 /****************************/
-class Chpnut:public CCPU{
+class Chp41cpu:public CCPU{
 
 //  friend class CMcodeDlg;
 //  friend class CBreakPointsDlg;
 public:
-  Chpnut(CPObject *parent);
-  ~Chpnut();
+  Chp41cpu(CPObject *parent);
+  ~Chp41cpu();
 
   Chp41* hp41;
 
@@ -108,9 +108,9 @@ public:
   virtual void	Load_Internal(QXmlStreamReader *);
   virtual void	save_internal(QXmlStreamWriter *);
 
-  virtual	bool	Get_Xin(void){}
+  virtual	bool	Get_Xin(void){ return true;}
   virtual	void	Set_Xin(bool){}
-  virtual	bool	Get_Xout(void){}
+  virtual	bool	Get_Xout(void){ return true;}
   virtual	void	Set_Xout(bool){}
 
   virtual	UINT32	get_PC(void);					//get Program Counter

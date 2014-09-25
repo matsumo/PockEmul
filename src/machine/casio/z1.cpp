@@ -130,8 +130,8 @@ bool Cz1::init(void)				// initialize
     pCPU->logsw = true;
 
 #endif
-    CpcXXXX::init();
     initExtension();
+    CpcXXXX::init();
 
 //    for(int i = 0; i < 0x10000; i++) mem[i] = i & 0xff;
 
