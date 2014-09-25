@@ -4,7 +4,7 @@
    <example brand="SHARP" idpocket="PC-1211" filename="./" name="Sharp pc-1211 SIMULATOR!!!  in progress..." image=":/pc1211/pc-1211.png"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="TI-57" filename="./" name="Texas Instruments TI-57" image=":/ti57/ti57.png"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP-41" filename="./" name="Work in Progress HP-41" image=":/hp41/hp41.png"/>
-   <!--example brand="HEWLETT-PACKARD" idpocket="HP-15C" filename="./" name="HP-15C" image=":/hp15c/hp15c.png"/-->
+   <example brand="HEWLETT-PACKARD" idpocket="HP-15C" filename="./" name="HP-15C" image=":/hp15c/hp15c.png"/>
     <example brand="SHARP" idpocket="PC-1245" filename="./" name="Sharp pc-1245" image=":/pc1245/pc1245.png"/>
     <example brand="SEIKO" idpocket="MC-2200" filename="./" name="Seiko MC-2200" image=":/pc1245/mc2200.png"/>
      <example brand="SHARP" idpocket="PC-1250" filename="./" name="Sharp pc-1250" image=":/pc1250/pc1250.png"/>
