@@ -1081,7 +1081,8 @@ OTHER_FILES += \
     resources/keymap/cc40.map \
     resources/keymap/ti74.map \
     resources/keymap/ti95.map \
-    resources/keymap/fx8000g.map
+    resources/keymap/fx8000g.map \
+    resources/keymap/hp15c.map
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

@@ -222,7 +222,7 @@ bool Chp15c::run()
     pLCDC->updated = true;
 
     if (pKEYB->LastKey!=0) {
-       nutcpu->nut_press_key (nutcpu->reg, 15);
+       nutcpu->nut_press_key (nutcpu->reg, getKey());
     }
     else {
         nutcpu->nut_release_key(nutcpu->reg);
@@ -500,48 +500,50 @@ UINT8 Chp15c::getKey()
 
     if ( (currentView==FRONTview) && (pKEYB->LastKey))
     {
-        if (KEY(K_OF))			code = 0x18;
-        if (KEY(K_F1))			code = 0x18;
-        if (KEY(K_F2))			code = 0xC6;
-        if (KEY(K_F3))			code = 0xC5;
-        if (KEY(K_F4))			code = 0xC4;
 
-        if (KEY('A'))			code = 0x10;
-        if (KEY('B'))			code = 0x30;
-        if (KEY('C'))			code = 0x70;
-        if (KEY('D'))			code = 0x80;
-        if (KEY('E'))			code = 0xC0;
-        if (KEY('F'))			code = 0x11;
-        if (KEY('G'))			code = 0x31;
-        if (KEY('H'))			code = 0x71;
-        if (KEY('I'))			code = 0x81;
-        if (KEY('J'))			code = 0xC1;
-        if (KEY(K_SHT))			code = 0x12;
-        if (KEY('K'))			code = 0x32;
-        if (KEY('L'))			code = 0x72;
-        if (KEY('M'))			code = 0x82;
-        if (KEY(K_SST))			code = 0xC2;
-        if (KEY('N'))			code = 0x13;
-        if (KEY('O'))			code = 0x73;
-        if (KEY('P'))			code = 0x83;
-        if (KEY(K_LA))			code = 0xC3;
-        if (KEY('Q'))			code = 0x14;
-        if (KEY('R'))			code = 0x34;
-        if (KEY('S'))			code = 0x74;
-        if (KEY('T'))			code = 0x84;
-        if (KEY('U'))			code = 0x15;
-        if (KEY('V'))			code = 0x35;
-        if (KEY('W'))			code = 0x75;
-        if (KEY('X'))			code = 0x85;
-        if (KEY('Y'))			code = 0x16;
-        if (KEY('Z'))			code = 0x36;
-        if (KEY('='))			code = 0x76;
-        if (KEY('?'))			code = 0x86;
+        if (KEY('A'))			code = 0x13;    // A
+        if (KEY('B'))			code = 0x33;    // B
+        if (KEY('C'))			code = 0x73;    // C
+        if (KEY('D'))			code = 0xC3;    // D
+        if (KEY('E'))			code = 0x83;    // E
+        if (KEY(K_SIGN))		code = 0x82;    // CHS
+        if (KEY('7'))			code = 0xC2;    // 7
+        if (KEY('8'))			code = 0x72;    // 8
+        if (KEY('9'))			code = 0x32;    // 9
+        if (KEY('/'))			code = 0x12;    // /
 
-        if (KEY(':'))			code = 0x17;
-        if (KEY(' '))			code = 0x37;
-        if (KEY('.'))			code = 0x77;
-        if (KEY(K_RS))			code = 0x87;
+        if (KEY(K_SST))			code = 0x10;    // SST
+        if (KEY(K_GTO))			code = 0x30;    // GTO
+        if (KEY(K_SIN))			code = 0x70;    // SIN
+        if (KEY(K_COS))			code = 0xC0;    // COS
+        if (KEY(K_TAN))			code = 0x80;    // TAN
+        if (KEY(K_EE))			code = 0x87;    // EEX
+        if (KEY('4'))			code = 0xC7;    // 4
+        if (KEY('5'))			code = 0x77;    // 5
+        if (KEY('6'))			code = 0x37;    // 6
+        if (KEY('*'))			code = 0x17;    // *
+
+        if (KEY(K_RS))			code = 0x11;    // R/S
+//        if (KEY(K_GSB))			code = 0x31;    // GSB
+//        if (KEY(K_RDA))			code = 0x71;    // R Down
+//        if (KEY(K_XY))			code = 0xC1;    // XY
+        if (KEY(K_LA))			code = 0x81;    // left arrow
+        if (KEY(K_RET))			code = 0x84;    // ENTER
+        if (KEY('1'))			code = 0xC4;    // 1
+        if (KEY('2'))			code = 0x74;    // 2
+        if (KEY('3'))			code = 0x34;    // 3
+        if (KEY('-'))			code = 0x14;    // -
+
+        if (KEY(K_SST))			code = 0x18;    // ON
+        if (KEY('F'))			code = 0x38;    // f
+        if (KEY('G'))			code = 0x78;    // g
+        if (KEY(K_STO))			code = 0xC8;    // STO
+        if (KEY(K_RCL))			code = 0x88;    // RCL
+        if (KEY(K_RET))			code = 0x85;    // ENTER
+        if (KEY('0'))			code = 0xC5;    // 0
+        if (KEY('.'))			code = 0x75;    // .
+        if (KEY(K_SUM))			code = 0x35;    // sigma
+        if (KEY('+'))			code = 0x15;    // +
 
     }
 

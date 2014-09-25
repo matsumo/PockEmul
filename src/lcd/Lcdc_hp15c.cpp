@@ -189,6 +189,11 @@ void Clcdc_hp15c::disp(void)
     if (!ready) return;
     if (!updated) return;
 //    qWarning()<<"disp";
+
+
+    voyager_display_update(nutcpu->reg,info);
+
+
     updated = false;
     Refresh= true;
     delete pPC->LcdImage;
@@ -246,7 +251,7 @@ void Clcdc_hp15c::disp(void)
 void Clcdc_hp15c::voyager_op_display_off (nut_reg_t *nut_reg, int opcode)
 {
     Q_UNUSED(opcode)
-
+qWarning()<<"display off";
     voyager_display_reg_t *display = ((Clcdc_hp15c*)nut_reg->pPC->pLCDC)->info;
 
     display->enable = 0;

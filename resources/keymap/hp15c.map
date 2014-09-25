@@ -1,0 +1,30 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>hp15c</model>
+<Keyboard>
+    <KEY description="-" height="25" left="405" masterscancode="0x00" modifier="" scancode="0x2d" top="190" width="28"/>
+    <KEY description="*" height="25" left="404" masterscancode="0x00" modifier="" scancode="0x2a" top="150" width="28"/>
+    <KEY description="/" height="25" left="403" masterscancode="0x00" modifier="" scancode="0x2f" top="103" width="28"/>
+    <KEY description="+" height="25" left="406" masterscancode="0x00" modifier="" scancode="0x2b" top="239" width="28"/>
+    <KEY description="On/Off" height="25" left="34" masterscancode="0x00" modifier="" scancode="0xb2" top="236" width="32"/>
+    <KEY description="A" height="25" left="34" masterscancode="0x00" modifier="" scancode="0x41" top="101" width="28"/>
+    <KEY description="B" height="25" left="75" masterscancode="0x00" modifier="" scancode="0x42" top="101" width="28"/>
+    <KEY description="C" height="25" left="118" masterscancode="0x00" modifier="" scancode="0x43" top="100" width="28"/>
+    <KEY description="D" height="25" left="160" masterscancode="0x00" modifier="" scancode="0x44" top="102" width="28"/>
+    <KEY description="E" height="25" left="200" masterscancode="0x00" modifier="" scancode="0x45" top="101" width="28"/>
+    <KEY description="F" height="25" left="77" masterscancode="0x00" modifier="" scancode="0x46" top="237" width="28"/>
+    <KEY description="G" height="25" left="116" masterscancode="0x00" modifier="" scancode="0x47" top="238" width="28"/>
+    <KEY description="0" height="25" left="280" masterscancode="0x00" modifier="" scancode="0x46" top="235" width="28"/>
+    <KEY description="1" height="25" left="281" masterscancode="0x00" modifier="" scancode="0x47" top="191" width="28"/>
+    <KEY description="2" height="25" left="320" masterscancode="0x00" modifier="" scancode="0x48" top="189" width="28"/>
+    <KEY description="3" height="25" left="362" masterscancode="0x00" modifier="" scancode="0x49" top="192" width="28"/>
+    <KEY description="4" height="25" left="284" masterscancode="0x00" modifier="" scancode="0x4a" top="145" width="28"/>
+    <KEY description="5" height="25" left="322" masterscancode="0x00" modifier="" scancode="0x11" top="146" width="28"/>
+    <KEY description="6" height="25" left="364" masterscancode="0x00" modifier="" scancode="0x4b" top="149" width="28"/>
+    <KEY description="7" height="25" left="281" masterscancode="0x00" modifier="" scancode="0x4c" top="102" width="28"/>
+    <KEY description="8" height="25" left="321" masterscancode="0x00" modifier="" scancode="0x4d" top="102" width="28"/>
+    <KEY description="9" height="25" left="364" masterscancode="0x00" modifier="" scancode="0x236" top="101" width="28"/>
+    <KEY description="ENTER" height="68" left="237" masterscancode="0x00" modifier="" scancode="0x0d" top="193" width="28"/>
+    <KEY description="." height="25" left="320" masterscancode="0x00" modifier="" scancode="0x2e" top="235" width="28"/>
+    <KEY description="R/S" height="25" left="35" masterscancode="0x00" modifier="" scancode="0x233" top="191" width="28"/>
+</Keyboard>
+</KEYBMAP>

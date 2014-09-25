@@ -1179,6 +1179,7 @@ bool CHPNUT::nut_execute_cycle (cpu_t *nut_reg)
 
     opcode = nut_get_ucode (nut_reg, prev_pc);
 
+    qWarning()<<QString("EXEC [%1] = %2").arg(prev_pc,4,16,QChar('0')).arg(opcode,3,16,QChar('0'));
     nut_reg->prev_carry = nut_reg->carry;
     nut_reg->carry = 0;
 
