@@ -11,7 +11,8 @@
 #include "Debug.h"
 #include "pcxxxx.h"
 
-
+#undef IN
+#undef OUT
 
 enum
 {
@@ -55,7 +56,7 @@ enum
     DGT,
     DI,
     DIV,
-    DLT,
+    _DLT,
     DMOV,
     DNE,
     DOFF,
@@ -235,7 +236,7 @@ static const char *const token[] =
     "DGT",
     "DI",
     "DIV",
-    "DLT",
+    "_DLT",
     "DMOV",
     "DNE",
     "DOFF",
@@ -3332,9 +3333,9 @@ static const struct Cdebug_upd7810::dasm_s  dasm74[256] =
     {illegal,0	 }, /* ba: 0111 0100 1011 1010                      */
     {illegal,0	 }, /* bb: 0111 0100 1011 1011                      */
     {illegal,0	 }, /* bc: 0111 0100 1011 1100                      */
-    {DLT,"EA,BC"    }, /* bd: 0111 0100 1011 1101                      */
-    {DLT,"EA,DE"    }, /* be: 0111 0100 1011 1110                      */
-    {DLT,"EA,HL"    }, /* bf: 0111 0100 1011 1111                      */
+    {_DLT,"EA,BC"    }, /* bd: 0111 0100 1011 1101                      */
+    {_DLT,"EA,DE"    }, /* be: 0111 0100 1011 1110                      */
+    {_DLT,"EA,HL"    }, /* bf: 0111 0100 1011 1111                      */
 
     {ADDW,"%a"      }, /* c0: 0111 0100 1100 0000 oooo oooo            */
     {illegal,0	 }, /* c1: 0111 0100 1100 0001                      */

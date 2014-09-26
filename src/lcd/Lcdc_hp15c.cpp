@@ -199,11 +199,13 @@ void Clcdc_hp15c::disp(void)
     for (int digit=0 ; digit < 11; digit++) {
         if (info->display_segments[digit] != display_segments_backup[digit]) {
             changed = true;
-            display_segments_backup[digit] ==  info->display_segments[digit];
+            display_segments_backup[digit] =  info->display_segments[digit];
         }
     }
 
-    if (!changed) return;
+    if (!changed) {
+        return;
+    }
 
     updated = false;
     Refresh= true;

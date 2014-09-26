@@ -7,11 +7,12 @@
   7810
   7811 (4kbyte),7812(8),7814(16) have internal rom at 0x0000
 */
+#undef IN
+#undef OUT
 
 #include "cpu.h"
 
-#undef IN
-#undef OUT
+
 
 
 
