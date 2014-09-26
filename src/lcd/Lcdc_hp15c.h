@@ -106,6 +106,7 @@ public:
     CHPNUT *nutcpu;
 
     voyager_display_reg_t *info;
+    segment_bitmap_t display_segments_backup [MAX_DIGIT_POSITION];
 
     static void voyager_op_display_off(nut_reg_t *nut_reg, int opcode);
     static void voyager_op_display_toggle(nut_reg_t *nut_reg, int opcode);

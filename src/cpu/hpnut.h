@@ -145,7 +145,7 @@ typedef struct nut_reg_t
 
     void (* op_fcn [1024])(struct nut_reg_t *nut_reg, int opcode);
 
-    rom_word_t *rom;
+//    rom_word_t *rom;
 
     // RAM:
     quint16 ram_addr;  // selected RAM address
@@ -171,7 +171,7 @@ class CHPNUT : public CCPU
 {
 public:
 
-    CHPNUT(CPObject *parent, int ram_size, QString romFn);
+    CHPNUT(CPObject *parent, int ram_size);
     virtual ~CHPNUT();
 
     virtual	bool	init(void);						//initialize
@@ -193,7 +193,6 @@ public:
 
     cpu_t * reg;
     cpu_t * nut_new_processor (int ram_size);
-    bool nut_read_object_file (cpu_t *nut_reg, QString fn);
     void nut_press_key (cpu_t *nut_reg, int keycode);
     void nut_release_key (cpu_t *nut_reg);
     bool nut_execute_instruction (cpu_t *nut_reg);
@@ -284,8 +283,6 @@ private:
     static void reg_test_nonequal(const digit_t *src1, const digit_t *src2, int first, int last, bool *carry);
     static void reg_shift_right(digit_t *reg, int first, int last);
     static void reg_shift_left(digit_t *reg, int first, int last);
-    static quint64 bcd_reg_to_binary(digit_t *reg, int digits);
-    static void binary_to_bcd_reg(quint64 val, digit_t *reg, int digits);
     static void nut_kbd_scanner_cycle(cpu_t *nut_reg);
     static void nut_kbd_scanner_sleep(cpu_t *nut_reg);
     static void op_powoff(cpu_t *nut_reg, int opcode);
@@ -295,11 +292,7 @@ private:
     static void nut_new_ram_addr_space(cpu_t *nut_reg, int max_ram);
     static void nut_new_rom_addr_space(cpu_t *nut_reg, int rom_size);
     static void nut_new_ram(cpu_t *nut_reg, int base_addr, int count);
-    static bool nut_parse_object_line(QByteArray buf, int *addr, rom_word_t *opcode);
-    static bool parse_hex(char *hex, int digits, int *val);
     static void *alloc(size_t size);
-    static void trim_trailing_whitespace(char *s);
-    static size_t fread_bytes(FILE *stream, void *ptr, size_t byte_count, bool *eof, bool *error);
 
     static rom_word_t nut_get_ucode(cpu_t *nut_reg, rom_addr_t addr);
 };

@@ -215,4 +215,10 @@
          <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=89"/>
          <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/fx8000g/FX-8000G_user_guide_FR.pdf"/>
       </model>
+      <model value="hp15c">
+      <url desc="Silicium (fr)" link="http://www.silicium.org/site/index.php/24-catalogue/ordinateurs-de-poche/76-hewlett-packard-hp-11c-hp-15c"/>
+          <url desc="HP Museum" link="http://www.hpmuseum.org/hp15.htm"/>
+          <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp15c/hp15c.pdf"/>
+          <document desc="Advanced Functions Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp15c/hp15cAdvanced.pdf"/>
+      </model>
 </weblinks>

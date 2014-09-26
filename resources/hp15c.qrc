@@ -23,5 +23,8 @@
         <file>hp15c/ann_ggrad.png</file>
         <file>hp15c/ann_begin.png</file>
         <file>hp15c/ann_g.png</file>
+        <file>hp15c/hp15cright.png</file>
+        <file>hp15c/hp15cback.png</file>
+        <file>hp15c/hp15cleft.png</file>
     </qresource>
 </RCC>

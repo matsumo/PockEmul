@@ -82,40 +82,40 @@ voyager_segment_info_t voyager_display_map [11] [10] =
 void Clcdc_hp15c::voyager_display_update (nut_reg_t *nut_reg,voyager_display_reg_t *display)
 {
 
-  int digit;
-  int segment;
+    int digit;
+    int segment;
 
-  for (digit = 0; digit < VOYAGER_DISPLAY_DIGITS; digit++)
+    for (digit = 0; digit < VOYAGER_DISPLAY_DIGITS; digit++)
     {
-      display->display_segments [digit] = 0;
-      if (display->enable &&
-      ((! display->blink) || (display->blink_state)))
-    {
-      for (segment = 0; segment <= 9; segment++)
+        display->display_segments [digit] = 0;
+        if (display->enable &&
+                ((! display->blink) || (display->blink_state)))
         {
-          int vreg = voyager_display_map [digit][segment].reg;
-          int vdig = voyager_display_map [digit][segment].dig;
-          int vbit = voyager_display_map [digit][segment].bit;
-          if (vbit && (nut_reg->ram [9 + vreg][vdig] & vbit))
-        {
-          if (segment < 9)
-            display->display_segments [digit] |= (1 << segment);
-          else
-            display->display_segments [digit] |= SEGMENT_ANN;
+            for (segment = 0; segment <= 9; segment++)
+            {
+                int vreg = voyager_display_map [digit][segment].reg;
+                int vdig = voyager_display_map [digit][segment].dig;
+                int vbit = voyager_display_map [digit][segment].bit;
+                if (vbit && (nut_reg->ram [9 + vreg][vdig] & vbit))
+                {
+                    if (segment < 9)
+                        display->display_segments [digit] |= (1 << segment);
+                    else
+                        display->display_segments [digit] |= SEGMENT_ANN;
+                }
+            }
         }
-        }
-    }
     }
 
   if (display->blink)
-    {
+  {
       display->blink_count--;
       if (! display->blink_count)
-    {
-      display->blink_state ^= 1;
-      display->blink_count = VOYAGER_DISPLAY_BLINK_DIVISOR;
-    }
-    }
+      {
+          display->blink_state ^= 1;
+          display->blink_count = VOYAGER_DISPLAY_BLINK_DIVISOR;
+      }
+  }
 }
 
 void Clcdc_hp15c::disp_symb(void)
@@ -154,6 +154,8 @@ bool Clcdc_hp15c::init()
     nutcpu = (CHPNUT*)(pPC->pCPU);
     info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
     voyager_display_init_ops(nutcpu->reg,info);
+    voyager_display_reset(info);
+
 
     // 157x182
     seg[0] = pPC->CreateImage(QSize(),P_RES(":/hp15c/a.png"));
@@ -189,10 +191,19 @@ void Clcdc_hp15c::disp(void)
     if (!ready) return;
     if (!updated) return;
 //    qWarning()<<"disp";
-
+    if (!info->enable) return;
 
     voyager_display_update(nutcpu->reg,info);
 
+    bool changed = false;
+    for (int digit=0 ; digit < 11; digit++) {
+        if (info->display_segments[digit] != display_segments_backup[digit]) {
+            changed = true;
+            display_segments_backup[digit] ==  info->display_segments[digit];
+        }
+    }
+
+    if (!changed) return;
 
     updated = false;
     Refresh= true;

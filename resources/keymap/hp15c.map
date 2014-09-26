@@ -13,7 +13,7 @@
     <KEY description="E" height="25" left="200" masterscancode="0x00" modifier="" scancode="0x45" top="101" width="28"/>
     <KEY description="F" height="25" left="77" masterscancode="0x00" modifier="" scancode="0x46" top="237" width="28"/>
     <KEY description="G" height="25" left="116" masterscancode="0x00" modifier="" scancode="0x47" top="238" width="28"/>
-    <KEY description="0" height="25" left="280" masterscancode="0x00" modifier="" scancode="0x46" top="235" width="28"/>
+    <KEY description="0" height="25" left="280" masterscancode="0x00" modifier="" scancode="0x30" top="235" width="28"/>
     <KEY description="1" height="25" left="281" masterscancode="0x00" modifier="" scancode="0x31" top="191" width="28"/>
     <KEY description="2" height="25" left="320" masterscancode="0x00" modifier="" scancode="0x32" top="189" width="28"/>
     <KEY description="3" height="25" left="362" masterscancode="0x00" modifier="" scancode="0x33" top="192" width="28"/>
@@ -29,5 +29,16 @@
     <KEY description="Tan" height="25" left="201" masterscancode="0x00" modifier="" scancode="0xf1" top="149" width="28"/>
     <KEY description="Cos" height="25" left="158" masterscancode="0x00" modifier="" scancode="0xf2" top="148" width="28"/>
     <KEY description="Sin" height="25" left="118" masterscancode="0x00" modifier="" scancode="0xf3" top="150" width="28"/>
+    <KEY description="R Down Arrow" height="25" left="119" masterscancode="0x00" modifier="" scancode="0x04" top="191" width="28"/>
+    <KEY description="Left Arrow" height="25" left="199" masterscancode="0x00" modifier="" scancode="0x06" top="192" width="28"/>
+    <KEY description="GSB" height="25" left="80" masterscancode="0x00" modifier="" scancode="0x23f" top="189" width="28"/>
+    <KEY description="X - Y" height="25" left="158" masterscancode="0x00" modifier="" scancode="0x241" top="191" width="28"/>
+    <KEY description="STO" height="25" left="159" masterscancode="0x00" modifier="" scancode="0xdd" top="236" width="28"/>
+    <KEY description="RCL" height="25" left="198" masterscancode="0x00" modifier="" scancode="0xde" top="234" width="28"/>
+    <KEY description="SST" height="25" left="37" masterscancode="0x00" modifier="" scancode="0x236" top="147" width="28"/>
+    <KEY description="GTO" height="25" left="78" masterscancode="0x00" modifier="" scancode="0x230" top="147" width="28"/>
+    <KEY description="CHS" height="25" left="240" masterscancode="0x00" modifier="" scancode="0xe0" top="105" width="28"/>
+    <KEY description="EEX" height="25" left="239" masterscancode="0x00" modifier="" scancode="0x23b" top="147" width="28"/>
+    <KEY description="Sigma+" height="25" left="366" masterscancode="0x00" modifier="" scancode="0x239" top="236" width="28"/>
 </Keyboard>
 </KEYBMAP>

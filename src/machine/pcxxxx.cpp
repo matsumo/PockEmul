@@ -723,6 +723,7 @@ bool CpcXXXX::SaveSession_File(QXmlStreamWriter *xmlOut) {
     xmlOut->writeStartElement("session");
         xmlOut->writeAttribute("version", "2.0");
         xmlOut->writeAttribute("model", SessionHeader );
+        xmlOut->writeAttribute("power",Power?"true":"false");
         SaveConfig(xmlOut);
         SaveExt(xmlOut);
         if (pCPU) pCPU->save_internal(xmlOut);
@@ -758,6 +759,7 @@ bool CpcXXXX::LoadSession_File(QXmlStreamReader *xmlIn) {
     if ((xmlIn->name()=="session") || (xmlIn->readNextStartElement())) {
         if ( (xmlIn->name() == "session") &&
              (xmlIn->attributes().value("model") == SessionHeader) ) {
+            Power = (xmlIn->attributes().value("power")=="true") ?true:false;
             QString version = xmlIn->attributes().value("version").toString();
             if (!LoadConfig(xmlIn)) {
                 emit msgError("ERROR Loading Session Config:"+SessionHeader);
@@ -782,6 +784,7 @@ bool CpcXXXX::LoadSession_File(QXmlStreamReader *xmlIn) {
                 }
             }
         }
+        if (Power) TurnON();
     }
 
     updateMenuFromExtension();

@@ -69,10 +69,9 @@ int itmap [WSIZE] =
 
 
 
-CHPNUT::CHPNUT(CPObject *parent,int ram_size,QString romFn):CCPU(parent)
+CHPNUT::CHPNUT(CPObject *parent,int ram_size):CCPU(parent)
 {
     reg = nut_new_processor(ram_size);
-    nut_read_object_file (reg, romFn);
 
     pDEBUG = new Cdebug_hpnut(pPC);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
@@ -106,14 +105,38 @@ void CHPNUT::Reset(void) {
     nut_reset(reg);
 }
 
-void CHPNUT::Load_Internal(QXmlStreamReader *)
+void CHPNUT::Load_Internal(QXmlStreamReader *xmlIn)
 {
+    if (xmlIn->readNextStartElement()) {
+        if ( (xmlIn->name()=="cpu") &&
+             (xmlIn->attributes().value("model").toString() == "hpnut")) {
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) reg,ba_reg.data(),sizeof(cpu_t));
+            QByteArray ba_ram = QByteArray::fromBase64(xmlIn->attributes().value("ram").toString().toLatin1());
+            memcpy((char *) reg->ram,ba_ram.data(),reg->max_ram * sizeof(reg_t));
+            QByteArray ba_ram_exists = QByteArray::fromBase64(xmlIn->attributes().value("ram_exists").toString().toLatin1());
+            memcpy((char *) reg->ram_exists,ba_ram_exists.data(),reg->max_ram * sizeof(bool));
 
+            reg->pPC = pPC;
+            nut_init_ops(reg);
+
+        }
+        xmlIn->skipCurrentElement();
+    }
 }
 
-void CHPNUT::save_internal(QXmlStreamWriter *)
+void CHPNUT::save_internal(QXmlStreamWriter *xmlOut)
 {
 
+    xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","hpnut");
+        QByteArray ba_reg((char*)reg,sizeof(cpu_t));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+        QByteArray ba_ram((char*)reg->ram,reg->max_ram * sizeof(reg_t));
+        xmlOut->writeAttribute("ram",ba_ram.toBase64());
+        QByteArray ba_ram_exists((char*)reg->ram_exists,reg->max_ram * sizeof(bool));
+        xmlOut->writeAttribute("ram_exists",ba_ram_exists.toBase64());
+    xmlOut->writeEndElement();
 }
 
 UINT32 CHPNUT::get_PC()
@@ -128,12 +151,9 @@ void CHPNUT::Regs_Info(UINT8 Type)
 
 rom_word_t CHPNUT::nut_get_ucode (cpu_t *nut_reg, rom_addr_t addr)
 {
-    //if (addr < sizeof rom_data/sizeof(rom_data[0]))
-        return nut_reg->rom[addr];
-    //else {
-   //     printf("adres out of ROM\n");
-    //	return 0;  // non-existent memory
-    //}
+//        return nut_reg->rom[addr];
+        return nut_reg->pPC->Get_16r(addr<<1);
+
 }
 
 inline quint8 CHPNUT::arithmetic_base (cpu_t *nut_reg)
@@ -1325,7 +1345,7 @@ void CHPNUT::nut_new_ram_addr_space (cpu_t *nut_reg, int max_ram)
 
 void CHPNUT::nut_new_rom_addr_space (cpu_t *nut_reg, int rom_size)
 {
-    nut_reg->rom          = (rom_word_t *)			alloc (rom_size * sizeof (rom_word_t));
+//    nut_reg->rom          = (rom_word_t *)			alloc (rom_size * sizeof (rom_word_t));
 }
 
 void CHPNUT::nut_new_ram (cpu_t *nut_reg, int base_addr, int count)
@@ -1388,86 +1408,6 @@ cpu_t * CHPNUT::nut_new_processor (int ram_size)
     return nut_reg;
 }
 
-
-
-bool CHPNUT::parse_hex (char *hex, int digits, int *val)
-{
-    *val = 0;
-
-    while (digits--)
-    {
-        char c = *(hex++);
-        (*val) <<= 4;
-        if ((c >= '0') && (c <= '9'))
-            (*val) += (c - '0');
-        else if ((c >= 'A') && (c <= 'F'))
-            (*val) += (10 + (c - 'A'));
-        else if ((c >= 'a') && (c <= 'f'))
-            (*val) += (10 + (c - 'a'));
-        else
-            return (false);
-    }
-    return (true);
-}
-
-
-bool CHPNUT::nut_parse_object_line (QByteArray buf, int *addr,
-                            rom_word_t *opcode)
-{
-    int a;
-    int o;
-
-    if (buf [0] == '#')  /* comment? */
-        return (false);
-
-    if (buf.length() != 8)
-        return (false);
-
-    if (buf [4] != ':')
-    {
-        fprintf (stderr, "invalid object file format\n");
-        return (false);
-    }
-
-    if (! parse_hex (buf.data(), 4, & a))
-    {
-        fprintf (stderr, "invalid address %o\n", a);
-        return (false);
-    }
-
-    if (! parse_hex (buf.mid(5).data(), 3, & o))
-    {
-        fprintf (stderr, "invalid opcode %o\n", o);
-        return (false);
-    }
-
-    *addr = a;
-    *opcode = o;
-    return (true);
-}
-
-bool CHPNUT::nut_read_object_file (cpu_t *nut_reg, QString fn)
-{
-    QFile file(fn);
-    if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-        return false;
-
-    int addr;
-    rom_word_t opcode;
-    while (!file.atEnd()) {
-        QByteArray line = file.readLine().trimmed();
-        if (nut_parse_object_line (line, & addr, & opcode)) {
-            nut_reg->rom [addr] = opcode;
-//            qWarning()<<QString("rom[%1]=%2").arg(addr,4,16,QChar('0')).arg(opcode,3,16,QChar('0'));
-        }
-    }
-
-
-#if 0
-    fprintf (stderr, "read %d words from '%s'\n", count, fn);
-#endif
-    return (true);
-}
 
 void CHPNUT::reg_zero (digit_t *dest, int first, int last)
 {
@@ -1610,81 +1550,6 @@ void CHPNUT::reg_shift_left (digit_t *reg, int first, int last)
 }
 
 
-// BCD to native host binary and vice versa
-quint64 CHPNUT::bcd_reg_to_binary (digit_t *reg, int digits)
-{
-    quint64 val = 0;
-
-    reg += digits;
-    while (digits--)
-    {
-        val *= 10;
-        val += *(--reg);
-    }
-
-    return val;
-}
-
-void CHPNUT::binary_to_bcd_reg (quint64 val, digit_t *reg, int digits)
-{
-    while (digits--)
-    {
-        *(reg++) = val % 10;
-        val /= 10;
-    }
-}
-
-void CHPNUT::trim_trailing_whitespace (char *s)
-{
-    int i;
-    char c;
-
-    i = (int)strlen (s);
-    while (--i >= 0)
-    {
-        c = s [i];
-        if ((c == '\n') || (c == '\r') || (c == ' ') || (c == '\t'))
-            s [i] = '\0';
-        else
-            break;
-    }
-}
-
-size_t CHPNUT::fread_bytes  (FILE *stream,
-                     void *ptr,
-                     size_t byte_count,
-                     bool *eof,
-                     bool *error)
-{
-    size_t total = 0;
-
-    *eof = false;
-    *error = false;
-
-    while (byte_count)
-    {
-        size_t count;
-
-        count = fread (ptr, 1, byte_count, stream);
-        ptr += count;
-        total += count;
-        byte_count -= count;
-        if (byte_count)
-        {
-            if (ferror (stream))
-            {
-                *error = true;
-                return total;
-            }
-            if (feof (stream))
-            {
-                *eof = true;
-                return total;
-            }
-        }
-    }
-    return total;
-}
 
 void *CHPNUT::alloc (size_t size)
 {
