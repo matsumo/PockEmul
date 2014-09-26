@@ -113,9 +113,9 @@ public:
     static void voyager_op_display_blink(nut_reg_t *nut_reg, int opcode);
     static void voyager_display_init_ops(nut_reg_t *nut_reg, voyager_display_reg_t *display);
     static void voyager_display_reset(voyager_display_reg_t *display);
-private:
     static void voyager_display_update(nut_reg_t *nut_reg,voyager_display_reg_t *display);
 
+private:
     QImage *seg[10],*minus,*ann_user,*ann_f,*ann_g,*ann_begin,*ann_ggrad,*ann_rad,*ann_dmy,*ann_c,*ann_prgm;
 
 

@@ -184,16 +184,14 @@ bool Clcdc_hp15c::init()
 
 void Clcdc_hp15c::disp(void)
 {
-    bool error = false;
 
     Refresh = false;
 
     if (!ready) return;
     if (!updated) return;
-//    qWarning()<<"disp";
     if (!info->enable) return;
 
-    voyager_display_update(nutcpu->reg,info);
+//    voyager_display_update(nutcpu->reg,info);
 
     bool changed = false;
     for (int digit=0 ; digit < 11; digit++) {
@@ -213,8 +211,7 @@ void Clcdc_hp15c::disp(void)
     pPC->LcdImage = pPC->CreateImage(QSize(160*11, 260),QString());
 
     QPainter painter(pPC->LcdImage);
-//painter.setCompositionMode(QPainter::CompositionMode_Source);
-#if 1
+
     int x = 0;
     int y = 0;
     if (info->display_segments[0] & (1<<6)) {
@@ -249,11 +246,6 @@ void Clcdc_hp15c::disp(void)
         }
     }
 
-
-#else
-    painter.drawImage(0,0,seg[0]->copy(1,1,157,182));
-
-#endif
 //    disp_symb();
 
 //    qWarning()<<"Display:"<<GetLCD()<<" : ";
@@ -266,7 +258,7 @@ void Clcdc_hp15c::disp(void)
 void Clcdc_hp15c::voyager_op_display_off (nut_reg_t *nut_reg, int opcode)
 {
     Q_UNUSED(opcode)
-qWarning()<<"display off";
+//qWarning()<<"display off";
     voyager_display_reg_t *display = ((Clcdc_hp15c*)nut_reg->pPC->pLCDC)->info;
 
     display->enable = 0;

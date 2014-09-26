@@ -120,9 +120,7 @@ bool Chp15c::init()
 
     CpcXXXX::init();
 
-//    pLCDC->updated = true;
-//    pLCDC->Refresh = true;
-//    pLCDC->disp();
+    ((Clcdc_hp15c*)pLCDC)->voyager_display_init_ops(nutcpu->reg,((Clcdc_hp15c*)pLCDC)->info);
 
     WatchPoint.remove(this);
 
@@ -152,6 +150,12 @@ void Chp15c::TurnOFF()
 
 bool Chp15c::run()
 {
+    static int lcd_count = 15;
+    lcd_count--;
+    if (lcd_count == 0) {
+        lcd_count=15;
+        ((Clcdc_hp15c*)pLCDC)->voyager_display_update(nutcpu->reg,((Clcdc_hp15c*)pLCDC)->info);
+    }
 
     pLCDC->updated = true;
 
