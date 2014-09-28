@@ -110,8 +110,12 @@ void CHPNUT::Load_Internal(QXmlStreamReader *xmlIn)
     if (xmlIn->readNextStartElement()) {
         if ( (xmlIn->name()=="cpu") &&
              (xmlIn->attributes().value("model").toString() == "hpnut")) {
+            reg_t* _ramPtr = reg->ram;
+            bool* _ramExistsPtr = reg->ram_exists;
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
             memcpy((char *) reg,ba_reg.data(),sizeof(cpu_t));
+            reg->ram = _ramPtr;
+            reg->ram_exists = _ramExistsPtr;
             QByteArray ba_ram = QByteArray::fromBase64(xmlIn->attributes().value("ram").toString().toLatin1());
             memcpy((char *) reg->ram,ba_ram.data(),/*reg->max_ram*/256 * sizeof(reg_t));
             QByteArray ba_ram_exists = QByteArray::fromBase64(xmlIn->attributes().value("ram_exists").toString().toLatin1());

@@ -221,4 +221,17 @@
           <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp15c/hp15c.pdf"/>
           <document desc="Advanced Functions Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp15c/hp15cAdvanced.pdf"/>
       </model>
+      <model value="hp11c">
+         <url desc="HP Museum" link="http://www.hpmuseum.org/hp11c.htm"/>
+         <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp11c/hp11c.pdf"/>
+      </model>
+      <model value="hp12c">
+        <url desc="Silicium (fr)" link="http://www.silicium.org/site/index.php/24-catalogue/ordinateurs-de-poche/67-hewlett-packard-hp-12c"/>
+          <url desc="HP Museum" link="http://www.hpmuseum.org/hp12c.htm"/>
+          <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp12c/hp12c.pdf"/>
+      </model>
+      <model value="hp16c">
+         <url desc="HP Museum" link="http://www.hpmuseum.org/hp16.htm"/>
+         <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp16c/hp16c.pdf"/>
+      </model>
 </weblinks>
