@@ -3,6 +3,7 @@
 
 
 #include "pcxxxx.h"
+#include "modelids.h"
 
 class CHPNUT;
 class CConnector;
@@ -44,7 +45,7 @@ class Chp15c:public CpcXXXX{
 Q_OBJECT
 
 public:
-  Chp15c(CPObject *parent=0);
+  Chp15c(CPObject *parent=0,Models mod=HP15);
   ~Chp15c();
 
   CHPNUT *nutcpu;

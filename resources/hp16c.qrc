@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hp16c/hp16c.bin</file>
+        <file>hp16c/hp16c.png</file>
+    </qresource>
+</RCC>

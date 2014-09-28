@@ -654,7 +654,10 @@ RESOURCES +=  \
     resources/cc40.qrc \
     resources/ti74.qrc \
     resources/fx8000g.qrc \
-    resources/hp15c.qrc
+    resources/hp15c.qrc \
+    resources/hp11c.qrc \
+    resources/hp12c.qrc \
+    resources/hp16c.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \

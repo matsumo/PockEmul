@@ -48,31 +48,66 @@ extern MainWindowPockemul *mainwindow;
 /****************************/
 
 
-Chp15c::Chp15c(CPObject *parent):CpcXXXX(parent)
+Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
 {
 
     setfrequency( (int) 215000);  // 80µs per cycle
-    setcfgfname(QString("hp15c"));
-
-    SessionHeader	= "HP15CPKM";
-    Initial_Session_Fname ="hp15c.pkm";
-
-    BackGroundFname	= P_RES(":/hp15c/hp15c.png");
-    LcdFname		= P_RES(":/hp15c/hp15clcd.png");
-//    SymbFname		= P_RES("");
-
-//    TopFname = P_RES(":/hp15c/top.png");
-    BackFname = P_RES(":/hp15c/hp15cback.png");
-    LeftFname = P_RES(":/hp15c/hp15cleft.png");
-    RightFname = P_RES(":/hp15c/hp15cright.png");
-
-
     memsize		= 0x10000;
     InitMemValue	= 0x00;
-
     SlotList.clear();
-    SlotList.append(CSlot(28 , 0x0000 ,P_RES(":/hp15c/hp15c.bin"), ""	, CSlot::ROM , "ROM"));
-//    SlotList.append(CSlot(40 , 0x6000 ,"", ""	, CSlot::RAM , "RAM"));
+
+    switch (mod) {
+    case HP15:
+
+        setcfgfname(QString("hp15c"));
+        SessionHeader	= "HP15CPKM";
+        Initial_Session_Fname ="hp15c.pkm";
+        BackGroundFname	= P_RES(":/hp15c/hp15c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    SymbFname		= P_RES("");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp15c/hp15cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(28 , 0x0000 ,P_RES(":/hp15c/hp15c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+    case HP11:
+        setcfgfname(QString("hp11c"));
+        SessionHeader	= "HP11CPKM";
+        Initial_Session_Fname ="hp11c.pkm";
+        BackGroundFname	= P_RES(":/hp11c/hp11c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp15c/hp15cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp11c/hp11c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+    case HP12:
+        setcfgfname(QString("hp12c"));
+        SessionHeader	= "HP12CPKM";
+        Initial_Session_Fname ="hp12c.pkm";
+        BackGroundFname	= P_RES(":/hp12c/hp12c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp15c/hp15cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp12c/hp12c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+    case HP16:
+        setcfgfname(QString("hp16c"));
+        SessionHeader	= "HP16CPKM";
+        Initial_Session_Fname ="hp16c.pkm";
+        BackGroundFname	= P_RES(":/hp16c/hp16c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp15c/hp15cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp16c/hp16c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+    }
 
     setDXmm(130);
     setDYmm(79);
@@ -96,7 +131,7 @@ Chp15c::Chp15c(CPObject *parent):CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_hp15c(this);
-    pCPU		= new CHPNUT(this,80);
+    pCPU		= new CHPNUT(this, mod==HP15 ? 80 : 40);
     nutcpu = (CHPNUT*)pCPU;
     pKEYB		= new Ckeyb(this,"hp15c.map");
 

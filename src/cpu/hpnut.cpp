@@ -113,7 +113,7 @@ void CHPNUT::Load_Internal(QXmlStreamReader *xmlIn)
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
             memcpy((char *) reg,ba_reg.data(),sizeof(cpu_t));
             QByteArray ba_ram = QByteArray::fromBase64(xmlIn->attributes().value("ram").toString().toLatin1());
-            memcpy((char *) reg->ram,ba_ram.data(),reg->max_ram * sizeof(reg_t));
+            memcpy((char *) reg->ram,ba_ram.data(),/*reg->max_ram*/256 * sizeof(reg_t));
             QByteArray ba_ram_exists = QByteArray::fromBase64(xmlIn->attributes().value("ram_exists").toString().toLatin1());
             memcpy((char *) reg->ram_exists,ba_ram_exists.data(),reg->max_ram * sizeof(bool));
 
@@ -132,7 +132,7 @@ void CHPNUT::save_internal(QXmlStreamWriter *xmlOut)
         xmlOut->writeAttribute("model","hpnut");
         QByteArray ba_reg((char*)reg,sizeof(cpu_t));
         xmlOut->writeAttribute("registers",ba_reg.toBase64());
-        QByteArray ba_ram((char*)reg->ram,reg->max_ram * sizeof(reg_t));
+        QByteArray ba_ram((char*)reg->ram,/*reg->max_ram*/ 256* sizeof(reg_t));
         xmlOut->writeAttribute("ram",ba_ram.toBase64());
         QByteArray ba_ram_exists((char*)reg->ram_exists,reg->max_ram * sizeof(bool));
         xmlOut->writeAttribute("ram_exists",ba_ram_exists.toBase64());
