@@ -4,6 +4,9 @@
 #   include <QSensor>
 #   include <QSensorReading>
 #   include <QOrientationSensor>
+#   include <QRotationReading>
+#   include <QSensorGesture>
+#   include <QSensorGestureManager>
 #else
 #   include <QtCore>
 #   include <QtGui>
@@ -145,12 +148,28 @@ server = new ServeurTcp(this);
 #endif
 
 #if QT_VERSION >= 0x050000
-    sensor = new QSensor("QRotationSensor");//QGyroscope");
-    sensor->start();
+// Create a QSensorGestureManager
+    QSensorGestureManager gestureManager;
+
+// Get a list of known recognizers
+    QStringList recognizersList = gestureManager.gestureIds();
+
+// Create a QSensorGeture object for each of those gesture recognizers
+        QSensorGesture *gesture = new QSensorGesture( gestureManager.gestureIds(), this);
+// Connect the known signals up.
+        connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
 #endif
 
 }
 
+void MainWindowPockemul::gestureDetected(QString _s) {
+    qWarning()<<"gestureDetected"<<_s;
+}
+
+void MainWindowPockemul::checkReading() {
+    QRotationReading * _rot = (QRotationReading*)(sensor->reading());
+    qWarning()<<_rot->x()<<_rot->y()<<_rot->z();
+}
 MainWindowPockemul::~MainWindowPockemul() {
     delete PcThread;
     delete dialoglog;

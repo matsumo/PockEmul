@@ -57,8 +57,46 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
     SlotList.clear();
 
     switch (mod) {
-    case HP15:
+    case HP11:
+        setcfgfname(QString("hp11c"));
+        SessionHeader	= "HP11CPKM";
+        Initial_Session_Fname ="hp11c.pkm";
+        BackGroundFname	= P_RES(":/hp11c/hp11c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp11c/hp11cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp11c/hp11c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
 
+    case HP12:
+        setcfgfname(QString("hp12c"));
+        SessionHeader	= "HP12CPKM";
+        Initial_Session_Fname ="hp12c.pkm";
+        BackGroundFname	= P_RES(":/hp12c/hp12c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp12c/hp12cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp12c/hp12c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+
+    case HP16:
+        setcfgfname(QString("hp16c"));
+        SessionHeader	= "HP16CPKM";
+        Initial_Session_Fname ="hp16c.pkm";
+        BackGroundFname	= P_RES(":/hp16c/hp16c.png");
+        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
+        //    TopFname = P_RES(":/hp15c/top.png");
+        BackFname = P_RES(":/hp16c/hp16cback.png");
+        LeftFname = P_RES(":/hp15c/hp15cleft.png");
+        RightFname = P_RES(":/hp15c/hp15cright.png");
+        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp16c/hp16c.bin"), ""	, CSlot::ROM , "ROM"));
+        break;
+
+    default:
         setcfgfname(QString("hp15c"));
         SessionHeader	= "HP15CPKM";
         Initial_Session_Fname ="hp15c.pkm";
@@ -70,42 +108,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
         LeftFname = P_RES(":/hp15c/hp15cleft.png");
         RightFname = P_RES(":/hp15c/hp15cright.png");
         SlotList.append(CSlot(28 , 0x0000 ,P_RES(":/hp15c/hp15c.bin"), ""	, CSlot::ROM , "ROM"));
-        break;
-    case HP11:
-        setcfgfname(QString("hp11c"));
-        SessionHeader	= "HP11CPKM";
-        Initial_Session_Fname ="hp11c.pkm";
-        BackGroundFname	= P_RES(":/hp11c/hp11c.png");
-        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
-        //    TopFname = P_RES(":/hp15c/top.png");
-        BackFname = P_RES(":/hp15c/hp15cback.png");
-        LeftFname = P_RES(":/hp15c/hp15cleft.png");
-        RightFname = P_RES(":/hp15c/hp15cright.png");
-        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp11c/hp11c.bin"), ""	, CSlot::ROM , "ROM"));
-        break;
-    case HP12:
-        setcfgfname(QString("hp12c"));
-        SessionHeader	= "HP12CPKM";
-        Initial_Session_Fname ="hp12c.pkm";
-        BackGroundFname	= P_RES(":/hp12c/hp12c.png");
-        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
-        //    TopFname = P_RES(":/hp15c/top.png");
-        BackFname = P_RES(":/hp15c/hp15cback.png");
-        LeftFname = P_RES(":/hp15c/hp15cleft.png");
-        RightFname = P_RES(":/hp15c/hp15cright.png");
-        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp12c/hp12c.bin"), ""	, CSlot::ROM , "ROM"));
-        break;
-    case HP16:
-        setcfgfname(QString("hp16c"));
-        SessionHeader	= "HP16CPKM";
-        Initial_Session_Fname ="hp16c.pkm";
-        BackGroundFname	= P_RES(":/hp16c/hp16c.png");
-        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
-        //    TopFname = P_RES(":/hp15c/top.png");
-        BackFname = P_RES(":/hp15c/hp15cback.png");
-        LeftFname = P_RES(":/hp15c/hp15cleft.png");
-        RightFname = P_RES(":/hp15c/hp15cright.png");
-        SlotList.append(CSlot(12 , 0x0000 ,P_RES(":/hp16c/hp16c.bin"), ""	, CSlot::ROM , "ROM"));
         break;
     }
 
@@ -216,11 +218,16 @@ bool Chp15c::run()
 
 UINT8 Chp15c::in(UINT8 address)
 {
+    Q_UNUSED(address)
+
     return 0;
 }
 
 UINT8 Chp15c::out(UINT8 address, UINT8 value)
 {
+    Q_UNUSED(address)
+    Q_UNUSED(value)
+
     return 0;
 }
 
@@ -232,6 +239,8 @@ UINT8 Chp15c::out(UINT8 address, UINT8 value)
 /****************************/
 bool Chp15c::Chk_Adr(UINT32 *d, UINT32 data)
 {
+    Q_UNUSED(d)
+    Q_UNUSED(data)
 
     return false;
 
@@ -239,6 +248,9 @@ bool Chp15c::Chk_Adr(UINT32 *d, UINT32 data)
 
 bool Chp15c::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
+    Q_UNUSED(d)
+    Q_UNUSED(data)
+
     return true;
 }
 

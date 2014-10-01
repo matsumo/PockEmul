@@ -114,15 +114,19 @@ void CHPNUT::Load_Internal(QXmlStreamReader *xmlIn)
             bool* _ramExistsPtr = reg->ram_exists;
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
             memcpy((char *) reg,ba_reg.data(),sizeof(cpu_t));
+
+            // Restore registers pointers
             reg->ram = _ramPtr;
             reg->ram_exists = _ramExistsPtr;
+            reg->pPC = pPC;
+            nut_init_ops(reg);
+
             QByteArray ba_ram = QByteArray::fromBase64(xmlIn->attributes().value("ram").toString().toLatin1());
             memcpy((char *) reg->ram,ba_ram.data(),/*reg->max_ram*/256 * sizeof(reg_t));
             QByteArray ba_ram_exists = QByteArray::fromBase64(xmlIn->attributes().value("ram_exists").toString().toLatin1());
             memcpy((char *) reg->ram_exists,ba_ram_exists.data(),reg->max_ram * sizeof(bool));
 
-            reg->pPC = pPC;
-            nut_init_ops(reg);
+
 
         }
         xmlIn->skipCurrentElement();

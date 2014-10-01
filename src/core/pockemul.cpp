@@ -69,7 +69,7 @@ int main(int argc, char *argv[])
 
     int loadedFontID = QFontDatabase::addApplicationFont(":/hp41/41chrset.ttf");
   QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(loadedFontID);
-  qWarning()<<loadedFontFamilies;
+//  qWarning()<<loadedFontFamilies;
 
 #ifdef Q_OS_MAC
     QDir dir(QApplication::applicationDirPath());
@@ -244,7 +244,11 @@ mainwindow = new MainWindowPockemul();
     mainwindow->zoomSlider->setValue(100);
 #endif
 
+#ifdef Q_OS_ANDROID
+    mainwindow->showFullScreen();
+#else
     mainwindow->show();
+#endif
 
 //#ifndef Q_OS_ANDROID
     mainwindow->initCommandLine();

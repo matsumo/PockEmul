@@ -114,7 +114,8 @@ public slots:
 
 private slots:
 
-
+    void checkReading();
+    void gestureDetected(QString);
     void about();
     void Log();
     void IDE();

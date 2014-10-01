@@ -147,12 +147,13 @@ Clcdc_hp15c::Clcdc_hp15c(CPObject *parent)	: Clcdc(parent){						//[constructor]
                 (int) (117*contrast),
                 (int) (108*contrast));
 
+    info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
 }
 
 bool Clcdc_hp15c::init()
 {
     nutcpu = (CHPNUT*)(pPC->pCPU);
-    info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
+
     voyager_display_init_ops(nutcpu->reg,info);
     voyager_display_reset(info);
 
@@ -189,7 +190,6 @@ void Clcdc_hp15c::disp(void)
 
     if (!ready) return;
     if (!updated) return;
-    if (!info->enable) return;
 
 //    voyager_display_update(nutcpu->reg,info);
 
@@ -277,6 +277,7 @@ void Clcdc_hp15c::voyager_op_display_toggle (nut_reg_t *nut_reg, int opcode)
 
   display->enable = ! display->enable;
   display->count = 0;  // force immediate display update
+  voyager_display_update(nut_reg,display);
 }
 
 
@@ -291,6 +292,7 @@ void Clcdc_hp15c::voyager_op_display_blink (nut_reg_t *nut_reg, int opcode)
     display->blink_state = 1;
     display->blink_count = VOYAGER_DISPLAY_BLINK_DIVISOR;
     display->count = 0;  // force immediate display update
+    voyager_display_update(nut_reg,display);
 }
 
 

@@ -55,6 +55,7 @@ A2	A1	A0	Access	Function
                     bit 2 - state of the CTS input
                     bit 3 - state of the DSR input
                     bit 4 - state of the DCD input
+                    bit 5 - error flag
 0	0	1	Write	serial port control register
                     bit 0 - transmitter enable
                     bit 1 - receiver enable
