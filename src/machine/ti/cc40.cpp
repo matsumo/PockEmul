@@ -419,11 +419,12 @@ bool Ccc40::init()
     pCPU->logsw = false;
 #endif
     initExtension();
-    CpcXXXX::init();
     pHD44780->init();
 
     init_sysram(0, 0x2000); // default to 6KB
     init_sysram(1, 0x2000); // "
+
+    CpcXXXX::init();
 
     Reset();
 

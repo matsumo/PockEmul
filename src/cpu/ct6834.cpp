@@ -31,7 +31,6 @@ CT6834::CT6834(CPObject *parent)	: CPObject(this)
 }
 
 CT6834::~CT6834(){
-    free(mem);
 }
 
 const CMD_T6834 CT6834::Cmd_T6834[] =
@@ -785,7 +784,7 @@ void CT6834::Load_Internal(QXmlStreamReader *xmlIn)
 //            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toAscii());
 //            memcpy((char *) &r,ba_reg.data(),sizeof(r));
             QByteArray ba_mem = QByteArray::fromBase64(xmlIn->attributes().value("Mem").toString().toLatin1());
-            memcpy((char *)mem,ba_mem.data(),ba_mem.size());
+            memcpy((char *)&mem,ba_mem.data(),sizeof(mem));
             QByteArray ba_lcd = QByteArray::fromBase64(xmlIn->attributes().value("Lcd").toString().toLatin1());
             memcpy((char *)&Ram_Video,ba_lcd.data(),MIN(ba_lcd.size(),sizeof(Ram_Video)));
         }
@@ -799,7 +798,7 @@ void CT6834::save_internal(QXmlStreamWriter *xmlOut)
         xmlOut->writeAttribute("model","t6834");
 //        QByteArray ba_reg((char*)&r,sizeof(r));
 //        xmlOut->writeAttribute("registers",ba_reg.toBase64());
-        QByteArray ba_mem((char*)mem,0x2200*sizeof(UINT8));
+        QByteArray ba_mem((char*)&mem,sizeof(mem));
         xmlOut->writeAttribute("Mem",ba_mem.toBase64());
         QByteArray ba_lcd((char*)&Ram_Video,sizeof(Ram_Video));
         xmlOut->writeAttribute("Lcd",ba_lcd.toBase64());
@@ -808,7 +807,7 @@ void CT6834::save_internal(QXmlStreamWriter *xmlOut)
 
 bool CT6834::init()
 {
-    mem=(UINT8 *)malloc(0x2200*sizeof(UINT8));
+
 
     Reset();
 

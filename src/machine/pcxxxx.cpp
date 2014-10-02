@@ -106,8 +106,11 @@ CpcXXXX::~CpcXXXX()
 
 bool CpcXXXX::UpdateFinalImage(void)
 {
-//#define TRANSFORM Qt::FastTransformation
+#ifdef Q_OS_ANDROID
+#define TRANSFORM Qt::FastTransformation
+#else
 #define TRANSFORM Qt::SmoothTransformation
+#endif
 
     //    qWarning()<<"UpdateFinalImage";
 //    CPObject::UpdateFinalImage();

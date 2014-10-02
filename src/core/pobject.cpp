@@ -1006,7 +1006,11 @@ void CPObject::ComputeKey()
 
 void CPObject::paintEvent(QPaintEvent *event)
 {
-
+#ifdef Q_OS_ANDROID
+#define TRANSFORM Qt::FastTransformation
+#else
+#define TRANSFORM Qt::SmoothTransformation
+#endif
     if (flipping) {
         CViewObject::paintEvent(event);
     }
@@ -1018,7 +1022,7 @@ void CPObject::paintEvent(QPaintEvent *event)
         painter.begin(this);
         if (FinalImage)
         {
-            painter.drawImage(QPoint(0,0), FinalImage->scaled(this->size(),Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
+            painter.drawImage(QPoint(0,0), FinalImage->scaled(this->size(),Qt::IgnoreAspectRatio,TRANSFORM));
         }
 
         if (dialogkeylist)

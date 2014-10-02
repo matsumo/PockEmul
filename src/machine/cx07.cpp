@@ -160,16 +160,19 @@ bool Cx07::init(void)				// initialize
 #ifndef QT_NO_DEBUG
     pCPU->logsw = false;
 #endif
-    CpcXXXX::init();
-
-    memset((void*)&Port_FX,0,sizeof (Port_FX));
-    memset((void *)mem ,0,0x6000);
-
-    ((CZ80 *) pCPU)->z80.r16.pc = 0xC3C3;
-
     pT6834->init();
     pUART->init();
     pUART->pTIMER = pTIMER;
+
+    memset((void*)&Port_FX,0,sizeof (Port_FX));
+
+    CpcXXXX::init();
+
+
+
+    ((CZ80 *) pCPU)->z80.r16.pc = 0xC3C3;
+
+
 
     pPARConnector = new Cconnector(this,15,0,Cconnector::Canon_15,"Parrallel Connector",false,QPoint(715,50));
     publish(pPARConnector);

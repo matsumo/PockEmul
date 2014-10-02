@@ -94,7 +94,7 @@ public:
     static const UINT8 key_tbl_ks[256];
     static const UINT8 key_tbl_g[256];
 
-    UINT8 *mem;
+    UINT8 mem[0x2200];
 
     QByteArray Clavier;
     quint8 LastKey;
