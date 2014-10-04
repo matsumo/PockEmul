@@ -35,17 +35,20 @@ void CViewObject::setPosX(float val)
 {
     PosX = val;
     QWidget::move(QPoint(PosX,PosY));
+    emit movePObject(this,QPoint(PosX,PosY));
 }
 void CViewObject::setPosY(float val)
 {
     PosY = val;
     QWidget::move(QPoint(PosX,PosY));
+    emit movePObject(this,QPoint(PosX,PosY));
 }
 void CViewObject::Move(QPoint p)
 {
     PosX += p.x();
     PosY += p.y();
     QWidget::move(QPoint(PosX,PosY));
+    emit movePObject(this,QPoint(PosX,PosY));
 #ifdef AVOID
     mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
     mainwindow->router->processTransaction();
@@ -57,6 +60,18 @@ QPoint CViewObject::pos()
 {
     return QPoint(PosX,PosY);
 }
+
+int CViewObject::getDX() {return Pc_DX;}
+
+int CViewObject::getDY() {return Pc_DY;}
+
+int CViewObject::getDZ() {return 0;}
+
+void CViewObject::setDX(int v) {Pc_DX = v;}
+
+void CViewObject::setDY(int v) {Pc_DY = v;}
+
+void CViewObject::setDZ(int v) {Q_UNUSED(v)}
 QRect CViewObject::rect()
 {
     return QRect(PosX,PosY,Pc_DX,Pc_DY);
@@ -336,6 +351,7 @@ void CViewObject::changeGeometry(int newposx,int newposy,int newwidth,int newhei
                                Avoid::Point(newposx+newwidth+20, newposy+newheight+20));
     mainwindow->router->moveShape(mainwindow->shapeRefList[this], rectangle);
 #endif
+    emit sizePObject(this,QSize(newwidth,newheight));
 }
 
 void CViewObject::mousePressEvent(QMouseEvent *event) {

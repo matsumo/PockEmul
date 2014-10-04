@@ -1,5 +1,5 @@
 
-import QtQuick 1.1
+import QtQuick 2.0
 
 Item {
     id: delegate
@@ -51,12 +51,11 @@ Item {
             color: (delegate.ListView.isCurrentItem | (type == "text")) ? "white" : "black"
             font { family: "Helvetica"; pointSize: 16; bold: false }
             anchors.verticalCenter: parent.verticalCenter
-            visible: ((type == "text") | (type == "action") | (type == "checkbox"))
+            visible: ((type == "text") | (type == "checkbox"))
         }
 
         TextButton {
             id: buttonElement
-
             text: labelString
             objectName: name
             font.pointSize: 16

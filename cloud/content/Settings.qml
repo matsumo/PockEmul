@@ -1,5 +1,5 @@
-import QtQuick 1.1
-
+import QtQuick 2.0
+import QtQuick.Controls 1.2
 
 Rectangle {
     width: 800; height: 480
@@ -48,11 +48,11 @@ Rectangle {
         focus: true
         id: categories
         anchors.fill: parent
-
+        interactive: true;
         model: visualSettingsModel
         //            footer: quitButtonDelegate
         //        highlight: Rectangle { color: "steelblue" }
-        highlightMoveSpeed: 9999999
+        highlightMoveVelocity: 9999999
     }
     ScrollBar {
         scrollArea: categories; height: categories.height; width: 8

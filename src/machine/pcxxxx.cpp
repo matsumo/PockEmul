@@ -152,6 +152,7 @@ bool CpcXXXX::UpdateFinalImage(void)
     }
     Refresh_Display = false;
 
+    emit updatedPObject(this);
     return true;
 }
 

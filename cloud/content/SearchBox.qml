@@ -38,13 +38,13 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.0
+import QtQuick 2.0
 
 FocusScope {
     id: focusScope
     width: 250; height: 28
 
-    signal textChanged(string value)
+//    signal textChanged(string value)
 
     property alias text: textInput.text
 
@@ -80,9 +80,9 @@ FocusScope {
         anchors { left: parent.left; leftMargin: 8; right: clear.left; rightMargin: 8; verticalCenter: parent.verticalCenter }
         focus: true
         selectByMouse: true
-        onTextChanged: {
-            focusScope.textChanged(text)
-        }
+//        onTextChanged: {
+//            focusScope.textChanged(text)
+//        }
     }
 
     Image {

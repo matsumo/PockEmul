@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef CLOUDWINDOW_H
+#define CLOUDWINDOW_H
 
 
 #include <QMainWindow>
@@ -15,6 +15,10 @@ class QNetworkReply;
 class QPushButton;
 class CloudImageProvider;
 class QDeclarativeView;
+class QQuickView;
+class QQuickWidget;
+class CViewObject;
+class CPObject;
 
 class CloudWindow : public QWidget
 {
@@ -37,6 +41,8 @@ public:
 
     Q_INVOKABLE void clearCache(QString s);
 
+    void addPocket(QString _name, QString url, QString pocketId, int left, int top, int width, int height);
+
 protected:
     void wheelEvent(QWheelEvent *event);
 
@@ -46,6 +52,11 @@ public slots:
     Q_INVOKABLE void showFileDialog();
     Q_INVOKABLE void warning(QString msg);
 
+    void pocketUpdated(CPObject* pObject);
+    void newPObject(CPObject *pObject);
+    void movePObject(CViewObject*pObject, QPoint pos);
+    void sizePObject(CViewObject*pObject, QSize size);
+
 private slots:
 
     void sendPML(const QString &filePath);
@@ -54,7 +65,9 @@ private slots:
     void finishedSave(QNetworkReply* reply);
 
 private:
-    QDeclarativeView *view;
+//    QDeclarativeView *view;
+    QQuickView *view;
+//    QQuickWidget *view;
 
     QNetworkReply *m_reply;
     QFileDialog *m_fileDialog;
@@ -64,4 +77,4 @@ private:
     void resizeEvent(QResizeEvent *e);
 };
 
-#endif // MAINWINDOW_H
+#endif // CLOUDWINDOW_H

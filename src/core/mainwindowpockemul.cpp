@@ -158,6 +158,9 @@ server = new ServeurTcp(this);
         QSensorGesture *gesture = new QSensorGesture( gestureManager.gestureIds(), this);
 // Connect the known signals up.
         connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
+
+        cloud = new CloudWindow(this);
+
 #endif
 
 }

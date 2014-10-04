@@ -28,7 +28,7 @@
         <file>content/images/knob.png</file>
         <file>content/counter.js</file>
         <file>content/SortListModel.qml</file>
-        <file>content/Test.qml</file>
+        <file>content/Test2.qml</file>
         <file>content/Grid.qml</file>
         <file>content/Message.qml</file>
         <file>PmlView2.qml</file>
@@ -47,5 +47,6 @@
         <file>TabbedQuickApp/pics/tab0.png</file>
         <file>TabbedQuickApp/pics/tab1.png</file>
         <file>TabbedQuickApp/pics/tab2.png</file>
+        <file>Test.qml</file>
     </qresource>
 </RCC>

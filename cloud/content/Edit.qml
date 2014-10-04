@@ -1,4 +1,4 @@
-import QtQuick 1.1
+import QtQuick 2.0
 Rectangle {
     property alias text: edit.text
     property alias font: edit.font

@@ -39,7 +39,7 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
+import QtQuick 2.0
 import "counter.js" as Counter
 
 import ".."
@@ -190,6 +190,7 @@ Item {
             font.family: "Helvetica"; font.pointSize: 14
 //            nbLine: 4
             textColor: changed ? "red" : "black"
+            visible: (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             onTextChanged: checkmodif()
         }
@@ -211,6 +212,7 @@ Item {
         spacing: 5
         TextButton {
             id: closeButton
+            visible: (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: "Close"
             onClicked: {
@@ -230,7 +232,7 @@ Item {
         }
         TextButton {
             id: importButton
-            visible: !ismine
+            visible: !ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: "Clone to private"
             onClicked: {
@@ -246,7 +248,7 @@ Item {
         //    *     2 => 'Public',
         TextButton {
             id: makePrivate
-            visible: (access_id != 0) && ismine
+            visible: (access_id != 0) && ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: "Make private"
             onClicked: {
@@ -264,7 +266,7 @@ Item {
         }
         TextButton {
             id: makeFriend
-            visible: (access_id != -2) && ismine
+            visible: (access_id != -2) && ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: "Share with Friends"
             onClicked: {
@@ -300,7 +302,7 @@ Item {
         TextButton {
             id: saveCurrentSessionButtonIn
             text: "Save current session"
-            visible: ismine
+            visible: ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             onClicked: {
                 if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
@@ -410,7 +412,7 @@ Item {
         }
         TextButton {
             id: deleteButton
-            visible: ismine
+            visible: ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: (isdeleted ==1) ? "Permanently delete" : "Delete"
             onClicked: {
@@ -452,6 +454,7 @@ Item {
         PropertyChanges { target: delegate.ListView.view; explicit: true; contentY: delegate.y }
 
         // Disallow flicking while we're in detailed view
+//        PropertyChanges { target: delegate.ListView.view; interactive: false }
         PropertyChanges { target: delegate.ListView.view; interactive: false }
     }
 

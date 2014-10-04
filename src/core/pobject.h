@@ -226,6 +226,7 @@ public:
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);
 signals:
     void msgError(QString);
+    void updatedPObject(CPObject *);
 
 public slots:
 #ifndef NO_SOUND

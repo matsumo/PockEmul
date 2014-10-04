@@ -25,15 +25,23 @@
 #include <QCryptographicHash>
 
 
-#include <QtDeclarative/QDeclarativeView>
-#include <QtDeclarative/QDeclarativeContext>
-#include <QtDeclarative/QDeclarativeEngine>
+//#include <QtDeclarative/QDeclarativeView>
+//#include <QtDeclarative/QDeclarativeContext>
+//#include <QtDeclarative/QDeclarativeEngine>
+
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickView>
+#include <QtQuickWidgets/QQuickWidget>
+
 
 #include "applicationconfig.h"
 #include "cloudwindow.h"
 #include "cloudimageprovider.h"
 
 #include "mainwindowpockemul.h"
+#include "pobject.h"
+
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
@@ -45,13 +53,15 @@ CloudWindow::CloudWindow(QWidget *parent)
     imgprov = new CloudImageProvider(this);
     if (getValueFor("serverURL","")=="") saveValueFor("serverURL","http://pockemul.dscloud.me/elgg/");
 
-    view = new QDeclarativeView(this);
+
+    view = new QQuickView;//QQuickWidget;//QDeclarativeView(this);
     view->engine()->addImageProvider(QLatin1String("PockEmulCloud"),imgprov );
+    view->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     view->rootContext()->setContextProperty("cloud", this);
     view->setSource(QUrl("qrc:/main.qml"));
-    view->setResizeMode(QDeclarativeView::SizeRootObjectToView);
+    view->setResizeMode(QQuickView::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
     connect(view->engine(), SIGNAL(quit()), this,SLOT(hide()));
-    object = view->rootObject();
+    object = (QObject*) view->rootObject();
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
 
     m_fileDialog = new QFileDialog(this);
@@ -61,8 +71,17 @@ CloudWindow::CloudWindow(QWidget *parent)
             this, SLOT(sendPML(QString)));
 
     QVBoxLayout *windowLayout = new QVBoxLayout(this);
-    windowLayout->addWidget(view);
+    QWidget *container = QWidget::createWindowContainer(view,this);
+//    container->setMinimumSize(...);
+//    container->setMaximumSize(...);
+//    container->setFocusPolicy(Qt::TabFocus);
+
+    windowLayout->addWidget(container);
+//    windowLayout->addWidget(view);
     windowLayout->setMargin(0);
+
+
+    connect(parent,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
 
 }
 
@@ -319,6 +338,52 @@ void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
 
+void CloudWindow::pocketUpdated(CPObject * pObject)
+{
+
+    QMetaObject::invokeMethod(object, "refreshPocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              );
+}
+
+void CloudWindow::newPObject(CPObject *pObject) {
+    qWarning()<<"Add Pocket"<<pObject->getName()<<
+                pObject->pos().x()<<
+                pObject->pos().y()<<
+                pObject->size();
+
+    connect (pObject,SIGNAL(movePObject(CViewObject*,QPoint)),this,SLOT(movePObject(CViewObject*,QPoint)));
+    connect (pObject,SIGNAL(sizePObject(CViewObject*,QSize)),this,SLOT(sizePObject(CViewObject*,QSize)));
+
+    QMetaObject::invokeMethod(object, "addPocket",
+                              Q_ARG(QVariant, QString("name")),
+                              Q_ARG(QVariant, "qrc"+pObject->BackGroundFname),
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, pObject->pos().x()),
+                              Q_ARG(QVariant, pObject->pos().y()),
+                              Q_ARG(QVariant, pObject->width()),
+                              Q_ARG(QVariant, pObject->height())
+                              );
+}
+
+void CloudWindow::movePObject(CViewObject *pObject, QPoint pos)
+{
+    qWarning()<<"movePocket:"<<pos;
+    QMetaObject::invokeMethod(object, "movePocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, pos.x()),
+                              Q_ARG(QVariant, pos.y())
+                              );
+}
+void CloudWindow::sizePObject(CViewObject *pObject, QSize size)
+{
+    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(object, "sizePocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, size.width()),
+                              Q_ARG(QVariant, size.height())
+                              );
+}
 void CloudWindow::addShortcut(QString param) {
     m_addShortcut("test",param);
 }

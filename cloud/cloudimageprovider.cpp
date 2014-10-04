@@ -15,11 +15,14 @@
 #include <QXmlStreamReader>
 
 #include "cloudwindow.h"
+#include "pobject.h"
+
 extern QString workDir;
 
 
 CloudImageProvider::CloudImageProvider(QObject *parent) : QObject(parent),
-    QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+    QQuickImageProvider(QQuickImageProvider::Image)
+//    QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
 {
     // This space intentionally left blank.
 
@@ -51,6 +54,30 @@ CloudImageProvider::~CloudImageProvider()
     // This space intentionally left blank.
 }
 
+PocketImageProvider::PocketImageProvider(QObject *parent) : QObject(parent),
+    QQuickImageProvider(QQuickImageProvider::Image)
+//    QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
+{
+    // This space intentionally left blank.
+}
+
+PocketImageProvider::~PocketImageProvider()
+{
+    // This space intentionally left blank.
+}
+QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
+{
+
+
+    QStringList _id = id.split('/');
+
+qWarning()<<"PocketImageProvider::requestImage:"<<_id;
+    if (id.isEmpty()) return QImage();
+    CPObject *pc = (CPObject*)_id[0].toULongLong();
+
+    return *(pc->FinalImage);
+
+}
 
 // CACHE MODULE
 QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)

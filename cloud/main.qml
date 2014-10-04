@@ -1,4 +1,4 @@
-import QtQuick 1.0
+import QtQuick 2.0
 import "TabbedQuickApp"
 import "content"
 import "."
@@ -10,6 +10,9 @@ Rectangle {
 
     id: root
     signal sendWarning(string test)
+
+//    property var pocketMap: new Map()
+
 
     property string serverURL: cloud.getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")
     property string currentUserid: "pock emul"
@@ -91,11 +94,13 @@ Rectangle {
             }
         }
 
-//         Tab {
-//                name: ""
-//                icon: "pics/back-white.png"
-//                Test {}
-//            }
+         Tab {
+                name: ""
+                icon: "pics/back-white.png"
+                Test {
+                    id: testarea
+                }
+            }
 
 
     }
@@ -340,7 +345,56 @@ Rectangle {
 
     }
 
+function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
+    testarea.xmlThumbModel.append(   {name:_name,
+                             imageFileName:_url,
+                             _left:_left,
+                             _top:_top,
+                             _width:_width,
+                             _height:_height,
+                             idpocket:_pocketId,
+                                  dummy:0});
 
+}
+
+function refreshPocket(_pocketId) {
+    var index = getIndex(_pocketId);
+    testarea.xmlThumbModel.get(index).dummy = Math.random()
+}
+
+function movePocket(_pocketId,_left,_top) {
+
+    var index = getIndex(_pocketId);
+
+    console.log("found index:"+index);
+    if (index !== -1) {
+
+        testarea.xmlThumbModel.get(index)._left = _left;
+        testarea.xmlThumbModel.get(index)._top = _top;
+        console.log("object moved to ("+_left+","+_top+")");
+    }
+}
+function sizePocket(_pocketId,_width,_height) {
+
+    var index = getIndex(_pocketId);
+
+    console.log("found index:"+index);
+    if (index !== -1) {
+
+        testarea.xmlThumbModel.get(index)._width = _width;
+        testarea.xmlThumbModel.get(index)._height = _height;
+        console.log("object sized to ("+_width+","+_height+")");
+    }
+}
+function getIndex(id) {
+    for (var i=0; i<testarea.xmlThumbModel.count;i++) {
+        var item = testarea.xmlThumbModel.get(i);
+        if (item.idpocket === id) {
+            return i;
+        }
+    }
+    return -1;
+}
 
     function encodeXml(s) {
         return s.replace(/([\&"<>])/g, function(str, item) {

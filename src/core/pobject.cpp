@@ -35,6 +35,7 @@
 #include "fluidlauncher.h"
 
 #include "mainwindowpockemul.h"
+#include "cloud/cloudwindow.h"
 
 #include "bus.h"
 
@@ -53,8 +54,8 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		toDestroy = false;
 		PosX	= 0;
 		PosY	= 0;
-		Pc_DX	= 0;
-		Pc_DY	= 0;
+        setDX(0);
+        setDY(0);
 
 		pKEYB	= 0;
 		pTIMER	= 0;
@@ -108,6 +109,8 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 
         // ERROR MESSAGE
         connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
+
+        connect(this,SIGNAL(updatedPObject(CPObject*)),mainwindow->cloud,SLOT(pocketUpdated(CPObject*)));
     }
 
 
@@ -277,7 +280,7 @@ bool CPObject::init()
     startKeyDrag = false;
     startPosDrag = false;
     setMouseTracking(true);
-    resize(Pc_DX,Pc_DY);
+    resize(getDX(),getDY());
     move(QPoint(PosX,PosY));
     setAttribute(Qt::WA_AlwaysShowToolTips,true);
 
@@ -1364,7 +1367,7 @@ bool CPObject::InitDisplay(void)
     BackgroundImageBackup = CreateImage(QSize(Pc_DX, Pc_DY),BackGroundFname);
 #else
     BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
-    internalImageRatio = (float) BackgroundImageBackup->size().width() / Pc_DX;
+    internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
 #endif
 
     delete BackgroundImage;
@@ -1390,6 +1393,8 @@ bool CPObject::UpdateFinalImage(void)
         painter.end();
 	}
 	Refresh_Display = false;
+qWarning()<<"UpdateFinalImage";
+    emit updatedPObject(this);
     return true;
 }
 

@@ -39,8 +39,9 @@
 **
 ****************************************************************************/
 
-import QtQuick 1.1
-
+import QtQuick 2.0
+import QtQuick.XmlListModel 2.0
+import QtQuick.Controls 1.2
 
 import "content"
 Rectangle {
@@ -145,7 +146,7 @@ Rectangle {
             }
         }
         // not found, create a record
-        tmpcategoryModel.append({objid: object_id,
+        tmpcategoryModel.append({objid: parseInt(object_id),
                                  name: object_name,
                                  counter: 1});
     }
@@ -256,7 +257,7 @@ Rectangle {
 //            console.log("object OK");
             if ( (pmlview.objid == -1) && (item.isdeleted != 1 )) continue;
 //            console.log("Deleted OK");
-            if ( (searchText != "") && !pmlContain(item,searchText)) continue;
+            if ( (searchText !== "") && !pmlContain(item,searchText)) continue;
 
             pmlModel.append({   rowid : i,
                                 pmlid: item.pmlid,
@@ -324,7 +325,6 @@ Rectangle {
             width: 220; height: pmlview.height
             color: "#efefef"
 
-
             ListView {
                 id: categories
                 focus: true
@@ -334,13 +334,15 @@ Rectangle {
                 header: refreshButtonDelegate
                 delegate: CategoryDelegate {}
                 highlight: Rectangle { color: "steelblue" }
-                highlightMoveSpeed: 9999999
+                highlightMoveVelocity: 9999999
             }
+
             ScrollBar {
                 scrollArea: categories; height: categories.height; width: 8
                 anchors.right: categories.right
             }
         }
+
         ListView {
             id: list
             width: pmlview.width - categoriesView.width;

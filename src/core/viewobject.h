@@ -54,12 +54,12 @@ public:
 
     float	PosX,PosY;
 
-    int     getDX() {return Pc_DX;}
-    int     getDY() {return Pc_DY;}
-    int     getDZ() {return 0;}
-    void    setDX(int v) {Pc_DX = v;}
-    void    setDY(int v) {Pc_DY = v;}
-    void    setDZ(int v) {Q_UNUSED(v)}
+    int     getDX();
+    int     getDY();
+    int     getDZ();
+    void    setDX(int v);
+    void    setDY(int v);
+    void    setDZ(int v);
 
     int     getDXmm() {return Pc_DX_mm;}
     int     getDYmm() {return Pc_DY_mm;}
@@ -82,6 +82,9 @@ public:
     static QImage * CreateImage(QSize size, QString fname, bool Hmirror=false, bool Vmirror=false, int angle=0);
     void changeGeometry(int newposx, int newposy, int newwidth, int newheight);
     void changeGeometrySize(int newposx, int newposy, int newwidth, int newheight);
+signals:
+    void movePObject(CViewObject*,QPoint);
+    void sizePObject(CViewObject*,QSize);
 
 public slots:
     void endAnimation();

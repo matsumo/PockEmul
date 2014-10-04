@@ -1,3 +1,5 @@
+TEMPLATE = app
+
 QMAKE_CXXFLAGS += -fsigned-char
 
 
@@ -14,12 +16,13 @@ QT += \
     core \
     gui \
     network \
+    qml quick \
 #    opengl \
     xml \
 #    multimedia \
     script declarative sensors \
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+greaterThan(QT_MAJOR_VERSION, 4): QT += widgets quickwidgets
 
 PROJECT_TYPE = \
     STANDARD \
