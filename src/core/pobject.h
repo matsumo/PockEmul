@@ -224,11 +224,13 @@ public:
     void writeBus(UINT32 *d, UINT32 data);
     void readBus(UINT32 *d, UINT32 *data);
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);
+
 signals:
     void msgError(QString);
     void updatedPObject(CPObject *);
 
 public slots:
+    void slotDoubleClick(QPoint pos);
 #ifndef NO_SOUND
     void audioStateChanged(QAudio::State state);
 #endif

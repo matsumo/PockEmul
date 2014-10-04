@@ -610,15 +610,11 @@ void CPObject::wheelEvent(QWheelEvent *event) {
 
 }
 
-void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
-{
-//    qWarning()<<"CPObject::mouseDoubleClickEvent";
-    // Check if we clic a key
-    QPoint pts(event->x() , event->y());
-    if ((pKEYB) &&(pKEYB->KeyClick(pts))) {
+void CPObject::slotDoubleClick(QPoint pos) {
+    if ((pKEYB) &&(pKEYB->KeyClick(pos))) {
 //        qWarning()<<"keyclick";
         // Send thee mouseclick event twice
-        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
         QApplication::sendEvent(this, e);
         delete e;
         return;
@@ -651,7 +647,7 @@ void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
         int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);
         if (r>100) {
-            mainwindow->doZoom(event->pos(),1,r-mainwindow->zoom);
+            mainwindow->doZoom(pos,1,r-mainwindow->zoom);
             //move to upper left
             // Fetch all_object and move them
             rs = RectWithLinked();
@@ -659,13 +655,19 @@ void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
         }
     }
     else {
-        mainwindow->doZoom(event->pos(),-1,mainwindow->zoom-100);
+        mainwindow->doZoom(pos,-1,mainwindow->zoom-100);
     }
 
 #endif
-
-
 }
+
+void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
+{
+    QPoint pts(event->x() , event->y());
+    slotDoubleClick(pts);
+}
+
+
 extern void Vibrate();
 void CPObject::mousePressEvent(QMouseEvent *event)
 {
@@ -1169,8 +1171,8 @@ menu->popup(event->globalPos () );
 void CPObject::BuildContextMenu(QMenu * menu)
 {
     Vibrate();
-//    menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
-//    menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
+    menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
+    menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
 #ifdef Q_OS_ANDROID
      menu->addAction(tr("Create desktop Shortcut"),this,SLOT(createShortcut()));
 #endif

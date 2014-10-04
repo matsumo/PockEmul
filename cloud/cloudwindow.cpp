@@ -86,7 +86,7 @@ CloudWindow::CloudWindow(QWidget *parent)
 
 
     connect(parent,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
-
+    connect(parent,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 }
 
 void CloudWindow::resizeEvent(QResizeEvent *e) {
@@ -395,6 +395,14 @@ void CloudWindow::newPObject(CPObject *pObject) {
                               Q_ARG(QVariant, pObject->pos().y()),
                               Q_ARG(QVariant, pObject->width()),
                               Q_ARG(QVariant, pObject->height())
+                              );
+}
+
+void CloudWindow::delPObject(CPObject *pObject)
+{
+    qWarning()<<"delPObject"<<pObject;
+    QMetaObject::invokeMethod(object, "delPocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );
 }
 

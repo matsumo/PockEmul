@@ -361,7 +361,13 @@ function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
 
 function refreshPocket(_pocketId) {
     var index = getIndex(_pocketId);
-    testarea.xmlThumbModel.get(index).dummy = Math.random()
+    if (index == -1) return;
+    testarea.xmlThumbModel.get(index).dummy = Math.random();
+}
+
+function delPocket(_pocketId) {
+    var index = getIndex(_pocketId);
+    testarea.xmlThumbModel.remove(index);
 }
 
 function movePocket(_pocketId,_left,_top) {
