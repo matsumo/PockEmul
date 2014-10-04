@@ -51,6 +51,8 @@ public slots:
     Q_INVOKABLE QString save();
     Q_INVOKABLE void showFileDialog();
     Q_INVOKABLE void warning(QString msg);
+    Q_INVOKABLE void click(QString Id, int x, int y);
+    Q_INVOKABLE void unclick(QString Id, int x, int y);
 
     void pocketUpdated(CPObject* pObject);
     void newPObject(CPObject *pObject);

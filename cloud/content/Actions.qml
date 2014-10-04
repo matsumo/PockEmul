@@ -8,7 +8,6 @@ Column {
     Rectangle {height: 20 }
 
     TextButton {
-        id: saveCurrentSessionButton
         text: "Save current session"
         expand: false
         font.pointSize: 16

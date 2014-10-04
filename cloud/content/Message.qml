@@ -46,6 +46,7 @@ Rectangle {
     border.width: 1
     radius: 8
     smooth: true
+    visible: opacity==0 ? false : true
     opacity: 0 // transparent = 0 by default
     color: "black"
 

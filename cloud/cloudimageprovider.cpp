@@ -71,7 +71,7 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
 
     QStringList _id = id.split('/');
 
-qWarning()<<"PocketImageProvider::requestImage:"<<_id;
+//qWarning()<<"PocketImageProvider::requestImage:"<<_id;
     if (id.isEmpty()) return QImage();
     CPObject *pc = (CPObject*)_id[0].toULongLong();
 

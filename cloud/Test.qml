@@ -65,8 +65,8 @@ Window {
 
         Rectangle {
             id: photoFrame
-            width: _width //image.width * image.scale //+ 20
-            height: _height //image.height * image.scale //+ 20
+            width: _width * image.scale //+ 20
+            height: _height * image.scale //+ 20
 //            border.color: "black"
             color: "transparent"
 
@@ -97,7 +97,11 @@ Window {
                     hoverEnabled: true
                     anchors.fill: parent
                     drag.target: photoFrame
-                    onPressed: photoFrame.z = ++testarea.highestZ;
+                    onPressed: {
+                        photoFrame.z = ++testarea.highestZ;
+                        root.sendClick(idpocket,mouseX,mouseY);
+                    }
+                    onReleased: root.sendUnClick(idpocket,mouseX,mouseY)
                     onEntered: photoFrame.border.color = "red";
                     onExited: photoFrame.border.color = "black";
                     onWheel: {

@@ -1393,7 +1393,7 @@ bool CPObject::UpdateFinalImage(void)
         painter.end();
 	}
 	Refresh_Display = false;
-qWarning()<<"UpdateFinalImage";
+//qWarning()<<"UpdateFinalImage";
     emit updatedPObject(this);
     return true;
 }

@@ -10,6 +10,8 @@ Rectangle {
 
     id: root
     signal sendWarning(string test)
+    signal sendClick(string id,int x,int y)
+    signal sendUnClick(string id,int x,int y)
 
 //    property var pocketMap: new Map()
 

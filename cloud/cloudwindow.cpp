@@ -41,6 +41,7 @@
 
 #include "mainwindowpockemul.h"
 #include "pobject.h"
+#include "Keyb.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -62,7 +63,10 @@ CloudWindow::CloudWindow(QWidget *parent)
     view->setResizeMode(QQuickView::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
     connect(view->engine(), SIGNAL(quit()), this,SLOT(hide()));
     object = (QObject*) view->rootObject();
+
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
+    QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
+    QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
 
     m_fileDialog = new QFileDialog(this);
     m_fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -338,6 +342,34 @@ void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
 
+void CloudWindow::click(QString Id, int x, int y)
+{
+    qWarning()<<"click:"<<Id<<x<<y;
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    QPoint pts(x , y);
+    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts))) {
+//        qWarning()<<"keyclick";
+        // Send thee mouseclick event twice
+        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QApplication::sendEvent(pc, e);
+        delete e;
+        return;
+    }
+}
+void CloudWindow::unclick(QString Id, int x, int y)
+{
+    qWarning()<<"unclick:"<<Id<<x<<y;
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    QPoint pts(x , y);
+    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts))) {
+//        qWarning()<<"keyclick";
+        // Send thee mouseclick event twice
+        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QApplication::sendEvent(pc, e);
+        delete e;
+        return;
+    }
+}
 void CloudWindow::pocketUpdated(CPObject * pObject)
 {
 
