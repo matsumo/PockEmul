@@ -52,10 +52,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		pPC = (CpcXXXX*) parent;
 		Parent	= parent;
 		toDestroy = false;
-		PosX	= 0;
-		PosY	= 0;
-        setDX(0);
-        setDY(0);
+
 
 		pKEYB	= 0;
 		pTIMER	= 0;
@@ -68,6 +65,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		SymbImage = 0;
         TopImage=LeftImage=RightImage=BottomImage=BackImage = 0;
         internalImageRatio = 1;
+        LcdRatio = 1;
         flipping = false;
         currentView = FRONTview;
 		extensionArray[0] = 0;
@@ -124,7 +122,7 @@ CPObject::~CPObject()
     if (pLCDC) delete pLCDC;
     if (bus) delete bus;
 	
-    delete FinalImage;
+
     delete BackgroundImage;
     delete BackgroundImageBackup;
     delete LcdImage;
@@ -147,8 +145,8 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
     xml->writeAttribute("front",Front?"true":"false");
     xml->writeAttribute("power",Power?"true":"false");
         xml->writeStartElement("position");
-        xml->writeAttribute("x", QString("%1").arg(PosX));
-        xml->writeAttribute("y", QString("%1").arg(PosY));
+        xml->writeAttribute("x", QString("%1").arg(posx()));
+        xml->writeAttribute("y", QString("%1").arg(posy()));
         xml->writeAttribute("width", QString("%1").arg(getDX()));
         xml->writeAttribute("height", QString("%1").arg(getDY()));
         xml->writeEndElement(); // position
@@ -179,7 +177,7 @@ void CPObject::createShortcut() {
 #endif
 }
 
-void CPObject::maximizeHeight()
+void CPObject::maximizeWidth()
 {
     if (mainwindow->zoom <= 100) {
         // Compute global rect
@@ -206,7 +204,7 @@ void CPObject::maximizeHeight()
     }
 }
 
-void CPObject::maximizeWidth()
+void CPObject::maximizeHeight()
 {
     if (mainwindow->zoom <= 100) {
         // Compute global rect
@@ -281,7 +279,7 @@ bool CPObject::init()
     startPosDrag = false;
     setMouseTracking(true);
     resize(getDX(),getDY());
-    move(QPoint(PosX,PosY));
+    move(QPoint(posx(),posy()));
     setAttribute(Qt::WA_AlwaysShowToolTips,true);
 
     AddLog(LOG_MASTER,tr("Memory initialisation"));
@@ -300,7 +298,7 @@ bool CPObject::init()
 
 bool CPObject::exit()
 {
-	if (pKEYB)		pKEYB->exit();
+    if (pKEYB)	pKEYB->exit();
     if (pLCDC)  pLCDC->exit();
     if (pTIMER) pTIMER->exit();
     if (dialogVKeyboard) { dialogVKeyboard->close(); dialogVKeyboard->deleteLater(); }
@@ -512,7 +510,7 @@ void CPObject::SwitchFrontBack(QPoint point) {
 
         QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
         animation->setDuration(1000);
-        animation->setStartValue(QRect(PosX,PosY,getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100));
+        animation->setStartValue(QRect(posx(),posy(),getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100));
         animation->setEndValue(QRect(newposx,newposy,getDX()*mainwindow->zoom/100/4,getDY()*mainwindow->zoom/100/4));
         animation->setEasingCurve(QEasingCurve::OutBounce);
         animation->start();
@@ -621,25 +619,6 @@ void CPObject::slotDoubleClick(QPoint pos) {
     }
 
 
-#if 0
-    bool detach = (parentWidget() != 0);
-    // Search all conected objects then compute them
-    QList<CPObject *> LinkedList;
-    LinkedList.append(this);
-    mainwindow->pdirectLink->findAllObj(this,&LinkedList);
-    for (int i=0;i<LinkedList.size();i++)
-    {
-        if (detach) {
-            LinkedList.at(i)->setParent(0);
-            LinkedList.at(i)->setWindowFlags(Qt::FramelessWindowHint);
-            LinkedList.at(i)->show();
-        }
-        else {
-            LinkedList.at(i)->setParent(mainwindow);
-            LinkedList.at(i)->show();
-        }
-    }
-#else
     if (mainwindow->zoom <= 100) {
         // Compute global rect
         QRect rs = RectWithLinked();
@@ -658,7 +637,6 @@ void CPObject::slotDoubleClick(QPoint pos) {
         mainwindow->doZoom(pos,-1,mainwindow->zoom-100);
     }
 
-#endif
 }
 
 void CPObject::mouseDoubleClickEvent(QMouseEvent *event)

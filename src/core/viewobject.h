@@ -44,15 +44,14 @@ public:
     QSize targetSize;
     QImage *getViewImage(View v);
 
-    float	posx();
-    float   posy();
-    void    setPosX(float);
-    void    setPosY(float);
     void    Move(QPoint);
     QRect   rect();
     QPoint  pos();
 
-    float	PosX,PosY;
+    float	posx();
+    float   posy();
+    void    setPosX(float);
+    void    setPosY(float);
 
     int     getDX();
     int     getDY();
@@ -61,17 +60,12 @@ public:
     void    setDY(int v);
     void    setDZ(int v);
 
-    int     getDXmm() {return Pc_DX_mm;}
-    int     getDYmm() {return Pc_DY_mm;}
-    int     getDZmm() {return Pc_DZ_mm;}
-    void    setDXmm(int v) {Pc_DX_mm = v;}
-    void    setDYmm(int v) {Pc_DY_mm = v;}
-    void    setDZmm(int v) {Pc_DZ_mm = v;}
-    int		Pc_DX,Pc_DY;
-    int		Pc_DX_mm,Pc_DY_mm,Pc_DZ_mm;		// PC size (mm
-
-
-
+    int     getDXmm();
+    int     getDYmm();
+    int     getDZmm();
+    void    setDXmm(int v);
+    void    setDYmm(int v);
+    void    setDZmm(int v);
 
     virtual bool InitDisplay(void);
     void mousePressEvent(QMouseEvent *event);
@@ -88,6 +82,11 @@ signals:
 
 public slots:
     void endAnimation();
+
+private:
+    int		Pc_DX,Pc_DY;
+    float	PosX,PosY;
+    int		Pc_DX_mm,Pc_DY_mm,Pc_DZ_mm;		// PC size (mm
 };
 
 #endif // VIEWOBJECT_H

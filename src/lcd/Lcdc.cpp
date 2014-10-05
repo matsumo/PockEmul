@@ -160,7 +160,8 @@ void Clcdc_pc1350::disp_symb(void)
 
 }
 
-
+#define PIXEL_SIZE 4
+#define PIXEL_GAP 1
 void Clcdc_pc1350::disp(void)
 {
     BYTE co,li,ind,b,data,x,y;
@@ -195,7 +196,12 @@ void Clcdc_pc1350::disp(void)
                     for (b=0; b<8;b++)
                     {
                         painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                        painter.drawPoint( x, y+b);
+                        painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
+                        //painter.drawPoint( x, y+b);
+                        painter.drawRect(x*(PIXEL_SIZE+PIXEL_GAP),
+                                         (y+b)*(PIXEL_SIZE+PIXEL_GAP),
+                                         PIXEL_SIZE-1,
+                                         PIXEL_SIZE-1);
                     }
                     DirtyBuf[adr-0x7000]=0;
                 }

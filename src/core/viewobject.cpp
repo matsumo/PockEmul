@@ -14,13 +14,22 @@ extern MainWindowPockemul* mainwindow;
 
 CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
 {
+    Q_UNUSED(parent)
+
     FrontImage=TopImage=LeftImage=RightImage=BottomImage=BackImage=0;
     Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;
+    PosX = PosY	= Pc_DX = Pc_DY = 0;
 }
 
 CViewObject::~CViewObject()
 {
-
+    delete FinalImage;
+    delete FrontImage;
+    delete TopImage;
+    delete LeftImage;
+    delete RightImage;
+    delete BottomImage;
+    delete BackImage;
 }
 
 float	CViewObject::posx()
@@ -72,6 +81,19 @@ void CViewObject::setDX(int v) {Pc_DX = v;}
 void CViewObject::setDY(int v) {Pc_DY = v;}
 
 void CViewObject::setDZ(int v) {Q_UNUSED(v)}
+
+int CViewObject::getDXmm() {return Pc_DX_mm;}
+
+int CViewObject::getDYmm() {return Pc_DY_mm;}
+
+int CViewObject::getDZmm() {return Pc_DZ_mm;}
+
+void CViewObject::setDXmm(int v) {Pc_DX_mm = v;}
+
+void CViewObject::setDYmm(int v) {Pc_DY_mm = v;}
+
+void CViewObject::setDZmm(int v) {Pc_DZ_mm = v;}
+
 QRect CViewObject::rect()
 {
     return QRect(PosX,PosY,Pc_DX,Pc_DY);
@@ -242,6 +264,7 @@ void CViewObject::flip(Direction dir) {
          animationView2 = currentView;
          clearMask();
          break;
+     default: break;
      }
 
      QParallelAnimationGroup *group = new QParallelAnimationGroup;
@@ -257,6 +280,8 @@ void CViewObject::flip(Direction dir) {
 #define RATIO .25
 void CViewObject::paintEvent(QPaintEvent *event)
 {
+    Q_UNUSED(event)
+
     if (flipping)
     {
         UpdateFinalImage();
@@ -316,6 +341,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
                                   getViewImage(animationView2)->scaled(QSize(wt * m_angle/90,ht),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
                                   );
                 break;
+            default: break;
             }
 
             painter.end();
@@ -374,6 +400,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         case LEFTdir: targetView = LEFTview; break;
         case RIGHTdir: targetView = RIGHTview; break;
         case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
         }
         break;
     case TOPview:
@@ -382,6 +409,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
 //        case LEFTdir: targetView = LEFTview; break;
 //        case RIGHTdir: targetView = RIGHTview; break;
         case BOTTOMdir: targetView = FRONTview; break;
+        default: break;
         }
         break;
     case LEFTview:
@@ -390,6 +418,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         case LEFTdir: targetView = BACKview; break;
         case RIGHTdir: targetView = FRONTview; break;
 //        case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
         }
         break;
     case RIGHTview:
@@ -398,6 +427,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         case LEFTdir: targetView = FRONTview; break;
         case RIGHTdir: targetView = BACKview; break;
 //        case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
         }
         break;
     case BOTTOMview:
@@ -406,6 +436,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
 //        case LEFTdir: targetView = LEFTview; break;
 //        case RIGHTdir: targetView = RIGHTview; break;
         case BOTTOMdir: targetView = BACKview; break;
+        default: break;
         }
         break;
     case BACKview:
@@ -414,6 +445,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         case LEFTdir: targetView = RIGHTview; break;
         case RIGHTdir: targetView = LEFTview; break;
         case BOTTOMdir: targetView = TOPview; break;
+        default: break;
         }
         break;
 

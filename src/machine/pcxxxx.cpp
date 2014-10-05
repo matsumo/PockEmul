@@ -172,7 +172,7 @@ bool CpcXXXX::InitDisplay(void)
     global_h = getDY();
 
     delete LcdImage;
-    LcdImage				= CreateImage(QSize(Lcd_DX, Lcd_DY),LcdFname,false,false,0);
+    LcdImage				= CreateImage(QSize(Lcd_DX * LcdRatio, Lcd_DY*LcdRatio),LcdFname,false,false,0);
     if (!SymbFname.isEmpty()) {
         delete SymbImage;
         SymbImage	= CreateImage(QSize(Lcd_Symb_DX, Lcd_Symb_DY),SymbFname);

@@ -39,6 +39,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     Lcd_DY		= 32;
     Lcd_ratio_X	= 2;
     Lcd_ratio_Y	= 2;
+    LcdRatio = 5;
 
     Lcd_Symb_X	= 50;
     Lcd_Symb_Y	= 48;
