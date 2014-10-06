@@ -86,23 +86,22 @@ Window {
 
         Rectangle {
             id: photoFrame
-            width: _width //* image.scale //+ 20
-            height: _height //* image.scale //+ 20
-//            border.color: "black"
             color: "transparent"
 
             border.width: 0
             smooth: true
             antialiasing: true
-            x: _left //Math.random() * testarea.width - defaultSize
-            y: _top //Math.random() * testarea.height - defaultSize
+            x: _left
+            y: _top
+            width: _width
+            height: _height
             rotation: Math.random() * 13 - 6
             Image {
                 id: image
                 anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
                 source: "image://Pocket/"+idpocket+"/"+dummy
-                scale: 1 //defaultSize / Math.max(sourceSize.width, sourceSize.height)
+                scale: 1
                 antialiasing: true
             }
             PinchArea {
@@ -123,7 +122,7 @@ Window {
                     propagateComposedEvents: true
                     onPositionChanged: {
                         if (drag.active) {
-                            root.sendMovePocket(idpocket,photoFrame.left,photoFrame.top);
+                            root.sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
                         }
                     }
 
@@ -136,10 +135,13 @@ Window {
                     onExited: photoFrame.border.color = "black";
 
                     onWheel: {
+                        wheel.accepted = false;
                         if (wheel.modifiers & Qt.ControlModifier) {
+                            wheel.accepted = true;
                             photoFrame.rotation += wheel.angleDelta.y / 120 * 5;
                             if (Math.abs(photoFrame.rotation) < 4)
                                 photoFrame.rotation = 0;
+
                         }
                     }
 
