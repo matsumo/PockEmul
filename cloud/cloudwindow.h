@@ -53,6 +53,7 @@ public slots:
     Q_INVOKABLE void warning(QString msg);
     Q_INVOKABLE void click(QString Id, int x, int y);
     Q_INVOKABLE void unclick(QString Id, int x, int y);
+    Q_INVOKABLE void setzoom(int x,int y,int z);
 
     void pocketUpdated(CPObject* pObject);
     void newPObject(CPObject *pObject);

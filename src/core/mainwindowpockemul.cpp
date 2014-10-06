@@ -185,6 +185,12 @@ MainWindowPockemul::~MainWindowPockemul() {
 
 }
 
+void MainWindowPockemul::setZoom(int z)
+{
+    qWarning()<<"setzoom:"<<z;
+    zoom = z;
+}
+
 void MainWindowPockemul::initObjectTable() {
     objtable["PC-1211"]=PC1211;
     objtable["PC-1245"]=PC1245;
@@ -1207,6 +1213,7 @@ void MainWindowPockemul::updateFrameTimer()
 #endif
                 if ( CurrentpPC->Refresh_Display) {
 //                   AddLog(LOG_DISPLAY,tr("Refresh Display"));
+                    CurrentpPC->UpdateFinalImage();
                     CurrentpPC->update();
                     CurrentpPC->Refresh_Display= false;
 //                    qWarning()<<"Refresh Display";

@@ -55,6 +55,27 @@ Window {
     property int highestZ: 0
     property real defaultSize: 200
 
+    PinchArea {
+        id: mainpinch
+        anchors.fill: parent
+        //pinch.target: photoFrame
+        pinch.minimumRotation: -360
+        pinch.maximumRotation: 360
+        pinch.minimumScale: 0.1
+        pinch.maximumScale: 10
+        onPinchUpdated: {
+            root.setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+        }
+        MouseArea {
+            hoverEnabled: true
+            anchors.fill: parent
+            onWheel: {
+                console.log("angle:"+wheel.angleDelta);
+                    root.setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
+            }
+        }
+    }
+
     ListModel {
         id: xmlThumbModel
     }
@@ -65,8 +86,8 @@ Window {
 
         Rectangle {
             id: photoFrame
-            width: _width * image.scale //+ 20
-            height: _height * image.scale //+ 20
+            width: _width //* image.scale //+ 20
+            height: _height //* image.scale //+ 20
 //            border.color: "black"
             color: "transparent"
 
@@ -78,7 +99,7 @@ Window {
             rotation: Math.random() * 13 - 6
             Image {
                 id: image
-                anchors.centerIn: parent
+                anchors.fill: parent
                 fillMode: Image.PreserveAspectFit
                 source: "image://Pocket/"+idpocket+"/"+dummy
                 scale: 1 //defaultSize / Math.max(sourceSize.width, sourceSize.height)
@@ -91,12 +112,15 @@ Window {
                 pinch.maximumRotation: 360
                 pinch.minimumScale: 0.1
                 pinch.maximumScale: 10
-                onPinchFinished: photoFrame.border.color = "black";
+                onPinchUpdated: {
+                    root.setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+                }
                 MouseArea {
                     id: dragArea
                     hoverEnabled: true
                     anchors.fill: parent
                     drag.target: photoFrame
+                    propagateComposedEvents: true
                     onPressed: {
                         photoFrame.z = ++testarea.highestZ;
                         root.sendClick(idpocket,mouseX,mouseY);
@@ -104,6 +128,7 @@ Window {
                     onReleased: root.sendUnClick(idpocket,mouseX,mouseY)
                     onEntered: photoFrame.border.color = "red";
                     onExited: photoFrame.border.color = "black";
+                    /*
                     onWheel: {
                         if (wheel.modifiers & Qt.ControlModifier) {
                             photoFrame.rotation += wheel.angleDelta.y / 120 * 5;
@@ -117,36 +142,14 @@ Window {
                             image.scale += image.scale * wheel.angleDelta.y / 120 / 10;
                             _left -= image.width * (image.scale - scaleBefore) / 2.0;
                             _top -= image.height * (image.scale - scaleBefore) / 2.0;
+                            root.setZoom(mouseX,mouseY,image.scale*100);
                         }
                     }
+                    */
                 }
             }
         }
     }
 
-//    Image {
-//        anchors.top: parent.top
-//        anchors.left: parent.left
-//        anchors.margins: 10
-//        source: "core/folder.png"
-//        MouseArea {
-//            anchors.fill: parent
-//            anchors.margins: -10
-//            onClicked: fileDialog.open()
-//        }
-//    }
 
-//    Text {
-//        anchors.bottom: parent.bottom
-//        anchors.left: parent.left
-//        anchors.right: parent.right
-//        anchors.margins: 10
-//        color: "darkgrey"
-//        wrapMode: Text.WordWrap
-//        font.pointSize: 8
-//        text: "On a touchscreen: use two fingers to zoom and rotate, one finger to drag\n" +
-//              "With a mouse: drag normally, use the vertical wheel to zoom, horizontal wheel to rotate, or hold Ctrl while using the vertical wheel to rotate"
-//    }
-
-//    Component.onCompleted: xmlThumbModel.source= "qrc:/pockemul/config.xml"
 }

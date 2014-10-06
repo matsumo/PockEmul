@@ -67,6 +67,7 @@ CloudWindow::CloudWindow(QWidget *parent)
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
     QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+    QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
 
     m_fileDialog = new QFileDialog(this);
     m_fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -369,6 +370,11 @@ void CloudWindow::unclick(QString Id, int x, int y)
         delete e;
         return;
     }
+}
+
+void CloudWindow::setzoom(int x,int y,int z)
+{
+    mainwindow->doZoom(QPoint(x,y),z);
 }
 void CloudWindow::pocketUpdated(CPObject * pObject)
 {

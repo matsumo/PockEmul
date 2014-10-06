@@ -1068,13 +1068,14 @@ OTHER_FILES += \
     cloud/content/knob.svg \
     cloud/content/counter.js \
     cloud/content/SortListModel.qml \
-    cloud/content/Test.qml \
+    cloud/content/Test2.qml \
     cloud/content/Grid.qml \
     resources/keymap/ti57.map \
     resources/keymap/hp41.map \
     resources/keymap/hp82143a.map \
     cloud/content/Message.qml \
     cloud/PmlView2.qml \
+    cloud/Test.qml \
     cloud/content/NewsDelegate2.qml \
     cloud/content/Actions.qml \
     resources/keymap/rlp9006.map \
