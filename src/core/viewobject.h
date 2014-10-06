@@ -44,7 +44,8 @@ public:
     QSize targetSize;
     QImage *getViewImage(View v);
 
-    void    Move(QPoint);
+    void    MoveRel(QPoint);
+    void    MoveAbs(QPoint p);
     QRect   rect();
     QPoint  pos();
 
@@ -76,6 +77,7 @@ public:
     static QImage * CreateImage(QSize size, QString fname, bool Hmirror=false, bool Vmirror=false, int angle=0);
     void changeGeometry(int newposx, int newposy, int newwidth, int newheight);
     void changeGeometrySize(int newposx, int newposy, int newwidth, int newheight);
+
 signals:
     void movePObject(CViewObject*,QPoint);
     void sizePObject(CViewObject*,QSize);

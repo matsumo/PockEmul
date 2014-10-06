@@ -456,7 +456,7 @@ CPObject *pPC=0;
 
 
 
-    pPC->Move(QPoint(0,0));
+    pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
     pPC->show();
 
@@ -1241,7 +1241,7 @@ void MainWindowPockemul::MoveAll(QPoint p) {
     // Fetch all_object and move them
     for (int i=0;i<listpPObject.size();i++)
     {
-        listpPObject.at(i)->Move(p);
+        listpPObject.at(i)->MoveRel(p);
     }
 }
 

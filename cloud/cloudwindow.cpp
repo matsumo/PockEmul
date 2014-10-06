@@ -67,6 +67,7 @@ CloudWindow::CloudWindow(QWidget *parent)
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
     QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+    QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
     QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
 
     m_fileDialog = new QFileDialog(this);
@@ -342,6 +343,13 @@ QString CloudWindow::loadCache(QString fileName)
 void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
+void CloudWindow::movepocket(QString Id, int x, int y)
+{
+    qWarning()<<"movepocket:"<<Id<<x<<y;
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    QPoint pts(x , y);
+    pc->MoveWithLinkedAbs(pts);
+ }
 
 void CloudWindow::click(QString Id, int x, int y)
 {

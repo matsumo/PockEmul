@@ -52,10 +52,23 @@ void CViewObject::setPosY(float val)
     QWidget::move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 }
-void CViewObject::Move(QPoint p)
+void CViewObject::MoveRel(QPoint p)
 {
     PosX += p.x();
     PosY += p.y();
+    QWidget::move(QPoint(PosX,PosY));
+    emit movePObject(this,QPoint(PosX,PosY));
+#ifdef AVOID
+    mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
+    mainwindow->router->processTransaction();
+    mainwindow->router->outputInstanceToSVG("test-connectionpin01");
+#endif
+}
+
+void CViewObject::MoveAbs(QPoint p)
+{
+    PosX = p.x();
+    PosY = p.y();
     QWidget::move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 #ifdef AVOID

@@ -121,6 +121,12 @@ Window {
                     anchors.fill: parent
                     drag.target: photoFrame
                     propagateComposedEvents: true
+                    onPositionChanged: {
+                        if (drag.active) {
+                            root.sendMovePocket(idpocket,photoFrame.left,photoFrame.top);
+                        }
+                    }
+
                     onPressed: {
                         photoFrame.z = ++testarea.highestZ;
                         root.sendClick(idpocket,mouseX,mouseY);
@@ -128,24 +134,15 @@ Window {
                     onReleased: root.sendUnClick(idpocket,mouseX,mouseY)
                     onEntered: photoFrame.border.color = "red";
                     onExited: photoFrame.border.color = "black";
-                    /*
+
                     onWheel: {
                         if (wheel.modifiers & Qt.ControlModifier) {
                             photoFrame.rotation += wheel.angleDelta.y / 120 * 5;
                             if (Math.abs(photoFrame.rotation) < 4)
                                 photoFrame.rotation = 0;
-                        } else {
-                            photoFrame.rotation += wheel.angleDelta.x / 120;
-                            if (Math.abs(photoFrame.rotation) < 0.6)
-                                photoFrame.rotation = 0;
-                            var scaleBefore = image.scale;
-                            image.scale += image.scale * wheel.angleDelta.y / 120 / 10;
-                            _left -= image.width * (image.scale - scaleBefore) / 2.0;
-                            _top -= image.height * (image.scale - scaleBefore) / 2.0;
-                            root.setZoom(mouseX,mouseY,image.scale*100);
                         }
                     }
-                    */
+
                 }
             }
         }

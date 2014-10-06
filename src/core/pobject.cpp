@@ -242,7 +242,7 @@ void CPObject::FindAllLinked(CPObject * search, QList<CPObject *> * liste) {
     }
 }
 
-void CPObject::MoveWithLinked(QPoint p) {
+void CPObject::MoveWithLinkedAbs(QPoint p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
     ConList.append(this);
@@ -251,7 +251,28 @@ void CPObject::MoveWithLinked(QPoint p) {
 
     for (int i=0;i<ConList.size();i++)
     {
-        ConList.at(i)->Move(p);
+        ConList.at(i)->MoveAbs(p);
+
+    }
+
+    // YES, but how to connect closely extendions ?
+//    for (int i=0;i<listpPObject.size();i++) {
+//        CPObject * locpc = listpPObject.at(i);
+
+//        if ((locpc != this) && !locpc->geometry().intersect(this->geometry()).isNull()) locpc->MoveWithLinked(p);
+    //    }
+}
+
+void CPObject::MoveWithLinkedRel(QPoint p) {
+    // Search all conected objects then move them
+    QList<CPObject *> ConList;
+    ConList.append(this);
+
+    FindAllLinked(this,&ConList);
+
+    for (int i=0;i<ConList.size();i++)
+    {
+        ConList.at(i)->MoveRel(p);
 
     }
 
@@ -780,7 +801,7 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
                     if (delta.x()<0) delta.setX(MAX(delta.x(),mainwindow->centralwidget->width()- (posx()+width())));
 
                 }
-                MoveWithLinked(delta);
+                MoveWithLinkedRel(delta);
                 PosDrag = event->globalPos();
                 update();
                 event->accept();
@@ -866,7 +887,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
                             // The user clicked the Yes button or pressed Enter
                             // Connect
 
-                            MoveWithLinked(listpPObject.at(k)->pos() + listpPObject.at(k)->ConnList.at(c)->getSnap()*mainwindow->zoom/100 - pos() - nearList.at(r)->getSnap()*mainwindow->zoom/100);
+                            MoveWithLinkedRel(listpPObject.at(k)->pos() + listpPObject.at(k)->ConnList.at(c)->getSnap()*mainwindow->zoom/100 - pos() - nearList.at(r)->getSnap()*mainwindow->zoom/100);
                             mainwindow->pdirectLink->addLink(listpPObject.at(k)->ConnList.at(c),nearList.at(r),true);
                             QList<CPObject *> list;
                             listpPObject.at(k)->manageStackPos(&list);

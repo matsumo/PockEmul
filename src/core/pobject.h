@@ -109,7 +109,8 @@ public:
 	
     void    serialize(QXmlStreamWriter *,int id);
 
-    void    MoveWithLinked(QPoint);
+    void    MoveWithLinkedRel(QPoint);
+    void    MoveWithLinkedAbs(QPoint p);
 
 	QImage* BackgroundImageBackup;
 	QImage* BackgroundImage;
@@ -225,6 +226,7 @@ public:
     void writeBus(UINT32 *d, UINT32 data);
     void readBus(UINT32 *d, UINT32 *data);
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);
+
 
 signals:
     void msgError(QString);
