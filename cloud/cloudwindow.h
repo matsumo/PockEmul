@@ -60,6 +60,7 @@ public slots:
     void delPObject(CPObject *pObject);
     void movePObject(CViewObject*pObject, QPoint pos);
     void sizePObject(CViewObject*pObject, QSize size);
+    void stackPosChanged();
 
 
 private slots:

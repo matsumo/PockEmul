@@ -357,8 +357,7 @@ void CloudWindow::click(QString Id, int x, int y)
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
     if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts))) {
-//        qWarning()<<"keyclick";
-        // Send thee mouseclick event twice
+        // Send thee MouseButtonPress event
         QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
         QApplication::sendEvent(pc, e);
         delete e;
@@ -370,14 +369,14 @@ void CloudWindow::unclick(QString Id, int x, int y)
     qWarning()<<"unclick:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
-    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts))) {
-//        qWarning()<<"keyclick";
-        // Send thee mouseclick event twice
-        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-        QApplication::sendEvent(pc, e);
-        delete e;
-        return;
-    }
+
+
+    // Send thee MouseButtonRelease event
+    QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+    QApplication::sendEvent(pc, e);
+    delete e;
+    return;
+
 }
 
 void CloudWindow::setzoom(int x,int y,int z)
@@ -400,6 +399,7 @@ void CloudWindow::newPObject(CPObject *pObject) {
 
     connect (pObject,SIGNAL(movePObject(CViewObject*,QPoint)),this,SLOT(movePObject(CViewObject*,QPoint)));
     connect (pObject,SIGNAL(sizePObject(CViewObject*,QSize)),this,SLOT(sizePObject(CViewObject*,QSize)));
+    connect (pObject,SIGNAL(stackPosChanged()),this,SLOT(stackPosChanged()));
 
     QMetaObject::invokeMethod(object, "addPocket",
                               Q_ARG(QVariant, QString("name")),
@@ -438,6 +438,22 @@ void CloudWindow::sizePObject(CViewObject *pObject, QSize size)
                               Q_ARG(QVariant, size.height())
                               );
 }
+
+void CloudWindow::stackPosChanged()
+{
+    // fetch all main windows children
+    // set zorder
+    QObjectList list = mainwindow->centralWidget()->children();
+
+    for (int i=0; i<list.count();i++) {
+        CPObject * pobj = (CPObject*)(list.at(i));
+        QMetaObject::invokeMethod(object, "orderPocket",
+                                  Q_ARG(QVariant, QString("%1").arg((long)pobj)),
+                                  Q_ARG(QVariant, i)
+                                  );
+    }
+}
+
 void CloudWindow::addShortcut(QString param) {
     m_addShortcut("test",param);
 }

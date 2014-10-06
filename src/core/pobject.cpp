@@ -247,11 +247,12 @@ void CPObject::MoveWithLinkedAbs(QPoint p) {
     QList<CPObject *> ConList;
     ConList.append(this);
 
+    QPoint delta = p - pos();
     FindAllLinked(this,&ConList);
 
     for (int i=0;i<ConList.size();i++)
     {
-        ConList.at(i)->MoveAbs(p);
+        ConList.at(i)->MoveRel(delta);
 
     }
 
@@ -750,7 +751,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
     list.clear();
 
     manageStackPos(&list);
-
+    emit stackPosChanged();
 
     if ( (parentWidget() != mainwindow->centralwidget) //mainwindow
          && (parentWidget() != 0))
@@ -891,6 +892,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
                             mainwindow->pdirectLink->addLink(listpPObject.at(k)->ConnList.at(c),nearList.at(r),true);
                             QList<CPObject *> list;
                             listpPObject.at(k)->manageStackPos(&list);
+                            emit stackPosChanged();
                         }
 //                        qWarning("post box :%i",mainwindow);
                     }

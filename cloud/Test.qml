@@ -73,6 +73,11 @@ Window {
                 console.log("angle:"+wheel.angleDelta);
                     root.setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
             }
+            onPositionChanged: {
+                if (mouse.button == Qt.LeftButton) {
+                    root.sendMoveAllPocket(photoFrame.x,photoFrame.y);
+                }
+            }
         }
     }
 
@@ -93,13 +98,14 @@ Window {
             antialiasing: true
             x: _left
             y: _top
+            z: _zorder
             width: _width
             height: _height
             rotation: Math.random() * 13 - 6
             Image {
                 id: image
                 anchors.fill: parent
-                fillMode: Image.PreserveAspectFit
+                fillMode: Image.Stretch
                 source: "image://Pocket/"+idpocket+"/"+dummy
                 scale: 1
                 antialiasing: true
@@ -125,15 +131,13 @@ Window {
                             root.sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
                         }
                     }
-
                     onPressed: {
-                        photoFrame.z = ++testarea.highestZ;
-                        root.sendClick(idpocket,mouseX,mouseY);
+                        //photoFrame.z = ++testarea.highestZ;
+                        root.sendClick(idpocket,mouse.x,mouse.y);
                     }
-                    onReleased: root.sendUnClick(idpocket,mouseX,mouseY)
+                    onReleased: root.sendUnClick(idpocket,mouse.x,mouse.y)
                     onEntered: photoFrame.border.color = "red";
                     onExited: photoFrame.border.color = "black";
-
                     onWheel: {
                         wheel.accepted = false;
                         if (wheel.modifiers & Qt.ControlModifier) {
@@ -143,6 +147,9 @@ Window {
                                 photoFrame.rotation = 0;
 
                         }
+                    }
+                    onPressAndHold: {
+                        onReleased: root.sendPressAndHold(idpocket,mouse.x,mouse.y)
                     }
 
                 }

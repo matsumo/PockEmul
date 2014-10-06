@@ -357,7 +357,8 @@ function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
                              _width:_width,
                              _height:_height,
                              idpocket:_pocketId,
-                                  dummy:0});
+                                  dummy:0,
+                                  _zorder:0});
 
 }
 
@@ -384,6 +385,7 @@ function movePocket(_pocketId,_left,_top) {
         console.log("object moved to ("+_left+","+_top+")");
     }
 }
+
 function sizePocket(_pocketId,_width,_height) {
 
     var index = getIndex(_pocketId);
@@ -394,6 +396,17 @@ function sizePocket(_pocketId,_width,_height) {
         testarea.xmlThumbModel.get(index)._width = _width;
         testarea.xmlThumbModel.get(index)._height = _height;
         console.log("object sized to ("+_width+","+_height+")");
+    }
+}
+
+function orderPocket(_pocketId,_zorder) {
+
+    var index = getIndex(_pocketId);
+
+    console.log("found index:"+index);
+    if (index !== -1) {
+
+        testarea.xmlThumbModel.get(index)._zorder = _zorder;
     }
 }
 function getIndex(id) {

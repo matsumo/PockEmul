@@ -36,6 +36,8 @@ public:
 
     virtual void ComputeKey(void);
 
+    virtual bool	UpdateFinalImage(void);
+
     //virtual void resizeEvent ( QResizeEvent * );
 	
 	Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;

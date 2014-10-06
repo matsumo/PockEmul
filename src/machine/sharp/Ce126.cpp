@@ -39,6 +39,8 @@ int KeyMapce126Lenght = 5;
 
 Cce126::Cce126(CPObject *parent):Cprinter(this)
 {								//[constructor]
+    Q_UNUSED(parent)
+
     setfrequency( 0);
     ce126buf	= 0;
     ce126display= 0;
@@ -92,6 +94,33 @@ void Cce126::ComputeKey(void)
     if (pKEYB->LastKey == K_RMT_OFF) {
         rmtSwitch = false;
     }
+}
+
+bool Cce126::UpdateFinalImage(void) {
+
+    Cprinter::UpdateFinalImage();
+
+    QPainter painter;
+    painter.begin(FinalImage);
+
+    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
+
+//    ratio *= charsize;
+    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
+                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
+                          QPoint(paperWidget->bufferImage->width(),
+                                 paperWidget->getOffset().y() +10)
+                          );
+//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+    painter.drawImage(PaperPos(),
+                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+                      );
+
+    painter.end();
+
+    emit updatedPObject(this);
+
+    return true;
 }
 
 
@@ -212,7 +241,7 @@ bool Cce126::init(void)
 
     paperWidget = new CpaperWidget(PaperPos(),ce126buf,this);
     paperWidget->updated = true;
-	paperWidget->show();
+//	paperWidget->show();
 
     // Fill it blank
     clearPaper();
@@ -633,8 +662,8 @@ C263591::C263591()
 {								//[constructor]
     BackGroundFname	= P_RES(":/ext/26-3591.jpg");
     setcfgfname("263591");
-    setDX(854);//Pc_DX	= 854;
-    setDY(349);//Pc_DY	= 349;
+    setDX(854);
+    setDY(349);
     SnapPts = QPoint(373,0);
     setDXmm(236);
     setDYmm(96);
