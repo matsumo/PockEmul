@@ -15,8 +15,8 @@ Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
     Initial_Session_Fname ="pc1260.pkm";
 
     BackGroundFname	= P_RES(":/pc1260/pc1260.png");
-    LcdFname		= P_RES(":/pc1260/1260lcd.png");
-    SymbFname		= P_RES(":/pc1260/1260symb.png");
+    LcdFname		= ":/pockemul/transparent.png";
+    SymbFname		= ":/pockemul/transparent.png";
 
     memsize			= 0x10000;
 
@@ -27,13 +27,14 @@ Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
 
     Lcd_X		= 79;
     Lcd_Y		= 37;
-    Lcd_DX		= 312;
-    Lcd_DY		= 30;
-    Lcd_ratio_X	= 1;//1.18;
-    Lcd_ratio_Y	= 1;//1.18;
+    Lcd_DX		= 156;
+    Lcd_DY		= 16;
+    Lcd_ratio_X	= 2;
+    Lcd_ratio_Y	= 2;
+    LcdRatio    = 5;
 
     Lcd_Symb_X	= 53;
-    Lcd_Symb_Y	= 40;
+    Lcd_Symb_Y	= 37;
     Lcd_Symb_DX	= 288;
     Lcd_Symb_DY	= 33;
     Lcd_Symb_ratio_X	= 1;//1.18;
@@ -80,12 +81,8 @@ Cpc1261::Cpc1261(CPObject *parent)	: Cpc1260(this)
     Initial_Session_Fname ="pc1261.pkm";
 
     BackGroundFname	= P_RES(":/pc1261/pc1261.png");
-    LcdFname		= P_RES(":/pc1261/1261lcd.png");
-//		SymbFname		= "pc-1261\\1261symb.png";
-
 
     memsize			= 0x10000;
-//		NbSlot		= 3;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1261/cpu-1261.rom")	, "" , CSlot::ROM , "CPU ROM"));
@@ -110,13 +107,9 @@ Cpc1262::Cpc1262(CPObject *parent)	: Cpc1261(this)
     SessionHeader	= "PC1262PKM";
     Initial_Session_Fname ="pc1262.pkm";
 
-    BackGroundFname	= P_RES(":/pc1262/pc1262.png");
-    LcdFname		= P_RES(":/pc1262/1262lcd.png");
-//		SymbFname		= "pc-1262\\1262symb.png";
-
+    BackGroundFname	= P_RES(":/pc1262/pc1262.jpg");
 
     memsize			= 0x10000;
-//		NbSlot		= 3;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1262/cpu-1262.rom")	, "" , CSlot::ROM , "CPU ROM"));

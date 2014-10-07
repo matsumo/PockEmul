@@ -75,10 +75,9 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
     Initial_Session_Fname ="pc1350.pkm";
 
     BackGroundFname	= P_RES(":/pc1350/pc1350.png");
-    LcdFname		= P_RES(":/pc1350/1350lcd.png");
-    SymbFname		= P_RES(":/pc1350/1350symb.png");
+    LcdFname		= ":/pockemul/transparent.png";
+    SymbFname		= ":/pockemul/transparent.png";
     memsize			= 0x10000;
-//		NbSlot		= 3;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1350/cpu-1350.rom")	, "pc-1350/cpu-1350.rom"	, CSlot::ROM , "CPU ROM"));
@@ -91,8 +90,8 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
     pLCDC		= new Clcdc_pc1350(this);
     pKEYB		= new Ckeyb(this,"pc1350.map",scandef_pc1350);
     pCPU		= new CSC61860(this);
-
     pTIMER		= new Ctimer(this);
+
 }
 
 void	Cpc1350::initExtension(void)

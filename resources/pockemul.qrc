@@ -6,5 +6,6 @@
         <file>pockemul/configExt.xml</file>
         <file>pockemul/splash.png</file>
         <file>pockemul/weblinks.xml</file>
+        <file>pockemul/transparent.png</file>
     </qresource>
 </RCC>

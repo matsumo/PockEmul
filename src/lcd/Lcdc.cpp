@@ -37,7 +37,7 @@ Clcdc::~Clcdc() {
 void Clcdc::Contrast(int command)
 {
 	origColor_Off = Color_Off;
-	
+
 	switch (command)
 	{
 	case 0: contrast = (float) 1;	break;
@@ -46,9 +46,12 @@ void Clcdc::Contrast(int command)
 	case 3: contrast = (float) 0.7;	break;
 	case 4: contrast = (float) 0.5;	break;
 	}
-	Color_Off = QColor( (int) ( origColor_Off.red() * contrast ),
-						(int) ( origColor_Off.green() * contrast ),
-						(int) ( origColor_Off.blue() * contrast ) );
+//	Color_Off = QColor( (int) ( origColor_Off.red() * contrast ),
+//						(int) ( origColor_Off.green() * contrast ),
+//                        (int) ( origColor_Off.blue() * contrast ),
+//                        origColor_Off.alpha());
+
+    Color_Off.setAlphaF(1-contrast);
 	Update();
 }
 
@@ -69,6 +72,7 @@ void Clcdc::disp_one_symb(QPainter *painter, const char *figure, QColor color, i
 void Clcdc::disp_one_symb(const char *figure, QColor color, int x, int y)
 {
 	QPainter painter(pPC->SymbImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     Clcdc::disp_one_symb(&painter,figure,color,x,y);
 	painter.end();
 }
@@ -160,6 +164,11 @@ void Clcdc_pc1350::disp_symb(void)
 
 }
 
+Clcdc_pc1350::Clcdc_pc1350(CPObject *parent)	: Clcdc(parent)
+{						//[constructor]
+    Color_Off = Qt::transparent;
+}
+
 #define PIXEL_SIZE 4
 #define PIXEL_GAP 1
 void Clcdc_pc1350::disp(void)
@@ -172,6 +181,7 @@ void Clcdc_pc1350::disp(void)
     disp_symb();
 
     QPainter painter(pPC->LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (co=0; co<5; co++)
     {	for (li=0; li<4; li++)
@@ -662,10 +672,10 @@ void Clcdc_pc1260::disp_symb(void)
     disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x02),	pc1260_pos[3].x,	pc1260_pos[3].y);
     disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x04),	pc1260_pos[4].x,	pc1260_pos[4].y);
     disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x20),	pc1260_pos[5].x,	pc1260_pos[5].y);
-    disp_one_symb(S_JAP,		COLOR(SYMB2_1260&0x08),	pc1260_pos[6].x,	pc1260_pos[6].y);
+    disp_one_symb(S_JAP,	COLOR(SYMB2_1260&0x08),	pc1260_pos[6].x,	pc1260_pos[6].y);
     disp_one_symb(S_SMALL,	COLOR(SYMB2_1260&0x10),	pc1260_pos[7].x,	pc1260_pos[7].y);
     disp_one_symb(S_SHIFT,	COLOR(SYMB2_1260&0x20),	pc1260_pos[8].x,	pc1260_pos[8].y);
-    disp_one_symb(S_DEF,		COLOR(SYMB2_1260&0x40),	pc1260_pos[9].x,	pc1260_pos[9].y);
+    disp_one_symb(S_DEF,	COLOR(SYMB2_1260&0x40),	pc1260_pos[9].x,	pc1260_pos[9].y);
 	
     DirtyBuf[SYMB1_ADR_1260-0x2000] = false;
     DirtyBuf[SYMB2_ADR_1260-0x2000] = false;
@@ -682,7 +692,7 @@ void Clcdc_pc1260::disp_symb(void)
 void Clcdc_pc1260::disp(void)
 {
 	BYTE b,data;
-	int x,y;
+    int x,y;
 	int ind;
 	WORD adr;
 
@@ -691,101 +701,54 @@ void Clcdc_pc1260::disp(void)
 	disp_symb();
 
 	QPainter painter(pPC->LcdImage);
-	
-#if 1
-	for (ind=0; ind<0x3c; ind++)
-	{	adr = 0x2000 + ind;
-		if (DirtyBuf[adr-0x2000])
-		{
-            Refresh = true;
-			data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
-			
-                        x =(ind*2) + (ind/5)*3;			// +1 every 5 cols
-			y = 0;
-			
-			for (b=0; b<7;b++)
-			{
-				painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-				painter.drawPoint( x,	y+2*b	);
-				painter.drawPoint( x,	y+2*b+1	);
-				painter.drawPoint( x+1,	y+2*b	);
-				painter.drawPoint( x+1,	y+2*b+1	);
-			}
-			DirtyBuf[adr-0x2000] = 0;				
-		}
-	}
-#endif
-#if 1
-	for (ind=0; ind<0x3c; ind++)
-	{	adr = 0x2000 + 0x40 + ind;
-		if (DirtyBuf[adr-0x2000])
-		{
-            Refresh = true;
-			data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
-			
-                        x =(ind*2) + (ind/5)*3;			// +1 every 5 cols
-			y = 15;
-	
-			for (b=0; b<7;b++)
-			{
-				painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-				painter.drawPoint( x,	y+2*b	);
-				painter.drawPoint( x,	y+2*b+1	);
-				painter.drawPoint( x+1,	y+2*b	);
-				painter.drawPoint( x+1,	y+2*b+1	);
-			}
-			DirtyBuf[adr-0x2000] = 0;				
-		}
-	}
-#endif
-#if 1
-	for (ind=0; ind<0x3c; ind++)
-	{	adr = 0x2800 + ind;
-		if (DirtyBuf[adr-0x2000])
-		{
-            Refresh = true;
-			data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
-			
-                        x = (12*2*5+3*12) + (ind*2) + (ind/5)*3;			// +1 every 5 cols
-			y = 0;
-			
-			for (b=0; b<7;b++)
-			{
-				painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-				painter.drawPoint( x,	y+2*b	);
-				painter.drawPoint( x,	y+2*b+1	);
-				painter.drawPoint( x+1,	y+2*b	);
-				painter.drawPoint( x+1,	y+2*b+1	);
-			}
-			DirtyBuf[adr-0x2000] = 0;				
-		}
-	}
-#endif
-#if 1
-	for (ind=0; ind<0x3c; ind++)
-	{	adr = 0x2800 + 0x40 + ind;
-		if (DirtyBuf[adr-0x2000])
-		{
-            Refresh = true;
-			data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
-			
-                        x = (12*2*5+3*12) + (ind*2) + (ind/5)*3;			// +1 every 5 cols
-			y = 15;
-	
-			for (b=0; b<7;b++)
-			{
-				painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-				painter.drawPoint( x,	y+2*b	);
-				painter.drawPoint( x,	y+2*b+1	);
-				painter.drawPoint( x+1,	y+2*b	);
-				painter.drawPoint( x+1,	y+2*b+1	);
-			}
-			DirtyBuf[adr-0x2000] = 0;				
-		}
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+
+    for (int area = 0; area < 4; area++) {
+        int memOffset=0;
+        int xOffset = 0;
+        int yOffset = 0;
+
+        switch (area) {
+        case 0: memOffset = 0x000; xOffset = 0;  yOffset = 0; break;
+        case 1: memOffset = 0x040; xOffset = 0;  yOffset = 8; break;
+        case 2: memOffset = 0x800; xOffset = 78; yOffset = 0; break;
+        case 3: memOffset = 0x840; xOffset = 78; yOffset = 8; break;
         }
-#endif
+
+        for (ind=0; ind<0x3c; ind++)
+        {	adr = memOffset + 0x2000 + ind;
+            if (DirtyBuf[adr-0x2000])
+            {
+                Refresh = true;
+                data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+
+                x = xOffset + ind /*+ (ind/5)*/;			// +1 every 5 cols
+                y = yOffset;
+
+                for (b=0; b<7;b++)
+                {
+                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+                    painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
+                    //painter.drawPoint( x, y+b);
+                    painter.drawRect(x*(PIXEL_SIZE+PIXEL_GAP) + (ind/5)*(PIXEL_SIZE+PIXEL_GAP)*3/2,
+                                     (y+b)*(PIXEL_SIZE+PIXEL_GAP),
+                                     PIXEL_SIZE-1,
+                                     PIXEL_SIZE-1);
+                }
+                DirtyBuf[adr-0x2000] = 0;
+            }
+        }
+    }
+
+
 	redraw = 0;
 	painter.end();
+
+}
+
+Clcdc_pc1260::Clcdc_pc1260(CPObject *parent)	: Clcdc_pc1250(parent){						//[constructor]
+
+    Color_Off = QColor(0,0,0,0);
 
 }
 

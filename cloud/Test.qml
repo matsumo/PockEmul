@@ -40,6 +40,7 @@
 import QtQuick 2.0
 import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
+import QtQuick.Controls 1.2
 
 
 
@@ -54,6 +55,40 @@ Window {
 
     property int highestZ: 0
     property real defaultSize: 200
+
+
+    Menu {
+        id: menu
+        title: "Edit"
+
+        MenuItem {
+            text: "Cut"
+            shortcut: "Ctrl+X"
+            onTriggered: {}
+        }
+
+        MenuItem {
+            text: "Copy"
+            shortcut: "Ctrl+C"
+            onTriggered: {}
+        }
+
+        MenuItem {
+            text: "Paste"
+            shortcut: "Ctrl+V"
+            onTriggered: {}
+        }
+
+        MenuSeparator { }
+
+        Menu {
+            title: "More Stuff"
+
+            MenuItem {
+                text: "Do Nothing"
+            }
+        }
+    }
 
     PinchArea {
         id: mainpinch
@@ -149,7 +184,7 @@ Window {
                         }
                     }
                     onPressAndHold: {
-                        onReleased: root.sendPressAndHold(idpocket,mouse.x,mouse.y)
+                        menu.popup();
                     }
 
                 }

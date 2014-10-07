@@ -19,6 +19,7 @@ CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
     FrontImage=TopImage=LeftImage=RightImage=BottomImage=BackImage=0;
     Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;
     PosX = PosY	= Pc_DX = Pc_DY = 0;
+    pKEYB = 0;
 }
 
 CViewObject::~CViewObject()
@@ -30,6 +31,8 @@ CViewObject::~CViewObject()
     delete RightImage;
     delete BottomImage;
     delete BackImage;
+
+    delete pKEYB;
 }
 
 float	CViewObject::posx()

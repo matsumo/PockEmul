@@ -116,7 +116,7 @@ CPObject::~CPObject()
 {
     if (dialogdasm) delete dialogdasm;
 
-    if (pKEYB) delete pKEYB;
+
     //FIXME: When extension are connected , they share the timer with the host.
     //delete pTIMER;
     if (pLCDC) delete pLCDC;
@@ -1371,6 +1371,7 @@ bool CPObject::InitDisplay(void)
 #else
     BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
     internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
+    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
 #endif
 
     delete BackgroundImage;

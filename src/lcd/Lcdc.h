@@ -72,16 +72,10 @@ public:
 	void disp(void);				//display LCDC data to screen
 	void disp_symb(void);
 
-	Clcdc_pc1350(CPObject *parent)	: Clcdc(parent)
-	{						//[constructor]
-		Color_Off.setRgb(	
-                            (int) (101*contrast),
-                            (int) (109*contrast),
-                            (int) (94*contrast));
-	};
+    Clcdc_pc1350(CPObject *parent);
 	virtual ~Clcdc_pc1350()
 	{						//[constructor]
-	};
+    }
 
 };
 
@@ -183,15 +177,10 @@ public:
     const char*	GetClassName(){ return("Clcdc_pc1260");}
 
 
-	Clcdc_pc1260(CPObject *parent = 0)	: Clcdc_pc1250(parent){						//[constructor]
-		Color_Off.setRgb(
-                            (int) (0x63*contrast),
-                            (int) (0x6D*contrast),
-                            (int) (0x62*contrast));
-	};
+    Clcdc_pc1260(CPObject *parent = 0);
 	virtual ~Clcdc_pc1260()
 	{						//[constructor]
-	};
+    }
 
 };
 
