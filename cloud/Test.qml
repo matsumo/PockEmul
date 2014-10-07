@@ -37,7 +37,7 @@
 ** $QT_END_LICENSE$
 **
 ****************************************************************************/
-import QtQuick 2.0
+import QtQuick 2.3
 import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
@@ -129,8 +129,8 @@ Window {
             color: "transparent"
 
             border.width: 0
-            smooth: true
-            antialiasing: true
+//            smooth: true
+//            antialiasing: true
             x: _left
             y: _top
             z: _zorder
@@ -143,7 +143,9 @@ Window {
                 fillMode: Image.Stretch
                 source: "image://Pocket/"+idpocket+"/"+dummy
                 scale: 1
-                antialiasing: true
+                smooth: true
+                mipmap: true
+//                antialiasing: true
             }
             PinchArea {
                 anchors.fill: parent

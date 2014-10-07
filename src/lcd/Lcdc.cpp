@@ -24,9 +24,11 @@ Clcdc::Clcdc(CPObject *parent)
     On			= true;
     Refresh		= false;
     updated     = false;
-    contrast	= 0.95;
+    contrast = 1;
+
     memset(&DirtyBuf,0,sizeof(DirtyBuf));
-    Color_On.setRgb(0,0,0);
+    Color_On  = QColor(0,0,0,255);
+    Color_Off = QColor(0,0,0,0);
     ready = false;
 }
 
@@ -36,7 +38,6 @@ Clcdc::~Clcdc() {
 
 void Clcdc::Contrast(int command)
 {
-	origColor_Off = Color_Off;
 
 	switch (command)
 	{
@@ -46,12 +47,18 @@ void Clcdc::Contrast(int command)
 	case 3: contrast = (float) 0.7;	break;
 	case 4: contrast = (float) 0.5;	break;
 	}
-//	Color_Off = QColor( (int) ( origColor_Off.red() * contrast ),
-//						(int) ( origColor_Off.green() * contrast ),
-//                        (int) ( origColor_Off.blue() * contrast ),
-//                        origColor_Off.alpha());
+    if ( (Color_Off.red()==0) && (Color_Off.green()==0) && (Color_Off.blue()==0)) {
+        qWarning()<<"trabs";
+        Color_Off.setAlphaF(1-contrast);
+    }
+    else {
+        qWarning()<<"classic";
+        Color_Off = QColor( (int) ( origColor_Off.red() * contrast ),
+                            (int) ( origColor_Off.green() * contrast ),
+                            (int) ( origColor_Off.blue() * contrast ),
+                            origColor_Off.alpha());
+    }
 
-    Color_Off.setAlphaF(1-contrast);
 	Update();
 }
 
@@ -106,7 +113,8 @@ bool	Clcdc::init(void)
     ready = true;
     redraw = true;
 
-	
+    origColor_Off = Color_Off;
+    Contrast(3);
     AddLog(LOG_MASTER,"Lcd INIT");
 	return(true);
 }
@@ -805,12 +813,12 @@ void Clcdc_pc1401::disp_symb(void)
 	{
 
     disp_one_symb( S_BUSY,	COLOR(SYMB2_1401&0x01),	pc1401_pos[0].x,	pc1401_pos[0].y);
-    disp_one_symb( S_DEF,		COLOR(SYMB2_1401&0x02),	pc1401_pos[1].x,	pc1401_pos[1].y);
+    disp_one_symb( S_DEF,	COLOR(SYMB2_1401&0x02),	pc1401_pos[1].x,	pc1401_pos[1].y);
     disp_one_symb( S_SHIFT,	COLOR(SYMB2_1401&0x04),	pc1401_pos[2].x,	pc1401_pos[2].y);
-    disp_one_symb( S_HYP,		COLOR(SYMB2_1401&0x08),	pc1401_pos[3].x,	pc1401_pos[3].y);
-    disp_one_symb( S_DE,		COLOR(SYMB3_1401&0x20),	pc1401_pos[5].x,	pc1401_pos[5].y);
+    disp_one_symb( S_HYP,	COLOR(SYMB2_1401&0x08),	pc1401_pos[3].x,	pc1401_pos[3].y);
+    disp_one_symb( S_DE,	COLOR(SYMB3_1401&0x20),	pc1401_pos[5].x,	pc1401_pos[5].y);
     disp_one_symb( S_G,		COLOR(SYMB3_1401&0x10),	pc1401_pos[6].x,	pc1401_pos[6].y);
-    disp_one_symb( S_RAD,		COLOR(SYMB3_1401&0x08),	pc1401_pos[7].x,	pc1401_pos[7].y);
+    disp_one_symb( S_RAD,	COLOR(SYMB3_1401&0x08),	pc1401_pos[7].x,	pc1401_pos[7].y);
     disp_one_symb( S_O_BRA,	COLOR(SYMB3_1401&0x04),	pc1401_pos[8].x,	pc1401_pos[8].y);
     disp_one_symb( S_C_BRA,	COLOR(SYMB3_1401&0x04),	pc1401_pos[9].x,	pc1401_pos[9].y);
     disp_one_symb( S_REV_M,	COLOR(SYMB3_1401&0x02),	pc1401_pos[10].x,	pc1401_pos[10].y);
@@ -837,22 +845,30 @@ void Clcdc_pc1401::disp_symb(void)
 	Clcdc::disp_symb();
 }
 
+Clcdc_pc1401::Clcdc_pc1401(CPObject *parent)	: Clcdc(parent){						//[constructor]
+    Color_Off.setRgb(
+                (int) (0x61*contrast),
+                (int) (0x6D*contrast),
+                (int) (0x61*contrast));
+
+}
+
 void Clcdc_pc1401::disp(void)
 {
-	
-	BYTE b,data,x,y;
-	int ind;
-	WORD adr;
+
+    BYTE b,data,x,y;
+    int ind;
+    WORD adr;
 
     Refresh = false;
 
-	disp_symb();
+    disp_symb();
 
-	QPainter painter(pPC->LcdImage);
+    QPainter painter(pPC->LcdImage);
 
-	for (ind=0; ind<0x28; ind++)
-	{
-		adr = 0x6000 + ind;
+    for (ind=0; ind<0x28; ind++)
+    {
+        adr = 0x6000 + ind;
 		if ( DirtyBuf[adr-0x6000] )
 		{	
             Refresh = true;

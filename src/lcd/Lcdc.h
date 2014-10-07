@@ -192,15 +192,10 @@ public:
 
 
 
-	Clcdc_pc1401(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x61*contrast),
-							(int) (0x6D*contrast),
-							(int) (0x61*contrast));
-	};
+    Clcdc_pc1401(CPObject *parent = 0);
 	virtual ~Clcdc_pc1401()
 	{						//[constructor]
-	};
+    }
 
 };
 
