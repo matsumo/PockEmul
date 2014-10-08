@@ -105,14 +105,13 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     KeyMapLenght= KeyMap1250Lenght;
 
     PowerSwitch	= 0;
-    Pc_Offset_X = Pc_Offset_Y = 0;
 
-    setDXmm(200);//Pc_DX_mm = 135;
-    setDYmm(130);//Pc_DY_mm = 70;
-    setDZmm(30);//Pc_DZ_mm = 10;
+    setDXmm(200);
+    setDYmm(130);
+    setDZmm(30);
 
-    setDX(715);//Pc_DX		= 483;//409;
-    setDY(465);//Pc_DY		= 252;//213;
+    setDX(715);
+    setDY(465);
 
     Lcd_X		= 67;
     Lcd_Y		= 63;

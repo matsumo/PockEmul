@@ -72,7 +72,6 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
 
     PowerSwitch	= 0;
-    Pc_Offset_X = Pc_Offset_Y = 0;
 
     setDXmm(206);//Pc_DX_mm =200 ;
     setDYmm(83);//Pc_DY_mm =130;

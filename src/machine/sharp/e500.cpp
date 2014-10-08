@@ -104,9 +104,6 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
     }
 
     PowerSwitch	= 0;
-    Pc_Offset_X = Pc_Offset_Y = 0;
-
-
 
     Lcd_X		= 69;
     Lcd_Y		= 99;

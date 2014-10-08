@@ -54,9 +54,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     Japan		= false;
     timerRate   = 1;
 
-    Pc_Offset_X	= 0;
-    Pc_Offset_Y	= 0;
-
     Lcd_X		= 0;
     Lcd_Y		= 0;
     Lcd_DX		= 0;
@@ -133,15 +130,15 @@ bool CpcXXXX::UpdateFinalImage(void)
         {
             if (SymbImage) {
                 //painter.setRenderHint(QPainter::Antialiasing);
-                x = (Lcd_Symb_X + Pc_Offset_X)*internalImageRatio;
-                y = (Lcd_Symb_Y + Pc_Offset_Y)*internalImageRatio;
+                x = Lcd_Symb_X * internalImageRatio;
+                y = Lcd_Symb_Y * internalImageRatio;
                 z = (int) (Lcd_Symb_DX * Lcd_Symb_ratio_X * internalImageRatio);
                 t = (int) (Lcd_Symb_DY * Lcd_Symb_ratio_Y * internalImageRatio);
 
                 painter.drawImage(QRect(x,y,z,t),SymbImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
             }
-            x	= (Lcd_X + Pc_Offset_X) * internalImageRatio;
-            y	= (Lcd_Y + Pc_Offset_Y) * internalImageRatio;
+            x	= Lcd_X * internalImageRatio;
+            y	= Lcd_Y * internalImageRatio;
             z	= (int) (Lcd_DX * Lcd_ratio_X * internalImageRatio);
             t	= (int) (Lcd_DY * Lcd_ratio_Y * internalImageRatio);
             painter.drawImage(QRect(x,y,z,t),LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
@@ -169,8 +166,6 @@ bool CpcXXXX::InitDisplay(void)
 
     Refresh_Display = true;
     UpdateDisplayRunning = false;
-    global_w = getDX();
-    global_h = getDY();
 
     delete LcdImage;
     LcdImage				= CreateImage(QSize(Lcd_DX * LcdRatio, Lcd_DY*LcdRatio),LcdFname,false,false,0);

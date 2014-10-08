@@ -51,14 +51,12 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
 	KeyMap		= KeyMap1500;
 	KeyMapLenght= KeyMap1500Lenght;
 
-	Pc_Offset_X = Pc_Offset_Y = 0;
+    setDXmm(195);
+    setDYmm(86);
+    setDZmm(25);
 
-    setDXmm(195);//Pc_DX_mm = 195;
-    setDYmm(86);//Pc_DY_mm = 86;
-    setDZmm(25);//Pc_DZ_mm = 25;
-
-    setDX(679);//Pc_DX		= 572;
-    setDY(299);//Pc_DY		= 254;
+    setDX(679);
+    setDY(299);
 		
     Lcd_X		= 93;//80;
     Lcd_Y		= 61;//50;

@@ -52,7 +52,6 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(1 , 0x1800 ,	""					, ""	, CSlot::ROM , "PORT"));
 
     PowerSwitch	= 0;
-    Pc_Offset_X = Pc_Offset_Y = 0;
 
     setDXmm(187);
     setDYmm(177);

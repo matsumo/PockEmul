@@ -37,16 +37,12 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
 
     SlotList.clear();
 
+    setDXmm(196);
+    setDYmm(95);
+    setDZmm(20);
 
-    Pc_Offset_X = Pc_Offset_Y = 0;
-
-
-    setDXmm(196);//Pc_DX_mm = 195;
-    setDYmm(95);//Pc_DY_mm = 86;
-    setDZmm(20);//Pc_DZ_mm = 25;
-
-    setDX(683);//Pc_DX		= 679; //572;
-    setDY(330);//Pc_DY		= 299;//254;
+    setDX(683);
+    setDY(330);
 
     Lcd_X		= 67;
     Lcd_Y		= 60;

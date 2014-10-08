@@ -55,8 +55,6 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
     KeyMap		= KeyMap1600;
     KeyMapLenght= KeyMap1600Lenght;
 
-    Pc_Offset_X = Pc_Offset_Y = 0;
-
     setDXmm(195);
     setDYmm(86);
     setDZmm(25);

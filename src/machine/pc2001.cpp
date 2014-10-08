@@ -63,14 +63,13 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     KeyMapLenght= KeyMap1250Lenght;
 
     PowerSwitch	= 0;
-    Pc_Offset_X = Pc_Offset_Y = 0;
 
-    setDXmm(225);//Pc_DX_mm 206
-    setDYmm(129);//Pc_DY_mm =83)
-    setDZmm(32);//Pc_DZ_mm =30)
+    setDXmm(225);
+    setDYmm(129);
+    setDZmm(32);
 
-    setDX(804);//Pc_DX		= 483;//409;
-    setDY(462);//Pc_DY		= 252;//213;
+    setDX(804);
+    setDY(462);
 
     Lcd_X		= 89;
     Lcd_Y		= 70;

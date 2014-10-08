@@ -48,8 +48,6 @@ Cpb2000::Cpb2000(CPObject *parent)	: Cpb1000(parent)
     SlotList.append(CSlot(32, 0x28000 ,	""					, ""	, CSlot::RAM , "RAM 1"));
     SlotList.append(CSlot(64, 0x30000 ,	"EMPTY"             , ""	, CSlot::ROM , "EXT ROM"));      // Originally in 70000
 
-    Pc_Offset_X = Pc_Offset_Y = 0;
-
     setDXmm(188);
     setDYmm(83);
     setDZmm(15);
