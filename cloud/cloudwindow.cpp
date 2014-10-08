@@ -356,7 +356,8 @@ void CloudWindow::click(QString Id, int x, int y)
     qWarning()<<"click:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
-    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts))) {
+//    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
+    {
         // Send thee MouseButtonPress event
         QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
         QApplication::sendEvent(pc, e);

@@ -110,6 +110,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 #define TRANSFORM Qt::FastTransformation
 #else
 #define TRANSFORM Qt::SmoothTransformation
+//#define TRANSFORM Qt::FastTransformation
 #endif
 
     //    qWarning()<<"UpdateFinalImage";
