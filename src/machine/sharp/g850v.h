@@ -18,14 +18,12 @@ Q_OBJECT
 public:
     const char*	GetClassName(){ return("Cg850");}
 
-    bool	LoadConfig(QXmlStreamReader *);
-    bool	SaveConfig(QXmlStreamWriter *);
+    bool	LoadConfig(QXmlStreamReader *xmlIn);
+    bool	SaveConfig(QXmlStreamWriter *xmlOut);
     bool	InitDisplay(void);
     bool	CompleteDisplay(void);
 
     virtual bool	run(void);				// emulator main
-    void	Set_Port(PORTS Port,BYTE data);
-    BYTE	Get_Port(PORTS Port);
 
     virtual bool Mem_Mirror(UINT32 *d);
     virtual void TurnON(void);

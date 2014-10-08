@@ -30,8 +30,8 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
     SessionHeader	= "G850PKM";
     Initial_Session_Fname ="g850.pkm";
     BackGroundFname	= P_RES(":/G850V/g850v.png");
-    LcdFname		= P_RES(":/G850V/g850vlcd.png");
-    SymbFname		= P_RES(":/G850V/g850vsymb.png");
+    LcdFname		= ":/pockemul/transparent.png"; //P_RES(":/G850V/g850vlcd.png");
+    SymbFname		= ":/pockemul/transparent.png"; //P_RES(":/G850V/g850vsymb.png");
     memsize			= 0x060000;
     InitMemValue	= 0xff;
 
@@ -50,6 +50,7 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
     Lcd_DY		= 48;
     Lcd_ratio_X	= 2;
     Lcd_ratio_Y	= 2;
+    LcdRatio = 5;
 
     Lcd_Symb_X	= 50;//64+288;
     Lcd_Symb_Y	= 60;
@@ -438,23 +439,16 @@ bool Cg850v::run()
     return true;
 }
 
-void Cg850v::Set_Port(PORTS Port, BYTE data)
-{
-}
 
-BYTE Cg850v::Get_Port(PORTS Port)
+bool Cg850v::LoadConfig(QXmlStreamReader *xmlIn)
 {
-    return 0;
-}
-
-
-bool Cg850v::LoadConfig(QXmlStreamReader *)
-{
+//    pSED1560->Load_Internal(xmlIn);
     return true;
 }
 
-bool Cg850v::SaveConfig(QXmlStreamWriter *)
+bool Cg850v::SaveConfig(QXmlStreamWriter *xmlOut)
 {
+//    pSED1560->save_internal(xmlOut);
     return true;
 }
 

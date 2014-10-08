@@ -56,7 +56,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(300);
     setDY(643);
 
-    Lcd_X		= 52;
+    Lcd_X		= 55;
     Lcd_Y		= 45;
     Lcd_DX		= 96;
     Lcd_DY		= 64;

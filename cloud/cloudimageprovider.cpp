@@ -75,7 +75,7 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
     if (id.isEmpty()) return QImage();
     CPObject *pc = (CPObject*)_id[0].toULongLong();
 
-    return *(pc->FinalImage);
+    return *(pc->getViewImage(pc->currentView));
 
 }
 

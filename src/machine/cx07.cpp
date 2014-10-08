@@ -82,7 +82,7 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="x07.pkm";
 
     BackGroundFname	= P_RES(":/x07/x07.png");
-    LcdFname		= P_RES(":/x07/x07lcd.png");
+    LcdFname		= ":/pockemul/transparent.png"; //P_RES(":/x07/x07lcd.png");
     SymbFname		= "";
 
     RightFname  = P_RES(":/x07/x07Right.png");
@@ -115,16 +115,17 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
 
     Lcd_X		= 67;
     Lcd_Y		= 63;
-    Lcd_DX		= 120;//168;//144 ;
+    Lcd_DX		= 120;
     Lcd_DY		= 32;
-    Lcd_ratio_X	= 2.4;// * 1.18;
-    Lcd_ratio_Y	= 2.8;// * 1.18;
+    Lcd_ratio_X	= 2.4;
+    Lcd_ratio_Y	= 2.8;
+    LcdRatio = 5;
 
-    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
+    Lcd_Symb_X	= 55;
+    Lcd_Symb_Y	= 41;
     Lcd_Symb_DX	= 339;
     Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+    Lcd_Symb_ratio_X	= 1;
 
     PowerSwitch = 0;
 

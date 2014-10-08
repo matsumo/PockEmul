@@ -555,6 +555,9 @@ void CT6834::ClrScr (void)
     pPC->Refresh_Display = true;
 }
 
+#define PIXEL_SIZE 4
+#define PIXEL_GAP 1
+
 void CT6834::RefreshVideo (void)
 {
     int x;
@@ -573,6 +576,8 @@ if (!General_Info.LcdOn) return;
     if (!pPC->LcdImage) return;
     QPainter painter;
     painter.begin(pPC->LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+
     for (x=0;x<120;x++)
         for (y=0;y<32;y++)
         {
@@ -580,20 +585,30 @@ if (!General_Info.LcdOn) return;
                 curOnOff &&
                 General_Info.Curs_X == (x/6) &&
                 General_Info.Curs_Y == (y/8)) {
-
-                painter.setPen( (General_Info.LcdOn &&
-                                 (y == General_Info.Curs_Y * 8 + 6) &&
-                                 (x!=General_Info.Curs_X*6+5)) ?
-                                    pPC->pLCDC->Color_On :
-                                    pPC->pLCDC->Color_Off );
-                painter.drawPoint(x,y);
+                QColor col = (General_Info.LcdOn &&
+                              (y == General_Info.Curs_Y * 8 + 6) &&
+                              (x!=General_Info.Curs_X*6+5)) ?
+                                 pPC->pLCDC->Color_On :
+                                 pPC->pLCDC->Color_Off;
+                painter.setPen( col );
+                painter.setBrush( col );
+//                painter.drawPoint(x,y);
+                painter.drawRect((x)*(PIXEL_SIZE+PIXEL_GAP),
+                                 (y)*(PIXEL_SIZE+PIXEL_GAP),
+                                 PIXEL_SIZE-1,
+                                 PIXEL_SIZE-1);
             }
             else {
                 QColor col = (General_Info.LcdOn && Ram_Video[x][y])?
                                     pPC->pLCDC->Color_On : pPC->pLCDC->Color_Off;
 
                 painter.setPen(  col  );
-                painter.drawPoint(x,y);
+                painter.setBrush(  col  );
+//                painter.drawPoint(x,y);
+                painter.drawRect((x)*(PIXEL_SIZE+PIXEL_GAP),
+                                 (y)*(PIXEL_SIZE+PIXEL_GAP),
+                                 PIXEL_SIZE-1,
+                                 PIXEL_SIZE-1);
             }
         }
 //    if (General_Info.Curseur && cursorTimer.elapsed()>1000) cursorTimer.restart();

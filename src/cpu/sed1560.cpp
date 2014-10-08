@@ -1,4 +1,4 @@
-
+#include <QDebug>
 
 #include "sed1560.h"
 #include "pcxxxx.h"
@@ -132,6 +132,7 @@ BYTE CSED1560::instruction(qint16 cmd)
 }
 void CSED1560::cmd_ElecCtrlReg(qint16 cmd) {
     info.ElectCtrl = cmd & 0x1f;
+    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
 }
 
 void CSED1560::cmd_OutStatusRegSet(qint16 cmd) {
@@ -156,6 +157,8 @@ void CSED1560::cmd_AllIndic(qint16 cmd) {
 }
 
 void CSED1560::cmd_ADCSel(qint16 cmd) {
+
+
     AddLog(LOG_DISPLAY,tr("cmd_ADCSel : %1").arg(cmd,2,16,QChar('0')));
 }
 
