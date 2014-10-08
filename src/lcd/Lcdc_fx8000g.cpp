@@ -10,10 +10,10 @@
 
 Clcdc_fx8000g::Clcdc_fx8000g(CPObject *parent)	: Clcdc(parent){						//[constructor]
 
-    Color_Off.setRgb(
-                        (int) (90*contrast),
-                        (int) (108*contrast),
-                        (int) (99*contrast));
+//    Color_Off.setRgb(
+//                        (int) (90*contrast),
+//                        (int) (108*contrast),
+//                        (int) (99*contrast));
 }
 
 
@@ -42,7 +42,8 @@ void Clcdc_fx8000g::TurnOFF()
 
 }
 
-
+#define PIXEL_SIZE 4
+#define PIXEL_GAP 1
 
 void Clcdc_fx8000g::disp(void)
 {
@@ -55,6 +56,7 @@ void Clcdc_fx8000g::disp(void)
 
 //    qWarning()<<"PAINT";
     QPainter painter(pPC->LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     UINT8 cw = info.m_char_width;
 
@@ -96,8 +98,16 @@ void Clcdc_fx8000g::disp(void)
                             UINT8 d = d1 | (d2<<4);
                             for (int b=0; b<8; b++)
                             {
-                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( px*cw + c, a*32 + py*8 + b );
+//                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
+//                                painter.drawPoint( px*cw + c, a*32 + py*8 + b );
+
+                                painter.setPen( (BIT(d, 7-b)) ? Color_On : Color_Off );
+                                painter.setBrush((BIT(d, 7-b)) ? Color_On : Color_Off);
+                                //painter.drawPoint( x, y+b);
+                                painter.drawRect((px*cw + c)*(PIXEL_SIZE+PIXEL_GAP),
+                                                 (a*32 + py*8 + b)*(PIXEL_SIZE+PIXEL_GAP),
+                                                 PIXEL_SIZE-1,
+                                                 PIXEL_SIZE-1);
                             }
                         }
                     }

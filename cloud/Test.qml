@@ -170,7 +170,12 @@ Window {
                     }
                     onPressed: {
                         //photoFrame.z = ++testarea.highestZ;
-                        root.sendClick(idpocket,mouse.x,mouse.y);
+                        if (mouse.button == Qt.LeftButton) {
+                            root.sendClick(idpocket,mouse.x,mouse.y);
+                        }
+                        if (mouse.button == Qt.RightButton) {
+                            menu.popup();
+                        }
                     }
                     onReleased: root.sendUnClick(idpocket,mouse.x,mouse.y)
                     onEntered: photoFrame.border.color = "red";

@@ -36,7 +36,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="fx8000g.pkm";
 
     BackGroundFname	= P_RES(":/fx8000g/fx8000g.png");
-    LcdFname		= P_RES(":/fx8000g/fx8000glcd.png");
+    LcdFname		= ":/pockemul/transparent.png"; //P_RES(":/fx8000g/fx8000glcd.png");
     SymbFname	= "";
 
     LeftFname   = P_RES(":/fx8000g/fx8000gleft.png");
@@ -62,6 +62,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     Lcd_DY		= 64;
     Lcd_ratio_X	= 2;
     Lcd_ratio_Y	= 2;
+    LcdRatio = 5;
 
     Lcd_Symb_X	= 55;
     Lcd_Symb_Y	= 41;
