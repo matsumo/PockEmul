@@ -26,7 +26,6 @@
 
 #include "cpu.h"
 
-#define LOG(x)
 
 typedef unsigned char flag;
 typedef unsigned char byte;

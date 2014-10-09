@@ -71,9 +71,8 @@ void Clcdc_rlh1000::disp_symb(void)
 void Clcdc_rlh1000::disp(void)
 {
 
-    BYTE b,data,x;
+    BYTE b,data;
     int ind;
-    UINT32 adr;
 
     Refresh = false;
 

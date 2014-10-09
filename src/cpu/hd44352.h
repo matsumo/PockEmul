@@ -12,7 +12,7 @@
 ***************************************************************************/
 
 typedef struct {
-    UINT8 m_cursor[8];
+    UINT8 m_cursor[16];
     UINT8 m_cursor_x;
     UINT8 m_cursor_y;
     UINT8 m_cursor_lcd;

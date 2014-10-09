@@ -20,7 +20,9 @@ void Clcdc_ce1560::disp_symb(void)
 }
 INLINE int Clcdc_ce1560::symbSL(int x)
 {
-return 0;
+    Q_UNUSED(x)
+
+    return 0;
 }
 
 INLINE int Clcdc_ce1560::computeSL(CHD61102* pCtrl,int ord)

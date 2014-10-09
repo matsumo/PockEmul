@@ -27,6 +27,7 @@ void Clcdc_cc40::disp_symb(void)
 
 }
 
+#undef COLOR
 #define COLOR(b)	( ( (b) ) ? Color_On : Color_Off)
 #if 1
 HD44780_PIXEL_UPDATE(Ccc40_update_pixel_symb)

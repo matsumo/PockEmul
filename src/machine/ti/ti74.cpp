@@ -128,7 +128,7 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     Q_UNUSED(data)
 
 
-    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
+    if (*d<=0x007F)	{ return true;	}  // CPU RAM
 
     // CPU RAM
 
@@ -137,9 +137,9 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
 
     if (*d==0x0118) { ptms70c46cpu->control_w(data); return true; }
 
-    if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
-    if   (*d==0x1000) { pHD44780->control_write(data); pLCDC->redraw = true; return false; }
-    if   (*d==0x1001) { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
+    if (                 (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
+    if   (*d==0x1000)                   { pHD44780->control_write(data); pLCDC->redraw = true; return false; }
+    if   (*d==0x1001)                   { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
     if ( (*d>=0x1000) && (*d<=0x1FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return (SlotList[1].getType()==CSlot::RAM ? true: false); } // system ROM
@@ -150,7 +150,7 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
 
 bool Cti74::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
-    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
+    if (                 (*d<=0x007F) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x0100) && (*d<=0x010F) )	{ *data = ptms70c46cpu->pf_read(*d-0x100); return false;	}  // CPU RAM
     if   (*d==0x0118) { *data = ptms70c46cpu->control_r(); return false; }
     if   (*d==0x1000) { *data = pHD44780->control_read(); return false; }

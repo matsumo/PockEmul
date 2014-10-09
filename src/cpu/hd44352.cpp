@@ -177,7 +177,7 @@ void CHD44352::data_write(UINT8 data)
         }
 
         if (info.m_state>3)
-            qWarning()<<"STATE 4!!!!";
+//            qWarning()<<"STATE 4!!!!";
 
         switch (info.m_par[0] & 0x0f)
         {
@@ -332,6 +332,7 @@ void CHD44352::data_write(UINT8 data)
                 {
                     int _cursorId = (info.m_par[0]>>4)&0x01;
                     info.cursor[_cursorId].m_cursor[info.m_byte_count] = data;
+//                    qWarning()<<"HD44353: LCD_CURSOR_GRAPHIC cursor["<<_cursorId<<"]["<<info.m_byte_count<<"]="<<data;
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;
                 }
@@ -341,9 +342,10 @@ void CHD44352::data_write(UINT8 data)
                 {
                     int _cursorId = (info.m_par[0]>>4)&0x01;
                     UINT8 char_code = ((data<<4)&0xf0) | ((data>>4)&0x0f);
-
-                    for (int i=0; i<8; i++)
+//                    qWarning()<<"HD44353: LCD_CURSOR_CHAR cursor["<<_cursorId<<"]="<<char_code;
+                    for (int i=0; i<8; i++) {
                         info.cursor[_cursorId].m_cursor[i] = get_char(char_code*8 + i);
+                    }
 
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;
@@ -412,7 +414,10 @@ void CHD44352::data_write4(UINT8 data)
         case LCD_CURSOR_GRAPHIC:
         case LCD_CURSOR_CHAR:
             info.m_offset = 0;
-              if (info.m_state == 3) info.cursor[info.m_par[1] & 1].offset = data;
+            if (info.m_state == 3) {
+                info.cursor[info.m_par[1] & 1].offset = data;
+//                qWarning()<<"HD44353: cursor["<<(info.m_par[1] & 1)<<"].offset="<<data;
+            }
               break;
         case LCD_SCROLL_CHAR_WIDTH:
             if (info.m_state == 2)
@@ -424,7 +429,7 @@ void CHD44352::data_write4(UINT8 data)
         case LCD_CURSOR_STATUS:
             if (info.m_state == 2) {
                 info.m_cursor_status = data;
-                //                qWarning()<<"LCD_CURSOR_STATUS:"<<data;
+//                qWarning()<<"LCD_CURSOR_STATUS:"<<data;
             }
             break;
         case LCD_USER_CHARACTER:
@@ -467,21 +472,29 @@ void CHD44352::data_write4(UINT8 data)
         {
 //            qWarning()<<"state="<<info.m_state<<"  data="<<QString("%1").arg(data,2,16,QChar('0'));
             int _cursorId = (info.m_par[1]&0x01);
-            if (info.m_state == 3)
+            if (info.m_state == 3) {
                 info.cursor[_cursorId].m_cursor_x = data;
+//                qWarning()<<"HD44353: LCD_CURSOR_POSITION: cursor["<<_cursorId<<"].x="<<info.cursor[_cursorId].m_cursor_x;
+            }
             else if (info.m_state == 4)
             {
                 info.cursor[_cursorId].m_cursor_x += ((data & 7) << 4);
                 info.cursor[_cursorId].m_cursor_lcd = (data > 7) ? 1:0;
+//                qWarning()<<"HD44353: LCD_CURSOR_POSITION: cursor["<<_cursorId<<"].x="<<info.cursor[_cursorId].m_cursor_x;
+//                qWarning()<<"HD44353: LCD_CURSOR_POSITION: cursor["<<_cursorId<<"].lcd="<<info.cursor[_cursorId].m_cursor_lcd;
+
             }
-            else if (info.m_state == 5)
+            else if (info.m_state == 5) {
                 info.cursor[_cursorId].m_cursor_y = (data & 3);// * 192;
-//            qWarning()<<"LCD_CURSOR_POSITION:"<<info.cursor[_cursorId].m_cursor_x<<info.cursor[_cursorId].m_cursor_y<<" page:"<<info.cursor[_cursorId].m_cursor_lcd;
+//                qWarning()<<"HD44353: LCD_CURSOR_POSITION: cursor["<<_cursorId<<"].y="<<info.cursor[_cursorId].m_cursor_y;
+
+            }
+
         }
             break;
         }
 
-//        info.m_byte_count = 0;
+        info.m_byte_count = 0;
 //        info.m_data_bus = 0xff;
     }
     else
@@ -538,10 +551,12 @@ void CHD44352::data_write4(UINT8 data)
         }
             break;
         case LCD_CURSOR_GRAPHIC:
-                if (info.m_byte_count<8)
+//                if (info.m_byte_count<8)
                 {
-                    int _cursorId = (info.m_par[0]>>4)&0x01;
-                    info.cursor[_cursorId].m_cursor[info.m_byte_count] = data;
+                    info.m_byte_count &= 0x0f;
+                    int _cursorId = info.m_par[1] & 0x01;
+                    info.cursor[_cursorId].m_cursor[info.m_byte_count^1] = data;
+//                    qWarning()<<"HD44353: LCD_CURSOR_GRAPHIC cursor["<<_cursorId<<"]["<<(info.m_byte_count^1)<<"]="<<data;
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;
                 }
@@ -549,12 +564,13 @@ void CHD44352::data_write4(UINT8 data)
             case LCD_CURSOR_CHAR:
                 if (info.m_byte_count<1)
                 {
-                    int _cursorId = (info.m_par[0]>>4)&0x01;
+                    int _cursorId = info.m_par[1] & 0x01;
                     UINT8 char_code = ((data<<4)&0xf0) | ((data>>4)&0x0f);
+//                    qWarning()<<"HD44353: LCD_CURSOR_CHAR cursor["<<_cursorId<<"]="<<char_code;
 
-                    for (int i=0; i<8; i++)
+                    for (int i=0; i<8; i++) {
                         info.cursor[_cursorId].m_cursor[i] = get_char(char_code*8 + i);
-
+                    }
                     info.m_byte_count++;
                     info.m_data_bus = 0xff;
                 }

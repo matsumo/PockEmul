@@ -4,7 +4,7 @@
 #include <QtCore>
 
 static const char
-*S_REV_BATT=
+* const  S_REV_BATT=
 "#################\r"
 "#  ### ##   #   #\r"
 "# # # # ## ### ##\r"
@@ -13,7 +13,7 @@ static const char
 "#  ## # ## ### ##\r"
 "#################"
 
-,*S_BUSY=
+,* const S_BUSY=
 
 "##  #  #  ## # #\r"
 "# # #  # #   # #\r"
@@ -21,7 +21,7 @@ static const char
 "# # #  #   #  # \r"
 "##   ##  ##   #"
 
-,*S_HYP=
+,* const S_HYP=
 
 "# # # # ## \r"
 "# # # # # #\r"
@@ -29,7 +29,7 @@ static const char
 "# #  #  #  \r"
 "# #  #  #  "
 
-,*S_O_BRA=
+,* const S_O_BRA=
 
 " #\r"
 "# \r"
@@ -37,7 +37,7 @@ static const char
 "# \r"
 " #"
 
-,*S_C_BRA=
+,* const S_C_BRA=
 
 "# \r"
 " #\r"
@@ -45,7 +45,7 @@ static const char
 " #\r"
 "#"
 
-,*S_REV_M=
+,* const S_REV_M=
 
 "#######\r"
 "#  #  #\r"
@@ -53,7 +53,7 @@ static const char
 "# ### #\r"
 "#######"
 
-,*S_E=
+,* const S_E=
 
 "####\r"
 "#  \r"
@@ -61,7 +61,7 @@ static const char
 "#  \r"
 "####"
 
-,*S_PRINT=
+,* const S_PRINT=
 
 "### \r"
 "#  #\r"
@@ -69,7 +69,7 @@ static const char
 "#  \r"
 "#   "
 
-,*S_PRINTL=
+,* const S_PRINTL=
 
 "###  ###  # #   # #####\r"
 "#  # #  # # ##  #   #  \r"
@@ -77,7 +77,7 @@ static const char
 "#    # #  # #  ##   #  \r"
 "#    #  # # #   #   #  "
 
-,*S_DBL=
+,* const S_DBL=
 
 "##  ##  #  \r"
 "# # # # #  \r"
@@ -85,7 +85,7 @@ static const char
 "# # # # #  \r"
 "##  ##  ###"
 
-,*S_LOW=
+,* const S_LOW=
 
 "##############\r"
 "# ### ## # # #\r"
@@ -93,7 +93,7 @@ static const char
 "## ## ### # ##\r"
 "##############"
 
-,*S_INF=
+,* const S_INF=
 
 "  #\r"
 " # \r"
@@ -101,7 +101,7 @@ static const char
 " # \r"
 "  #"
 
-,*S_DA=
+,* const S_DA=
 
 "#######\r"
 " #   # \r"
@@ -109,7 +109,7 @@ static const char
 "   #   \r"
 "       "
 
-,*S_SUP=
+,* const S_SUP=
 
 "#  \r"
 " # \r"
@@ -117,7 +117,7 @@ static const char
 " # \r"
 "#  "
 
-,*S_UCL=
+,* const S_UCL=
 
 "# #  ## #  \r"
 "# # #   #  \r"
@@ -125,7 +125,7 @@ static const char
 "# # #   #  \r"
 "###  ##  ##"
 
-,*S_CTL=
+,* const S_CTL=
 
 " ## ### #  \r"
 "#    #  #  \r"
@@ -133,7 +133,7 @@ static const char
 "#    #  #  \r"
 " ##  #   ##"
 
-,*S_FN=
+,* const S_FN=
 
 "### #  #\r"
 "#   ## #\r"
@@ -141,7 +141,7 @@ static const char
 "#   #  #\r"
 "#   #  #"
 
-,*S_IO=
+,* const S_IO=
 
 "###   # ###  \r"
 " #    # # #  \r"
@@ -149,7 +149,7 @@ static const char
 " #  #   # #  \r"
 "### #   ###"
 
-,*S_SHIFT=
+,* const S_SHIFT=
 
 " ## # # # ### ###\r"
 "#   # # # #    # \r"
@@ -157,7 +157,7 @@ static const char
 "  # # # # #    # \r"
 "##  # # # #    #"
 
-,*S_ERROR=
+,* const S_ERROR=
 
 " ## ##  ##   #  ## \r"
 "#   # # # # # # # #\r"
@@ -165,7 +165,7 @@ static const char
 "#   # # # # # # # #\r"
 " ## # # # #  #  # #"
 
-,*S_CTRL=
+,* const S_CTRL=
 
 " ## ### ##  #  \r"
 "#    #  # # #  \r"
@@ -173,7 +173,7 @@ static const char
 "#    #  # # #  \r"
 " ##  #  # # ###"
 
-,*S_SML=
+,* const S_SML=
 
 " ## #   # #  \r"
 "#   ## ## #  \r"
@@ -181,7 +181,7 @@ static const char
 "  # #   # #  \r"
 "##  #   # ###"
 
-,*S_STAT=
+,* const S_STAT=
 
 " ## ###  #  ###\r"
 "#    #  # #  # \r"
@@ -189,7 +189,7 @@ static const char
 "  #  #  # #  # \r"
 "##   #  # #  #"
 
-,*S_SMALL=
+,* const S_SMALL=
 
 " ## #   #  #  #   #  \r"
 "#   ## ## # # #   #  \r"
@@ -197,7 +197,7 @@ static const char
 "  # #   # # # #   #  \r"
 "##  #   # # # ### ###"
 
-,*S_CASL=
+,* const S_CASL=
 
 " ##  #   ## #  \r"
 "#   # # #   #  \r"
@@ -205,7 +205,7 @@ static const char
 "#   # #   # #  \r"
 " ## # # ##  ###"
 
-,*S_CONST=
+,* const S_CONST=
 
 " ##  #  #  #  ## ###\r"
 "#   # # ## # #    #\r"
@@ -213,7 +213,7 @@ static const char
 "#   # # #  #   #  #\r"
 " ##  #  #  # ##   #"
 
-,*S_CAPS=
+,* const S_CAPS=
 
 " ##  #  ###  ##\r"
 "#   # # #  ##  \r"
@@ -221,7 +221,7 @@ static const char
 "#   # # #     #\r"
 " ## # # #   ## "
 
-,*S_SECF=
+,* const S_SECF=
 
 " ##            ###\r"
 "#  # # #     # #  \r"
@@ -229,7 +229,7 @@ static const char
 " #   #  # #  # #  \r"
 "###  #  #  ### #  "
 
-,*S_SEC=
+,* const S_SEC=
 
 " ##           \r"
 "#  # # #     #\r"
@@ -237,7 +237,7 @@ static const char
 " #   #  # #  #\r"
 "###  #  #  ###"
 
-,*S_JAP=
+,* const S_JAP=
 
 " #      # \r"
 "##### ####\r"
@@ -245,7 +245,7 @@ static const char
 " # #    # \r"
 "# #    #  "
 
-,*S_JAP2=
+,* const S_JAP2=
 
 "   #   \r"
 " # # # \r"
@@ -253,7 +253,7 @@ static const char
 "   #   \r"
 "  #    "
 
-,*S_TEXT=
+,* const S_TEXT=
 
 "### ### # # ###\r"
 " #  #   # #  # \r"
@@ -261,7 +261,7 @@ static const char
 " #  #   # #  # \r"
 " #  ### # #  #"
 
-,*S_DE=
+,* const S_DE=
 
 "##  ###\r"
 "# # #  \r"
@@ -269,14 +269,14 @@ static const char
 "# # #  \r"
 "##  ###"
 
-,*S_G=
+,* const S_G=
 " ###\r"
 "#   \r"
 "# ##\r"
 "#  #\r"
 " ##"
 
-,*S_DEG=
+,* const S_DEG=
 
 "##  ###  ###\r"
 "# # #   #   \r"
@@ -285,7 +285,7 @@ static const char
 "##  ###  ##"
 
 
-,*S_RAD=
+,* const S_RAD=
 
 "##   #  ## \r"
 "# # # # # #\r"
@@ -293,7 +293,7 @@ static const char
 "# # # # # #\r"
 "# # # # ##"
 
-,*S_RESERVE=
+,* const S_RESERVE=
 
 "##  ###  ## ### ##  # # ###\r"
 "# # #   #   #   # # # # #  \r"
@@ -301,7 +301,7 @@ static const char
 "# # #     # #   # # # # #  \r"
 "# # ### ##  ### # #  #  ###"
 
-,*S_RUN=
+,* const S_RUN=
 
 "##  #  # #  #\r"
 "# # #  # ## #\r"
@@ -309,7 +309,7 @@ static const char
 "# # #  # #  #\r"
 "# #  ##  #  #"
 
-,*S_PRO=
+,* const S_PRO=
 
 "##  ##   # \r"
 "# # # # # #\r"
@@ -317,7 +317,7 @@ static const char
 "#   # # # #\r"
 "#   # #  #"
 
-,*S_DEF=
+,* const S_DEF=
 
 "##  ### ###\r"
 "# # #   #  \r"
@@ -325,7 +325,7 @@ static const char
 "# # #   #  \r"
 "##  ### #"
 
-,*S_ROMEAN_I =
+,* const S_ROMEAN_I =
 
 "###\r"
 " # \r"
@@ -333,7 +333,7 @@ static const char
 " # \r"
 "###"
 
-,*S_ROMEAN_II=
+,* const S_ROMEAN_II=
 
 "######\r"
 " #  # \r"
@@ -341,7 +341,7 @@ static const char
 " #  # \r"
 "######"
 
-,*S_ROMEAN_III=
+,* const S_ROMEAN_III=
 
 "#########\r"
 " #  #  # \r"
@@ -349,96 +349,96 @@ static const char
 " #  #  # \r"
 "#########"
 
-,*S_BATTERY=
+,* const S_BATTERY=
 
 " ## \r"
 "####\r"
 "####\r"
 " ##"
 
-,*S_BAR13=
+,* const S_BAR13=
 
 "###"
 
-,*S_BAR23=
+,* const S_BAR23=
 
 "###\r"
 "###"
 
-,*S_BAR33=
+,* const S_BAR33=
 
-"###\r"
-"###\r"
-"###"
-
-,*S_BAR43=
-
-"###\r"
 "###\r"
 "###\r"
 "###"
 
-,*S_BAR53=
+,* const S_BAR43=
 
-"###\r"
 "###\r"
 "###\r"
 "###\r"
 "###"
 
-,*S_BAR14=
+,* const S_BAR53=
+
+"###\r"
+"###\r"
+"###\r"
+"###\r"
+"###"
+
+,* const S_BAR14=
 
 "####"
 
-,*S_BAR24=
+,* const S_BAR24=
 
 "####\r"
 "####"
 
-,*S_BAR34=
+,* const S_BAR34=
 
-"####\r"
-"####\r"
-"####"
-
-,*S_BAR44=
-
-"####\r"
-"####\r"
-"####\r"
-"####"
-
-,*S_BAR54=
-
-"####\r"
-"####\r"
 "####\r"
 "####\r"
 "####"
 
-,*S_BAR15=
+,* const S_BAR44=
+
+"####\r"
+"####\r"
+"####\r"
+"####"
+
+,* const S_BAR54=
+
+"####\r"
+"####\r"
+"####\r"
+"####\r"
+"####"
+
+,* const S_BAR15=
 
 "#####"
 
-,*S_BAR25=
+,* const S_BAR25=
 
 "#####\r"
 "#####"
 
-,*S_BAR35=
+,* const S_BAR35=
 
-"#####\r"
-"#####\r"
-"#####"
-
-,*S_BAR45=
-
-"#####\r"
 "#####\r"
 "#####\r"
 "#####"
 
-,*S_BAR55=
+,* const S_BAR45=
+
+"#####\r"
+"#####\r"
+"#####\r"
+"#####"
+
+,* const S_BAR55=
 
 "#####\r"
 "#####\r"

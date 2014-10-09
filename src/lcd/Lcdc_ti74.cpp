@@ -31,6 +31,7 @@ void Clcdc_ti74::disp_symb(void)
 
 }
 
+#undef COLOR
 #define COLOR(b)	( ( (b) ) ? Color_On : Color_Off)
 HD44780_PIXEL_UPDATE(Cti74_update_pixel_symb)
 {

@@ -144,8 +144,9 @@ bool Cfx8000g::UpdateFinalImage(void) {
     painter.begin(FinalImage);
 
     // POWER SWITCH
-//    painter.drawImage(0,29,BackgroundImageBackup->copy(0,29,10,95).mirrored(false,!off));
-
+    painter.drawImage(366,504,BackgroundImageBackup->copy(366,504,111,48).mirrored(!off,false));
+    // HD SWITCH
+    painter.drawImage(124,504,BackgroundImageBackup->copy(124,504,109,48).mirrored(hdFlag,false));
     painter.end();
 
     return true;
@@ -158,6 +159,7 @@ bool Cfx8000g::run() {
     if (pKEYB->LastKey == K_DEF) {
         hdFlag = !hdFlag;
         pKEYB->LastKey = 0;
+        update();
     }
 
 #if 1
@@ -308,11 +310,15 @@ void Cfx8000g::Reset()
 
 bool Cfx8000g::LoadConfig(QXmlStreamReader *xmlIn)
 {
+    Q_UNUSED(xmlIn)
+
     return true;
 }
 
 bool Cfx8000g::SaveConfig(QXmlStreamWriter *xmlOut)
 {
+    Q_UNUSED(xmlOut)
+
     return true;
 }
 

@@ -268,7 +268,7 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
     Q_UNUSED(data)
 
 
-    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
+    if (*d<=0x007F)	{ return true;	}  // CPU RAM
 
     // CPU RAM
     if (*d==0x0110) { bus_control_w(data); return false; }
@@ -295,7 +295,7 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
     }
     if ( (*d>=0x0100) && (*d<=0x010B) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}
 
-    if ( (*d>=0x0000) && (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
+    if (                 (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x1000) && (*d<=0x4FFF) )	{ sysram_w(*d-0x1000,data); return false;	}  // CPU RAM
     if ( (*d>=0x5000) && (*d<=0xCFFF) )	{ *d += 0x1B000 + ( RamBank * 0x8000 );
         return (SlotList[3].getType()==CSlot::RAM ? true: false); } // system ROM
@@ -311,7 +311,7 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
     Q_UNUSED(d)
     Q_UNUSED(data)
 
-    if ( (*d>=0x0000) && (*d<=0x007F) )	{ return true;	}  // CPU RAM
+    if (*d<=0x007F)	{ return true;	}  // CPU RAM
 
     if (*d==0x0110) { *data = bus_control_r(); return false; }
     if (*d==0x0114) { *data = 1; return false; }

@@ -1,6 +1,8 @@
 #ifndef HP41_H
 #define HP41_H
 
+#include <QDebug>
+
 // *********************************************************************
 //    Copyright (c) 1989-2002  Warren Furlow
 //    Sound, Timer, Trace Copyright (c) 2001 Zharkoi Oleg

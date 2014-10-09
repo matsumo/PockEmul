@@ -20,9 +20,9 @@ const byte ASCIItoLCD[128]=
 QByteArray ConvertASCIItoLCD(QByteArray *ba)
   {
     QByteArray out;
-  for (uint i=0;i<ba->size();i++)
+  for (int i=0;i<ba->size();i++)
     {
-    if (ba->at(i)<0x80)
+//    if (ba->at(i) < 0x80)
         out.append(ba->at(i));
 //    if ((byte)(ba.at(i)<0x80))
 //      out[i]= out.at(i)+0x20;
@@ -56,7 +56,6 @@ void Clcdc_hp41::disp_symb(void)
 
 void Clcdc_hp41::disp(void)
 {
-    bool error = false;
 
     Refresh = false;
 
