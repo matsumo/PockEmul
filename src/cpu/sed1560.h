@@ -15,6 +15,8 @@ typedef struct {
     BYTE    PgAdrReg;
     BYTE    displaySL;
     BYTE    ElectCtrl;
+    bool    allPtsOn;
+    bool    reverse;
     BYTE    imem[IMEMSIZE];
 } SED1560info;
 

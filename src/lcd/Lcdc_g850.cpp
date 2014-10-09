@@ -147,7 +147,7 @@ void Clcdc_g850::disp(void)
         {
             for (int j = 0 ; j < 8 ; j++)
             {
-            BYTE data = g850->pSED1560->info.imem[ (j * 0xa6) + i ];
+            BYTE data = g850->pSED1560->get8((j * 0xa6) + i); //info.imem[ (j * 0xa6) + i ];
                 for (b=0; b<8;b++)
                 {
                     //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);

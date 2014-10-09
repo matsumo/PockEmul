@@ -18,7 +18,10 @@
 #define PIN11IF_UART	2	// UART
 
 Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
-{								//[constructor]
+{
+    Q_UNUSED(parent)
+
+    //[constructor]
 #ifndef QT_NO_DEBUG
     if (!fp_log) fp_log=fopen("g850.log","wt");	// Open log file
 #endif
@@ -239,6 +242,8 @@ bool Cg850v::Mem_Mirror(UINT32 *d)
 
 bool Cg850v::Chk_Adr(UINT32 *d, UINT32 data)
 {
+    Q_UNUSED(data)
+
     Mem_Mirror(d);
     if (*d<=0x7fff) return true;
     return false;
@@ -246,6 +251,8 @@ bool Cg850v::Chk_Adr(UINT32 *d, UINT32 data)
 
 bool Cg850v::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
+    Q_UNUSED(data)
+
     Mem_Mirror(d);
     return true;
 }
@@ -442,12 +449,16 @@ bool Cg850v::run()
 
 bool Cg850v::LoadConfig(QXmlStreamReader *xmlIn)
 {
+    Q_UNUSED(xmlIn)
+
 //    pSED1560->Load_Internal(xmlIn);
     return true;
 }
 
 bool Cg850v::SaveConfig(QXmlStreamWriter *xmlOut)
 {
+    Q_UNUSED(xmlOut)
+
 //    pSED1560->save_internal(xmlOut);
     return true;
 }

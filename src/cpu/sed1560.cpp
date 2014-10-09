@@ -4,6 +4,7 @@
 #include "pcxxxx.h"
 #include "Log.h"
 #include "cpu.h"
+#include "Lcdc_g850.h"
 
 
 CSED1560::CSED1560(CpcXXXX *parent)
@@ -22,7 +23,10 @@ CSED1560::CSED1560(CpcXXXX *parent)
     info.busy = info.ADC = info.reset = false;
     updated = true;
     info.ReadModifyWrite = true;
+    info.allPtsOn = false;
+    info.reverse = false;
     info.ElectCtrl = 0x0f;
+    cmd_ElecCtrlReg(0x0f);
 }
 
 CSED1560::~CSED1560() {
@@ -31,14 +35,17 @@ CSED1560::~CSED1560() {
 
 BYTE CSED1560::get8(qint16 adr)
 {
+    if (info.allPtsOn) return 0xff;
+
     if (adr >= IMEMSIZE)
     {
         // ERROR
         AddLog(LOG_TEMP,tr("LCD : ERROR adr [%1] out of range").arg(adr,4,16,QChar('0')));
         if (pPC->fp_log) fprintf(pPC->fp_log,"LCD : ERROR adr [%04x] out of range [0,200h]\n",adr);
-        return 0;
+        qWarning()<<tr("ERROR:%1").arg(adr,4,16,QChar('0'));
+        return info.reverse ? 0xff : 0x00;
     }
-    return info.imem[adr];
+    return info.reverse ? ~info.imem[adr] : info.imem[adr];
 }
 
 void CSED1560::set8(qint16 adr,BYTE val)
@@ -84,7 +91,7 @@ BYTE CSED1560::instruction(qint16 cmd)
 //    updated = true;
     if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"SED1560 CMD: %04x\n",cmd);
 
-//    AddLog(LOG_DISPLAY,tr("SED1560 CMD:%1").arg(cmd,4,16,QChar('0')));
+//qWarning()<<tr("SED1560 CMD:%1").arg(cmd,4,16,QChar('0'));
 
     if ((cmd & MASK_write) == MASK_write ) { cmd_write(cmd); }
     else
@@ -132,7 +139,10 @@ BYTE CSED1560::instruction(qint16 cmd)
 }
 void CSED1560::cmd_ElecCtrlReg(qint16 cmd) {
     info.ElectCtrl = cmd & 0x1f;
-    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
+    pPC->pLCDC->Color_Off.setAlphaF( info.ElectCtrl * 5.0f / 100);
+    updated = true;
+    pPC->pLCDC->Update();
+//    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
 }
 
 void CSED1560::cmd_OutStatusRegSet(qint16 cmd) {
@@ -149,11 +159,20 @@ void CSED1560::cmd_DutySel(qint16 cmd) {
 }
 
 void CSED1560::cmd_NormRevDsp(qint16 cmd) {
+    info.reverse = cmd & 0x01 ? true : false;
     AddLog(LOG_DISPLAY,tr("cmd_NormRevDsp : %1").arg(cmd,2,16,QChar('0')));
+//    qWarning()<<"REVERSE:"<<info.reverse;
 }
 
 void CSED1560::cmd_AllIndic(qint16 cmd) {
+    if (info.on_off)
+        info.allPtsOn = cmd & 0x01 ? false : true;
+    else {
+        //power Save mode
+
+    }
     AddLog(LOG_DISPLAY,tr("cmd_AllIndic : %1").arg(cmd,2,16,QChar('0')));
+//    qWarning()<<"ALL ON:"<<info.allPtsOn;
 }
 
 void CSED1560::cmd_ADCSel(qint16 cmd) {
@@ -234,6 +253,8 @@ void CSED1560::cmd_ColAdrLo(qint16 cmd) {
 
 BYTE CSED1560::cmd_status(qint16 cmd)
 {
+    Q_UNUSED(cmd)
+
 //    if (pPC->fp_log) fprintf(pPC->fp_log,"LCD request status\n");
     BYTE status =   (info.busy  << 7) |
                     (info.ADC   << 6) |
@@ -261,7 +282,7 @@ void CSED1560::cmd_write(qint16 cmd)
 
 BYTE CSED1560::cmd_read(qint16 cmd)
 {
-
+    Q_UNUSED(cmd)
 
     BYTE value = get8( info.ColAdrReg  + info.PgAdrReg * 0xa6 );
 //    AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
