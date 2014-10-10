@@ -377,7 +377,7 @@ function movePocket(_pocketId,_left,_top) {
 
     var index = getIndex(_pocketId);
 
-    console.log("found index:"+index);
+//    console.log("found index:"+index);
     if (index !== -1) {
 
         testarea.xmlThumbModel.get(index)._left = _left;
