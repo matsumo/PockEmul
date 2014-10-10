@@ -13,15 +13,12 @@
 
 Clcdc_lbc1100::Clcdc_lbc1100(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (154*contrast),
-                        (int) (145*contrast),
-                        (int) (116*contrast));
+
+
+    internalSize = QSize(240,21);
+    pixelSize = 4;
+    pixelGap = 1;
 }
-
-
-
-
 
 void Clcdc_lbc1100::disp_symb(void)
 {
@@ -49,6 +46,7 @@ void Clcdc_lbc1100::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (int i = 0 ; i<4; i++)
     {
@@ -61,8 +59,9 @@ void Clcdc_lbc1100::disp(void)
             BYTE data = lbc1100->upd16434[i]->info.imem[0x31 - j];
             for (b=0;b<8;b++)
             {
-                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-                painter.drawPoint(j + j/5 + i*60,b + (b==7));
+//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
+//                painter.drawPoint(j + j/5 + i*60,b + (b==7));
+                drawPixel(&painter,j + j/5 + i*60,b + (b==7),((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
         for (int j = 0; j< 0x32;j++)
@@ -70,8 +69,9 @@ void Clcdc_lbc1100::disp(void)
             BYTE data = lbc1100->upd16434[i]->info.imem[0x71-j];
             for (b=0;b<8;b++)
             {
-                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-                painter.drawPoint(j + j/5 + i*60,b + (b==7)+12);
+//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
+//                painter.drawPoint(j + j/5 + i*60,b + (b==7)+12);
+                drawPixel(&painter,j + j/5 + i*60,b + (b==7)+12,((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
     }

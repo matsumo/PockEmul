@@ -46,8 +46,6 @@ Ctpc8300::Ctpc8300(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="tpc8300.pkm";
 
     BackGroundFname	= P_RES(":/tpc8300/tpc-8300.png");
-//    LcdFname		= P_RES(":/tpc8300/tpc-8300lcd.png");
-//    SymbFname		= "";
 
     memsize		= 0x10000;
     InitMemValue	= 0xFF;
@@ -68,19 +66,11 @@ Ctpc8300::Ctpc8300(CPObject *parent)	: CpcXXXX(parent)
     setDX(711);//Pc_DX		= 483;//409;
     setDY(343);//Pc_DY		= 252;//213;
 
-//    Lcd_X		= 197;
-//    Lcd_Y		= 44;
-//    Lcd_DX		= 144;//168;//144 ;
-//    Lcd_DY		= 20;
-//    Lcd_ratio_X	= 2.25;// * 1.18;
-//    Lcd_ratio_Y	= 2.25;// * 1.18;
-
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_tpc8300(this,
                                     QRect(197,44,144*2.25,20*2.25),
-                                    QRect(),
-                                    P_RES(":/tpc8300/tpc-8300lcd.png"));
+                                    QRect());
     pCPU		= new Cupd7907(this);    upd7907 = (Cupd7907*)pCPU;
     for (int i=0;i<3;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);

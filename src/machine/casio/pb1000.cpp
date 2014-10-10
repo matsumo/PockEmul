@@ -36,8 +36,6 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pb1000.pkm";
 
     BackGroundFname	= P_RES(":/pb1000/pb-1000.png");
-//    LcdFname		= P_RES(":/pb1000/pb-1000lcd.png");
-//    SymbFname		= "";
 
     back = new QImage(P_RES(":/pb1000/pb1000back.png"));
 
@@ -61,19 +59,11 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
     setDX(668);//715);
     setDY(633);//465);
 
-//    Lcd_X		= 90;
-//    Lcd_Y		= 130;
-//    Lcd_DX		= 192;//168;//144 ;
-//    Lcd_DY		= 32;
-//    Lcd_ratio_X	= 2;// * 1.18;
-//    Lcd_ratio_Y	= 2;// * 1.18;
-
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_pb1000(this,
                                    QRect(90,130,192*2,32*2),
-                                   QRect(),
-                                   P_RES(":/pb1000/pb-1000lcd.png"));
+                                   QRect());
     pCPU		= new CHD61700(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"pb1000.map");

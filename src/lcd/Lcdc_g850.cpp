@@ -10,10 +10,10 @@
 
 Clcdc_g850::Clcdc_g850(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-//    Color_Off.setRgb(
-//                        (int) (92*contrast),
-//                        (int) (120*contrast),
-//                        (int) (103*contrast));
+
+    internalSize = QSize(144,48);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 #if 0
@@ -117,8 +117,8 @@ INLINE int Clcdc_g850::computeSL(int ord)
     if (y < 0) y += 64;
     return y;
 }
-#define PIXEL_SIZE 4
-#define PIXEL_GAP 1
+
+
 void Clcdc_g850::disp(void)
 {
 
@@ -151,20 +151,9 @@ void Clcdc_g850::disp(void)
             BYTE data = g850->pSED1560->get8((j * 0xa6) + i); //info.imem[ (j * 0xa6) + i ];
                 for (b=0; b<8;b++)
                 {
-                    //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
-
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                    painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
                     int y = computeSL(j*8+b);
                     if ((y>=0)&&(y < 48)) {
-//                        if ((data>>b)&0x01) {AddLog(LOG_DISPLAY,tr("pset[%1,%2]").arg(i).arg(y));}
-//                        painter.drawPoint( i, y );
-
-                        //painter.drawPoint( x, y+b);
-                        painter.drawRect((i)*(PIXEL_SIZE+PIXEL_GAP),
-                                         (y)*(PIXEL_SIZE+PIXEL_GAP),
-                                         PIXEL_SIZE-1,
-                                         PIXEL_SIZE-1);
+                        drawPixel(&painter,i,y,((data>>b)&0x01) ? Color_On : Color_Off );
                     }
                 }
             }

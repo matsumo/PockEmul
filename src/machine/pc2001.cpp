@@ -44,8 +44,6 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pc2001.pkm";
 
     BackGroundFname	= P_RES(":/pc2001/pc-2001.png");
-//    LcdFname		= P_RES(":/pc2001/pc-2001lcd.png");
-//    SymbFname		= "";
 
     RightFname = P_RES(":/pc2001/pc2001Right.png");
     TopFname = P_RES(":/pc2001/pc2001Top.png");
@@ -71,20 +69,11 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     setDX(804);
     setDY(462);
 
-//    Lcd_X		= 89;
-//    Lcd_Y		= 70;
-//    Lcd_DX		= 240;//168;//144 ;
-//    Lcd_DY		= 21;
-//    Lcd_ratio_X	= 2.15;// * 1.18;
-//    Lcd_ratio_Y	= 2.75;// * 1.18;
-
-
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_pc2001(this,
-                                   QRect(89,70,240*2.15,21*2.15),
-                                   QRect(),
-                                   P_RES(":/pc2001/pc-2001lcd.png"));
+                                   QRect(93,80,240*2.15,21*2.15),
+                                   QRect());
     pCPU		= new Cupd7907(this);    upd7907 = (Cupd7907*)pCPU;
     for (int i=0;i<4;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);

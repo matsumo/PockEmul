@@ -25,8 +25,6 @@ Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="rlh1000.pkm";
 
     BackGroundFname	= P_RES(":/rlh1000/rlh1000.png");
-//    LcdFname		= P_RES(":/rlh1000/rlh1000lcd.png");
-//    SymbFname		= "";
 
     LeftFname   = P_RES(":/rlh1000/rlh1000Left.png");
 //    RightFname  = P_RES(":/rlh1000/rlh1000Right.png");
@@ -55,20 +53,11 @@ Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
     setDX(811);
     setDY(340);
 
-//    Lcd_X		= 205;
-//    Lcd_Y		= 55;
-//    Lcd_DX		= 159;//168;//144 ;
-//    Lcd_DY		= 8;
-//    Lcd_ratio_X	= 2.5;
-//    Lcd_ratio_Y	= 3;
-
-
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_rlh1000(this,
                                     QRect(205,55,159*2.5,8*3),
-                                    QRect(),
-                                    P_RES(":/rlh1000/rlh1000lcd.png"));
+                                    QRect());
     pCPU		= new Cm6502(this);    m6502 = (Cm6502*)pCPU;
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"rlh1000.map");

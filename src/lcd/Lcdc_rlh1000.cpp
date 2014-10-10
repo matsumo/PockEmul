@@ -42,10 +42,10 @@ void Clcdc_rlh1000::disp_symb(void)
 
 Clcdc_rlh1000::Clcdc_rlh1000(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (111*contrast),
-                (int) (117*contrast),
-                (int) (108*contrast));
+
+    internalSize = QSize(159,8);
+    pixelSize = 4;
+    pixelGap = 1;
     memset((void *)mem,0,sizeof(mem));
 }
 
@@ -62,6 +62,7 @@ void Clcdc_rlh1000::disp(void)
     //	disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     On=true;
     for (ind=0; ind<0xA0; ind++)
@@ -83,8 +84,9 @@ void Clcdc_rlh1000::disp(void)
 
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( ind, b);
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( ind, b);
+                drawPixel(&painter,ind, b,((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
     }

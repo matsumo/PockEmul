@@ -11,10 +11,9 @@
 Clcdc_pb1000::Clcdc_pb1000(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
-    Color_Off.setRgb(
-                        (int) (90*contrast),
-                        (int) (108*contrast),
-                        (int) (99*contrast));
+    internalSize = QSize(192,32);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 
@@ -37,9 +36,9 @@ void Clcdc_pb1000::disp(void)
 //    disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     UINT8 cw = info.m_char_width;
-
 
     if (info.m_control_lines&0x80 && info.m_lcd_on)
     {
@@ -57,8 +56,9 @@ void Clcdc_pb1000::disp(void)
                             UINT8 d = CHD44352::compute_newval((info.m_cursor_status>>5) & 0x07, info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48], info.cursor[a].m_cursor[c]);
                             for (int b=0; b<8; b++)
                             {
-                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+//                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
+//                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+                                drawPixel(&painter,a*cw*16 + px*cw + c, py*8 + b,BIT(d, 7-b) ? Color_On : Color_Off);
                             }
                         }
                     }
@@ -69,8 +69,9 @@ void Clcdc_pb1000::disp(void)
                             UINT8 d = info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48];
                             for (int b=0; b<8; b++)
                             {
-                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+//                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
+//                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
+                                drawPixel(&painter,a*cw*16 + px*cw + c, py*8 + b,BIT(d, 7-b) ? Color_On : Color_Off);
                             }
                         }
                     }

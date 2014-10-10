@@ -198,7 +198,7 @@ void CHD44352::data_write(UINT8 data)
             case 1: info.m_lcd_on = BIT(data, 4); break;
             default: break;
             }
-//            qWarning()<<"LCD_ON_OFF:"<<data<<info.m_lcd_on;
+            qWarning()<<"LCD_ON_OFF:"<<data<<info.m_lcd_on;
             info.m_data_bus = 0xff;
             info.m_state = 0;
             break;

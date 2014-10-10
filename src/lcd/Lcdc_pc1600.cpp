@@ -168,7 +168,7 @@ void Clcdc_pc1600::disp(void)
     }
     else {
         // Turn off screen
-        for (int i=0;i<64;i++)
+        for (int i=0;i<28;i++)
             for (int j=0;j<32;j++)
                 drawPixel(&painter,128+i,j,Color_Off);
     }

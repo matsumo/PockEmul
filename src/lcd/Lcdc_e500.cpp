@@ -8,10 +8,10 @@
 
 Clcdc_e500::Clcdc_e500(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (92*contrast),
-                        (int) (120*contrast),
-                        (int) (103*contrast));
+
+    internalSize = QSize(240,32);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 static const struct {
@@ -64,7 +64,7 @@ void Clcdc_e500::disp_symb(void)
     disp_one_symb( S_DEG,         COLOR(SYMB3_e500&0x10),	e500_pos[13].x,	e500_pos[13].y);
     disp_one_symb( S_REV_BATT,    COLOR(SYMB3_e500&0x80),	e500_pos[14].x,	e500_pos[14].y);
 
-    Clcdc::disp_symb();
+//    Clcdc::disp_symb();
 }
 INLINE int Clcdc_e500::symbSL(int x)
 {
@@ -101,6 +101,7 @@ void Clcdc_e500::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     if (((Ce500 *)pPC)->pHD61102_2->info.on_off) {
         for (int i = 0 ; i < 64; i++)
@@ -111,19 +112,21 @@ void Clcdc_e500::disp(void)
                 for (b=0; b<8;b++)
                 {
                     //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
 
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_2,j*8+b);
-                    if ((y>=0)&&(y < 32)) painter.drawPoint( i, y );
+                    if ((y>=0)&&(y < 32))
+                        drawPixel(&painter,i, y,((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.drawPoint( i, y );
                 }
             }
         }
     }
     else {
         // Turn off screen
-        painter.setPen( Color_Off );
-        painter.setBrush(Color_Off);
-        painter.drawRect( 0, 0,64,32);
+        for (int i=0;i<64;i++)
+            for (int j=0;j<32;j++)
+                drawPixel(&painter,i,j,Color_Off);
     }
 
     if (((Ce500 *)pPC)->pHD61102_1->info.on_off) {
@@ -135,19 +138,21 @@ void Clcdc_e500::disp(void)
                 for (b=0; b<8;b++)
                 {
                     //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",64+i,j*8+b);
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
     //                painter.drawPoint( 64+i, computeSL(j*8+b));
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_1,j*8+b);
-                     if ((y>=0)&&(y < 32)) painter.drawPoint( 64+i, y );
+                     if ((y>=0)&&(y < 32))
+                         drawPixel(&painter,64+i, y,((data>>b)&0x01) ? Color_On : Color_Off );
+//                     painter.drawPoint( 64+i, y );
                 }
             }
         }
     }
     else {
         // Turn off screen
-        painter.setPen( Color_Off );
-        painter.setBrush(Color_Off);
-        painter.drawRect( 64, 0,56,32);
+        for (int i=0;i<56;i++)
+            for (int j=0;j<32;j++)
+                drawPixel(&painter,64+i,j,Color_Off);
     }
 
     if (((Ce500 *)pPC)->pHD61102_1->info.on_off) {
@@ -160,9 +165,11 @@ void Clcdc_e500::disp(void)
                 for (b=0; b<8;b++)
                 {
     //                if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",128+i,(j-4)*8+b);
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_1,j*8+b-32);
-                    if ((y>=0)&&(y < 32)) painter.drawPoint( 175-i, y );
+                    if ((y>=0)&&(y < 32))
+                        drawPixel(&painter,175-i, y,((data>>b)&0x01) ? Color_On : Color_Off );
+//                        painter.drawPoint( 175-i, y );
 
                 }
             }
@@ -170,9 +177,9 @@ void Clcdc_e500::disp(void)
     }
     else {
         // Turn off screen
-        painter.setPen( Color_Off );
-        painter.setBrush(Color_Off);
-        painter.drawRect( 175-55, 0,56,32);
+        for (int i=0;i<56;i++)
+            for (int j=0;j<32;j++)
+                drawPixel(&painter,175-i,j,Color_Off);
     }
 
 
@@ -187,9 +194,11 @@ void Clcdc_e500::disp(void)
                 for (b=0; b<8;b++)
                 {
     //                if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",128+i,(j-4)*8+b);
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_2,j*8+b-32);
-                    if ((y>=0)&&(y < 32)) painter.drawPoint( 239-i, y );
+                    if ((y>=0)&&(y < 32))
+                        drawPixel(&painter,239-i, y,((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.drawPoint( 239-i, y );
 
                 }
             }
@@ -197,9 +206,9 @@ void Clcdc_e500::disp(void)
     }
     else {
         // Turn off screen
-        painter.setPen( Color_Off );
-        painter.setBrush(Color_Off);
-        painter.drawRect( 239-63, 0,64,32);
+        for (int i=0;i<64;i++)
+            for (int j=0;j<32;j++)
+                drawPixel(&painter,239-i,j,Color_Off);
     }
 
 
