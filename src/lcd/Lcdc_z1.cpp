@@ -9,15 +9,14 @@
 
 Clcdc_z1::Clcdc_z1(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (92*contrast),
-                        (int) (120*contrast),
-                        (int) (103*contrast));
+
+    internalSize = QSize(190,32);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 
-#define pset(x,y,dot) {    painter.setPen( dot ? Color_On : Color_Off ); \
-                           painter.drawPoint( x, y ); \
+#define pset(x,y,dot) {    drawPixel(&painter,(x),(y),(dot) ? Color_On : Color_Off ); \
                         }
 
 void Clcdc_z1::disp(void)
@@ -40,6 +39,7 @@ void Clcdc_z1::disp(void)
     Refresh = true;
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     int x, y;
     UINT8 *p = z1->pHD66108->vram;

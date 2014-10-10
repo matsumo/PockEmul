@@ -12,10 +12,9 @@
 Clcdc_cc40::Clcdc_cc40(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
-    Color_Off.setRgb(
-                        (int) (90*contrast),
-                        (int) (108*contrast),
-                        (int) (99*contrast));
+    internalSize = QSize(186,10);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 
@@ -33,6 +32,8 @@ void Clcdc_cc40::disp_symb(void)
 #if 1
 HD44780_PIXEL_UPDATE(Ccc40_update_pixel_symb)
 {
+    painter->setCompositionMode(QPainter::CompositionMode_Source);
+
     if (line == 1 && pos == 15)
     {
         // the last char is used to control lcd indicators
@@ -79,8 +80,9 @@ HD44780_PIXEL_UPDATE(Ccc40_update_pixel)
     {
         // internal: 2*16, external: 1*31 + indicators
         if (y == 7) y++;
-        painter->setPen(COLOR(state));
-        painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
+//        painter->setPen(COLOR(state));
+//        painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
+        plcd->drawPixel(painter, 1 + line*16*6 + pos*6 + x, 1 + y ,COLOR(state));
     }
 }
 #endif
@@ -97,18 +99,20 @@ void Clcdc_cc40::disp(void)
 
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Ccc40_update_pixel);
-    pHD44780->screen_update(&painter,Color_On,Color_Off);
+    pHD44780->screen_update(this,&painter,Color_On,Color_Off);
     painter.end();
 
 
     QPainter painterSymb(SymbImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Ccc40_update_pixel_symb);
-    pHD44780->screen_update(&painterSymb,Color_On,Color_Off);
+    pHD44780->screen_update(this,&painterSymb,Color_On,Color_Off);
     painterSymb.end();
 
 

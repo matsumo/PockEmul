@@ -73,27 +73,18 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
     PowerSwitch	= 0;
 
-    setDXmm(206);//Pc_DX_mm =200 ;
-    setDYmm(83);//Pc_DY_mm =130;
-    setDZmm(25);//Pc_DZ_mm = 10;
+    setDXmm(206);
+    setDYmm(83);
+    setDZmm(25);
 
-    setDX(736);//Pc_DX		= 483;//409;
-    setDY(297);//Pc_DY		= 252;//213;
-
-//    Lcd_X		= 77;
-//    Lcd_Y		= 44;
-//    Lcd_DX		= 192;//168;//144 ;
-//    Lcd_DY		= 32;
-//    Lcd_ratio_X	= 2;// * 1.18;
-//    Lcd_ratio_Y	= 2;// * 1.18;
-
+    setDX(736);
+    setDY(297);
 
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_z1(this,
                                QRect(77,44,384,64),
-                               QRect(),
-                               P_RES(":/z1/z1grlcd.png"));
+                               QRect());
     pCPU		= new Ci80L188EB(this);
     pFPU        = new CCF79107PJ(this);
     pTIMER		= new Ctimer(this);

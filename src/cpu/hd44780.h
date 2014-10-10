@@ -8,6 +8,7 @@
 class CpcXXXX;
 class QXmlStreamReader;
 class QXmlStreamWriter;
+class Clcdc;
 
 /***************************************************************************
 
@@ -15,8 +16,8 @@ class QXmlStreamWriter;
 
 ***************************************************************************/
 
-typedef void (*hd44780_pixel_update_func)(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off);
-#define HD44780_PIXEL_UPDATE(name) void name(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off)
+typedef void (*hd44780_pixel_update_func)(Clcdc *plcd,QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off);
+#define HD44780_PIXEL_UPDATE(name) void name(Clcdc *plcd,QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor Color_On,QColor Color_Off)
 
 typedef struct {
     UINT8       m_lines;          // number of lines
@@ -80,9 +81,9 @@ public:
 
     quint64 on_timer_rate;
 
-    UINT32 screen_update(QPainter *painter,QColor color_ON,QColor color_OFF);
+    UINT32 screen_update(Clcdc *plcd,QPainter *painter,QColor color_ON,QColor color_OFF);
 
-    void pixel_update(QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor color_ON,QColor color_OFF);
+    void pixel_update(Clcdc *plcd,QPainter *painter, UINT8 line, UINT8 pos, UINT8 y, UINT8 x, int state,QColor color_ON,QColor color_OFF);
     void set_charset_type(int type);
 
     // device-level overrides

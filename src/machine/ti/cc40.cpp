@@ -164,25 +164,12 @@ Ccc40::Ccc40(CPObject *parent)	: CpcXXXX(parent)
     setDX(845);
     setDY(525);
 
-//    Lcd_X		= 50;
-//    Lcd_Y		= 175;
-//    Lcd_DX		= 186;
-//    Lcd_DY		= 10;
-//    Lcd_ratio_X	= 2.7;
-//    Lcd_ratio_Y	= 2.7;
-
-//    Lcd_Symb_X	= 50;//(int) (45 * 1.18);
-//    Lcd_Symb_Y	= 160;//(int) (35 * 1.18);
-//    Lcd_Symb_DX	= 250;
-//    Lcd_Symb_DY	= 30;
-//    Lcd_Symb_ratio_X	= 2;//1.18;
-//    Lcd_Symb_ratio_Y	= 2;//1.18;
-
     pLCDC		= new Clcdc_cc40(this,
                                  QRect(50,175,186*2.7,10*2.7),
-                                 QRect(50,160,500,60),
-                                 P_RES(":/cc40/cc40lcd.png"),
-                                 P_RES(":/cc40/cc40lcd.png"));
+                                 QRect(50,160,250,30));
+    pLCDC->Lcd_Symb_ratio_X = 2;
+    pLCDC->Lcd_Symb_ratio_Y = 2;
+
     pCPU		= new Ctms70c20(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"cc40.map");

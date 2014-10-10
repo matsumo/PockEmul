@@ -268,11 +268,11 @@ UINT8 FP200_CarDef[256][8]={
 
 
 Clcdc_fp200::Clcdc_fp200(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
-    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (118*contrast),
-                        (int) (149*contrast),
-                        (int) (136*contrast));
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
+{						//[constructor]
+    internalSize = QSize(160,64);
+    pixelSize = 4;
+    pixelGap = 1;
     X = Y = 0;
     Status = 0;
     memset((char*)mem_video,0,sizeof(mem_video));
@@ -370,6 +370,7 @@ void Clcdc_fp200::disp(void)
     Refresh = true;
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
 //    if (((Ce500 *)pPC)->pHD61102_2->info.on_off) {
         for (int i = 0 ; i < 64; i++)
@@ -380,10 +381,8 @@ void Clcdc_fp200::disp(void)
                 quint8 data = mem_video[li][ i ];
                 for (b=0; b<8;b++)
                 {
-                    //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
                     quint8 y = computeSL((li<10)?1:2,i);
-                    painter.drawPoint( li*8+b,y );
+                    drawPixel(&painter,li*8+b,y,((data>>b)&0x01) ? Color_On : Color_Off);
                 }
             }
         }

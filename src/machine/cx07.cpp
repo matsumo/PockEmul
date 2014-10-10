@@ -111,20 +111,6 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     setDX(715);
     setDY(465);
 
-//    Lcd_X		= 67;
-//    Lcd_Y		= 63;
-//    Lcd_DX		= 120;
-//    Lcd_DY		= 32;
-//    Lcd_ratio_X	= 2.4;
-//    Lcd_ratio_Y	= 2.8;
-//    LcdRatio = 5;
-
-//    Lcd_Symb_X	= 55;
-//    Lcd_Symb_Y	= 41;
-//    Lcd_Symb_DX	= 339;
-//    Lcd_Symb_DY	= 5;
-//    Lcd_Symb_ratio_X	= 1;
-
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_x07(this,

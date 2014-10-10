@@ -119,8 +119,8 @@ bool CpcXXXX::UpdateFinalImage(void)
                 //painter.setRenderHint(QPainter::Antialiasing);
                 x = pLCDC->symbRect.x() * internalImageRatio;
                 y = pLCDC->symbRect.y() * internalImageRatio;
-                z = (int) (pLCDC->symbRect.width() * internalImageRatio);
-                t = (int) (pLCDC->symbRect.height() * internalImageRatio);
+                z = (int) (pLCDC->symbRect.width() * pLCDC->Lcd_Symb_ratio_X * internalImageRatio);
+                t = (int) (pLCDC->symbRect.height()* pLCDC->Lcd_Symb_ratio_Y * internalImageRatio);
 
                 painter.drawImage(QRect(x,y,z,t),pLCDC->SymbImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
             }

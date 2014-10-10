@@ -10,18 +10,17 @@
 Clcdc_ti74::Clcdc_ti74(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
-    Color_Off.setRgb(
-                        (int) (90*contrast),
-                        (int) (108*contrast),
-                        (int) (99*contrast));
+    internalSize = QSize(186,10);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 Clcdc_ti95::Clcdc_ti95(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc_ti74(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){
-    Color_Off.setRgb(
-                        (int) (152*contrast),
-                        (int) (170*contrast),
-                        (int) (151*contrast));
+
+    internalSize = QSize(130,30);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 void Clcdc_ti74::disp_symb(void)
@@ -37,6 +36,8 @@ void Clcdc_ti74::disp_symb(void)
 #define COLOR(b)	( ( (b) ) ? Color_On : Color_Off)
 HD44780_PIXEL_UPDATE(Cti74_update_pixel_symb)
 {
+    painter->setCompositionMode(QPainter::CompositionMode_Source);
+
     if (line == 1 && pos == 15)
     {
         // TI-74 ref._________________...
@@ -81,8 +82,9 @@ HD44780_PIXEL_UPDATE(Cti74_update_pixel)
     {
         // internal: 2*16, external: 1*31 + indicators
         if (y == 7) y++;
-        painter->setPen(COLOR(state));
-        painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
+//        painter->setPen(COLOR(state));
+//        painter->drawPoint( 1 + line*16*6 + pos*6 + x, 1 + y );
+        plcd->drawPixel(painter, 1 + line*16*6 + pos*6 + x, 1 + y ,COLOR(state));
     }
 }
 
@@ -90,6 +92,8 @@ HD44780_PIXEL_UPDATE(Cti74_update_pixel)
 
 HD44780_PIXEL_UPDATE(Cti95_update_pixel_symb)
 {
+    painter->setCompositionMode(QPainter::CompositionMode_Source);
+
     if (line == 1 && pos == 15)
     {
         // output#  |  40   43     41   44   42     12  11  10/13/14  0    1    2
@@ -144,8 +148,9 @@ HD44780_PIXEL_UPDATE(Cti95_update_pixel)
     {
         // 1st line is simply 16 chars
         if (y == 7) y++;
-        painter->setPen(COLOR(state));
-        painter->drawPoint( 15 + pos*6 + x, 7 + y );
+//        painter->setPen(COLOR(state));
+//        painter->drawPoint( 15 + pos*6 + x, 7 + y );
+        plcd->drawPixel(painter, 15 + pos*6 + x, 7 + y ,COLOR(state));
     }
     else if (line == 1 && pos < 15 && y < 7)
     {
@@ -153,8 +158,9 @@ HD44780_PIXEL_UPDATE(Cti95_update_pixel)
         // note: the chars are smaller than on the 1st line (this is handled in .lay file)
         const int gap = 6;
         int group = pos / 3;
-        painter->setPen(COLOR(state));
-        painter->drawPoint( 9 + group*gap + pos*6 + x, 22 + y );
+//        painter->setPen(COLOR(state));
+//        painter->drawPoint( 9 + group*gap + pos*6 + x, 22 + y );
+        plcd->drawPixel(painter,  9 + group*gap + pos*6 + x, 22 + y  ,COLOR(state));
     }
 }
 
@@ -171,18 +177,20 @@ void Clcdc_ti74::disp(void)
 
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti74_update_pixel);
-    pHD44780->screen_update(&painter,Color_On,Color_Off);
+    pHD44780->screen_update(this,&painter,Color_On,Color_Off);
     painter.end();
 
 
     QPainter painterSymb(SymbImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti74_update_pixel_symb);
-    pHD44780->screen_update(&painterSymb,Color_On,Color_Off);
+    pHD44780->screen_update(this,&painterSymb,Color_On,Color_Off);
     painterSymb.end();
 
 
@@ -199,24 +207,14 @@ void Clcdc_ti95::disp(void)
     if (!pHD44780 ) return;
     Refresh = true;
     info = pHD44780->getInfo();
-//    disp_symb();
-
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti95_update_pixel);
-    pHD44780->screen_update(&painter,Color_On,Color_Off);
+    pHD44780->screen_update(this,&painter,Color_On,Color_Off);
     painter.end();
-
-
-//    QPainter painterSymb(pPC->SymbImage);
-//    info->m_lines = 2;
-//    info->m_chars = 16;
-//    pHD44780->set_pixel_update_cb(&Cti95_update_pixel_symb);
-//    pHD44780->screen_update(&painterSymb,Color_On,Color_Off);
-//    painterSymb.end();
-
 
     redraw = 0;
 

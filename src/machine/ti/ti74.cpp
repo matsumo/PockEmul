@@ -31,8 +31,6 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="ti74.pkm";
 
     BackGroundFname	= P_RES(":/ti74/ti74.png");
-//    LcdFname		= P_RES(":/ti74/ti74lcd.png");
-//    SymbFname		= P_RES(":/ti74/ti74lcd.png");
 
     memsize		= 0x20000;
     InitMemValue	= 0x00;
@@ -66,9 +64,10 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 
     pLCDC		= new Clcdc_ti74(this,
                                  QRect(50,60,186*2.25,10*2.25),
-                                 QRect(50,50,420,46),
-                                 P_RES(":/ti74/ti74lcd.png"),
-                                 P_RES(":/ti74/ti74lcd.png"));
+                                 QRect(50,50,210,23));
+    pLCDC->Lcd_Symb_ratio_X = 2;
+    pLCDC->Lcd_Symb_ratio_Y = 2;
+
     pCPU		= new Ctms70c46(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"ti74.map");
@@ -90,8 +89,7 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     Initial_Session_Fname ="ti95.pkm";
 
     BackGroundFname	= P_RES(":/ti74/ti95.png");
-//    LcdFname		= P_RES(":/ti74/ti95lcd.png");
-//    SymbFname		= P_RES("");
+
 
     memsize		= 0x20000;
     InitMemValue	= 0x00;
@@ -109,8 +107,6 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 //    Lcd_DY		= 30;
 //    Lcd_ratio_X	= 340.0/Lcd_DX;
 //    Lcd_ratio_Y	= 75.0/Lcd_DY;
-
-
 
     delete pLCDC;
     pLCDC		= new Clcdc_ti95(this,
