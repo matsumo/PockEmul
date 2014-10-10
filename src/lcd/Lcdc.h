@@ -85,11 +85,14 @@ public:
     QString	LcdFname;
     QString	SymbFname;
 
+    void drawPixel(QPainter *painter, float x, float y, QColor color);
 protected:
     QColor origColor_Off;
     WORD baseAdr;
 
     BYTE pixelSize,pixelGap;
+
+    QSize internalSize;
 
 
 

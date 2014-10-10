@@ -37,7 +37,7 @@ Clcdc::Clcdc(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfnam
     LcdImage = 0;
     SymbImage = 0;
 
-    LcdRatio = 1;
+    LcdRatio = 0;
 
     LcdFname = _lcdfname;
     if (LcdFname.isEmpty()) LcdFname = ":/pockemul/transparent.png";
@@ -117,9 +117,26 @@ void Clcdc::disp_symb(void)
                            symbList.at(ii).x,
                            symbList.at(ii).y);
         }
-        DirtyBuf[symbList.at(ii).addr-baseAdr] = 0;
 
         Refresh = true;
+    }
+    for (int ii=0;ii<symbList.count();ii++) {
+        DirtyBuf[symbList.at(ii).addr-baseAdr] = 0;
+    }
+}
+
+void Clcdc::drawPixel(QPainter *painter,float x,float y, QColor color) {
+    painter->setCompositionMode(QPainter::CompositionMode_Source);
+    painter->setPen(color );
+    if (pixelSize > 1) {
+        painter->setBrush(color);
+        painter->drawRect(x*(pixelSize+pixelGap),
+                         y*(pixelSize+pixelGap),
+                         pixelSize-1,
+                         pixelSize-1);
+    }
+    else {
+        painter->drawPoint( x*pixelGap, y*pixelGap);
     }
 }
 
@@ -169,8 +186,9 @@ void Clcdc::SetDirtyBuf(WORD index)
 
 void Clcdc::InitDisplay()
 {
+    if (LcdRatio == 0) LcdRatio = pixelSize+pixelGap;
     delete LcdImage;
-    LcdImage = CViewObject::CreateImage(rect.size() * LcdRatio,LcdFname,false,false,0);
+    LcdImage = CViewObject::CreateImage(internalSize * LcdRatio,LcdFname,false,false,0);
     if (symbRect.isValid()) {
         delete SymbImage;
         SymbImage	= CViewObject::CreateImage(symbRect.size(),SymbFname);

@@ -142,12 +142,14 @@ void Clcdc_hp15c::disp_symb(void)
 }
 
 Clcdc_hp15c::Clcdc_hp15c(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
-    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (111*contrast),
-                (int) (117*contrast),
-                (int) (108*contrast));
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
+{						//[constructor]
+//    Color_Off.setRgb(
+//                (int) (111*contrast),
+//                (int) (117*contrast),
+//                (int) (108*contrast));
 
+    internalSize = QSize(210,33);
     LcdRatio = 8.38;
     info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
 }
@@ -215,7 +217,7 @@ void Clcdc_hp15c::disp(void)
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(LcdImage->rect(),Qt::transparent);
-
+    painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
     int x = 0;
     int y = 0;
     if (info->display_segments[0] & (1<<6)) {

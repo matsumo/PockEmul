@@ -81,8 +81,7 @@ void Clcdc_hp41::disp(void)
 
 
     QPainter painter(LcdImage);
-//    painter.setPen(Qt::transparent);
-//    painter.setBrush(Qt::transparent);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
     painter.fillRect(LcdImage->rect(),Qt::transparent);
 
     QFont font;

@@ -3,6 +3,7 @@
 #include "Lcdc_pc1475.h"
 #include "Lcdc_symb.h"
 
+// TODO: seems to be very close of the PC-1262. Try to mix them.
 
 /*******************/
 /***	1475	****/
@@ -94,15 +95,18 @@ void Clcdc_pc1475::disp_symb(void)
     Refresh = true;
     }
 
-    Clcdc::disp_symb();
+//    Clcdc::disp_symb();
 }
 
 Clcdc_pc1475::Clcdc_pc1475(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (0x5d*contrast),
-                (int) (0x71*contrast),
-                (int) (0x6a*contrast));
+//    Color_Off.setRgb(
+//                (int) (0x5d*contrast),
+//                (int) (0x71*contrast),
+//                (int) (0x6a*contrast));
+    internalSize = QSize(144,15);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 bool	Clcdc_pc1475::init(void)
@@ -145,6 +149,7 @@ void Clcdc_pc1475::disp(void)
     Refresh = false;
     disp_symb();
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
 #if 1
     for (ind=0; ind<0x3c; ind++)
@@ -159,11 +164,12 @@ void Clcdc_pc1475::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+2*b);
-                painter.drawPoint( x, y+2*b+1);
-                painter.drawPoint( x+1, y+2*b);
-                painter.drawPoint( x+1, y+2*b+1);
+                drawPixel(&painter,x/2.0f,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+2*b);
+//                painter.drawPoint( x, y+2*b+1);
+//                painter.drawPoint( x+1, y+2*b);
+//                painter.drawPoint( x+1, y+2*b+1);
             }
             DirtyBuf[adr-0x2000] = 0;
         }
@@ -178,15 +184,17 @@ void Clcdc_pc1475::disp(void)
             data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
 
             x =(ind*2) + (ind/5);			// +1 every 5 cols
-            y = 16;
+            y = 8;
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+2*b);
-                painter.drawPoint( x, y+2*b+1);
-                painter.drawPoint( x+1, y+2*b);
-                painter.drawPoint( x+1, y+2*b+1);
+                drawPixel(&painter,x/2.0f,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+2*b);
+//                painter.drawPoint( x, y+2*b+1);
+//                painter.drawPoint( x+1, y+2*b);
+//                painter.drawPoint( x+1, y+2*b+1);
             }
             DirtyBuf[adr-0x2000] = 0;
         }
@@ -205,11 +213,12 @@ void Clcdc_pc1475::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+2*b);
-                painter.drawPoint( x, y+2*b+1);
-                painter.drawPoint( x+1, y+2*b);
-                painter.drawPoint( x+1, y+2*b+1);
+                drawPixel(&painter,x/2.0f,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+2*b);
+//                painter.drawPoint( x, y+2*b+1);
+//                painter.drawPoint( x+1, y+2*b);
+//                painter.drawPoint( x+1, y+2*b+1);
             }
             DirtyBuf[adr-0x2000] = 0;
         }
@@ -224,15 +233,16 @@ void Clcdc_pc1475::disp(void)
             data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
 
             x = 132 + (ind*2) + (ind/5);			// +1 every 5 cols
-            y = 16;
+            y = 8;
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+2*b);
-                painter.drawPoint( x, y+2*b+1);
-                painter.drawPoint( x+1, y+2*b);
-                painter.drawPoint( x+1, y+2*b+1);
+                drawPixel(&painter,x/2.0f,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+2*b);
+//                painter.drawPoint( x, y+2*b+1);
+//                painter.drawPoint( x+1, y+2*b);
+//                painter.drawPoint( x+1, y+2*b+1);
             }
             DirtyBuf[adr-0x2000] = 0;
         }

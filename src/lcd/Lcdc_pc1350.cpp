@@ -17,7 +17,7 @@ Clcdc_pc1350::Clcdc_pc1350(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     baseAdr = 0x7000;
     pixelSize = 4;
     pixelGap = 1;
-    LcdRatio = 5;
+    internalSize = QSize(150,32);
 
     symbList << ClcdSymb(1, 3,  S_PRINT	,0x783C	,0x04)
              << ClcdSymb(8, 3,  S_RUN	,0x783C	,0x10)
@@ -62,17 +62,18 @@ void Clcdc_pc1350::disp(void)
 
                     for (b=0; b<8;b++)
                     {
-                        painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                        if (pixelSize > 1) {
-                            painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
-                            painter.drawRect(x*(pixelSize+pixelGap),
-                                             (y+b)*(pixelSize+pixelGap),
-                                             pixelSize-1,
-                                             pixelSize-1);
-                        }
-                        else {
-                            painter.drawPoint( x, y+b);
-                        }
+                        drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                        painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                        if (pixelSize > 1) {
+//                            painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
+//                            painter.drawRect(x*(pixelSize+pixelGap),
+//                                             (y+b)*(pixelSize+pixelGap),
+//                                             pixelSize-1,
+//                                             pixelSize-1);
+//                        }
+//                        else {
+//                            painter.drawPoint( x, y+b);
+//                        }
                     }
                     DirtyBuf[adr-baseAdr]=0;
                 }
@@ -93,8 +94,6 @@ Clcdc_pc1360::Clcdc_pc1360(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     for (int i=0; i< symbList.count();i++)
         symbList[i].addr = 0x303C;
     baseAdr = 0x2800;
-    pixelSize = 4;
-    pixelGap = 1;
 }
 
 

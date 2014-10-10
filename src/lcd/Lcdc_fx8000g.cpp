@@ -13,9 +13,9 @@ Clcdc_fx8000g::Clcdc_fx8000g(CPObject *parent, QRect _lcdRect, QRect _symbRect, 
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
     Color_Off = Qt::transparent;
+    internalSize = QSize(96,64);
     pixelSize = 4;
     pixelGap = 1;
-    LcdRatio = 5;
 }
 
 

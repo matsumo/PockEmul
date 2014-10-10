@@ -92,6 +92,8 @@ void Clcdc_pc1401::disp_symb(void)
 Clcdc_pc1401::Clcdc_pc1401(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {
+    internalSize = QSize(96,7);
+
     Color_Off.setRgb(
                 (int) (0x61*contrast),
                 (int) (0x6D*contrast),

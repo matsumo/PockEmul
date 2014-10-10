@@ -72,6 +72,7 @@ Clcdc_pc1250::Clcdc_pc1250(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
 {						//[constructor]
     Color_Off = Qt::transparent;
     baseAdr = 0xF800;
+    internalSize = QSize(144,8);
     pixelSize = 4;
     pixelGap = 1;
 
@@ -99,6 +100,7 @@ void Clcdc_pc1250::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (ind=0; ind<0x3c; ind++)
     {	adr = baseAdr + ind;
@@ -112,8 +114,9 @@ void Clcdc_pc1250::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-baseAdr] = 0;
         }
@@ -131,8 +134,9 @@ void Clcdc_pc1250::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-baseAdr] = 0;
         }
@@ -227,8 +231,9 @@ void Clcdc_pc1245::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0xF800] = 0;
         }
@@ -246,8 +251,9 @@ void Clcdc_pc1245::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0xF800] = 0;
         }
@@ -260,10 +266,7 @@ Clcdc_pc1245::Clcdc_pc1245(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {						//[constructor]
 
-    Color_Off.setRgb(
-                (int) (0x7e*contrast),
-                (int) (0x94*contrast),
-                (int) (0x90*contrast));
+    internalSize = QSize(96,8);
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -323,7 +326,7 @@ void Clcdc_pc1260::disp_symb(void)
     Refresh = true;
     }
 
-    Clcdc::disp_symb();
+//    Clcdc::disp_symb();
 
 }
 
@@ -366,17 +369,18 @@ void Clcdc_pc1260::disp(void)
 
                 for (b=0; b<7;b++)
                 {
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                    if (pixelSize>1) {
-                        painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
-                        painter.drawRect(x*(pixelSize+pixelGap) + (ind/5)*(pixelSize+pixelGap)*3/2,
-                                         (y+b)*(pixelSize+pixelGap),
-                                         pixelSize-1,
-                                         pixelSize-1);
-                    }
-                    else {
-                        painter.drawPoint( x, y+b);
-                    }
+                    drawPixel(&painter,x + (ind/5)*1.5f ,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    if (pixelSize>1) {
+//                        painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
+//                        painter.drawRect(x*(pixelSize+pixelGap) + (ind/5)*(pixelSize+pixelGap)*3/2,
+//                                         (y+b)*(pixelSize+pixelGap),
+//                                         pixelSize-1,
+//                                         pixelSize-1);
+//                    }
+//                    else {
+//                        painter.drawPoint( x, y+b);
+//                    }
                 }
                 DirtyBuf[adr-0x2000] = 0;
             }
@@ -391,8 +395,9 @@ void Clcdc_pc1260::disp(void)
 Clcdc_pc1260::Clcdc_pc1260(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {
-    Color_Off = QColor(0,0,0,0);
+    Color_Off = Qt::transparent;
 
+    internalSize = QSize(156,16);
     pixelSize = 4;
     pixelGap = 1;
 
