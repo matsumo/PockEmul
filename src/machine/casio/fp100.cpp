@@ -27,12 +27,12 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(this) {
 
     delete pKEYB; pKEYB		= new Ckeyb(this,"x710.map");
 
-    setDXmm(302);//Pc_DX_mm = 256;
-    setDYmm(120);//Pc_DY_mm = 185;
-    setDZmm(36);//Pc_DZ_mm = 42;
+    setDXmm(302);
+    setDYmm(120);
+    setDZmm(36);
 
-    setDX(1078);//Pc_DX	= 895;
-    setDY(817);//Pc_DY	= 615;
+    setDX(1078);
+    setDY(817);
 
 
 
@@ -166,10 +166,12 @@ void Cfp100::ComputeKey(void)
 
 bool Cfp100::UpdateFinalImage(void) {
 
-    Cce515p::UpdateFinalImage();
+//    Cce515p::UpdateFinalImage();
 
     QPainter painter;
     painter.begin(FinalImage);
+
+    painter.drawImage(QPoint(0,0),*BackgroundImage);
 
     float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 
@@ -182,7 +184,7 @@ bool Cfp100::UpdateFinalImage(void) {
     painter.drawImage(PaperPos(),
                       paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
-
+#if 1
     painter.setOpacity(0.5);
     painter.fillRect(PaperPos(),Qt::black);
     painter.setOpacity(1);
@@ -192,8 +194,10 @@ bool Cfp100::UpdateFinalImage(void) {
     int offset = (lastX ) * ratio /( mainwindow->zoom/100);
     painter.drawImage(152+offset,178,*head);       // Draw head
     painter.drawImage(793 - offset,214,*cable);    // Draw cable
-
+#endif
     painter.end();
+
+    emit updatedPObject(this);
 
     return true;
 }

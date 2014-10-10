@@ -95,7 +95,9 @@ bool Cpb1000::UpdateFinalImage(void) {
     painter.begin(FinalImage);
 
     // POWER SWITCH
-    painter.drawImage(38,388,BackgroundImageBackup->copy(38,388,56,23).mirrored(off,false));
+    painter.drawImage(38*internalImageRatio,388*internalImageRatio,
+                      BackgroundImageBackup->copy(38*internalImageRatio,388*internalImageRatio,
+                                                  56*internalImageRatio,23*internalImageRatio).mirrored(off,false));
 
     painter.end();
 

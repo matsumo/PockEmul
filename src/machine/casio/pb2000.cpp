@@ -75,12 +75,14 @@ bool Cpb2000::UpdateFinalImage(void) {
     painter.begin(FinalImage);
 
     // POWER SWITCH
-    painter.drawImage(0,29,BackgroundImageBackup->copy(0,29,10,95).mirrored(false,!off));
+    painter.drawImage(0,29*internalImageRatio,
+                      BackgroundImageBackup->copy(0,29*internalImageRatio,
+                                                  10*internalImageRatio,95*internalImageRatio).mirrored(false,!off));
 
     //TODO: Manage keyboard overlay
     // DRAW overlay depending of inserted module
-    painter.drawImage(55,218,overlay->copy(0,0,432,6));
-    painter.drawImage(55,251,overlay->copy(0,6,432,6));
+    painter.drawImage(QPoint(55,218)*internalImageRatio,overlay->copy(0,0,432,6).scaled(QSize(432,6)*internalImageRatio));
+    painter.drawImage(QPoint(55,251)*internalImageRatio,overlay->copy(0,6,432,6).scaled(QSize(432,6)*internalImageRatio));
     painter.end();
 
     return true;

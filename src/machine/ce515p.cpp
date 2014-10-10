@@ -11,7 +11,7 @@
 #include "Inter.h"
 #include "dialoganalog.h"
 
-
+extern bool soundEnabled;
 
 #define NO_MOVE	0
 #define RI_MOVE	1
@@ -330,18 +330,20 @@ void Cce515p::Print(CMove point)
         if (point.penDown != old_penDown) {
 #ifndef NO_SOUND
 //            clac->play();
-            if (getfrequency()>0) {
-                fillSoundBuffer(0xFF);
-                fillSoundBuffer(0x00);
-            }
-            else {
-//                int ps = m_audioOutput->periodSize();
-                mainwindow->audioMutex.lock();
-                QByteArray buff;
-                buff.append(0xFF);
-                buff.append((char)0);
-                m_output->write(buff.constData(),2);
-                mainwindow->audioMutex.unlock();
+            if (soundEnabled) {
+                if (getfrequency()>0) {
+                    fillSoundBuffer(0xFF);
+                    fillSoundBuffer(0x00);
+                }
+                else {
+                    //                int ps = m_audioOutput->periodSize();
+                    mainwindow->audioMutex.lock();
+                    QByteArray buff;
+                    buff.append(0xFF);
+                    buff.append((char)0);
+                    m_output->write(buff.constData(),2);
+                    mainwindow->audioMutex.unlock();
+                }
             }
 #endif
             old_penDown = point.penDown;
