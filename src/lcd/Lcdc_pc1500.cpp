@@ -78,10 +78,9 @@ void Clcdc_pc1500::disp_symb(void)
 
 Clcdc_pc1500::Clcdc_pc1500(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (0x6e*contrast),
-                (int) (0x80*contrast),
-                (int) (0x80*contrast));
+    internalSize = QSize(156,7);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 
@@ -98,7 +97,7 @@ void Clcdc_pc1500::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
-
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (ind=0; ind<0x4D; ind+=2)
     {	adr = 0x7600 + ind;
@@ -119,8 +118,9 @@ void Clcdc_pc1500::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, b);
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, b);
             }
 
             if (On)
@@ -136,8 +136,9 @@ void Clcdc_pc1500::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, b);
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, b);
             }
 
         }
@@ -162,8 +163,9 @@ void Clcdc_pc1500::disp(void)
 
             for (b=0; b<7;b++)
                 {
-                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                    painter.drawPoint( x, b);
+                    drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                    painter.drawPoint( x, b);
                 }
 
             if (On)
@@ -178,8 +180,9 @@ void Clcdc_pc1500::disp(void)
             x += 78;
 
             for (b=0; b<7;b++) {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, b);
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, b);
             }
 
         }

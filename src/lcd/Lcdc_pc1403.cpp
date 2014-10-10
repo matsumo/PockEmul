@@ -92,11 +92,9 @@ void Clcdc_pc1403::disp_symb(void)
 Clcdc_pc1403::Clcdc_pc1403(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
-    internalSize = QSize(96,7);
-    Color_Off.setRgb(
-                (int) (0x5d*contrast),
-                (int) (0x71*contrast),
-                (int) (0x6a*contrast));
+    internalSize = QSize(144,7);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 void Clcdc_pc1403::disp(void)
@@ -111,6 +109,7 @@ void Clcdc_pc1403::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
 #if 1
     // 1-6
@@ -125,8 +124,9 @@ void Clcdc_pc1403::disp(void)
             y = 0;
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -148,8 +148,9 @@ void Clcdc_pc1403::disp(void)
 
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -170,8 +171,9 @@ void Clcdc_pc1403::disp(void)
 
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -193,8 +195,9 @@ void Clcdc_pc1403::disp(void)
 
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -215,8 +218,9 @@ void Clcdc_pc1403::disp(void)
 
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -237,8 +241,9 @@ void Clcdc_pc1403::disp(void)
             y = 0;
             for (b=0; b<8;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0x3000] = 0;
         }
@@ -339,10 +344,7 @@ void Clcdc_pc1425::disp_symb(void)
 Clcdc_pc1425::Clcdc_pc1425(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc_pc1403(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {						//[constructor]
-    Color_Off.setRgb(
-                (int) (0x5d*contrast),
-                (int) (0x71*contrast),
-                (int) (0x6a*contrast));
+
 }
 
 

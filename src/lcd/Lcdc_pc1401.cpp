@@ -93,12 +93,8 @@ Clcdc_pc1401::Clcdc_pc1401(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {
     internalSize = QSize(96,7);
-
-    Color_Off.setRgb(
-                (int) (0x61*contrast),
-                (int) (0x6D*contrast),
-                (int) (0x61*contrast));
-
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 void Clcdc_pc1401::disp(void)
@@ -113,6 +109,7 @@ void Clcdc_pc1401::disp(void)
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (ind=0; ind<0x28; ind++)
     {
@@ -127,8 +124,9 @@ void Clcdc_pc1401::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x,	y+b	);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x,	y+b	);
             }
             DirtyBuf[adr-0x6000] = 0;
         }
@@ -146,8 +144,9 @@ void Clcdc_pc1401::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x,	y+b	);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//                painter.drawPoint( x,	y+b	);
             }
             DirtyBuf[adr-0x6000] = 0;
         }

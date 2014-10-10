@@ -57,10 +57,8 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     Initial_Session_Fname ="pc1403.pkm";
 
     BackGroundFname	= P_RES(":/pc1403/pc1403.png");
-//    LcdFname		= P_RES(":/pc1403/1403lcd.png");
-//    SymbFname		= P_RES(":/pc1403/1403symb.png");
+
     memsize			= 0x20000;
-//		NbSlot		= 8;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1403/cpu-1403.rom")	, "pc-1403/cpu-1403.rom" , CSlot::ROM , "CPU ROM"));
@@ -77,27 +75,11 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     KeyMap		= KeyMap1403;
     KeyMapLenght= KeyMap1403Lenght;
 
-
-
     delete pLCDC;	pLCDC		= new Clcdc_pc1403(this,
                                                    QRect(116,53,144*1.5,14),
-                                                   QRect(119,44,210,35),
-                                                   P_RES(":/pc1403/1403lcd.png"),
-                                                   P_RES(":/pc1403/1403symb.png"));
+                                                   QRect(119,44,210,35));
     delete pKEYB;	pKEYB		= new Ckeyb(this,"pc1403.map",scandef_pc1403);
 
-
-//    Lcd_X	= 116;
-//    Lcd_Y	= 53;
-//    Lcd_DX	= 144;
-//    Lcd_DY	= 7;
-//    Lcd_ratio_X	= 1.5;
-//    Lcd_ratio_Y	= 2;
-
-//    Lcd_Symb_X	= 119;
-//    Lcd_Symb_Y	= 44;
-//    Lcd_Symb_DX	= 210;
-//    Lcd_Symb_DY	= 35;
 
     memOffset = 0xC000;
 
@@ -210,9 +192,6 @@ Cpc1403H::Cpc1403H(CPObject *parent) : Cpc1403(parent)
     Initial_Session_Fname ="pc1403H.pkm";
 
     BackGroundFname	= P_RES(":/pc1403/pc1403h.png");
-    pLCDC->LcdFname		= P_RES(":/pc1403/1403lcd.png");
-    pLCDC->SymbFname		= P_RES(":/pc1403/1403symb.png");
-
 
 }
 

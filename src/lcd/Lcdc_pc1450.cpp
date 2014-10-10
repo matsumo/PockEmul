@@ -83,10 +83,10 @@ void Clcdc_pc1450::disp_symb(void)
 
 Clcdc_pc1450::Clcdc_pc1450(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (0x5d*contrast),
-                (int) (0x71*contrast),
-                (int) (0x6a*contrast));
+
+    internalSize = QSize(96,7);
+    pixelSize = 4;
+    pixelGap = 1;
 }
 
 bool	Clcdc_pc1450::init(void)
@@ -122,6 +122,7 @@ void Clcdc_pc1450::disp(void)
     Refresh = false;
     disp_symb();
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (ind=0; ind<80; ind++)
     {
@@ -136,8 +137,7 @@ void Clcdc_pc1450::disp(void)
 
             for (b=0; b<7;b++)
             {
-                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-                painter.drawPoint( x, y+b);
+                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
             }
             DirtyBuf[adr-0x7000] = 0;
         }

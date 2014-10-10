@@ -25,23 +25,10 @@ Cpc1425::Cpc1425(CPObject *parent) : Cpc1403(parent)
     SlotList.append(CSlot(16, 0x1C000 ,	P_RES(":/pc1425/b3-1425.bin"), "" , CSlot::ROM , "BANK 4"));
 
     delete pLCDC;	pLCDC = new Clcdc_pc1425(this,
-                                             QRect(130,53,144*4.0/3,20),
-                                             QRect(130,44,196,35),
-                                             P_RES(":/pc1403/1403lcd.png"),
-                                             P_RES(":/pc1403/1403symb.png"));
+                                             QRect(130,56,144*4.0/3,15),
+                                             QRect(130,44,196,35));
     pKEYB->fn_KeyMap = "pc1425.map";
 
-//    Lcd_X		= 130;
-//    Lcd_Y		= 53;
-//    Lcd_DX		= 144;
-//    Lcd_DY		= 10;
-//    Lcd_ratio_X	= 4.0/3;
-//    Lcd_ratio_Y	= 2;
-
-//    Lcd_Symb_X	= 130;
-//    Lcd_Symb_Y	= 44;
-//    Lcd_Symb_DX	= 196;
-//    Lcd_Symb_DY	= 35;
 
 }
 

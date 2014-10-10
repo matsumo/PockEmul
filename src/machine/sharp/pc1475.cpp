@@ -50,25 +50,9 @@ Cpc1475::Cpc1475(CPObject *parent)	: Cpc1360(parent)
 
     delete pLCDC;		pLCDC		= new Clcdc_pc1475(this,
                                                        QRect(111,48,264*.9,30),
-                                                       QRect(111,38,264*.9,45),
-                                                       P_RES(":/pc1475/1475lcd.png"),
-                                                       P_RES(":/pc1475/1475symb.png"));
+                                                       QRect(111,38,264*.9,45));
     delete pKEYB;		pKEYB		= new Ckeyb(this,"pc1450.map",scandef_pc1450);
 
-//    Lcd_X		= 111;
-//    Lcd_Y		= 48;
-//    Lcd_DX		= 264;
-//    Lcd_DY		= 30;
-//    Lcd_ratio_X	= .9;
-//    Lcd_ratio_Y	= 1;
-
-//    Lcd_Symb_X	= 111;
-//    Lcd_Symb_Y	= 38;
-//    Lcd_Symb_DX	= 264;
-//    Lcd_Symb_DY	= 45;
-//    Lcd_Symb_ratio_X = .9;
-
-//    pCPU->logsw = true;
 }
 
 bool Cpc1475::Chk_Adr(UINT32 *d,UINT32 data)

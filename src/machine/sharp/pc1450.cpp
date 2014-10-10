@@ -22,8 +22,6 @@ Cpc1450::Cpc1450(CPObject *parent)	: Cpc1350(parent)
     Initial_Session_Fname ="pc1450.pkm";
 
     BackGroundFname	= P_RES(":/pc1450/pc1450.png");
-//    LcdFname		= P_RES(":/pc1450/1450lcd.png");
-//    SymbFname		= P_RES(":/pc1450/1450symb.png");
     memsize			= 0x10000;
 
     SlotList.clear();
@@ -36,22 +34,8 @@ Cpc1450::Cpc1450(CPObject *parent)	: Cpc1350(parent)
 
     delete pLCDC;   pLCDC = new Clcdc_pc1450(this,
                                              QRect(130,53,192,20),
-                                             QRect(130,44,196,35),
-                                             P_RES(":/pc1450/1450lcd.png"),
-                                             P_RES(":/pc1450/1450symb.png"));
+                                             QRect(130,44,196,35));
     delete pKEYB;   pKEYB = new Ckeyb(this,"pc1450.map",scandef_pc1450);
-
-//    Lcd_X		= 130;
-//    Lcd_Y		= 53;
-//    Lcd_DX		= 96;
-//    Lcd_DY		= 10;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-
-//    Lcd_Symb_X	= 130;
-//    Lcd_Symb_Y	= 44;
-//    Lcd_Symb_DX	= 196;
-//    Lcd_Symb_DY	= 35;
 
     //initExtension();
 }

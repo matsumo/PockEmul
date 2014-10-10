@@ -100,11 +100,9 @@ void Clcdc_pc1475::disp_symb(void)
 
 Clcdc_pc1475::Clcdc_pc1475(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-//    Color_Off.setRgb(
-//                (int) (0x5d*contrast),
-//                (int) (0x71*contrast),
-//                (int) (0x6a*contrast));
-    internalSize = QSize(144,15);
+
+
+    internalSize = QSize(132,15);
     pixelSize = 4;
     pixelGap = 1;
 }
@@ -114,26 +112,7 @@ bool	Clcdc_pc1475::init(void)
 
     Clcdc::init();
 
-#define LCDX1 (5 * 12)
-#define LCDX2 (5 * 16)
-
-#define LCD1 0x7000
-#define LCD2 0x703c
-#define LCD3 0x7068
-#define LCD4 0x707c
-
-
-
-    int x;
-    for (x = 0; x < LCDX1; x++) {
-    x2a[x] = LCD1 + x;
-    }
-    for (x = LCDX1; x < LCDX2; x++) {
-    x2a[x] = LCD3 + (LCDX2 - x - 1);
-    }
-
-    return(1);
-
+    return true;
 }
 
 void Clcdc_pc1475::disp(void)

@@ -12,12 +12,8 @@ Cpc1402::Cpc1402(CPObject *parent)	: Cpc1401(parent)
     Initial_Session_Fname ="pc1402.pkm";
 
     BackGroundFname	= P_RES(":/pc1402/pc1402.png");
-    pLCDC->LcdFname		= P_RES(":/pc1402/1402lcd.png");
-    pLCDC->SymbFname		= P_RES(":/pc1402/1402symb.png");
-
 
     memsize			= 0x10000;
-//		NbSlot		= 3;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1402/cpu-1402.rom"), "pc-1402/cpu-1402.rom" , CSlot::ROM , "CPU ROM"));
