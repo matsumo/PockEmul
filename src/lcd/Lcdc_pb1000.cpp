@@ -8,7 +8,8 @@
 
 #define BIT(x,n) (((x)>>(n))&1)
 
-Clcdc_pb1000::Clcdc_pb1000(CPObject *parent)	: Clcdc(parent){						//[constructor]
+Clcdc_pb1000::Clcdc_pb1000(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
     Color_Off.setRgb(
                         (int) (90*contrast),
@@ -35,7 +36,7 @@ void Clcdc_pb1000::disp(void)
     info = ((Cpb1000*) pPC)->pHD44352->getInfo();
 //    disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
     UINT8 cw = info.m_char_width;
 

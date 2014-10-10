@@ -33,9 +33,8 @@ Cpb2000::Cpb2000(CPObject *parent)	: Cpb1000(parent)
     Initial_Session_Fname ="pb2000.pkm";
 
     BackGroundFname	= P_RES(":/pb2000/pb-2000.png");
-    LcdFname		= P_RES(":/pb2000/pb-2000lcd.png");
-
-    SymbFname		= "";
+    pLCDC->LcdFname		= P_RES(":/pb2000/pb-2000lcd.png");
+//    SymbFname		= "";
 
     memsize         = 0x70000;
     InitMemValue	= 0xff;
@@ -55,14 +54,15 @@ Cpb2000::Cpb2000(CPObject *parent)	: Cpb1000(parent)
     setDX(668);//715);
     setDY(294);//465);
 
-    Lcd_X		= 58;
-    Lcd_Y		= 45;
-    Lcd_DX		= 192;//168;//144 ;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2;// * 1.18;
-    Lcd_ratio_Y	= 2;// * 1.18;
+//    Lcd_X		= 58;
+//    Lcd_Y		= 45;
+//    Lcd_DX		= 192;//168;//144 ;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2;// * 1.18;
+//    Lcd_ratio_Y	= 2;// * 1.18;
 
     //delete pLCDC;       pLCDC		= new Clcdc_pb1000(this);
+    pLCDC->rect.moveTo(58,45);
     pLCDC->Color_Off.setRgb(
                 (int) (81*pLCDC->contrast),
                 (int) (89*pLCDC->contrast),

@@ -10,7 +10,8 @@
 //#include "Lcdc_symb.h"
 #include "Log.h"
 
-Clcdc_pc2001::Clcdc_pc2001(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_pc2001::Clcdc_pc2001(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                         (int) (92*contrast),
                         (int) (120*contrast),
@@ -43,7 +44,7 @@ void Clcdc_pc2001::disp(void)
 
     disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
     for (int i = 0 ; i<4; i++)
     {

@@ -37,33 +37,16 @@ static const struct {
 void Clcdc_rlh1000::disp_symb(void)
 {
 
-
-
-    if (DirtyBuf[SYMB1_ADR_rlh1000-0x7600] || DirtyBuf[SYMB2_ADR_rlh1000-0x7600])
-    {
-        disp_one_symb( S_BUSY,		COLOR(SYMB1_rlh1000&1),	rlh1000_pos[0].x,	rlh1000_pos[0].y);
-        disp_one_symb( S_SHIFT,		COLOR(SYMB1_rlh1000&2),	rlh1000_pos[1].x,	rlh1000_pos[1].y);
-        disp_one_symb( S_JAP,			COLOR(SYMB1_rlh1000&4),	rlh1000_pos[2].x,	rlh1000_pos[2].y);
-        disp_one_symb( S_SMALL,		COLOR(SYMB1_rlh1000&8),	rlh1000_pos[3].x,	rlh1000_pos[3].y);
-        disp_one_symb( S_DE,			COLOR(SYMB2_rlh1000&0x01),	rlh1000_pos[4].x,	rlh1000_pos[4].y);
-        disp_one_symb( S_G,			COLOR(SYMB2_rlh1000&0x02),	rlh1000_pos[5].x,	rlh1000_pos[5].y);
-        disp_one_symb( S_RAD,			COLOR(SYMB2_rlh1000&0x04),	rlh1000_pos[6].x,	rlh1000_pos[6].y);
-        disp_one_symb( S_RUN,			COLOR(SYMB2_rlh1000&0x40),	rlh1000_pos[7].x,	rlh1000_pos[7].y);
-        disp_one_symb( S_PRO,			COLOR(SYMB2_rlh1000&0x20),	rlh1000_pos[8].x,	rlh1000_pos[8].y);
-        disp_one_symb( S_RESERVE,		COLOR(SYMB2_rlh1000&0x10),	rlh1000_pos[9].x,	rlh1000_pos[9].y);
-        disp_one_symb( S_DEF,			COLOR(SYMB1_rlh1000&0x80),	rlh1000_pos[10].x,	rlh1000_pos[10].y);
-        disp_one_symb( S_ROMEAN_I,	COLOR(SYMB1_rlh1000&0x40),	rlh1000_pos[11].x,	rlh1000_pos[11].y);
-        disp_one_symb( S_ROMEAN_II,	COLOR(SYMB1_rlh1000&0x20),	rlh1000_pos[12].x,	rlh1000_pos[12].y);
-        disp_one_symb( S_ROMEAN_III,	COLOR(SYMB1_rlh1000&0x10),	rlh1000_pos[13].x,	rlh1000_pos[13].y);
-        disp_one_symb( S_BATTERY,		COLOR(1),				rlh1000_pos[14].x,	rlh1000_pos[14].y);
-
-        DirtyBuf[SYMB1_ADR_rlh1000-0x7600] = 0;
-        DirtyBuf[SYMB2_ADR_rlh1000-0x7600] = 0;
-
-        Refresh = true;
-    }
-
     Clcdc::disp_symb();
+}
+
+Clcdc_rlh1000::Clcdc_rlh1000(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
+    Color_Off.setRgb(
+                (int) (111*contrast),
+                (int) (117*contrast),
+                (int) (108*contrast));
+    memset((void *)mem,0,sizeof(mem));
 }
 
 
@@ -76,11 +59,11 @@ void Clcdc_rlh1000::disp(void)
 
     Refresh = false;
 
-//	disp_symb();
+    //	disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
-On=true;
+    On=true;
     for (ind=0; ind<0xA0; ind++)
     {
         if ( (DirtyBuf[ind]) )

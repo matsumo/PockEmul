@@ -31,8 +31,8 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="ti74.pkm";
 
     BackGroundFname	= P_RES(":/ti74/ti74.png");
-    LcdFname		= P_RES(":/ti74/ti74lcd.png");
-    SymbFname		= P_RES(":/ti74/ti74lcd.png");;
+//    LcdFname		= P_RES(":/ti74/ti74lcd.png");
+//    SymbFname		= P_RES(":/ti74/ti74lcd.png");
 
     memsize		= 0x20000;
     InitMemValue	= 0x00;
@@ -50,21 +50,25 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     setDX(730);
     setDY(340);
 
-    Lcd_X		= 50;
-    Lcd_Y		= 60;
-    Lcd_DX		= 186;
-    Lcd_DY		= 10;
-    Lcd_ratio_X	= 2.25;
-    Lcd_ratio_Y	= 2.25;
+//    Lcd_X		= 50;
+//    Lcd_Y		= 60;
+//    Lcd_DX		= 186;
+//    Lcd_DY		= 10;
+//    Lcd_ratio_X	= 2.25;
+//    Lcd_ratio_Y	= 2.25;
 
-    Lcd_Symb_X	= 50;
-    Lcd_Symb_Y	= 50;
-    Lcd_Symb_DX	= 210;
-    Lcd_Symb_DY	= 23;
-    Lcd_Symb_ratio_X	= 2;
-    Lcd_Symb_ratio_Y	= 2;
+//    Lcd_Symb_X	= 50;
+//    Lcd_Symb_Y	= 50;
+//    Lcd_Symb_DX	= 210;
+//    Lcd_Symb_DY	= 23;
+//    Lcd_Symb_ratio_X	= 2;
+//    Lcd_Symb_ratio_Y	= 2;
 
-    pLCDC		= new Clcdc_ti74(this);
+    pLCDC		= new Clcdc_ti74(this,
+                                 QRect(50,60,186*2.25,10*2.25),
+                                 QRect(50,50,420,46),
+                                 P_RES(":/ti74/ti74lcd.png"),
+                                 P_RES(":/ti74/ti74lcd.png"));
     pCPU		= new Ctms70c46(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"ti74.map");
@@ -86,8 +90,8 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     Initial_Session_Fname ="ti95.pkm";
 
     BackGroundFname	= P_RES(":/ti74/ti95.png");
-    LcdFname		= P_RES(":/ti74/ti95lcd.png");
-    SymbFname		= P_RES("");;
+//    LcdFname		= P_RES(":/ti74/ti95lcd.png");
+//    SymbFname		= P_RES("");
 
     memsize		= 0x20000;
     InitMemValue	= 0x00;
@@ -99,22 +103,20 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/hn61256pc95.bin")        , ""	, CSlot::ROM , "ROM"));
 
 
-    Lcd_X		= 142;
-    Lcd_Y		= 40;
-    Lcd_DX		= 130;
-    Lcd_DY		= 30;
-    Lcd_ratio_X	= 340.0/Lcd_DX;
-    Lcd_ratio_Y	= 75.0/Lcd_DY;
+//    Lcd_X		= 142;
+//    Lcd_Y		= 40;
+//    Lcd_DX		= 130;
+//    Lcd_DY		= 30;
+//    Lcd_ratio_X	= 340.0/Lcd_DX;
+//    Lcd_ratio_Y	= 75.0/Lcd_DY;
 
-    Lcd_Symb_X	= 50;
-    Lcd_Symb_Y	= 50;
-    Lcd_Symb_DX	= 210;
-    Lcd_Symb_DY	= 23;
-    Lcd_Symb_ratio_X	= 2;
-    Lcd_Symb_ratio_Y	= 2;
+
 
     delete pLCDC;
-    pLCDC		= new Clcdc_ti95(this);
+    pLCDC		= new Clcdc_ti95(this,
+                                 QRect(142,40,340,75),
+                                 QRect(),
+                                 P_RES(":/ti74/ti95lcd.png"));
     pKEYB->fn_KeyMap = "ti95.map";
 
 }

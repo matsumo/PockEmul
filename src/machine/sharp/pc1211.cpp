@@ -18,8 +18,8 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pc1211.pkm";
 
     BackGroundFname	= P_RES(":/pc1211/pc-1211.png");
-    LcdFname		= P_RES(":/pc1211/pc-1211lcd.png");
-    SymbFname		= P_RES(":/pc1211/pc-1211symb.png");
+//    LcdFname		= P_RES(":/pc1211/pc-1211lcd.png");
+//    SymbFname		= P_RES(":/pc1211/pc-1211symb.png");
 
     memsize		= 0x10000;
 
@@ -35,20 +35,24 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
     setDX(626);
     setDY(252);
 
-    Lcd_X		= 46;
-    Lcd_Y		= 50;
-    Lcd_DX		= 144;//168;//144 ;
-    Lcd_DY		= 8;
-    Lcd_ratio_X	= 2 * 1.375;
-    Lcd_ratio_Y	= 2 * 1.375;
+//    Lcd_X		= 46;
+//    Lcd_Y		= 50;
+//    Lcd_DX		= 144;//168;//144 ;
+//    Lcd_DY		= 8;
+//    Lcd_ratio_X	= 2 * 1.375;
+//    Lcd_ratio_Y	= 2 * 1.375;
 
-    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 380;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+//    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
+//    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
+//    Lcd_Symb_DX	= 380;
+//    Lcd_Symb_DY	= 5;
+//    Lcd_Symb_ratio_X	= 1;//1.18;
 
-    pLCDC		= new Clcdc_pc1211(this);
+    pLCDC		= new Clcdc_pc1211(this,
+                                   QRect(46,50,144*2*1.375,8*2*1.375),
+                                   QRect(55,41,380,5),
+                                   P_RES(":/pc1211/pc-1211lcd.png"),
+                                   P_RES(":/pc1211/pc-1211symb.png"));
     pKEYB		= new Ckeyb(this,"pc1211.map");
     pCPU = new CTinyBasic(this);
     pTIMER		= new Ctimer(this);

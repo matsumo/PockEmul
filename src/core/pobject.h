@@ -83,8 +83,7 @@ public:
 	Ctimer		*pTIMER;
 	Clcdc		*pLCDC;					// create LCDC object
     QString BackGroundFname;
-	QString	LcdFname;
-	QString	SymbFname;
+
 
     Cbus   *bus;
     QMutex       busMutex;
@@ -114,11 +113,9 @@ public:
 
 	QImage* BackgroundImageBackup;
 	QImage* BackgroundImage;
-	QImage* LcdImage;
-	QImage* SymbImage;
 
     float internalImageRatio;
-    float LcdRatio;
+
 
     int		getfrequency() { return frequency; }
     void	setfrequency(int f);

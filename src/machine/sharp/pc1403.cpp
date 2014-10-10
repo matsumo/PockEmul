@@ -10,7 +10,7 @@
 #include	"Inter.h"
 #include	"Keyb.h"
 #include "Keyb1403.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1403.h"
 //#include	"ce126.h"
 //#include	"sound.h"
 
@@ -57,8 +57,8 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     Initial_Session_Fname ="pc1403.pkm";
 
     BackGroundFname	= P_RES(":/pc1403/pc1403.png");
-    LcdFname		= P_RES(":/pc1403/1403lcd.png");
-    SymbFname		= P_RES(":/pc1403/1403symb.png");
+//    LcdFname		= P_RES(":/pc1403/1403lcd.png");
+//    SymbFname		= P_RES(":/pc1403/1403symb.png");
     memsize			= 0x20000;
 //		NbSlot		= 8;
 
@@ -79,21 +79,25 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
 
 
 
-    delete pLCDC;	pLCDC		= new Clcdc_pc1403(this);
+    delete pLCDC;	pLCDC		= new Clcdc_pc1403(this,
+                                                   QRect(116,53,144*1.5,14),
+                                                   QRect(119,44,210,35),
+                                                   P_RES(":/pc1403/1403lcd.png"),
+                                                   P_RES(":/pc1403/1403symb.png"));
     delete pKEYB;	pKEYB		= new Ckeyb(this,"pc1403.map",scandef_pc1403);
 
 
-    Lcd_X	= 116;
-    Lcd_Y	= 53;
-    Lcd_DX	= 144;
-    Lcd_DY	= 7;
-    Lcd_ratio_X	= 1.5;
-    Lcd_ratio_Y	= 2;
+//    Lcd_X	= 116;
+//    Lcd_Y	= 53;
+//    Lcd_DX	= 144;
+//    Lcd_DY	= 7;
+//    Lcd_ratio_X	= 1.5;
+//    Lcd_ratio_Y	= 2;
 
-    Lcd_Symb_X	= 119;
-    Lcd_Symb_Y	= 44;
-    Lcd_Symb_DX	= 210;
-    Lcd_Symb_DY	= 35;
+//    Lcd_Symb_X	= 119;
+//    Lcd_Symb_Y	= 44;
+//    Lcd_Symb_DX	= 210;
+//    Lcd_Symb_DY	= 35;
 
     memOffset = 0xC000;
 
@@ -206,8 +210,8 @@ Cpc1403H::Cpc1403H(CPObject *parent) : Cpc1403(parent)
     Initial_Session_Fname ="pc1403H.pkm";
 
     BackGroundFname	= P_RES(":/pc1403/pc1403h.png");
-    LcdFname		= P_RES(":/pc1403/1403lcd.png");
-    SymbFname		= P_RES(":/pc1403/1403symb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1403/1403lcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1403/1403symb.png");
 
 
 }

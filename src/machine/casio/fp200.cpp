@@ -32,8 +32,8 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="fp200.pkm";
 
     BackGroundFname	= P_RES(":/fp200/fp200.png");
-    LcdFname		= P_RES(":/fp200/fp200lcd.png");
-    SymbFname		= "";
+//    LcdFname		= P_RES(":/fp200/fp200lcd.png");
+//    SymbFname		= "";
 
     TopFname    = P_RES(":/fp200/fp200Top.png");
 
@@ -54,14 +54,17 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
     setDX(1034);
     setDY(705);
 
-    Lcd_X		= 158;
-    Lcd_Y		= 57;
-    Lcd_DX		= 160;
-    Lcd_DY		= 64;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
+//    Lcd_X		= 158;
+//    Lcd_Y		= 57;
+//    Lcd_DX		= 160;
+//    Lcd_DY		= 64;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
 
-    pLCDC		= new Clcdc_fp200(this);
+    pLCDC		= new Clcdc_fp200(this,
+                                  QRect(158,57,320,128),
+                                  QRect(),
+                                  P_RES(":/fp200/fp200lcd.png"));
     pCPU		= new Ci8085(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"fp200.map");

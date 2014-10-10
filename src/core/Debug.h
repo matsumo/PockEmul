@@ -44,7 +44,7 @@ public:
 
 	DisAsmTbl	*AsmTbl;
 
-    virtual void injectReg(Parser *p) {}
+    virtual void injectReg(Parser *p) { Q_UNUSED(p) }
 
 	Cdebug(CPObject *parent)	: CPObject(parent)
 	{							//[constructor]

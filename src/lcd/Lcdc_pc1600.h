@@ -15,15 +15,10 @@ public:
     int x2a[100];
 
 
-    Clcdc_pc1600(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-        Color_Off.setRgb(
-                            (int) (95*contrast),
-                            (int) (119*contrast),
-                            (int) (193*contrast));
-    };
+    Clcdc_pc1600(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_pc1600()
     {						//[constructor]
-    };
+    }
 
 };
 

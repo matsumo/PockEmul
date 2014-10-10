@@ -46,8 +46,8 @@ Clbc1100::Clbc1100(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="lbc1100.pkm";
 
     BackGroundFname	= P_RES(":/lbc1100/lbc-1100.png");
-    LcdFname		= P_RES(":/lbc1100/lbc-1100lcd.png");
-    SymbFname		= "";
+//    LcdFname		= P_RES(":/lbc1100/lbc-1100lcd.png");
+//    SymbFname		= "";
 
     memsize		= 0x10000;
     InitMemValue	= 0xFF;
@@ -70,22 +70,19 @@ Clbc1100::Clbc1100(CPObject *parent)	: CpcXXXX(parent)
     setDX(786);//Pc_DX		= 483;//409;
     setDY(376);//Pc_DY		= 252;//213;
 
-    Lcd_X		= 70;
-    Lcd_Y		= 60;
-    Lcd_DX		= 240;//168;//144 ;
-    Lcd_DY		= 21;
-    Lcd_ratio_X	= 2.15;// * 1.18;
-    Lcd_ratio_Y	= 2.75;// * 1.18;
-
-    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 339;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+//    Lcd_X		= 70;
+//    Lcd_Y		= 60;
+//    Lcd_DX		= 240;//168;//144 ;
+//    Lcd_DY		= 21;
+//    Lcd_ratio_X	= 2.15;// * 1.18;
+//    Lcd_ratio_Y	= 2.75;// * 1.18;
 
     PowerSwitch = 0;
 
-    pLCDC		= new Clcdc_lbc1100(this);
+    pLCDC		= new Clcdc_lbc1100(this,
+                                    QRect(70,60,240*2.15,21*2.75),
+                                    QRect(),
+                                    P_RES(":/lbc1100/lbc-1100lcd.png"));
     pCPU		= new Cupd7907(this);    upd7907 = (Cupd7907*)pCPU;
     for (int i=0;i<4;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);

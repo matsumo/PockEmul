@@ -49,8 +49,8 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
         BackGroundFname	= P_RES(":/z1/z1.png");
     }
 
-    LcdFname		= P_RES(":/z1/z1grlcd.png");
-    SymbFname		= "";
+//    LcdFname		= P_RES(":/z1/z1grlcd.png");
+//    SymbFname		= "";
 
     LeftFname       = P_RES(":/z1/z1Left.png");
 
@@ -80,22 +80,20 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
     setDX(736);//Pc_DX		= 483;//409;
     setDY(297);//Pc_DY		= 252;//213;
 
-    Lcd_X		= 77;
-    Lcd_Y		= 44;
-    Lcd_DX		= 192;//168;//144 ;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2;// * 1.18;
-    Lcd_ratio_Y	= 2;// * 1.18;
+//    Lcd_X		= 77;
+//    Lcd_Y		= 44;
+//    Lcd_DX		= 192;//168;//144 ;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2;// * 1.18;
+//    Lcd_ratio_Y	= 2;// * 1.18;
 
-    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 339;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;//1.18;
 
     PowerSwitch = 0;
 
-    pLCDC		= new Clcdc_z1(this);
+    pLCDC		= new Clcdc_z1(this,
+                               QRect(77,44,384,64),
+                               QRect(),
+                               P_RES(":/z1/z1grlcd.png"));
     pCPU		= new Ci80L188EB(this);
     pFPU        = new CCF79107PJ(this);
     pTIMER		= new Ctimer(this);

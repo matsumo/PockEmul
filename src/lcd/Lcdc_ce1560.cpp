@@ -6,7 +6,8 @@
 #include "Lcdc_ce1560.h"
 #include "Lcdc_symb.h"
 
-Clcdc_ce1560::Clcdc_ce1560(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_ce1560::Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                         (int) (64*contrast),
                         (int) (86*contrast),
@@ -54,7 +55,7 @@ void Clcdc_ce1560::disp(void)
 
     Refresh = true;
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     for (int _m=0; _m<3 ; _m++) {
         if (((Cce1560 *)pPC)->ps6b0108[_m]->info.on_off)
         {

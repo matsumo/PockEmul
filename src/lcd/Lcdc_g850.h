@@ -13,7 +13,7 @@ public:
     int computeSL(int ord);
     int symbSL(int x);
 
-    Clcdc_g850(CPObject *parent = 0);
+    Clcdc_g850(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_g850()
     {						//[constructor]
     }

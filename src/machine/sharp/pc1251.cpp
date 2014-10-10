@@ -1,6 +1,7 @@
 #include	"common.h"
 
 #include "pc1251.h"
+#include "Lcdc.h"
 
 Cpc1251::Cpc1251(CPObject *parent)	: Cpc1250(this)
 {								//[constructor]
@@ -12,8 +13,8 @@ Cpc1251::Cpc1251(CPObject *parent)	: Cpc1250(this)
     Initial_Session_Fname ="pc1251.pkm";
 
     BackGroundFname	= P_RES(":/pc1251/pc1251.png"); //":/pc1251/pc1251hd.jpg"; //
-    LcdFname		= P_RES(":/pc1251/1251lcd.png");
-    SymbFname		= P_RES(":/pc1251/1251symb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1251/1251lcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1251/1251symb.png");
 
 
     memsize			= 0x10000;

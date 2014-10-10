@@ -8,7 +8,7 @@ public:
     void disp(void);				//display LCDC data to screen
     const char*	GetClassName(){ return("Clcdc_z1");}
 
-    Clcdc_z1(CPObject *parent = 0);
+    Clcdc_z1(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_z1()
     {						//[constructor]
     }

@@ -15,15 +15,7 @@ public:
     const char*	GetClassName(){ return("Clcdc_hp41");}
 
 
-    Clcdc_hp41(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-        Color_Off.setRgb(
-                            (int) (111*contrast),
-                            (int) (117*contrast),
-                            (int) (108*contrast));
-
-        hp41 = (Chp41*) parent;
-        hp41cpu = hp41->hp41cpu;
-    }
+    Clcdc_hp41(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_hp41()
     {						//[constructor]
     }

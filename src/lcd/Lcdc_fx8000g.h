@@ -16,7 +16,7 @@ public:
     virtual void	TurnOFF(void);			// LCD Off
 
 
-    Clcdc_fx8000g(CPObject *parent = 0);
+    Clcdc_fx8000g(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_fx8000g()
     {						//[constructor]
     }

@@ -8,7 +8,8 @@
 #include "Lcdc_symb.h"
 #include "Log.h"
 
-Clcdc_g850::Clcdc_g850(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_g850::Clcdc_g850(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 //    Color_Off.setRgb(
 //                        (int) (92*contrast),
 //                        (int) (120*contrast),
@@ -138,7 +139,7 @@ void Clcdc_g850::disp(void)
 
     disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     if (g850->pSED1560->info.on_off)

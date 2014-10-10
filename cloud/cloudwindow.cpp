@@ -92,6 +92,8 @@ CloudWindow::CloudWindow(QWidget *parent)
 }
 
 void CloudWindow::resizeEvent(QResizeEvent *e) {
+    Q_UNUSED(e)
+
 //    view->setGeometry(this->geometry());
 }
 
@@ -168,6 +170,7 @@ void CloudWindow::sendPML(const QString &filePath)
 //    qWarning()<<req.url();
     connect(mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(finishedSave(QNetworkReply*)));
     QNetworkReply *reply = mgr->post(req, qu.query(QUrl::FullyEncoded).toUtf8());
+    Q_UNUSED(reply)
 #else
 // Qt4 code
 #endif

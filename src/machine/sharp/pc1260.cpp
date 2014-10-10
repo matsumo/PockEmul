@@ -1,7 +1,7 @@
 #include	"common.h"
  
 #include "pc1260.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1250.h"
 #include "Keyb.h"
 
 Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
@@ -15,8 +15,8 @@ Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
     Initial_Session_Fname ="pc1260.pkm";
 
     BackGroundFname	= P_RES(":/pc1260/pc1260.png");
-    LcdFname		= ":/pockemul/transparent.png";
-    SymbFname		= ":/pockemul/transparent.png";
+//    LcdFname		= ":/pockemul/transparent.png";
+//    SymbFname		= ":/pockemul/transparent.png";
 
     memsize			= 0x10000;
 
@@ -25,21 +25,23 @@ Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
     SlotList.append(CSlot(24, 0x2000 ,	""									, "" , CSlot::RAM , "RAM"));
     SlotList.append(CSlot(32, 0x8000 ,	P_RES(":/pc1260/bas-1260.rom")	, "" , CSlot::ROM , "BASIC ROM"));
 
-    Lcd_X		= 79;
-    Lcd_Y		= 37;
-    Lcd_DX		= 156;
-    Lcd_DY		= 16;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
-    LcdRatio    = 5;
+//    Lcd_X		= 79;
+//    Lcd_Y		= 37;
+//    Lcd_DX		= 156;
+//    Lcd_DY		= 16;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
+//    LcdRatio    = 5;
 
-    Lcd_Symb_X	= 53;
-    Lcd_Symb_Y	= 37;
-    Lcd_Symb_DX	= 288;
-    Lcd_Symb_DY	= 33;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+//    Lcd_Symb_X	= 53;
+//    Lcd_Symb_Y	= 37;
+//    Lcd_Symb_DX	= 288;
+//    Lcd_Symb_DY	= 33;
+//    Lcd_Symb_ratio_X	= 1;//1.18;
 
-    delete pLCDC;	pLCDC = new Clcdc_pc1260(this);
+    delete pLCDC;	pLCDC = new Clcdc_pc1260(this,
+                                             QRect(79,37,312,32),
+                                             QRect(53,37,288,33));
     pKEYB->fn_KeyMap = "pc1260.map";
 }
 

@@ -9,7 +9,8 @@
 
 
 
-Clcdc_cc40::Clcdc_cc40(CPObject *parent)	: Clcdc(parent){						//[constructor]
+Clcdc_cc40::Clcdc_cc40(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
     Color_Off.setRgb(
                         (int) (90*contrast),
@@ -95,7 +96,7 @@ void Clcdc_cc40::disp(void)
 //    disp_symb();
 
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Ccc40_update_pixel);
@@ -103,7 +104,7 @@ void Clcdc_cc40::disp(void)
     painter.end();
 
 
-    QPainter painterSymb(pPC->SymbImage);
+    QPainter painterSymb(SymbImage);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Ccc40_update_pixel_symb);

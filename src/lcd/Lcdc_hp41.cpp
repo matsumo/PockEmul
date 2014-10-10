@@ -33,9 +33,9 @@ QByteArray ConvertASCIItoLCD(QByteArray *ba)
 
 void Clcdc_hp41::disp_symb(void)
 {
-    delete pPC->SymbImage;
-    pPC->SymbImage = pPC->CreateImage(QSize(pPC->Lcd_Symb_DX, pPC->Lcd_Symb_DY),pPC->SymbFname,false,false,0);
-    QPainter painter(pPC->SymbImage);
+    delete SymbImage;
+    SymbImage = pPC->CreateImage(symbRect.size(),SymbFname,false,false,0);
+    QPainter painter(SymbImage);
 
     painter.setCompositionMode(QPainter::CompositionMode_Source);
     if (! (hp41->DIS_ANNUN_REG&0x0800)) {painter.fillRect(  0,0,18,8,Qt::transparent); }// bat
@@ -54,6 +54,17 @@ void Clcdc_hp41::disp_symb(void)
     painter.end();
 }
 
+Clcdc_hp41::Clcdc_hp41(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
+    Color_Off.setRgb(
+                (int) (111*contrast),
+                (int) (117*contrast),
+                (int) (108*contrast));
+
+    hp41 = (Chp41*) parent;
+    hp41cpu = hp41->hp41cpu;
+}
+
 void Clcdc_hp41::disp(void)
 {
 
@@ -61,17 +72,18 @@ void Clcdc_hp41::disp(void)
 
     if (!ready) return;
     if (!updated) return;
-//    qWarning()<<"disp";
+    //    qWarning()<<"disp";
     updated = false;
     Refresh= true;
-    delete pPC->LcdImage;
-    pPC->LcdImage = pPC->CreateImage(QSize(pPC->Lcd_DX, pPC->Lcd_DY),pPC->LcdFname,false,false,0);
+//    delete LcdImage;
+//    LcdImage = pPC->CreateImage(QSize(pPC->Lcd_DX, pPC->Lcd_DY),pPC->LcdFname,false,false,0);
 
 
 
-    QPainter painter(pPC->LcdImage);
-//    painter.setPen(QColor(255,255,255,0));
-//    painter.fillRect(pPC->LcdImage->rect(),Qt::SolidPattern);
+    QPainter painter(LcdImage);
+//    painter.setPen(Qt::transparent);
+//    painter.setBrush(Qt::transparent);
+    painter.fillRect(LcdImage->rect(),Qt::transparent);
 
     QFont font;
     font.setFamily("HP41 Character Set");
@@ -95,8 +107,8 @@ void Clcdc_hp41::disp(void)
 
 //    ba = ConvertASCIItoLCD(GetLCD());
 
-//    painter.drawText(pPC->LcdImage->rect(),ba);
-    painter.drawText(pPC->LcdImage->rect(),GetLCD());
+//    painter.drawText(LcdImage->rect(),ba);
+    painter.drawText(LcdImage->rect(),GetLCD());
 
     disp_symb();
 

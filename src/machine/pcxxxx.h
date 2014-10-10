@@ -135,16 +135,7 @@ public:
 
 	bool	SoundOn;
 
-	
-	int		Lcd_X,Lcd_Y;			// LCD panel display position(x,y)
-	int		Lcd_DX,Lcd_DY;			// LCD panel display Width & Heigth
-	float	Lcd_ratio_X;
-	float	Lcd_ratio_Y;
 
-	int		Lcd_Symb_X,Lcd_Symb_Y;		// LCD panel display position(x,y)
-	int		Lcd_Symb_DX,Lcd_Symb_DY;	// LCD panel display Width & Heigth
-    float	Lcd_Symb_ratio_X;
-    float	Lcd_Symb_ratio_Y;
 
 	BYTE	IO_A,IO_B,IO_C,IO_F,IO_T;			// Four Input Output port 
 	bool	Get_Port_bit(PORTS Port, int bit);
@@ -228,7 +219,6 @@ public:
 
     quint8		RomBank,RamBank;					// Bank Number id
     int     ProtectMemory;
-	UINT	DialogExtensionID;
 
 	int		Tape_Base_Freq;
 

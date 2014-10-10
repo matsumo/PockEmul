@@ -82,8 +82,6 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="x07.pkm";
 
     BackGroundFname	= P_RES(":/x07/x07.png");
-    LcdFname		= ":/pockemul/transparent.png"; //P_RES(":/x07/x07lcd.png");
-    SymbFname		= "";
 
     RightFname  = P_RES(":/x07/x07Right.png");
     LeftFname  = P_RES(":/x07/x07Left.png");
@@ -113,23 +111,25 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     setDX(715);
     setDY(465);
 
-    Lcd_X		= 67;
-    Lcd_Y		= 63;
-    Lcd_DX		= 120;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2.4;
-    Lcd_ratio_Y	= 2.8;
-    LcdRatio = 5;
+//    Lcd_X		= 67;
+//    Lcd_Y		= 63;
+//    Lcd_DX		= 120;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2.4;
+//    Lcd_ratio_Y	= 2.8;
+//    LcdRatio = 5;
 
-    Lcd_Symb_X	= 55;
-    Lcd_Symb_Y	= 41;
-    Lcd_Symb_DX	= 339;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;
+//    Lcd_Symb_X	= 55;
+//    Lcd_Symb_Y	= 41;
+//    Lcd_Symb_DX	= 339;
+//    Lcd_Symb_DY	= 5;
+//    Lcd_Symb_ratio_X	= 1;
 
     PowerSwitch = 0;
 
-    pLCDC		= new Clcdc_x07(this);
+    pLCDC		= new Clcdc_x07(this,
+                                QRect(67,63,120*2.4,32*2.8),
+                                QRect(55,41,339,5));
     pCPU		= new CZ80(this);
     pT6834      = new CT6834(this);
     pUART        = new Cuart(this);

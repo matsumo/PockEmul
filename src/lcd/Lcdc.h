@@ -13,6 +13,17 @@
 class CpcXXXX;
 class CPObject;
 
+class ClcdSymb {
+public:
+    ClcdSymb(int _x,int _y,const char* _symb,UINT32 _addr,int _bit);
+
+    int x,y;
+    const char *symb;
+    UINT32	addr;
+    int	bit;
+
+};
+
 class Clcdc:public QObject{
 Q_OBJECT
 
@@ -30,6 +41,7 @@ public:
     bool    updated;
 	bool	DirtyBuf[0x1000];
     bool    ready;
+    QList<ClcdSymb> symbList;
 
 	void	Update(void){
 					for (int i=0 ; i<0x1000;i++) DirtyBuf[i]=true;
@@ -53,299 +65,36 @@ public:
 	QColor	Color_On;
 	QColor	Color_Off;
 
-    Clcdc(CPObject *parent);
+    QImage* LcdImage;
+    QImage* SymbImage;
+    float LcdRatio;
+
+    void InitDisplay(void);
+
+    Clcdc(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
 
     virtual ~Clcdc();
 
+    QRect rect;
+    QRect symbRect;
+    float	Lcd_ratio_X;
+    float	Lcd_ratio_Y;
+
+    float	Lcd_Symb_ratio_X;
+    float	Lcd_Symb_ratio_Y;
+    QString	LcdFname;
+    QString	SymbFname;
 
 protected:
-	QColor origColor_Off;
-};
+    QColor origColor_Off;
+    WORD baseAdr;
+
+    BYTE pixelSize,pixelGap;
 
 
-//////////////////////////////////////////////////////
-// LCDC emulation Windows///////////////////////////
-//////////////////////////////////////////////////
-class Clcdc_pc1350:public Clcdc
-{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-
-    Clcdc_pc1350(CPObject *parent);
-	virtual ~Clcdc_pc1350()
-	{						//[constructor]
-    }
 
 };
-
-class Clcdc_pc1360:public Clcdc{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-
-	
-	Clcdc_pc1360(CPObject *parent = 0)	: Clcdc(parent)
-	{						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x58*contrast),
-							(int) (0x6c*contrast),
-							(int) (0x60*contrast));
-	};
-	virtual ~Clcdc_pc1360()
-	{						//[constructor]
-	};
-
-};
-class Clcdc_pc2500:public Clcdc
-{
-public:
-    void disp(void);				//display LCDC data to screen
-    void disp_symb(void);
-
-    Clcdc_pc2500(CPObject *parent)	: Clcdc(parent)
-    {						//[constructor]
-        Color_Off.setRgb(
-                            (int) (0x4f*contrast),
-                            (int) (0x5b*contrast),
-                            (int) (0x51*contrast));
-    };
-    virtual ~Clcdc_pc2500()
-    {						//[constructor]
-    };
-
-};
-class Clcdc_pc1250:public Clcdc{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-
-	Clcdc_pc1250(CPObject *parent = 0)	: Clcdc(parent)
-	{					//[constructor]
-
-        Color_Off.setRgb(	(int) ( 0x4a*contrast ),
-								(int) ( 0x63*contrast ),
-                                (int) ( 0x63*contrast ) );
-    }
-	virtual ~Clcdc_pc1250()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1245:public Clcdc_pc1250{
-public:
-	void disp_symb(void);
-	void disp(void);				//display LCDC data to screen
-    const char*	GetClassName(){ return("Clcdc_pc1245");}
-
-	Clcdc_pc1245(CPObject *parent = 0)	: Clcdc_pc1250(parent)
-	{						//[constructor]
-
-		Color_Off.setRgb(
-							(int) (0x7e*contrast),
-							(int) (0x94*contrast),
-							(int) (0x90*contrast));
-    }
-	virtual ~Clcdc_pc1245()
-	{						//[constructor]
-    }
-
-};
-
-
-class Clcdc_pc1255:public Clcdc_pc1250{
-public:
-    const char*	GetClassName(){ return("Clcdc_pc1255");}
-
-	Clcdc_pc1255(CPObject *parent = 0)	: Clcdc_pc1250(parent){						//[constructor]
-		Color_Off.setRgb(
-                            (int) (0x63*contrast),
-                            (int) (0x6e*contrast),
-                            (int) (0x5e*contrast));
-	};
-	virtual ~Clcdc_pc1255()
-	{						//[constructor]
-	};
-
-};
-
-class Clcdc_pc1260:public Clcdc_pc1250{
-public:
-	void disp_symb(void);
-	void disp(void);				//display LCDC data to screen
-    const char*	GetClassName(){ return("Clcdc_pc1260");}
-
-
-    Clcdc_pc1260(CPObject *parent = 0);
-	virtual ~Clcdc_pc1260()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1401:public Clcdc{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1401");}
-
-
-
-    Clcdc_pc1401(CPObject *parent = 0);
-	virtual ~Clcdc_pc1401()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1403:public Clcdc{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1403");}
-
-
-
-	Clcdc_pc1403(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x5d*contrast),
-							(int) (0x71*contrast),
-							(int) (0x6a*contrast));
-    }
-	virtual ~Clcdc_pc1403()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1425:public Clcdc_pc1403{
-public:
-    void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1425");}
-
-
-
-    Clcdc_pc1425(CPObject *parent = 0)	: Clcdc_pc1403(parent){						//[constructor]
-        Color_Off.setRgb(
-                            (int) (0x5d*contrast),
-                            (int) (0x71*contrast),
-                            (int) (0x6a*contrast));
-    }
-    virtual ~Clcdc_pc1425()
-    {						//[constructor]
-    }
-
-};
-
-
-class Clcdc_pc1450:public Clcdc{
-public:
-	bool init(void);
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1450");}
-
-
-	int x2a[100];
-
-	Clcdc_pc1450(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x5d*contrast),
-							(int) (0x71*contrast),
-							(int) (0x6a*contrast));
-	};
-	virtual ~Clcdc_pc1450()
-	{						//[constructor]
-	};
-
-};
-
-class Clcdc_pc1475:public Clcdc{
-public:
-	bool init(void);
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1475");}
-
-
-	int x2a[100];
-
-	Clcdc_pc1475(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x5d*contrast),
-							(int) (0x71*contrast),
-							(int) (0x6a*contrast));
-	};
-	virtual ~Clcdc_pc1475()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1500:public Clcdc{
-public:
-	void disp(void);				//display LCDC data to screen
-	void disp_symb(void);
-    const char*	GetClassName(){ return("Clcdc_pc1500");}
-
-
-	int x2a[100];
-
-
-	Clcdc_pc1500(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x6e*contrast),
-							(int) (0x80*contrast),
-							(int) (0x80*contrast));
-    }
-	virtual ~Clcdc_pc1500()
-	{						//[constructor]
-    }
-
-};
-class Clcdc_trspc2:public Clcdc_pc1500{
-public:
-    const char*	GetClassName(){ return("Clcdc_trspc2");}
-
-	Clcdc_trspc2(CPObject *parent = 0)	: Clcdc_pc1500(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x53*contrast),
-							(int) (0x62*contrast),
-							(int) (0x4f*contrast));
-	};
-	virtual ~Clcdc_trspc2()
-	{						//[constructor]
-    }
-
-};
-
-class Clcdc_pc1500A:public Clcdc_pc1500{
-public:
-    const char*	GetClassName(){ return("Clcdc_pc1500A");}
-
-	Clcdc_pc1500A(CPObject *parent = 0)	: Clcdc_pc1500(parent){						//[constructor]
-		Color_Off.setRgb(
-							(int) (0x60*contrast),
-							(int) (0x6a*contrast),
-							(int) (0x60*contrast));
-	};
-	virtual ~Clcdc_pc1500A()
-	{						//[constructor]
-    }
-
-};
-
-
-
-
-///////////////////////
 
 #define COLOR(b)	( ( (b)&&On ) ? Color_On : Color_Off)
-
-
-
-
-
 
 #endif

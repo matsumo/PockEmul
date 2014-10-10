@@ -3,7 +3,7 @@
 #include "common.h"
 
 #include "pc1245.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1250.h"
 #include "Keyb.h"
 
 Cpc1245::Cpc1245(CPObject *parent)	: Cpc1250(parent)
@@ -14,8 +14,8 @@ Cpc1245::Cpc1245(CPObject *parent)	: Cpc1250(parent)
 	Initial_Session_Fname ="pc1245.pkm";
 	
     BackGroundFname	= P_RES(":/pc1245/pc1245.png");
-    LcdFname		= P_RES(":/pc1245/1245lcd.png");
-    SymbFname		= P_RES(":/pc1245/1245symb.png");
+//    LcdFname		= P_RES(":/pc1245/1245lcd.png");
+//    SymbFname		= P_RES(":/pc1245/1245symb.png");
 	
 
 	memsize			= 0x10000;
@@ -28,20 +28,24 @@ Cpc1245::Cpc1245(CPObject *parent)	: Cpc1250(parent)
     SlotList.append(CSlot(32, 0x8000 ,	""								, "pc1245/R2-1245.ram" 	, CSlot::RAM , "RAM"));
 
 
-	Lcd_X		= 50;
-	Lcd_Y		= 56;
-	Lcd_DX		= 96;
-	Lcd_DY		= 8;
-	Lcd_ratio_X	= (float) 2;
-	Lcd_ratio_Y	= (float) 2;
+//	Lcd_X		= 50;
+//	Lcd_Y		= 56;
+//	Lcd_DX		= 96;
+//	Lcd_DY		= 8;
+//	Lcd_ratio_X	= (float) 2;
+//	Lcd_ratio_Y	= (float) 2;
 
-	Lcd_Symb_X	= 50;
-	Lcd_Symb_Y	= 45;
-	Lcd_Symb_DX	= 173;
-	Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1*1.18;
+//	Lcd_Symb_X	= 50;
+//	Lcd_Symb_Y	= 45;
+//	Lcd_Symb_DX	= 173;
+//	Lcd_Symb_DY	= 5;
+//    Lcd_Symb_ratio_X	= 1*1.18;
 	
-	delete pLCDC;	pLCDC		= new Clcdc_pc1245(this);
+    delete pLCDC;	pLCDC		= new Clcdc_pc1245(this,
+                                                   QRect(50,56,192,16),
+                                                   QRect(50,45,173,5),
+                                                   P_RES(":/pc1245/1245lcd.png"),
+                                                   P_RES(":/pc1245/1245symb.png"));
     pKEYB->fn_KeyMap = "pc1260.map";
 
 }
@@ -119,21 +123,24 @@ Cmc2200::Cmc2200(CPObject *parent)	: Cpc1245(parent)
     Initial_Session_Fname ="mc2200.pkm";
 
     BackGroundFname	= P_RES(":/pc1245/mc2200.png");
-    LcdFname		= P_RES(":/pc1245/mc2200lcd.png");
-    SymbFname		= P_RES(":/pc1245/mc2200symb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1245/mc2200lcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1245/mc2200symb.png");
 
-    Lcd_X		= 125;
-    Lcd_Y		= 54;
-    Lcd_DX		= 96;
-    Lcd_DY		= 8;
-    Lcd_ratio_X	= (float) 2;
-    Lcd_ratio_Y	= (float) 2;
+    pLCDC->rect.moveTo(54,96);
+//    Lcd_X		= 125;
+//    Lcd_Y		= 54;
+//    Lcd_DX		= 96;
+//    Lcd_DY		= 8;
+//    Lcd_ratio_X	= (float) 2;
+//    Lcd_ratio_Y	= (float) 2;
 
-    Lcd_Symb_X	= 125;
-    Lcd_Symb_Y	= 40;
-    Lcd_Symb_DX	= 173;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;
+    pLCDC->symbRect.moveTo(125,40);
+//    Lcd_Symb_X	= 125;
+//    Lcd_Symb_Y	= 40;
+//    Lcd_Symb_DX	= 173;
+//    Lcd_Symb_DY	= 5;
+//    Lcd_Symb_ratio_X	= 1;
+
     pLCDC->Color_Off.setRgb(
                         (int) (132 * pLCDC->contrast),
                         (int) (143 * pLCDC->contrast),

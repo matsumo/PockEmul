@@ -6,7 +6,7 @@
  
 #include "common.h"
 #include "pc1401.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1401.h"
 #include "Log.h"
 #include "Inter.h"
 #include "Keyb.h"
@@ -25,10 +25,9 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pc1401.pkm";
 
     BackGroundFname	= P_RES(":/pc1401/pc1401.png");
-    LcdFname		= P_RES(":/pc1401/1401lcd.png");
-    SymbFname		= P_RES(":/pc1401/1401symb.png");
+//    LcdFname		= P_RES(":/pc1401/1401lcd.png");
+//    SymbFname		= P_RES(":/pc1401/1401symb.png");
     memsize			= 0x10000;
-//		NbSlot		= 3;
     LeftFname = P_RES(":/pc1250/125xLeft.png");
 
     SlotList.clear();
@@ -48,22 +47,26 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
 
     cnt = 0;
 
-    pLCDC		= new Clcdc_pc1401(this);
+    pLCDC		= new Clcdc_pc1401(this,
+                                   QRect(119,53,206,21),
+                                   QRect(119,44,210,35),
+                                   P_RES(":/pc1401/1401lcd.png"),
+                                   P_RES(":/pc1401/1401symb.png"));
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"pc1401.map",scandef_pc1401);
 
-    Lcd_X	= 119;
-    Lcd_Y	= 53;
-    Lcd_DX	= 96;//206;
-    Lcd_DY	= 7;//21;
-    Lcd_ratio_X	= 206.0/96;
-    Lcd_ratio_Y	= 21/7;
+//    Lcd_X	= 119;
+//    Lcd_Y	= 53;
+//    Lcd_DX	= 96;//206;
+//    Lcd_DY	= 7;//21;
+//    Lcd_ratio_X	= 206.0/96;
+//    Lcd_ratio_Y	= 21/7;
 
-    Lcd_Symb_X	= 119;
-    Lcd_Symb_Y	= 44;
-    Lcd_Symb_DX	= 210;
-    Lcd_Symb_DY	= 35;
+//    Lcd_Symb_X	= 119;
+//    Lcd_Symb_Y	= 44;
+//    Lcd_Symb_DX	= 210;
+//    Lcd_Symb_DY	= 35;
 
 }
 

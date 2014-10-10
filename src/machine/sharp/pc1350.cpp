@@ -11,7 +11,7 @@
 #include	"pc1350.h"
 #include "cextension.h"
 #include "Connect.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1350.h"
 #include "sc61860.h"
 #include "Inter.h"
 #include "Keyb.h"
@@ -31,24 +31,25 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     setDX(633);//Pc_DX = 633;
     setDY(252);//Pc_DY = 252;
 
+//    LcdFname		= ":/pockemul/transparent.png";
+//    SymbFname		= ":/pockemul/transparent.png";
+
     RightFname = P_RES(":/pc1350/pc1350Right.png");
 
-    Lcd_X		= 75;
-    Lcd_Y		= 48;
-    Lcd_DX		= 150;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
-    LcdRatio = 5;
+//    Lcd_X		= 75;
+//    Lcd_Y		= 48;
+//    Lcd_DX		= 150;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
+//    LcdRatio = 5;
 
-    Lcd_Symb_X	= 50;
-    Lcd_Symb_Y	= 48;
-    Lcd_Symb_DX	= 30;
-    Lcd_Symb_DY	= 64;
+//    Lcd_Symb_X	= 50;
+//    Lcd_Symb_Y	= 48;
+//    Lcd_Symb_DX	= 30;
+//    Lcd_Symb_DY	= 64;
 
     cnt=0;
-
-
 }
 
 bool Cpc13XX::init(void)
@@ -75,8 +76,6 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
     Initial_Session_Fname ="pc1350.pkm";
 
     BackGroundFname	= P_RES(":/pc1350/pc1350.png");
-    LcdFname		= ":/pockemul/transparent.png";
-    SymbFname		= ":/pockemul/transparent.png";
     memsize			= 0x10000;
 
     SlotList.clear();
@@ -87,7 +86,9 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
     KeyMap		= KeyMap1350;
     KeyMapLenght= KeyMap1350Lenght;
 
-    pLCDC		= new Clcdc_pc1350(this);
+    pLCDC		= new Clcdc_pc1350(this,
+                                   QRect(75,48,300,64),
+                                   QRect(50,48,30,64));
     pKEYB		= new Ckeyb(this,"pc1350.map",scandef_pc1350);
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);

@@ -117,8 +117,8 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
     Initial_Session_Fname ="hp41.pkm";
 
     BackGroundFname	= P_RES(":/hp41/hp41.png");
-    LcdFname		= P_RES(":/hp41/hp41lcd.png");
-    SymbFname		= P_RES(":/hp41/hp41symb.png");
+//    LcdFname		= P_RES(":/hp41/hp41lcd.png");
+//    SymbFname		= P_RES(":/hp41/hp41symb.png");
 
     TopFname = P_RES(":/hp41/top.png");
 //    BackFname = P_RES(":/hp41/back.png");
@@ -139,21 +139,25 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
     setDX(279);
     setDY(508);
 
-    Lcd_X		= 30;
-    Lcd_Y		= 33;
-    Lcd_DX		= 220;
-    Lcd_DY		= 40;
-    Lcd_ratio_X	= 1;
-    Lcd_ratio_Y	= 1;
+//    Lcd_X		= 30;
+//    Lcd_Y		= 33;
+//    Lcd_DX		= 220;
+//    Lcd_DY		= 40;
+//    Lcd_ratio_X	= 1;
+//    Lcd_ratio_Y	= 1;
 
-    Lcd_Symb_X	= 35;
-    Lcd_Symb_Y	= 55;
-    Lcd_Symb_DX	= 215;
-    Lcd_Symb_DY	= 7;
-    Lcd_Symb_ratio_X	= 1;
+//    Lcd_Symb_X	= 35;
+//    Lcd_Symb_Y	= 55;
+//    Lcd_Symb_DX	= 215;
+//    Lcd_Symb_DY	= 7;
+//    Lcd_Symb_ratio_X	= 1;
 
+    pLCDC		= new Clcdc_hp41(this,
+                                 QRect(30,33,220,40),
+                                 QRect(35,55,215,7),
+                                 P_RES(":/hp41/hp41lcd.png"),
+                                 P_RES(":/hp41/hp41symb.png"));
     pTIMER		= new Ctimer(this);
-    pLCDC		= new Clcdc_hp41(this);
     pCPU		= new Chp41cpu(this);    hp41cpu = (Chp41cpu*)pCPU;
     pKEYB		= new Ckeyb(this,"hp41.map");
 

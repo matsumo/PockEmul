@@ -120,33 +120,35 @@ void Clcdc_hp15c::voyager_display_update (nut_reg_t *nut_reg,voyager_display_reg
 
 void Clcdc_hp15c::disp_symb(void)
 {
-    delete pPC->SymbImage;
-    pPC->SymbImage = pPC->CreateImage(QSize(pPC->Lcd_Symb_DX, pPC->Lcd_Symb_DY),pPC->SymbFname,false,false,0);
-    QPainter painter(pPC->SymbImage);
+//    delete pPC->SymbImage;
+//    pPC->SymbImage = pPC->CreateImage(QSize(pPC->Lcd_Symb_DX, pPC->Lcd_Symb_DY),pPC->SymbFname,false,false,0);
+//    QPainter painter(pPC->SymbImage);
 
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
-//    if (! (hp41->DIS_ANNUN_REG&0x0800)) {painter.fillRect(  0,0,18,8,Qt::transparent); }// bat
-//    if (! (hp41->DIS_ANNUN_REG&0x0400)) {painter.fillRect( 24,0,24,8,Qt::transparent); }// user
-//    if (! (hp41->DIS_ANNUN_REG&0x0200)) {painter.fillRect( 54,0, 6,8,Qt::transparent); }// g
-//    if (! (hp41->DIS_ANNUN_REG&0x0100)) {painter.fillRect( 60,0,18,8,Qt::transparent); }// rad
-//    if (! (hp41->DIS_ANNUN_REG&0x0080)) {painter.fillRect( 84,0,30,8,Qt::transparent); }// shift
-//    if (! (hp41->DIS_ANNUN_REG&0x0040)) {painter.fillRect(120,0, 6,8,Qt::transparent); }// 0
-//    if (! (hp41->DIS_ANNUN_REG&0x0020)) {painter.fillRect(126,0, 6,8,Qt::transparent); }// 1
-//    if (! (hp41->DIS_ANNUN_REG&0x0010)) {painter.fillRect(132,0, 6,8,Qt::transparent); }// 2
-//    if (! (hp41->DIS_ANNUN_REG&0x0008)) {painter.fillRect(138,0, 6,8,Qt::transparent); }// 3
-//    if (! (hp41->DIS_ANNUN_REG&0x0004)) {painter.fillRect(144,0, 6,8,Qt::transparent); }// 4
-//    if (! (hp41->DIS_ANNUN_REG&0x0002)) {painter.fillRect(156,0,24,8,Qt::transparent); }// prgm
-//    if (! (hp41->DIS_ANNUN_REG&0x0001)) {painter.fillRect(186,0,30,8,Qt::transparent); }// alpha
+//    painter.setCompositionMode(QPainter::CompositionMode_Source);
+////    if (! (hp41->DIS_ANNUN_REG&0x0800)) {painter.fillRect(  0,0,18,8,Qt::transparent); }// bat
+////    if (! (hp41->DIS_ANNUN_REG&0x0400)) {painter.fillRect( 24,0,24,8,Qt::transparent); }// user
+////    if (! (hp41->DIS_ANNUN_REG&0x0200)) {painter.fillRect( 54,0, 6,8,Qt::transparent); }// g
+////    if (! (hp41->DIS_ANNUN_REG&0x0100)) {painter.fillRect( 60,0,18,8,Qt::transparent); }// rad
+////    if (! (hp41->DIS_ANNUN_REG&0x0080)) {painter.fillRect( 84,0,30,8,Qt::transparent); }// shift
+////    if (! (hp41->DIS_ANNUN_REG&0x0040)) {painter.fillRect(120,0, 6,8,Qt::transparent); }// 0
+////    if (! (hp41->DIS_ANNUN_REG&0x0020)) {painter.fillRect(126,0, 6,8,Qt::transparent); }// 1
+////    if (! (hp41->DIS_ANNUN_REG&0x0010)) {painter.fillRect(132,0, 6,8,Qt::transparent); }// 2
+////    if (! (hp41->DIS_ANNUN_REG&0x0008)) {painter.fillRect(138,0, 6,8,Qt::transparent); }// 3
+////    if (! (hp41->DIS_ANNUN_REG&0x0004)) {painter.fillRect(144,0, 6,8,Qt::transparent); }// 4
+////    if (! (hp41->DIS_ANNUN_REG&0x0002)) {painter.fillRect(156,0,24,8,Qt::transparent); }// prgm
+////    if (! (hp41->DIS_ANNUN_REG&0x0001)) {painter.fillRect(186,0,30,8,Qt::transparent); }// alpha
 
-    painter.end();
+//    painter.end();
 }
 
-Clcdc_hp15c::Clcdc_hp15c(CPObject *parent)	: Clcdc(parent){						//[constructor]
+Clcdc_hp15c::Clcdc_hp15c(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                 (int) (111*contrast),
                 (int) (117*contrast),
                 (int) (108*contrast));
 
+    LcdRatio = 8.38;
     info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
 }
 
@@ -207,10 +209,12 @@ void Clcdc_hp15c::disp(void)
 
     updated = false;
     Refresh= true;
-    delete pPC->LcdImage;
-    pPC->LcdImage = pPC->CreateImage(QSize(160*11, 260),QString());
+//    delete LcdImage;
+//    LcdImage = pPC->CreateImage(QSize(160*11, 260),QString());
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painter.fillRect(LcdImage->rect(),Qt::transparent);
 
     int x = 0;
     int y = 0;

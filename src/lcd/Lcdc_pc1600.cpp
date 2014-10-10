@@ -68,6 +68,14 @@ INLINE int Clcdc_pc1600::symbSL(int x)
     return l*0x40+63;
 }
 
+Clcdc_pc1600::Clcdc_pc1600(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
+    Color_Off.setRgb(
+                (int) (95*contrast),
+                (int) (119*contrast),
+                (int) (193*contrast));
+}
+
 INLINE int Clcdc_pc1600::computeSL(CHD61102* pCtrl,int ord)
 {
     int y = ord;
@@ -93,7 +101,7 @@ void Clcdc_pc1600::disp(void)
 
     disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
     if (((Cpc1600 *)pPC)->pHD61102_1->info.on_off) {
         for (int i = 0 ; i < 64; i++)

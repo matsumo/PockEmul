@@ -6,7 +6,7 @@
 #include "Log.h"
 
 #include "pc1280.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1475.h"
 #include "cextension.h"
 #include "cpu.h"
 #include "init.h"
@@ -22,8 +22,8 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
     Initial_Session_Fname ="pc1280.pkm";
 
     BackGroundFname	= P_RES(":/pc1280/pc-1280.png");
-    LcdFname		= P_RES(":/pc1280/1280lcd.png");
-    SymbFname		= P_RES(":/pc1280/1280symb.png");
+//    LcdFname		= P_RES(":/pc1280/1280lcd.png");
+//    SymbFname		= P_RES(":/pc1280/1280symb.png");
     back = new QImage(P_RES(":/pc1280/pc-1280back.png"));
     memsize			= 0x40000;
 
@@ -53,23 +53,28 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
     setDX(483);//Pc_DX = 483;
     setDY(502);//Pc_DY = 502;
 
-    delete pLCDC;		pLCDC		= new Clcdc_pc1475(this);
+    delete pLCDC;		pLCDC		= new Clcdc_pc1475(this,
+                                                       QRect(80,48,264*1.22,30*1.22),
+                                                       QRect(80,40,264*1.22,48*1.22),
+                                                       P_RES(":/pc1280/1280lcd.png"),
+                                                       P_RES(":/pc1280/1280symb.png"));
     delete pKEYB;		pKEYB		= new Ckeyb(this,"pc1280.map",scandef_pc1280);
 
 
-    Lcd_X		= 80;
-    Lcd_Y		= 48;
-    Lcd_DX		= 264;
-    Lcd_DY		= 30;
-    Lcd_ratio_X	= 1.22;
-    Lcd_ratio_Y	= 1.22;
+//    Lcd_X		= 80;
+//    Lcd_Y		= 48;
+//    Lcd_DX		= 264;
+//    Lcd_DY		= 30;
+//    Lcd_ratio_X	= 1.22;
+//    Lcd_ratio_Y	= 1.22;
+//    LcdRatio = 1;
 
-    Lcd_Symb_X	= 80;
-    Lcd_Symb_Y	= 40;
-    Lcd_Symb_DX	= 264;
-    Lcd_Symb_DY	= 48;
-    Lcd_Symb_ratio_X = 1.22;
-    //Lcd_Symb_ratio_Y = 1.22;
+//    Lcd_Symb_X	= 80;
+//    Lcd_Symb_Y	= 40;
+//    Lcd_Symb_DX	= 264;
+//    Lcd_Symb_DY	= 48;
+//    Lcd_Symb_ratio_X = 1.22;
+//    //Lcd_Symb_ratio_Y = 1.22;
 
      remove(pSIOCONNECTOR);
 

@@ -6,7 +6,7 @@
 #include "sc61860.h"
 #include "Inter.h"
 #include "cextension.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1350.h"
 #include "Keyb.h"
 #include "Connect.h"
 #include "Keyb2500.h"
@@ -25,8 +25,8 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
     Initial_Session_Fname ="pc2500.pkm";
 
     BackGroundFname	= P_RES(":/pc2500/pc2500.png");
-    LcdFname		= P_RES(":/pc2500/2500lcd.png");
-    SymbFname		= P_RES(":/pc2500/2500symb.png");
+//    LcdFname		= P_RES(":/pc2500/2500lcd.png");
+//    SymbFname		= P_RES(":/pc2500/2500symb.png");
     memsize			= 0x18000;
 //		NbSlot		= 3;
 
@@ -39,7 +39,10 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
     KeyMap		= KeyMap2500;
     KeyMapLenght= KeyMap2500Lenght;
 
-    pLCDC		= new Clcdc_pc2500(this);
+    delete pLCDC;
+    pLCDC		= new Clcdc_pc2500(this,
+                                   QRect(560,70,300,64),
+                                   QRect(560,60,300,5));
     pKEYB		= new Ckeyb(this,"pc2500.map",scandef_pc2500);
     pCPU		= new CSC61860(this);
 
@@ -55,18 +58,18 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
     setDX(960);//Pc_DX = 960;
     setDY(673);//Pc_DY = 673;
 
-    Lcd_X		= 560;
-    Lcd_Y		= 70;
-    Lcd_DX		= 150;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
+//    Lcd_X		= 560;
+//    Lcd_Y		= 70;
+//    Lcd_DX		= 150;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
 
-    Lcd_Symb_X	= 560;
-    Lcd_Symb_Y	= 60;
-    Lcd_Symb_DX	= 300;
-    Lcd_Symb_DY	= 5;
-    //Lcd_Symb_ratio = 2;
+//    Lcd_Symb_X	= 560;
+//    Lcd_Symb_Y	= 60;
+//    Lcd_Symb_DX	= 300;
+//    Lcd_Symb_DY	= 5;
+//    //Lcd_Symb_ratio = 2;
 
     printMode = false;
     capslock = false;

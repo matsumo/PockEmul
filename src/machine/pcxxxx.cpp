@@ -42,7 +42,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
 
     fp_log  = 0;
     off			= true;
-    DialogExtensionID = 0;
     setcfgfname(QString("pcXXXX"));
     SessionHeader	= "PCXXXXPKM";
 
@@ -54,18 +53,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     Japan		= false;
     timerRate   = 1;
 
-    Lcd_X		= 0;
-    Lcd_Y		= 0;
-    Lcd_DX		= 0;
-    Lcd_DY		= 0;
-    Lcd_ratio_X	= 1;
-    Lcd_ratio_Y	= 1;
-
-    Lcd_Symb_X	= 0;
-    Lcd_Symb_Y	= 0;
-    Lcd_Symb_DX	= 0;
-    Lcd_Symb_DY	= 0;;
-    Lcd_Symb_ratio_X = Lcd_Symb_ratio_Y	= 1;
 
     Tape_Base_Freq=4000;
 
@@ -126,22 +113,22 @@ bool CpcXXXX::UpdateFinalImage(void)
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
 
-        //if (pPC->pLCDC->On)
+        if (pLCDC && pLCDC->rect.isValid())
         {
-            if (SymbImage) {
+            if (pLCDC->symbRect.isValid()) {
                 //painter.setRenderHint(QPainter::Antialiasing);
-                x = Lcd_Symb_X * internalImageRatio;
-                y = Lcd_Symb_Y * internalImageRatio;
-                z = (int) (Lcd_Symb_DX * Lcd_Symb_ratio_X * internalImageRatio);
-                t = (int) (Lcd_Symb_DY * Lcd_Symb_ratio_Y * internalImageRatio);
+                x = pLCDC->symbRect.x() * internalImageRatio;
+                y = pLCDC->symbRect.y() * internalImageRatio;
+                z = (int) (pLCDC->symbRect.width() * internalImageRatio);
+                t = (int) (pLCDC->symbRect.height() * internalImageRatio);
 
-                painter.drawImage(QRect(x,y,z,t),SymbImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
+                painter.drawImage(QRect(x,y,z,t),pLCDC->SymbImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
             }
-            x	= Lcd_X * internalImageRatio;
-            y	= Lcd_Y * internalImageRatio;
-            z	= (int) (Lcd_DX * Lcd_ratio_X * internalImageRatio);
-            t	= (int) (Lcd_DY * Lcd_ratio_Y * internalImageRatio);
-            painter.drawImage(QRect(x,y,z,t),LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
+            x	= pLCDC->rect.x() * internalImageRatio;
+            y	= pLCDC->rect.y() * internalImageRatio;
+            z	= (int) (pLCDC->rect.width() * internalImageRatio);
+            t	= (int) (pLCDC->rect.height() * internalImageRatio);
+            painter.drawImage(QRect(x,y,z,t),pLCDC->LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
 
         }
         painter.end();
@@ -167,15 +154,9 @@ bool CpcXXXX::InitDisplay(void)
     Refresh_Display = true;
     UpdateDisplayRunning = false;
 
-    delete LcdImage;
-    LcdImage				= CreateImage(QSize(Lcd_DX * LcdRatio, Lcd_DY*LcdRatio),LcdFname,false,false,0);
-    if (!SymbFname.isEmpty()) {
-        delete SymbImage;
-        SymbImage	= CreateImage(QSize(Lcd_Symb_DX, Lcd_Symb_DY),SymbFname);
+    if (pLCDC) {
+        pLCDC->InitDisplay();
     }
-
-//    pLCDC->Color_Off.setRgb(LcdImage->pixel(0,0));
-//    pLCDC->Color_Off.setAlphaF(1-pLCDC->contrast);
 
     UpdateDisplayRunning = true;
     return(1);

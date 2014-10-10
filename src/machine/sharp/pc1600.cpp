@@ -42,8 +42,8 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
     SessionHeader	= "PC1600PKM";
     Initial_Session_Fname ="pc1600.pkm";
     BackGroundFname	= P_RES(":/pc1600/pc-1600.png");
-    LcdFname		= P_RES(":/pc1600/pc1600lcd.png");
-    SymbFname		= P_RES(":/pc1600/1600symb.png");
+//    LcdFname		= P_RES(":/pc1600/pc1600lcd.png");
+//    SymbFname		= P_RES(":/pc1600/1600symb.png");
 
 
     LeftFname   = P_RES(":/pc1600/pc1600Left.png");
@@ -62,23 +62,27 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
     setDX(679);
     setDY(299);
 
-    Lcd_X		= 60;
-    Lcd_Y		= 50;
-    Lcd_DX		= 156;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
+//    Lcd_X		= 60;
+//    Lcd_Y		= 50;
+//    Lcd_DX		= 156;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
 
-    Lcd_Symb_X	= 60;
-    Lcd_Symb_Y	= 40;
-    Lcd_Symb_DX	= 317;
-    Lcd_Symb_DY	= 5;
+//    Lcd_Symb_X	= 60;
+//    Lcd_Symb_Y	= 40;
+//    Lcd_Symb_DX	= 317;
+//    Lcd_Symb_DY	= 5;
 
     SoundOn			= false;
     lh5810_Access	= false;
     ce150_Access	= false;
 
-    pLCDC		= new Clcdc_pc1600(this);
+    pLCDC		= new Clcdc_pc1600(this,
+                                   QRect(60,50,312,64),
+                                   QRect(60,40,317,5),
+                                   P_RES(":/pc1600/pc1600lcd.png"),
+                                   P_RES(":/pc1600/1600symb.png"));
     pLCDC->Color_Off.setRgb(
                         (int) (95*pLCDC->contrast),
                         (int) (119*pLCDC->contrast),

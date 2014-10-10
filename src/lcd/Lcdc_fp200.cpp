@@ -267,7 +267,8 @@ UINT8 FP200_CarDef[256][8]={
 
 
 
-Clcdc_fp200::Clcdc_fp200(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_fp200::Clcdc_fp200(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                         (int) (118*contrast),
                         (int) (149*contrast),
@@ -368,7 +369,7 @@ void Clcdc_fp200::disp(void)
 
     Refresh = true;
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
 //    if (((Ce500 *)pPC)->pHD61102_2->info.on_off) {
         for (int i = 0 ; i < 64; i++)

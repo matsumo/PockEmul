@@ -36,8 +36,6 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="fx8000g.pkm";
 
     BackGroundFname	= P_RES(":/fx8000g/fx8000g.png");
-    LcdFname		= ":/pockemul/transparent.png"; //P_RES(":/fx8000g/fx8000glcd.png");
-    SymbFname	= "";
 
     LeftFname   = P_RES(":/fx8000g/fx8000gleft.png");
     BackFname   = P_RES(":/fx8000g/fx8000gback.png");
@@ -56,22 +54,19 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(300);
     setDY(643);
 
-    Lcd_X		= 55;
-    Lcd_Y		= 45;
-    Lcd_DX		= 96;
-    Lcd_DY		= 64;
-    Lcd_ratio_X	= 2;
-    Lcd_ratio_Y	= 2;
-    LcdRatio = 5;
+//    Lcd_X		= 55;
+//    Lcd_Y		= 45;
+//    Lcd_DX		= 96;
+//    Lcd_DY		= 64;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
+//    LcdRatio = 5;
 
-    Lcd_Symb_X	= 55;
-    Lcd_Symb_Y	= 41;
-    Lcd_Symb_DX	= 339;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;
 
     pTIMER		= new Ctimer(this);
-    pLCDC		= new Clcdc_fx8000g(this);
+    pLCDC		= new Clcdc_fx8000g(this,
+                                    QRect(55,45,192,128),
+                                    QRect());
     pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));
     fx8000gcpu = (CUPD1007*)pCPU;
     pKEYB		= new Ckeyb(this,"fx8000g.map");

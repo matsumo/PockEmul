@@ -11,7 +11,8 @@
 #include "Lcdc_tpc8300.h"
 #include "Log.h"
 
-Clcdc_tpc8300::Clcdc_tpc8300(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_tpc8300::Clcdc_tpc8300(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                         (int) (101*contrast),
                         (int) (99*contrast),
@@ -44,7 +45,7 @@ void Clcdc_tpc8300::disp(void)
 //qWarning()<<"disp";
     disp_symb();
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
     for (int i = 0 ; i<3; i++)
     {

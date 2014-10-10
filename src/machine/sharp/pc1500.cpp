@@ -14,7 +14,7 @@
 
 #include	"pc1500.h"
 #include    "cextension.h"
-#include    "Lcdc.h"
+#include    "Lcdc_pc1500.h"
 #include	"Inter.h"
 #include	"Debug.h"
 #include	"Keyb.h"
@@ -39,8 +39,8 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     SessionHeader	= "PC1500PKM";
 	Initial_Session_Fname ="pc1500.pkm";
     BackGroundFname	= P_RES(":/pc1500/pc1500.png");
-    LcdFname		= P_RES(":/pc1500/1500lcd.png");
-    SymbFname		= P_RES(":/pc1500/1500symb.png");
+//    LcdFname		= P_RES(":/pc1500/1500lcd.png");
+//    SymbFname		= P_RES(":/pc1500/1500symb.png");
     memsize			= 0x10000;
 	InitMemValue	= 0xFF;
 
@@ -58,23 +58,25 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     setDX(679);
     setDY(299);
 		
-    Lcd_X		= 93;//80;
-    Lcd_Y		= 61;//50;
-	Lcd_DX		= 156;
-    Lcd_DY		= 7;
-    Lcd_ratio_X	= 2*1.18;
-    Lcd_ratio_Y	= 2*1.18;
+//    Lcd_X		= 93;//80;
+//    Lcd_Y		= 61;//50;
+//	Lcd_DX		= 156;
+//    Lcd_DY		= 7;
+//    Lcd_ratio_X	= 2*1.18;
+//    Lcd_ratio_Y	= 2*1.18;
 
-    Lcd_Symb_X	= 95;//80;
-    Lcd_Symb_Y	= 53;//43;
-    Lcd_Symb_DX	= 316*1.18;
-    Lcd_Symb_DY	= 5*1.18;
-
-	DialogExtensionID = 0;//IDD_EXT_PROPERTIES_1500;
+//    Lcd_Symb_X	= 95;//80;
+//    Lcd_Symb_Y	= 53;//43;
+//    Lcd_Symb_DX	= 316*1.18;
+//    Lcd_Symb_DY	= 5*1.18;
 
     SoundOn			= false;
 
-	pLCDC		= new Clcdc_pc1500(this);
+    pLCDC		= new Clcdc_pc1500(this,
+                                   QRect(93,61,156*2*1.18,7*2*1.18),
+                                   QRect(95,53,316*1.18,5*1.18),
+                                   P_RES(":/pc1500/1500lcd.png"),
+                                   P_RES(":/pc1500/1500symb.png"));
     pCPU		= new CLH5801(this); pCPU->logsw=false;
 	pLH5810		= new CLH5810_PC1500(this);
 	pTIMER		= new Ctimer(this);
@@ -103,8 +105,8 @@ Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(this)
     SessionHeader	= "PC1500APKM";
     Initial_Session_Fname ="pc1500A.pkm";
     BackGroundFname	= P_RES(":/pc1500A/pc1500A.png");
-    LcdFname		= P_RES(":/pc1500A/1500Alcd.png");
-    SymbFname		= P_RES(":/pc1500A/1500Asymb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1500A/1500Alcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1500A/1500Asymb.png");
     memsize			= 0x10000;
 
     SlotList.clear();
@@ -115,7 +117,10 @@ Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(this)
     SlotList.append(CSlot(8 , 0xA000 ,	""								, "" , CSlot::ROM , "ROM"));
     SlotList.append(CSlot(16, 0xC000 ,	P_RES(":/pc1500A/SYS1500A.ROM"), "" , CSlot::ROM , "SYSTEM ROM"));
 
-    delete pLCDC; pLCDC = new Clcdc_pc1500A(this);
+    pLCDC->Color_Off.setRgb(
+                (int) (0x60*pLCDC->contrast),
+                (int) (0x6a*pLCDC->contrast),
+                (int) (0x60*pLCDC->contrast));
 
 }
 
@@ -128,16 +133,19 @@ Ctrspc2::Ctrspc2(CPObject *parent)	: Cpc1500(this)
     SessionHeader	= "TRSPC-2PKM";
     Initial_Session_Fname ="trspc2.pkm";
     BackGroundFname	= P_RES(":/pc1500/trspc2.png");
-    LcdFname		= P_RES(":/pc1500/pc2lcd.png");
-    SymbFname		= P_RES(":/pc1500/pc2symb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1500/pc2lcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1500/pc2symb.png");
 
-    Lcd_X		= 181;//152 ;
-    Lcd_Y		= 62;//52 ;
-    Lcd_Symb_X	= 181;//152;
-    Lcd_Symb_Y	= 53;//45 ;
+    pLCDC->rect.moveTo(181,62);
+//    Lcd_X		= 181;//152 ;
+//    Lcd_Y		= 62;//52 ;
 
-    delete pLCDC;
-    pLCDC = new Clcdc_trspc2(this);
+    pLCDC->symbRect.moveTo(181,53);
+//    Lcd_Symb_X	= 181;//152;
+//    Lcd_Symb_Y	= 53;//45 ;
+
+//    delete pLCDC;
+//    pLCDC = new Clcdc_trspc2(this);
     pKEYB->fn_KeyMap = "trspc2.map";
 
 }

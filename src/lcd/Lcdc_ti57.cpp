@@ -11,6 +11,19 @@ void Clcdc_ti57::disp_symb(void)
 {
 }
 
+Clcdc_ti57::Clcdc_ti57(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
+    Color_Off.setRgb(
+                (int) (111*contrast),
+                (int) (117*contrast),
+                (int) (108*contrast));
+
+    blinkTimer = new QTimer(this);
+    connect(blinkTimer,SIGNAL(timeout()),this,SLOT(blink()));
+    blinkState = false;
+
+}
+
 void Clcdc_ti57::disp(void)
 {
     bool error = false;
@@ -19,17 +32,15 @@ void Clcdc_ti57::disp(void)
 
     if (!ready) return;
     if (!updated) return;
-//    qWarning()<<"disp";
+    //    qWarning()<<"disp";
     updated = false;
     Refresh= true;
-    delete pPC->LcdImage;
-    pPC->LcdImage = pPC->CreateImage(QSize(pPC->Lcd_DX, pPC->Lcd_DY),pPC->LcdFname,false,false,0);
 
-
-
-    QPainter painter(pPC->LcdImage);
-//    painter.setPen(QColor(255,255,255,0));
-//    painter.fillRect(pPC->LcdImage->rect(),Qt::SolidPattern);
+    QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+//    painter.setPen(Qt::transparent);
+//    painter.setBrush(Qt::transparent);
+    painter.fillRect(LcdImage->rect(),Qt::transparent);
 
     QFont font;
     font.setPixelSize(30);
@@ -60,7 +71,7 @@ void Clcdc_ti57::disp(void)
         //        qWarning()<<"print text";
         painter.setPen(QColor(255,0,0));
 #if 0
-        painter.drawText(pPC->LcdImage->rect(),Qt::AlignCenter,s);
+        painter.drawText(LcdImage->rect(),Qt::AlignCenter,s);
 #else
         int pos = 0;
         int charSpace = 18;

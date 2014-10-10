@@ -19,29 +19,28 @@ Cce1560::Cce1560(CPObject *parent):CpcXXXX(this)
 
     //[constructor]
     BackGroundFname	= P_RES(":/pc1500/ce1560_1.png");
-    LcdFname		= P_RES(":/pc1500/1500lcd.png");
+//    LcdFname		= P_RES(":/pc1500/1500lcd.png");
     setcfgfname(QString("ce1560"));
     coverImage = QImage(P_RES(":/pc1500/ce1560_cover.png"));
 
-    setDXmm(329);//Pc_DX_mm = 329;
-    setDYmm(115);//Pc_DY_mm = 115;
-    setDZmm(48);//Pc_DZ_mm = 48;
+    setDXmm(329);
+    setDYmm(115);
+    setDZmm(48);
 
-//    setDX(481);//Pc_DX	= 960;
-//    setDY(550);//Pc_DY	= 320;
-    setDX(752);//Pc_DX	= 960;
-    setDY(679);//Pc_DY	= 320;
+    setDX(752);
+    setDY(679);
 
-//    Lcd_X		= 48;
-//    Lcd_Y		= 53;
-    Lcd_X		= 188;
-    Lcd_Y		= 60;
-    Lcd_DX		= 192;//168;//144 ;
-    Lcd_DY		= 64;
-    Lcd_ratio_X	= 2;//348.0/240;
-    Lcd_ratio_Y	= 2;//60.0/32;
+//    Lcd_X		= 188;
+//    Lcd_Y		= 60;
+//    Lcd_DX		= 192;
+//    Lcd_DY		= 64;
+//    Lcd_ratio_X	= 2;
+//    Lcd_ratio_Y	= 2;
 
-    pLCDC		= new Clcdc_ce1560(this);
+    pLCDC		= new Clcdc_ce1560(this,
+                                   QRect(188,60,384,128),
+                                   QRect(),
+                                   P_RES(":/pc1500/1500lcd.png"));
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"ce1560.map");
 

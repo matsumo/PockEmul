@@ -4,7 +4,7 @@
 #include	"common.h"
 #include	"pc1360.h"
 #include "cextension.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1350.h"
 #include "sc61860.h"
 #include	"Inter.h"
 //#include	"debug.h"
@@ -20,8 +20,8 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     Initial_Session_Fname ="pc1360.pkm";
 
     BackGroundFname	= P_RES(":/pc1360/pc1360.png");
-    LcdFname		= P_RES(":/pc1360/1360lcd.png");
-    SymbFname		= P_RES(":/pc1360/1360symb.png");
+//    LcdFname		= P_RES(":/pc1360/1360lcd.png");
+//    SymbFname		= P_RES(":/pc1360/1360symb.png");
     memsize			= 0x40000;
 //    InitMemValue    = 0xff;
 
@@ -44,7 +44,9 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     KeyMap = KeyMap1360;
     KeyMapLenght = KeyMap1360Lenght;
 
-    pLCDC		= new Clcdc_pc1360(this);
+    pLCDC		= new Clcdc_pc1360(this,
+                                    QRect(75,48,300,64),
+                                    QRect(50,48,30,64));
     pKEYB		= new Ckeyb(this,"pc1360.map",scandef_pc1360);
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);

@@ -7,7 +7,8 @@
 #define BIT(x,n) (((x)>>(n))&1)
 
 
-Clcdc_ti74::Clcdc_ti74(CPObject *parent)	: Clcdc(parent){						//[constructor]
+Clcdc_ti74::Clcdc_ti74(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
     Color_Off.setRgb(
                         (int) (90*contrast),
@@ -15,7 +16,8 @@ Clcdc_ti74::Clcdc_ti74(CPObject *parent)	: Clcdc(parent){						//[constructor]
                         (int) (99*contrast));
 }
 
-Clcdc_ti95::Clcdc_ti95(CPObject *parent)	: Clcdc_ti74(parent){
+Clcdc_ti95::Clcdc_ti95(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc_ti74(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){
     Color_Off.setRgb(
                         (int) (152*contrast),
                         (int) (170*contrast),
@@ -168,7 +170,7 @@ void Clcdc_ti74::disp(void)
 //    disp_symb();
 
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti74_update_pixel);
@@ -176,7 +178,7 @@ void Clcdc_ti74::disp(void)
     painter.end();
 
 
-    QPainter painterSymb(pPC->SymbImage);
+    QPainter painterSymb(SymbImage);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti74_update_pixel_symb);
@@ -200,7 +202,7 @@ void Clcdc_ti95::disp(void)
 //    disp_symb();
 
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Cti95_update_pixel);

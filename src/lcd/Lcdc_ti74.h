@@ -16,7 +16,7 @@ public:
     int x2a[100];
 
 
-    Clcdc_ti74(CPObject *parent = 0);
+    Clcdc_ti74(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_ti74()
     {						//[constructor]
     }
@@ -30,7 +30,7 @@ public:
 
     virtual void disp(void);
 
-    Clcdc_ti95(CPObject *parent = 0);
+    Clcdc_ti95(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_ti95()
     {						//[constructor]
     }

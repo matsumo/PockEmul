@@ -98,7 +98,7 @@ public:
     const char*	GetClassName(){ return("Clcdc_hp15c");}
 
 
-    Clcdc_hp15c(CPObject *parent = 0);
+    Clcdc_hp15c(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_hp15c()
     {						//[constructor]
     }

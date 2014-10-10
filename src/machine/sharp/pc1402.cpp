@@ -12,8 +12,8 @@ Cpc1402::Cpc1402(CPObject *parent)	: Cpc1401(parent)
     Initial_Session_Fname ="pc1402.pkm";
 
     BackGroundFname	= P_RES(":/pc1402/pc1402.png");
-    LcdFname		= P_RES(":/pc1402/1402lcd.png");
-    SymbFname		= P_RES(":/pc1402/1402symb.png");
+    pLCDC->LcdFname		= P_RES(":/pc1402/1402lcd.png");
+    pLCDC->SymbFname		= P_RES(":/pc1402/1402symb.png");
 
 
     memsize			= 0x10000;

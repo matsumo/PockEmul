@@ -573,9 +573,9 @@ if (!General_Info.LcdOn) return;
     }
     if (!pPC->pLCDC->redraw) return;
     pPC->pLCDC->redraw = false;
-    if (!pPC->LcdImage) return;
+    if (!pPC->pLCDC->LcdImage) return;
     QPainter painter;
-    painter.begin(pPC->LcdImage);
+    painter.begin(pPC->pLCDC->LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (x=0;x<120;x++)

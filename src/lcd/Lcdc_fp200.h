@@ -12,7 +12,7 @@ public:
     void disp_symb(void);
     const char*	GetClassName(){ return("Clcdc_fp200");}
 
-    Clcdc_fp200(CPObject *parent = 0);
+    Clcdc_fp200(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_fp200()
     {						//[constructor]
     }

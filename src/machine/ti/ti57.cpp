@@ -19,8 +19,8 @@ Cti57::Cti57(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="ti57.pkm";
 
     BackGroundFname	= P_RES(":/ti57/ti57.png");
-    LcdFname		= P_RES(":/ti57/ti57lcd.png");
-    SymbFname		= "";
+//    LcdFname		= P_RES(":/ti57/ti57lcd.png");
+//    SymbFname		= "";
 
     memsize		= 0xFFFF;
     InitMemValue	= 0xFF;
@@ -35,21 +35,18 @@ Cti57::Cti57(CPObject *parent)	: CpcXXXX(parent)
     setDX(279);
     setDY(529);
 
-    Lcd_X		= 30;
-    Lcd_Y		= 43;
-    Lcd_DX		= 220;
-    Lcd_DY		= 40;
-    Lcd_ratio_X	= 1;
-    Lcd_ratio_Y	= 1;
-
-    Lcd_Symb_X	= 55;
-    Lcd_Symb_Y	= 41;
-    Lcd_Symb_DX	= 339;
-    Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;
+//    Lcd_X		= 30;
+//    Lcd_Y		= 43;
+//    Lcd_DX		= 220;
+//    Lcd_DY		= 40;
+//    Lcd_ratio_X	= 1;
+//    Lcd_ratio_Y	= 1;
 
     pTIMER		= new Ctimer(this);
-    pLCDC		= new Clcdc_ti57(this);
+    pLCDC		= new Clcdc_ti57(this,
+                                 QRect(30,43,220,40),
+                                 QRect(),
+                                 P_RES(":/ti57/ti57lcd.png"));
     pCPU		= new Cti57cpu(this);    ti57cpu = (Cti57cpu*)pCPU;
     pKEYB		= new Ckeyb(this,"ti57.map");
 

@@ -67,7 +67,8 @@ PocketImageProvider::~PocketImageProvider()
 }
 QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
-
+    Q_UNUSED(size)
+    Q_UNUSED(requestedSize)
 
     QStringList _id = id.split('/');
 
@@ -82,6 +83,9 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
 // CACHE MODULE
 QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QSize& requestedSize)
 {
+    Q_UNUSED(size)
+    Q_UNUSED(requestedSize)
+
 //    qWarning()<<id<<"   auth_token="<<CloudWindow::getValueFor("auth_token")<<" size="<<requestedSize;
     QByteArray _ba = "api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa&auth_token=" +
             CloudWindow::getValueFor("auth_token").toUtf8();
@@ -99,7 +103,7 @@ QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QS
 
     cache[key] = QImage();
     QNetworkReply *_reply = mgr->post(req, _ba);
-
+    Q_UNUSED(_reply)
 //    qWarning()<<_reply;
 
     return QImage();

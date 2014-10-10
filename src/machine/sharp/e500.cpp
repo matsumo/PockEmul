@@ -78,8 +78,8 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
         Initial_Session_Fname ="e500.pkm";
 
         BackGroundFname	= P_RES(":/e500/pc-e500.png");
-        LcdFname		= P_RES(":/e500/e500lcd.png");
-        SymbFname		= P_RES(":/e500/e500symb.png");
+//        LcdFname		= P_RES(":/e500/e500lcd.png");
+//        SymbFname		= P_RES(":/e500/e500symb.png");
         SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3.rom"), "e500/s3.rom" , CSlot::ROM , "ROM 7.3"));
         break;
     case E500S:
@@ -95,8 +95,8 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
 //        setDY(375);
 
         BackGroundFname	= P_RES(":/e500/pc-e500s.png");
-        LcdFname		= P_RES(":/e500/e500lcd.png");
-        SymbFname		= P_RES(":/e500/e500symb.png");
+//        LcdFname		= P_RES(":/e500/e500lcd.png");
+//        SymbFname		= P_RES(":/e500/e500symb.png");
         SlotList.append(CSlot(128, 0x20000 , P_RES(":/e500/s3ext-8.3-E500S.rom"), "e500/s3ext-8.3-E500S.rom" , CSlot::ROM , "ROM 8.3 EXT"));
         SlotList.append(CSlot(256, 0xC0000 , P_RES(":/e500/s3-8.3-E500S.rom"), "e500/s3-8.3-E500S.rom" , CSlot::ROM , "ROM 8.3"));
         break;
@@ -105,20 +105,24 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
     PowerSwitch	= 0;
 
-    Lcd_X		= 69;
-    Lcd_Y		= 99;
-    Lcd_DX		= 240;//168;//144 ;
-    Lcd_DY		= 32;
-    Lcd_ratio_X	= 348.0/240;
-    Lcd_ratio_Y	= 60.0/32;
+//    Lcd_X		= 69;
+//    Lcd_Y		= 99;
+//    Lcd_DX		= 240;//168;//144 ;
+//    Lcd_DY		= 32;
+//    Lcd_ratio_X	= 348.0/240;
+//    Lcd_ratio_Y	= 60.0/32;
 
-    Lcd_Symb_X	= 69;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 79;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 348;
-    Lcd_Symb_DY	= 20;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+//    Lcd_Symb_X	= 69;//(int) (45 * 1.18);
+//    Lcd_Symb_Y	= 79;//(int) (35 * 1.18);
+//    Lcd_Symb_DX	= 348;
+//    Lcd_Symb_DY	= 20;
+//    Lcd_Symb_ratio_X	= 1;//1.18;
 
-    pLCDC		= new Clcdc_e500(this);
+    pLCDC		= new Clcdc_e500(this,
+                                 QRect(69,99,348,60),
+                                 QRect(69,79,348,20),
+                                 P_RES(":/e500/e500lcd.png"),
+                                 P_RES(":/e500/e500symb.png"));
     pCPU		= new Csc62015(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"e500.map");
@@ -865,11 +869,13 @@ Ce550::Ce550(CPObject *parent):Ce500(parent)
 
     BackGroundFname	= P_RES(":/e500/pc-e550.png");
 
-    Lcd_X		= 70;
-    Lcd_Y		= 96;
+    pLCDC->rect.moveTo(70,96);
+//    Lcd_X		= 70;
+//    Lcd_Y		= 96;
 
-    Lcd_Symb_X	= 70;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 76;//(int) (35 * 1.18);
+    pLCDC->symbRect.moveTo(70,76);
+//    Lcd_Symb_X	= 70;//(int) (45 * 1.18);
+//    Lcd_Symb_Y	= 76;//(int) (35 * 1.18);
 
 }
 

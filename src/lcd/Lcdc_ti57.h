@@ -43,17 +43,7 @@ public:
     QTimer *blinkTimer;
     bool blinkState;
 
-    Clcdc_ti57(CPObject *parent = 0)	: Clcdc(parent){						//[constructor]
-        Color_Off.setRgb(
-                            (int) (111*contrast),
-                            (int) (117*contrast),
-                            (int) (108*contrast));
-
-        blinkTimer = new QTimer(this);
-        connect(blinkTimer,SIGNAL(timeout()),this,SLOT(blink()));
-        blinkState = false;
-
-    }
+    Clcdc_ti57(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_ti57()
     {						//[constructor]
     }

@@ -582,7 +582,14 @@ HEADERS += src/core/Connect.h \
     src/cpu/hd61710.h \
     src/machine/hp/hp15c.h \
     src/cpu/hpnut.h \
-    src/lcd/Lcdc_hp15c.h
+    src/lcd/Lcdc_hp15c.h \
+    src/lcd/Lcdc_pc1350.h \
+    src/lcd/Lcdc_pc1250.h \
+    src/lcd/Lcdc_pc1500.h \
+    src/lcd/Lcdc_pc1475.h \
+    src/lcd/Lcdc_pc1403.h \
+    src/lcd/Lcdc_pc1450.h \
+    src/lcd/Lcdc_pc1401.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -863,7 +870,14 @@ SOURCES +=  \
     src/cpu/hd61710.cpp \
     src/machine/hp/hp15c.cpp \
     src/cpu/hpnut.cpp \
-    src/lcd/Lcdc_hp15c.cpp
+    src/lcd/Lcdc_hp15c.cpp \
+    src/lcd/Lcdc_pc1350.cpp \
+    src/lcd/Lcdc_pc1250.cpp \
+    src/lcd/Lcdc_pc1500.cpp \
+    src/lcd/Lcdc_pc1475.cpp \
+    src/lcd/Lcdc_pc1403.cpp \
+    src/lcd/Lcdc_pc1450.cpp \
+    src/lcd/Lcdc_pc1401.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

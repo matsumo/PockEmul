@@ -9,8 +9,13 @@
 
 #define BIT(x,n) (((x)>>(n))&1)
 
-Clcdc_fx8000g::Clcdc_fx8000g(CPObject *parent)	: Clcdc(parent){						//[constructor]
+Clcdc_fx8000g::Clcdc_fx8000g(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
+    Color_Off = Qt::transparent;
+    pixelSize = 4;
+    pixelGap = 1;
+    LcdRatio = 5;
 }
 
 
@@ -39,9 +44,6 @@ void Clcdc_fx8000g::TurnOFF()
 
 }
 
-#define PIXEL_SIZE 4
-#define PIXEL_GAP 1
-
 void Clcdc_fx8000g::disp(void)
 {
     if (!redraw) return;
@@ -52,7 +54,7 @@ void Clcdc_fx8000g::disp(void)
 
 
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     UINT8 cw = info.m_char_width;
@@ -90,10 +92,10 @@ void Clcdc_fx8000g::disp(void)
                             {
                                 painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
                                 painter.setBrush((BIT(d, 7-b)) ? Color_On : Color_Off);
-                                painter.drawRect((px*cw + c)*(PIXEL_SIZE+PIXEL_GAP),
-                                                 (a*32 + py*8 + b)*(PIXEL_SIZE+PIXEL_GAP),
-                                                 PIXEL_SIZE-1,
-                                                 PIXEL_SIZE-1);
+                                painter.drawRect((px*cw + c)*(pixelSize+pixelGap),
+                                                 (a*32 + py*8 + b)*(pixelSize+pixelGap),
+                                                 pixelSize-1,
+                                                 pixelSize-1);
                             }
                         }
                     }
@@ -108,10 +110,10 @@ void Clcdc_fx8000g::disp(void)
                             {
                                 painter.setPen( (BIT(d, 7-b)) ? Color_On : Color_Off );
                                 painter.setBrush((BIT(d, 7-b)) ? Color_On : Color_Off);
-                                painter.drawRect((px*cw + c)*(PIXEL_SIZE+PIXEL_GAP),
-                                                 (a*32 + py*8 + b)*(PIXEL_SIZE+PIXEL_GAP),
-                                                 PIXEL_SIZE-1,
-                                                 PIXEL_SIZE-1);
+                                painter.drawRect((px*cw + c)*(pixelSize+pixelGap),
+                                                 (a*32 + py*8 + b)*(pixelSize+pixelGap),
+                                                 pixelSize-1,
+                                                 pixelSize-1);
                             }
                         }
                     }

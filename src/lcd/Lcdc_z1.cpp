@@ -7,7 +7,8 @@
 #include "Lcdc_z1.h"
 #include "Log.h"
 
-Clcdc_z1::Clcdc_z1(CPObject *parent )	: Clcdc(parent){						//[constructor]
+Clcdc_z1::Clcdc_z1(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
     Color_Off.setRgb(
                         (int) (92*contrast),
                         (int) (120*contrast),
@@ -38,7 +39,7 @@ void Clcdc_z1::disp(void)
     if(z1->pCPU->fp_log) fprintf(z1->pCPU->fp_log,"REFRESH DISP\n");
     Refresh = true;
 
-    QPainter painter(pPC->LcdImage);
+    QPainter painter(LcdImage);
 
     int x, y;
     UINT8 *p = z1->pHD66108->vram;

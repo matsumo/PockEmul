@@ -61,11 +61,9 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		FinalImage = 0;
 		BackgroundImage = 0;
         BackgroundImageBackup = 0;
-		LcdImage = 0;
-		SymbImage = 0;
         TopImage=LeftImage=RightImage=BottomImage=BackImage = 0;
         internalImageRatio = 1;
-        LcdRatio = 1;
+
         flipping = false;
         currentView = FRONTview;
 		extensionArray[0] = 0;
@@ -125,8 +123,6 @@ CPObject::~CPObject()
 
     delete BackgroundImage;
     delete BackgroundImageBackup;
-    delete LcdImage;
-    delete SymbImage;
 
 
 //    delete extensionArray[0];

@@ -5,7 +5,7 @@
 
 #include "common.h"
 #include "pc1250.h"
-#include "Lcdc.h"
+#include "Lcdc_pc1250.h"
  
 #include "Inter.h"
 #include "Keyb.h"
@@ -27,8 +27,8 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 	Initial_Session_Fname ="pc1250.pkm";
 
     BackGroundFname	= P_RES(":/pc1250/pc1250.png");
-    LcdFname		= P_RES(":/pc1250/1250lcd.png");
-    SymbFname		= P_RES(":/pc1250/1250symb.png");
+//    LcdFname		= P_RES(":/pc1250/1250lcd.png");
+//    SymbFname		= P_RES(":/pc1250/1250symb.png");
 
     LeftFname = P_RES(":/pc1250/125xLeft.png");
 
@@ -52,25 +52,29 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
     setDX(483);
     setDY(252);
 
-    Lcd_X		= 55;
-    Lcd_Y		= 49;
-    Lcd_DX		= 144;//168;//144 ;
-    Lcd_DY		= 8;
-    Lcd_ratio_X	= 2 * 1.18;
-    Lcd_ratio_Y	= 2 * 1.18;
+//    Lcd_X		= 55;
+//    Lcd_Y		= 49;
+//    Lcd_DX		= 144;//168;//144 ;
+//    Lcd_DY		= 8;
+//    Lcd_ratio_X	= 2 * 1.18;
+//    Lcd_ratio_Y	= 2 * 1.18;
 
-    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
-    Lcd_Symb_DX	= 339;
-	Lcd_Symb_DY	= 5;
-    Lcd_Symb_ratio_X	= 1;//1.18;
+//    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
+//    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
+//    Lcd_Symb_DX	= 339;
+//	Lcd_Symb_DY	= 5;
+//    Lcd_Symb_ratio_X	= 1;//1.18;
 
-//		DialogExtensionID = IDD_EXT_PROPERTIES_12XX;
+    pLCDC		= new Clcdc_pc1250(this,
+                                   QRect(55,49,288,16),
+                                   QRect(55,41,339,5),
+                                   P_RES(":/pc1250/1250lcd.png"),
+                                   P_RES(":/pc1250/1250symb.png"));
 
 	PowerSwitch = 0;
 	previous_key= 0;
 	
-	pLCDC		= new Clcdc_pc1250(this);
+
 	pCPU		= new CSC61860(this);
 	pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"pc1250.map",scandef_pc1250);

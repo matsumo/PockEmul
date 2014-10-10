@@ -16,7 +16,7 @@ public:
     int x2a[100];
 
 
-    Clcdc_ce1560(CPObject *parent = 0);
+    Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
     virtual ~Clcdc_ce1560()
     {						//[constructor]
     }
