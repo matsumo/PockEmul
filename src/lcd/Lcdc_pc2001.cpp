@@ -18,16 +18,11 @@ Clcdc_pc2001::Clcdc_pc2001(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     pixelGap = 1;
 }
 
-
-
-
-
 void Clcdc_pc2001::disp_symb(void)
 {
 
     Clcdc::disp_symb();
 }
-
 
 void Clcdc_pc2001::disp(void)
 {
@@ -47,19 +42,16 @@ void Clcdc_pc2001::disp(void)
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
+    bool _toRefresh = false;
     for (int i = 0 ; i<4; i++)
     {
-        if (!pc2001->upd16434[i]->updated) break;
-        Refresh = true;
-    //AddLog(LOG_DISPLAY,"DISP");
-        pc2001->upd16434[i]->updated = false;
+        if (!pc2001->upd16434[i]->updated) continue;
+
         for (int j = 0; j< 0x32;j++)
         {
             BYTE data = pc2001->upd16434[i]->info.imem[0x31 - j];
             for (b=0;b<8;b++)
             {
-//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                painter.drawPoint(j + j/5 + i*60,b + (b==7));
                 drawPixel(&painter,j + j/5 + i*60,b + (b==7),((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
@@ -68,16 +60,14 @@ void Clcdc_pc2001::disp(void)
             BYTE data = pc2001->upd16434[i]->info.imem[0x71-j];
             for (b=0;b<8;b++)
             {
-//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                painter.drawPoint(j + j/5 + i*60,b + (b==7)+12);
                 drawPixel(&painter,j + j/5 + i*60,b + (b==7)+12,((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
+        _toRefresh = true;
+        pc2001->upd16434[i]->updated = false;
     }
-//    if (g850->pSED1560->info.on_off)
 
-
-
+    Refresh = _toRefresh;
     redraw = 0;
     painter.end();
 }

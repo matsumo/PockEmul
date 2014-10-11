@@ -589,7 +589,8 @@ HEADERS += src/core/Connect.h \
     src/lcd/Lcdc_pc1475.h \
     src/lcd/Lcdc_pc1403.h \
     src/lcd/Lcdc_pc1450.h \
-    src/lcd/Lcdc_pc1401.h
+    src/lcd/Lcdc_pc1401.h \
+    src/lcd/Lcdc_symb2x.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 

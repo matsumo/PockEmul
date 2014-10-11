@@ -67,7 +67,7 @@ public:
 
     QImage* LcdImage;
     QImage* SymbImage;
-    float LcdRatio;
+    float LcdRatio,SymbRatio;
 
     void InitDisplay(void);
 
@@ -92,7 +92,7 @@ protected:
 
     BYTE pixelSize,pixelGap;
 
-    QSize internalSize;
+    QSize internalSize,internalSymbSize;
 
 
 

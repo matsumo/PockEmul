@@ -84,9 +84,6 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"pc2001.map");
 
-
-    //    i86cpu = (Ci80x86*)pCPU;
-
     ioFreq = 0;
 }
 
@@ -120,10 +117,7 @@ bool Cpc2001::init(void)				// initialize
     return true;
 }
 
-
-
 bool Cpc2001::run() {
-
 
     CpcXXXX::run();
 
@@ -170,11 +164,10 @@ bool Cpc2001::run() {
         }
     }
 
-//     fillSoundBuffer(upd7907->upd7810stat.imem[0x00] & 0x10 ? 0xff : 0x00);
-     fillSoundBuffer(upd7907->upd7907stat.to ? 0xff : 0x00);
+    fillSoundBuffer(upd7907->upd7907stat.to ? 0xff : 0x00);
 
-     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
-     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
+    pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
+    pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
     return true;
 }
 
@@ -195,7 +188,6 @@ bool Cpc2001::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-
 UINT8 Cpc2001::in(UINT8 Port)
 {
     switch (Port) {
@@ -206,16 +198,10 @@ UINT8 Cpc2001::in(UINT8 Port)
     return 0;
 }
 
-
-
 UINT8 Cpc2001::out(UINT8 Port, UINT8 x)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
-
-//    switch (Port) {
-//    case 0x01 : portB = x; break;
-//    }
 
     return 0;
 }
@@ -246,14 +232,12 @@ bool Cpc2001::Set_Connector()
 
 bool Cpc2001::Get_Connector()
 {
-
     if (pPRINTERCONNECTOR->Get_pin(9)) {
         sendToPrinter = 0;
     }
 
     return true;
 }
-
 
 void Cpc2001::TurnOFF(void) {
     mainwindow->saveAll = YES;
@@ -268,7 +252,6 @@ void Cpc2001::TurnON(void){
     upd7907->upd7907stat.pc.w.l=0;
 
 }
-
 
 void Cpc2001::Reset()
 {
@@ -458,13 +441,6 @@ UINT16 Cpc2001::getKey()
 50 X=X+1
 60 GOTO30
 70 PRINTX*LOG(X)-X+LOG(6.28319/X)/2+((1/99/X/X-1/30)/X/X+1)/12-LOG(G)
-
-
-
-
-
-
-
 
 
  **/

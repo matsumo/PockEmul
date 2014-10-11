@@ -330,7 +330,7 @@ BYTE CUPD16434::data(quint8 cmd)
 
 BYTE CUPD16434::instruction(quint8 cmd)
 {
-    updated = true;
+
     if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 CMD: %02x\n",cmd);
 
 //    AddLog(LOG_DISPLAY,tr("UPD16434 CMD:%1").arg(cmd,4,16,QChar('0')));
@@ -368,6 +368,7 @@ BYTE CUPD16434::instruction(quint8 cmd)
     else
     if ((cmd & MASK_STOP) == MASK_STOP ) { return cmd_STOP(cmd); }
 
+    updated = true;
     return 0;
 }
 

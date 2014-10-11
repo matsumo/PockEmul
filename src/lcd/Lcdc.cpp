@@ -40,6 +40,7 @@ Clcdc::Clcdc(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfnam
     SymbImage = 0;
 
     LcdRatio = 0;
+    SymbRatio = 1;
 
     LcdFname = _lcdfname;
     if (LcdFname.isEmpty()) LcdFname = ":/pockemul/transparent.png";
@@ -94,6 +95,7 @@ void Clcdc::disp_one_symb(QPainter *painter, const char *figure, QColor color, i
         switch (figure[j]) {
         case '#':	painter->drawPoint( x+xi, y );
                     xi++;		break;
+        case '.':
         case ' ':	xi++;		break;
         case '\r':	xi=0; y++;	break;
         };
@@ -197,8 +199,10 @@ void Clcdc::InitDisplay()
     delete LcdImage;
     LcdImage = CViewObject::CreateImage(internalSize * LcdRatio,LcdFname,false,false,0);
     if (symbRect.isValid()) {
+        if (!internalSymbSize.isValid())
+            internalSymbSize = symbRect.size();
         delete SymbImage;
-        SymbImage	= CViewObject::CreateImage(symbRect.size(),SymbFname);
+        SymbImage	= CViewObject::CreateImage(internalSymbSize * SymbRatio,SymbFname);
     }
 
 }

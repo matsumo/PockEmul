@@ -390,7 +390,7 @@ function sizePocket(_pocketId,_width,_height) {
 
     var index = getIndex(_pocketId);
 
-    console.log("found index:"+index);
+//    console.log("found index:"+index);
     if (index !== -1) {
 
         testarea.xmlThumbModel.get(index)._width = _width;
@@ -403,7 +403,7 @@ function orderPocket(_pocketId,_zorder) {
 
     var index = getIndex(_pocketId);
 
-    console.log("found index:"+index);
+//    console.log("found index:"+index);
     if (index !== -1) {
 
         testarea.xmlThumbModel.get(index)._zorder = _zorder;

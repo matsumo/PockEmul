@@ -145,7 +145,7 @@ Window {
                 scale: 1
                 smooth: true
                 mipmap: true
-//                antialiasing: true
+                antialiasing: true
             }
             PinchArea {
                 anchors.fill: parent

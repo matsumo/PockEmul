@@ -1,5 +1,5 @@
-#ifndef LCD_SYMB
-#define LCD_SYMB
+#ifndef LCDC_SYMB2X_H
+#define LCDC_SYMB2X_H
 
 static const char
 * const  S_REV_BATT=
@@ -18,6 +18,24 @@ static const char
 "##  #  #  #  # #\r"
 "# # #  #   #  # \r"
 "##   ##  ##   #"
+
+,* const S15_BUSY=
+
+"######    #  #  ## # #\r"
+"#     #   #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#     #   #  #  ## # #\r"
+"#    #    #  # #   # #\r"
+"#####     #  #  #  # #\r"
+"#    #    #  #  ## # #\r"
+"#     #   #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#      #  #  #  ## # #\r"
+"#      #  #  #   #  # \r"
+"#######   ##  ##   #"
 
 ,* const S_HYP=
 
@@ -447,4 +465,4 @@ static const char
 ;
 
 
-#endif
+#endif // LCDC_SYMB2X_H
