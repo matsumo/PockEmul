@@ -1,6 +1,11 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc2001</model>
 <Keyboard>
+    <KEY description="F1" height="22" left="107" masterscancode="0x00" modifier="" scancode="0xf6" top="206" width="70"/>
+    <KEY description="F2" height="22" left="196" masterscancode="0x00" modifier="" scancode="0xf7" top="206" width="70"/>
+    <KEY description="F3" height="22" left="281" masterscancode="0x00" modifier="" scancode="0xf8" top="206" width="70"/>
+    <KEY description="F4" height="22" left="368" masterscancode="0x00" modifier="" scancode="0xf9" top="206" width="70"/>
+    <KEY description="F5" height="22" left="458" masterscancode="0x00" modifier="" scancode="0xfa" top="206" width="70"/>
     <KEY description="-" height="18" left="458" masterscancode="0x00" modifier="" scancode="0x2d" top="247" width="25"/>
     <KEY description="Tab" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x0f" top="0" width="20"/>
     <KEY description="&apos;" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xb0" top="0" width="20"/>
@@ -8,8 +13,8 @@
     <KEY description=")" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x29" top="0" width="20"/>
     <KEY description="*" height="30" left="737" masterscancode="0x00" modifier="" scancode="0x2a" top="293" width="37"/>
     <KEY description="," height="20" left="372" masterscancode="0x00" modifier="" scancode="0x2c" top="365" width="20"/>
-    <KEY description="." height="18" left="413" masterscancode="0x00" modifier="" scancode="0x2e" top="366" width="25"/>
-    <KEY description="/" height="34" left="737" masterscancode="0x00" modifier="" scancode="0x2f" top="241" width="37"/>
+    <KEY description="." height="22" left="413" masterscancode="0x00" modifier="" scancode="0x2e" top="366" width="25"/>
+    <KEY description="/" height="22" left="455" masterscancode="0x00" modifier="" scancode="0x2f" top="367" width="25"/>
     <KEY description=":" height="20" left="479" masterscancode="0x00" modifier="" scancode="0x3a" top="325" width="28"/>
     <KEY description=";" height="20" left="436" masterscancode="0x00" modifier="" scancode="0x3b" top="326" width="27"/>
     <KEY description="+" height="34" left="735" masterscancode="0x00" modifier="" scancode="0x2b" top="393" width="40"/>
@@ -83,6 +88,7 @@
     <KEY description="Pad 7" height="30" left="587" masterscancode="0x00" modifier="" scancode="0xa7" top="242" width="38"/>
     <KEY description="Pad 8" height="30" left="636" masterscancode="0x00" modifier="" scancode="0xa8" top="244" width="38"/>
     <KEY description="Pad 9" height="30" left="687" masterscancode="0x00" modifier="" scancode="0xa9" top="244" width="38"/>
-    <KEY description="&quot;" masterscancode="0x32" modifier="shift"/>
+    <KEY description="Pad /" height="30" left="743" masterscancode="0x00" modifier="" scancode="0x2f" top="249" width="38"/>
+    <KEY description="&quot;" height="0" left="0" masterscancode="0x32" modifier="shift" scancode="0x00" top="0" width="0"/>
 </Keyboard>
 </KEYBMAP>

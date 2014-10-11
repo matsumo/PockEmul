@@ -363,19 +363,20 @@ void m_addShortcut(QString name, QString param) {
 }
 
 QString P_RES(QString _name) {
+
     QString _locName = _name;
     _locName.replace(":",appDir+"/res");
+    QFileInfo info_locName(_locName);
 
 #ifdef LOCRES
     return _locName;
 #else
     if (hiRes) {
         // if file exists, rename it
-        if (QFile::exists(_locName+"@2X")) {
-            return _locName+"@2X";
-        }
-        if (QFile::exists(_name+"@2X")) {
-            return _name+"@2X";
+        QString hiResFname = info_locName.path()+"/"+info_locName.baseName()+"@2X."+info_locName.suffix();
+        qWarning()<<hiResFname;
+        if (QFile::exists(hiResFname)) {
+            return hiResFname;
         }
     }
     if (QFile::exists(_locName)) {

@@ -1,0 +1,13 @@
+<!DOCTYPE skin>
+<skin version="1.0" model="pc1403">
+	<frontview fname=":/pc1403/pc1403.png"/>
+	<topview fname=":/pc1403/pc1403.png"/>
+	<lcd>
+		<rect	left="0" top="0" width="100" height="16"/>
+		<symbzone>
+			<rect	left="0" top="0" width="100" height="16"/>
+		</symbzone>
+	</lcd>
+	<keyboard>
+	</keyboard>
+</skin>

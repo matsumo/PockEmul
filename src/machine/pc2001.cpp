@@ -8,6 +8,8 @@
 #include "Lcdc_pc2001.h"
 #include "Connect.h"
 
+// TODO: Keyboard map is not complete
+
 /*
 
  PA bit 0-1:
@@ -374,7 +376,7 @@ UINT16 Cpc2001::getKey()
         if (ks&0x100) {
             if (KEY('I'))			data|=0x01;
             if (KEY('K'))			data|=0x02;
-            if (KEY('/'))			data|=0x04;
+//            if (KEY('/'))			data|=0x04;
             if (KEY(K_7))			data|=0x08;
             if (KEY('8'))			data|=0x10;
             if (KEY('/'))			data|=0x20;

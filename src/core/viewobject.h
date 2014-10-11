@@ -21,9 +21,11 @@ public:
 
     Ckeyb		*pKEYB;
 
-    QString FrontFname,TopFname,LeftFname,RightFname,BottomFname,BackFname;
+    QString FrontFname,TopFname,LeftFname,RightFname,BottomFname,BackFname,BackGroundFname;
     QImage *FrontImage,*TopImage,*LeftImage,*RightImage,*BottomImage,*BackImage;
     QImage* FinalImage;
+    float internalImageRatio;
+    QImage* BackgroundImageBackup;
     QPixmap mask;
     View currentView,targetView,animationView1,animationView2;
     Direction currentFlipDir;

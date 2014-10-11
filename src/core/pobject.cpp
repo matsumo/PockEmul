@@ -58,11 +58,8 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 		pTIMER	= 0;
 		pLCDC	= 0;
         bus     = 0;
-		FinalImage = 0;
-		BackgroundImage = 0;
-        BackgroundImageBackup = 0;
-        TopImage=LeftImage=RightImage=BottomImage=BackImage = 0;
-        internalImageRatio = 1;
+        BackgroundImage = 0;
+
 
         flipping = false;
         currentView = FRONTview;
@@ -122,7 +119,7 @@ CPObject::~CPObject()
 	
 
     delete BackgroundImage;
-    delete BackgroundImageBackup;
+
 
 
 //    delete extensionArray[0];
@@ -1359,16 +1356,7 @@ bool CPObject::InitDisplay(void)
 {
     CViewObject::InitDisplay();
 
-//    qWarning("INIT DISPLAY");
-    delete BackgroundImageBackup;
-//    qWarning()<<BackGroundFname;
-#if 0
-    BackgroundImageBackup = CreateImage(QSize(Pc_DX, Pc_DY),BackGroundFname);
-#else
-    BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
-    internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
-    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
-#endif
+
 
     delete BackgroundImage;
     BackgroundImage = new QImage(*BackgroundImageBackup);

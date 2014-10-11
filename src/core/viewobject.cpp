@@ -20,6 +20,9 @@ CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
     Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;
     PosX = PosY	= Pc_DX = Pc_DY = 0;
     pKEYB = 0;
+    FinalImage = 0;
+    BackgroundImageBackup = 0;
+    internalImageRatio = 1;
 }
 
 CViewObject::~CViewObject()
@@ -31,6 +34,7 @@ CViewObject::~CViewObject()
     delete RightImage;
     delete BottomImage;
     delete BackImage;
+    delete BackgroundImageBackup;
 
     delete pKEYB;
 }
@@ -138,17 +142,22 @@ QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmi
 
 bool CViewObject::InitDisplay(void)
 {
+    delete BackgroundImageBackup;
     delete TopImage;
     delete LeftImage;
     delete RightImage;
     delete BottomImage;
     delete BackImage;
 
-    if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview),TopFname);
-    if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview),LeftFname);
-    if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview),RightFname);
-    if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview),BottomFname);
-    if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview),BackFname);
+    BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
+    internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
+    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
+
+    if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname);
+    if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname);
+    if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname);
+    if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname);
+    if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
 
     return(1);
 }
@@ -186,8 +195,8 @@ void CViewObject::setZoom(qreal value)
 
 QSize CViewObject::viewRect(View v) {
     if (getDXmm()==0) {
-        qWarning()<<"ERROR DXùù not set";
-        return QSize(0,0);
+        qWarning()<<"ERROR DXmm not set";
+        return QSize();
     }
     float _ratio = this->getDX()/this->getDXmm();
 
@@ -200,7 +209,7 @@ QSize CViewObject::viewRect(View v) {
     case LEFTview:
     case RIGHTview: return QSize(this->getDZmm()*_ratio,this->getDY());
     }
-    return QSize(0,0);
+    return QSize();
 }
 
 QSize CViewObject::currentViewRect() {
