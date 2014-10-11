@@ -43,10 +43,12 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     SessionHeader	= "PC2001PKM";
     Initial_Session_Fname ="pc2001.pkm";
 
-    BackGroundFname	= P_RES(":/pc2001/pc-2001.png");
+    BackGroundFname	= P_RES(":/pc2001/pc2001.png");
 
     RightFname = P_RES(":/pc2001/pc2001Right.png");
+    LeftFname = P_RES(":/pc2001/pc2001Left.png");
     TopFname = P_RES(":/pc2001/pc2001Top.png");
+    BackFname = P_RES(":/pc2001/pc2001Back.png");
 
     memsize		= 0xFFFF;
     InitMemValue	= 0xFF;

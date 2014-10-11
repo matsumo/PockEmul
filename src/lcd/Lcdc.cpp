@@ -17,6 +17,8 @@
 #include "Log.h"
 #include "viewobject.h"
 
+extern bool hiRes;
+
 Clcdc::Clcdc(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname)
 {						//[constructor]
     pPC = (CpcXXXX*) parent;
@@ -136,7 +138,7 @@ void Clcdc::drawPixel(QPainter *painter,float x,float y, QColor color) {
                          pixelSize-1);
     }
     else {
-        painter->drawPoint( x*pixelGap, y*pixelGap);
+        painter->drawPoint( x*(pixelGap+1), y*(pixelGap+1));
     }
 }
 
@@ -186,6 +188,11 @@ void Clcdc::SetDirtyBuf(WORD index)
 
 void Clcdc::InitDisplay()
 {
+    if (!hiRes) {
+        pixelSize = 1;
+        pixelGap = 0;
+    }
+
     if (LcdRatio == 0) LcdRatio = pixelSize+pixelGap;
     delete LcdImage;
     LcdImage = CViewObject::CreateImage(internalSize * LcdRatio,LcdFname,false,false,0);
@@ -193,9 +200,6 @@ void Clcdc::InitDisplay()
         delete SymbImage;
         SymbImage	= CViewObject::CreateImage(symbRect.size(),SymbFname);
     }
-
-//    pLCDC->Color_Off.setRgb(LcdImage->pixel(0,0));
-//    pLCDC->Color_Off.setAlphaF(1-pLCDC->contrast);
 
 }
 

@@ -12,6 +12,8 @@
 #include "mc6847.h"
 #include "Inter.h"
 
+// TODO: performance issue with this module
+
 Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
 {                                                       //[constructor]
     Q_UNUSED(parent)
