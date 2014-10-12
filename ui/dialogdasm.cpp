@@ -1,4 +1,6 @@
 ﻿//TODO Contextual menu on breakpoints
+//TODO: saveall in the destructor. try to manage changes
+
 #include <QDebug>
 #include <QScrollBar>
 #include <QFileDialog>

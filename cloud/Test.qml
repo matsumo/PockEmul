@@ -116,13 +116,9 @@ Window {
             }
 
             onPositionChanged: {
-//                if (mouse.button == Qt.LeftButton)
-                {
-                    console.log("ok");
-                    root.sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
-                    prevX = mouseX;
-                    prevY = mouseY;
-                }
+                root.sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+                prevX = mouseX;
+                prevY = mouseY;
             }
         }
     }

@@ -177,26 +177,6 @@ bool Cpc15XX::LoadConfig(QXmlStreamReader *xmlIn)
     return true;
 }
 
-bool Cpc15XX::LoadConfig(QFile *file)
-{
-    Q_UNUSED(file)
-
-	AddLog(LOG_FUNC,"Cpc1500::LoadConfig");
-
-//--	fread(&Extension,1,sizeof(TExtension),fp);
-	return(1);
-}
-
-bool Cpc15XX::SaveConfig(QFile *file)
-{
-    Q_UNUSED(file)
-
-	AddLog(LOG_FUNC,"Cpc1500::SaveConfig");
-
-//--	fwrite(&Extension,1,sizeof(TExtension),fp);
-	return(1);
-}
-
 bool Cpc15XX::SaveConfig(QXmlStreamWriter *xmlOut)
 {
 
@@ -211,18 +191,16 @@ bool Cpc15XX::init(void)				// initialize
 //        if (!fp_log) fp_log=fopen("pc1500.log","wt");	// Open log file
 
 	CpcXXXX::init();
-	
 
-
-        pCONNECTOR	= new Cconnector(this,
-                                     60,
-                                     0,
-                                     Cconnector::Sharp_60,
-                                     "Connector 60 pins",
-                                     false,
-                                     QPoint(0,72),
-                                     Cconnector::WEST);
-        publish(pCONNECTOR);
+    pCONNECTOR	= new Cconnector(this,
+                                 60,
+                                 0,
+                                 Cconnector::Sharp_60,
+                                 "Connector 60 pins",
+                                 false,
+                                 QPoint(0,72),
+                                 Cconnector::WEST);
+    publish(pCONNECTOR);
 
 	WatchPoint.remove(this);
 	
@@ -257,7 +235,8 @@ bool Cpc15XX::init(void)				// initialize
 
 bool Cpc15XX::run(void) 
 {
-    // NEED TO USE IMEMSIZE instead
+
+    //TODO NEED TO USE IMEMSIZE instead
     if (dialogdasm)
         dialogdasm->imem=false;
 
@@ -268,12 +247,14 @@ bool Cpc15XX::run(void)
 //	previous_pc = pCPU->get_PC();
 
 // ---------------------------------------------------------	
-	CpcXXXX::run();
+    CpcXXXX::run();
 // ---------------------------------------------------------
+
+    if (off) return true;
 
 	Current_PC = pCPU->get_PC();
 
-    //pLCDC->On = ((CLH5801 *)pCPU)->lh5801.dp;
+    //TODO pLCDC->On = ((CLH5801 *)pCPU)->lh5801.dp;
 
 	if (pKEYB->CheckKon()) 
 		((CLH5801 *)pCPU)->lh5801.bf=1;

@@ -27,7 +27,7 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
 #endif
 
     setfrequency( (int) 8000000);
-//    ioFreq = 0;
+    ioFreq = 0;
     setcfgfname(QString("g850"));
 
     SessionHeader	= "G850PKM";
@@ -45,19 +45,6 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
 
     setDX(683);
     setDY(330);
-
-//    Lcd_X		= 67;
-//    Lcd_Y		= 60;
-//    Lcd_DX		= 144;
-//    Lcd_DY		= 48;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-//    LcdRatio = 5;
-
-//    Lcd_Symb_X	= 50;//64+288;
-//    Lcd_Symb_Y	= 60;
-//    Lcd_Symb_DX	= 17+288+30;
-//    Lcd_Symb_DY	= 96;
 
     SoundOn			= false;
 

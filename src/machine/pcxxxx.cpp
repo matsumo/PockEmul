@@ -184,6 +184,7 @@ void CpcXXXX::TurnOFF(void)
     PowerSwitch = PS_OFF;
     if (pLCDC) pLCDC->TurnOFF();
     InitDisplay();
+    update();
 }
 
 
@@ -680,7 +681,8 @@ bool CpcXXXX::run(void)
             pCPU->step();
 
         }
-        pTIMER->state+=10;// = pTIMER->currentState();//qint64) ( mainwindow->rawclk * (pTIMER->CPUSpeed *(getfrequency() / 1000L)) );
+
+        pTIMER->state = pTIMER->currentState();
     }
 
     Set_Connector();		//Write the connectors

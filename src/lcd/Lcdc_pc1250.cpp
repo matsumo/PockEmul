@@ -336,7 +336,7 @@ void Clcdc_pc1260::disp(void)
     int x,y;
     int ind;
     WORD adr;
-qWarning()<<"ok";
+
     Refresh = false;
 
     disp_symb();

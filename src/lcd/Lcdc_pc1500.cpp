@@ -1,4 +1,6 @@
 #include <QPainter>
+#include <QDebug>
+
 #include "pcxxxx.h"
 
 #include "Lcdc_pc1500.h"
@@ -78,6 +80,7 @@ void Clcdc_pc1500::disp_symb(void)
 
 Clcdc_pc1500::Clcdc_pc1500(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
+
     internalSize = QSize(156,7);
     pixelSize = 4;
     pixelGap = 1;

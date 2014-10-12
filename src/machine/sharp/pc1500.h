@@ -48,8 +48,6 @@ Q_OBJECT
 public:
     const char*	GetClassName(){ return("Cpc15XX");}
 
-	bool	LoadConfig(QFile *file);
-	bool	SaveConfig(QFile *file);
     bool	LoadConfig(QXmlStreamReader *);
     bool	SaveConfig(QXmlStreamWriter *);
 	bool	InitDisplay(void);

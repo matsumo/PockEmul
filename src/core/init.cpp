@@ -90,7 +90,7 @@ void CPocketThread::run()
 
                     }
                     else {
-//                        qWarning()<<pPC->pTIMER->state << cs;
+//                        qWarning()<<"ok!"<<pPC->pTIMER->state << cs;
                     }
                 }
                 if (pPC->toDestroy)
