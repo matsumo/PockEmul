@@ -25,8 +25,8 @@ Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
     setDZmm(31);
 
  // Ratio = 3,57
-    setDX(848);//Pc_DX  = 75;
-    setDY(340);//Pc_DY  = 20;
+    setDX(848);
+    setDY(340);
 
     rotate = false;
     SlotList.clear();
@@ -50,8 +50,6 @@ Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
 Crlp2001::~Crlp2001(){
     delete(pCONNECTOR);
 }
-
-
 
 bool Crlp2001::run(void)
 {
@@ -190,6 +188,7 @@ bool Crlp2001::run(void)
 }
 
 bool Crlp2001::UpdateFinalImage(void) {
+
 //    CPObject::UpdateFinalImage();
 
     // Draw switch by 180 rotation

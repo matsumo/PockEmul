@@ -55,6 +55,8 @@ Window {
 
     property int highestZ: 0
     property real defaultSize: 200
+    property int prevX: 0
+    property int prevY: 0
 
 
     Menu {
@@ -102,15 +104,24 @@ Window {
             root.setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
         }
         MouseArea {
-            hoverEnabled: true
+            hoverEnabled: false
             anchors.fill: parent
             onWheel: {
                 console.log("angle:"+wheel.angleDelta);
                     root.setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
             }
+            onPressed: {
+                prevX = mouseX;
+                prevY = mouseY;
+            }
+
             onPositionChanged: {
-                if (mouse.button == Qt.LeftButton) {
-                    root.sendMoveAllPocket(photoFrame.x,photoFrame.y);
+//                if (mouse.button == Qt.LeftButton)
+                {
+                    console.log("ok");
+                    root.sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+                    prevX = mouseX;
+                    prevY = mouseY;
                 }
             }
         }

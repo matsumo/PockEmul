@@ -18,8 +18,6 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pc1211.pkm";
 
     BackGroundFname	= P_RES(":/pc1211/pc-1211.png");
-//    LcdFname		= P_RES(":/pc1211/pc-1211lcd.png");
-//    SymbFname		= P_RES(":/pc1211/pc-1211symb.png");
 
     memsize		= 0x10000;
 
@@ -50,9 +48,7 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
 
     pLCDC		= new Clcdc_pc1211(this,
                                    QRect(46,50,144*2*1.375,8*2*1.375),
-                                   QRect(55,41,380,5),
-                                   P_RES(":/pc1211/pc-1211lcd.png"),
-                                   P_RES(":/pc1211/pc-1211symb.png"));
+                                   QRect(55,41,380,5));
     pKEYB		= new Ckeyb(this,"pc1211.map");
     pCPU = new CTinyBasic(this);
     pTIMER		= new Ctimer(this);

@@ -29,13 +29,6 @@ Cce1560::Cce1560(CPObject *parent):CpcXXXX(this)
     setDX(752);
     setDY(679);
 
-//    Lcd_X		= 188;
-//    Lcd_Y		= 60;
-//    Lcd_DX		= 192;
-//    Lcd_DY		= 64;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-
     pLCDC		= new Clcdc_ce1560(this,
                                    QRect(188,60,384,128),
                                    QRect());

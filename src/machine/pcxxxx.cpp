@@ -151,7 +151,7 @@ bool CpcXXXX::InitDisplay(void)
 {
     CPObject::InitDisplay();
 
-    Refresh_Display = true;
+//    Refresh_Display = true;
     UpdateDisplayRunning = false;
 
     if (pLCDC) {
@@ -739,7 +739,7 @@ bool CpcXXXX::LoadSession_File(QXmlStreamReader *xmlIn) {
     if ((xmlIn->name()=="session") || (xmlIn->readNextStartElement())) {
         if ( (xmlIn->name() == "session") &&
              (xmlIn->attributes().value("model") == SessionHeader) ) {
-            Power = (xmlIn->attributes().value("power")=="true") ?true:false;
+//            Power = (xmlIn->attributes().value("power")=="true") ?true:false;
             QString version = xmlIn->attributes().value("version").toString();
             if (!LoadConfig(xmlIn)) {
                 emit msgError("ERROR Loading Session Config:"+SessionHeader);

@@ -114,11 +114,11 @@ Cpc2081::Cpc2081(CPObject *parent) : Cce152(parent)
 {
     BackGroundFname	= P_RES(":/ext/pc-2081.png");
     setcfgfname("pc2081");
-    setDXmm(184);//Pc_DX_mm = 135;
-    setDYmm(114);//Pc_DY_mm = 70;
-    setDZmm(31);//Pc_DZ_mm = 10;
-    setDX(658);//Pc_DX		= 483;//409;
-    setDY(410);//Pc_DY		= 252;//213;
+    setDXmm(184);
+    setDYmm(114);
+    setDZmm(31);
+    setDX(658);
+    setDY(410);
     pKEYB->fn_KeyMap = "pc2081.map";
 
 

@@ -48,6 +48,7 @@ extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
 extern bool soundEnabled;
 extern bool hiRes;
+extern QList<CPObject *> listpPObject;
 
 CloudWindow::CloudWindow(QWidget *parent)
     : QWidget(parent)
@@ -69,6 +70,7 @@ CloudWindow::CloudWindow(QWidget *parent)
     QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
     QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
+    QObject::connect(object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
     QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
 
     m_fileDialog = new QFileDialog(this);
@@ -350,15 +352,22 @@ void CloudWindow::warning(QString msg) {
 }
 void CloudWindow::movepocket(QString Id, int x, int y)
 {
-    qWarning()<<"movepocket:"<<Id<<x<<y;
+//    qWarning()<<"movepocket:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
     pc->MoveWithLinkedAbs(pts);
  }
 
+void CloudWindow::moveallpocket(int x, int y)
+{
+//    qWarning()<<"moveallpocket:"<<x<<y;
+    QPoint pts(x , y);
+    mainwindow->MoveAll(pts);
+}
+
 void CloudWindow::click(QString Id, int x, int y)
 {
-    qWarning()<<"click:"<<Id<<x<<y;
+//    qWarning()<<"click:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 //    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
@@ -372,7 +381,7 @@ void CloudWindow::click(QString Id, int x, int y)
 }
 void CloudWindow::unclick(QString Id, int x, int y)
 {
-    qWarning()<<"unclick:"<<Id<<x<<y;
+//    qWarning()<<"unclick:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 

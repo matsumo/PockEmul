@@ -32,7 +32,6 @@ void Clcdc_cc40::disp_symb(void)
 #if 1
 HD44780_PIXEL_UPDATE(Ccc40_update_pixel_symb)
 {
-    painter->setCompositionMode(QPainter::CompositionMode_Source);
 
     if (line == 1 && pos == 15)
     {

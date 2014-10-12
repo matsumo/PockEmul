@@ -1,4 +1,6 @@
 #include <QPainter>
+#include <QDebug>
+
 #include "pcxxxx.h"
 
 #include "Lcdc_pc1250.h"
@@ -115,8 +117,6 @@ void Clcdc_pc1250::disp(void)
             for (b=0; b<7;b++)
             {
                 drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-baseAdr] = 0;
         }
@@ -301,7 +301,6 @@ static const struct {
 void Clcdc_pc1260::disp_symb(void)
 {
 
-
     if ( (DirtyBuf[SYMB1_ADR_1260-0x2000]) ||
          (DirtyBuf[SYMB2_ADR_1260-0x2000]) ||
          (DirtyBuf[SYMB3_ADR_1260-0x2000])
@@ -337,7 +336,7 @@ void Clcdc_pc1260::disp(void)
     int x,y;
     int ind;
     WORD adr;
-
+qWarning()<<"ok";
     Refresh = false;
 
     disp_symb();

@@ -93,10 +93,10 @@ quint8 pc1211_carDef[0x500] = {
 
 Clcdc_pc1211::Clcdc_pc1211(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (102*contrast),
-                        (int) (106*contrast),
-                        (int) (29*contrast));
+
+    internalSize = QSize(144,8);
+    pixelSize = 4;
+    pixelGap = 1;
 
     pPC1211 = (Cpc1211*) parent;
 
@@ -237,6 +237,7 @@ void Clcdc_pc1211::DrawChar(quint8 c, int x)
     Refresh = true;
     //	disp_symb();
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (int ind=0; ind<5; ind++)
     {
@@ -248,8 +249,9 @@ void Clcdc_pc1211::DrawChar(quint8 c, int x)
         for (int b=0; b<7;b++)
         {
             Refresh = true;
-            painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-            painter.drawPoint( off, b);
+//            painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
+//            painter.drawPoint( off, b);
+            drawPixel(&painter,off, b,((data>>b)&0x01) ? Color_On : Color_Off);
         }
     }
 

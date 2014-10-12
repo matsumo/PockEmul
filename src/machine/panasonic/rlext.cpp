@@ -32,9 +32,8 @@ CrlExt::CrlExt(CPObject *parent):CPObject(this)
     setDYmm(95);
     setDZmm(51);
 
-    setDX(440);//Pc_DX  = 75;
-    setDY(340);//Pc_DY  = 20;
-
+    setDX(440);
+    setDY(340);
 
     rotate = false;
     INTrequest = false;

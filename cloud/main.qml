@@ -13,6 +13,7 @@ Rectangle {
     signal sendClick(string id,int x,int y)
     signal sendUnClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)
+    signal sendMoveAllPocket(int x,int y)
     signal setZoom(int x,int y,int z)
 
 //    property var pocketMap: new Map()

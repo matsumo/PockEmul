@@ -1203,7 +1203,7 @@ void MainWindowPockemul::updateFrameTimer()
                     if (dynamic_cast<CpcXXXX *>(CurrentpPC) )
                     {
 //                        CpcXXXX *tmpPC = (CpcXXXX*)CurrentpPC;
-                        //if (tmpPC->getDisp_on())
+                        if (CurrentpPC->pLCDC->On)
                         {
                             nbframe++;
                             CurrentpPC->pLCDC->disp();
