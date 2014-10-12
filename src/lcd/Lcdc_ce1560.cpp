@@ -8,10 +8,10 @@
 
 Clcdc_ce1560::Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                        (int) (64*contrast),
-                        (int) (86*contrast),
-                        (int) (79*contrast));
+
+    pixelSize = 4;
+    pixelGap = 1;
+    internalSize = QSize(192,64);
 }
 
 
@@ -56,6 +56,8 @@ void Clcdc_ce1560::disp(void)
     Refresh = true;
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
+
     for (int _m=0; _m<3 ; _m++) {
         if (((Cce1560 *)pPC)->ps6b0108[_m]->info.on_off)
         {
@@ -66,20 +68,18 @@ void Clcdc_ce1560::disp(void)
                     BYTE data = ((Cce1560 *)pPC)->ps6b0108[_m]->info.imem[ (j * 0x40) + i ];
                     for (b=0; b<8;b++)
                     {
-                        //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
-                        painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-
                         int y = computeSL(((Cce1560 *)pPC)->ps6b0108[_m],j*8+b);
-                        if ((y>=0)&&(y < 64)) painter.drawPoint( _m*64+i, y );
+                        if ((y>=0)&&(y < 64))
+                            drawPixel(&painter,_m*64+i, y,((data>>b)&0x01) ? Color_On : Color_Off );
                     }
                 }
             }
         }
         else {
             // Turn off screen
-            painter.setPen( Color_Off );
-            painter.setBrush(Color_Off);
-            painter.drawRect( _m*64, 0,64,64);
+            for (int i=0;i<64;i++)
+                for (int j=0;j<64;j++)
+                    drawPixel(&painter,_m*64+i,j,Color_Off);
         }
     }
 

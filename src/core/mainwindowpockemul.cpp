@@ -160,6 +160,7 @@ server = new ServeurTcp(this);
         connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
 
         cloud = new CloudWindow(this);
+        cloud->hide();
 
 #endif
 
