@@ -680,10 +680,8 @@ bool CpcXXXX::run(void)
     else {
         if (!off) {
             pCPU->step();
-
         }
-
-        pTIMER->state = pTIMER->currentState();
+        pTIMER->state +=20;//= pTIMER->currentState();
     }
 
     Set_Connector();		//Write the connectors
