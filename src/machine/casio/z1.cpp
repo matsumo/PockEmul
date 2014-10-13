@@ -49,9 +49,6 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
         BackGroundFname	= P_RES(":/z1/z1.png");
     }
 
-//    LcdFname		= P_RES(":/z1/z1grlcd.png");
-//    SymbFname		= "";
-
     LeftFname       = P_RES(":/z1/z1Left.png");
 
     memsize		= 0xFFFFF;
