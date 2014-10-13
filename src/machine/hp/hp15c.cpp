@@ -62,7 +62,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
         SessionHeader	= "HP11CPKM";
         Initial_Session_Fname ="hp11c.pkm";
         BackGroundFname	= P_RES(":/hp11c/hp11c.png");
-//        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
         //    TopFname = P_RES(":/hp15c/top.png");
         BackFname = P_RES(":/hp11c/hp11cback.png");
         LeftFname = P_RES(":/hp15c/hp15cleft.png");
@@ -75,7 +74,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
         SessionHeader	= "HP12CPKM";
         Initial_Session_Fname ="hp12c.pkm";
         BackGroundFname	= P_RES(":/hp12c/hp12c.png");
-//        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
         //    TopFname = P_RES(":/hp15c/top.png");
         BackFname = P_RES(":/hp12c/hp12cback.png");
         LeftFname = P_RES(":/hp15c/hp15cleft.png");
@@ -88,7 +86,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
         SessionHeader	= "HP16CPKM";
         Initial_Session_Fname ="hp16c.pkm";
         BackGroundFname	= P_RES(":/hp16c/hp16c.png");
-//        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
         //    TopFname = P_RES(":/hp15c/top.png");
         BackFname = P_RES(":/hp16c/hp16cback.png");
         LeftFname = P_RES(":/hp15c/hp15cleft.png");
@@ -101,8 +98,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
         SessionHeader	= "HP15CPKM";
         Initial_Session_Fname ="hp15c.pkm";
         BackGroundFname	= P_RES(":/hp15c/hp15c.png");
-//        LcdFname		= P_RES(":/hp15c/hp15clcd.png");
-        //    SymbFname		= P_RES("");
         //    TopFname = P_RES(":/hp15c/top.png");
         BackFname = P_RES(":/hp15c/hp15cback.png");
         LeftFname = P_RES(":/hp15c/hp15cleft.png");
@@ -117,14 +112,6 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
 
     setDX(465);
     setDY(283);
-
-//    Lcd_X		= 90;
-//    Lcd_Y		= 35;
-//    Lcd_DX		= 210;
-//    Lcd_DY		= 33;
-//    Lcd_ratio_X	= 1;
-//    Lcd_ratio_Y	= 1;
-
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_hp15c(this,QRect(90,35,210,33),
