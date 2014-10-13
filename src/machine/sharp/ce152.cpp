@@ -247,7 +247,7 @@ bool Cce152::UpdateFinalImage(void) {
 
 
     Refresh_Display = true;
-
+    emit updatedPObject(this);
     return true;
 }
 

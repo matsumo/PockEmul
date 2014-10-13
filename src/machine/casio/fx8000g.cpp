@@ -134,16 +134,21 @@ bool Cfx8000g::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
-    // Draw switch by 180� rotation
+    // Draw switch by 180 rotation
     QPainter painter;
     painter.begin(FinalImage);
 
     // POWER SWITCH
-    painter.drawImage(366,504,BackgroundImageBackup->copy(366,504,111,48).mirrored(!off,false));
+    painter.drawImage(183*internalImageRatio,252*internalImageRatio,
+                      BackgroundImageBackup->copy(183*internalImageRatio,252*internalImageRatio,
+                                                          55*internalImageRatio,24*internalImageRatio).mirrored(!off,false));
     // HD SWITCH
-    painter.drawImage(124,504,BackgroundImageBackup->copy(124,504,109,48).mirrored(hdFlag,false));
+    painter.drawImage(62*internalImageRatio,252*internalImageRatio,
+                      BackgroundImageBackup->copy(62*internalImageRatio,252*internalImageRatio,
+                                                         55*internalImageRatio,24*internalImageRatio).mirrored(hdFlag,false));
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

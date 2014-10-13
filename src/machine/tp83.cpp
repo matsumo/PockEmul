@@ -166,6 +166,7 @@ bool Ctp83::UpdateFinalImage(void) {
 
     QPainter painter;
     painter.begin(FinalImage);
+    painter.scale(internalImageRatio,internalImageRatio);
 
     float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 

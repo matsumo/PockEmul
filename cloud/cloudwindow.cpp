@@ -1,3 +1,5 @@
+// FIXME: test with no config.ini. Seems to crash
+
 #include <QApplication>
 #if QT_VERSION >= 0x050000
 // Qt5 code

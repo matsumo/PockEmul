@@ -90,16 +90,20 @@ bool Cpc2500::UpdateFinalImage(void) {
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
-    painter.drawImage(580,239,BackgroundImageBackup->copy(580,239,59,15).mirrored(!printMode,false));
+
+    painter.drawImage(580*internalImageRatio,239*internalImageRatio,
+                      BackgroundImageBackup->copy(580*internalImageRatio,239*internalImageRatio,
+                                                  59*internalImageRatio,15*internalImageRatio).mirrored(!printMode,false));
 
 
     // CAPS LOCK
     if (capslock) {
 //        painter.setPen( Qt::green);
-        painter.fillRect(139,645,5,5,QColor(Qt::green));
+        painter.fillRect(139*internalImageRatio,645*internalImageRatio,5*internalImageRatio,5*internalImageRatio,QColor(Qt::green));
     }
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

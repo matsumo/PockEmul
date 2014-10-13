@@ -112,22 +112,23 @@ bool CpcXXXX::UpdateFinalImage(void)
     {
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
+        painter.scale(internalImageRatio,internalImageRatio);
 
         if (pLCDC && pLCDC->rect.isValid())
         {
             if (pLCDC->symbRect.isValid()) {
                 //painter.setRenderHint(QPainter::Antialiasing);
-                x = pLCDC->symbRect.x() * internalImageRatio;
-                y = pLCDC->symbRect.y() * internalImageRatio;
-                z = (int) (pLCDC->symbRect.width() * pLCDC->Lcd_Symb_ratio_X * internalImageRatio);
-                t = (int) (pLCDC->symbRect.height()* pLCDC->Lcd_Symb_ratio_Y * internalImageRatio);
+                x = pLCDC->symbRect.x() ;
+                y = pLCDC->symbRect.y() ;
+                z = (int) (pLCDC->symbRect.width() * pLCDC->Lcd_Symb_ratio_X );
+                t = (int) (pLCDC->symbRect.height()* pLCDC->Lcd_Symb_ratio_Y );
 
                 painter.drawImage(QRect(x,y,z,t),pLCDC->SymbImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
             }
-            x	= pLCDC->rect.x() * internalImageRatio;
-            y	= pLCDC->rect.y() * internalImageRatio;
-            z	= (int) (pLCDC->rect.width() * internalImageRatio);
-            t	= (int) (pLCDC->rect.height() * internalImageRatio);
+            x	= pLCDC->rect.x() ;
+            y	= pLCDC->rect.y() ;
+            z	= (int) (pLCDC->rect.width() );
+            t	= (int) (pLCDC->rect.height() );
             painter.drawImage(QRect(x,y,z,t),pLCDC->LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
 
         }

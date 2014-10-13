@@ -189,7 +189,7 @@ bool Ccl1000::UpdateFinalImage(void) {
 //    qWarning()<<"update";
 
     painter.end();
-
+    emit updatedPObject(this);
     return true;
 }
 

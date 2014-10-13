@@ -126,7 +126,7 @@ bool Cce125::UpdateFinalImage(void) {
     painter.end();
 
     Refresh_Display = true;
-
+    emit updatedPObject(this);
     return true;
 }
 

@@ -219,9 +219,12 @@ bool Cfp40::UpdateFinalImage(void) {
 
     QPainter painter;
     painter.begin(FinalImage);
+
+
     painter.drawImage(650,280,BackgroundImageBackup->copy(650,280,33,60).mirrored(false,charsize==1?false:true));
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

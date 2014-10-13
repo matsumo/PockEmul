@@ -59,10 +59,11 @@ bool Cce140f::UpdateFinalImage(void) {
     if (busyLed) {
         QPainter painter;
         painter.begin(FinalImage);
+
         painter.fillRect(411,390,20,7,QColor(Qt::green));
         painter.end();
     }
-
+    emit updatedPObject(this);
     return true;
 
 }

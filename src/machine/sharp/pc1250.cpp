@@ -84,10 +84,11 @@ bool Cpc1250::UpdateFinalImage(void)
     // Draw
     QPainter painter;
     painter.begin(FinalImage);
+    painter.scale(internalImageRatio,internalImageRatio);
 
-    QPoint ptPower(446*internalImageRatio,28*internalImageRatio);
+    QPoint ptPower(446,28);
 
-    QSize _size= iPowerRUN.size()*internalImageRatio;
+    QSize _size= iPowerRUN.size();
 
     switch (PowerSwitch)
     {
@@ -99,6 +100,7 @@ bool Cpc1250::UpdateFinalImage(void)
 
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

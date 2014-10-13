@@ -85,6 +85,7 @@ bool Cpb2000::UpdateFinalImage(void) {
     painter.drawImage(QPoint(55,251)*internalImageRatio,overlay->copy(0,6,432,6).scaled(QSize(432,6)*internalImageRatio));
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

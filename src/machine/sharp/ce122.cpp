@@ -127,12 +127,13 @@ bool Cce122::UpdateFinalImage(void) {
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
+
     painter.drawImage(257,257,BackgroundImageBackup->copy(257,257,22,30).mirrored(false,Power));
     painter.drawImage(203,257,BackgroundImageBackup->copy(203,257,22,30).mirrored(false,printSwitch));
     painter.end();
 
     Refresh_Display = true;
-
+    emit updatedPObject(this);
     return true;
 }
 

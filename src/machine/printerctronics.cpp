@@ -252,6 +252,7 @@ bool CprinterCtronics::UpdateFinalImage(void) {
     QPainter painter;
     painter.begin(FinalImage);
 
+
     float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 
 //    ratio *= charsize;
@@ -267,5 +268,6 @@ bool CprinterCtronics::UpdateFinalImage(void) {
 
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }

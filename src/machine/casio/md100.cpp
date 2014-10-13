@@ -67,8 +67,9 @@ bool Cmd100::UpdateFinalImage(void) {
     }
 
     painter.end();
-    return true;
 
+    emit updatedPObject(this);
+    return true;
 }
 
 

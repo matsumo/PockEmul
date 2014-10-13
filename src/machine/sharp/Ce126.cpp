@@ -103,6 +103,7 @@ bool Cce126::UpdateFinalImage(void) {
     QPainter painter;
     painter.begin(FinalImage);
 
+
     float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 
 //    ratio *= charsize;

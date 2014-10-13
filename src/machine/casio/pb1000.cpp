@@ -101,6 +101,7 @@ bool Cpb1000::UpdateFinalImage(void) {
 
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

@@ -171,6 +171,7 @@ bool Cfp100::UpdateFinalImage(void) {
     QPainter painter;
     painter.begin(FinalImage);
 
+
     painter.drawImage(QPoint(0,0),*BackgroundImage);
 
     float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );

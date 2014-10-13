@@ -169,12 +169,13 @@ bool Cce140p::UpdateFinalImage(void) {
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
+
     painter.drawImage(800,430,BackgroundImageBackup->copy(800,430,22,14).mirrored(!printerSwitch,false));
 
     painter.end();
 
     Refresh_Display = true;
-
+    emit updatedPObject(this);
     return true;
 }
 

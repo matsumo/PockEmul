@@ -463,6 +463,7 @@ bool Cce1560::UpdateFinalImage(void) {
         manageStackPos(&list);
     }
 
+    emit updatedPObject(this);
     return true;
 }
 

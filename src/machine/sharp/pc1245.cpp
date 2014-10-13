@@ -50,6 +50,7 @@ bool Cpc1245::UpdateFinalImage(void)
 
     painter.end();
 
+    emit updatedPObject(this);
     return true;
 }
 

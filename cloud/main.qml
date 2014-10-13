@@ -36,8 +36,10 @@ Rectangle {
 
     Component.onCompleted: {
         console.log("start");
-        user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
-        console.log("logged:"+auth_token);
+        if (username !="") {
+            user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
+            console.log("logged:"+auth_token);
+        }
     }
 
     onWidthChanged: {

@@ -196,12 +196,13 @@ bool Crlp2001::UpdateFinalImage(void) {
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
+
     painter.drawImage(200,30,*screen);
 
     painter.end();
 
 //    Refresh_Display = true;
-
+    emit updatedPObject(this);
     return true;
 }
 
