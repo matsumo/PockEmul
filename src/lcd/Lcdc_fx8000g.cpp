@@ -87,15 +87,9 @@ void Clcdc_fx8000g::disp(void)
                             UINT8 d1 = info.cursor[a].m_cursor[2*c];
                             UINT8 d2 = info.cursor[a].m_cursor[2*c+1];
                             UINT8 d = d1 | (d2<<4);
-//                            qWarning()<<"data="<<d;
                             for (int b=0; b<8; b++)
                             {
-                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.setBrush((BIT(d, 7-b)) ? Color_On : Color_Off);
-                                painter.drawRect((px*cw + c)*(pixelSize+pixelGap),
-                                                 (a*32 + py*8 + b)*(pixelSize+pixelGap),
-                                                 pixelSize-1,
-                                                 pixelSize-1);
+                                drawPixel(&painter,px*cw + c,a*32 + py*8 + b,(BIT(d, 7-b)) ? Color_On : Color_Off);
                             }
                         }
                     }
@@ -108,12 +102,7 @@ void Clcdc_fx8000g::disp(void)
                             UINT8 d = d1 | (d2<<4);
                             for (int b=0; b<8; b++)
                             {
-                                painter.setPen( (BIT(d, 7-b)) ? Color_On : Color_Off );
-                                painter.setBrush((BIT(d, 7-b)) ? Color_On : Color_Off);
-                                painter.drawRect((px*cw + c)*(pixelSize+pixelGap),
-                                                 (a*32 + py*8 + b)*(pixelSize+pixelGap),
-                                                 pixelSize-1,
-                                                 pixelSize-1);
+                                drawPixel(&painter,px*cw + c,a*32 + py*8 + b,(BIT(d, 7-b)) ? Color_On : Color_Off);
                             }
                         }
                     }

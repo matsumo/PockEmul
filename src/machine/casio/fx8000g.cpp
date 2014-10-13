@@ -54,15 +54,6 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     setDX(300);
     setDY(643);
 
-//    Lcd_X		= 55;
-//    Lcd_Y		= 45;
-//    Lcd_DX		= 96;
-//    Lcd_DY		= 64;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-//    LcdRatio = 5;
-
-
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_fx8000g(this,
                                     QRect(55,45,192,128),

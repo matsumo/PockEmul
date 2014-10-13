@@ -36,7 +36,7 @@ Rectangle {
 
     Component.onCompleted: {
         console.log("start");
-        if (username !="") {
+        if (cloud.getValueFor("username","") != "") {
             user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
             console.log("logged:"+auth_token);
         }

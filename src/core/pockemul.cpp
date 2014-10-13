@@ -374,7 +374,7 @@ QString P_RES(QString _name) {
     if (hiRes) {
         // if file exists, rename it
         QString hiResFname = info_locName.path()+"/"+info_locName.baseName()+"@2X."+info_locName.suffix();
-        qWarning()<<hiResFname;
+//        qWarning()<<hiResFname;
         if (QFile::exists(hiResFname)) {
             return hiResFname;
         }
