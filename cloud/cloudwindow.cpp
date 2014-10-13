@@ -355,7 +355,7 @@ void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
 
-void CloudWindow::keypressed(QString Id, QVariant v)
+void CloudWindow::keypressed(QString Id, const QVariant &v)
 {
     CPObject *pc = ((CPObject*)Id.toULongLong());
     qWarning()<<"key pressed:"<<v;

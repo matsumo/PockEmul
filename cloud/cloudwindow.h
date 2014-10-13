@@ -51,7 +51,7 @@ public slots:
     Q_INVOKABLE QString save();
     Q_INVOKABLE void showFileDialog();
     Q_INVOKABLE void warning(QString msg);
-    Q_INVOKABLE void keypressed(QString Id, QVariant v);
+    Q_INVOKABLE void keypressed(QString Id, const QVariant &v);
     Q_INVOKABLE void click(QString Id, int x, int y);
     Q_INVOKABLE void unclick(QString Id, int x, int y);
     Q_INVOKABLE void setzoom(int x,int y,int z);
