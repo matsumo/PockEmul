@@ -70,7 +70,8 @@ CloudWindow::CloudWindow(QWidget *parent)
     object = (QObject*) view->rootObject();
 
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
-    QObject::connect(object, SIGNAL(sendKeyPressed(QString,QVariant)), this, SLOT(keypressed(QString,QVariant)));
+    QObject::connect(object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
+    QObject::connect(object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
     QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
     QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
@@ -355,12 +356,24 @@ void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
 
-void CloudWindow::keypressed(QString Id, const QVariant &v)
+void CloudWindow::keypressed(QString Id, int k,int m,int scan)
 {
     CPObject *pc = ((CPObject*)Id.toULongLong());
-    qWarning()<<"key pressed:"<<v;
+    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
+    // Send thee MouseButtonPress event
+    QKeyEvent *e=new QKeyEvent( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
+    QApplication::sendEvent(pc, e);
+    delete e;
 }
-
+void CloudWindow::keyreleased(QString Id, int k,int m,int scan)
+{
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
+    // Send thee MouseButtonPress event
+    QKeyEvent *e=new QKeyEvent( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
+    QApplication::sendEvent(pc, e);
+    delete e;
+}
 void CloudWindow::movepocket(QString Id, int x, int y)
 {
 //    qWarning()<<"movepocket:"<<Id<<x<<y;

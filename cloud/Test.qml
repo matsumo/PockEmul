@@ -145,7 +145,11 @@ Window {
             height: _height
             rotation: Math.random() * 13 - 6
             Keys.onPressed: {
-                root.sendKeyPressed(idpocket,event);
+                root.sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                event.accepted = true;
+                }
+            Keys.onReleased: {
+                root.sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;
                 }
             Image {
