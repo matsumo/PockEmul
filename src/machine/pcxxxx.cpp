@@ -159,6 +159,7 @@ bool CpcXXXX::InitDisplay(void)
     }
 
     UpdateDisplayRunning = true;
+    emit updatedPObject(this);
     return(1);
 }
 
