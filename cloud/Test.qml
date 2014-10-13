@@ -144,6 +144,10 @@ Window {
             width: _width
             height: _height
             rotation: Math.random() * 13 - 6
+            Keys.onPressed: {
+                root.sendKeyPressed(idpocket,event);
+                event.accepted = true;
+                }
             Image {
                 id: image
                 anchors.fill: parent
@@ -177,6 +181,7 @@ Window {
                     }
                     onPressed: {
                         //photoFrame.z = ++testarea.highestZ;
+                        photoFrame.focus = true;
                         if (mouse.button == Qt.LeftButton) {
                             root.sendClick(idpocket,mouse.x,mouse.y);
                         }

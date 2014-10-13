@@ -10,6 +10,7 @@ Rectangle {
 
     id: root
     signal sendWarning(string test)
+    signal sendKeyPressed(string id,event e)
     signal sendClick(string id,int x,int y)
     signal sendUnClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)

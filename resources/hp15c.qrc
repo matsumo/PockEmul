@@ -2,7 +2,6 @@
     <qresource prefix="/">
         <file>hp15c/hp15c.png</file>
         <file>hp15c/hp15c.bin</file>
-        <file>hp15c/hp15c.obj</file>
         <file>hp15c/a.png</file>
         <file>hp15c/b.png</file>
         <file>hp15c/c.png</file>

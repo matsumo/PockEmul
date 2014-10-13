@@ -35,6 +35,7 @@
 #include <QQmlContext>
 #include <QQuickView>
 #include <QtQuickWidgets/QQuickWidget>
+#include <QKeyEvent>
 
 
 #include "applicationconfig.h"
@@ -69,6 +70,7 @@ CloudWindow::CloudWindow(QWidget *parent)
     object = (QObject*) view->rootObject();
 
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
+    QObject::connect(object, SIGNAL(sendKeyPressed(QString,QVariant)), this, SLOT(keypressed(QString,QVariant)));
     QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
     QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
@@ -352,6 +354,13 @@ QString CloudWindow::loadCache(QString fileName)
 void CloudWindow::warning(QString msg) {
     ask(this, msg, 1);
 }
+
+void CloudWindow::keypressed(QString Id, QVariant v)
+{
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    qWarning()<<"key pressed:"<<v;
+}
+
 void CloudWindow::movepocket(QString Id, int x, int y)
 {
 //    qWarning()<<"movepocket:"<<Id<<x<<y;

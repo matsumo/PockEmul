@@ -187,6 +187,25 @@ void	Cz1::initExtension(void)
     extensionArray[1] = ext_MemSlot2;
 }
 
+bool Cz1::UpdateFinalImage(void) {
+
+    CpcXXXX::UpdateFinalImage();
+
+    // Draw switch by 180° rotation
+    QPainter painter;
+    painter.begin(FinalImage);
+
+    // POWER SWITCH
+    painter.drawImage(0,41*internalImageRatio,
+                      BackgroundImageBackup->copy(0,41*internalImageRatio,
+                                                  11*internalImageRatio,70*internalImageRatio).mirrored(false,off));
+
+    painter.end();
+
+    emit updatedPObject(this);
+    return true;
+}
+
 bool Cz1::run() {
 
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();
