@@ -26,39 +26,28 @@ void Clcdc_z1::disp(void)
 
     Cz1 *z1 = (Cz1*)pPC;
 
-    BYTE b;
-
     Refresh = false;
-
 
     if (!ready) return;
     if (!z1->pHD66108) return;
     if (!z1->pHD66108->updated) return;
     z1->pHD66108->updated = false;
 
-//    qWarning()<<"-----------REFRESH DISP";
     if(z1->pCPU->fp_log) fprintf(z1->pCPU->fp_log,"REFRESH DISP\n");
     Refresh = true;
 
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
-    int x, y;
     UINT8 *p = z1->pHD66108->vram;
 
-    for(y = 0; y < LCD_HEIGHT; y++)
-        for(x = 0; x < LCD_WIDTH; x += 8) {
-            pset(x + 0, y, *p & 0x80);
-            pset(x + 1, y, *p & 0x40);
-            pset(x + 2, y, *p & 0x20);
-            pset(x + 3, y, *p & 0x10);
-            pset(x + 4, y, *p & 0x08);
-            pset(x + 5, y, *p & 0x04);
-            pset(x + 6, y, *p & 0x02);
-            pset(x + 7, y, *p & 0x01);
+    for(int y = 0; y < 32; y++)
+        for(int x = 0; x < 192; x += 8) {
+            for (int b=0;b<8;b++) {
+                drawPixel(&painter,x+b,y,(*p & (0x01<<(7-b))) ? Color_On : Color_Off );
+            }
             p++;
         }
-
     redraw = 0;
     painter.end();
 }
