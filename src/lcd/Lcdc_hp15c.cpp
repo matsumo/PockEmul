@@ -243,13 +243,14 @@ void Clcdc_hp15c::disp(void)
             case 3: painter.drawImage(480,190,*ann_f); break;
             case 4: painter.drawImage(580,190,*ann_g); break;
             case 5: painter.drawImage(680,190,*ann_begin); break;
-            case 6: painter.drawImage(980,190,*ann_ggrad); break;
+            case 6: painter.drawImage(960,190,*ann_ggrad); break;
             case 7: painter.drawImage(1020,190,*ann_rad); break;
-            case 8: painter.drawImage(1175,190,*ann_dmy); break;
+            case 8: painter.drawImage(1185,190,*ann_dmy); break;
             case 9: painter.drawImage(1410,190,*ann_c); break;
-            case 10:painter.drawImage(1550,190,*ann_prgm); break;
+            case 10:painter.drawImage(1540,190,*ann_prgm); break;
             }
         }
+
     }
 
 //    disp_symb();
