@@ -10,16 +10,6 @@ Rectangle {
 
     id: root
     signal sendWarning(string test)
-//    signal sendKeyPressed(string id,int key, int mod,int scancode)
-//    signal sendKeyReleased(string id,int key, int mod,int scancode)
-//    signal sendClick(string id,int x,int y)
-//    signal sendUnClick(string id,int x,int y)
-//    signal sendMovePocket(string id,int x,int y)
-//    signal sendMoveAllPocket(int x,int y)
-//    signal setZoom(int x,int y,int z)
-
-//    property var pocketMap: new Map()
-
 
     property string serverURL: cloud.getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")
     property string currentUserid: "pock emul"
@@ -343,78 +333,7 @@ Rectangle {
 //        console.log("count after:"+refpmlModel.count());
 
     }
-/*
-function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
-    testarea.xmlThumbModel.append(   {name:_name,
-                             imageFileName:_url,
-                             _left:_left,
-                             _top:_top,
-                             _width:_width,
-                             _height:_height,
-                             idpocket:_pocketId,
-                                  dummy:0,
-                                  _zorder:0});
 
-}
-
-function refreshPocket(_pocketId) {
-    var index = getIndex(_pocketId);
-    if (index == -1) return;
-    testarea.xmlThumbModel.get(index).dummy = Math.random();
-}
-
-function delPocket(_pocketId) {
-    var index = getIndex(_pocketId);
-    testarea.xmlThumbModel.remove(index);
-}
-
-function movePocket(_pocketId,_left,_top) {
-
-    var index = getIndex(_pocketId);
-
-//    console.log("found index:"+index);
-    if (index !== -1) {
-
-        testarea.xmlThumbModel.get(index)._left = _left;
-        testarea.xmlThumbModel.get(index)._top = _top;
-//        console.log("object moved to ("+_left+","+_top+")");
-    }
-}
-
-function sizePocket(_pocketId,_width,_height) {
-
-    var index = getIndex(_pocketId);
-
-//    console.log("found index:"+index);
-    if (index !== -1) {
-
-        testarea.xmlThumbModel.get(index)._width = _width;
-        testarea.xmlThumbModel.get(index)._height = _height;
-//        console.log("object sized to ("+_width+","+_height+")");
-    }
-}
-
-function orderPocket(_pocketId,_zorder) {
-
-    var index = getIndex(_pocketId);
-
-//    console.log("found index:"+index);
-    if (index !== -1) {
-
-        testarea.xmlThumbModel.get(index)._zorder = _zorder;
-    }
-}
-
-function getIndex(id) {
-    for (var i=0; i<testarea.xmlThumbModel.count;i++) {
-        var item = testarea.xmlThumbModel.get(i);
-        if (item.idpocket === id) {
-            return i;
-        }
-    }
-    return -1;
-}
-*/
     function encodeXml(s) {
         return s.replace(/([\&"<>])/g, function(str, item) {
             var xml_special_to_escaped_one_map = {

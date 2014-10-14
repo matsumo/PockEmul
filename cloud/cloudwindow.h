@@ -51,19 +51,6 @@ public slots:
     Q_INVOKABLE QString save();
     Q_INVOKABLE void showFileDialog();
     Q_INVOKABLE void warning(QString msg);
-    Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);
-    Q_INVOKABLE void keyreleased(QString Id, int k, int m, int scan);
-    Q_INVOKABLE void click(QString Id, int x, int y);
-    Q_INVOKABLE void unclick(QString Id, int x, int y);
-    Q_INVOKABLE void setzoom(int x,int y,int z);
-    Q_INVOKABLE void movepocket(QString Id, int x, int y);
-    Q_INVOKABLE void moveallpocket(int x, int y);
-    void pocketUpdated(CPObject* pObject);
-    void newPObject(CPObject *pObject);
-    void delPObject(CPObject *pObject);
-    void movePObject(CViewObject*pObject, QPoint pos);
-    void sizePObject(CViewObject*pObject, QSize size);
-    void stackPosChanged();
 
 
 private slots:

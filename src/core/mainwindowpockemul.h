@@ -66,10 +66,6 @@ public:
 #endif
     ServeurTcp      *server;
     CloudWindow     *cloud;
-    CrenderView     *view;
-
-
-    //	CpaperWidget	*paperWidget;
 
     QTimer *FrameTimer;
 

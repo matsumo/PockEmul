@@ -117,8 +117,8 @@ Rectangle {
             hoverEnabled: false
             anchors.fill: parent
             onWheel: {
-                console.log("angle:"+wheel.angleDelta);
-                    setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
+//                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
+                    setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12);
             }
             onPressed: {
                 prevX = mouseX;
@@ -205,8 +205,8 @@ Rectangle {
                         }
                     }
                     onReleased: sendUnClick(idpocket,mouse.x,mouse.y)
-                    onEntered: photoFrame.border.color = "red";
-                    onExited: photoFrame.border.color = "black";
+//                    onEntered: photoFrame.border.color = "red";
+//                    onExited: photoFrame.border.color = "black";
                     onWheel: {
                         wheel.accepted = false;
                         if (wheel.modifiers & Qt.ControlModifier) {

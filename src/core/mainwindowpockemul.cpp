@@ -17,6 +17,7 @@
 #include <iostream>
 #include <QtNetwork>
 #include <QInputMethod>
+#include <QQuickItem>
 
 
 /** \mainpage
@@ -66,6 +67,7 @@ PockEmul is a Sharp Pocket Computer Emulator.
 #include "allobjects.h"
 
 extern MainWindowPockemul* mainwindow;
+extern QQuickWidget* view;
 extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
@@ -897,7 +899,11 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     QBuffer buffer(&ba);
     buffer.open(QIODevice::WriteOnly);
 #if QT_VERSION >= 0x050000
-    grab().toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+    qWarning()<<"ok1";
+    qWarning()<<view;
+//    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+    view->grab().toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+    qWarning()<<"ok2";
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
 #endif
@@ -958,7 +964,7 @@ QString MainWindowPockemul::saveassessionString() {
     QString s;
     QXmlStreamWriter *xml = new QXmlStreamWriter(&s);
     saveassession(xml);
-    qWarning()<<"save:"<<s;
+//    qWarning()<<"save:"<<s;
     return s;
 }
 
@@ -1045,9 +1051,9 @@ void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
 
 
         // calculate the new origine
-
-        float newposx = locpc->posx() + (locpc->posx()-point.x())*(delta)/100.0;
-        float newposy = locpc->posy() + (locpc->posy()-point.y())*(delta)/100.0;
+        QPoint pt = /*locpc->mapToGlobal*/(point);
+        float newposx = locpc->posx() + (locpc->posx()-pt.x())*(delta)/100.0;
+        float newposy = locpc->posy() + (locpc->posy()-pt.y())*(delta)/100.0;
 
         locpc->changeGeometry(newposx,
                               newposy,

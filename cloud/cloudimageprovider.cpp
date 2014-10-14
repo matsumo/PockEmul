@@ -101,11 +101,16 @@ QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QS
     if (cache.contains(key))
         return cache[key];
 
+qWarning()<<"YES!!1:"<<req.url()<<_ba;
     cache[key] = QImage();
-    QNetworkReply *_reply = mgr->post(req, _ba);
+
+    QNetworkAccessManager *_mgr = new QNetworkAccessManager;
+    connect(_mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(loadfinished(QNetworkReply*)));
+
+    QNetworkReply *_reply = _mgr->post(req, _ba);
     Q_UNUSED(_reply)
 //    qWarning()<<_reply;
-
+qWarning()<<"YES!!2";
     return QImage();
 }
 
@@ -138,7 +143,7 @@ void CloudImageProvider::clearCache(QString s) {
 
 void CloudImageProvider::loadfinished(QNetworkReply *reply)
 {
-//    qWarning()<<"Downloas finished*******";
+    qWarning()<<"Downloas finished*******";
 
     QByteArray xmlData = reply->readAll();
 //    qWarning() << "data="<<xmlData.left(200);
@@ -164,6 +169,7 @@ void CloudImageProvider::loadfinished(QNetworkReply *reply)
         }
     }
 
+    reply->manager()->deleteLater();
     reply->deleteLater();
 
     emit cacheUpdated();
