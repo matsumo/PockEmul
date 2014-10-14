@@ -114,6 +114,7 @@ Rectangle {
             setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
         }
         MouseArea {
+            property bool isdrag: false;
             hoverEnabled: false
             anchors.fill: parent
             onWheel: {
@@ -123,12 +124,16 @@ Rectangle {
             onPressed: {
                 prevX = mouseX;
                 prevY = mouseY;
+                isdrag=true;
             }
-
+            onReleased: isdrag=false;
             onPositionChanged: {
-                sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
-                prevX = mouseX;
-                prevY = mouseY;
+                if (isdrag) {
+                    console.log("non");
+                    sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+                    prevX = mouseX;
+                    prevY = mouseY;
+                }
             }
         }
     }
@@ -183,28 +188,40 @@ Rectangle {
                     setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
                 }
                 MouseArea {
+                    property bool isdrag: false;
                     id: dragArea
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     hoverEnabled: true
                     anchors.fill: parent
                     drag.target: photoFrame
-                    propagateComposedEvents: true
+                    propagateComposedEvents: false
                     onPositionChanged: {
-                        if (drag.active) {
+                        if (isdrag) {
+
                             sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
                         }
                     }
-                    onPressAndHold: sendContextMenu(idpocket,mouse.x,mouse.y);
+                    onPressAndHold: {
+                        if (mouse.button == Qt.LeftButton) {
+                            sendContextMenu(idpocket,mouse.x,mouse.y);
+                        }
+                    }
                     onPressed: {
                         photoFrame.focus = true;
                         if (mouse.button == Qt.RightButton) {
+                            console.log("oui");
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                         }
                         if (mouse.button == Qt.LeftButton) {
+                            isdrag=true;
                             sendClick(idpocket,mouse.x,mouse.y);
                         }
+                        mouse.accepted=true;
                     }
-                    onReleased: sendUnClick(idpocket,mouse.x,mouse.y)
+                    onReleased: {
+                        isdrag=false;
+                        sendUnClick(idpocket,mouse.x,mouse.y);
+                    }
 //                    onEntered: photoFrame.border.color = "red";
 //                    onExited: photoFrame.border.color = "black";
                     onWheel: {
@@ -214,10 +231,8 @@ Rectangle {
                             photoFrame.rotation += wheel.angleDelta.y / 120 * 5;
                             if (Math.abs(photoFrame.rotation) < 4)
                                 photoFrame.rotation = 0;
-
                         }
                     }
-
                 }
             }
         }
