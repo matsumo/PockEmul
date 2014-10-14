@@ -185,6 +185,7 @@ void CpcXXXX::TurnOFF(void)
     PowerSwitch = PS_OFF;
     if (pLCDC) pLCDC->TurnOFF();
     InitDisplay();
+    UpdateFinalImage();
     update();
 }
 

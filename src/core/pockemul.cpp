@@ -14,6 +14,7 @@
 #include "pobject.h"
 #include "init.h"
 #include "cloud/cloudwindow.h"
+#include "renderView.h"
 
 #ifdef P_AVOID
 #include "libavoid.h"
@@ -34,6 +35,7 @@
 
 MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
+CrenderView* view;
 
 bool soundEnabled=true;
 bool hiRes=true;
@@ -119,13 +121,15 @@ mainwindow = new MainWindowPockemul();
     // search for ShowMyModalDialog method
 
 #endif
+//    QWidget *cw= new QWidget();
+    view = new CrenderView();
+//    QWidget *_cont = QWidget::createWindowContainer(view,cw);
 
-    QWidget *cw= new QWidget();
-    mainwindow->setCentralWidget(cw);
+    mainwindow->setCentralWidget(view);
 
     delete mainwindow->centralwidget;
 
-    mainwindow->centralwidget = cw;
+    mainwindow->centralwidget = view;
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
 
@@ -157,6 +161,7 @@ mainwindow = new MainWindowPockemul();
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
                                                 ":/core/pocket.png");
     launch1->setGeometry(0,v_pos,iconSize,iconSize);
+    launch1->raise();
     v_pos += v_inter;
     launch1->setToolTip("Start a new Pocket Emulation.");
 

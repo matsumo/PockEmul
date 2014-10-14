@@ -590,7 +590,8 @@ HEADERS += src/core/Connect.h \
     src/lcd/Lcdc_pc1403.h \
     src/lcd/Lcdc_pc1450.h \
     src/lcd/Lcdc_pc1401.h \
-    src/lcd/Lcdc_symb2x.h
+    src/lcd/Lcdc_symb2x.h \
+    src/core/renderView.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -878,7 +879,8 @@ SOURCES +=  \
     src/lcd/Lcdc_pc1475.cpp \
     src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
-    src/lcd/Lcdc_pc1401.cpp
+    src/lcd/Lcdc_pc1401.cpp \
+    src/core/renderView.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

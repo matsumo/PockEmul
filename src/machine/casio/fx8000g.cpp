@@ -150,7 +150,9 @@ bool Cfx8000g::run() {
     if (pKEYB->LastKey == K_DEF) {
         hdFlag = !hdFlag;
         pKEYB->LastKey = 0;
+        UpdateFinalImage();
         update();
+        emit updatedPObject(this);
     }
 
 #if 1

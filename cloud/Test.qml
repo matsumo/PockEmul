@@ -44,14 +44,24 @@ import QtQuick.Controls 1.2
 
 
 
-Window {
-    id: testarea
+Rectangle {
+    id: renderArea
+
+    signal sendWarning(string test)
+    signal sendKeyPressed(string id,int key, int mod,int scancode)
+    signal sendKeyReleased(string id,int key, int mod,int scancode)
+    signal sendContextMenu(string id,int x,int y)
+    signal sendClick(string id,int x,int y)
+    signal sendUnClick(string id,int x,int y)
+    signal sendMovePocket(string id,int x,int y)
+    signal sendMoveAllPocket(int x,int y)
+    signal setZoom(int x,int y,int z)
 
      property alias xmlThumbModel: xmlThumbModel
 
     visible: true
     width: 1024; height: 600
-    color: "black"
+//    color: "black"
 
     property int highestZ: 0
     property real defaultSize: 200
@@ -101,14 +111,14 @@ Window {
         pinch.minimumScale: 0.1
         pinch.maximumScale: 10
         onPinchUpdated: {
-            root.setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+            setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
         }
         MouseArea {
             hoverEnabled: false
             anchors.fill: parent
             onWheel: {
                 console.log("angle:"+wheel.angleDelta);
-                    root.setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
+                    setZoom(mouseX,mouseY,wheel.angleDelta.y/12);
             }
             onPressed: {
                 prevX = mouseX;
@@ -116,7 +126,7 @@ Window {
             }
 
             onPositionChanged: {
-                root.sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+                sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
                 prevX = mouseX;
                 prevY = mouseY;
             }
@@ -145,11 +155,11 @@ Window {
             height: _height
             rotation: Math.random() * 13 - 6
             Keys.onPressed: {
-                root.sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;
                 }
             Keys.onReleased: {
-                root.sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;
                 }
             Image {
@@ -170,30 +180,31 @@ Window {
                 pinch.minimumScale: 0.1
                 pinch.maximumScale: 10
                 onPinchUpdated: {
-                    root.setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
                 }
                 MouseArea {
                     id: dragArea
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
                     hoverEnabled: true
                     anchors.fill: parent
                     drag.target: photoFrame
                     propagateComposedEvents: true
                     onPositionChanged: {
                         if (drag.active) {
-                            root.sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
+                            sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
                         }
                     }
+                    onPressAndHold: sendContextMenu(idpocket,mouse.x,mouse.y);
                     onPressed: {
-                        //photoFrame.z = ++testarea.highestZ;
                         photoFrame.focus = true;
-                        if (mouse.button == Qt.LeftButton) {
-                            root.sendClick(idpocket,mouse.x,mouse.y);
-                        }
                         if (mouse.button == Qt.RightButton) {
-                            menu.popup();
+                            sendContextMenu(idpocket,mouse.x,mouse.y);
+                        }
+                        if (mouse.button == Qt.LeftButton) {
+                            sendClick(idpocket,mouse.x,mouse.y);
                         }
                     }
-                    onReleased: root.sendUnClick(idpocket,mouse.x,mouse.y)
+                    onReleased: sendUnClick(idpocket,mouse.x,mouse.y)
                     onEntered: photoFrame.border.color = "red";
                     onExited: photoFrame.border.color = "black";
                     onWheel: {
@@ -206,14 +217,81 @@ Window {
 
                         }
                     }
-                    onPressAndHold: {
-                        menu.popup();
-                    }
 
                 }
             }
         }
     }
 
+    function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
+        renderArea.xmlThumbModel.append(   {name:_name,
+                                 imageFileName:_url,
+                                 _left:_left,
+                                 _top:_top,
+                                 _width:_width,
+                                 _height:_height,
+                                 idpocket:_pocketId,
+                                      dummy:0,
+                                      _zorder:0});
+
+    }
+
+    function refreshPocket(_pocketId) {
+        var index = getIndex(_pocketId);
+        if (index == -1) return;
+        renderArea.xmlThumbModel.get(index).dummy = Math.random();
+    }
+
+    function delPocket(_pocketId) {
+        var index = getIndex(_pocketId);
+        renderArea.xmlThumbModel.remove(index);
+    }
+
+    function movePocket(_pocketId,_left,_top) {
+
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._left = _left;
+            renderArea.xmlThumbModel.get(index)._top = _top;
+    //        console.log("object moved to ("+_left+","+_top+")");
+        }
+    }
+
+    function sizePocket(_pocketId,_width,_height) {
+
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._width = _width;
+            renderArea.xmlThumbModel.get(index)._height = _height;
+    //        console.log("object sized to ("+_width+","+_height+")");
+        }
+    }
+
+    function orderPocket(_pocketId,_zorder) {
+
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._zorder = _zorder;
+        }
+    }
+
+    function getIndex(id) {
+        for (var i=0; i<renderArea.xmlThumbModel.count;i++) {
+            var item = renderArea.xmlThumbModel.get(i);
+            if (item.idpocket === id) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }

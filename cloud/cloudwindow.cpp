@@ -62,7 +62,7 @@ CloudWindow::CloudWindow(QWidget *parent)
 
     view = new QQuickView;//QQuickWidget;//QDeclarativeView(this);
     view->engine()->addImageProvider(QLatin1String("PockEmulCloud"),imgprov );
-    view->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
+//    view->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     view->rootContext()->setContextProperty("cloud", this);
     view->setSource(QUrl("qrc:/main.qml"));
     view->setResizeMode(QQuickView::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
@@ -70,13 +70,13 @@ CloudWindow::CloudWindow(QWidget *parent)
     object = (QObject*) view->rootObject();
 
     QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
-    QObject::connect(object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
-    QObject::connect(object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
-    QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
-    QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
+//    QObject::connect(object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
+//    QObject::connect(object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
+//    QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
+//    QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+//    QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
+//    QObject::connect(object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
+//    QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
 
     m_fileDialog = new QFileDialog(this);
     m_fileDialog->setFileMode(QFileDialog::ExistingFile);
@@ -95,8 +95,8 @@ CloudWindow::CloudWindow(QWidget *parent)
     windowLayout->setMargin(0);
 
 
-    connect(parent,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
-    connect(parent,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
+//    connect(parent,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
+//    connect(parent,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 }
 
 void CloudWindow::resizeEvent(QResizeEvent *e) {
@@ -431,10 +431,10 @@ void CloudWindow::pocketUpdated(CPObject * pObject)
 }
 
 void CloudWindow::newPObject(CPObject *pObject) {
-    qWarning()<<"Add Pocket"<<pObject->getName()<<
-                pObject->pos().x()<<
-                pObject->pos().y()<<
-                pObject->size();
+//    qWarning()<<"Add Pocket"<<pObject->getName()<<
+//                pObject->pos().x()<<
+//                pObject->pos().y()<<
+//                pObject->size();
 
     connect (pObject,SIGNAL(movePObject(CViewObject*,QPoint)),this,SLOT(movePObject(CViewObject*,QPoint)));
     connect (pObject,SIGNAL(sizePObject(CViewObject*,QSize)),this,SLOT(sizePObject(CViewObject*,QSize)));
@@ -453,7 +453,7 @@ void CloudWindow::newPObject(CPObject *pObject) {
 
 void CloudWindow::delPObject(CPObject *pObject)
 {
-    qWarning()<<"delPObject"<<pObject;
+//    qWarning()<<"delPObject"<<pObject;
     QMetaObject::invokeMethod(object, "delPocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );
@@ -461,7 +461,7 @@ void CloudWindow::delPObject(CPObject *pObject)
 
 void CloudWindow::movePObject(CViewObject *pObject, QPoint pos)
 {
-    qWarning()<<"movePocket:"<<pos;
+//    qWarning()<<"movePocket:"<<pos;
     QMetaObject::invokeMethod(object, "movePocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject)),
                               Q_ARG(QVariant, pos.x()),
@@ -470,7 +470,7 @@ void CloudWindow::movePObject(CViewObject *pObject, QPoint pos)
 }
 void CloudWindow::sizePObject(CViewObject *pObject, QSize size)
 {
-    qWarning()<<"sizePObject:"<<size;
+//    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(object, "sizePocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject)),
                               Q_ARG(QVariant, size.width()),

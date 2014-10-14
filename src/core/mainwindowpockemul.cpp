@@ -61,6 +61,7 @@ PockEmul is a Sharp Pocket Computer Emulator.
 #include "downloadmanager.h"
 #include "servertcp.h"
 #include "cloud/cloudwindow.h"
+#include "renderView.h"
 
 #include "allobjects.h"
 
@@ -152,7 +153,7 @@ server = new ServeurTcp(this);
     QSensorGestureManager gestureManager;
 
 // Get a list of known recognizers
-    QStringList recognizersList = gestureManager.gestureIds();
+//    QStringList recognizersList = gestureManager.gestureIds();
 
 // Create a QSensorGeture object for each of those gesture recognizers
         QSensorGesture *gesture = new QSensorGesture( gestureManager.gestureIds(), this);
@@ -161,6 +162,9 @@ server = new ServeurTcp(this);
 
         cloud = new CloudWindow(this);
         cloud->hide();
+
+//    view = new CrenderView(this);
+//    QWidget *container = QWidget::createWindowContainer(view,this);
 
 #endif
 
@@ -459,7 +463,7 @@ CPObject *pPC=0;
 
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
-    pPC->show();
+//    pPC->show();
 
 
 

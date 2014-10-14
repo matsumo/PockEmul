@@ -48,63 +48,62 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 extern bool soundEnabled;
 
 CPObject::CPObject(CPObject *parent):CViewObject(parent)
-    {
-		pPC = (CpcXXXX*) parent;
-		Parent	= parent;
-		toDestroy = false;
+{
+    pPC = (CpcXXXX*) parent;
+    Parent	= parent;
+    toDestroy = false;
 
 
-		pKEYB	= 0;
-		pTIMER	= 0;
-		pLCDC	= 0;
-        bus     = 0;
-        BackgroundImage = 0;
+    pKEYB	= 0;
+    pTIMER	= 0;
+    pLCDC	= 0;
+    bus     = 0;
+    BackgroundImage = 0;
 
 
-        flipping = false;
-        currentView = FRONTview;
-		extensionArray[0] = 0;
-		extensionArray[1] = 0;
-		extensionArray[2] = 0;
-		extensionArray[3] = 0;
-		extensionArray[4] = 0;
-		frequency	= 0;
-        PowerSwitch	= 0;
-		setFocusPolicy(Qt::StrongFocus);	
-		Refresh_Display = false;
+    flipping = false;
+    currentView = FRONTview;
+    extensionArray[0] = 0;
+    extensionArray[1] = 0;
+    extensionArray[2] = 0;
+    extensionArray[3] = 0;
+    extensionArray[4] = 0;
+    frequency	= 0;
+    PowerSwitch	= 0;
+    setFocusPolicy(Qt::StrongFocus);
+    Refresh_Display = false;
 
-        memsize			= 0;
-        InitMemValue	= 0x00;
-		
-		SnapPts = QPoint(0,0);
-		
-		Front = true;
-        fullscreenMode = false;
-        fillSoundBuffer_old_state = 0;
+    memsize			= 0;
+    InitMemValue	= 0x00;
 
-        forceStackOver = forceStackUnder = false;
+    SnapPts = QPoint(0,0);
 
-		dialogkeylist	= 0;
-		dialogdump		= 0;
-        dialogdasm = 0;
-        dialogVKeyboard = 0;
-		Power = false;
-        audioBuff.clear();
+    Front = true;
+    fullscreenMode = false;
+    fillSoundBuffer_old_state = 0;
 
-        ioFreq = 0;
-        off =true;
-        closed = false;
-        resetAt = 0;
-        hardresetAt = 0;
-        hardreset = false;
-		
-        grabGesture(Qt::TapAndHoldGesture);
+    forceStackOver = forceStackUnder = false;
 
-        // ERROR MESSAGE
-        connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
+    dialogkeylist	= 0;
+    dialogdump		= 0;
+    dialogdasm = 0;
+    dialogVKeyboard = 0;
+    Power = false;
+    audioBuff.clear();
 
-        connect(this,SIGNAL(updatedPObject(CPObject*)),mainwindow->cloud,SLOT(pocketUpdated(CPObject*)));
-    }
+    ioFreq = 0;
+    off =true;
+    closed = false;
+    resetAt = 0;
+    hardresetAt = 0;
+    hardreset = false;
+
+    grabGesture(Qt::TapAndHoldGesture);
+
+    // ERROR MESSAGE
+    connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
+
+}
 
 
 CPObject::~CPObject()

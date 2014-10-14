@@ -30,6 +30,8 @@ class QCommandLine;
 class DownloadManager;
 class ServeurTcp;
 class CloudWindow;
+class CrenderView;
+
 #if QT_VERSION >= 0x050000
 class QSensor;
 #endif
@@ -64,6 +66,7 @@ public:
 #endif
     ServeurTcp      *server;
     CloudWindow     *cloud;
+    CrenderView     *view;
 
 
     //	CpaperWidget	*paperWidget;
