@@ -50,7 +50,7 @@ void Clcdc_lbc1100::disp(void)
 
     for (int i = 0 ; i<4; i++)
     {
-        if (!lbc1100->upd16434[i]->updated) break;
+        if (!lbc1100->upd16434[i]->updated) continue;
         Refresh = true;
     //AddLog(LOG_DISPLAY,"DISP");
         lbc1100->upd16434[i]->updated = false;
@@ -59,8 +59,6 @@ void Clcdc_lbc1100::disp(void)
             BYTE data = lbc1100->upd16434[i]->info.imem[0x31 - j];
             for (b=0;b<8;b++)
             {
-//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                painter.drawPoint(j + j/5 + i*60,b + (b==7));
                 drawPixel(&painter,j + j/5 + i*60,b + (b==7),((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
@@ -69,15 +67,10 @@ void Clcdc_lbc1100::disp(void)
             BYTE data = lbc1100->upd16434[i]->info.imem[0x71-j];
             for (b=0;b<8;b++)
             {
-//                painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                painter.drawPoint(j + j/5 + i*60,b + (b==7)+12);
                 drawPixel(&painter,j + j/5 + i*60,b + (b==7)+12,((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
     }
-//    if (g850->pSED1560->info.on_off)
-
-
 
     redraw = 0;
     painter.end();

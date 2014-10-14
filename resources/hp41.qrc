@@ -13,7 +13,6 @@
         <file>hp41/MOD/CCD.MOD</file>
         <file>hp41/MOD/PPC.MOD</file>
         <file>hp41/hp41.png</file>
-        <file>hp41/hp41lcd.png</file>
         <file>hp41/LCD4.ttf</file>
         <file>hp41/41chrset.ttf</file>
         <file>hp41/top.png</file>
@@ -29,7 +28,6 @@
         <file>hp41/modimg/hp82160a.png</file>
         <file>hp41/modimg/module.png</file>
         <file>hp41/modimg/hepax.png</file>
-        <file>hp41/hp41symb.png</file>
         <file>hp41/MOD/HPIL.MOD</file>
     </qresource>
 </RCC>

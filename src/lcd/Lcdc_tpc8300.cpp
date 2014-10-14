@@ -61,8 +61,6 @@ void Clcdc_tpc8300::disp(void)
                 BYTE data = tpc8300->upd16434[i]->info.imem[0x27 - j];
                 for (b=0;b<8;b++)
                 {
-//                    painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                    painter.drawPoint(j + j/5 + i*48,b + (b==7));
                     drawPixel(&painter,j + j/5 + i*48,b + (b==7),((data>>b)&0x01) ? Color_On : Color_Off );
                 }
             }
@@ -71,8 +69,6 @@ void Clcdc_tpc8300::disp(void)
                 BYTE data = tpc8300->upd16434[i]->info.imem[0x67-j];
                 for (b=0;b<8;b++)
                 {
-//                    painter.setPen(((data>>b)&0x01)? Color_On : Color_Off);
-//                    painter.drawPoint(j + j/5 + i*48,b + (b==7)+12);
                     drawPixel(&painter,j + j/5 + i*48,b + (b==7)+12,((data>>b)&0x01) ? Color_On : Color_Off );
                 }
             }

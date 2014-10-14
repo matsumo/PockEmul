@@ -56,11 +56,8 @@ void Clcdc_hp41::disp_symb(void)
 
 Clcdc_hp41::Clcdc_hp41(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
-    Color_Off.setRgb(
-                (int) (111*contrast),
-                (int) (117*contrast),
-                (int) (108*contrast));
 
+    LcdRatio = 5;
     hp41 = (Chp41*) parent;
     hp41cpu = hp41->hp41cpu;
 }
@@ -72,13 +69,9 @@ void Clcdc_hp41::disp(void)
 
     if (!ready) return;
     if (!updated) return;
-    //    qWarning()<<"disp";
+
     updated = false;
     Refresh= true;
-//    delete LcdImage;
-//    LcdImage = pPC->CreateImage(QSize(pPC->Lcd_DX, pPC->Lcd_DY),pPC->LcdFname,false,false,0);
-
-
 
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);

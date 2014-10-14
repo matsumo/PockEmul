@@ -614,7 +614,7 @@ static QImage prepareSurface(QImage img, int w, int h)
   img.fill(BACKGROUNDCOLOR);
   QPainter painter;
   painter.begin(&img);
-  painter.drawImage(0,h-imgtmp.height(),imgtmp);
+  painter.drawImage((w-imgtmp.width())/2,h-imgtmp.height(),imgtmp);
   painter.end();
 
   // slightly larger, to accommodate for the reflection
