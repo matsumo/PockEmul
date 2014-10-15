@@ -81,6 +81,7 @@ bool Cfp100::init(void) {
     WatchPoint.add(&pCONNECTOR_value,64,36,this,"// 36pins connector",lbl);
 
     paperWidget->hide();
+
     return true;
 }
 
@@ -201,6 +202,12 @@ bool Cfp100::UpdateFinalImage(void) {
     emit updatedPObject(this);
 
     return true;
+}
+
+bool Cfp100::InitDisplay()
+{
+    Cce515p::InitDisplay();
+    UpdateFinalImage();
 }
 
 void Cfp100::paintEvent(QPaintEvent *event)

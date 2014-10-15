@@ -15,6 +15,7 @@ public:
     //virtual void ExportByte(qint8);
     virtual void ComputeKey(void);
     virtual bool UpdateFinalImage(void);
+    virtual bool InitDisplay(void);
 
     Cconnector *pCONNECTOR; qint64 pCONNECTOR_value;
     Cconnector *pSavedCONNECTOR;
