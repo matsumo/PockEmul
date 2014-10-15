@@ -33,7 +33,7 @@ void Clcdc_pc2001::disp(void)
 
     BYTE b;
 
-    Refresh = false;
+//    Refresh = false;
 
 
     if (!ready) return;

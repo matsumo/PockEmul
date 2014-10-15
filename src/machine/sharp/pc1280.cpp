@@ -23,6 +23,8 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
 
     BackGroundFname	= P_RES(":/pc1280/pc-1280.png");
     back = new QImage(P_RES(":/pc1280/pc-1280back.png"));
+    LeftFname = RightFname = TopFname = BottomFname = BackFname = "";
+
     memsize			= 0x40000;
 
     SlotList.clear();
@@ -234,16 +236,38 @@ void Cpc1280::TurnON(void)
 #endif
 }
 
+void Cpc1280::TurnOFF(void) {
+    mainwindow->saveAll = YES;
+    CpcXXXX::TurnOFF();
+    mainwindow->saveAll = ASK;
+    AddLog(LOG_TEMP,"TURN OFF");
+}
+
 #define RATIO (251.0/502.0)
 
 void Cpc1280::paintEvent(QPaintEvent *event)
 {
     if (closed | flipping) {
+        QPainter painter;
+
+        painter.begin(this);
+        painter.drawImage(0,0,AnimatedImage->scaled(this->size()));
+        painter.end();
+    }
+    else {
+        CPObject::paintEvent(event);
+    }
+}
+
+void Cpc1280::renderAnimation()
+{
+    if (closed | flipping) {
 
         UpdateFinalImage();
 
+        AnimatedImage->fill(Qt::transparent);
         QPainter painter;
-        painter.begin(this);
+        painter.begin(AnimatedImage);
 
         if (FinalImage)
         {
@@ -275,10 +299,10 @@ void Cpc1280::paintEvent(QPaintEvent *event)
             }
         }
         painter.end();
+        emit updatedPObject(this);
+        update();
     }
-    else {
-        CPObject::paintEvent(event);
-    }
+
 }
 
 void Cpc1280::TurnCLOSE(void) {
@@ -289,6 +313,7 @@ void Cpc1280::TurnCLOSE(void) {
     // Animate close
     closed = !closed;
 
+    QSize _s = size();
     QPropertyAnimation *animation1 = new QPropertyAnimation(this, "angle");
     QPropertyAnimation *animation2 = new QPropertyAnimation(this, "zoom");
      animation1->setDuration(1500);
@@ -299,6 +324,8 @@ void Cpc1280::TurnCLOSE(void) {
          animation2->setKeyValueAt(0.0,1.0);
          animation2->setKeyValueAt(0.5,.55);
          animation2->setKeyValueAt(1.0,1.0);
+         delete AnimatedImage;
+         AnimatedImage = new QImage(*FinalImage);
          clearMask();
      }
      else {
@@ -307,17 +334,25 @@ void Cpc1280::TurnCLOSE(void) {
          animation2->setKeyValueAt(0,1.0);
          animation2->setKeyValueAt(0.5,.55);
          animation2->setKeyValueAt(1,1.0);
-         clearMask();
-         setGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+//         clearMask();
+         _s = QSize(this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+//         delete AnimatedImage;
+//         AnimatedImage = new QImage(FinalImage);
      }
 
      QParallelAnimationGroup *group = new QParallelAnimationGroup;
      group->addAnimation(animation1);
      group->addAnimation(animation2);
 
-     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(update()));
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
+//     flipping = true;
+//     delete AnimatedImage;
+//     AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
      flipping = true;
+     emit updatedPObject(this);
+     changeGeometry(this->posx(),this->posy(),
+                    _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
      group->start();
 
 }

@@ -154,13 +154,18 @@ void	Clcdc::check(void)  {}
 
 void	Clcdc::TurnON(void) {
 
+    qWarning()<<"LCD:TurnON";
     On = true;
     Refresh = true;
     redraw = true;
     Update();
+    emit pPC->updatedPObject(pPC);
 }
 
-void	Clcdc::TurnOFF(void){ On = false; }
+void	Clcdc::TurnOFF(void){
+    On = false;
+    qWarning()<<"LCD:TurnOFF";
+}
 
 bool	Clcdc::init(void)
 {

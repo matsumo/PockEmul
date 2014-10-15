@@ -102,7 +102,7 @@ public:
 	void	Set_Xin(bool);
 	bool	Get_Xout(void);
 	void	Set_Xout(bool);
-
+    virtual void    set_PC(UINT32 data);
 
 	UINT32	get_reg(REGNAME regname);			//get register
 	void	set_reg(REGNAME regname,UINT32 data);	//set register

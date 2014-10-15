@@ -78,6 +78,7 @@ void CpaperWidget::paperCopy()
 	QClipboard *clipboard = QApplication::clipboard();
 	clipboard->setImage(*bufferImage);
 }
+
 void CpaperWidget::paperCopyText()
 {
 

@@ -158,7 +158,7 @@ Rectangle {
             z: _zorder
             width: _width
             height: _height
-            rotation: Math.random() * 13 - 6
+//            rotation: Math.random() * 13 - 6
             Keys.onPressed: {
                 sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;

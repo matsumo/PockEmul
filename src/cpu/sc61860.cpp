@@ -127,8 +127,14 @@ INLINE bool CSC61860::Get_Xout(void)
 
 void CSC61860::Set_Xout(bool data)
 {
-	Xout = data;
+    Xout = data;
 }
+
+void CSC61860::set_PC(UINT32 data)
+{
+    reg.d.pc = data;
+}
+
 extern FILE	*fp_tmp;
 INLINE void CSC61860::compute_xout(void)
 {

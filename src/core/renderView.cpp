@@ -45,7 +45,7 @@ void CrenderView::warning(QString msg) {
 void CrenderView::keypressed(QString Id, int k,int m,int scan)
 {
     CPObject *pc = ((CPObject*)Id.toULongLong());
-    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
+//    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent *e=new QKeyEvent( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
     QApplication::sendEvent(pc, e);
@@ -54,7 +54,7 @@ void CrenderView::keypressed(QString Id, int k,int m,int scan)
 void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 {
     CPObject *pc = ((CPObject*)Id.toULongLong());
-    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
+//    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent *e=new QKeyEvent( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
     QApplication::sendEvent(pc, e);
@@ -92,7 +92,7 @@ void CrenderView::contextMenu(QString Id, int x, int y)
 
 void CrenderView::click(QString Id, int x, int y)
 {
-    qWarning()<<"click:"<<Id<<x<<y;
+//    qWarning()<<"click:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 //    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
@@ -106,7 +106,7 @@ void CrenderView::click(QString Id, int x, int y)
 }
 void CrenderView::unclick(QString Id, int x, int y)
 {
-    qWarning()<<"unclick:"<<Id<<x<<y;
+//    qWarning()<<"unclick:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 

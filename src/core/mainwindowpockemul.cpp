@@ -1217,7 +1217,9 @@ void MainWindowPockemul::updateFrameTimer()
                         {
                             nbframe++;
                             CurrentpPC->pLCDC->disp();
-                            if (CurrentpPC->pLCDC->Refresh) CurrentpPC->Refresh_Display = true;
+                            if (CurrentpPC->pLCDC->Refresh) {
+                                CurrentpPC->Refresh_Display = true;
+                            }
                         }
                     }
                 }
@@ -1226,7 +1228,9 @@ void MainWindowPockemul::updateFrameTimer()
 //                   AddLog(LOG_DISPLAY,tr("Refresh Display"));
                     CurrentpPC->UpdateFinalImage();
                     CurrentpPC->update();
+                    emit CurrentpPC->updatedPObject(CurrentpPC);
                     CurrentpPC->Refresh_Display= false;
+//                    CurrentpPC->pLCDC->Refresh = false;
 //                    qWarning()<<"Refresh Display";
                 }
             }

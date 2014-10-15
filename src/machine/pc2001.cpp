@@ -1,3 +1,6 @@
+//FIXME: issue with turnoff turnon and reset.... initialyse memory
+
+
 #include <QDebug>
 
 #include "pc2001.h"
@@ -251,6 +254,7 @@ void Cpc2001::TurnOFF(void) {
 
 void Cpc2001::TurnON(void){
     CpcXXXX::TurnON();
+    upd7907->Reset();
     upd7907->upd7907stat.pc.w.l=0;
 qWarning()<<"LCD ON:"<<pLCDC->On;
 }
@@ -258,7 +262,8 @@ qWarning()<<"LCD ON:"<<pLCDC->On;
 void Cpc2001::Reset()
 {
     CpcXXXX::Reset();
-    pLCDC->init();
+    upd7907->upd7907stat.pc.w.l=0;
+//    pLCDC->init();
     for (int i=0;i<4;i++) upd16434[i]->Reset();
     sendToPrinter=0;
 

@@ -24,7 +24,9 @@ public:
     virtual bool	Set_Connector(void);
     virtual bool	Get_Connector(void);
     virtual void	initExtension(void);
-    virtual void TurnON(void);
+    virtual void    TurnON(void);
+    virtual void    TurnOFF(void);
+
     void paintEvent(QPaintEvent *event);
     virtual void TurnCLOSE(void);
     void setAngle(int value);
@@ -35,7 +37,7 @@ public:
     qreal zoom() const { return m_zoom; }
     qreal m_zoom;
 
-    bool flipping;
+//    bool flipping;
     QImage *back;
     Cpc1280(CPObject *parent = 0);
 
@@ -45,6 +47,7 @@ private:
 
 public slots:
     void endAnimation(void);
+    void renderAnimation();
 };
 
 

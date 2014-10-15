@@ -404,7 +404,7 @@ if (ext_MemSlot1->ExtArray[ID_RP_256]->IsChecked) return 0x40;
         return 0x01;
         break;}
     case 0x241: // Ack from centronic
-//        return (pCENT->isAvailable()?0x00:0x01);
+        return (pCENT->isAvailable()?0x00:0x01);
         break;
     default:
         if (fp_log) fprintf(fp_log,"IN[%04x]    pc=%08x\n",Port,pCPU->get_PC());

@@ -307,7 +307,7 @@ void Clbc1100::TurnON(void){
 void Clbc1100::Reset()
 {
     CpcXXXX::Reset();
-    pLCDC->init();
+//    pLCDC->init();
     for (int i=0;i<4;i++) upd16434[i]->Reset();
     sendToPrinter=0;
     initcmd = true;
