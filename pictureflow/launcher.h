@@ -54,12 +54,13 @@
    Q_OBJECT
 
  public:
-     Launcher(QString idpocket,QString executableName, QString caption, QString imageName, QStringList args,QString descdription=QString());
+     Launcher(QString idpocket,QString executableName, QString caption, QString imageName, QStringList args,QString description=QString(),QString brand=QString());
      void launch();
      QImage* getImage();
      QString getCaption();
      QString getIdPocket();
      QStringList getArguments();
+     QString getBrand();
 
      QString getDescription();
  public slots:
@@ -79,6 +80,7 @@
      QStringList arguments;
      QProcess process;
      QString description;
+     QString brand;
  };
 
 

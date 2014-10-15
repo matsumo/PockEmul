@@ -93,6 +93,7 @@ class CPObject;
      PictureFlow* pictureFlowWidget;
 
      QList<Launcher*> demoList;
+     QList<Launcher *> filteredList;
 
      LaunchType Type;
 
@@ -101,7 +102,7 @@ class CPObject;
      void parseDemos(QXmlStreamReader& reader);
 
      QStringList Config;
-    QString connType,connGender;
+    QString connType,connGender,brandSearch;
  };
 
  #endif

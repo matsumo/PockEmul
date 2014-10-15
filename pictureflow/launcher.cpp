@@ -47,12 +47,13 @@ extern MainWindowPockemul *mainwindow;
 #include "common.h"
  #include "launcher.h"
 
- Launcher::Launcher(QString id,QString executableName, QString caption, QString imageName, QStringList args,QString description)
+ Launcher::Launcher(QString id, QString executableName, QString caption, QString imageName, QStringList args, QString description, QString brand)
  {
      idPocket = id;
      imagePath = imageName;
      appCaption = caption;
      this->description = description;
+     this->brand = brand;
 
      if (executableName[0] == QLatin1Char('/'))
          executablePath = executableName;
@@ -92,6 +93,11 @@ extern MainWindowPockemul *mainwindow;
  QStringList Launcher::getArguments()
  {
      return arguments;
+ }
+
+ QString Launcher::getBrand()
+ {
+     return brand;
  }
 
  QString Launcher::getCaption()
