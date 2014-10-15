@@ -335,6 +335,7 @@ BYTE CUPD16434::instruction(quint8 cmd)
 
 //    AddLog(LOG_DISPLAY,tr("UPD16434 CMD:%1").arg(cmd,4,16,QChar('0')));
 //    qWarning()<<"UPD16434 CMD:"<<cmd;
+//    updated = true;
 
     if ((cmd & MASK_LDPI) == MASK_LDPI ) { return cmd_LDPI(cmd); }
     else
@@ -368,7 +369,7 @@ BYTE CUPD16434::instruction(quint8 cmd)
     else
     if ((cmd & MASK_STOP) == MASK_STOP ) { return cmd_STOP(cmd); }
 
-    updated = true;
+
     return 0;
 }
 
@@ -376,22 +377,26 @@ BYTE CUPD16434::instruction(quint8 cmd)
 BYTE CUPD16434::cmd_LDPI(quint8 cmd)
 {
     info.dataPointer = cmd & 0x7F;
+    updated = true;
     return 0;
 }
 
 BYTE CUPD16434::cmd_WRCURS(quint8 cmd)
 {
+    updated = true;
     return 0;
 }
 
 BYTE CUPD16434::cmd_CLCURS(quint8 cmd)
 {
+    updated = true;
     return 0;
 }
 
 BYTE CUPD16434::cmd_MODE(quint8 cmd)
 {
     info.mode = cmd;
+    updated = true;
     return cmd;
 }
 
@@ -418,6 +423,7 @@ BYTE CUPD16434::cmd_BSET(quint8 cmd,bool set)
     if (mode == 0) { info.dataPointer++; info.dataPointer &= 0x7f; }
     if (mode == 1) { info.dataPointer--; info.dataPointer &= 0x7f; }
 
+    updated = true;
     return 0;
 }
 

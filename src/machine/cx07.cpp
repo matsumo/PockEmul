@@ -767,6 +767,7 @@ void Cx07::TurnON(void){
         pCPU->Reset();
         ((CZ80 *) pCPU)->z80.r16.pc = 0xC3C3;
         pT6834->General_Info.LcdOn = true;
+        pLCDC->TurnON();
 
         AddLog(LOG_CANON,"TURN ON");
     }

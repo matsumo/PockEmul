@@ -608,7 +608,7 @@ void PictureFlowPrivate::resetSlides()
 static QImage prepareSurface(QImage img, int w, int h)
 {
 //    qWarning()<<"before prepareSurface";
-  Qt::TransformationMode mode = Qt::FastTransformation;//Qt::SmoothTransformation;
+  Qt::TransformationMode mode = /*Qt::FastTransformation;//*/Qt::SmoothTransformation;
   QImage imgtmp  = img.scaled(w, h, Qt::KeepAspectRatio, mode);
   img = QImage(w,h,IMAGEFORMAT);
   img.fill(BACKGROUNDCOLOR);

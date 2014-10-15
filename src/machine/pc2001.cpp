@@ -1,3 +1,5 @@
+#include <QDebug>
+
 #include "pc2001.h"
 #include "upd7907/upd7907.h"
 #include "upd16434.h"
@@ -250,7 +252,7 @@ void Cpc2001::TurnOFF(void) {
 void Cpc2001::TurnON(void){
     CpcXXXX::TurnON();
     upd7907->upd7907stat.pc.w.l=0;
-
+qWarning()<<"LCD ON:"<<pLCDC->On;
 }
 
 void Cpc2001::Reset()

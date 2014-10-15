@@ -1,4 +1,6 @@
 #include <QPainter>
+#include <QDebug>
+
 #include "common.h"
 #include "pcxxxx.h"
 #include "cpu.h"
@@ -46,7 +48,7 @@ void Clcdc_pc2001::disp(void)
     for (int i = 0 ; i<4; i++)
     {
         if (!pc2001->upd16434[i]->updated) continue;
-
+        Refresh = true;
         for (int j = 0; j< 0x32;j++)
         {
             BYTE data = pc2001->upd16434[i]->info.imem[0x31 - j];
@@ -67,7 +69,7 @@ void Clcdc_pc2001::disp(void)
         pc2001->upd16434[i]->updated = false;
     }
 
-    Refresh = _toRefresh;
+//    Refresh = _toRefresh;
     redraw = 0;
     painter.end();
 }

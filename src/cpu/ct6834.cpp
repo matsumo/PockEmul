@@ -617,6 +617,7 @@ if (!General_Info.LcdOn) return;
 
     pPC->pLCDC->Refresh = true;
     Refresh_Display = true;
+    emit pPC->updatedPObject(this);
     pPC->update();
 }
 
