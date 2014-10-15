@@ -190,11 +190,11 @@ bool Cfp100::UpdateFinalImage(void) {
     painter.fillRect(PaperPos(),Qt::black);
     painter.setOpacity(1);
 
-    painter.drawImage(112,145,*capot);
+    painter.drawImage(112 * internalImageRatio,145 * internalImageRatio,*capot);
 
-    int offset = (lastX ) * ratio /( mainwindow->zoom/100);
-    painter.drawImage(152+offset,178,*head);       // Draw head
-    painter.drawImage(793 - offset,214,*cable);    // Draw cable
+    int offset = (lastX ) * ratio;
+    painter.drawImage((152+offset) * internalImageRatio,178 * internalImageRatio,*head);       // Draw head
+    painter.drawImage((793 - offset) * internalImageRatio,214 * internalImageRatio,*cable);    // Draw cable
 #endif
     painter.end();
 
