@@ -1170,13 +1170,18 @@ PictureFlow::PictureFlow(QWidget* parent): QWidget(parent)
 #endif
 
   pb = new QPushButton(this);
-  pb->setPalette(QColor(Qt::black));
-  //  QString monStyle = "QPushButton { background-image: url(':/cover/exit.png'); }";
+  QPixmap pixmap(":/core/back-white.png");
 
-  pb->setStyleSheet("background-color: rgb(0, 0, 0); color: rgb(255, 255, 255)");
-
-  pb->setText("Exit");
-
+  // Pour enlever les bords
+  pb->setFlat(true);
+  // Pour éviter d'avoir l'indication de focus sur l'image (pointillés)
+  pb->setFocusPolicy(Qt::NoFocus);
+  // image est ton QPixmap
+  pb->setIcon(pixmap);
+  // Parce que le bouton ne s'adapte pas à la taille de l'image
+  pb->setIconSize(QSize(64,64));//image.size());
+  // Pour enlever les bords au moment du clic
+  pb->setStyleSheet("QPushButton:flat:pressed { border: none; };");
 
   connect(pb,SIGNAL(clicked()),this,SLOT(exitSlot()));
 }

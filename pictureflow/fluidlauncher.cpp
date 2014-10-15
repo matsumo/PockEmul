@@ -320,9 +320,9 @@ qWarning()<<"After PopulatePictureFlow";
      else {
          filteredList.clear();
          for (int i=0;i<demoList.count();i++) {
-             if (demoList.at(i)->getBrand().startsWith(brandSearch))
+             if (demoList.at(i)->getBrand() == brandSearch)
                  filteredList.append(demoList.at(i));
-             if (demoList.at(i)->getIdPocket().remove(0,7).startsWith(brandSearch))
+             if (demoList.at(i)->getIdPocket().remove(0,7)==(brandSearch))
                  brand = demoList.at(i)->getBrand();
          }
      }

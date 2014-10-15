@@ -12,5 +12,10 @@
         <file>logos/ti.png</file>
         <file>logos/radioshack.png</file>
         <file>logos/casio.png</file>
+        <file>logos/sharp_pc12xx.png</file>
+        <file>logos/sharp_newgen.png</file>
+        <file>logos/sharp_pc13xx.png</file>
+        <file>logos/sharp_pc14xx.png</file>
+        <file>logos/sharp_pc15xx.png</file>
     </qresource>
 </RCC>

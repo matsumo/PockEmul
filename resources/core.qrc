@@ -19,5 +19,6 @@
         <file>core/PostIt.png</file>
         <file>core/size-black.png</file>
         <file>core/size-white.png</file>
+        <file>core/back-white.png</file>
     </qresource>
 </RCC>
