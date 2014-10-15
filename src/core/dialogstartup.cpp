@@ -45,11 +45,15 @@ bool DialogStartup::populateListWidget(QListWidget* lw,QString configPath) {
                             QStringRef _conngender = attrs.value("conngender");
 
                             QListWidgetItem *newItem = new QListWidgetItem;
-                                newItem->setText(name.toString());
-                                newItem->setIcon(QIcon(image.toString()));
-                                newItem->setData(Qt::UserRole,idpocket.toString());
+                            newItem->setText(name.toString());
+                            newItem->setIcon(QIcon(image.toString()));
+                            newItem->setData(Qt::UserRole,idpocket.toString());
+
+                            if (!idpocket.startsWith("#"))
                                 lw->addItem( newItem);
+
                             // filter on connectors type and gender
+
 //                            if (!connType.isEmpty() && (_connectortype.indexOf(connType)==-1)) continue;
            //                 qWarning()<<connType<<" found:"<<_connectortype;
 //                            if (!connGender.isEmpty() && (_conngender.indexOf(connGender)==-1)) continue;

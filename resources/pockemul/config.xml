@@ -10,32 +10,34 @@
    <example brand="HEWLETT-PACKARD" idpocket="HP-16C" filename="./" name="HP-16C" image=":/hp16c/hp16c.png"/>
     <example brand="SHARP" idpocket="PC-1245" filename="./" name="Sharp pc-1245" image=":/pc1245/pc1245.png"/>
     <example brand="OTHER" idpocket="MC-2200" filename="./" name="Seiko MC-2200" image=":/pc1245/mc2200.png"/>
-     <example brand="SHARP" idpocket="PC-1250" filename="./" name="Sharp pc-1250" image=":/pc1250/pc1250.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1250" filename="./" name="Sharp pc-1250" image=":/pc1250/pc1250.png"/>
      <example brand="TANDY" idpocket="Tandy PC-3" filename="./" name="Tandy PC-3" image=":/pc1250/pc31k.png"/>
-     <example brand="SHARP" idpocket="PC-1251" filename="./" name="Sharp pc-1251" image=":/pc1251/pc1251.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1251" filename="./" name="Sharp pc-1251" image=":/pc1251/pc1251.png"/>
      <example brand="TANDY" idpocket="Tandy PC-3 (4Ko)" filename="./" name="Tandy PC-3 (4Ko)" image=":/pc1250/pc31k.png"/>
-     <example brand="SHARP" idpocket="PC-1251H" filename="./" name="Sharp pc-1251H" image=":/pc1251/pc1251h.png"/>
-     <example brand="SHARP" idpocket="PC-1255" filename="./" name="Sharp pc-1255" image=":/pc1255/pc1255.png"/>
-     <example brand="SHARP" idpocket="PC-1260" filename="./" name="Sharp pc-1260" image=":/pc1260/pc1260.png"/>
-     <example brand="SHARP" idpocket="PC-1261" filename="./" name="Sharp pc-1261" image=":/pc1261/pc1261.png"/>
-     <example brand="SHARP" idpocket="PC-1262" filename="./" name="Sharp pc-1262" image=":/pc1262/pc1262.png"/>
-     <example brand="SHARP" idpocket="PC-1280" filename="./" name="Sharp pc-1280" image=":/pc1280/pc-1280.png"/>
-     <example brand="SHARP" idpocket="PC-1350" filename="./" name="Sharp pc-1350" image=":/pc1350/pc1350.png"/>
-     <example brand="SHARP" idpocket="PC-1360" filename="./" name="Sharp pc-1360" image=":/pc1360/pc1360.png"/>
-     <example brand="SHARP" idpocket="PC-1401" filename="./" name="Sharp pc-1401" image=":/pc1401/pc1401.png"/>
-     <example brand="SHARP" idpocket="PC-1402" filename="./" name="Sharp pc-1402" image=":/pc1402/pc1402.png"/>
-     <example brand="SHARP" idpocket="PC-1403" filename="./" name="Sharp pc-1403" image=":/pc1403/pc1403.png"/>
-     <example brand="SHARP" idpocket="PC-1403H" filename="./" name="Sharp pc-1403H" image=":/pc1403/pc1403h.png"/>
-     <example brand="SHARP" idpocket="PC-1421" filename="./" name="Sharp pc-1421" image=":/pc1421/pc-1421.png"/>
-     <example brand="SHARP" idpocket="PC-1425" filename="./" name="Sharp pc-1425" image=":/pc1425/pc1425.png"/>
-     <example brand="SHARP" idpocket="PC-1450" filename="./" name="Sharp pc-1450" image=":/pc1450/pc1450.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1251H" filename="./" name="Sharp pc-1251H" image=":/pc1251/pc1251h.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1255" filename="./" name="Sharp pc-1255" image=":/pc1255/pc1255.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1260" filename="./" name="Sharp pc-1260" image=":/pc1260/pc1260.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1261" filename="./" name="Sharp pc-1261" image=":/pc1261/pc1261.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1262" filename="./" name="Sharp pc-1262" image=":/pc1262/pc1262.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1280" filename="./" name="Sharp pc-1280" image=":/pc1280/pc-1280.png"/>
+     <example brand="SHARP_PC13XX" idpocket="PC-1350" filename="./" name="Sharp pc-1350" image=":/pc1350/pc1350.png"/>
+     <example brand="SHARP_PC13XX" idpocket="PC-1360" filename="./" name="Sharp pc-1360" image=":/pc1360/pc1360.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1401" filename="./" name="Sharp pc-1401" image=":/pc1401/pc1401.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1402" filename="./" name="Sharp pc-1402" image=":/pc1402/pc1402.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1403" filename="./" name="Sharp pc-1403" image=":/pc1403/pc1403.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1403H" filename="./" name="Sharp pc-1403H" image=":/pc1403/pc1403h.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1421" filename="./" name="Sharp pc-1421" image=":/pc1421/pc-1421.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1425" filename="./" name="Sharp pc-1425" image=":/pc1425/pc1425.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1450" filename="./" name="Sharp pc-1450" image=":/pc1450/pc1450.png"/>
      <!--example brand="SHARP" idpocket="PC 1460" filename="./" name="Sharp pc-1460" image=":/cover/pc-1460.jpg"/-->
-     <example brand="SHARP" idpocket="PC-1475" filename="./" name="Sharp pc-1475" image=":/pc1475/pc1475.png"/>
+     <example brand="SHARP_PC14XX" idpocket="PC-1475" filename="./" name="Sharp pc-1475" image=":/pc1475/pc1475.png"/>
+     <example brand="SHARP" idpocket="#BRAND#SHARP_PC13XX" filename="./" name="Sharp pc-13xx Series" image=":/pc1350/pc1350.png"/>
+     <example brand="SHARP" idpocket="#BRAND#SHARP_PC14XX" filename="./" name="Sharp pc-14xx Series" image=":/pc1450/pc1450.png"/>
      <example brand="SHARP" idpocket="PC-1500" filename="./" name="Sharp pc-1500" image=":/pc1500/pc1500.png"/>
      <example brand="TANDY" idpocket="Tandy PC-2" filename="./" name="Tandy PC-2" image=":/pc1500/trspc2.png"/>
      <example brand="SHARP" idpocket="PC-1500A" filename="./" name="Sharp pc-1500A" image=":/pc1500A/pc1500A.png"/>
      <example brand="SHARP" idpocket="PC-1600" filename="./" name="Sharp pc-1600" image=":/pc1600/pc-1600.png"/>
-     <example brand="SHARP" idpocket="PC-2500" filename="./" name="Sharp pc-2500" image=":/pc2500/pc2500.png"/>
+     <example brand="SHARP_PC13XX" idpocket="PC-2500" filename="./" name="Sharp pc-2500" image=":/pc2500/pc2500.png"/>
      <example brand="CASIO" idpocket="Casio FP-200" filename="./" name="Casio FP-200" image=":/fp200/fp200.png"/>
      <example brand="OTHER" idpocket="Canon X-07" filename="./" name="Canon X-07" image=":/x07/x07.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="CC-40" filename="./" name="Texas Instruments CC-40" image=":/cc40/cc40.png"/>
@@ -56,11 +58,11 @@
     <example brand="OTHER" idpocket="SANCO TPC-8300" filename="./" name="SANCO TPC-8300" image=":/tpc8300/tpc-8300.png"/>
    <example brand="PANASONIC" idpocket="Panasonic HHC RL-H1000" filename="./" name="Panasonic HHC RL-H1000" image=":/rlh1000/rlh1000.png"/>
    <example brand="BRAND" idpocket="#BRAND#PANASONIC" filename="./" name="Panasonic" image=":/rlh1000/rlh1000.png"/>
-   <example brand="BRAND" idpocket="#BRAND#HEWLETT-PACKARD" filename="./" name="Hewlett Packard" image=":/hp15c/hp15c.png"/>
-   <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/z1/z1.png"/>
-   <example brand="BRAND" idpocket="#BRAND#CASIO" filename="./" name="Casio" image=":/z1/z1.png"/>
-   <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/ti74/ti95.png"/>
-   <example brand="BRAND" idpocket="#BRAND#TANDY" filename="./" name="Tandy" image=":/pc1500/trspc2.png"/>
-   <example brand="BRAND" idpocket="#BRAND#OTHER" filename="./" name="Others" image=":/pc1500/trspc2.png"/>
+   <example brand="BRAND" idpocket="#BRAND#HEWLETT-PACKARD" filename="./" name="Hewlett Packard" image=":/logos/hp.png"/>
+   <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/logos/sharp.png"/>
+   <example brand="BRAND" idpocket="#BRAND#CASIO" filename="./" name="Casio" image=":/logos/casio.png"/>
+   <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/logos/ti.png"/>
+   <example brand="BRAND" idpocket="#BRAND#TANDY" filename="./" name="Radio Shack" image=":/logos/radioshack.png"/>
+   <example brand="BRAND" idpocket="#BRAND#OTHER" filename="./" name="Others" image=":/logos/others.png"/>
    </demos>
  </demolauncher>

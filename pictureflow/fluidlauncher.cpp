@@ -322,6 +322,8 @@ qWarning()<<"After PopulatePictureFlow";
          for (int i=0;i<demoList.count();i++) {
              if (demoList.at(i)->getBrand().startsWith(brandSearch))
                  filteredList.append(demoList.at(i));
+             if (demoList.at(i)->getIdPocket().remove(0,7).startsWith(brandSearch))
+                 brand = demoList.at(i)->getBrand();
          }
      }
 
@@ -361,6 +363,7 @@ Vibrate();
              populatePictureFlow();
          }
 
+         qWarning()<<"brandSearch:"<<brandSearch<<"  brand:"<<brand;
          return;
      }
 
@@ -373,7 +376,7 @@ Vibrate();
      if (Type == PictureFlowType) {
          int result = 0; //EMPTY;
          QString ItemText = filteredList[index]->getIdPocket();
-
+         QString ItemBrand = filteredList[index]->getBrand();
          //TODO: try to implement sub level
          // if ItemText start with a specic tag, load the corresponding xml and display the new pictureflow.
          // Esc should exit
@@ -382,8 +385,10 @@ Vibrate();
             qWarning()<<args;
             if (args[0]=="BRAND") {
                 brandSearch = args[1];
-                qWarning()<<"brand:"<<brandSearch;
+                qWarning()<<"brandSearch:"<<brandSearch;
                 populatePictureFlow();
+                brand = ItemBrand;
+                qWarning()<<"brand:"<<brand;
                 return;
             }
         }

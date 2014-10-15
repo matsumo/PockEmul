@@ -7,5 +7,10 @@
         <file>pockemul/splash.png</file>
         <file>pockemul/weblinks.xml</file>
         <file>pockemul/transparent.png</file>
+        <file>logos/hp.png</file>
+        <file>logos/sharp.png</file>
+        <file>logos/ti.png</file>
+        <file>logos/radioshack.png</file>
+        <file>logos/casio.png</file>
     </qresource>
 </RCC>
