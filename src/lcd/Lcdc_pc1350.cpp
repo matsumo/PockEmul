@@ -106,6 +106,8 @@ Clcdc_pc1360::Clcdc_pc1360(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
 Clcdc_pc2500::Clcdc_pc2500(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc_pc1350(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {						//[constructor]
+    symbList.clear();
+
     symbList << ClcdSymb(0, 0,  S_BUSY	,0x787C	,0x80)
              << ClcdSymb(223, 0,  S_RUN	,0x783C	,0x10)
              << ClcdSymb(260, 0, S_PRO	,0x783C	,0x20)

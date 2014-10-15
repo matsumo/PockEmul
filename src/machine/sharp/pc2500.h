@@ -34,6 +34,8 @@ public:
 
     Cpc2500(CPObject *parent = 0);
     virtual ~Cpc2500();
+protected slots:
+    void contextMenuEvent (QContextMenuEvent * e);
 
 private:
     bool printMode;

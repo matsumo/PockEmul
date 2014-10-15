@@ -34,7 +34,7 @@ public:
     virtual void raise();
 
     QByteArray	TextBuffer;
-protected slots:
+public slots:
     void contextMenuEvent ( QContextMenuEvent * );
 
 protected:

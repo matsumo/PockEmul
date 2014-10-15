@@ -25,10 +25,8 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
     Initial_Session_Fname ="pc2500.pkm";
 
     BackGroundFname	= P_RES(":/pc2500/pc2500.png");
-//    LcdFname		= P_RES(":/pc2500/2500lcd.png");
-//    SymbFname		= P_RES(":/pc2500/2500symb.png");
+
     memsize			= 0x18000;
-//		NbSlot		= 3;
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc2500/cpu-2500.bin")	, "pc-2500/cpu-2500.bin"	, CSlot::ROM , "CPU ROM"));
@@ -51,25 +49,12 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
     pce515p     = new Cce515p(this);
     pce515p->pTIMER = pTIMER;
 
-    setDXmm(297);//Pc_DX_mm = 297;
-    setDYmm(210);//Pc_DY_mm = 210;
-    setDZmm(46);//Pc_DZ_mm = 46;
+    setDXmm(297);
+    setDYmm(210);
+    setDZmm(46);
 
-    setDX(960);//Pc_DX = 960;
-    setDY(673);//Pc_DY = 673;
-
-//    Lcd_X		= 560;
-//    Lcd_Y		= 70;
-//    Lcd_DX		= 150;
-//    Lcd_DY		= 32;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-
-//    Lcd_Symb_X	= 560;
-//    Lcd_Symb_Y	= 60;
-//    Lcd_Symb_DX	= 300;
-//    Lcd_Symb_DY	= 5;
-//    //Lcd_Symb_ratio = 2;
+    setDX(960);
+    setDY(673);
 
     printMode = false;
     capslock = false;
@@ -82,7 +67,19 @@ Cpc2500::~Cpc2500()
     delete pce515p;
 }
 
+void Cpc2500::contextMenuEvent(QContextMenuEvent *e)
+{
+    if (pce515p->PaperPos().contains(e->pos())) {
+        pce515p->contextMenuEvent(e);
+    }
+    else
+        Cpc1350::contextMenuEvent(e);
+
+    e->accept();
+}
+
 bool Cpc2500::UpdateFinalImage(void) {
+
     CpcXXXX::UpdateFinalImage();
 
     // Draw switch by 180° rotation
@@ -91,6 +88,20 @@ bool Cpc2500::UpdateFinalImage(void) {
     // PRINTER SWITCH
     painter.begin(FinalImage);
 
+
+
+    float ratio = ( (float) pce515p->paperWidget->width() ) / ( pce515p->paperWidget->bufferImage->width() - pce515p->paperWidget->getOffset().x() );
+
+    QRect source = QRect( QPoint(pce515p->paperWidget->getOffset().x() ,
+                                 pce515p->paperWidget->getOffset().y()  - pce515p->paperWidget->height() / ratio ) ,
+                          QPoint(pce515p->paperWidget->bufferImage->width(),
+                                 pce515p->paperWidget->getOffset().y() +10)
+                          );
+//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+    painter.drawImage(pce515p->PaperPos(),
+                      pce515p->paperWidget->bufferImage->copy(source).scaled(pce515p->PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+                      );
+
     painter.drawImage(580*internalImageRatio,239*internalImageRatio,
                       BackgroundImageBackup->copy(580*internalImageRatio,239*internalImageRatio,
                                                   59*internalImageRatio,15*internalImageRatio).mirrored(!printMode,false));
@@ -98,7 +109,6 @@ bool Cpc2500::UpdateFinalImage(void) {
 
     // CAPS LOCK
     if (capslock) {
-//        painter.setPen( Qt::green);
         painter.fillRect(139*internalImageRatio,645*internalImageRatio,5*internalImageRatio,5*internalImageRatio,QColor(Qt::green));
     }
     painter.end();

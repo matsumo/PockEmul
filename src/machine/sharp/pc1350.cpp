@@ -24,30 +24,14 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     setfrequency( (int) 768000/3);
     setcfgfname("pc1350");
 
-    setDXmm(182);//Pc_DX_mm = 182;
-    setDYmm(72);//Pc_DY_mm = 72;
-    setDZmm(16);//Pc_DZ_mm = 16;
+    setDXmm(182);
+    setDYmm(72);
+    setDZmm(16);
 
-    setDX(633);//Pc_DX = 633;
-    setDY(252);//Pc_DY = 252;
-
-//    LcdFname		= ":/pockemul/transparent.png";
-//    SymbFname		= ":/pockemul/transparent.png";
+    setDX(633);
+    setDY(252);
 
     RightFname = P_RES(":/pc1350/pc1350Right.png");
-
-//    Lcd_X		= 75;
-//    Lcd_Y		= 48;
-//    Lcd_DX		= 150;
-//    Lcd_DY		= 32;
-//    Lcd_ratio_X	= 2;
-//    Lcd_ratio_Y	= 2;
-//    LcdRatio = 5;
-
-//    Lcd_Symb_X	= 50;
-//    Lcd_Symb_Y	= 48;
-//    Lcd_Symb_DX	= 30;
-//    Lcd_Symb_DY	= 64;
 
     cnt=0;
 }
