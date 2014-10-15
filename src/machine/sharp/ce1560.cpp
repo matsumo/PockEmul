@@ -359,24 +359,28 @@ void Cce1560::ComputeKey()
         qWarning()<<"INHIBIT FALSE";
         pKEYB->keyPressedList.removeAll(0x242);
         update();
+        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x243)) {
         inhibitSwitch = true;
         qWarning()<<"INHIBIT TRUE";
         pKEYB->keyPressedList.removeAll(0x243);
         update();
+        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x244)) {
         firmwarePg = 0;
         qWarning()<<"Firmware Pg 0";
         pKEYB->keyPressedList.removeAll(0x244);
         update();
+        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x245)) {
         firmwarePg = 1;
         qWarning()<<"Firmware Pg 1";
         pKEYB->keyPressedList.removeAll(0x245);
         update();
+        emit updatedPObject(this);
     }
 
 

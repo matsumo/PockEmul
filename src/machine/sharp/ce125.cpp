@@ -34,6 +34,7 @@ void Cce125tape::ComputeKey(void)
             BackGroundFname	= playImage;
             InitDisplay();
             update();
+            emit updatedPObject(this);
             Play();
             break;
         default: break;
@@ -49,25 +50,32 @@ void Cce125tape::ComputeKey(void)
         case STOP : BackGroundFname	= P_RES(":/ext/ce-125eject.png");
 					InitDisplay();
 					update();
+                    emit updatedPObject(this);
 					if (LoadTape())
                         BackGroundFname	= loadImage;
 					else
                         BackGroundFname	= P_RES(":/ext/ce-125tape.png");
 					InitDisplay();
-					update(); break;
+                    update();
+            emit updatedPObject(this);
+            break;
         case LOAD : BackGroundFname	= P_RES(":/ext/ce-125eject.png");
 					InitDisplay();
 					update();
+                    emit updatedPObject(this);
 					if (LoadTape())
                         BackGroundFname	= loadImage;
 					else
                         BackGroundFname	= P_RES(":/ext/ce-125tape.png");
 					InitDisplay();
-					update(); break;
+                    update();
+                    emit updatedPObject(this);
+                    break;
 		case RECORD:
         case PLAY : BackGroundFname	= loadImage;
 					InitDisplay();
 					update();
+                    emit updatedPObject(this);
 					StopPlay(); break;
 		}
 	}

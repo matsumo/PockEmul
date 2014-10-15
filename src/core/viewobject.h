@@ -30,6 +30,7 @@ public:
     View currentView,targetView,animationView1,animationView2;
     Direction currentFlipDir;
     bool flipping;
+    QImage* AnimatedImage;
 
     void setAngle(int value);
     int angle() const { return m_angle; }
@@ -83,9 +84,11 @@ public:
 signals:
     void movePObject(CViewObject*,QPoint);
     void sizePObject(CViewObject*,QSize);
+    void updatedPObject(CViewObject *);
 
 public slots:
-    void endAnimation();
+    void endAnimation();   
+    void renderAnimation();
 
 private:
     int		Pc_DX,Pc_DY;

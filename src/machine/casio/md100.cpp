@@ -348,7 +348,10 @@ bool Cmd100::Get_MainConnector(void) {
             (PIN( 3)<<3);
 
 
-    if (PIN(12) != READ_BIT(port,3)) update();      // refresh on power ON/OFF
+    if (PIN(12) != READ_BIT(port,3)) {
+        emit updatedPObject(this);
+        update();      // refresh on power ON/OFF
+    }
 
     PUT_BIT(port,0,PIN(25));
     PUT_BIT(port,1,PIN(11));

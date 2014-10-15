@@ -389,7 +389,7 @@ bool CPObject::run(void){
     }
     if ((hardresetAt>0) && (pTIMER->state >= hardresetAt)) {
         qWarning()<<"HardReset";
-        // FIXME: cannot call init from CPU Thread
+        // FIXME: cannot call init from CPU Thread. Use a SIGNAL
         hardreset = true;
         init();
         Reset();
@@ -600,6 +600,7 @@ void CPObject::swipeTriggered(QSwipeGesture *gesture)
                 // move to right
                 qWarning()<<"SWIPE LEFT";
             }
+            emit updatedPObject(this);
             update();
         }
     }
@@ -777,6 +778,7 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
                 dialogkeylist->i->Rect.adjust(delta.x(),delta.y(),delta.x(),delta.y());
                 pKEYB->modified = true;
                 KeyDrag = event->globalPos();
+                emit updatedPObject(this);
                 update();
                 event->accept();
                 return;
@@ -796,6 +798,7 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
                 }
                 MoveWithLinkedRel(delta);
                 PosDrag = event->globalPos();
+                emit updatedPObject(this);
                 update();
                 event->accept();
                 return;

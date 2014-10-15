@@ -191,7 +191,7 @@ Rectangle {
                     property bool isdrag: false;
                     id: dragArea
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
-                    hoverEnabled: true
+//                    hoverEnabled: true
                     anchors.fill: parent
                     drag.target: photoFrame
                     propagateComposedEvents: false
@@ -211,6 +211,7 @@ Rectangle {
                         if (mouse.button == Qt.RightButton) {
                             console.log("oui");
                             sendContextMenu(idpocket,mouse.x,mouse.y);
+
                         }
                         if (mouse.button == Qt.LeftButton) {
                             isdrag=true;

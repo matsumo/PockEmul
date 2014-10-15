@@ -22,6 +22,7 @@ CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
     pKEYB = 0;
     FinalImage = 0;
     BackgroundImageBackup = 0;
+    AnimatedImage = 0;
     internalImageRatio = 1;
 }
 
@@ -35,7 +36,7 @@ CViewObject::~CViewObject()
     delete BottomImage;
     delete BackImage;
     delete BackgroundImageBackup;
-
+    delete AnimatedImage;
     delete pKEYB;
 }
 
@@ -151,7 +152,7 @@ bool CViewObject::InitDisplay(void)
 
     BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
     internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
-    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
+//    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
 
     if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname);
     if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname);
@@ -296,9 +297,10 @@ void CViewObject::flip(Direction dir) {
      group->addAnimation(animation1);
      group->addAnimation(animation2);
 
-     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(update()));
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
      flipping = true;
+
      group->start();
 
 }
@@ -306,13 +308,25 @@ void CViewObject::flip(Direction dir) {
 void CViewObject::paintEvent(QPaintEvent *event)
 {
     Q_UNUSED(event)
+    if (flipping)
+    {
+        QPainter painter;
 
+        painter.begin(this);
+        painter.drawImage(0,0,AnimatedImage->scaled(this->size()));
+        painter.end();
+    }
+}
+
+void CViewObject::renderAnimation()
+{
     if (flipping)
     {
         UpdateFinalImage();
+
         QPainter painter;
 
-
+        AnimatedImage->fill(Qt::transparent);
         if (FinalImage)
         {
             int w = viewRect(animationView1).width() * mainwindow->zoom/100.0;//this->width();
@@ -320,7 +334,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
             int wt = viewRect(animationView2).width() * mainwindow->zoom/100.0;
             int ht = viewRect(animationView2).height()* mainwindow->zoom/100.0;
 //            qWarning()<<"angle:"<<m_angle;
-            painter.begin(this);
+            painter.begin(AnimatedImage);
 
             QTransform matrix,matrix2;
             matrix.scale(m_zoom,m_zoom);
@@ -336,7 +350,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
                                   getViewImage(animationView1)->scaled(QSize(w,h*(90 -m_angle)/90),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
                                   );
                 painter.end();
-                painter.begin(this);
+                painter.begin(AnimatedImage);
                 painter.translate(w/2 ,ht * m_angle/90);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
@@ -356,7 +370,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
                                   getViewImage(animationView1)->scaled(QSize(w*(90 -m_angle)/90,h),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
                                   );
                 painter.end();
-                painter.begin(this);
+                painter.begin(AnimatedImage);
                 painter.translate(wt*m_angle/90,h/2);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
@@ -370,7 +384,9 @@ void CViewObject::paintEvent(QPaintEvent *event)
             }
 
             painter.end();
-
+//            qWarning()<<"animation - currentview="<<currentView;
+            emit updatedPObject(this);
+            update();
         }
     }
 }
@@ -378,10 +394,11 @@ void CViewObject::paintEvent(QPaintEvent *event)
 void CViewObject::endAnimation(){
     currentView = targetView;
 //    currentFlipDir = NONEdir;
-//    flipping = false;
+    flipping = false;
 
+//    qWarning()<<"endAnimation";
     changeGeometry(this->posx(),this->posy(),viewRect(currentView).width()*mainwindow->zoom/100.0,viewRect(currentView).height()*mainwindow->zoom/100.0);
-
+    emit updatedPObject(this);
 }
 
 void CViewObject::changeGeometrySize(int newposx,int newposy,int newwidth,int newheight) {
@@ -478,6 +495,10 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
 
     if ( (targetView != currentView) && getViewImage(targetView) ) {
         QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
+        delete AnimatedImage;
+        AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
+        flipping = true;
+        emit updatedPObject(this);
         changeGeometry(this->posx(),this->posy(),
                        _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
         flip(dir);

@@ -89,6 +89,7 @@ void CprinterCtronics::clearPaper(void)
     // empty TextBuffer
     TextBuffer.clear();
     paperWidget->updated = true;
+    emit updatedPObject(this);
     update();
 }
 

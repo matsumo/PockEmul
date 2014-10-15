@@ -465,12 +465,14 @@ bool Cce140f::run(void)
         if (!busyLed) {
             busyLed = true;
             update();
+            emit updatedPObject(this);
         }
     }
     else {
         if (busyLed) {
             busyLed = false;
             update();
+            emit updatedPObject(this);
         }
     }
     Set_Connector();

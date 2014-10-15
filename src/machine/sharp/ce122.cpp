@@ -105,16 +105,22 @@ void Cce122::ComputeKey(void)
     }
     if (pKEYB->LastKey == K_RMT_ON) {
         rmtSwitch = true;
+        emit updatedPObject(this);
+        update();
     }
     if (pKEYB->LastKey == K_RMT_OFF) {
         rmtSwitch = false;
+        emit updatedPObject(this);
+        update();
     }
     if (pKEYB->LastKey == K_PRINT_ON) {
         printSwitch = true;
+        emit updatedPObject(this);
         update();
     }
     if (pKEYB->LastKey == K_PRINT_OFF) {
         printSwitch = false;
+        emit updatedPObject(this);
         update();
     }
 }
@@ -141,10 +147,12 @@ void Cce122::TurnON()
 {
     Power = true;
     update();
+    emit updatedPObject(this);
 }
 
 void Cce122::TurnOFF()
 {
     Power = false;
     update();
+    emit updatedPObject(this);
 }

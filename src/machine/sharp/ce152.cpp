@@ -290,6 +290,7 @@ bool Cce152::GetWav(void)
         if (counterDiv100 < (counter/100)) {
             counterDiv100 = counter/100;
             update();
+            emit updatedPObject(this);
         }
         first_state +=wait;
 	}
@@ -346,6 +347,7 @@ bool Cce152::SetWav(bool bit)
             counterDiv100 = counter/100;
             Refresh_Display=true;
             update();
+            emit updatedPObject(this);
         }
         first_state +=wait;
 	}

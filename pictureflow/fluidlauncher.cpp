@@ -350,7 +350,11 @@ Vibrate();
          //TODO: try to implement sub level
          // if ItemText start with a specic tag, load the corresponding xml and display the new pictureflow.
          // Esc should exit
-
+        if (ItemText.startsWith("#")) {
+            loadConfig(QStringList()<<P_RES(":/pockemul/configExt.xml"));
+            populatePictureFlow();
+            return;
+        }
 
          CPObject *_pc=0;
 

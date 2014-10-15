@@ -320,6 +320,7 @@ void Chp82143A::ComputeKey(void)
         top+=10;
         fpadv = true;
         update();
+        emit updatedPObject(this);
     }
     else fpadv = false;
 
@@ -328,13 +329,13 @@ void Chp82143A::ComputeKey(void)
     }
     else fprint = false;
 
-    if (pKEYB->LastKey == K_PRT_INT_MIN) { intensity = -1; update(); }
-    if (pKEYB->LastKey == K_PRT_INT_NORM) { intensity = 0; update(); }
-    if (pKEYB->LastKey == K_PRT_INT_MAX) { intensity = 1; update(); }
+    if (pKEYB->LastKey == K_PRT_INT_MIN) { intensity = -1; emit updatedPObject(this); update(); }
+    if (pKEYB->LastKey == K_PRT_INT_NORM) { intensity = 0; emit updatedPObject(this); update(); }
+    if (pKEYB->LastKey == K_PRT_INT_MAX) { intensity = 1; emit updatedPObject(this); update(); }
 
-    if (pKEYB->LastKey == K_PRT_NORM) { Mode = NORM_MODE; update(); }
-    if (pKEYB->LastKey == K_PRT_TRACE) { Mode = TRACE_MODE; update(); }
-    if (pKEYB->LastKey == K_PRT_MANUAL) { Mode = MANUAL_MODE; update(); }
+    if (pKEYB->LastKey == K_PRT_NORM) { Mode = NORM_MODE; emit updatedPObject(this); update(); }
+    if (pKEYB->LastKey == K_PRT_TRACE) { Mode = TRACE_MODE; emit updatedPObject(this); update(); }
+    if (pKEYB->LastKey == K_PRT_MANUAL) { Mode = MANUAL_MODE; emit updatedPObject(this); update(); }
 
 //    if (pKEYB->LastKey == K_PRINT_ON) {
 //        printerSwitch = true;

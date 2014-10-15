@@ -186,6 +186,7 @@ void CpcXXXX::TurnOFF(void)
     if (pLCDC) pLCDC->TurnOFF();
     InitDisplay();
     UpdateFinalImage();
+    emit updatedPObject(this);
     update();
 }
 

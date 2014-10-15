@@ -79,6 +79,7 @@ void Cfp40::ComputeKey(void)
     if (pKEYB->LastKey == K_PRT_COND) {
         if (charsize==1) charsize=2;
         else charsize = 1;
+        emit updatedPObject(this);
         update();
     }
 //    if (pKEYB->LastKey == K_PRINT_ON) {

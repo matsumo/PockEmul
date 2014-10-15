@@ -226,7 +226,6 @@ public:
 
 signals:
     void msgError(QString);
-    void updatedPObject(CPObject *);
     void stackPosChanged();
 
 public slots:

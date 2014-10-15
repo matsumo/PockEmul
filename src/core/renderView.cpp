@@ -123,9 +123,9 @@ void CrenderView::setzoom(int x,int y,int z)
 {
     mainwindow->doZoom(QPoint(x,y),z);
 }
-void CrenderView::pocketUpdated(CPObject * pObject)
+void CrenderView::pocketUpdated(CViewObject * pObject)
 {
-
+    update();
     QMetaObject::invokeMethod(object, "refreshPocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );
@@ -140,7 +140,7 @@ void CrenderView::newPObject(CPObject *pObject) {
     connect (pObject,SIGNAL(movePObject(CViewObject*,QPoint)),this,SLOT(movePObject(CViewObject*,QPoint)));
     connect (pObject,SIGNAL(sizePObject(CViewObject*,QSize)),this,SLOT(sizePObject(CViewObject*,QSize)));
     connect (pObject,SIGNAL(stackPosChanged()),this,SLOT(stackPosChanged()));
-    connect( pObject,SIGNAL(updatedPObject(CPObject*)),this,SLOT(pocketUpdated(CPObject*)));
+    connect( pObject,SIGNAL(updatedPObject(CViewObject*)),this,SLOT(pocketUpdated(CViewObject*)));
 
     QMetaObject::invokeMethod(object, "addPocket",
                               Q_ARG(QVariant, QString("name")),
