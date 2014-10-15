@@ -598,7 +598,7 @@ void Cti74::ComputeKey()
     currentSlot = _slot;
     FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                 QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                                FluidLauncher::PictureFlowType,
+                                                FluidLauncher::PictureFlowType,QString(),
                                                 "TI-74_Cartridge");
     connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
     launcher->show();

@@ -46,7 +46,7 @@
 
 #endif
 
- #include "fluidlauncher.h"
+#include "fluidlauncher.h"
 #include "init.h"
 #include "mainwindowpockemul.h"
 
@@ -59,7 +59,7 @@ extern void Vibrate();
  #define SIZING_FACTOR_WIDTH 6/12
 
 
-FluidLauncher::FluidLauncher(QWidget * parent, QStringList config, LaunchType type,QString connType,QString connGender):QStackedWidget(parent)
+FluidLauncher::FluidLauncher(QWidget * parent, QStringList config, LaunchType type, QString brand, QString connType, QString connGender):QStackedWidget(parent)
 {
 //    qWarning("CFL 1\n");
 
@@ -67,6 +67,7 @@ FluidLauncher::FluidLauncher(QWidget * parent, QStringList config, LaunchType ty
     Config = config;
     this->connType = connType;
     this->connGender = connGender;
+    this->brand = brand;
 
     pictureFlowWidget = new PictureFlow();
 
@@ -95,7 +96,7 @@ FluidLauncher::FluidLauncher(QWidget * parent, QStringList config, LaunchType ty
 
     if (type == PictureFlowType) {
         bool success;
-//qWarning()<<"Berfore LoadConfig";
+qWarning()<<"Berfore LoadConfig";
         success = loadConfig(Config);
 //qWarning()<<"After LoadConfig";
         if (success) {
@@ -198,7 +199,7 @@ qWarning()<<"After PopulatePictureFlow";
              QXmlStreamAttributes attrs = reader.attributes();
              QStringRef filename = attrs.value("filename");
              if (!filename.isEmpty()) {
-                 QStringRef brand = attrs.value("brand");
+                 QStringRef _brand = attrs.value("brand");
                  QStringRef name = attrs.value("name");
                  QStringRef image = attrs.value("image");
                  QStringRef args = attrs.value("args");
@@ -208,7 +209,7 @@ qWarning()<<"After PopulatePictureFlow";
                  QStringRef _conngender = attrs.value("conngender");
 
                  // filter on brand, connectors type and gender
-                 if (!brandSearch.isEmpty() && (brand.indexOf(brandSearch)==-1)) continue;
+
                  if (!connType.isEmpty() && (_connectortype.indexOf(connType)==-1)) continue;
 //                 qWarning()<<connType<<" found:"<<_connectortype;
                  if (!connGender.isEmpty() && (_conngender.indexOf(connGender)==-1)) continue;
@@ -220,7 +221,7 @@ qWarning()<<"After PopulatePictureFlow";
                              image.toString(),
                              args.toString().split(" "),
                              desc.toString(),
-                             brand.toString());
+                             _brand.toString());
                  demoList.append(newDemo);
 
              }
@@ -308,14 +309,18 @@ qWarning()<<"After PopulatePictureFlow";
 
  void FluidLauncher::populatePictureFlow()
  {
+     if (brandSearch.isEmpty()) {
+         brandSearch = brand;
+     }
 
      if (brandSearch.isEmpty()) {
+
          filteredList = demoList;
      }
      else {
          filteredList.clear();
          for (int i=0;i<demoList.count();i++) {
-             if (brandSearch == demoList.at(i)->getBrand())
+             if (demoList.at(i)->getBrand().startsWith(brandSearch))
                  filteredList.append(demoList.at(i));
          }
      }
@@ -348,11 +353,11 @@ Vibrate();
 
      if ( (index==-1) )//||(index == demoList.size() -1))
      {
-         if (brandSearch.isEmpty()) {
+         if (brandSearch.isEmpty() || (brandSearch==brand)) {
              hide();
          }
          else {
-             brandSearch = "";
+             brandSearch = brand;
              populatePictureFlow();
          }
 

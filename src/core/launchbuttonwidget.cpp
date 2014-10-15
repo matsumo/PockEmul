@@ -9,14 +9,14 @@ extern void Vibrate();
 
 
 
-LaunchButtonWidget::LaunchButtonWidget(QWidget *parent,LaunchButtonWidget::LaunchType type,QStringList param,QString img):QWidget(parent)
+LaunchButtonWidget::LaunchButtonWidget(QWidget *parent,LaunchButtonWidget::LaunchType type,QStringList param,QString img,QString brand):QWidget(parent)
 {
     this->type = type;
     config = param;
     image = img;
     setAttribute(Qt::WA_DeleteOnClose);
     if (type == PictureFlow){
-        launcher = new FluidLauncher(mainwindow,config,FluidLauncher::PictureFlowType);
+        launcher = new FluidLauncher(mainwindow,config,FluidLauncher::PictureFlowType,brand);
         launcher->hide();
     }
     if (type == FileBrowser){

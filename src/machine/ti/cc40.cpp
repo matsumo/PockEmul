@@ -676,7 +676,7 @@ void Ccc40::ComputeKey()
     currentSlot = _slot;
     FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                 QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                                FluidLauncher::PictureFlowType,
+                                                FluidLauncher::PictureFlowType,QString(),
                                                 "CC-40_Cartridge");
     connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
     launcher->show();

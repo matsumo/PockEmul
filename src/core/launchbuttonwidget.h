@@ -24,7 +24,7 @@ public:
 
 
 
-    LaunchButtonWidget(QWidget* parent,LaunchType type,QStringList param,QString img);
+    LaunchButtonWidget(QWidget* parent, LaunchType type, QStringList param, QString img, QString brand=QString());
     ~LaunchButtonWidget();
 
     void mousePressEvent(QMouseEvent *);

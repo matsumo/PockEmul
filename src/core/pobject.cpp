@@ -999,7 +999,7 @@ void CPObject::ComputeKey()
     if (KEY(K_SHARP11PINS)) {
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,
+                                     FluidLauncher::PictureFlowType,QString(),
                                      "Sharp_11");
         launcher->show();
     }

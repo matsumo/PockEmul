@@ -467,7 +467,7 @@ void Crlp1004a::ComputeKey()
         pKEYB->keyPressedList.removeAll(0x240);
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,
+                                     FluidLauncher::PictureFlowType,QString(),
                                      "Jack_3");
         launcher->show();
     }

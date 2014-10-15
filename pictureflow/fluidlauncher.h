@@ -69,7 +69,7 @@ class CPObject;
          FileBrowserType
      };
 
-     FluidLauncher(QWidget *,QStringList,LaunchType,QString connType=QString(),QString connGender=QString());
+     FluidLauncher(QWidget *, QStringList, LaunchType, QString brand=QString(), QString connType=QString(), QString connGender=QString());
      ~FluidLauncher();
 
      void populateFileBrowser(QStringList param);
@@ -102,7 +102,7 @@ class CPObject;
      void parseDemos(QXmlStreamReader& reader);
 
      QStringList Config;
-    QString connType,connGender,brandSearch;
+    QString connType,connGender,brand,brandSearch;
  };
 
  #endif

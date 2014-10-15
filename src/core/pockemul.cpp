@@ -159,7 +159,7 @@ mainwindow = new MainWindowPockemul();
     LaunchButtonWidget* launch1 = new LaunchButtonWidget(mainwindow->centralwidget,
                                                 LaunchButtonWidget::PictureFlow,
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
-                                                ":/core/pocket.png");
+                                                ":/core/pocket.png","BRAND");
     launch1->setGeometry(0,v_pos,iconSize,iconSize);
     launch1->raise();
     v_pos += v_inter;

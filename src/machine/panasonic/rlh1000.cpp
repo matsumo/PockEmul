@@ -659,7 +659,7 @@ void Crlh1000::ComputeKey()
         pKEYB->keyPressedList.removeAll(0x240);
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,
+                                     FluidLauncher::PictureFlowType,QString(),
                                      "Panasonic_44");
         launcher->show();
     }
