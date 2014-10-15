@@ -59,7 +59,7 @@
    <example brand="BRAND" idpocket="#BRAND#CASIO" filename="./" name="Casio" image=":/logos/casio.png"/>
    <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/logos/sharp.png"/>
    <example brand="BRAND" idpocket="#BRAND#TANDY" filename="./" name="Radio Shack" image=":/logos/radioshack.png"/>
-   <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/logos/ti.png"/>
+   <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/logos/ti2.png"/>
    <example brand="BRAND" idpocket="#BRAND#OTHER" filename="./" name="Others" image=":/logos/others.png"/>
    <example brand="SHARP" idpocket="#BRAND#SHARP_PC12XX" filename="./" name="Sharp pc-12xx Series" image=":/logos/sharp_pc12xx.png"/>
    <example brand="SHARP" idpocket="#BRAND#SHARP_PC13XX" filename="./" name="Sharp pc-13xx Series" image=":/logos/sharp_pc13xx.png"/>
