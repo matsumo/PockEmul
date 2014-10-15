@@ -1,6 +1,7 @@
 
 #include <QPainter>
 #include <QResource>
+#include <QDebug>
 
 #include "common.h"
 #include "ce515p.h"
@@ -197,13 +198,26 @@ bool Cce515p::run(void)
         }
 #else
         Draw();
+
+
 #endif
 
+        // Expand paper size if limit reached
+        int _height = ce515pbuf->height();
+        if (Pen_Y >= (_height-500)) {
+            qWarning()<<"increase size:"<<_height;
+            QImage *_tmp = ce515pbuf;
+            ce515pbuf = new QImage(_tmp->width(),_height+500,QImage::Format_ARGB32);
+            ce515pbuf->fill(PaperColor.rgba());
 
+            qWarning()<<"increased size:"<<ce515pbuf->size();
+            QPainter painter(ce515pbuf);
+            painter.drawImage(0,0,*_tmp);
+            painter.end();
+            paperWidget->bufferImage = ce515pbuf;
+            delete _tmp;
+        }
 
-
-    //pCONNECTOR->Set_pin(1	,1);
-    //pCONNECTOR->Set_pin(30	,pLH5810->INT);
 
     return(1);
 }
@@ -276,7 +290,7 @@ bool Cce515p::init(void)
     if(pTIMER)	pTIMER->init();
 
     // Create CE-150 Paper Image
-    ce515pbuf	= new QImage(QSize(Paper_DX, 3000),QImage::Format_ARGB32);
+    ce515pbuf	= new QImage(QSize(Paper_DX, 600),QImage::Format_ARGB32);
     ce515pdisplay= new QImage(QSize(Paper_DX, 567),QImage::Format_ARGB32);
     ce515ppen	= new QImage(P_RES(":/ext/ce-150pen.png"));
     // Fill it blank
