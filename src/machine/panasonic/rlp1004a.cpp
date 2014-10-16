@@ -1,3 +1,5 @@
+//FIXME: modify updatefinalimage to drfaw paper.
+
 #include <QtGui>
 #include <QTime>
 #include <QFileDialog>
@@ -247,6 +249,8 @@ bool Crlp1004a::run(void)
 
     }
 
+
+
     pCONNECTOR->Set_values(bus.toUInt64());
     return true;
 
@@ -345,7 +349,7 @@ bool Crlp1004a::init(void)
     paperdisplay= new QImage(QSize(200, 149),QImage::Format_ARGB32);
 
 
-//TODO Update the chartable with upd16343 char table
+//TODO Update the chartable with upd16434 char table
     charTable = new QImage(P_RES(":/rlh1000/rlp1004atable.bmp"));
 
 //      bells    = new QSound("ce.wav");
@@ -411,22 +415,13 @@ void Crlp1004a::paintEvent(QPaintEvent *event)
     CPObject::paintEvent(event);
 }
 
-void Crlp1004a::contextMenuEvent ( QContextMenuEvent * event )
-{
-    QMenu *menu= new QMenu(this);
-
-    BuildContextMenu(menu);
-
-
+void Crlp1004a::BuildContextMenu(QMenu * menu) {
+    Cprinter::BuildContextMenu(menu);
     menu->addAction(tr("Dump Memory"),this,SLOT(Dump()));
     menu->addSeparator();
-
     menu->addAction(tr("Rotate 180"),this,SLOT(Rotate()));
-//    menu.addAction(tr("Hide console"),this,SLOT(HideConsole()));
-
-    menu->popup(event->globalPos () );
-    event->accept();
 }
+
 
 void Crlp1004a::Rotate()
 {

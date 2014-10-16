@@ -106,11 +106,6 @@ void Cx710::contextMenuEvent ( QContextMenuEvent * event )
 
     BuildContextMenu(menu);
 
-//    menu.addSeparator();
-
-//    menu.addAction(tr("Show console"),pSIO,SLOT(ShowConsole()));
-//    menu.addAction(tr("Hide console"),pSIO,SLOT(HideConsole()));
-
     menu->popup(event->globalPos () );
     event->accept();
 }
@@ -126,27 +121,27 @@ void Cx710::ComputeKey(void)
 //    }
 }
 
-bool Cx710::UpdateFinalImage(void) {
-    Cce515p::UpdateFinalImage();
+//bool Cx710::UpdateFinalImage(void) {
+//    Cce515p::UpdateFinalImage();
 
-//    // Draw switch by 180° rotation
-//    QPainter painter;
+////    // Draw switch by 180° rotation
+////    QPainter painter;
 
-//    // PRINTER SWITCH
-//    painter.begin(FinalImage);
-//    painter.drawImage(800,430,FinalImage->copy(800,430,22,14).mirrored(!printerSwitch,false));
+////    // PRINTER SWITCH
+////    painter.begin(FinalImage);
+////    painter.drawImage(800,430,FinalImage->copy(800,430,22,14).mirrored(!printerSwitch,false));
 
-//    painter.end();
+////    painter.end();
 
-//    Refresh_Display = true;
+////    Refresh_Display = true;
 
-    return true;
-}
+//    return true;
+//}
 
-void Cx710::paintEvent(QPaintEvent *event)
-{
-    Cce515p::paintEvent(event);
-}
+//void Cx710::paintEvent(QPaintEvent *event)
+//{
+//    Cce515p::paintEvent(event);
+//}
 
 void Cx710::CommandSlot(qint8 data) {
     Command(data);

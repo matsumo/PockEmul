@@ -27,10 +27,11 @@ public:
     Cce140p(CPObject *parent = 0);
     virtual ~Cce140p();
 
+    virtual void BuildContextMenu(QMenu *menu);
 protected:
     void paintEvent(QPaintEvent *);
 protected slots:
-    void contextMenuEvent ( QContextMenuEvent * );
+
     void CommandSlot(qint8);
 //    void ShowConsole(void);
 //    void HideConsole(void);

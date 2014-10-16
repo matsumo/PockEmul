@@ -25,12 +25,12 @@ Cfp40::Cfp40(CPObject *parent):CprinterCtronics(this) {
 
     delete pKEYB; pKEYB		= new Ckeyb(this,"fp40.map");
 
-    setDXmm(210);//Pc_DX_mm = 256;
-    setDYmm(145);//Pc_DY_mm = 185;
-    setDZmm(42);//Pc_DZ_mm = 42;
+    setDXmm(210);
+    setDYmm(145);
+    setDZmm(42);
 
-    setDX(750);//Pc_DX	= 895;
-    setDY(518);//Pc_DY	= 615;
+    setDX(750);
+    setDY(518);
 
 
     margin = 40;
@@ -55,21 +55,6 @@ bool Cfp40::init(void) {
 //    qWarning()<<"init done";
     return true;
 }
-
-bool Cfp40::run(void) {
-
-    CprinterCtronics::run();
-
-    return true;
-}
-
-bool Cfp40::exit(void) {
-
-    CprinterCtronics::exit();
-
-    return true;
-}
-
 
 void Cfp40::ComputeKey(void)
 {

@@ -126,7 +126,7 @@ public:
 	void publish(Cconnector* newConn);
     void remove(Cconnector* newConn);
 
-	void BuildContextMenu(QMenu * menu);
+    virtual void BuildContextMenu(QMenu * menu);
     void computeWebLinksMenu(QMenu * menu);
 
     enum LINKTYPE {WEBLINK,DOCUMENT};

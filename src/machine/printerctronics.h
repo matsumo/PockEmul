@@ -28,7 +28,7 @@ public:
     virtual void SaveAsText(void);
 
     virtual void ComputeKey(void);
-    virtual bool UpdateFinalImage(void);
+//    virtual bool UpdateFinalImage(void);
 
     virtual void Printer(quint8 d);			//printer emulator
     //virtual void resizeEvent ( QResizeEvent * );

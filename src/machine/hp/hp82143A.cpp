@@ -481,36 +481,44 @@ bool Chp82143A::UpdateFinalImage(void) {
 
     // Draw switch
 
-    if (intensity == -1)
-        painter.drawImage(205,338,QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
-    if (intensity == 1)
-        painter.drawImage(205,338,QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
-    if (intensity == 0)
-        painter.drawImage(205,338,BackgroundImageBackup->copy(205,338,69,24));
-
+    if (intensity == -1) {
+        painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
+                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
+    }
+    if (intensity == 1) {
+        painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
+                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
+    }
+    if (intensity == 0) {
+        painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
+                          BackgroundImageBackup->copy(205 * internalImageRatio,338 * internalImageRatio,69,24));
+    }
 
     // MODE SWITCH
 
     if (Mode == NORM_MODE)
-        painter.drawImage(205,385,QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
+        painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
+                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
     if (Mode == MANUAL_MODE)
-        painter.drawImage(205,385,QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
+        painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
+                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
     if (Mode == TRACE_MODE)
-        painter.drawImage(205,385,BackgroundImageBackup->copy(205,385,69,24));
+        painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
+                          BackgroundImageBackup->copy(205,385,69,24));
 
 
-    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
+//    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 
-//    ratio *= charsize;
-    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
-                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
-                          QPoint(paperWidget->bufferImage->width(),
-                                 paperWidget->getOffset().y() +10)
-                          );
-//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(PaperPos(),
-                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
-                      );
+////    ratio *= charsize;
+//    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
+//                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
+//                          QPoint(paperWidget->bufferImage->width(),
+//                                 paperWidget->getOffset().y() +10)
+//                          );
+////    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+//    painter.drawImage(PaperPos(),
+//                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+//                      );
 //    painter.drawImage(350,15,QImage("://hp41/hp82143a_cover.png"));
 
     painter.end();

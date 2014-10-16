@@ -1,7 +1,6 @@
 #ifndef KEYB1401_H
 #define KEYB1401_H
 
-//TODO  ADD {} in KeyMap1401 to avoid warning during compilation
 
 BYTE scandef_pc1401[] = {
 //+0		+1			+2			+3			+4			+5			+6			+7

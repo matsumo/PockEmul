@@ -32,12 +32,12 @@ Ccl1000::Ccl1000(CPObject *parent):Cce515p(this) {
 
     delete pKEYB; pKEYB		= new Ckeyb(this,"cl1000.map");
 
-    setDXmm(260);//Pc_DX_mm = 256;
-    setDYmm(225);//Pc_DY_mm = 185;
-    setDZmm(42);//Pc_DZ_mm = 42;
+    setDXmm(260);
+    setDYmm(225);
+    setDZmm(42);
 
-    setDX(928);//Pc_DX	= 895;
-    setDY(804);//Pc_DY	= 615;
+    setDX(928);
+    setDY(804);
 
     printerACK = false;
     printerBUSY = false;
@@ -162,6 +162,7 @@ bool Ccl1000::UpdateFinalImage(void) {
 
     Cce515p::UpdateFinalImage();
 
+    return true;
     QPainter painter;
     painter.begin(FinalImage);
 

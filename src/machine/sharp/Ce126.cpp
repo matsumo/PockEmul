@@ -57,8 +57,8 @@ Cce126::Cce126(CPObject *parent):Cprinter(this)
     KeyMap      = KeyMapce126;
     KeyMapLenght= KeyMapce126Lenght;
     pKEYB		= new Ckeyb(this,"ce126.map");
-    setDX(620);//Pc_DX	= 620;
-    setDY(488);//Pc_DY	= 488;
+    setDX(620);
+    setDY(488);
 
     setDXmm(116);
     setDYmm(140);
@@ -94,34 +94,6 @@ void Cce126::ComputeKey(void)
     if (pKEYB->LastKey == K_RMT_OFF) {
         rmtSwitch = false;
     }
-}
-
-bool Cce126::UpdateFinalImage(void) {
-
-    Cprinter::UpdateFinalImage();
-
-    QPainter painter;
-    painter.begin(FinalImage);
-
-
-    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
-
-//    ratio *= charsize;
-    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
-                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
-                          QPoint(paperWidget->bufferImage->width(),
-                                 paperWidget->getOffset().y() +10)
-                          );
-//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(PaperPos(),
-                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
-                      );
-
-    painter.end();
-
-    emit updatedPObject(this);
-
-    return true;
 }
 
 
@@ -229,7 +201,7 @@ bool Cce126::init(void)
 
 	// Create CE-126 Paper Image
 	// The final paper image is 207 x 149 at (277,0) for the ce125
-	ce126buf	= new QImage(QSize(207, 3000),QImage::Format_ARGB32);
+    ce126buf	= new QImage(QSize(207, 1000),QImage::Format_ARGB32);
 	ce126display= new QImage(QSize(207, 149),QImage::Format_ARGB32);
 
 
@@ -526,8 +498,6 @@ bool Cce126::run(void)
                 break;
             }
 
-
-
    if ((code_transfer_step==BASIC_MODE) || (code_transfer_step == INIT_MODE)) {
 
         switch (device_code)
@@ -594,19 +564,15 @@ bool Cce126::run(void)
                         else {
                             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
                         }
-
-	
 					} 
 				}
                 Previous_BUSY = BUSY;
                 Previous_MT_OUT1 = MT_OUT1;
 				pulldownsignal();
-				
-
         }
-
     }
 
+   ce126buf = checkPaper(ce126buf,top);
 
 	pCONNECTOR_value = pCONNECTOR->Get_values();
 	pTAPECONNECTOR_value = pTAPECONNECTOR->Get_values();
@@ -621,8 +587,8 @@ Cce123::Cce123()
 {								//[constructor]
     BackGroundFname	= P_RES(":/ext/ce-123p.jpg");
     setcfgfname("ce123p");
-    setDX(708);//Pc_DX	= 708;
-    setDY(566);//Pc_DY	= 566;
+    setDX(708);
+    setDY(566);
     setDXmm(196);
     setDYmm(155);
     setDZmm(33);
@@ -641,8 +607,8 @@ Cce129::Cce129()
 {								//[constructor]
     BackGroundFname	= P_RES(":/ext/ce-129p.jpg");
     setcfgfname("ce129p");
-    setDX(708);//Pc_DX	= 708;
-    setDY(566);//Pc_DY	= 566;
+    setDX(708);
+    setDY(566);
 
     setDXmm(196);
     setDYmm(155);

@@ -209,20 +209,21 @@ bool CprinterCtronics::run(void)
 
 
     // Expand paper size if limit reached
-    int _height = printerbuf->height();
-    if (top >= (_height-500)) {
-        qWarning()<<"increase size:"<<_height;
-        QImage *_tmp = printerbuf;
-        printerbuf = new QImage(_tmp->width(),_height+500,QImage::Format_ARGB32);
-        printerbuf->fill(PaperColor.rgba());
+    printerbuf = checkPaper(printerbuf,top);
+//    int _height = printerbuf->height();
+//    if (top >= (_height-500)) {
+//        qWarning()<<"increase size:"<<_height;
+//        QImage *_tmp = printerbuf;
+//        printerbuf = new QImage(_tmp->width(),_height+500,QImage::Format_ARGB32);
+//        printerbuf->fill(PaperColor.rgba());
 
-        qWarning()<<"increased size:"<<printerbuf->size();
-        QPainter painter(printerbuf);
-        painter.drawImage(0,0,*_tmp);
-        painter.end();
-        paperWidget->bufferImage = printerbuf;
-        delete _tmp;
-    }
+//        qWarning()<<"increased size:"<<printerbuf->size();
+//        QPainter painter(printerbuf);
+//        painter.drawImage(0,0,*_tmp);
+//        painter.end();
+//        paperWidget->bufferImage = printerbuf;
+//        delete _tmp;
+//    }
     return true;
 
 }
@@ -246,29 +247,29 @@ void CprinterCtronics::Printer(quint8 d)
 
 
 
-bool CprinterCtronics::UpdateFinalImage(void) {
+//bool CprinterCtronics::UpdateFinalImage(void) {
 
-    Cprinter::UpdateFinalImage();
+//    Cprinter::UpdateFinalImage();
 
-    QPainter painter;
-    painter.begin(FinalImage);
+//    QPainter painter;
+//    painter.begin(FinalImage);
 
 
-    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
+//    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
 
-//    ratio *= charsize;
-    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
-                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
-                          QPoint(paperWidget->bufferImage->width(),
-                                 paperWidget->getOffset().y() +10)
-                          );
-//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(PaperPos(),
-                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
-                      );
+////    ratio *= charsize;
+//    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
+//                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
+//                          QPoint(paperWidget->bufferImage->width(),
+//                                 paperWidget->getOffset().y() +10)
+//                          );
+////    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+//    painter.drawImage(PaperPos(),
+//                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+//                      );
 
-    painter.end();
+//    painter.end();
 
-    emit updatedPObject(this);
-    return true;
-}
+//    emit updatedPObject(this);
+//    return true;
+//}

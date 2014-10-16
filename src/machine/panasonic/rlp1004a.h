@@ -60,10 +60,10 @@ public:
     int margin;
     int		top;
     bool INTrequest;
+    virtual void BuildContextMenu(QMenu *menu);
 protected:
     void paintEvent(QPaintEvent *);
 protected slots:
-    void contextMenuEvent ( QContextMenuEvent * );
     void Rotate();
 
 private:

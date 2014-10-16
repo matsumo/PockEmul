@@ -1,6 +1,8 @@
 #include <QMenu>
 #include <QClipboard>
 #include <QFileDialog>
+#include <QPainter>
+#include <QDebug>
 
 #include "cprinter.h"
 #include "paperwidget.h"
@@ -20,6 +22,36 @@ Cprinter::~Cprinter()
 	delete paperWidget;
 }
 
+bool Cprinter::UpdateFinalImage(void) {
+
+    CPObject::UpdateFinalImage();
+
+    QPainter painter;
+    painter.begin(FinalImage);
+
+
+    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
+
+//    ratio *= charsize;
+    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
+                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
+                          QPoint(paperWidget->bufferImage->width(),
+                                 paperWidget->getOffset().y() +10)
+                          );
+//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+
+    QRect _target = QRect(PaperPos().topLeft()*internalImageRatio,PaperPos().size()*internalImageRatio);
+    painter.drawImage(_target,
+                      paperWidget->bufferImage->copy(source).scaled(_target.size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+                      );
+
+    painter.end();
+
+    emit updatedPObject(this);
+
+    return true;
+}
+
 void Cprinter::resizeEvent ( QResizeEvent * ) {
     float ratio = (float)this->width()/getDX() ;
 
@@ -33,11 +65,28 @@ void Cprinter::resizeEvent ( QResizeEvent * ) {
     this->paperWidget->updated=true;
 }
 
-void Cprinter::contextMenuEvent ( QContextMenuEvent * event )
-{
-    QMenu *menu= new QMenu(this);
+QImage * Cprinter::checkPaper(QImage *printerbuf,int top) {
+    int _height = printerbuf->height();
+    if (top >= (_height-500)) {
+        qWarning()<<"increase size:"<<_height;
+        QImage *_tmp = printerbuf;
+        printerbuf = new QImage(_tmp->width(),_height+500,QImage::Format_ARGB32);
+        printerbuf->fill(PaperColor.rgba());
 
-    BuildContextMenu(menu);
+        qWarning()<<"increased size:"<<printerbuf->size();
+        QPainter painter(printerbuf);
+        painter.drawImage(0,0,*_tmp);
+        painter.end();
+        paperWidget->bufferImage = printerbuf;
+        delete _tmp;
+
+    }
+    return printerbuf;
+}
+
+void Cprinter::BuildContextMenu(QMenu *menu)
+{
+    CPObject::BuildContextMenu(menu);
 
     QMenu * menuPaper = menu->addMenu(tr("Paper"));
     menuPaper->addAction(tr("Copy Image"),paperWidget,SLOT(paperCopy()));
@@ -45,6 +94,14 @@ void Cprinter::contextMenuEvent ( QContextMenuEvent * event )
     menuPaper->addAction(tr("Cut"),paperWidget,SLOT(paperCut()));
     menuPaper->addAction(tr("Save Image ..."),paperWidget,SLOT(paperSaveImage()));
     menuPaper->addAction(tr("Save Text ..."),paperWidget,SLOT(paperSaveText()));
+
+}
+
+void Cprinter::contextMenuEvent ( QContextMenuEvent * event )
+{
+    QMenu *menu= new QMenu(this);
+
+    BuildContextMenu(menu);
 
     menu->popup(event->globalPos () );
     event->accept();

@@ -23,8 +23,6 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(this) {
     setcfgfname(QString("fp100"));
     BackGroundFname	= P_RES(":/ext/fp100.png");
 
-
-
     delete pKEYB; pKEYB		= new Ckeyb(this,"x710.map");
 
     setDXmm(302);
@@ -34,11 +32,8 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(this) {
     setDX(1078);
     setDY(817);
 
-
-
     printerACK = false;
     printerBUSY = false;
-
 
     capot = CreateImage(QSize(849,274),P_RES(":/ext/fp100-capot.png"));
     head = CreateImage(QSize(79,161),P_RES(":/ext/fp100head.png"));

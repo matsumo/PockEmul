@@ -32,12 +32,12 @@ Cce140p::Cce140p(CPObject *parent):Cce515p(this) {
     KeyMapLenght= KeyMapce140pLenght;
     delete pKEYB; pKEYB		= new Ckeyb(this,"ce140p.map");
 
-    setDXmm(256);//Pc_DX_mm = 256;
-    setDYmm(185);//Pc_DY_mm = 185;
-    setDZmm(42);//Pc_DZ_mm = 42;
+    setDXmm(256);
+    setDYmm(185);
+    setDZmm(42);
 
-    setDX(895);//Pc_DX	= 895;
-    setDY(615);//Pc_DY	= 615;
+    setDX(895);
+    setDY(615);
 
     setPaperPos(QRect(200,46,380,170));
 
@@ -135,19 +135,14 @@ bool Cce140p::exit(void) {
     return true;
 }
 
-void Cce140p::contextMenuEvent ( QContextMenuEvent * event )
+void Cce140p::BuildContextMenu(QMenu *menu)
 {
-    QMenu *menu= new QMenu(this);
-
-    BuildContextMenu(menu);
+    Cce515p::BuildContextMenu(menu);
 
     menu->addSeparator();
 
     menu->addAction(tr("Show serial console"),pSIO,SLOT(ShowConsole()));
     menu->addAction(tr("Hide serial console"),pSIO,SLOT(HideConsole()));
-
-    menu->popup(event->globalPos () );
-    event->accept();
 }
 
 void Cce140p::ComputeKey(void)

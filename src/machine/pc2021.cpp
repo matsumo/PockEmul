@@ -51,8 +51,8 @@ Cpc2021::Cpc2021(CPObject *parent):Cprinter(this)
     setDYmm(130);
     setDZmm(43);
 
-    setDX(386);//Pc_DX	= 620;
-    setDY(464);//Pc_DY	= 488;
+    setDX(386);
+    setDY(464);
     SnapPts = QPoint(594,145);
 
     setPaperPos(QRect(70,-3,275,149));
@@ -194,7 +194,7 @@ bool Cpc2021::init(void)
 
     // Create CE-126 Paper Image
     // The final paper image is 207 x 149 at (277,0) for the ce125
-    pc2021buf	= new QImage(QSize(340, 3000),QImage::Format_ARGB32);
+    pc2021buf	= new QImage(QSize(340, 1000),QImage::Format_ARGB32);
     pc2021display= new QImage(QSize(340, 149),QImage::Format_ARGB32);
 
 
@@ -299,7 +299,7 @@ bool Cpc2021::run(void)
     pCONNECTOR_value = pCONNECTOR->Get_values();
 
 
-
+    pc2021buf = checkPaper(pc2021buf,top);
 
     Set_Connector();
 

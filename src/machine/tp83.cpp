@@ -15,15 +15,6 @@
 #define DOWN	0
 #define UP		1
 
-/*
-TransMap KeyMapce140p[]={
-    {1,	"FEED  ",	K_PFEED,34,234,	9},
-    {2, "PRINTER ON",K_PRINT_ON,34,200,9},
-    {3, "SIO ON",K_PRINT_OFF,35,150,9}
-};
- int KeyMapce140pLenght = 3;
-*/
-
 Ctp83::Ctp83(CPObject *parent):Cce515p(this) {
     setfrequency( 0);
     ioFreq = 0;
@@ -32,12 +23,12 @@ Ctp83::Ctp83(CPObject *parent):Cce515p(this) {
 
     delete pKEYB; pKEYB		= new Ckeyb(this,"tp83.map");
 
-    setDXmm(329);//Pc_DX_mm = 256;
-    setDYmm(117);//Pc_DY_mm = 185;
-    setDZmm(51);//Pc_DZ_mm = 42;
+    setDXmm(329);
+    setDYmm(117);
+    setDZmm(51);
 
-    setDX(1175);//Pc_DX	= 895;
-    setDY(418);//Pc_DY	= 615;
+    setDX(1175);
+    setDY(418);
 
     printerACK = false;
     printerBUSY = false;
@@ -110,6 +101,8 @@ bool Ctp83::run(void) {
 
     Draw();
 
+    ce515pbuf = checkPaper(ce515pbuf,Pen_Y);
+
     return true;
 }
 
@@ -130,75 +123,6 @@ bool Ctp83::GoUp(int pin) {
 }
 bool Ctp83::Change(int pin) {
     return (pCONNECTOR->Get_pin(pin) != pSavedCONNECTOR->Get_pin(pin) ) ? true:false;
-}
-
-void Ctp83::contextMenuEvent ( QContextMenuEvent * event )
-{
-    QMenu *menu= new QMenu(this);
-
-    BuildContextMenu(menu);
-
-    QMenu * menuPaper = menu->addMenu(tr("Paper"));
-    menuPaper->addAction(tr("Copy"),paperWidget,SLOT(paperCopy()));
-    menuPaper->addAction(tr("Cut"),paperWidget,SLOT(paperCut()));
-    menuPaper->addAction(tr("Save Image ..."),paperWidget,SLOT(paperSaveImage()));
-    menuPaper->addAction(tr("Save Text ..."),paperWidget,SLOT(paperSaveText()));
-
-    menu->popup(event->globalPos () );
-    event->accept();
-}
-
-void Ctp83::ComputeKey(void)
-{
-
-//    if (pKEYB->LastKey == K_PRINT_ON) {
-//        printerSwitch = true;
-//    }
-//    if (pKEYB->LastKey == K_PRINT_OFF) {
-//        printerSwitch = false;
-//    }
-}
-
-bool Ctp83::UpdateFinalImage(void) {
-
-
-    Cce515p::UpdateFinalImage();
-
-    QPainter painter;
-    painter.begin(FinalImage);
-    painter.scale(internalImageRatio,internalImageRatio);
-
-    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
-
-    QRect source = QRect( QPoint(paperWidget->getOffset().x() ,
-                                 paperWidget->getOffset().y()  - paperWidget->height() / ratio ) ,
-                          QPoint(paperWidget->bufferImage->width(),
-                                 paperWidget->getOffset().y() +10)
-                          );
-//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(PaperPos(),
-                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
-                      );
-
-//    painter.setOpacity(0.5);
-//    painter.fillRect(PaperPos(),Qt::black);
-//    painter.setOpacity(1);
-
-//    painter.drawImage(112,145,*capot);
-
-//    int offset = (lastX ) * ratio /( mainwindow->zoom/100);
-//    painter.drawImage(152+offset,178,*head);       // Draw head
-//    painter.drawImage(793 - offset,214,*cable);    // Draw cable
-//    qWarning()<<"update";
-
-    painter.end();
-
-    return true;
-}
-
-void Ctp83::paintEvent(QPaintEvent *event)
-{
-    Cce515p::paintEvent(event);
 }
 
 void Ctp83::CommandSlot(qint8 data) {

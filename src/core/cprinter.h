@@ -24,6 +24,8 @@ public:
 
     virtual void resizeEvent ( QResizeEvent * );
     virtual void moveEvent(QMoveEvent *event);
+
+    virtual bool	UpdateFinalImage(void);
 	
     QRect pos;
     QRect PaperWidgetRect;
@@ -34,6 +36,8 @@ public:
     virtual void raise();
 
     QByteArray	TextBuffer;
+    QImage *checkPaper(QImage *printerbuf, int top);
+    virtual void BuildContextMenu(QMenu * menu);
 public slots:
     void contextMenuEvent ( QContextMenuEvent * );
 

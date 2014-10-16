@@ -17,7 +17,7 @@ public:
     virtual bool exit(void);				//end
     //virtual void ExportByte(qint8);
     virtual void ComputeKey(void);
-    virtual bool UpdateFinalImage(void);
+//    virtual bool UpdateFinalImage(void);
 
     Cconnector *pCONNECTOR; qint64 pCONNECTOR_value;
     Cconnector *pSavedCONNECTOR;
@@ -30,7 +30,7 @@ public:
     bool GoUp(int pin);
     bool Change(int pin);
 protected:
-    void paintEvent(QPaintEvent *);
+//    void paintEvent(QPaintEvent *);
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );
     void CommandSlot(qint8);
