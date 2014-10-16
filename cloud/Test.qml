@@ -204,19 +204,19 @@ Rectangle {
                         isdrag=false;
                     }
                     onPressed: {
-                        drag.maximumX = renderArea.width;
-                        drag.minimumX = 0;
-                        drag.maximumY = renderArea.height;
-                        drag.minimumY = 0;
+                        drag.maximumX = 65536; //renderArea.width;
+                        drag.minimumX = -65536; //0;
+                        drag.maximumY = 65536; //renderArea.height;
+                        drag.minimumY = -65536; //0;
                         photoFrame.focus = true;
                         if (mouse.button == Qt.RightButton) {
-                            console.log("drag active:"+drag.active);
+//                            console.log("drag active:"+drag.active);
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                             isdrag=false;
                         }
                         if (mouse.button == Qt.LeftButton) {
                             isdrag=true;
-                            console.log("isdrag true");
+//                            console.log("isdrag true");
                             sendClick(idpocket,mouse.x,mouse.y);
                         }
                         mouse.accepted=true;
@@ -226,19 +226,17 @@ Rectangle {
                         sendUnClick(idpocket,mouseX,mouseY);
                     }
                     onPositionChanged: {
-                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
+//                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
                         if (isdrag) {
                             sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
 //                          console.log("diff:" +(_tmpX-prevX) +" "+(_tmpY-prevY));
                         }
                         else {
-                            console.log("drag cancel");
+//                            console.log("drag cancel");
                             drag.maximumX = photoFrame.x;
                             drag.minimumX = photoFrame.x;
                             drag.maximumY = photoFrame.y;
                             drag.minimumY = photoFrame.y;
-//                            drag.axis= Drag.XAndYAxis;
-
                         }
 
                     }
