@@ -101,8 +101,6 @@ bool Ctp83::run(void) {
 
     Draw();
 
-    ce515pbuf = checkPaper(ce515pbuf,Pen_Y);
-
     return true;
 }
 

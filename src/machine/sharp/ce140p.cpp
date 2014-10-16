@@ -115,9 +115,13 @@ bool Cce140p::run(void) {
         pSIO->pTIMER = pTIMER;
 
         pSIO->run();
-        if (pSIO->Refresh_Display) Refresh_Display=true;
+        if (pSIO->Refresh_Display) {
+            pSIO->Refresh_Display = false;
+            Refresh_Display=true;
+        }
 
         Draw();
+
 
         pSIOCONNECTOR->Set_values(pSIO->pSIOCONNECTOR->Get_values());
     }
@@ -125,6 +129,8 @@ bool Cce140p::run(void) {
         // NOT FINISHED
         pSIOCONNECTOR_OUT->Set_values(pSIOCONNECTOR->Get_values());
     }
+
+
     return true;
 }
 
@@ -165,11 +171,13 @@ bool Cce140p::UpdateFinalImage(void) {
     // PRINTER SWITCH
     painter.begin(FinalImage);
 
-    painter.drawImage(800,430,BackgroundImageBackup->copy(800,430,22,14).mirrored(!printerSwitch,false));
+    painter.drawImage(800*internalImageRatio,430*internalImageRatio,
+                      BackgroundImageBackup->copy(800*internalImageRatio,430*internalImageRatio,
+                                                  22*internalImageRatio,14*internalImageRatio).mirrored(!printerSwitch,false));
 
     painter.end();
 
-    Refresh_Display = true;
+    Refresh_Display = false;
     emit updatedPObject(this);
     return true;
 }

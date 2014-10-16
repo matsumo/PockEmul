@@ -198,27 +198,7 @@ bool Cce515p::run(void)
         }
 #else
         Draw();
-
-
 #endif
-
-        // Expand paper size if limit reached
-        ce515pbuf = checkPaper(ce515pbuf,Pen_Y);
-//        int _height = ce515pbuf->height();
-//        if (Pen_Y >= (_height-500)) {
-//            qWarning()<<"increase size:"<<_height;
-//            QImage *_tmp = ce515pbuf;
-//            ce515pbuf = new QImage(_tmp->width(),_height+500,QImage::Format_ARGB32);
-//            ce515pbuf->fill(PaperColor.rgba());
-
-//            qWarning()<<"increased size:"<<ce515pbuf->size();
-//            QPainter painter(ce515pbuf);
-//            painter.drawImage(0,0,*_tmp);
-//            painter.end();
-//            paperWidget->bufferImage = ce515pbuf;
-//            delete _tmp;
-//        }
-
 
     return(1);
 }
@@ -238,6 +218,9 @@ void Cce515p::Draw(void) {
                 lastX = moveBuffer.at(0).X;
                 Print(moveBuffer.at(0));
                 moveBuffer.removeFirst();
+
+                // Expand paper size if limit reached
+                ce515pbuf = checkPaper(ce515pbuf,Pen_Y);
             }
         }
 }
