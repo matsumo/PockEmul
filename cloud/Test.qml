@@ -129,7 +129,7 @@ Rectangle {
             onReleased: isdrag=false;
             onPositionChanged: {
                 if (isdrag) {
-                    console.log("non");
+                    console.log("master isdrag");
                     sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
                     prevX = mouseX;
                     prevY = mouseY;
@@ -189,39 +189,58 @@ Rectangle {
                 }
                 MouseArea {
                     property bool isdrag: false;
-                    id: dragArea
-                    acceptedButtons: Qt.LeftButton | Qt.RightButton
-//                    hoverEnabled: true
-                    anchors.fill: parent
-                    drag.target: photoFrame
-                    propagateComposedEvents: false
-                    onPositionChanged: {
-                        if (isdrag) {
 
-                            sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
-                        }
-                    }
+                    id: dragArea
+                    hoverEnabled: false;
+//                    preventStealing:true
+                    acceptedButtons: Qt.LeftButton | Qt.RightButton
+                    anchors.fill: parent
+                    propagateComposedEvents: false
+                    drag.target: photoFrame
                     onPressAndHold: {
                         if (mouse.button == Qt.LeftButton) {
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                         }
+                        isdrag=false;
                     }
                     onPressed: {
+                        drag.maximumX = renderArea.width;
+                        drag.minimumX = 0;
+                        drag.maximumY = renderArea.height;
+                        drag.minimumY = 0;
                         photoFrame.focus = true;
                         if (mouse.button == Qt.RightButton) {
-                            console.log("oui");
+                            console.log("drag active:"+drag.active);
                             sendContextMenu(idpocket,mouse.x,mouse.y);
-
+                            isdrag=false;
                         }
                         if (mouse.button == Qt.LeftButton) {
                             isdrag=true;
+                            console.log("isdrag true");
                             sendClick(idpocket,mouse.x,mouse.y);
                         }
                         mouse.accepted=true;
                     }
                     onReleased: {
                         isdrag=false;
-                        sendUnClick(idpocket,mouse.x,mouse.y);
+                        sendUnClick(idpocket,mouseX,mouseY);
+                    }
+                    onPositionChanged: {
+                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
+                        if (isdrag) {
+                            sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
+//                          console.log("diff:" +(_tmpX-prevX) +" "+(_tmpY-prevY));
+                        }
+                        else {
+                            console.log("drag cancel");
+                            drag.maximumX = photoFrame.x;
+                            drag.minimumX = photoFrame.x;
+                            drag.maximumY = photoFrame.y;
+                            drag.minimumY = photoFrame.y;
+//                            drag.axis= Drag.XAndYAxis;
+
+                        }
+
                     }
 //                    onEntered: photoFrame.border.color = "red";
 //                    onExited: photoFrame.border.color = "black";
@@ -238,7 +257,8 @@ Rectangle {
             }
         }
     }
-
+Item{ id:nullItem
+}
     function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
         renderArea.xmlThumbModel.append(   {name:_name,
                                  imageFileName:_url,
@@ -270,9 +290,9 @@ Rectangle {
     //    console.log("found index:"+index);
         if (index !== -1) {
 
+//            console.log("object moved from ("+renderArea.xmlThumbModel.get(index)._left+","+renderArea.xmlThumbModel.get(index)._top+") to ("+_left+","+_top+")");
             renderArea.xmlThumbModel.get(index)._left = _left;
             renderArea.xmlThumbModel.get(index)._top = _top;
-    //        console.log("object moved to ("+_left+","+_top+")");
         }
     }
 
