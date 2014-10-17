@@ -449,7 +449,7 @@ bool Crlh1000::Chk_Adr_R(UINT32 *d, UINT32 *data)
                 }
                 if (islineFE) {
                     t = (*d-0x47FE)/4;
-                    qWarning()<<"Read bus line FE";
+//                    qWarning()<<"Read bus line FE";
                     bus->setDest(t);
                     if (fp_log) fprintf(fp_log,"BUS_QUERY DEST=%i  ",bus->getDest());
                     bus->setData(0xff);

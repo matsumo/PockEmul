@@ -6,6 +6,8 @@
 #include <QThread>
 #include <QDebug>
 
+#include <math.h>
+
 #include "common.h"
 #include "fluidlauncher.h"
 
@@ -42,12 +44,12 @@ Crlp1005::Crlp1005(CPObject *parent):Cprinter(this)
     pTIMER              = new Ctimer(this);
     pKEYB               = new Ckeyb(this,"rlp1005.map");
 
-    setDXmm(113);
-    setDYmm(95);
-    setDZmm(51);
+    setDXmm(299);
+    setDYmm(219);
+    setDZmm(30);
  // Ratio = 3,57
-    setDX(440);
-    setDY(340);
+    setDX(1068);
+    setDY(781);
 
 //    setPaperPos(QRect(53,0,291,216));
     setPaperPos(QRect(57,-20,318,236));
@@ -62,11 +64,21 @@ Crlp1005::Crlp1005(CPObject *parent):Cprinter(this)
     printing = false;
     receiveMode = false;
     CRLFPending = false;
+    bank = 0;
 
-    memsize             = 0x2000;
+    memsize             = 0x22000;
     InitMemValue        = 0x7f;
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,  P_RES(":/rlh1000/rlp1005.bin")    , "" , CSlot::ROM , "Printer ROM"));
+
+    SlotList.append(CSlot(16 , 0x0000 , ""  , ""        , CSlot::CUSTOM_ROM , "ROM bank 1"));
+    SlotList.append(CSlot(16 , 0x4000 , ""  , ""        , CSlot::CUSTOM_ROM , "ROM bank 2"));
+    SlotList.append(CSlot(16 , 0x8000 , ""  , ""        , CSlot::CUSTOM_ROM , "ROM bank 3"));
+    SlotList.append(CSlot(16 , 0xC000 , ""  , ""        , CSlot::CUSTOM_ROM , "ROM bank 4"));
+    SlotList.append(CSlot(16 , 0x10000 , "" , ""        , CSlot::CUSTOM_ROM , "ROM bank 5"));
+    SlotList.append(CSlot(16 , 0x14000 , "" , ""        , CSlot::CUSTOM_ROM , "ROM bank 6"));
+    SlotList.append(CSlot(16 , 0x18000 , "" , ""        , CSlot::CUSTOM_ROM , "ROM bank 7"));
+    SlotList.append(CSlot(16 , 0x1C000 , "" , ""        , CSlot::CUSTOM_ROM , "ROM bank 8"));
+    SlotList.append(CSlot(8  , 0x20000 ,  P_RES(":/rlh1000/rlp1005.bin")    , "" , CSlot::ROM , "Printer ROM"));
 
 }
 
@@ -138,53 +150,18 @@ bool Crlp1005::run(void)
         if (pPC->pTIMER->pPC->fp_log) fprintf(pPC->pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
         return true;
     }
-
-    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
-//        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
-
-        switch (bus.getData()) {
-        case 1: Power = true; break;
-        default: Power = false; break;
-        }
-        if (Power)
-        {
-            bus.setFunc(BUS_READDATA);
-            bus.setData(0x01);
-            pCONNECTOR->Set_values(bus.toUInt64());
-        }
+    if ( (bus.getFunc()==BUS_LINE1) && !bus.isWrite() ) {
+        qWarning()<<"Read data LINE 1:";
+        bus.setFunc(BUS_ACK);
+    }
+    if ( (bus.getFunc()==BUS_LINE2) && !bus.isWrite() ) {
+//        qWarning()<<"Read data LINE 2:";
+        // BUSY ?
+        bus.setData(rand()&0x01);
+        bus.setFunc(BUS_READDATA);
+        pCONNECTOR->Set_values(bus.toUInt64());
         return true;
     }
-
-    if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
-            switch(bus.getData()) {
-            case 0: // Print
-                qWarning()<<"1004a: BUS_TOUCH:"<<bus.getData()<<  "PRINTING "<<buffer.size()<<" chars";
-    //            Refresh(0);
-                printing = true;
-    //            buffer.clear();
-                INTrequest = false;
-                break;
-            case 5: //
-                qWarning()<<"1004a: BUS_TOUCH:"<<bus.getData();
-                buffer.clear();
-                receiveMode = true;
-                INTrequest = true;
-    //            receiveMode = true;
-                break;
-            case 4: // CR/LF
-    //            Refresh(0x0d);
-                qWarning()<<"1004a: BUS_TOUCH:"<<bus.getData();
-
-    //            printing = true;
-                CRLFPending = true;
-    //            INTrequest = true;
-                break;
-            default: qWarning()<<"1004a: BUS_TOUCH:"<<bus.getData();
-                break;
-            }
-            bus.setFunc(BUS_ACK);
-    }
-
     if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
         if (INTrequest) {
 //            qWarning()<<"INTREQUEST:true";
@@ -201,14 +178,72 @@ bool Crlp1005::run(void)
         return true;
        }
 
+    if ( (bus.getFunc()==BUS_LINE0) && bus.isWrite() ) {
+        qWarning()<<"1005: write BUS_LINE0:"<<bus.getData();
+        bus.setFunc(BUS_ACK);
+    }
     if ( (bus.getFunc()==BUS_LINE1) && bus.isWrite() ) {
+        qWarning()<<"1005: write BUS_LINE1:"<<bus.getData();
         if (receiveMode) {
             buffer.append(bus.getData());
-            qWarning()<<"1004a: Receive data:"<<bus.getData();
+
 
             INTrequest = true;
         }
         bus.setFunc(BUS_ACK);
+    }
+    if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
+//        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
+
+        switch (bus.getData()) {
+        case 1: Power = true; bank = 7; break;
+        case 2: Power = true; bank = 6;  break;
+        case 4: Power = true; bank = 5;  break;
+        case 8: Power = true; bank = 4;  break;
+        case 16: Power = true; bank = 3;  break;
+        case 32: Power = true; bank = 2;  break;
+        case 64: Power = true; bank = 1;  break;
+        case 128: Power = true; bank = 0;  break;
+        default: Power = false; break;
+        }
+
+        if (Power)
+        {
+            bus.setFunc(BUS_READDATA);
+            bus.setData(0x01);
+            pCONNECTOR->Set_values(bus.toUInt64());
+        }
+        return true;
+    }
+    if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
+        switch(bus.getData()) {
+        case 0: // Print
+            qWarning()<<"1005: write BUS_LINE3:"<<bus.getData()<<  "  PRINTING "<<buffer.size()<<" chars";
+//            Refresh(0);
+            printing = true;
+//            buffer.clear();
+            INTrequest = false;
+            break;
+        case 5: //
+            qWarning()<<"1005: write BUS_LINE3:"<<bus.getData();
+            buffer.clear();
+            receiveMode = true;
+            INTrequest = true;
+//            receiveMode = true;
+            break;
+        case 4: // CR/LF
+//            Refresh(0x0d);
+            qWarning()<<"1005: write BUS_LINE3:"<<bus.getData();
+
+//            printing = true;
+            CRLFPending = true;
+//            INTrequest = true;
+            break;
+        default: qWarning()<<"1005: write BUS_LINE3:"<<bus.getData();
+            break;
+        }
+        bus.setFunc(BUS_ACK);
+
     }
 
 
@@ -220,23 +255,24 @@ bool Crlp1005::run(void)
 
     switch (bus.getFunc()) {
     case BUS_SLEEP: break;
+    case BUS_ACK: break;
     case BUS_WRITEDATA:
-        switch (adr) {
-        case 0x3020: // flip flop K7 output
-            tapeOutput = !tapeOutput;
-//            qWarning()<<pTIMER->state<<" - "<<tapeOutput;
-            bus.setData(0x00);
-            bus.setFunc(BUS_READDATA);
-            break;
-        }
+        qWarning()<<tr("write:%1=%2").arg(adr,4,16,QChar('0')).arg(bus.getData(),2,16,QChar('0'));
         break;
 
-
     case BUS_READDATA:
-        if ( (adr>=0x2000) && (adr<0x3000) ) bus.setData(mem[adr-0x2000]);
-        else if (adr == 0x3060){
-            bus.setData(tapeInput? 0x80 : 0x00);
+        if ( (adr>=0x2000) && (adr<0x3000) ) {
+            bus.setData(mem[0x20000 + adr - 0x2000]);
+//            qWarning()<<tr("read:%1=%2").arg(adr,4,16,QChar('0')).arg(bus.getData(),2,16,QChar('0'));
         }
+        else if ( (adr>=0x4000) && (adr < 0x8000)) {
+            //                qWarning()<<"ROM SIMUL:"<<adr<<"="<<mem[adr-0x4000+0x14];
+            bus.setFunc(BUS_ACK);
+            bus.setData(mem[adr-0x4000+bank*0x4000]);
+        }
+        //        else if (adr == 0x3060){
+        //            bus.setData(tapeInput? 0x80 : 0x00);
+        //        }
         else bus.setData(0x7f);
         break;
     default: break;

@@ -81,7 +81,7 @@ private:
     bool printing;
     bool receiveMode;
     bool CRLFPending;
-
+    quint8 bank;
 
 };
 
