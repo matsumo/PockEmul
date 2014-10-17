@@ -1,14 +1,19 @@
 #ifndef VIEWOBJECT_H
 #define VIEWOBJECT_H
 
+#if 1
+#define MAINCLASS QWidget
 #include <QWidget>
+#else
+#define MAINCLASS QOpenGLWidget
+#endif
 
 class Ckeyb;
 
 enum Direction { TOPdir,LEFTdir, RIGHTdir, BOTTOMdir, NONEdir};
 enum View {FRONTview,TOPview,LEFTview,RIGHTview,BOTTOMview,BACKview};
 
-class CViewObject: public QWidget {
+class CViewObject: public MAINCLASS {
     Q_OBJECT
 
     Q_PROPERTY(int angle READ angle WRITE setAngle)

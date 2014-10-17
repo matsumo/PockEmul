@@ -1021,9 +1021,10 @@ void CPObject::paintEvent(QPaintEvent *event)
         QPainter painter;
 
         painter.begin(this);
-        if (FinalImage)
+        QImage *_target = getViewImage(currentView);
+        if (_target)
         {
-            painter.drawImage(QPoint(0,0), FinalImage->scaled(this->size(),Qt::IgnoreAspectRatio,TRANSFORM));
+            painter.drawImage(QPoint(0,0), _target->scaled(this->size(),Qt::IgnoreAspectRatio,TRANSFORM));
         }
 
         if (dialogkeylist)

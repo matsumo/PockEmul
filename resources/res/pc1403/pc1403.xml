@@ -2,12 +2,14 @@
 <skin version="1.0" model="pc1403">
 	<frontview fname=":/pc1403/pc1403.png"/>
 	<topview fname=":/pc1403/pc1403.png"/>
-	<lcd>
-		<rect	left="0" top="0" width="100" height="16"/>
-		<symbzone>
-			<rect	left="0" top="0" width="100" height="16"/>
+	<lcd fname=":/pc1403/1403lcd.png">
+		<rect	left=0 top=0 width=100 height=16>
+		<coloroff R=0x5d G=0x71 B=0x6a/>
+		<coloron R=0xff G=0xff B=0xff/>
+		<symbzone fname=":/pc1403/1403symb.png">
+			<rect	left=0 top=0 width=100 height=16>
 		</symbzone>
 	</lcd>
-	<keyboard>
+	<Kkeyboard>
 	</keyboard>
 </skin>

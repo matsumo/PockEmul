@@ -121,15 +121,19 @@ mainwindow = new MainWindowPockemul();
     // search for ShowMyModalDialog method
 
 #endif
-//    QWidget *cw= new QWidget();
-    view = new CrenderView();
-//    QWidget *_cont = QWidget::createWindowContainer(view,cw);
 
-    mainwindow->setCentralWidget(view);
-
+#if 0
+    QWidget *cw= new QWidget();
+    mainwindow->setCentralWidget(cw);
     delete mainwindow->centralwidget;
-
+    mainwindow->centralwidget = cw;
+#else
+    view = new CrenderView();
+    mainwindow->setCentralWidget(view);
+    delete mainwindow->centralwidget;
     mainwindow->centralwidget = view;
+#endif
+
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
 
@@ -370,7 +374,7 @@ void m_addShortcut(QString name, QString param) {
 QString P_RES(QString _name) {
 
     QString _locName = _name;
-    _locName.replace(":",appDir+"/res");
+    _locName.replace(":",workDir+"/res");
     QFileInfo info_locName(_locName);
 
 #ifdef LOCRES

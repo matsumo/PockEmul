@@ -12,7 +12,7 @@
 
 extern MainWindowPockemul* mainwindow;
 
-CViewObject::CViewObject(CViewObject *parent):QWidget(mainwindow->centralwidget)
+CViewObject::CViewObject(CViewObject *parent):MAINCLASS(mainwindow->centralwidget)
 {
     Q_UNUSED(parent)
 
@@ -51,20 +51,20 @@ float CViewObject::posy()
 void CViewObject::setPosX(float val)
 {
     PosX = val;
-    QWidget::move(QPoint(PosX,PosY));
+    move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 }
 void CViewObject::setPosY(float val)
 {
     PosY = val;
-    QWidget::move(QPoint(PosX,PosY));
+    move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 }
 void CViewObject::MoveRel(QPoint p)
 {
     PosX += p.x();
     PosY += p.y();
-    QWidget::move(QPoint(PosX,PosY));
+    move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 #ifdef AVOID
     mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
@@ -77,7 +77,7 @@ void CViewObject::MoveAbs(QPoint p)
 {
     PosX = p.x();
     PosY = p.y();
-    QWidget::move(QPoint(PosX,PosY));
+    move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 #ifdef AVOID
     mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
@@ -313,6 +313,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
         QPainter painter;
 
         painter.begin(this);
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
         painter.drawImage(0,0,AnimatedImage->scaled(this->size()));
         painter.end();
     }
@@ -326,6 +327,7 @@ void CViewObject::renderAnimation()
 
         QPainter painter;
 
+        painter.setCompositionMode(QPainter::CompositionMode_Source);
         AnimatedImage->fill(Qt::transparent);
         if (FinalImage)
         {
