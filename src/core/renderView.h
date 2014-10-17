@@ -2,6 +2,7 @@
 #define RENDERVIEW_H
 
 #include <QQuickWidget>
+#include <QQuickView>
 
 class CPObject;
 class CViewObject;

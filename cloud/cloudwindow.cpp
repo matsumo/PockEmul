@@ -60,12 +60,12 @@ CloudWindow::CloudWindow(QWidget *parent)
     if (getValueFor("serverURL","")=="") saveValueFor("serverURL","http://pockemul.dscloud.me/elgg/");
 
 
-    view = new QQuickView;//QQuickWidget;//QDeclarativeView(this);
+    view = new QQuickWidget;//QDeclarativeView(this);
     view->engine()->addImageProvider(QLatin1String("PockEmulCloud"),imgprov );
 //    view->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     view->rootContext()->setContextProperty("cloud", this);
     view->setSource(QUrl("qrc:/main.qml"));
-    view->setResizeMode(QQuickView::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
+    view->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
     connect(view->engine(), SIGNAL(quit()), this,SLOT(hide()));
     object = (QObject*) view->rootObject();
 
@@ -78,13 +78,13 @@ CloudWindow::CloudWindow(QWidget *parent)
             this, SLOT(sendPML(QString)));
 
     QVBoxLayout *windowLayout = new QVBoxLayout(this);
-    QWidget *container = QWidget::createWindowContainer(view,this);
+//    QWidget *container = QWidget::createWindowContainer(view,this);
 //    container->setMinimumSize(...);
 //    container->setMaximumSize(...);
 //    container->setFocusPolicy(Qt::TabFocus);
 
-    windowLayout->addWidget(container);
-//    windowLayout->addWidget(view);
+//    windowLayout->addWidget(container);
+    windowLayout->addWidget(view);
     windowLayout->setMargin(0);
 
 

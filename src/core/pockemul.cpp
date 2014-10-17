@@ -5,6 +5,7 @@
 #include <QDir>
 #include <QSplashScreen>
 #include <QScreen>
+#include <QWidget>
 
 
 #include "launchbuttonwidget.h"
@@ -122,16 +123,18 @@ mainwindow = new MainWindowPockemul();
 
 #endif
 
-#if 0
+#if 1
     QWidget *cw= new QWidget();
     mainwindow->setCentralWidget(cw);
     delete mainwindow->centralwidget;
     mainwindow->centralwidget = cw;
-#else
-    view = new CrenderView();
-    mainwindow->setCentralWidget(view);
-    delete mainwindow->centralwidget;
-    mainwindow->centralwidget = view;
+#endif
+
+#ifndef Q_OS_ANDROID
+    QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+    view = new CrenderView(mainwindow->centralwidget);
+    windowLayout->addWidget(view);
+    windowLayout->setMargin(0);
 #endif
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );

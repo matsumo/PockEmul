@@ -469,8 +469,10 @@ CPObject *pPC=0;
 
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
-//    pPC->show();
 
+#ifdef Q_OS_ANDROID
+    pPC->show();
+#endif
 
 
     return pPC;
@@ -905,8 +907,8 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
 #if QT_VERSION >= 0x050000
     qWarning()<<"ok1";
     qWarning()<<view;
-    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
-//    view->grab().toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+//    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+    view->grab().toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
     qWarning()<<"ok2";
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");

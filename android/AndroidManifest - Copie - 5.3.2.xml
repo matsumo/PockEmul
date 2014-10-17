@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <manifest package="org.qtproject.pockemul" xmlns:android="http://schemas.android.com/apk/res/android" android:versionName="1.0" android:versionCode="1" android:installLocation="auto">
-    <application android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="pockemul" android:icon="@drawable/icon">
-        <activity android:name="org.qtproject.pockemul.PockemulActivity" android:label="-- %%INSERT_APP_NAME%% --" android:screenOrientation="unspecified" android:launchMode="singleTop">
+    <application android:hardwareAccelerated="true" android:name="org.qtproject.qt5.android.bindings.QtApplication" android:label="@string/app_name" android:icon="@drawable/icon">
+        <activity android:configChanges="orientation|uiMode|screenLayout|screenSize|smallestScreenSize|locale|fontScale|keyboard|keyboardHidden|navigation" android:name="org.qtproject.pockemul.PockemulActivity" android:label="@string/app_name" android:screenOrientation="unspecified" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
@@ -32,27 +32,20 @@
             <meta-data android:name="android.app.splash_screen_drawable" android:resource="@drawable/logo"/>
             -->
             <!-- Splash screen -->
-
-            <!-- Background running -->
-            <!-- Warning: changing this value to true may cause unexpected crashes if the
-                          application still try to draw after
-                          "applicationStateChanged(Qt::ApplicationSuspended)"
-                          signal is sent! -->
-            <meta-data android:name="android.app.background_running" android:value="false"/>
-            <!-- Background running -->
         </activity>
-    </application>
-    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="14"/>
+</application>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"/>
     <supports-screens android:largeScreens="true" android:normalScreens="true" android:anyDensity="true" android:smallScreens="true"/>
 
+<uses-permission android:name="android.permission.VIBRATE"/>
+<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <!-- The following comment will be replaced upon deployment with default permissions based on the dependencies of the application.
          Remove the comment if you do not require these default permissions. -->
+
     <!-- %%INSERT_PERMISSIONS -->
 
     <!-- The following comment will be replaced upon deployment with default features based on the dependencies of the application.
          Remove the comment if you do not require these default features. -->
     <!-- %%INSERT_FEATURES -->
 
-<uses-permission android:name="android.permission.VIBRATE"/>
-<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
 </manifest>

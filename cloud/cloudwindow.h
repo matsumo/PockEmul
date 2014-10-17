@@ -62,8 +62,8 @@ private slots:
 
 private:
 //    QDeclarativeView *view;
-    QQuickView *view;
-//    QQuickWidget *view;
+//    QQuickView *view;
+    QQuickWidget *view;
 
     QNetworkReply *m_reply;
     QFileDialog *m_fileDialog;
