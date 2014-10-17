@@ -1,0 +1,7 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>rlp1005</model>
+<Keyboard>
+    <KEY description="Tape connector" height="100" left="10" scancode="0x240" top="45" width="35" view="FRONT"/>
+    <KEY description="Paper feed" height="60" left="6" scancode="0xc1" top="183" width="30" view="FRONT"/>
+</Keyboard>
+</KEYBMAP>

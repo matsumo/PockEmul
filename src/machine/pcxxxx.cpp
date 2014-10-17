@@ -98,7 +98,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 #endif
 
     //    qWarning()<<"UpdateFinalImage";
-//    CPObject::UpdateFinalImage();
+
     // Paint FinalImage
     QRect                        destRect,srcRect;
     int x,y,z,t;
@@ -108,10 +108,12 @@ bool CpcXXXX::UpdateFinalImage(void)
     if (pLCDC) {
         if (pLCDC->Refresh == false) return false;
     }
+    CPObject::UpdateFinalImage();
+
     if ( (BackgroundImage) )
     {
         painter.begin(FinalImage);
-        painter.drawImage(QPoint(0,0),*BackgroundImage);
+//        painter.drawImage(QPoint(0,0),*BackgroundImage);
 
         if (pLCDC && pLCDC->rect.isValid())
         {
@@ -135,7 +137,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 
         if (pLCDC) pLCDC->Refresh = false;
     }
-    Refresh_Display = false;
+//    Refresh_Display = false;
 
     emit updatedPObject(this);
     return true;

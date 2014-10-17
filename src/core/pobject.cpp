@@ -1380,9 +1380,21 @@ bool CPObject::UpdateFinalImage(void)
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
 
+        if (dialogkeylist)
+        {
+            painter.setPen(QPen(Qt::red));
+            QRect rect = dialogkeylist->getkeyFoundRect();
+            qWarning()<<"drawRect:"<<rect;
+            painter.fillRect(QRect(rect.x()*internalImageRatio,
+                                   rect.y()*internalImageRatio,
+                                   rect.width()*internalImageRatio,
+                                   rect.height()*internalImageRatio),Qt::red);
+        }
         painter.end();
+
+
 	}
-	Refresh_Display = false;
+//	Refresh_Display = false;
 //qWarning()<<"UpdateFinalImage";
     emit updatedPObject(this);
     return true;

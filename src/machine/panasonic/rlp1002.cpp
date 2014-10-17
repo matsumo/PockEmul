@@ -21,39 +21,29 @@
 #define UP              1
 
 
-Crlp1002::Crlp1002(CPObject *parent):Cprinter(this)
+Crlp1002::Crlp1002(CPObject *parent):Cce515p(this)
 { //[constructor]
     Q_UNUSED(parent)
 
     setfrequency( 0);
-    paperbuf    = 0;
-    paperdisplay= 0;
-    //bells             = 0;
-    charTable = 0;
+
     margin = 25;
     BackGroundFname     = P_RES(":/rlh1000/rlp1002.png");
     setcfgfname("rlp1002");
 
-    settop(10);
-    setposX(0);
 
     pTIMER              = new Ctimer(this);
-//    pKEYB               = new Ckeyb(this,"rlp1002.map");
+    pKEYB               = new Ckeyb(this,"rlp1002.map");
     setDXmm(227);
     setDYmm(95);
     setDZmm(31);
 
- // Ratio = 3,57
-    setDX(848);//Pc_DX  = 75;
-    setDY(340);//Pc_DY  = 20;
 
-//    setPaperPos(QRect(53,0,291,216));
+    setDX(848);
+    setDY(340);
+
     setPaperPos(QRect(57,-20,318,236));
 
-    ctrl_char = false;
-    t = 0;
-    c = 0;
-    rmtSwitch = false;
 
     rotate = false;
     INTrequest = false;
@@ -64,74 +54,61 @@ Crlp1002::Crlp1002(CPObject *parent):Cprinter(this)
     memsize             = 0x2000;
     InitMemValue        = 0x7f;
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,  P_RES(":/rlh1000/rlp1004a.bin")    , "" , CSlot::ROM , "Printer ROM"));
+    SlotList.append(CSlot(8 , 0x0000 ,  P_RES(":/rlh1000/rlp1002.bin")    , "" , CSlot::ROM , "Printer ROM"));
 
 }
 
 Crlp1002::~Crlp1002() {
-    delete paperbuf;
-    delete paperdisplay;
+
     delete pCONNECTOR;
-    delete charTable;
-//    delete bells;
+
 }
 
 
 #define LATENCY (pTIMER->pPC->getfrequency()/3200)
 bool Crlp1002::run(void)
 {
-
     static quint64 _state=0;
-
-     CbusPanasonic bus;
+    CbusPanasonic bus;
 
     bus.fromUInt64(pCONNECTOR->Get_values());
-
-    if (printing) {
-        if (!buffer.isEmpty()) {
-            // Print char column one by one from buffer
-            // Wait 20char/sec -> 140 cols / Sec -> 7,142ms / col
-            if (pTIMER->usElapsed(_state)>=7142)
-            {
-                _state = pTIMER->state;
-                drawGraph(buffer.at(0));
-//                qWarning()<<"Printing data:"<<buffer.at(0)<<":"<<QChar(buffer.at(0));
-                buffer.remove(0,1);
-            }
-        }
-        else {
-            printing = false;
-        }
-    }
-    else {
-        if (CRLFPending) {
-//            qWarning()<<"Send CRLF";
-            CRLFPending = false;
-            top+=10;
-            posX=0;
-//                bus.setINT(true);
-            INTrequest = true;
-            pCONNECTOR->Set_values(bus.toUInt64());
-            Refresh();
-        }
-    }
 
     if (bus.getFunc()==BUS_SLEEP) return true;
 
     if (bus.getDest()!=0) return true;
     bus.setDest(0);
 
+
 //    qWarning()<<"PRINTER:"<<bus.toLog();
     if ( (bus.getFunc()==BUS_LINE0) && !bus.isWrite() ) {
+//        qWarning()<<"1002: read BUS_LINE0:"<<bus.getData();
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
-        if (pPC->pTIMER->pPC->fp_log) fprintf(pPC->pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
+        return true;
+    }
+    if ( (bus.getFunc()==BUS_LINE0) && bus.isWrite() ) {
+        qWarning()<<"1002: write BUS_LINE0:"<<bus.getData();
+        bus.setFunc(BUS_ACK);
         return true;
     }
 
+    if ( (bus.getFunc()==BUS_LINE1) && bus.isWrite() ) {
+        qWarning()<<"1002: write BUS_LINE1:"<<bus.getData();
+        if (receiveMode) {
+            Command( bus.getData());
+
+            INTrequest = true;
+        }
+        bus.setFunc(BUS_ACK);
+    }
+    if ( (bus.getFunc()==BUS_LINE1) && !bus.isWrite() ) {
+        qWarning()<<"1002: read BUS_LINE1:"<<bus.getData();
+        bus.setFunc(BUS_ACK);
+    }
+
     if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
-//        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
+//        qWarning()<<"1002 BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {
         case 1: Power = true; break;
@@ -145,47 +122,28 @@ bool Crlp1002::run(void)
         }
         return true;
     }
-
+    if ( (bus.getFunc()==BUS_LINE2) && !bus.isWrite() ) {
+        qWarning()<<"1002: read BUS_LINE2:"<<bus.getData();
+        bus.setFunc(BUS_ACK);
+    }
 
     if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
-            switch(bus.getData()) {
-            case 0: // Print
-    //            qWarning()<<"BUS_TOUCH:"<<bus.getData()<<  "PRINTING "<<buffer.size()<<" chars";
-    //            Refresh(0);
-                printing = true;
-    //            buffer.clear();
-                INTrequest = false;
-                break;
-            case 5: //
-    //            qWarning()<<"BUS_TOUCH:"<<bus.getData();
-                buffer.clear();
-                receiveMode = true;
-                INTrequest = true;
-    //            receiveMode = true;
-                break;
-            case 4: // CR/LF
-    //            Refresh(0x0d);
-    //            qWarning()<<"BUS_TOUCH:"<<bus.getData();
+        qWarning()<<"1002: write BUS_LINE3:"<<bus.getData();
+        INTrequest = true;
 
-    //            printing = true;
-                CRLFPending = true;
-    //            INTrequest = true;
-                break;
-            default: qWarning()<<"BUS_TOUCH:"<<bus.getData();
-                break;
-            }
-            bus.setFunc(BUS_ACK);
+        bus.setFunc(BUS_ACK);
     }
 
     if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
+//        qWarning()<<"1002: read BUS_LINE3:"<<bus.getData();
         if (INTrequest) {
-//            qWarning()<<"INTREQUEST:true";
+            qWarning()<<"INTREQUEST:true";
             bus.setINT(true);
             bus.setData(0x00);
             INTrequest = false;
         }
         else {
-//            qWarning()<<"INTREQUEST:false";
+            qWarning()<<"INTREQUEST:false";
             bus.setData(0xff);
         }
         bus.setFunc(BUS_READDATA);
@@ -193,43 +151,23 @@ bool Crlp1002::run(void)
         return true;
        }
 
-    if ( (bus.getFunc()==BUS_LINE1) && bus.isWrite() ) {
-        if (receiveMode) {
-            buffer.append(bus.getData());
-//            qWarning()<<"Receive data:"<<bus.getData();
-
-            INTrequest = true;
-        }
-        bus.setFunc(BUS_ACK);
-    }
-
 
 
     if (!Power) return true;
 
     quint32 adr = bus.getAddr();
-//    quint8 data = bus.getData();
 
     switch (bus.getFunc()) {
     case BUS_SLEEP: break;
     case BUS_WRITEDATA:
-        switch (adr) {
-        case 0x3020: // flip flop K7 output
-            tapeOutput = !tapeOutput;
-//            qWarning()<<pTIMER->state<<" - "<<tapeOutput;
-            bus.setData(0x00);
-            bus.setFunc(BUS_READDATA);
-            break;
-        }
+//        qWarning()<<tr("Try to write:%1").arg(adr,4,16,QChar('0'));
         break;
-
-
     case BUS_READDATA:
         if ( (adr>=0x2000) && (adr<0x3000) ) bus.setData(mem[adr-0x2000]);
-        else if (adr == 0x3060){
-            bus.setData(tapeInput? 0x80 : 0x00);
+        else {
+//            qWarning()<<tr("Try to read:%1").arg(adr,4,16,QChar('0'));
+            bus.setData(0x7f);
         }
-        else bus.setData(0x7f);
         break;
     default: break;
 
@@ -241,67 +179,12 @@ bool Crlp1002::run(void)
 }
 
 
-void Crlp1002::SaveAsText(void)
-{
-    QMessageBox::warning(mainwindow, "PockEmul",
-                          tr("This printer is a pure graphic printer (yes it is!!!)\n") +
-                          tr("Saving output as text is irrelevant") );
-}
 
-void Crlp1002::drawGraph(quint8 data) {
-    QPainter painter;
-
-    painter.begin(paperbuf);
-    for (int b=0; b<8;b++)
-    {
-        if ((data>>b)&0x01) painter.drawPoint( posX, top+b);
-    }
-    posX++;
-    painter.end();
-
-    Refresh();
-}
-
-void Crlp1002::Refresh()
-{
-    QPainter painter;
-
-    painter.begin(paperdisplay);
-    painter.drawImage(QRectF(0,MAX(149-top,0),165,MIN(top,159)),*paperbuf,QRectF(0,MAX(0,top-149),170,MIN(top,149)));
-
-    // Draw printer head
-    //    painter.fillRect(QRect(0 , 147,407,2),QBrush(QColor(0,0,0)));
-    //    painter.fillRect(QRect(21 + (7 * posX) , 137,14,2),QBrush(QColor(128,0,0)));
-
-    painter.end();
-
-    Refresh_Display = true;
-
-    paperWidget->setOffset(QPoint(0,top));
-    paperWidget->updated = true;
-
-}
-
-
-/*****************************************************/
-/* Initialize PRINTER                                                            */
-/*****************************************************/
-void Crlp1002::clearPaper(void)
-{
-    // Fill it blank
-    paperbuf->fill(PaperColor.rgba());
-    paperdisplay->fill(QColor(255,255,255,0).rgba());
-    settop(10);
-    setposX(0);
-    // empty TextBuffer
-    TextBuffer.clear();
-    paperWidget->updated = true;
-}
 
 
 bool Crlp1002::init(void)
 {
-    CPObject::init();
+    Cce515p::init();
 
     setfrequency( 0);
 
@@ -318,30 +201,7 @@ bool Crlp1002::init(void)
     if(pKEYB)   pKEYB->init();
     if(pTIMER)  pTIMER->init();
 
-    // Create CE-126 Paper Image
-    // The final paper image is 207 x 149 at (277,0) for the ce125
-    paperbuf    = new QImage(QSize(340, 3000),QImage::Format_ARGB32);
-    paperdisplay= new QImage(QSize(200, 149),QImage::Format_ARGB32);
-
-
-//TODO Update the chartable with upd16343 char table
-    charTable = new QImage(P_RES(":/rlh1000/rlp1004atable.bmp"));
-
-//      bells    = new QSound("ce.wav");
-
-// Create a paper widget
-
-    paperWidget = new CpaperWidget(PaperPos(),paperbuf,this);
-    paperWidget->updated = true;
-    paperWidget->show();
-
-    // Fill it blank
-    clearPaper();
-
-    run_oldstate = -1;
-
-
-    tapeOutput = tapeInput = false;
+    paperWidget->hide();
     return true;
 }
 
@@ -354,7 +214,7 @@ bool Crlp1002::exit(void)
 {
     AddLog(LOG_PRINTER,"PRT Closing...");
     AddLog(LOG_PRINTER,"done.");
-    Cprinter::exit();
+    Cce515p::exit();
     return true;
 }
 
@@ -381,31 +241,6 @@ bool Crlp1002::Set_Connector(void) {
     return true;
 }
 
-
-
-
-
-void Crlp1002::paintEvent(QPaintEvent *event)
-{
-    CPObject::paintEvent(event);
-}
-
-void Crlp1002::contextMenuEvent ( QContextMenuEvent * event )
-{
-    QMenu *menu= new QMenu(this);
-
-    BuildContextMenu(menu);
-
-
-    menu->addAction(tr("Dump Memory"),this,SLOT(Dump()));
-    menu->addSeparator();
-
-    menu->addAction(tr("Rotate 180"),this,SLOT(Rotate()));
-//    menu.addAction(tr("Hide console"),this,SLOT(HideConsole()));
-
-    menu->popup(event->globalPos () );
-    event->accept();
-}
 
 void Crlp1002::Rotate()
 {
@@ -437,18 +272,8 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 void Crlp1002::ComputeKey()
 {
     if (pKEYB->LastKey == K_PFEED) {
-        top+=10;
-        Refresh();
-    }
-
-    // Manage left connector click
-    if (KEY(0x240) && (currentView==FRONTview)) {
-        pKEYB->keyPressedList.removeAll(0x240);
-        FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,QString(),
-                                     "Jack_3");
-        launcher->show();
+        qWarning()<<"PaperFeed";
+        PaperFeed();
     }
 
 }

@@ -1,5 +1,5 @@
-#ifndef RLP1002_H
-#define RLP1002_H
+#ifndef RLP1005_H
+#define RLP1005_H
 
 
 #include <QTime>
@@ -8,13 +8,13 @@
 #endif
 
 #include "common.h"
-#include "ce515p.h"
+#include "cprinter.h"
 
 #include "Inter.h"
 
 class Cconnector;
 
-class Crlp1002:public Cce515p{
+class Crlp1005:public Cprinter{
     Q_OBJECT
 public:
 
@@ -25,24 +25,43 @@ public:
     virtual bool	Set_Connector(void);
     virtual bool	Get_Connector(void);
 
+    virtual void clearPaper(void);
+    virtual void SaveAsText(void);
+
     virtual void ComputeKey(void);
 
     //virtual void resizeEvent ( QResizeEvent * );
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
 
-    Crlp1002(CPObject *parent = 0);
+    Cconnector	*pTAPECONNECTOR;	qint64 pTAPECONNECTOR_value;
 
-    virtual ~Crlp1002();
+    QImage *paperbuf;
+    QImage *paperdisplay;
+
+    void Refresh();
+#ifndef NO_SOUND
+    QSound *bells;
+#endif
+
+    void	settop(int value){ top = value; }
+    void	setposX(int value) { posX = value; }
+
+
+    Crlp1005(CPObject *parent = 0);
+
+    virtual ~Crlp1005();
 
 public:
-
+    bool    rmtSwitch;
+    void drawGraph(quint8 data);
+    QImage *charTable;
     int margin;
     int		top;
     bool INTrequest;
-    bool INTEnabled;
+    virtual void BuildContextMenu(QMenu *menu);
 protected:
-
+    void paintEvent(QPaintEvent *);
 protected slots:
     void Rotate();
 
@@ -67,4 +86,4 @@ private:
 };
 
 
-#endif // RLP1002_H
+#endif // RLP1005_H

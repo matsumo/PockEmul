@@ -591,7 +591,8 @@ HEADERS += src/core/Connect.h \
     src/lcd/Lcdc_pc1450.h \
     src/lcd/Lcdc_pc1401.h \
     src/lcd/Lcdc_symb2x.h \
-    src/core/renderView.h
+    src/core/renderView.h \
+    src/machine/panasonic/rlp1005.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -880,7 +881,8 @@ SOURCES +=  \
     src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
     src/lcd/Lcdc_pc1401.cpp \
-    src/core/renderView.cpp
+    src/core/renderView.cpp \
+    src/machine/panasonic/rlp1005.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 
@@ -1106,7 +1108,9 @@ OTHER_FILES += \
     resources/keymap/ti74.map \
     resources/keymap/ti95.map \
     resources/keymap/fx8000g.map \
-    resources/keymap/hp15c.map
+    resources/keymap/hp15c.map \
+    resources/keymap/rlp1002.map \
+    resources/keymap/rlp1005.map
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

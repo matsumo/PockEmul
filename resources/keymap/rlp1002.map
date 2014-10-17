@@ -1,0 +1,6 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>rlp1002</model>
+<Keyboard>
+    <KEY description="Paper feed" height="60" left="400" scancode="0xc1" top="100" width="60" view="FRONT"/>
+</Keyboard>
+</KEYBMAP>

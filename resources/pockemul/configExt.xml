@@ -44,6 +44,7 @@
      <example brand="PANASONIC" idpocket="Panasonic RL-P1004A" filename="./" name="Panasonic RL-P1004A" image=":/rlh1000/rlp1004a.png" connectortype="Panasonic_44" conngender="male"/>
      <example brand="PANASONIC" idpocket="Panasonic RL-P1002" filename="./" name="Panasonic RL-P1002 (Not working)" image=":/rlh1000/rlp1002.png" connectortype="Panasonic_44" conngender="male"/>
      <example brand="PANASONIC" idpocket="Panasonic RL-P2001" filename="./" name="Panasonic RL-P2001 (Not working)" image=":/rlh1000/rlp2001.png" connectortype="Panasonic_44" conngender="male"/>
+     <example brand="PANASONIC" idpocket="Panasonic RL-P1005" filename="./" name="Panasonic RL-P1005 (Not working)" image=":/rlh1000/rlp1005.png" connectortype="Panasonic_44" conngender="male"/>
      <example brand="PANASONIC" idpocket="SNAPBASIC" filename="./" name="SNAPBasic capsule" image=":/rlh1000/modimg/snapbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>
      <example brand="PANASONIC" idpocket="SNAPFORTH" filename="./" name="SNAPForth capsule" image=":/rlh1000/modimg/snapforth.png" connectortype="Panasonic_Capsule" conngender="male"/>
      <example brand="PANASONIC" idpocket="MSBASIC" filename="./" name="MSBasic capsule" image=":/rlh1000/modimg/msbasic.png" connectortype="Panasonic_Capsule" conngender="male"/>

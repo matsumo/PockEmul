@@ -279,6 +279,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["General CL-1000"]=CL1000;
     objtable["SANCO TPC-8300"]=TPC8300;
     objtable["SANCO TP-83"]=TP83;
+
     objtable["Panasonic HHC RL-H1000"]=RLH1000;
     objtable["Panasonic RL-P3001 RS-232C"]=RLP3001;
     objtable["Panasonic RL-P4002 Modem"]=RLP4002;
@@ -293,6 +294,8 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Panasonic RL-P1002"]=RLP1002;
     objtable["Panasonic RL-P2001"]=RLP2001;
     objtable["Panasonic RL-P1004A"]=RLP1004A;
+    objtable["Panasonic RL-P1005"]=RLP1005;
+
     objtable["Post-it"]=POSTIT;
     objtable["TI-57"]=TI57;
     objtable["HP-41"]=HP41;
@@ -417,6 +420,7 @@ CPObject *pPC=0;
         case RLP1004A: pPC = new Crlp1004a;      pPC->setName("Panasonic RL-P1004A"); break;
         case RLP1002: pPC = new Crlp1002;      pPC->setName("Panasonic RL-P1002"); break;
         case RLP2001: pPC = new Crlp2001;      pPC->setName("Panasonic RL-P2001"); break;
+        case RLP1005: pPC = new Crlp1005;      pPC->setName("Panasonic RL-P1005"); break;
 
         case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
 

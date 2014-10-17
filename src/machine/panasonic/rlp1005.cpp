@@ -9,7 +9,7 @@
 #include "common.h"
 #include "fluidlauncher.h"
 
-#include "rlp1004a.h"
+#include "rlp1005.h"
 #include "rlh1000.h"
 #include "pcxxxx.h"
 #include "Log.h"
@@ -22,14 +22,8 @@
 #define DOWN    0
 #define UP              1
 
-TransMap KeyMaprlp1004a[]={
-    {1, "FEED  ",       K_PFEED,34,234, 9},
-    {2, "POWER ON",     K_POW_ON,34,234,        9},
-    {3, "POWER OFF",K_POW_OFF,34,234,   9}
-};
-int KeyMaprlp1004aLenght = 3;
 
-Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(this)
+Crlp1005::Crlp1005(CPObject *parent):Cprinter(this)
 { //[constructor]
     Q_UNUSED(parent)
 
@@ -39,21 +33,21 @@ Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(this)
     //bells             = 0;
     charTable = 0;
     margin = 25;
-    BackGroundFname     = P_RES(":/rlh1000/rlp1004a.png");
-    setcfgfname("rlp1004a");
+    BackGroundFname     = P_RES(":/rlh1000/rlp1005.png");
+    setcfgfname("rlp1005");
 
     settop(10);
     setposX(0);
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp1004a.map");
+    pKEYB               = new Ckeyb(this,"rlp1005.map");
 
     setDXmm(113);
     setDYmm(95);
     setDZmm(51);
  // Ratio = 3,57
-    setDX(440);//Pc_DX  = 75;
-    setDY(340);//Pc_DY  = 20;
+    setDX(440);
+    setDY(340);
 
 //    setPaperPos(QRect(53,0,291,216));
     setPaperPos(QRect(57,-20,318,236));
@@ -72,11 +66,11 @@ Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(this)
     memsize             = 0x2000;
     InitMemValue        = 0x7f;
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,  P_RES(":/rlh1000/rlp1004a.bin")    , "" , CSlot::ROM , "Printer ROM"));
+    SlotList.append(CSlot(8 , 0x0000 ,  P_RES(":/rlh1000/rlp1005.bin")    , "" , CSlot::ROM , "Printer ROM"));
 
 }
 
-Crlp1004a::~Crlp1004a() {
+Crlp1005::~Crlp1005() {
     delete paperbuf;
     delete paperdisplay;
     delete pCONNECTOR;
@@ -87,7 +81,7 @@ Crlp1004a::~Crlp1004a() {
 
 
 #define LATENCY (pTIMER->pPC->getfrequency()/3200)
-bool Crlp1004a::run(void)
+bool Crlp1005::run(void)
 {
 
     static quint64 _state=0;
@@ -257,14 +251,14 @@ bool Crlp1004a::run(void)
 }
 
 
-void Crlp1004a::SaveAsText(void)
+void Crlp1005::SaveAsText(void)
 {
     QMessageBox::warning(mainwindow, "PockEmul",
                           tr("This printer is a pure graphic printer (yes it is!!!)\n") +
                           tr("Saving output as text is irrelevant") );
 }
 
-void Crlp1004a::drawGraph(quint8 data) {
+void Crlp1005::drawGraph(quint8 data) {
     QPainter painter;
 
     painter.begin(paperbuf);
@@ -279,7 +273,7 @@ void Crlp1004a::drawGraph(quint8 data) {
     Refresh();
 }
 
-void Crlp1004a::Refresh()
+void Crlp1005::Refresh()
 {
     QPainter painter;
 
@@ -303,7 +297,7 @@ void Crlp1004a::Refresh()
 /*****************************************************/
 /* Initialize PRINTER                                                            */
 /*****************************************************/
-void Crlp1004a::clearPaper(void)
+void Crlp1005::clearPaper(void)
 {
     // Fill it blank
     paperbuf->fill(PaperColor.rgba());
@@ -316,7 +310,7 @@ void Crlp1004a::clearPaper(void)
 }
 
 
-bool Crlp1004a::init(void)
+bool Crlp1005::init(void)
 {
     CPObject::init();
 
@@ -375,7 +369,7 @@ bool Crlp1004a::init(void)
 /*****************************************************/
 /* Exit PRINTER                                                                          */
 /*****************************************************/
-bool Crlp1004a::exit(void)
+bool Crlp1005::exit(void)
 {
     AddLog(LOG_PRINTER,"PRT Closing...");
     AddLog(LOG_PRINTER,"done.");
@@ -398,11 +392,11 @@ bool Crlp1004a::exit(void)
 
 
 
-bool Crlp1004a::Get_Connector(void) {
+bool Crlp1005::Get_Connector(void) {
     return true;
 }
 
-bool Crlp1004a::Set_Connector(void) {
+bool Crlp1005::Set_Connector(void) {
     return true;
 }
 
@@ -410,12 +404,12 @@ bool Crlp1004a::Set_Connector(void) {
 
 
 
-void Crlp1004a::paintEvent(QPaintEvent *event)
+void Crlp1005::paintEvent(QPaintEvent *event)
 {
     CPObject::paintEvent(event);
 }
 
-void Crlp1004a::BuildContextMenu(QMenu * menu) {
+void Crlp1005::BuildContextMenu(QMenu * menu) {
     Cprinter::BuildContextMenu(menu);
     menu->addAction(tr("Dump Memory"),this,SLOT(Dump()));
     menu->addSeparator();
@@ -423,7 +417,7 @@ void Crlp1004a::BuildContextMenu(QMenu * menu) {
 }
 
 
-void Crlp1004a::Rotate()
+void Crlp1005::Rotate()
 {
     rotate = ! rotate;
 
@@ -451,7 +445,7 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-void Crlp1004a::ComputeKey()
+void Crlp1005::ComputeKey()
 {
     if (pKEYB->LastKey == K_PFEED) {
         top+=10;
@@ -469,3 +463,4 @@ void Crlp1004a::ComputeKey()
     }
 
 }
+

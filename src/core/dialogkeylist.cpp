@@ -1,5 +1,6 @@
 #include <QPainter>
 #include <QCloseEvent>
+#include <QDebug>
 
 #include "common.h"
 #include "pcxxxx.h"
@@ -88,6 +89,8 @@ void DialogKeyList::slotSelectKey(QListWidgetItem * item , QListWidgetItem * pre
 			AddLog(LOG_MASTER,tr("Rect %1,%2 - %3,%4").arg(i->Rect.left()).arg(i->Rect.right()).arg(i->Rect.width()).arg(i->Rect.height()));
 			sbHor->setValue(i->Rect.width());
 			sbVer->setValue(i->Rect.height());
+            qWarning()<<"FOUND!!!";
+            pPC->Refresh_Display = true;
 			pPC->update();
 			return;
 		}
