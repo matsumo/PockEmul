@@ -1053,7 +1053,6 @@ OTHER_FILES += \
     cloud/content/NewsDelegate.qml \
     cloud/content/CategoryDelegate.qml \
     cloud/content/BusyIndicator.qml \
-    cloud/main.qml \
     cloud/content/TabWidget.qml \
     cloud/qmltemplates/CoverFlow/example/main.qml \
     cloud/qmltemplates/CoverFlow/component/CoverFlowDelegate.qml \
@@ -1110,7 +1109,8 @@ OTHER_FILES += \
     resources/keymap/fx8000g.map \
     resources/keymap/hp15c.map \
     resources/keymap/rlp1002.map \
-    resources/keymap/rlp1005.map
+    resources/keymap/rlp1005.map \
+    cloud/Main.qml
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

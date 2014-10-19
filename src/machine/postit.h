@@ -89,6 +89,7 @@ public:
     bool run(void);
     bool init(void);				//initialize
     bool exit(void);				//end
+    virtual bool	UpdateFinalImage(void);
     virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
     Cpostit(CPObject *parent = 0);

@@ -83,7 +83,7 @@ Rectangle {
         source: cloud.getValueFor("serverURL","")+"services/api/rest/xml/?method=file.get_pmlfiles"+
                 "&username="+cloud.getValueFor("username","")+
                 "&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa"+
-                "&auth_token="+root.auth_token
+                "&auth_token="+rootCloud.auth_token
         query: "/elgg/result/array_item"
 
         XmlRole { name: "pmlid"; query: "guid/string()"; }

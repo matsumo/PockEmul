@@ -94,7 +94,7 @@ QImage CloudImageProvider::requestImage(const QString& id, QSize* size, const QS
 
 //    qWarning()<<id<<"   auth_token="<<CloudWindow::getValueFor("auth_token")<<" size="<<requestedSize;
     QByteArray _ba = "api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa&auth_token=" +
-            CloudWindow::getValueFor("auth_token").toUtf8();
+            Cloud::getValueFor("auth_token").toUtf8();
 
     QString _id = id;
     _id.remove(QChar('#'));

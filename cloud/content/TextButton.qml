@@ -12,7 +12,7 @@ Rectangle {
 
     width: expand ? Math.max(label.width + 20 , parent.width) : label.width + 20 ;
     height: label.height + 6
-    border.color: root.buttonBorderColor
+    border.color: rootCloud.buttonBorderColor
     radius: 5
 
     MouseArea {
@@ -23,7 +23,7 @@ Rectangle {
 
     Text {
         id: label
-        color: root.textButtonColor
+        color: rootCloud.textButtonColor
         anchors.centerIn: parent
     }
 

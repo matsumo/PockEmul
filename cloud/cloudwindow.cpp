@@ -43,10 +43,12 @@
 #include "cloudimageprovider.h"
 
 #include "mainwindowpockemul.h"
+#include "renderView.h"
 #include "pobject.h"
 #include "Keyb.h"
 
 extern MainWindowPockemul *mainwindow;
+extern CrenderView* view;
 extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
 extern bool soundEnabled;
@@ -54,27 +56,27 @@ extern bool hiRes;
 extern QList<CPObject *> listpPObject;
 
 CloudWindow::CloudWindow(QWidget *parent)
-    : QWidget(parent)
+    : QWidget(parent),cloud(this)
 {
-    imgprov = new CloudImageProvider(this);
-    if (getValueFor("serverURL","")=="") saveValueFor("serverURL","http://pockemul.dscloud.me/elgg/");
+
+    if (cloud.getValueFor("serverURL","")=="")
+        cloud.saveValueFor("serverURL","http://pockemul.dscloud.me/elgg/");
 
 
-    view = new QQuickWidget;//QDeclarativeView(this);
-    view->engine()->addImageProvider(QLatin1String("PockEmulCloud"),imgprov );
+    cloudView = new QQuickWidget;//QDeclarativeView(this);
+    cloudView->engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 //    view->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
-    view->rootContext()->setContextProperty("cloud", this);
-    view->setSource(QUrl("qrc:/main.qml"));
-    view->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
-    connect(view->engine(), SIGNAL(quit()), this,SLOT(hide()));
-    object = (QObject*) view->rootObject();
+    cloudView->rootContext()->setContextProperty("cloud", &cloud);
+    cloudView->setSource(QUrl("qrc:/Main.qml"));
+    cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
+    connect(cloudView->engine(), SIGNAL(quit()), this,SLOT(closeQuick()));
 
-    QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
+    cloud.object = (QObject*) cloudView->rootObject();
 
-    m_fileDialog = new QFileDialog(this);
-    m_fileDialog->setFileMode(QFileDialog::ExistingFile);
-    m_fileDialog->setNameFilter("PockEmul Session files (*.pml)");
-    connect(m_fileDialog, SIGNAL(fileSelected(QString)),
+    QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), &cloud, SLOT(warning(QString)));
+
+
+    connect(cloud.m_fileDialog, SIGNAL(fileSelected(QString)),
             this, SLOT(sendPML(QString)));
 
     QVBoxLayout *windowLayout = new QVBoxLayout(this);
@@ -84,7 +86,7 @@ CloudWindow::CloudWindow(QWidget *parent)
 //    container->setFocusPolicy(Qt::TabFocus);
 
 //    windowLayout->addWidget(container);
-    windowLayout->addWidget(view);
+    windowLayout->addWidget(cloudView);
     windowLayout->setMargin(0);
 
 
@@ -103,9 +105,18 @@ QSize CloudWindow::sizeHint() const
     return QSize(500, 700);
 }
 
-int CloudWindow::askDialog(QString msg, int nbButton)
+Cloud::Cloud(QWidget* parent)
 {
-    return ask(this, msg, nbButton);
+    this->parent = parent;
+    imgprov = new CloudImageProvider(parent);
+    m_fileDialog = new QFileDialog(parent);
+    m_fileDialog->setFileMode(QFileDialog::ExistingFile);
+    m_fileDialog->setNameFilter("PockEmul Session files (*.pml)");
+}
+
+int Cloud::askDialog(QString msg, int nbButton)
+{
+    return ask(parent, msg, nbButton);
 }
 
 void CloudWindow::wheelEvent(QWheelEvent *event)
@@ -113,22 +124,22 @@ void CloudWindow::wheelEvent(QWheelEvent *event)
     event->accept();
 }
 
-void CloudWindow::refresh()
+void Cloud::refresh()
 {
 
 }
 
 
-QString CloudWindow::save()
+QString Cloud::save()
 {
-    hide();
+//    hide();
 //    mainwindow->repaint();
 
     QString s = mainwindow->saveassessionString().remove(0,1);
 //    qWarning()<<"session saved";
 //    qWarning()<<s.left(500);
 //    qWarning()<<"session saved";
-    show();
+//    show();
     return s;
 
 //    sendPML(filePath);
@@ -141,7 +152,7 @@ QString CloudWindow::save()
 
 
 
-void CloudWindow::sendPML(const QString &filePath)
+void Cloud::sendPML(const QString &filePath)
 {
 //    qWarning()<<"sendPML";
     if (filePath.isEmpty())
@@ -177,7 +188,7 @@ void CloudWindow::sendPML(const QString &filePath)
 #endif
 }
 
-void CloudWindow::finishedSave(QNetworkReply *reply)
+void Cloud::finishedSave(QNetworkReply *reply)
 {
 
     QByteArray xmlData = reply->readAll();
@@ -222,7 +233,7 @@ void CloudWindow::finishedSave(QNetworkReply *reply)
 }
 
 
-void CloudWindow::downloadFinished()
+void Cloud::downloadFinished()
 {
 //    qWarning()<<"CloudWindow::downloadFinished - ";
     QByteArray xmlData = m_reply->readAll();
@@ -234,11 +245,13 @@ void CloudWindow::downloadFinished()
 //    emit imageChanged(m_object.value("id").toString());
 
     m_reply->deleteLater();
-    this->hide();
+
+    emit downloadEnd();
+//    this->hide();
 
 }
 
-void CloudWindow::downloadFinished2()
+void Cloud::downloadFinished2()
 {
 //    qWarning()<<"CloudWindow::downloadFinished - ";
     QByteArray xmlData = m_reply->readAll();
@@ -260,17 +273,18 @@ void CloudWindow::downloadFinished2()
     }
 
     m_reply->deleteLater();
-    this->hide();
+    emit downloadEnd();
+//    this->hide();
 
 }
 
 
-void CloudWindow::showFileDialog()
+void Cloud::showFileDialog()
 {
     m_fileDialog->show();
 }
 
-void CloudWindow::getPML(int id,int version,QString auth_token) {
+void Cloud::getPML(int id,int version,QString auth_token) {
     QNetworkAccessManager *mgr = new QNetworkAccessManager();
     QString url;
     if (version==0) {
@@ -298,7 +312,7 @@ void CloudWindow::getPML(int id,int version,QString auth_token) {
 
 extern QString workDir;
 
-QString CloudWindow::getValueFor(const QString &objectName, const QString &defaultValue)
+QString Cloud::getValueFor(const QString &objectName, const QString &defaultValue)
 {
     QSettings settings(workDir+"config.ini",QSettings::IniFormat);
     if (settings.value(objectName).isNull()) {
@@ -309,7 +323,7 @@ QString CloudWindow::getValueFor(const QString &objectName, const QString &defau
     return settings.value(objectName).toString();
 }
 
-void CloudWindow::saveValueFor(const QString &objectName, const QString &inputValue)
+void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
 {
     QSettings settings(workDir+"config.ini",QSettings::IniFormat);
     settings.setValue(objectName, QVariant(inputValue));
@@ -319,13 +333,13 @@ void CloudWindow::saveValueFor(const QString &objectName, const QString &inputVa
     if (objectName == "hiRes") hiRes =  (inputValue=="on") ? true : false;
 }
 
-QByteArray CloudWindow::generateKey(QString username,QString password) {
+QByteArray Cloud::generateKey(QString username,QString password) {
     QString key = QString("PockEmul"+username+"A"+password+"TRFGHUIJ");
 //    qWarning()<<"KEY:"<<key;
     return QCryptographicHash::hash ( key.toUtf8(), QCryptographicHash::Sha1).toBase64();
 }
 
-void CloudWindow::saveCache(QString fileName, QString xml)
+void Cloud::saveCache(QString fileName, QString xml)
 {
     QFile file(workDir+fileName);
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate))
@@ -334,7 +348,7 @@ void CloudWindow::saveCache(QString fileName, QString xml)
     file.close();
 }
 
-QString CloudWindow::loadCache(QString fileName)
+QString Cloud::loadCache(QString fileName)
 {
     QFile file(workDir+fileName);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -345,29 +359,35 @@ QString CloudWindow::loadCache(QString fileName)
 }
 
 
-void CloudWindow::warning(QString msg) {
-    ask(this, msg, 1);
+void Cloud::warning(QString msg) {
+    ask(parent, msg, 1);
 }
 
-void CloudWindow::addShortcut(QString param) {
+void CloudWindow::closeQuick()
+{
+    cloudView->hide();
+//    mainwindow->centralwidget->show();
+}
+
+void Cloud::addShortcut(QString param) {
     m_addShortcut("test",param);
 }
 
-void CloudWindow::clearCache(QString s)
+void Cloud::clearCache(QString s)
 {
     s.replace("image://pockemulcloud/","http://");
     qWarning()<<"CloudWindow::clearCache:"<<s;
     imgprov->clearCache(s);
 }
 
-bool CloudWindow::isPortraitOrientation() {
+bool Cloud::isPortraitOrientation() {
 #if QT_VERSION >= 0x050000
 
     return  (QGuiApplication::primaryScreen()->orientation() == Qt::PortraitOrientation) ||
             (QGuiApplication::primaryScreen()->orientation() == Qt::InvertedPortraitOrientation) ||
              ( (QGuiApplication::primaryScreen()->orientation() == Qt::LandscapeOrientation ||
               QGuiApplication::primaryScreen()->orientation() == Qt::InvertedLandscapeOrientation) &&
-             (this->height()>this->width())) ;
+             (parent->height()>parent->width())) ;
 
 #endif
 }

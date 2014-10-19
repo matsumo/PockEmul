@@ -22,7 +22,7 @@ Rectangle {
                     return;
                 }
 
-                root.user_register(nameFld.inputText,
+                rootCloud.user_register(nameFld.inputText,
                                    emailFld.inputText,
                                    usernameFld.inputText,
                                    passwordFld.inputText);
@@ -30,7 +30,7 @@ Rectangle {
         }
         SettingsDelegate { name: "apikey"; labelString: "Login"; type: "action"; saveInput:false;
             onButtonClicked: {
-                root.user_login(usernameFld.inputText,passwordFld.inputText);
+                rootCloud.user_login(usernameFld.inputText,passwordFld.inputText);
             }
         }
 

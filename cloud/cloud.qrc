@@ -4,7 +4,7 @@
         <file>content/CategoryDelegate.qml</file>
         <file>content/NewsDelegate.qml</file>
         <file>content/ScrollBar.qml</file>
-        <file>main.qml</file>
+        <file>Main.qml</file>
         <file>content/TabWidget.qml</file>
         <file>RatingIndicatorQML/MyRatingIndicator.qml</file>
         <file>RatingIndicatorQML/star.png</file>

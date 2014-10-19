@@ -8,8 +8,9 @@ Rectangle {
     width: 360
     height: 640
 
-    id: root
+    id: rootCloud
     signal sendWarning(string test)
+    signal close
 
     property string serverURL: cloud.getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")
     property string currentUserid: "pock emul"
@@ -89,7 +90,7 @@ Rectangle {
             icon: "pics/back-white.png"
             MouseArea {
                 anchors.fill: parent
-                onClicked: Qt.quit()
+                onClicked: close();
             }
         }
     }
@@ -100,6 +101,7 @@ Rectangle {
         tabIndex: 0
         tabsModel: tabsModel
         quitIndex: 3
+        onClose: rootCloud.close();
 
     }
 
@@ -311,6 +313,7 @@ Rectangle {
             }
         });
     }
+
 
     function addRefPmlModel(_pmlid,
                             _username,

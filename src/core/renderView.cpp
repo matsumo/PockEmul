@@ -1,40 +1,74 @@
 
 #include <QQmlContext>
+#include <QSettings>
 
 #include "renderView.h"
 #include "cloud/cloudimageprovider.h"
+
 #include "mainwindowpockemul.h"
 #include "pobject.h"
+#include "launchbuttonwidget.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
-//extern void m_addShortcut(QString name,QString param);
-//extern bool soundEnabled;
-//extern bool hiRes;
+extern void m_addShortcut(QString name,QString param);
+extern bool soundEnabled;
+extern bool hiRes;
 extern QList<CPObject *> listpPObject;
 
-CrenderView::CrenderView(QWidget *parent)
+CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
-    rootContext()->setContextProperty("render", this);
+    engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
+
+    rootContext()->setContextProperty("cloud", &cloud);
     setSource(QUrl("qrc:/Test.qml"));
     setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
-    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
-    object = (QObject*) rootObject();
+//    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
+    cloud.object = (QObject*) rootObject();
 
-    QObject::connect(object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
-    QObject::connect(object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
-    QObject::connect(object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
-    QObject::connect(object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
-    QObject::connect(object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
-    QObject::connect(object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
+    QObject::connect(cloud.object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
+    QObject::connect(cloud.object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
+
+    QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocket()));
+    QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newext()));
+    QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
+    QObject::connect(cloud.object, SIGNAL(sendSave()), mainwindow,SLOT(saveassession()));
+    QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(load()));
+    QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
 
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
     connect(mainwindow,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
+
+}
+
+extern LaunchButtonWidget* launch1;
+void CrenderView::newpocket()
+{
+    qWarning()<<"FO"<<launch1;
+    launch1->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
+}
+
+extern LaunchButtonWidget* launch2;
+void CrenderView::newext()
+{
+    qWarning()<<"FO"<<launch2;
+    launch2->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
+
+}
+extern LaunchButtonWidget* load;
+void CrenderView::load()
+{
+    launch2->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
+
 
 }
 
@@ -126,7 +160,7 @@ void CrenderView::setzoom(int x,int y,int z)
 void CrenderView::pocketUpdated(CViewObject * pObject)
 {
     update();
-    QMetaObject::invokeMethod(object, "refreshPocket",
+    QMetaObject::invokeMethod(cloud.object, "refreshPocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );
 }
@@ -142,7 +176,7 @@ void CrenderView::newPObject(CPObject *pObject) {
     connect (pObject,SIGNAL(stackPosChanged()),this,SLOT(stackPosChanged()));
     connect( pObject,SIGNAL(updatedPObject(CViewObject*)),this,SLOT(pocketUpdated(CViewObject*)));
 
-    QMetaObject::invokeMethod(object, "addPocket",
+    QMetaObject::invokeMethod(cloud.object, "addPocket",
                               Q_ARG(QVariant, QString("name")),
                               Q_ARG(QVariant, "qrc"+pObject->BackGroundFname),
                               Q_ARG(QVariant, QString("%1").arg((long)pObject)),
@@ -156,7 +190,7 @@ void CrenderView::newPObject(CPObject *pObject) {
 void CrenderView::delPObject(CPObject *pObject)
 {
 //    qWarning()<<"delPObject"<<pObject;
-    QMetaObject::invokeMethod(object, "delPocket",
+    QMetaObject::invokeMethod(cloud.object, "delPocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );
 }
@@ -164,7 +198,7 @@ void CrenderView::delPObject(CPObject *pObject)
 void CrenderView::movePObject(CViewObject *pObject, QPoint pos)
 {
 //    qWarning()<<"movePocket:"<<pos;
-    QMetaObject::invokeMethod(object, "movePocket",
+    QMetaObject::invokeMethod(cloud.object, "movePocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject)),
                               Q_ARG(QVariant, pos.x()),
                               Q_ARG(QVariant, pos.y())
@@ -173,7 +207,7 @@ void CrenderView::movePObject(CViewObject *pObject, QPoint pos)
 void CrenderView::sizePObject(CViewObject *pObject, QSize size)
 {
 //    qWarning()<<"sizePObject:"<<size;
-    QMetaObject::invokeMethod(object, "sizePocket",
+    QMetaObject::invokeMethod(cloud.object, "sizePocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject)),
                               Q_ARG(QVariant, size.width()),
                               Q_ARG(QVariant, size.height())
@@ -188,9 +222,11 @@ void CrenderView::stackPosChanged()
 
     for (int i=0; i<list.count();i++) {
         CPObject * pobj = (CPObject*)(list.at(i));
-        QMetaObject::invokeMethod(object, "orderPocket",
+        QMetaObject::invokeMethod(cloud.object, "orderPocket",
                                   Q_ARG(QVariant, QString("%1").arg((long)pobj)),
                                   Q_ARG(QVariant, i)
                                   );
     }
 }
+
+

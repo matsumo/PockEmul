@@ -738,6 +738,7 @@ void MainWindowPockemul::CloudSlot()
         cloud = new CloudWindow(this);
     }
 
+//    centralwidget->hide();
     cloud->setGeometry(0,0,width(),height());
 
     cloud->show();

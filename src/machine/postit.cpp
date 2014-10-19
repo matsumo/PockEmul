@@ -1,6 +1,7 @@
 #include "sizegrip.h"
 #include <QPainter>
 #include <QDebug>
+#include <QTextItem>
 
 
 #include "postit.h"
@@ -90,6 +91,16 @@ bool Cpostit::init(void)
 bool Cpostit::exit(void)
 {
     return true;
+}
+
+bool Cpostit::UpdateFinalImage()
+{
+    CPObject::UpdateFinalImage();
+    QPainter painter;
+    painter.begin(FinalImage);
+    painter.drawText(QPoint(10,10),edit->toPlainText());
+
+    painter.end();
 }
 
 

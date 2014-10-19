@@ -54,13 +54,13 @@ Rectangle {
             Rectangle {
                 id: borderTextInput
                 anchors.fill: parent
-                border.color: root.inputBorderColor
+                border.color: rootCloud.inputBorderColor
                 radius: 5
             }
             Rectangle {
                 width: borderTextInput.width
                 height: borderTextInput.height*0.75
-                border.color: root.backGroundColor
+                border.color: rootCloud.backGroundColor
                 radius: 5
 
             }

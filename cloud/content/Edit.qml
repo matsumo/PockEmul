@@ -17,7 +17,7 @@ Rectangle {
     Rectangle {
         anchors.fill: parent
     border.width: (readOnly) ? 0 : 1
-    border.color: root.inputBorderColor
+    border.color: rootCloud.inputBorderColor
     radius: 2
     }
 

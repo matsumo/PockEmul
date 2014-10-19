@@ -19,8 +19,8 @@ ServeurTcp :: ServeurTcp (QObject *parent)
 }
 
 void ServeurTcp::Connect() {
-    if (CloudWindow::getValueFor("telnetEnabled")=="on") {
-        int _port = CloudWindow::getValueFor("telnetPort").toInt();
+    if (Cloud::getValueFor("telnetEnabled")=="on") {
+        int _port = Cloud::getValueFor("telnetPort").toInt();
         listen(QHostAddress::LocalHost,_port);
         QObject:: connect(this, SIGNAL(newConnection()),this, SLOT(demande_connexion()));
     }

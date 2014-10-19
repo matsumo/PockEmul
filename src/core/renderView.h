@@ -3,7 +3,7 @@
 
 #include <QQuickWidget>
 #include <QQuickView>
-
+#include "cloud/cloudwindow.h"
 class CPObject;
 class CViewObject;
 
@@ -14,10 +14,15 @@ class CrenderView : public QQuickWidget
 public:
     CrenderView(QWidget *parent = 0);
 
-    QObject *object;
+//    QObject *object;
     QWidget * parent;
+    Cloud cloud;
 
 public slots:
+    Q_INVOKABLE void newpocket();
+    Q_INVOKABLE void newext();
+    Q_INVOKABLE void load();
+
     Q_INVOKABLE void warning(QString msg);
     Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);
     Q_INVOKABLE void keyreleased(QString Id, int k, int m, int scan);
@@ -33,6 +38,8 @@ public slots:
     void movePObject(CViewObject*pObject, QPoint pos);
     void sizePObject(CViewObject*pObject, QSize size);
     void stackPosChanged();
+
+
 };
 
 #endif // RENDERVIEW_H

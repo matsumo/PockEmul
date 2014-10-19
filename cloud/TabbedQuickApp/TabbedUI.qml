@@ -11,6 +11,7 @@ Rectangle {
     property VisualItemModel tabsModel
 
     property int quitIndex : 999999
+    signal close;
 
     anchors.fill: parent
 
@@ -86,7 +87,7 @@ Rectangle {
             onClicked: {
                 if (index==quitIndex) {
                     tabClicked(1);
-                    Qt.quit();
+                    close();
                 }
                 else
                     tabClicked(index);

@@ -38,6 +38,10 @@ MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
 CrenderView* view;
 
+LaunchButtonWidget* launch1;
+LaunchButtonWidget* launch2;
+LaunchButtonWidget* load;
+
 bool soundEnabled=true;
 bool hiRes=true;
 
@@ -128,6 +132,11 @@ mainwindow = new MainWindowPockemul();
     mainwindow->setCentralWidget(cw);
     delete mainwindow->centralwidget;
     mainwindow->centralwidget = cw;
+#else
+    view = new CrenderView();
+    mainwindow->setCentralWidget(view);
+    delete mainwindow->centralwidget;
+    mainwindow->centralwidget = view;
 #endif
 
 #ifndef Q_OS_ANDROID
@@ -156,28 +165,30 @@ mainwindow = new MainWindowPockemul();
 #   endif
 #endif
 
-        soundEnabled =  (CloudWindow::getValueFor("soundEnabled","on")=="on") ? true : false;
-        hiRes =  (CloudWindow::getValueFor("hiRes","on")=="on") ? true : false;
+        soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
+        hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
 
     float ratio = MAX(1,QGuiApplication::primaryScreen()->logicalDotsPerInch()/150);
     int iconSize = 48*ratio;
     int v_inter = 50*ratio;
     int v_pos = 12;
-    LaunchButtonWidget* launch1 = new LaunchButtonWidget(mainwindow->centralwidget,
+    launch1 = new LaunchButtonWidget(mainwindow->centralwidget,
                                                 LaunchButtonWidget::PictureFlow,
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
                                                 ":/core/pocket.png","BRAND");
     launch1->setGeometry(0,v_pos,iconSize,iconSize);
-    launch1->raise();
+    launch1->hide();
     v_pos += v_inter;
     launch1->setToolTip("Start a new Pocket Emulation.");
+    qWarning()<<"launch1="<<launch1;
 
 #ifndef EMSCRIPTEN
-    LaunchButtonWidget* launch2 = new LaunchButtonWidget(mainwindow->centralwidget,
+    launch2 = new LaunchButtonWidget(mainwindow->centralwidget,
                                                  LaunchButtonWidget::PictureFlow,
                                                  QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                  ":/core/ext.png");
     launch2->setGeometry(0,v_pos,iconSize,iconSize);
+    launch2->hide();
     v_pos += v_inter;
     launch2->setToolTip("Start a new Extension Emulation.");
 #endif
@@ -189,6 +200,7 @@ mainwindow = new MainWindowPockemul();
                                                      ":/core/dev.png");
     mainwindow->connect(dev,SIGNAL(clicked()),mainwindow,SLOT(IDE()));
     dev->setGeometry(0,v_pos,iconSize,iconSize);
+    dev->hide();
     v_pos += v_inter;
     dev->setToolTip("Start the Integrated development Environment.");
 #endif
@@ -199,15 +211,17 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/save.png");
     mainwindow->connect(save,SIGNAL(clicked()),mainwindow,SLOT(saveassession()));
     save->setGeometry(0,v_pos,iconSize,iconSize);
+    save->hide();
     v_pos += v_inter;
     save->setToolTip("Save the current session.");
 
-    LaunchButtonWidget* load = new LaunchButtonWidget(mainwindow->centralwidget,
+    load = new LaunchButtonWidget(mainwindow->centralwidget,
                                                       LaunchButtonWidget::FileBrowser,
                                                       QStringList()<<"."<<"*.pml",
                                                       ":/core/load.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     load->setGeometry(0,v_pos,iconSize,iconSize);
+    load->hide();
     v_pos += v_inter;
     load->setToolTip("Load an existing session.");
 
@@ -222,6 +236,7 @@ mainwindow = new MainWindowPockemul();
 #   endif
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
     cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
+    cloudButton->hide();
     v_pos += v_inter;
     cloudButton->setToolTip("Go to the Cloud.");
 #endif
@@ -232,6 +247,7 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/bookcase.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     bookcase->setGeometry(0,v_pos,iconSize,iconSize);
+    bookcase->hide();
     v_pos += v_inter;
     bookcase->setToolTip("Browse the bookcase.");
 
@@ -242,6 +258,7 @@ mainwindow = new MainWindowPockemul();
     mainwindow->connect(exit,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
 
     exit->setGeometry(0,v_pos,iconSize,iconSize);
+    exit->hide();
     v_pos += v_inter;
 
     exit->setToolTip("Exit PockEmul.");

@@ -217,7 +217,7 @@ Item {
             text: "Close"
             onClicked: {
                 if (changed) {
-                    root.sendWarning("Cancel changes before closing.");
+                    rootCloud.sendWarning("Cancel changes before closing.");
                 }
                 else {
                     delegate.state = '';
@@ -228,7 +228,7 @@ Item {
         TextButton {
             id: downloadButton
             text: "Download File"
-            onClicked: cloud.getPML(pmlid,1,root.auth_token);
+            onClicked: cloud.getPML(pmlid,1,rootCloud.auth_token);
         }
         TextButton {
             id: importButton
@@ -236,7 +236,7 @@ Item {
             opacity: delegate.detailsOpacity
             text: "Clone to private"
             onClicked: {
-                root.clone_pml(pmlid,
+                rootCloud.clone_pml(pmlid,
                                function(){xmlpmlModel.reload();},
                                function(){}
                                );
@@ -252,7 +252,7 @@ Item {
             opacity: delegate.detailsOpacity
             text: "Make private"
             onClicked: {
-                root.set_access(pmlid,0,
+                rootCloud.set_access(pmlid,0,
                                function(){
 
                                    refpmlModel.setProperty(rowid,"access_id",0);
@@ -270,7 +270,7 @@ Item {
             opacity: delegate.detailsOpacity
             text: "Share with Friends"
             onClicked: {
-                root.set_access(pmlid,-2,
+                rootCloud.set_access(pmlid,-2,
                                function(){
 
                                    refpmlModel.setProperty(rowid,"access_id",-2);
@@ -288,7 +288,7 @@ Item {
             opacity: delegate.detailsOpacity
             text: "Make public"
             onClicked: {
-                root.set_access(pmlid,2,
+                rootCloud.set_access(pmlid,2,
                                function(){
 
                                    refpmlModel.setProperty(rowid,"access_id",2);
@@ -418,7 +418,7 @@ Item {
             onClicked: {
                 if (cloud.askDialog("Do you want to delete this session ?",2)==2) return;
 
-                root.delete_pml(pmlid,
+                rootCloud.delete_pml(pmlid,
                                function(){xmlpmlModel.reload();},
                                function(){}
                                );
@@ -449,7 +449,7 @@ Item {
         PropertyChanges { target: pmlThumbImage; width: 200; height: 200;} // Make picture bigger
         PropertyChanges { target: delegate; detailsOpacity: 1; x: 0 } // Make details visible
         PropertyChanges { target: delegate; height: list.height } // Fill the entire list area with the detailed view
-        PropertyChanges { target: categoriesView; width: root.isPortrait?0:categoriesView.width }
+        PropertyChanges { target: categoriesView; width: rootCloud.isPortrait?0:categoriesView.width }
         // Move the list so that this item is at the top.
         PropertyChanges { target: delegate.ListView.view; explicit: true; contentY: delegate.y }
 

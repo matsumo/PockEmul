@@ -20,13 +20,11 @@ class QQuickWidget;
 class CViewObject;
 class CPObject;
 
-class CloudWindow : public QWidget
-{
+
+class Cloud : public QObject {
     Q_OBJECT
-    
 public:
-    CloudWindow(QWidget *parent = 0);
-    virtual QSize sizeHint() const;
+    Cloud(QWidget *parent=0);
 
     Q_INVOKABLE int askDialog(QString msg, int nbButton);
     Q_INVOKABLE void getPML(int id, int version=0, QString auth_token = QString());
@@ -41,35 +39,60 @@ public:
 
     Q_INVOKABLE void clearCache(QString s);
 
-    void addPocket(QString _name, QString url, QString pocketId, int left, int top, int width, int height);
-
-protected:
-    void wheelEvent(QWheelEvent *event);
-
+signals:
+    void downloadEnd();
 public slots:
     Q_INVOKABLE void refresh();
     Q_INVOKABLE QString save();
     Q_INVOKABLE void showFileDialog();
     Q_INVOKABLE void warning(QString msg);
 
-
-private slots:
-
     void sendPML(const QString &filePath);
     void downloadFinished();
     void downloadFinished2();
     void finishedSave(QNetworkReply* reply);
+public:
+    CloudImageProvider *imgprov;
+    QFileDialog *m_fileDialog;
+    QNetworkReply *m_reply;
+    QWidget *parent;
+    QObject *object;
+};
+
+class CloudWindow : public QWidget
+{
+    Q_OBJECT
+    
+public:
+    CloudWindow(QWidget *parent = 0);
+    virtual QSize sizeHint() const;
+
+    Cloud cloud;
+
+    void addPocket(QString _name, QString url, QString pocketId, int left, int top, int width, int height);
+
+protected:
+    void wheelEvent(QWheelEvent *event);
+
+
+
+
+private slots:
+
+    Q_INVOKABLE void closeQuick();
+
+
 
 private:
 //    QDeclarativeView *view;
 //    QQuickView *view;
-    QQuickWidget *view;
+    QQuickWidget *cloudView;
 
-    QNetworkReply *m_reply;
-    QFileDialog *m_fileDialog;
-    QObject *object;
 
-    CloudImageProvider *imgprov;
+
+
+
+
     void resizeEvent(QResizeEvent *e);
 };
 
