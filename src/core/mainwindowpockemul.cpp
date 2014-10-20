@@ -123,10 +123,13 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     // Create a timer for Drawing screen FRAMERATE times per seconds
     FrameTimer = new QTimer(mainwindow);
     connect(FrameTimer, SIGNAL(timeout()), this, SLOT(updateFrameTimer()));
+    qWarning()<<"before start FrameTimer";
     FrameTimer->start(FRAMERATE);
+    qWarning()<<"after start FrameTimer";
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(updateTimer()));
     timer->start(TIMER_RES);
+    qWarning()<<"after start timer";
 
     // Create the Pocket Thread
     PcThread = new CPocketThread(this);
@@ -470,9 +473,9 @@ CPObject *pPC=0;
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
 
-#ifdef Q_OS_ANDROID
-    pPC->show();
-#endif
+//#ifdef Q_OS_ANDROID
+//    pPC->show();
+//#endif
 
 
     return pPC;

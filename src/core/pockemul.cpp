@@ -139,12 +139,12 @@ mainwindow = new MainWindowPockemul();
     mainwindow->centralwidget = view;
 #endif
 
-#ifndef Q_OS_ANDROID
+
     QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
     view = new CrenderView(mainwindow->centralwidget);
     windowLayout->addWidget(view);
     windowLayout->setMargin(0);
-#endif
+
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
@@ -229,11 +229,11 @@ mainwindow = new MainWindowPockemul();
     LaunchButtonWidget* cloudButton = new LaunchButtonWidget(mainwindow->centralwidget,
                                                      LaunchButtonWidget::Action,
                                                      QStringList(),
-#   ifdef Q_OS_ANDROID
+#ifdef Q_OS_ANDROID
                                                      ":/core/cloud-white.png");
-#   else
+#else
                                                       ":/core/cloud.png");
-#   endif
+#endif
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
     cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
     cloudButton->hide();
