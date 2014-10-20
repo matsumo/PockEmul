@@ -89,6 +89,7 @@ public:
     bool run(void);
     bool init(void);				//initialize
     bool exit(void);				//end
+    virtual bool	InitDisplay(void);
     virtual bool	UpdateFinalImage(void);
     virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
@@ -105,7 +106,7 @@ protected slots:
 private:
     CpostitTextEdit *edit;
     QVBoxLayout *HBL,*mainLayout;
-    float size;
+    float sizeFactor;
 
 };
 

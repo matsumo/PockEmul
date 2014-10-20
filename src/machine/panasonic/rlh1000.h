@@ -20,7 +20,7 @@ public:
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
 
-    virtual void ComputeKey();
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
     virtual bool Set_Connector(void);
     virtual bool Get_Connector(void);
     virtual bool UpdateFinalImage();

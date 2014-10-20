@@ -83,8 +83,11 @@ Cce126::~Cce126() {
 //    delete bells;
 }
 
-void Cce126::ComputeKey(void)
+void Cce126::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (pKEYB->LastKey == K_PFEED) {
         RefreshCe126(0x0d);
     }

@@ -25,6 +25,7 @@
 #include <QDebug>
 
 #include "hp41Cpu.h"
+#include "hpnutd.h"
 #include "pcxxxx.h"
 #include "hp41.h"
 #include "Lcdc.h"

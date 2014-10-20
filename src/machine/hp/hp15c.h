@@ -59,11 +59,19 @@ public:
   virtual UINT8 out(UINT8 address,UINT8 value);
   virtual void TurnON();
   virtual void TurnOFF();
+  virtual void BuildContextMenu(QMenu * menu);
+  virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
   UINT8 getKey();
 
   bool LoadConfig(QXmlStreamReader *xmlIn);
   bool SaveConfig(QXmlStreamWriter *xmlOut);
+public slots:
+  void TurnNext();
+
+private:
+  bool turnOnNext;
+  int firstkey;
 };
 
 

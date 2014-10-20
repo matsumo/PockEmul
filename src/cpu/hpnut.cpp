@@ -19,12 +19,13 @@
  MA 02111, USA.
  */
 
+//TODO: Disassembler
 
 #include <QFile>
 #include <QDebug>
 
 #include "hpnut.h"
-#include "debug.h"
+#include "hpnutd.h"
 #include "ui/cregsz80widget.h"
 
 //#include "digit_ops.h"

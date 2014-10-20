@@ -14,7 +14,6 @@
 
 Cpostit::Cpostit(CPObject *parent )   : CPObject(this)
 {
-    //[constructor]
     Q_UNUSED(parent)
 
 //    setWindowFlags(Qt::SubWindow);
@@ -27,11 +26,10 @@ Cpostit::Cpostit(CPObject *parent )   : CPObject(this)
     setDYmm(318);
     setDZmm(51);
  // Ratio = 3,57
-    setDX(150);//Pc_DX  = 75;
-    setDY(150);//Pc_DY = 20;
+    setDX(150);
+    setDY(150);
 
-    size = 1;
-
+    sizeFactor = 1;
 
 }
 
@@ -42,8 +40,7 @@ Cpostit::~Cpostit(){
 
 bool Cpostit::run(void)
 {
-
-
+    Refresh_Display = true;
     return true;
 }
 
@@ -82,6 +79,8 @@ bool Cpostit::init(void)
     this->setLayout(mainLayout);
     AddLog(LOG_MASTER,"done.\n");
 
+
+
     return true;
 }
 
@@ -93,14 +92,28 @@ bool Cpostit::exit(void)
     return true;
 }
 
+bool Cpostit::InitDisplay()
+{
+
+    CPObject::InitDisplay();
+
+    return true;
+}
+
 bool Cpostit::UpdateFinalImage()
 {
     CPObject::UpdateFinalImage();
     QPainter painter;
     painter.begin(FinalImage);
-    painter.drawText(QPoint(10,10),edit->toPlainText());
+    QFont font("Arial", 6);
+    painter.setFont(font);
+    painter.setPen(Qt::black);
+    QRect _rect = QRect(QPoint(50,50),this->size());
+    painter.drawText(_rect,Qt::TextWordWrap,"TEXT:"+edit->toPlainText());
 
     painter.end();
+
+    return true;
 }
 
 
@@ -119,11 +132,6 @@ void Cpostit::contextMenuEvent ( QContextMenuEvent * event )
     QMenu *menu= new QMenu(this);
 
     BuildContextMenu(menu);
-
-//    menu.addSeparator();
-
-//    menu.addAction(tr("Show console"),this,SLOT(ShowConsole()));
-//    menu.addAction(tr("Hide console"),this,SLOT(HideConsole()));
 
     menu->popup(event->globalPos () );
     event->accept();
@@ -151,6 +159,10 @@ bool Cpostit::LoadSession_File(QXmlStreamReader *xmlIn)
 //            xmlIn->skipCurrentElement();
         }
     }
+
+    UpdateFinalImage();
+    emit updatedPObject(this);
+
     return true;
 }
 
@@ -158,7 +170,7 @@ bool Cpostit::LoadSession_File(QXmlStreamReader *xmlIn)
 
 void Cpostit::slotDblSize()
 {
-    size = 2;
+    sizeFactor = 2;
     int w=getDX()*2;
     int h=getDY()*2;
     setDX(w);

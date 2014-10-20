@@ -27,7 +27,7 @@ public:
     virtual void clearPaper(void);
     virtual void SaveAsText(void);
 
-    virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
     //virtual void resizeEvent ( QResizeEvent * );
 

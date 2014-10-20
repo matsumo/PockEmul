@@ -146,8 +146,11 @@ void Ccl1000::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Ccl1000::ComputeKey(void)
+void Ccl1000::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
 //    if (pKEYB->LastKey == K_PRINT_ON) {
 //        printerSwitch = true;

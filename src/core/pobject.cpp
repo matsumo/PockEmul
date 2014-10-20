@@ -720,7 +720,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
         if (pKEYB->LastKey != 0)
         {
-            ComputeKey();
+            ComputeKey(KEY_PRESSED,pKEYB->LastKey);
             Vibrate();
         }
 
@@ -901,9 +901,9 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     setCursor(Qt::ArrowCursor);
     if (pKEYB) {
         pKEYB->keyPressedList.removeAll(pKEYB->lastMousePressedKey);
+        ComputeKey(KEY_RELEASED,pKEYB->lastMousePressedKey);
         pKEYB->lastMousePressedKey = 0;
         pKEYB->LastKey = 0;
-        ComputeKey();
     }
 
     if ( (parentWidget() != mainwindow->centralwidget)
@@ -992,10 +992,14 @@ qreal CPObject::RangeFrom(CPObject * target)
     return range;
 }
 
+
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
-void CPObject::ComputeKey()
+void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (KEY(K_SHARP11PINS)) {
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
@@ -1051,11 +1055,19 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//(QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
-    pKEYB->keyPressedList.removeAll(mapKey(event));
-	pKEYB->LastKey = 0;
-    ComputeKey();
+    int _key = mapKey(event);
+    pKEYB->keyPressedList.removeAll(_key);
+    ComputeKey(KEY_RELEASED,_key);
+
+    pKEYB->LastKey = 0;
 
 }
+
+void CPObject::TurnON() {
+
+}
+
+void CPObject::TurnOFF() {}
 
 int CPObject::mapKey(QKeyEvent * event) {
     int key = 0;
@@ -1132,7 +1144,7 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     if (pKEYB->LastKey>0) {
         // Add th key to Key pressed buffer
         if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) pKEYB->keyPressedList.append(pKEYB->LastKey);
-        ComputeKey();
+        ComputeKey(KEY_PRESSED,pKEYB->LastKey);
     }
     else {
         event->ignore();

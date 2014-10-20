@@ -49,6 +49,7 @@ class CPObject:public CViewObject
     Q_OBJECT
 
 public:
+    enum KEYEVENT{ KEY_PRESSED,KEY_RELEASED};
 
 	CPObject(CPObject *parent=0);
 	virtual ~CPObject();
@@ -62,8 +63,8 @@ public:
     virtual bool	Get_Connector(void) { return true; }
     virtual void    keyPressEvent(QKeyEvent *event);
     virtual void    keyReleaseEvent(QKeyEvent *event);
-    virtual void    TurnON() {}
-    virtual void    TurnOFF() {}
+    virtual void    TurnON();
+    virtual void    TurnOFF();
     virtual int     initsound();
     virtual int     exitsound();
     virtual void    Reset() {}
@@ -76,7 +77,7 @@ public:
 
 	QPoint		SnapPts;
 	qreal		RangeFrom(CPObject * target);
-    virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 	CPObject	*Parent;
 	CpcXXXX		*pPC;
 

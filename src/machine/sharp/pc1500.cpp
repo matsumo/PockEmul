@@ -703,8 +703,11 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-void Cpc15XX::ComputeKey()
+void Cpc15XX::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
         pKEYB->keyPressedList.removeAll(0x240);

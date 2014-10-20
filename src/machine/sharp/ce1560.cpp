@@ -351,8 +351,11 @@ bool Cce1560::SaveConfig(QXmlStreamWriter *xmlOut)
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-void Cce1560::ComputeKey()
+void Cce1560::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
     if (screenOpen && KEY(0x242)) {
         inhibitSwitch = false;

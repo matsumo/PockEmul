@@ -352,7 +352,7 @@ public:
 
 
   void setPortChar(int port, UINT8 c);
-  virtual void ComputeKey();
+  virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
   virtual bool Set_Connector(void);
   virtual bool Get_Connector(void);
   virtual bool UpdateFinalImage();

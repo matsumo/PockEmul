@@ -1394,8 +1394,11 @@ bool CLH5810_PC1600::step()
 }
 
 
-void Cpc1600::ComputeKey()
+void Cpc1600::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
         pKEYB->keyPressedList.removeAll(0x240);

@@ -330,9 +330,3 @@ UINT32 Cdebug_ti57cpu::DisAsm_1(UINT32 oldpc)
     debugged = true;
     return NextDasmAdr;
 }
-
-UINT32 Cdebug_hpnut::DisAsm_1(UINT32 oldpc)
-{
-    //return (oldpc);
-    Buffer[0] = '\0';
-}

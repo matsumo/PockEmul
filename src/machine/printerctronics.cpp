@@ -43,8 +43,11 @@ CprinterCtronics::~CprinterCtronics() {
     delete charTable;
 }
 
-void CprinterCtronics::ComputeKey(void)
+void CprinterCtronics::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
 }
 

@@ -36,7 +36,7 @@ public:
     virtual bool	Set_Connector(void);
     virtual bool	Get_Connector(void);
     virtual bool UpdateFinalImage(void);
-    virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;

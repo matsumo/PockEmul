@@ -34,15 +34,16 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendDblClick(QString,int,int)), this, SLOT(dblclick(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
     QObject::connect(cloud.object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
 
-    QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocket()));
-    QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newext()));
+    QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
+    QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
     QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
     QObject::connect(cloud.object, SIGNAL(sendSave()), mainwindow,SLOT(saveassession()));
-    QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(load()));
+    QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(loadSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
 
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
@@ -51,25 +52,23 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 }
 
 extern LaunchButtonWidget* launch1;
-void CrenderView::newpocket()
+void CrenderView::newpocketSlot()
 {
     qWarning()<<"FO"<<launch1;
     launch1->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
 }
 
 extern LaunchButtonWidget* launch2;
-void CrenderView::newext()
+void CrenderView::newextSlot()
 {
     qWarning()<<"FO"<<launch2;
     launch2->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
-
 }
+
 extern LaunchButtonWidget* load;
-void CrenderView::load()
+void CrenderView::loadSlot()
 {
-    launch2->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
-
-
+    load->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
 }
 
 void CrenderView::warning(QString msg) {
@@ -78,6 +77,8 @@ void CrenderView::warning(QString msg) {
 
 void CrenderView::keypressed(QString Id, int k,int m,int scan)
 {
+    Q_UNUSED(scan)
+
     CPObject *pc = ((CPObject*)Id.toULongLong());
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
@@ -87,6 +88,8 @@ void CrenderView::keypressed(QString Id, int k,int m,int scan)
 }
 void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 {
+    Q_UNUSED(scan)
+
     CPObject *pc = ((CPObject*)Id.toULongLong());
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
@@ -152,7 +155,19 @@ void CrenderView::unclick(QString Id, int x, int y)
     return;
 
 }
+void CrenderView::dblclick(QString Id, int x, int y)
+{
 
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    QPoint pts(x , y);
+
+    // Send thee MouseButtonPress event
+    QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonDblClick, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+    QApplication::sendEvent(pc, e);
+    delete e;
+    return;
+
+}
 void CrenderView::setzoom(int x,int y,int z)
 {
     mainwindow->doZoom(QPoint(x,y),z);

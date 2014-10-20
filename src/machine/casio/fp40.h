@@ -11,7 +11,7 @@ public:
 
     virtual bool init(void);				//initialize
 
-    virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
     virtual bool UpdateFinalImage(void);
 
 

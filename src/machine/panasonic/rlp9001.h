@@ -20,7 +20,7 @@ public:
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
     virtual bool	InitDisplay(void);
     virtual bool UpdateFinalImage();
-    virtual void ComputeKey();
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
     Crlp9001(CPObject *parent = 0, Models mod=RLP9001);
     virtual ~Crlp9001();

@@ -149,8 +149,11 @@ void Cfp100::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Cfp100::ComputeKey(void)
+void Cfp100::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
 //    if (pKEYB->LastKey == K_PRINT_ON) {
 //        printerSwitch = true;

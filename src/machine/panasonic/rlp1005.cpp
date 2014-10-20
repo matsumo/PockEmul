@@ -481,9 +481,12 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-void Crlp1005::ComputeKey()
+void Crlp1005::ComputeKey(KEYEVENT ke,int scancode)
 {
-    if (pKEYB->LastKey == K_PFEED) {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
+   if (pKEYB->LastKey == K_PFEED) {
         top+=10;
         Refresh();
     }

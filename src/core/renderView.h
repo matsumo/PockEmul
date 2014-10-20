@@ -19,9 +19,9 @@ public:
     Cloud cloud;
 
 public slots:
-    Q_INVOKABLE void newpocket();
-    Q_INVOKABLE void newext();
-    Q_INVOKABLE void load();
+    Q_INVOKABLE void newpocketSlot();
+    Q_INVOKABLE void newextSlot();
+    Q_INVOKABLE void loadSlot();
 
     Q_INVOKABLE void warning(QString msg);
     Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);
@@ -29,6 +29,7 @@ public slots:
     Q_INVOKABLE void contextMenu(QString Id, int x, int y);
     Q_INVOKABLE void click(QString Id, int x, int y);
     Q_INVOKABLE void unclick(QString Id, int x, int y);
+    Q_INVOKABLE void dblclick(QString Id, int x, int y);
     Q_INVOKABLE void setzoom(int x,int y,int z);
     Q_INVOKABLE void movepocket(QString Id, int x, int y);
     Q_INVOKABLE void moveallpocket(int x, int y);

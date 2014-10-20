@@ -53,6 +53,7 @@ Rectangle {
     signal sendContextMenu(string id,int x,int y)
     signal sendClick(string id,int x,int y)
     signal sendUnClick(string id,int x,int y)
+    signal sendDblClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)
     signal sendMoveAllPocket(int x,int y)
     signal setZoom(int x,int y,int z)
@@ -206,6 +207,7 @@ Rectangle {
                         isdrag=false;
                         sendUnClick(idpocket,mouseX,mouseY);
                     }
+                    onDoubleClicked: sendDblClick(idpocket,mouseX,mouseY);
                     onPositionChanged: {
 //                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
                         if (isdrag) {

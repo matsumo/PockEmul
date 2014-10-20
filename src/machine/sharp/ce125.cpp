@@ -22,8 +22,11 @@ TransMap KeyMapce125[]={
 int KeyMapce125Lenght = 5;
 
 
-void Cce125tape::ComputeKey(void)
+void Cce125tape::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
     if (pKEYB->LastKey == K_PLAY)
     {

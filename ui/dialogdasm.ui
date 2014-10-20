@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>594</width>
-    <height>524</height>
+    <height>592</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -192,7 +192,14 @@
             </layout>
            </item>
            <item>
-            <widget class="QListWidget" name="codelistWidget"/>
+            <widget class="QListWidget" name="codelistWidget">
+             <property name="selectionMode">
+              <enum>QAbstractItemView::MultiSelection</enum>
+             </property>
+             <property name="selectionBehavior">
+              <enum>QAbstractItemView::SelectItems</enum>
+             </property>
+            </widget>
            </item>
            <item>
             <widget class="QLabel" name="lblMsg">

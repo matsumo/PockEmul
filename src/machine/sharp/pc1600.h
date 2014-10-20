@@ -71,7 +71,7 @@ public:
     bool	SaveConfig(QXmlStreamWriter *);
     bool	InitDisplay(void);
     bool	CompleteDisplay(void);
-    virtual void ComputeKey();
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
     bool	run(void);				// emulator main
     void	Set_Port(PORTS Port,BYTE data);

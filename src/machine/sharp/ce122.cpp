@@ -97,8 +97,11 @@ bool Cce122::run(void)
     return true;
 }
 
-void Cce122::ComputeKey(void)
+void Cce122::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
     if (pKEYB->LastKey == K_PFEED) {
         RefreshCe126(0x0d);

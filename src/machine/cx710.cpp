@@ -110,8 +110,11 @@ void Cx710::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Cx710::ComputeKey(void)
+void Cx710::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
 //    if (pKEYB->LastKey == K_PRINT_ON) {
 //        printerSwitch = true;

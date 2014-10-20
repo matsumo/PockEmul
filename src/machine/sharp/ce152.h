@@ -69,7 +69,7 @@ typedef struct {
 	QString		TapeFileName;
 	Cconnector	*pTAPECONNECTOR;
 	qint64		pTAPECONNECTOR_value;
-	virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 	
     Cce152(CPObject *parent = 0);
     ~Cce152() {

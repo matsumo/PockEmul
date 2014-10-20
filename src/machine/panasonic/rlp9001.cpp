@@ -387,8 +387,11 @@ void Crlp9001::exportROM() {
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-void Crlp9001::ComputeKey()
+void Crlp9001::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (model==RLP9006) {
         int _slot = -1;
         if (KEY(0x240)) _slot = 0;

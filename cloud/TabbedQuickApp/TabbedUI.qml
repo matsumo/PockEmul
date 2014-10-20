@@ -86,7 +86,7 @@ Rectangle {
             anchors.fill: parent
             onClicked: {
                 if (index==quitIndex) {
-                    tabClicked(1);
+//                    tabClicked(1);
                     close();
                 }
                 else

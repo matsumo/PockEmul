@@ -332,8 +332,11 @@ void Crlp4002::readData()
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-void Crlp4002::ComputeKey()
+void Crlp4002::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
     if (pKEYB->LastKey>0) {
         connected = !connected;

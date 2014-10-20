@@ -104,6 +104,8 @@ void Clcdc_hp15c::voyager_display_update (nut_reg_t *nut_reg,voyager_display_reg
                         display->display_segments [digit] |= SEGMENT_ANN;
                 }
             }
+//            if (display->display_segments [digit] == 0x50)
+//                display->display_segments [digit] = 0x21;
         }
     }
 

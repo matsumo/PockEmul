@@ -56,8 +56,11 @@ bool Cfp40::init(void) {
     return true;
 }
 
-void Cfp40::ComputeKey(void)
+void Cfp40::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (pKEYB->LastKey == K_PFEED) {
         Printer(0x0d);
     }

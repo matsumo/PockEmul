@@ -73,8 +73,11 @@ Cpc2021::~Cpc2021() {
 //    delete bells;
 }
 
-void Cpc2021::ComputeKey(void)
+void Cpc2021::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (pKEYB->LastKey == K_PFEED) {
         Refreshpc2021(0x0d);
     }

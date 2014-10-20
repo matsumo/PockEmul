@@ -552,8 +552,11 @@ bool Cti74::Set_Connector(void) {
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-void Cti74::ComputeKey()
+void Cti74::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
     if (ptms70c46cpu->info.m_idle_state)
     {
         ptms70c46cpu->info.m_icount -= 17;

@@ -68,8 +68,11 @@ bool Cce140f::UpdateFinalImage(void) {
 
 }
 
-void Cce140f::ComputeKey(void)
+void Cce140f::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
 }
 

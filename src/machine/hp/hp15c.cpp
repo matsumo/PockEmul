@@ -120,6 +120,7 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
     nutcpu = (CHPNUT*)pCPU;
     pKEYB		= new Ckeyb(this,"hp15c.map");
 
+    turnOnNext = false;
 }
 
 
@@ -156,6 +157,7 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 void Chp15c::TurnON()
 {
     CpcXXXX::TurnON();
+    pCPU->Reset();
     ((Clcdc_hp15c*)pLCDC)->voyager_op_display_toggle (((CHPNUT*)pCPU)->reg, 0);
 }
 
@@ -166,6 +168,33 @@ void Chp15c::TurnOFF()
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
     mainwindow->saveAll = _save;
+}
+
+void Chp15c::BuildContextMenu(QMenu *menu)
+{
+    menu->addAction(tr("Turn ON on next key pressed"),this,SLOT(TurnNext()));
+    CpcXXXX::BuildContextMenu(menu);
+
+}
+
+void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode)
+{
+    if (ke==KEY_PRESSED) {
+        if (pKEYB->keyPressedList.count()==1)
+            firstkey = scancode;
+            nutcpu->nut_press_key (nutcpu->reg, getKey());
+    }
+    if (ke==KEY_RELEASED) {
+        if (pKEYB->keyPressedList.isEmpty()) {
+            nutcpu->nut_release_key(nutcpu->reg);
+            firstkey = 0;
+        }
+        if (pKEYB->keyPressedList.count()==1) {
+            nutcpu->nut_release_key(nutcpu->reg);
+            firstkey = scancode;
+            nutcpu->nut_press_key (nutcpu->reg, getKey());
+        }
+    }
 }
 
 bool Chp15c::run()
@@ -179,12 +208,6 @@ bool Chp15c::run()
 
     pLCDC->updated = true;
 
-    if (pKEYB->LastKey!=0) {
-       nutcpu->nut_press_key (nutcpu->reg, getKey());
-    }
-    else {
-        nutcpu->nut_release_key(nutcpu->reg);
-    }
     if (pTIMER->usElapsedId(0)>=10000) {
         pTIMER->resetTimer(0);
 //        TimerProc();
@@ -322,4 +345,9 @@ bool Chp15c::SaveConfig(QXmlStreamWriter *xmlOut)
 //    xmlOut->writeEndElement();
 
     return true;
+}
+
+void Chp15c::TurnNext()
+{
+    turnOnNext = true;
 }

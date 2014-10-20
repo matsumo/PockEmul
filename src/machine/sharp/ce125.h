@@ -11,7 +11,7 @@ extern int KeyMapce125tapeLenght;
 class Cce125tape:public Cce152
 {
 public:
-	virtual void ComputeKey(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 	
 	Cce125tape(CPObject *parent = 0)	: Cce152(parent)
 	{									//[constructor]

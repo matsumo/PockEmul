@@ -643,8 +643,11 @@ bool Ccc40::Set_Connector(void) {
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-void Ccc40::ComputeKey()
+void Ccc40::ComputeKey(KEYEVENT ke,int scancode)
 {
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
 
     int _slot = -1;
     if (KEY(0x240)) {
