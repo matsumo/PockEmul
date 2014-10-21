@@ -121,8 +121,11 @@ Rectangle {
 
         xhr.onreadystatechange = function() { callback(xhr);}
 
-        xhr.open('POST', url);
+        console.log('before POST:');
+        xhr.open('POST', url,true);
+        console.log('before SEND:');
         xhr.send(data);
+        console.log('after SEND:');
 
     }
 

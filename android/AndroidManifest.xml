@@ -58,5 +58,5 @@
 
 <uses-permission android:name="android.permission.VIBRATE"/>
 <uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
-<uses-permission android:name="android.permission.INTERNET"/>
+
 </manifest>

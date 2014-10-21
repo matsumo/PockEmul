@@ -165,8 +165,8 @@ server = new ServeurTcp(this);
 // Connect the known signals up.
         connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
 
-        cloud = new CloudWindow(this);
-        cloud->hide();
+//        cloud = new CloudWindow(this);
+//        cloud->hide();
 
 //    view = new CrenderView(this);
 //    QWidget *container = QWidget::createWindowContainer(view,this);
