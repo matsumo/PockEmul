@@ -168,7 +168,7 @@ Rectangle {
                 '&password='+encodeURIComponent(password)+
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
         console.log('url:'+url);
-        requestPost(url, "" , function (o) {
+        requestPost(url, '' , function (o) {
             console.log('ERREUR:'+o.readyState);
 
             if (o.readyState == 4 ) {

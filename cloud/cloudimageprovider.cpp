@@ -181,6 +181,5 @@ void CloudImageProvider::loadfinished(QNetworkReply *reply)
     reply->deleteLater();
 
     emit cacheUpdated();
-    qWarning()<<"post image save";
 }
 

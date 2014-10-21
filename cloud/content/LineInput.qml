@@ -74,7 +74,7 @@ Rectangle {
                 objectName: "inputField"
                 text: cloud.getValueFor(input.objectName, defaultText)
                 font: fontstyle.font
-
+                inputMethodHints: Qt.ImhNoPredictiveText
                 onTextChanged: {
                     lineinput.inputAccepted(input.objectName, input.text)
                     //Here is where we save the value or string

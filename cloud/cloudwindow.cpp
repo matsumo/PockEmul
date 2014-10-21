@@ -316,10 +316,10 @@ QString Cloud::getValueFor(const QString &objectName, const QString &defaultValu
 {
     QSettings settings(workDir+"config.ini",QSettings::IniFormat);
     if (settings.value(objectName).isNull()) {
-//        qWarning()<<"getValue("<<objectName<<","<<defaultValue<<")";
+        qWarning()<<"getValue("<<objectName<<","<<defaultValue<<")";
         return defaultValue;
     }
-//    qWarning()<<"getValue("<<objectName<<","<<settings.value(objectName).toString()<<") in "<<workDir+"config.ini";
+    qWarning()<<"getValue("<<objectName<<","<<settings.value(objectName).toString()<<") in "<<workDir+"config.ini";
     return settings.value(objectName).toString();
 }
 
