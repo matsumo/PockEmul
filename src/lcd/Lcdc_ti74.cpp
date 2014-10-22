@@ -148,19 +148,14 @@ HD44780_PIXEL_UPDATE(Cti95_update_pixel)
     {
         // 1st line is simply 16 chars
         if (y == 7) y++;
-//        painter->setPen(COLOR(state));
-//        painter->drawPoint( 15 + pos*6 + x, 7 + y );
         plcd->drawPixel(painter, 15 + pos*6 + x, 7 + y ,COLOR(state));
     }
     else if (line == 1 && pos < 15 && y < 7)
     {
         // 2nd line is segmented into 5 groups of 3 chars, there is no cursor
-        // note: the chars are smaller than on the 1st line (this is handled in .lay file)
-        const int gap = 6;
         int group = pos / 3;
-//        painter->setPen(COLOR(state));
-//        painter->drawPoint( 9 + group*gap + pos*6 + x, 22 + y );
-        plcd->drawPixel(painter,  9 + group*gap + pos*6 + x, 22 + y  ,COLOR(state));
+        int offset[5]={1,5,9,14,18};
+        plcd->drawPixel(painter,  7 +offset[group] + pos*6 + x, 20 + y  ,COLOR(state));
     }
 }
 

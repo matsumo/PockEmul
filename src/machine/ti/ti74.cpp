@@ -48,19 +48,6 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
     setDX(730);
     setDY(340);
 
-//    Lcd_X		= 50;
-//    Lcd_Y		= 60;
-//    Lcd_DX		= 186;
-//    Lcd_DY		= 10;
-//    Lcd_ratio_X	= 2.25;
-//    Lcd_ratio_Y	= 2.25;
-
-//    Lcd_Symb_X	= 50;
-//    Lcd_Symb_Y	= 50;
-//    Lcd_Symb_DX	= 210;
-//    Lcd_Symb_DY	= 23;
-//    Lcd_Symb_ratio_X	= 2;
-//    Lcd_Symb_ratio_Y	= 2;
 
     pLCDC		= new Clcdc_ti74(this,
                                  QRect(50,60,186*2.25,10*2.25),
@@ -101,18 +88,10 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     SlotList.append(CSlot(32 , 0x10000,	P_RES(":/ti74/hn61256pc95.bin")        , ""	, CSlot::ROM , "ROM"));
 
 
-//    Lcd_X		= 142;
-//    Lcd_Y		= 40;
-//    Lcd_DX		= 130;
-//    Lcd_DY		= 30;
-//    Lcd_ratio_X	= 340.0/Lcd_DX;
-//    Lcd_ratio_Y	= 75.0/Lcd_DY;
-
     delete pLCDC;
     pLCDC		= new Clcdc_ti95(this,
-                                 QRect(142,40,340,75),
-                                 QRect(),
-                                 P_RES(":/ti74/ti95lcd.png"));
+                                 QRect(137,32,370,90),
+                                 QRect());
     pKEYB->fn_KeyMap = "ti95.map";
 
 }
@@ -437,14 +416,14 @@ quint8 Cti95::getKey()
             if (KEY('Q'))			data|=0x02;
             if (KEY('A'))			data|=0x04;
             if (KEY('Z'))			data|=0x08;
-//            if (KEY(''))			data|=0x10;
+            if (KEY(K_HELP))		data|=0x10;
             if (KEY(')'))			data|=0x20;
             if (KEY('/'))			data|=0x40;
             if (KEY('='))			data|=0x80;
         }
 
         if (ks & 0x02) {
-            if (KEY('{'))			data|=0x01;
+            if (KEY(K_EE))			data|=0x01;
             if (KEY('W'))			data|=0x02;
             if (KEY('S'))			data|=0x04;
             if (KEY('X'))			data|=0x08;
@@ -459,7 +438,7 @@ quint8 Cti95::getKey()
             if (KEY('E'))			data|=0x02;
             if (KEY('D'))			data|=0x04;
             if (KEY('C'))			data|=0x08;
-//            if (KEY(''))			data|=0x10;
+            if (KEY(K_LRN))			data|=0x10;
             if (KEY('6'))			data|=0x20;
             if (KEY('-'))			data|=0x40;
             if (KEY('5'))			data|=0x80;
@@ -469,7 +448,7 @@ quint8 Cti95::getKey()
             if (KEY('R'))			data|=0x02;
             if (KEY('F'))			data|=0x04;
             if (KEY('V'))			data|=0x08;
-//            if (KEY(K_RUN))			data|=0x10;
+            if (KEY(K_OLD))			data|=0x10;
             if (KEY('9'))			data|=0x20;
             if (KEY('*'))			data|=0x40;
             if (KEY('8'))			data|=0x80;
@@ -509,16 +488,9 @@ quint8 Cti95::getKey()
             if (KEY('('))		data|=0x01;
             if (KEY('I'))			data|=0x02;
             if (KEY('K'))			data|=0x04;
-//            if (KEY('/'))			data|=0x08;
-//            if (KEY(''))			data|=0x10;
-//            if (KEY(K_FN))			{
-//#if 0
-//                pCPU->logsw = true;
-//                pCPU->Check_Log();
-//#else
-//                data|=0x20;
-//#endif
-//            }
+            if (KEY(K_FUNC))		data|=0x08;
+            if (KEY(K_CCE))			data|=0x10;
+            if (KEY(K_LIST))		data|=0x20;
             if (KEY(K_CLR))			data|=0x40;
             if (KEY('1'))			data|=0x80;
         }
