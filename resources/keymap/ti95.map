@@ -16,7 +16,7 @@
     <KEY description="OLD" height="22" left="169" masterscancode="0x00" modifier="" scancode="0x25b" top="297" width="40"/>
     <KEY description="Cartridge Slot" height="125" left="627" masterscancode="0x00" modifier="" scancode="0x240" top="5" width="97"/>
     <KEY description="ON" height="15" left="68" masterscancode="0x00" modifier="" scancode="0xc7" top="80" width="52"/>
-    <KEY description="OFF" height="12" left="68" masterscancode="0x00" modifier="" scancode="0xc8" top="108" width="49"/>
+    <KEY description="OFF" height="12" left="68" masterscancode="0x00" modifier="" scancode="0x211" top="108" width="49"/>
     <KEY description="-" height="22" left="669" masterscancode="0x00" modifier="" scancode="0x2d" top="224" width="40"/>
     <KEY description="(" height="22" left="565" masterscancode="0x00" modifier="" scancode="0x28" top="149" width="40"/>
     <KEY description=")" height="22" left="614" masterscancode="0x00" modifier="" scancode="0x29" top="150" width="40"/>

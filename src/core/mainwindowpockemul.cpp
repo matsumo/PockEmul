@@ -1235,13 +1235,12 @@ void MainWindowPockemul::updateFrameTimer()
                 }
 #endif
                 if ( CurrentpPC->Refresh_Display) {
-                   qWarning()<<"Refresh Display";
+//                   qWarning()<<"Refresh Display";
                     CurrentpPC->UpdateFinalImage();
                     CurrentpPC->update();
                     emit CurrentpPC->updatedPObject(CurrentpPC);
                     CurrentpPC->Refresh_Display= false;
 //                    CurrentpPC->pLCDC->Refresh = false;
-//                    qWarning()<<"Refresh Display";
                 }
             }
         }
