@@ -678,20 +678,20 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
     QPoint pts(event->x() , event->y());
 
-    if (dialogkeylist)
-    {
-        // look keyFound
-        if ( dialogkeylist->keyIter->Rect.contains(pts) )
-        {
-            // keydef found start drag mode
-            // Change mouse pointer
-            qWarning()<<"startKeyDrag";
-            setCursor(Qt::SizeAllCursor);
-            startKeyDrag = true;
-            KeyDrag = event->globalPos();
-            return;
-        }
-    }
+//    if (dialogkeylist)
+//    {
+//        // look keyFound
+//        if ( dialogkeylist->keyIter->Rect.contains(pts) )
+//        {
+//            // keydef found start drag mode
+//            // Change mouse pointer
+//            qWarning()<<"startKeyDrag";
+//            setCursor(Qt::SizeAllCursor);
+//            startKeyDrag = true;
+//            KeyDrag = event->globalPos();
+//            return;
+//        }
+//    }
 
     if (pKEYB)
     {
@@ -771,21 +771,21 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
 //    if (!fullscreenMode)
     {
         //    _gestureHandler->handleEvent( event );
-        if (dialogkeylist)
-        {
-            if (startKeyDrag)
-            {
-                QPoint delta(event->globalPos() - KeyDrag);
-                dialogkeylist->keyIter->Rect.adjust(delta.x(),delta.y(),delta.x(),delta.y());
-                pKEYB->modified = true;
-                KeyDrag = event->globalPos();
-                emit updatedPObject(this);
-                Refresh_Display = true;
-                update();
-                event->accept();
-                return;
-            }
-        }
+//        if (dialogkeylist)
+//        {
+//            if (startKeyDrag)
+//            {
+//                QPoint delta(event->globalPos() - KeyDrag);
+//                dialogkeylist->keyIter->Rect.adjust(delta.x(),delta.y(),delta.x(),delta.y());
+//                pKEYB->modified = true;
+//                KeyDrag = event->globalPos();
+//                emit updatedPObject(this);
+//                Refresh_Display = true;
+//                update();
+//                event->accept();
+//                return;
+//            }
+//        }
 
         if (startPosDrag)
         {

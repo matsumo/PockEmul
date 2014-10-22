@@ -244,10 +244,6 @@ void	Cti74::initExtension(void)
 
 bool Cti74::run()
 {
-    if (pKEYB->LastKey == K_POW_ON) {
-        TurnON();
-        pKEYB->LastKey = 0;
-    }
 
     CpcXXXX::run();
 
@@ -256,10 +252,7 @@ bool Cti74::run()
 
 bool Cti95::run()
 {
-    if (pKEYB->LastKey == K_POW_ON) {
-        TurnON();
-        pKEYB->LastKey = 0;
-    }
+
 
     if (ptms70c46cpu->info.m_idle_state)
     {
@@ -556,6 +549,10 @@ void Cti74::ComputeKey(KEYEVENT ke,int scancode)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+
+    if ((ke==KEY_PRESSED) && (scancode == K_POW_ON)) {
+        TurnON();
+    }
 
     if (ptms70c46cpu->info.m_idle_state)
     {

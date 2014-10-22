@@ -25,13 +25,13 @@ private slots:
     void	slotSelectKey();
 	void	slotInitSize();
 	void	slotDelKey();
-    void	slotHorResize(int width);
-    void	slotVerResize(int height);
+    void    slotApplySize();
 
     void moveUp(void);
     void moveDown(void);
     void moveLeft(void);
     void moveRight(void);
+
     void showAll(void);
 
 	

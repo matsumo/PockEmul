@@ -19,8 +19,7 @@ DialogKeyList::DialogKeyList(CPObject * parent, Qt::WindowFlags f)
     connect(lwKeys,SIGNAL(itemSelectionChanged()),this,SLOT(slotSelectKey()));
 	connect(pbInit,SIGNAL(clicked()),this,SLOT(slotInitSize()));
 	connect(pbDel,SIGNAL(clicked()),this,SLOT(slotDelKey()));
-	connect(sbHor,SIGNAL(valueChanged ( int )),this,SLOT(slotHorResize(int)));
-	connect(sbVer,SIGNAL(valueChanged ( int )),this,SLOT(slotVerResize(int)));
+    connect(pbApply,SIGNAL(clicked()),this,SLOT(slotApplySize()));
 
     connect(pbUA,SIGNAL(clicked()),this,SLOT(moveUp()));
     connect(pbDA,SIGNAL(clicked()),this,SLOT(moveDown()));
@@ -63,31 +62,25 @@ void DialogKeyList::slotDelKey()
 
 }
 
+void DialogKeyList::slotApplySize()
+{
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.setWidth(sbHor->value());
+            pPC->pKEYB->Keys[i].Rect.setHeight(sbVer->value());
+        }
+    }
+    pPC->pKEYB->modified = true;
+    pPC->Refresh_Display = true;
+    pPC->update();
+}
+
 void DialogKeyList::slotInitSize()
 {
-    for (int i=0;i<listRect.count();i++) {
-        listRect[i].moveTo(0,0);
-    }
-	pPC->pKEYB->modified = true;
-    pPC->Refresh_Display = true;
-    pPC->update();
-}
-
-void DialogKeyList::slotHorResize(int width)
-{
-
-    for (int i=0;i<listRect.count();i++) {
-        listRect[i].setWidth(width);
-    }
-	pPC->pKEYB->modified = true;
-    pPC->Refresh_Display = true;
-    pPC->update();
-}
-
-void DialogKeyList::slotVerResize(int height)
-{
-    for (int i=0;i<listRect.count();i++) {
-        listRect[i].setHeight(height);
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.moveTo(0,0);
+        }
     }
 	pPC->pKEYB->modified = true;
     pPC->Refresh_Display = true;
@@ -142,6 +135,7 @@ void DialogKeyList::moveRight()
     pPC->update();
 }
 
+
 void DialogKeyList::showAll()
 {
     for (keyIter = pPC->pKEYB->Keys.begin(); keyIter != pPC->pKEYB->Keys.end(); ++keyIter)
@@ -171,10 +165,8 @@ void DialogKeyList::slotSelectKey()
 
     for (int i=0;i<lwKeys->count();i++) {
         if (lwKeys->item(i)->isSelected()) {
-//            CKey _key = findKey(lwKeys->at(i)->text());
-//            //        sbHor->setValue(_key.Rect.width());
-//            //        sbVer->setValue(_key.Rect.height());
-//            listRect.append(_key.Rect);
+            sbHor->setValue(pPC->pKEYB->Keys.at(i).Rect.width());
+            sbVer->setValue(pPC->pKEYB->Keys.at(i).Rect.height());
         }
     }
     pPC->Refresh_Display = true;
