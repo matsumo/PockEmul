@@ -681,10 +681,11 @@ void CPObject::mousePressEvent(QMouseEvent *event)
     if (dialogkeylist)
     {
         // look keyFound
-        if ( dialogkeylist->i->Rect.contains(pts) )
+        if ( dialogkeylist->keyIter->Rect.contains(pts) )
         {
             // keydef found start drag mode
             // Change mouse pointer
+            qWarning()<<"startKeyDrag";
             setCursor(Qt::SizeAllCursor);
             startKeyDrag = true;
             KeyDrag = event->globalPos();
@@ -775,10 +776,11 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
             if (startKeyDrag)
             {
                 QPoint delta(event->globalPos() - KeyDrag);
-                dialogkeylist->i->Rect.adjust(delta.x(),delta.y(),delta.x(),delta.y());
+                dialogkeylist->keyIter->Rect.adjust(delta.x(),delta.y(),delta.x(),delta.y());
                 pKEYB->modified = true;
                 KeyDrag = event->globalPos();
                 emit updatedPObject(this);
+                Refresh_Display = true;
                 update();
                 event->accept();
                 return;

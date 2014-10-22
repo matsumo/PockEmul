@@ -23,7 +23,7 @@
     <KEY description=";" height="22" left="0" masterscancode="0x00" modifier="" scancode="0x3b" top="0" width="32"/>
     <KEY description="+" height="22" left="666" masterscancode="0x00" modifier="" scancode="0x2b" top="257" width="40"/>
     <KEY description="CLR" height="60" left="460" masterscancode="0x00" modifier="" scancode="0x0c" top="259" width="38"/>
-    <KEY description="CTRL" height="19" left="0" masterscancode="0x00" modifier="" scancode="0xd5" top="0" width="38"/>
+    <KEY description="ALPHA" height="19" left="0" masterscancode="0x00" modifier="" scancode="0xd5" top="0" width="38"/>
     <KEY description="DEL" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x0a" top="0" width="25"/>
     <KEY description="Down Arrow" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x04" top="0" width="39"/>
     <KEY description="ENTER" height="57" left="0" masterscancode="0x00" modifier="" scancode="0x0d" top="0" width="36"/>

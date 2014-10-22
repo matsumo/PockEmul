@@ -8,6 +8,8 @@
 #include "mainwindowpockemul.h"
 #include "pobject.h"
 #include "launchbuttonwidget.h"
+#include "dialogkeylist.h"
+#include "Keyb.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -102,6 +104,7 @@ void CrenderView::movepocket(QString Id, int x, int y)
 //    qWarning()<<"movepocket:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
+
     pc->MoveWithLinkedAbs(pts);
  }
 
@@ -132,6 +135,7 @@ void CrenderView::click(QString Id, int x, int y)
 //    qWarning()<<"click:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
+
 //    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
     {
         // Send thee MouseButtonPress event
@@ -146,7 +150,6 @@ void CrenderView::unclick(QString Id, int x, int y)
 //    qWarning()<<"unclick:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
-
 
     // Send thee MouseButtonRelease event
     QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);

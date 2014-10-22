@@ -1180,8 +1180,8 @@ PictureFlow::PictureFlow(QWidget* parent): QWidget(parent)
   pb->setIcon(pixmap);
   // Parce que le bouton ne s'adapte pas à la taille de l'image
   pb->setIconSize(QSize(64,64));//image.size());
-  // Pour enlever les bords au moment du clic
-  pb->setStyleSheet("QPushButton:flat:pressed { border: none; };");
+  // Pour enlever les bords
+  pb->setStyleSheet("QPushButton { border: none; };");
 
   connect(pb,SIGNAL(clicked()),this,SLOT(exitSlot()));
 }

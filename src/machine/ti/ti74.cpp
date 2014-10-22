@@ -455,7 +455,7 @@ quint8 Cti95::getKey()
             if (KEY('W'))			data|=0x02;
             if (KEY('S'))			data|=0x04;
             if (KEY('X'))			data|=0x08;
-//            if (KEY(''))			data|=0x10;
+            if (KEY(K_CTRL))		data|=0x10; // ALPHA
             if (KEY('3'))			data|=0x20;
             if (KEY('+'))			data|=0x40;
             if (KEY('2'))			data|=0x80;

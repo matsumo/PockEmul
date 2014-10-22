@@ -18,5 +18,6 @@
         <file>logos/sharp_pc14xx.png</file>
         <file>logos/sharp_pc15xx.png</file>
         <file>logos/ti2.png</file>
+        <file>logos/others.png</file>
     </qresource>
 </RCC>

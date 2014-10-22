@@ -22,6 +22,11 @@ DialogKeyList::DialogKeyList(CPObject * parent, Qt::WindowFlags f)
 	connect(sbHor,SIGNAL(valueChanged ( int )),this,SLOT(slotHorResize(int)));
 	connect(sbVer,SIGNAL(valueChanged ( int )),this,SLOT(slotVerResize(int)));
 
+    connect(pbUA,SIGNAL(clicked()),this,SLOT(moveUp()));
+    connect(pbDA,SIGNAL(clicked()),this,SLOT(moveDown()));
+    connect(pbLA,SIGNAL(clicked()),this,SLOT(moveLeft()));
+    connect(pbRA,SIGNAL(clicked()),this,SLOT(moveRight()));
+
 	pPC = parent;
 	// populate lvKeys
 	InsertKeys();
@@ -46,7 +51,7 @@ void DialogKeyList::InsertKeys(void)
 
 void DialogKeyList::slotDelKey()
 {
-	i = pPC->pKEYB->Keys.erase( i );
+    keyIter = pPC->pKEYB->Keys.erase( keyIter );
 	keyFound = false;
 	pPC->pKEYB->modified = true;
 	delete lwKeys->currentItem();
@@ -55,7 +60,7 @@ void DialogKeyList::slotDelKey()
 
 void DialogKeyList::slotInitSize()
 {
-    i->Rect.moveTo(0,0);
+    keyIter->Rect.moveTo(0,0);
 	pPC->pKEYB->modified = true;
 }
 
@@ -63,7 +68,7 @@ void DialogKeyList::slotHorResize(int width)
 {
 	if (!keyFound) return;
 		
-	i->Rect.setWidth(width);
+    keyIter->Rect.setWidth(width);
 	pPC->pKEYB->modified = true;
 	pPC->update();
 }
@@ -72,23 +77,48 @@ void DialogKeyList::slotVerResize(int height)
 {
 	if (!keyFound) return;
 		
-	i->Rect.setHeight(height);
+    keyIter->Rect.setHeight(height);
 	pPC->pKEYB->modified = true;
-	pPC->update();
+    pPC->update();
+}
+
+void DialogKeyList::moveUp()
+{
+    keyIter->Rect.adjust(0,-1,0,0);
+    pPC->Refresh_Display = true;
+    pPC->update();
+}
+void DialogKeyList::moveDown()
+{
+    keyIter->Rect.adjust(0,+1,0,1);
+    pPC->Refresh_Display = true;
+    pPC->update();
+}
+void DialogKeyList::moveLeft()
+{
+    keyIter->Rect.adjust(-1,0,-1,0);
+    pPC->Refresh_Display = true;
+    pPC->update();
+}
+void DialogKeyList::moveRight()
+{
+    keyIter->Rect.adjust(+1,0,1,0);
+    pPC->Refresh_Display = true;
+    pPC->update();
 }
 
 void DialogKeyList::slotSelectKey(QListWidgetItem * item , QListWidgetItem * previous)
 {
 	// Find the correct Keys in List
 	// Draw the Boundary	
- 	for (i = pPC->pKEYB->Keys.begin(); i != pPC->pKEYB->Keys.end(); ++i)
+    for (keyIter = pPC->pKEYB->Keys.begin(); keyIter != pPC->pKEYB->Keys.end(); ++keyIter)
  	{
-		if (i->Description == item->text())
+        if (keyIter->Description == item->text())
 		{
 			keyFound = true;
-			AddLog(LOG_MASTER,tr("Rect %1,%2 - %3,%4").arg(i->Rect.left()).arg(i->Rect.right()).arg(i->Rect.width()).arg(i->Rect.height()));
-			sbHor->setValue(i->Rect.width());
-			sbVer->setValue(i->Rect.height());
+            AddLog(LOG_MASTER,tr("Rect %1,%2 - %3,%4").arg(keyIter->Rect.left()).arg(keyIter->Rect.right()).arg(keyIter->Rect.width()).arg(keyIter->Rect.height()));
+            sbHor->setValue(keyIter->Rect.width());
+            sbVer->setValue(keyIter->Rect.height());
             qWarning()<<"FOUND!!!";
             pPC->Refresh_Display = true;
 			pPC->update();
@@ -103,10 +133,10 @@ QRect DialogKeyList::getkeyFoundRect(void)
 	if (!keyFound) return QRect();
 
     QRect _result;
-    _result.setTop(i->Rect.top() * mainwindow->zoom/100);
-    _result.setLeft(i->Rect.left() * mainwindow->zoom/100);
-    _result.setWidth(i->Rect.width() * mainwindow->zoom/100);
-    _result.setHeight(i->Rect.height() * mainwindow->zoom/100);
+    _result.setTop(keyIter->Rect.top() * mainwindow->zoom/100);
+    _result.setLeft(keyIter->Rect.left() * mainwindow->zoom/100);
+    _result.setWidth(keyIter->Rect.width() * mainwindow->zoom/100);
+    _result.setHeight(keyIter->Rect.height() * mainwindow->zoom/100);
     return _result;
 }
 

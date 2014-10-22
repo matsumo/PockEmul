@@ -110,7 +110,6 @@ Rectangle {
             onReleased: isdrag=false;
             onPositionChanged: {
                 if (isdrag) {
-                    console.log("master isdrag");
                     sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
                     prevX = mouseX;
                     prevY = mouseY;

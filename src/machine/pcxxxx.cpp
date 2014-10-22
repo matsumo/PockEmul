@@ -106,7 +106,7 @@ bool CpcXXXX::UpdateFinalImage(void)
     QPainter painter;
 
     if (pLCDC) {
-        if (pLCDC->Refresh == false) return false;
+//        if (pLCDC->Refresh == false) return false;
     }
     CPObject::UpdateFinalImage();
 

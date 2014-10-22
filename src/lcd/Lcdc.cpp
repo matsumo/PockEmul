@@ -84,7 +84,9 @@ void Clcdc::Contrast(int command)
                             origColor_Off.alpha());
     }
 
+
 	Update();
+
 }
 
 void Clcdc::disp_one_symb(QPainter *painter, const char *figure, QColor color, int x, int y)

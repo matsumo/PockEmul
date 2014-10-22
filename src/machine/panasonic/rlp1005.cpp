@@ -266,7 +266,7 @@ bool Crlp1005::run(void)
 //            qWarning()<<tr("read:%1=%2").arg(adr,4,16,QChar('0')).arg(bus.getData(),2,16,QChar('0'));
         }
         else if ( (adr>=0x4000) && (adr < 0x8000)) {
-            //                qWarning()<<"ROM SIMUL:"<<adr<<"="<<mem[adr-0x4000+0x14];
+//            qWarning()<<"ROM SIMUL:"<<adr<<"="<<mem[adr-0x4000+0x14];
             bus.setFunc(BUS_ACK);
             bus.setData(mem[adr-0x4000+bank*0x4000]);
         }

@@ -18,14 +18,20 @@ public:
 	QRect	getkeyFoundRect(void);
 	
 	bool	keyFound;
-	QList<CKey>::iterator i;
+    QList<CKey>::iterator keyIter;
 
 private slots:
 	void	slotSelectKey(QListWidgetItem * item,QListWidgetItem *);
 	void	slotInitSize();
 	void	slotDelKey();
-	void	slotHorResize(int i);
-	void	slotVerResize(int i);
+    void	slotHorResize(int width);
+    void	slotVerResize(int height);
+
+    void moveUp(void);
+    void moveDown(void);
+    void moveLeft(void);
+    void moveRight(void);
+
 	
 protected:
 	void closeEvent(QCloseEvent *event);
