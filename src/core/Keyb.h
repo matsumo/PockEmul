@@ -285,6 +285,7 @@ class Ckeyb;
 
 class CKey{
 public:
+    CKey();
     CKey(int ScanCode, QString Description, QRect Rect = QRect(), int masterscancode=0, QString modifier = QString(), View view = FRONTview);
     ~CKey(){}
 	

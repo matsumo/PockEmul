@@ -14,14 +14,15 @@ public:
     DialogKeyList( CPObject * parent = 0, Qt::WindowFlags f = 0 );
 	
 	void	InsertKeys(void);
-	void	FindKey(QListWidgetItem * item);
-	QRect	getkeyFoundRect(void);
+    QList<QRect>	getkeyFoundRect(void);
 	
 	bool	keyFound;
     QList<CKey>::iterator keyIter;
+    QList<QRect> listRect;
 
+    CKey findKey(QString desc);
 private slots:
-	void	slotSelectKey(QListWidgetItem * item,QListWidgetItem *);
+    void	slotSelectKey();
 	void	slotInitSize();
 	void	slotDelKey();
     void	slotHorResize(int width);
@@ -31,6 +32,7 @@ private slots:
     void moveDown(void);
     void moveLeft(void);
     void moveRight(void);
+    void showAll(void);
 
 	
 protected:

@@ -31,6 +31,13 @@ typedef struct{
 const int RIGHT[11] = { 25 , 32 , 59 , 19, 21, 13, 21, 16, 31,16,16 };
 const int BOTTOM[11]= { 16 , 22 , 16 , 21, 10, 13, 13, 31, 31,16,16 };
 
+CKey::CKey()
+{
+    this->ScanCode	= 0;
+    this->enabled = false;
+    this->Rect = QRect();
+}
+
 CKey::CKey(int scancode, QString description,QRect rect,int masterscancode,QString modifier,View view)
 {
     this->Description = description;

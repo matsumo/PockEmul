@@ -16,7 +16,7 @@ DialogKeyList::DialogKeyList(CPObject * parent, Qt::WindowFlags f)
 	setupUi(this);
 	
 	keyFound = false;
-	connect(lwKeys,SIGNAL(currentItemChanged( QListWidgetItem * ,QListWidgetItem * )),this,SLOT(slotSelectKey(QListWidgetItem * , QListWidgetItem *)));
+    connect(lwKeys,SIGNAL(itemSelectionChanged()),this,SLOT(slotSelectKey()));
 	connect(pbInit,SIGNAL(clicked()),this,SLOT(slotInitSize()));
 	connect(pbDel,SIGNAL(clicked()),this,SLOT(slotDelKey()));
 	connect(sbHor,SIGNAL(valueChanged ( int )),this,SLOT(slotHorResize(int)));
@@ -26,6 +26,8 @@ DialogKeyList::DialogKeyList(CPObject * parent, Qt::WindowFlags f)
     connect(pbDA,SIGNAL(clicked()),this,SLOT(moveDown()));
     connect(pbLA,SIGNAL(clicked()),this,SLOT(moveLeft()));
     connect(pbRA,SIGNAL(clicked()),this,SLOT(moveRight()));
+
+    connect(pbShowAll,SIGNAL(clicked()),this,SLOT(showAll()));
 
 	pPC = parent;
 	// populate lvKeys
@@ -39,18 +41,21 @@ void DialogKeyList::InsertKeys(void)
 
 	AddLog(LOG_MASTER,tr("pPC=%1").arg((long) pPC));
 	QList<CKey>::iterator it;
- 	for (it = pPC->pKEYB->Keys.begin(); it != pPC->pKEYB->Keys.end(); ++it)
+    for (int i=0; i < pPC->pKEYB->Keys.count(); i++)
  	{
 //        if (it->MasterScanCode == 0 )
         {
-            item = new QListWidgetItem(it->Description, lwKeys);
-            item->setData( Qt::UserRole, qVariantFromValue( it->ScanCode ) );
+            item = new QListWidgetItem(pPC->pKEYB->Keys.at(i).Description, lwKeys);
+            item->setData( Qt::UserRole, qVariantFromValue( pPC->pKEYB->Keys.at(i).ScanCode ) );
         }
     }
 }
 
 void DialogKeyList::slotDelKey()
 {
+    return;
+    //TODO: Manage list
+
     keyIter = pPC->pKEYB->Keys.erase( keyIter );
 	keyFound = false;
 	pPC->pKEYB->modified = true;
@@ -60,84 +65,125 @@ void DialogKeyList::slotDelKey()
 
 void DialogKeyList::slotInitSize()
 {
-    keyIter->Rect.moveTo(0,0);
+    for (int i=0;i<listRect.count();i++) {
+        listRect[i].moveTo(0,0);
+    }
 	pPC->pKEYB->modified = true;
+    pPC->Refresh_Display = true;
+    pPC->update();
 }
 
 void DialogKeyList::slotHorResize(int width)
 {
-	if (!keyFound) return;
-		
-    keyIter->Rect.setWidth(width);
+
+    for (int i=0;i<listRect.count();i++) {
+        listRect[i].setWidth(width);
+    }
 	pPC->pKEYB->modified = true;
-	pPC->update();
+    pPC->Refresh_Display = true;
+    pPC->update();
 }
 
 void DialogKeyList::slotVerResize(int height)
 {
-	if (!keyFound) return;
-		
-    keyIter->Rect.setHeight(height);
+    for (int i=0;i<listRect.count();i++) {
+        listRect[i].setHeight(height);
+    }
 	pPC->pKEYB->modified = true;
+    pPC->Refresh_Display = true;
     pPC->update();
 }
 
 void DialogKeyList::moveUp()
 {
-    keyIter->Rect.adjust(0,-1,0,0);
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.adjust(0,-1,0,-1);
+            pPC->pKEYB->modified = true;
+        }
+    }
     pPC->Refresh_Display = true;
     pPC->update();
 }
+
 void DialogKeyList::moveDown()
 {
-    keyIter->Rect.adjust(0,+1,0,1);
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.adjust(0,+1,0,1);
+            pPC->pKEYB->modified = true;
+        }
+    }
     pPC->Refresh_Display = true;
     pPC->update();
 }
+
 void DialogKeyList::moveLeft()
 {
-    keyIter->Rect.adjust(-1,0,-1,0);
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.adjust(-1,0,-1,0);
+            pPC->pKEYB->modified = true;
+        }
+    }
     pPC->Refresh_Display = true;
     pPC->update();
 }
+
 void DialogKeyList::moveRight()
 {
-    keyIter->Rect.adjust(+1,0,1,0);
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+            pPC->pKEYB->Keys[i].Rect.adjust(+1,0,1,0);
+            pPC->pKEYB->modified = true;
+        }
+    }
     pPC->Refresh_Display = true;
     pPC->update();
 }
 
-void DialogKeyList::slotSelectKey(QListWidgetItem * item , QListWidgetItem * previous)
+void DialogKeyList::showAll()
 {
-	// Find the correct Keys in List
-	// Draw the Boundary	
     for (keyIter = pPC->pKEYB->Keys.begin(); keyIter != pPC->pKEYB->Keys.end(); ++keyIter)
- 	{
-        if (keyIter->Description == item->text())
-		{
-			keyFound = true;
-            AddLog(LOG_MASTER,tr("Rect %1,%2 - %3,%4").arg(keyIter->Rect.left()).arg(keyIter->Rect.right()).arg(keyIter->Rect.width()).arg(keyIter->Rect.height()));
-            sbHor->setValue(keyIter->Rect.width());
-            sbVer->setValue(keyIter->Rect.height());
-            qWarning()<<"FOUND!!!";
-            pPC->Refresh_Display = true;
-			pPC->update();
-			return;
-		}
-	}
-	
+    {
+        listRect.append(keyIter->Rect);
+    }
+    pPC->Refresh_Display = true;
+    pPC->update();
 }
 
-QRect DialogKeyList::getkeyFoundRect(void)
-{
-	if (!keyFound) return QRect();
+CKey DialogKeyList::findKey(QString desc) {
+    for (int i=0; i < pPC->pKEYB->Keys.count();i++)
+    {
+        if (pPC->pKEYB->Keys.at(i).Description == desc)
+        {
+            return pPC->pKEYB->Keys.at(i);
+        }
+    }
+    return CKey();
+}
 
-    QRect _result;
-    _result.setTop(keyIter->Rect.top() * mainwindow->zoom/100);
-    _result.setLeft(keyIter->Rect.left() * mainwindow->zoom/100);
-    _result.setWidth(keyIter->Rect.width() * mainwindow->zoom/100);
-    _result.setHeight(keyIter->Rect.height() * mainwindow->zoom/100);
-    return _result;
+void DialogKeyList::slotSelectKey()
+{
+	// Find the correct Keys in List
+    // Draw the Boundary
+    listRect.clear();;
+
+    for (int i=0;i<lwKeys->count();i++) {
+        if (lwKeys->item(i)->isSelected()) {
+//            CKey _key = findKey(lwKeys->at(i)->text());
+//            //        sbHor->setValue(_key.Rect.width());
+//            //        sbVer->setValue(_key.Rect.height());
+//            listRect.append(_key.Rect);
+        }
+    }
+    pPC->Refresh_Display = true;
+    pPC->update();
+}
+
+QList<QRect> DialogKeyList::getkeyFoundRect(void)
+{
+    return listRect;
 }
 
 void DialogKeyList::closeEvent(QCloseEvent *event)

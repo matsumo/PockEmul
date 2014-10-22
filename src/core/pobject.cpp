@@ -1036,8 +1036,12 @@ void CPObject::paintEvent(QPaintEvent *event)
         if (dialogkeylist)
         {
             painter.setPen(QPen(Qt::red));
-            QRect rect = dialogkeylist->getkeyFoundRect();
-            painter.drawRect(rect);
+            QList<QRect> _rectList = dialogkeylist->getkeyFoundRect();
+            qWarning()<<"drawRect:"<<_rectList;
+
+            for (int i=0; i<_rectList.count();i++) {
+                painter.drawRect(_rectList.at(i));
+            }
         }
 
 
@@ -1398,12 +1402,18 @@ bool CPObject::UpdateFinalImage(void)
         if (dialogkeylist)
         {
             painter.setPen(QPen(Qt::red));
-            QRect rect = dialogkeylist->getkeyFoundRect();
-            qWarning()<<"drawRect:"<<rect;
-            painter.fillRect(QRect(rect.x()*internalImageRatio,
-                                   rect.y()*internalImageRatio,
-                                   rect.width()*internalImageRatio,
-                                   rect.height()*internalImageRatio),Qt::red);
+            QList<QRect> _rectList = dialogkeylist->getkeyFoundRect();
+//            qWarning()<<"drawRect:"<<_rectList;
+
+            for (int i=0; i<dialogkeylist->lwKeys->count();i++) {
+                if (dialogkeylist->lwKeys->item(i)->isSelected()) {
+                painter.fillRect(QRect(pKEYB->Keys.at(i).Rect.x()*internalImageRatio,
+                                       pKEYB->Keys.at(i).Rect.y()*internalImageRatio,
+                                       pKEYB->Keys.at(i).Rect.width()*internalImageRatio,
+                                       pKEYB->Keys.at(i).Rect.height()*internalImageRatio),
+                                 QBrush(Qt::red,Qt::BDiagPattern));
+                }
+            }
         }
         painter.end();
 
