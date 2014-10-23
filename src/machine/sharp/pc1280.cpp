@@ -60,7 +60,7 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
 
      remove(pSIOCONNECTOR);
 
-     closed = true;
+     closed = false;
      flipping = false;
      m_angle = -180;
      m_zoom = 1;
@@ -250,15 +250,22 @@ void Cpc1280::paintEvent(QPaintEvent *event)
     if (closed | flipping) {
         QPainter painter;
 
+        if (!AnimatedImage) renderAnimation();
+        if (AnimatedImage) {
         painter.begin(this);
         painter.drawImage(0,0,AnimatedImage->scaled(this->size()));
         painter.end();
+        }
+        else {
+            qWarning()<<"ERROR AnimaedImage NULL.";
+        }
     }
     else {
         CPObject::paintEvent(event);
     }
 }
 
+//FIXME: Animation issue when zoom != 100%
 void Cpc1280::renderAnimation()
 {
     if (closed | flipping) {
@@ -271,8 +278,10 @@ void Cpc1280::renderAnimation()
 
         if (FinalImage)
         {
-            int w = getDX() * mainwindow->zoom/100.0;//this->width();
-            int h = getDY() * mainwindow->zoom/100.0;//this->height();
+//            int w = getDX()*internalImageRatio;// * mainwindow->zoom/100.0;//this->width();
+//            int h = getDY()*internalImageRatio;// * mainwindow->zoom/100.0;//this->height();
+            int w = AnimatedImage->width();
+            int h = AnimatedImage->height();
             painter.translate(w/2 ,(h*RATIO)*(1+m_angle/180.0));
 //            AddLog(LOG_MASTER,tr("zoom%1").arg(m_zoom));
 
@@ -310,6 +319,8 @@ void Cpc1280::TurnCLOSE(void) {
     QList<CPObject *> ConList;
     mainwindow->pdirectLink->findAllObj(this,&ConList);
     if (!ConList.isEmpty()) return;
+
+    if (flipping) return;
     // Animate close
     closed = !closed;
 

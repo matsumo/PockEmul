@@ -572,6 +572,9 @@ UINT8 Cpb1000::lcdDataRead() {
 
 
 void Cpb1000::TurnCLOSE(void) {
+    return;
+
+    // FIXME: Upgrade animation function (look PC-1280)
     // Animate close
     closed = !closed;
 

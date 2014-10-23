@@ -7,7 +7,7 @@ class Clcdc_pc1475:public Clcdc{
 public:
     bool init(void);
     void disp(void);				//display LCDC data to screen
-    void disp_symb(void);
+
     const char*	GetClassName(){ return("Clcdc_pc1475");}
 
 
