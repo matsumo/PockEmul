@@ -30,7 +30,11 @@ void Clcdc_z1::disp(void)
 
     if (!ready) return;
     if (!z1->pHD66108) return;
-    if (!z1->pHD66108->updated) return;
+    if (!redraw) {
+        if (!z1->pHD66108->updated) return;
+    }
+
+    redraw = false;
     z1->pHD66108->updated = false;
 
     if(z1->pCPU->fp_log) fprintf(z1->pCPU->fp_log,"REFRESH DISP\n");
@@ -48,7 +52,7 @@ void Clcdc_z1::disp(void)
             }
             p++;
         }
-    redraw = 0;
+
     painter.end();
 }
 

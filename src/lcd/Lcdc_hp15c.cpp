@@ -191,7 +191,11 @@ void Clcdc_hp15c::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!updated) return;
+
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
 
 //    voyager_display_update(nutcpu->reg,info);
 
@@ -256,7 +260,6 @@ void Clcdc_hp15c::disp(void)
 //    qWarning()<<"Display:"<<GetLCD()<<" : ";
 
     Refresh = true;
-    redraw = 0;
     painter.end();
 }
 

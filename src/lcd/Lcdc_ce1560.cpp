@@ -45,10 +45,14 @@ void Clcdc_ce1560::disp(void)
     if (!((Cce1560 *)pPC)->ps6b0108[0] ||
         !((Cce1560 *)pPC)->ps6b0108[1] ||
         !((Cce1560 *)pPC)->ps6b0108[2]) return;
-    if (!(((Cce1560 *)pPC)->ps6b0108[0]->updated ||
-          ((Cce1560 *)pPC)->ps6b0108[1]->updated ||
-          ((Cce1560 *)pPC)->ps6b0108[2]->updated)) return;
 
+    if (!redraw) {
+        if (!(((Cce1560 *)pPC)->ps6b0108[0]->updated ||
+              ((Cce1560 *)pPC)->ps6b0108[1]->updated ||
+              ((Cce1560 *)pPC)->ps6b0108[2]->updated)) return;
+    }
+
+    redraw = false;
     ((Cce1560 *)pPC)->ps6b0108[0]->updated = false;
     ((Cce1560 *)pPC)->ps6b0108[1]->updated = false;
     ((Cce1560 *)pPC)->ps6b0108[2]->updated = false;
@@ -83,7 +87,6 @@ void Clcdc_ce1560::disp(void)
         }
     }
 
-    redraw = 0;
     painter.end();
 }
 

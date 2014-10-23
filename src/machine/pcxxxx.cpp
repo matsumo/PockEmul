@@ -969,7 +969,7 @@ void CpcXXXX::LoadSession(void)
     QXmlStreamReader xmlIn;
 
     xmlIn.setDevice(&file);
-    if (LoadSession_File(&xmlIn) && pLCDC) pLCDC->Update();
+    if (LoadSession_File(&xmlIn) && pLCDC) pLCDC->forceRedraw();
 
 	file.close();							// Close the file
 
@@ -1023,7 +1023,7 @@ bool CpcXXXX::Initial_Session_Load()
         QXmlStreamReader xmlIn;
         xmlIn.setDevice(&file);
         if (LoadSession_File(&xmlIn) && pLCDC)
-            pLCDC->Update();
+            pLCDC->forceRedraw();
 		file.close();	
 		return true;
 	}

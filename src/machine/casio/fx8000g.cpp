@@ -61,7 +61,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));
     fx8000gcpu = (CUPD1007*)pCPU;
     pKEYB		= new Ckeyb(this,"fx8000g.map");
-    pHD44352    = new CHD44352(P_RES(":/fx8000g/charset.bin"));
+    pHD44352    = new CHD44352(this,P_RES(":/fx8000g/charset.bin"));
     pHD44352->OP_bit = 0x20;
     pHD44352->byteLenght = 4;
 
@@ -251,12 +251,12 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
     switch (Port) {
     case 0:
 //        qWarning()<<"HD44352 Ctrl_write:"<<(x);
-        pHD44352->control_write(x); pLCDC->redraw = true; break;
+        pHD44352->control_write(x); pLCDC->updated = true; break;
     case 1:
 //        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
 //        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
         pHD44352->data_write4(x & 0x0F);
-        pLCDC->redraw = true;
+        pLCDC->updated = true;
         break;
     case 2:
 //        qWarning()<<"HD44352 Ctrl_write:"<<(x);

@@ -255,7 +255,6 @@ void Clcdc_pc1211::DrawChar(quint8 c, int x)
         }
     }
 
-    redraw = 0;
     painter.end();
 
 }

@@ -363,8 +363,11 @@ void Clcdc_fp200::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!updated) return;
 
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
     updated = false;
 
     Refresh = true;
@@ -387,10 +390,6 @@ void Clcdc_fp200::disp(void)
             }
         }
 
-
-
-
-    redraw = 0;
     painter.end();
 }
 

@@ -31,8 +31,10 @@ void Clcdc_ti57::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!updated) return;
-    //    qWarning()<<"disp";
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
     updated = false;
     Refresh= true;
 
@@ -98,7 +100,6 @@ void Clcdc_ti57::disp(void)
     }
     //On=true;
     Refresh = true;
-    redraw = 0;
     painter.end();
 }
 

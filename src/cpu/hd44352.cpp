@@ -2,6 +2,8 @@
 #include <QDebug>
 
 #include "hd44352.h"
+#include "pcxxxx.h"
+#include "Lcdc.h"
 
 //TODO: the interfaace is 4bit instead of 8.
 // FX-8000g use 4 bits mode, pb-1000 use only 8 bit
@@ -29,18 +31,58 @@
 
 #define BIT(x,n) (((x)>>(n))&1)
 
+
+
 //-------------------------------------------------
 //  CHD44352 - constructor
 //-------------------------------------------------
 
 
-CHD44352::CHD44352(QString fnCharSet,QObject *parent) :
+CHD44352::CHD44352(CpcXXXX *parent, QString fnCharSet) :
     QObject(parent)
 {
+    pPC = parent;
     this->fncharset = fnCharSet;
     OP_bit = 0x01;
     byteLenght = 8;
     Reset();
+
+    // Contrast table extracted from FX-8000G ROM
+    contrastList << 0x0cff7f
+                 << 0x0c0078
+                 << 0x0cc03f
+                 << 0x0c003c
+                 << 0x0c0034
+                 << 0x0c0030
+                 << 0x0c001a
+                 << 0x0c0022
+                 << 0x0c200e
+                 << 0x0c0014
+                 << 0x0c0012
+                 << 0x0c8010
+                 << 0xfc0009
+                 << 0x0ca008
+                 << 0x1c4008
+                 << 0x8c0006
+                 << 0xbc0008
+                 << 0x8c0008
+                 << 0x3c0003
+                 << 0x0c6402
+                 << 0x0c6002
+                 << 0x1c4002
+                 << 0x1c8001
+                 << 0x1ce000
+                 << 0x0cc800
+                 << 0x1cc000
+                 << 0x2c2002
+                 << 0x6c0002
+                 << 0x0c0402
+                 << 0x0c1801
+                 << 0x8c0401
+                 << 0xac0001;
+
+
+
 }
 
 //-------------------------------------------------
@@ -230,10 +272,17 @@ void CHD44352::data_write(UINT8 data)
             case 1: info.m_contrast = (info.m_contrast & 0x00ffff) | (data<<16); break;
             case 2: info.m_contrast = (info.m_contrast & 0xff00ff) | (data<<8);  break;
             case 3: info.m_contrast = (info.m_contrast & 0xffff00) | (data<<0);
-//                info.m_state = 0;
+                 // qWarning()<<"contrast "<<info.m_state<<":"<<info.m_state<<"-"<<contrastList.indexOf(info.m_contrast);
+//                qWarning()<<"contrast"<<info.m_state<<":"<<QString("%1 = %2").arg(data,2,16,QChar('0')).arg(info.m_contrast,6,16,QChar('0'));
+                if (pPC->pLCDC) {
+                    pPC->pLCDC->Color_Off.setAlphaF( contrastList.indexOf(info.m_contrast) * 2.0f / 100);
+                    pPC->pLCDC->forceRedraw();
+                }
+                info.m_state = 0;
                 break;
             default: break;
             }
+
             info.m_data_bus = 0xff;
             break;
         case LCD_IRQ_FREQUENCY:
@@ -438,13 +487,16 @@ void CHD44352::data_write4(UINT8 data)
             break;
         case LCD_CONTRAST:
             switch (info.m_state) {
-            case 1: info.m_contrast = (info.m_contrast & 0x0fffff) | (data<<20); break;
-            case 2: info.m_contrast = (info.m_contrast & 0xf0ffff) | (data<<16); break;
-            case 3: info.m_contrast = (info.m_contrast & 0xff0fff) | (data<<12); break;
-            case 4: info.m_contrast = (info.m_contrast & 0xfff0ff) | (data<<8); break;
-            case 5: info.m_contrast = (info.m_contrast & 0xffff0f) | (data<<4); break;
-            case 6: info.m_contrast = (info.m_contrast & 0xfffff0) | (data<<0);
-//                info.m_state = 0;
+            case 1: info.m_contrast = (info.m_contrast & 0xf0ffff) | (data<<16); break;
+            case 2: info.m_contrast = (info.m_contrast & 0x0fffff) | (data<<20); break;
+            case 3: info.m_contrast = (info.m_contrast & 0xfff0ff) | (data<<8); break;
+            case 4: info.m_contrast = (info.m_contrast & 0xff0fff) | (data<<12); break;
+            case 5: info.m_contrast = (info.m_contrast & 0xfffff0) | (data<<0); break;
+            case 6: info.m_contrast = (info.m_contrast & 0xffff0f) | (data<<4);
+//                qWarning()<<"contrast:"<<info.m_state<<"-"<<contrastList.indexOf(info.m_contrast);
+                pPC->pLCDC->Color_Off.setAlphaF( contrastList.indexOf(info.m_contrast) * 2.0f / 100);
+
+                pPC->pLCDC->forceRedraw();
                 break;
             default: break;
             }

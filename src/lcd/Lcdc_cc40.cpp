@@ -89,9 +89,12 @@ HD44780_PIXEL_UPDATE(Ccc40_update_pixel)
 void Clcdc_cc40::disp(void)
 {
     CHD44780 * pHD44780 = ((Ccc40*) pPC)->pHD44780;
-    if (!redraw) return;
     if (!ready) return;
     if (!pHD44780 ) return;
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
     Refresh = true;
     info = pHD44780->getInfo();
 //    disp_symb();
@@ -115,7 +118,7 @@ void Clcdc_cc40::disp(void)
     painterSymb.end();
 
 
-    redraw = 0;
+    updated = false;
 
 }
 

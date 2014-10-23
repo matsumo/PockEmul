@@ -91,7 +91,7 @@ void Clcdc_rlh1000::disp(void)
         }
     }
 
-    redraw = 0;
+
     painter.end();
 }
 

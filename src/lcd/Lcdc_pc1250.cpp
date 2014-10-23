@@ -142,7 +142,6 @@ void Clcdc_pc1250::disp(void)
         }
     }
 
-    redraw = 0;
 
     painter.end();
 }
@@ -258,7 +257,7 @@ void Clcdc_pc1245::disp(void)
             DirtyBuf[adr-0xF800] = 0;
         }
     }
-    redraw = 0;
+
     painter.end();
 }
 
@@ -386,7 +385,6 @@ void Clcdc_pc1260::disp(void)
         }
     }
 
-    redraw = 0;
     painter.end();
 
 }

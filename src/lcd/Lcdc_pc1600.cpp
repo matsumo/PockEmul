@@ -92,9 +92,14 @@ void Clcdc_pc1600::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!((Cpc1600 *)pPC)->pHD61102_1 || !((Cpc1600 *)pPC)->pHD61102_2) return;
-    if (!(((Cpc1600 *)pPC)->pHD61102_1->updated || ((Cpc1600 *)pPC)->pHD61102_2->updated)) return;
 
+    if (!redraw) {
+        if ( !((Cpc1600 *)pPC)->pHD61102_1 ||
+             !((Cpc1600 *)pPC)->pHD61102_2) return;
+        if (!(((Cpc1600 *)pPC)->pHD61102_1->updated ||
+              ((Cpc1600 *)pPC)->pHD61102_2->updated)) return;
+    }
+    redraw = false;
     ((Cpc1600 *)pPC)->pHD61102_1->updated = false;
     ((Cpc1600 *)pPC)->pHD61102_2->updated = false;
     Refresh = true;
@@ -173,7 +178,5 @@ void Clcdc_pc1600::disp(void)
                 drawPixel(&painter,128+i,j,Color_Off);
     }
 
-
-    redraw = 0;
     painter.end();
 }

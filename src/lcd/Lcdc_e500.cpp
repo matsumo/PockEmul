@@ -90,9 +90,15 @@ void Clcdc_e500::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!((Ce500 *)pPC)->pHD61102_1 || !((Ce500 *)pPC)->pHD61102_2) return;
-    if (!(((Ce500 *)pPC)->pHD61102_1->updated || ((Ce500 *)pPC)->pHD61102_2->updated)) return;
+    if (!((Ce500 *)pPC)->pHD61102_1 ||
+        !((Ce500 *)pPC)->pHD61102_2) return;
 
+    if (!redraw) {
+        if (!(((Ce500 *)pPC)->pHD61102_1->updated ||
+              ((Ce500 *)pPC)->pHD61102_2->updated)) return;
+    }
+
+    redraw = false;
     ((Ce500 *)pPC)->pHD61102_1->updated = false;
     ((Ce500 *)pPC)->pHD61102_2->updated = false;
 
@@ -211,8 +217,6 @@ void Clcdc_e500::disp(void)
                 drawPixel(&painter,239-i,j,Color_Off);
     }
 
-
-    redraw = 0;
     painter.end();
 }
 

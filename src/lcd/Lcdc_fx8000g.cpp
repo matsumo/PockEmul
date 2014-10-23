@@ -39,17 +39,20 @@ void Clcdc_fx8000g::TurnOFF()
 
     ((Cfx8000g*) pPC)->pHD44352->getInfoRef()->m_lcd_on = 0;
     Refresh = true;
-    redraw = true;
+    updated = true;
     pPC->InitDisplay();
 
 }
 
 void Clcdc_fx8000g::disp(void)
 {
-    if (!redraw) return;
     if (!ready) return;
     if (!((Cfx8000g *)pPC)->pHD44352 ) return;
-    redraw = 0;
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
+    updated = false;
     info = ((Cfx8000g*) pPC)->pHD44352->getInfo();
 
 

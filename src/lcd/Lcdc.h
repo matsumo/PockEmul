@@ -29,9 +29,7 @@ Q_OBJECT
 
 public:
 	CpcXXXX *pPC;
-	
-	bool	redraw;
-	void	check(void);			// LCDC access check
+
 	void	TurnON(void);			// LCD On
     virtual void	TurnOFF(void);			// LCD Off
 
@@ -43,11 +41,8 @@ public:
     bool    ready;
     QList<ClcdSymb> symbList;
 
-	void	Update(void){
-					for (int i=0 ; i<0x1000;i++) DirtyBuf[i]=true;
-                    Refresh = true;
-						}
-									// Set the DirtyBuffer array to 1
+    void	forceRedraw(void);	// Set the DirtyBuffer array to 1
+    bool	redraw;
 
 	virtual bool	init(void);		// initialize
 	virtual bool	exit(void);		// end

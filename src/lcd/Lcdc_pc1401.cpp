@@ -152,8 +152,6 @@ void Clcdc_pc1401::disp(void)
         }
     }
 
-
-    redraw = 0;
     painter.end();
 
 }

@@ -115,8 +115,8 @@ bool Cti74::Chk_Adr(UINT32 *d, UINT32 data)
     if (*d==0x0118) { ptms70c46cpu->control_w(data); return true; }
 
     if (                 (*d<=0x0FFF) )	{ return true;	}  // CPU RAM
-    if   (*d==0x1000)                   { pHD44780->control_write(data); pLCDC->redraw = true; return false; }
-    if   (*d==0x1001)                   { pHD44780->data_write(data); pLCDC->redraw = true; return false; }
+    if   (*d==0x1000)                   { pHD44780->control_write(data); pLCDC->updated = true; return false; }
+    if   (*d==0x1001)                   { pHD44780->data_write(data); pLCDC->updated = true; return false; }
     if ( (*d>=0x1000) && (*d<=0x1FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return true;	}  // CPU RAM
     if ( (*d>=0x4000) && (*d<=0xBFFF) )	{ return (SlotList[1].getType()==CSlot::RAM ? true: false); } // system ROM

@@ -191,6 +191,5 @@ void Clcdc_pc1500::disp(void)
         }
     }
 
-    redraw = 0;
     painter.end();
 }

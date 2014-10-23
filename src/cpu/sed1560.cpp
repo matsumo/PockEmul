@@ -140,8 +140,8 @@ BYTE CSED1560::instruction(qint16 cmd)
 void CSED1560::cmd_ElecCtrlReg(qint16 cmd) {
     info.ElectCtrl = cmd & 0x1f;
     pPC->pLCDC->Color_Off.setAlphaF( info.ElectCtrl * 5.0f / 100);
-    updated = true;
-    pPC->pLCDC->Update();
+
+    pPC->pLCDC->forceRedraw();
 //    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
 }
 

@@ -16,6 +16,6 @@ void Clcdc_x07::disp()
 
 //    if (((Cx07 *)pPC)->pT6834)
 //        ((Cx07 *)pPC)->pT6834->RefreshVideo();
-    redraw = false;
+    updated = false;
 }
 

@@ -206,12 +206,12 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
               break;
 
    case 0x08:
-              pPC->pLCDC->redraw = true;
+              pPC->pLCDC->updated = true;
               ScrollVideo ();
               break;
 
    case 0x09:
-              pPC->pLCDC->redraw = true;
+              pPC->pLCDC->updated = true;
               LineClear (Send_Cmd_T6834[1]);
               break;
 
@@ -271,26 +271,26 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
      }
             break;
 
-   case 0x11: pPC->pLCDC->redraw = true;
+   case 0x11: pPC->pLCDC->updated = true;
               Pset (Send_Cmd_T6834[1],Send_Cmd_T6834[2]);
               break;
 
-   case 0x12: pPC->pLCDC->redraw = true;
+   case 0x12: pPC->pLCDC->updated = true;
               Preset (Send_Cmd_T6834[1],Send_Cmd_T6834[2]);
               break;
   case 0x13:	// Peor
-              pPC->pLCDC->redraw = true;
+              pPC->pLCDC->updated = true;
               if(Send_Cmd_T6834[1] < 120 && Send_Cmd_T6834[2] < 32) {
                   setRamVideo(Send_Cmd_T6834[1],Send_Cmd_T6834[2], ~(Ram_Video[Send_Cmd_T6834[1]][Send_Cmd_T6834[2]]));
               }
               break;
 
    case 0x14: // Line (x1,y1)-(x2,y2)
-              pPC->pLCDC->redraw = true;
+              pPC->pLCDC->updated = true;
               Line (Send_Cmd_T6834[1],Send_Cmd_T6834[2],
                     Send_Cmd_T6834[3],Send_Cmd_T6834[4]);
               break;
-  case 0x15: pPC->pLCDC->redraw = true;
+  case 0x15: pPC->pLCDC->updated = true;
              Circle(Send_Cmd_T6834[1],Send_Cmd_T6834[2],Send_Cmd_T6834[3]);
              break;
 
@@ -314,7 +314,7 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
                   break;
    case 0x18: // UDKOn
    case 0x19: // UDKOff
-                 pPC->pLCDC->redraw = true;
+                 pPC->pLCDC->updated = true;
                  break;
 
    case 0x1A: // UDCWrite
@@ -353,13 +353,13 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
 
               break;
    case 0x23: // Turn OFF
-      pPC->pLCDC->redraw = true;
+      pPC->pLCDC->updated = true;
       TurnOFF();
 
               break;
 
    case 0x24:
-              pPC->pLCDC->redraw = true;
+              pPC->pLCDC->updated = true;
               AddLog (LOG_TEMP,tr("Locate %1,%2 ").arg(Send_Cmd_T6834[1],2,16,QChar('0')).arg(Send_Cmd_T6834[2],2,16,QChar('0')));
 
               if ((Loc_X == Send_Cmd_T6834[1]) && (Loc_Y == Send_Cmd_T6834[2]))
@@ -386,14 +386,14 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
               break;
 
    case 0x25: // CursOn
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
                 AddLog (LOG_TEMP,"Curseur ON\n");
 
               General_Info.Curseur = true;
               break;
 
    case 0x26: // CursOff
-            pPC->pLCDC->redraw = true;
+            pPC->pLCDC->updated = true;
               AddLog (LOG_TEMP,"Curseur OFF\n");
 
               General_Info.Curseur = false;
@@ -435,11 +435,11 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
       break;
 
    case 0x2b: // LCD OFF
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
                 General_Info.LcdOn = false;
                 break;
    case 0x2c: // LCD ON
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
                 General_Info.LcdOn = true;
                 break;
    case 0x2D: // KeyBufferClear
@@ -448,12 +448,12 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
               break;
 
    case 0x30: // UDKOn
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
               General_Info.Aff_Udk = 1;
               AffUdkON (0);
               break;
    case 0x31: // UDKOff
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
               General_Info.Aff_Udk = 0;
               LineClear (3);
               break;
@@ -467,7 +467,7 @@ int CT6834::InitReponseT6834 (UINT8 Ordre, UINT8 *Rsp, PorT_FX *Port)
                  break;
 
    case 0x3F: // Sleep
-                pPC->pLCDC->redraw = true;
+                pPC->pLCDC->updated = true;
               AddLog (LOG_TEMP,"Sleep\n");
               mem[0x0006] |= 0x41;      // bit 0 and 6 to 1 for OFF and SLEEP
               General_Info.LcdOn = false;
@@ -568,11 +568,11 @@ if (!General_Info.LcdOn) return;
     if (cursorTimer.elapsed()>500) {
 //        qWarning()<<"Cursor";
         curOnOff = !curOnOff;
-        pPC->pLCDC->redraw = true;
+        pPC->pLCDC->updated = true;
         cursorTimer.restart();
     }
-    if (!pPC->pLCDC->redraw) return;
-    pPC->pLCDC->redraw = false;
+    if (!pPC->pLCDC->updated) return;
+    pPC->pLCDC->updated = false;
     if (!pPC->pLCDC->LcdImage) return;
     QPainter painter;
     painter.begin(pPC->pLCDC->LcdImage);

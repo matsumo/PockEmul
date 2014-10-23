@@ -23,7 +23,7 @@ Clcdc::Clcdc(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfnam
 {						//[constructor]
     pPC = (CpcXXXX*) parent;
 
-    redraw		= true;				//display redraw?(0:not need, 1:need)
+    redraw		= false;				//display redraw?(0:not need, 1:need)
     On			= true;
     Refresh		= false;
     updated     = false;
@@ -73,19 +73,18 @@ void Clcdc::Contrast(int command)
 	case 4: contrast = (float) 0.5;	break;
 	}
     if ( (Color_Off.red()==0) && (Color_Off.green()==0) && (Color_Off.blue()==0)) {
-        qWarning()<<"trabs";
+//        qWarning()<<"trans";
         Color_Off.setAlphaF(1-contrast);
     }
     else {
-        qWarning()<<"classic";
+//        qWarning()<<"classic";
         Color_Off = QColor( (int) ( origColor_Off.red() * contrast ),
                             (int) ( origColor_Off.green() * contrast ),
                             (int) ( origColor_Off.blue() * contrast ),
                             origColor_Off.alpha());
     }
 
-
-	Update();
+    forceRedraw();
 
 }
 
@@ -152,15 +151,13 @@ void Clcdc::drawPixel(QPainter *painter,float x,float y, QColor color) {
 /*  ENTRY :none																 */
 /*  RETURN: 0=error, 1=success												 */
 /*****************************************************************************/
-void	Clcdc::check(void)  {}
 
 void	Clcdc::TurnON(void) {
 
     qWarning()<<"LCD:TurnON";
     On = true;
-    Refresh = true;
     redraw = true;
-    Update();
+    forceRedraw();
     emit pPC->updatedPObject(pPC);
 }
 
@@ -169,9 +166,15 @@ void	Clcdc::TurnOFF(void){
     qWarning()<<"LCD:TurnOFF";
 }
 
+void Clcdc::forceRedraw(){
+    for (int i=0 ; i<0x1000;i++) DirtyBuf[i]=true;
+    updated = true;
+    redraw = true;
+}
+
 bool	Clcdc::init(void)
 {
-	On = false;
+    On = false;
     ready = true;
     redraw = true;
 

@@ -106,7 +106,7 @@ bool Cpc1280::Chk_Adr(UINT32 *d,UINT32 data)
 
     if ( (*d>=0x0000) && (*d<=0x1FFF) )	return(0);	// ROM area(0000-1fff)
     if ( (*d>=0x2000) && (*d<=0x27FF) )	return(0);
-    if ( (*d>=0x2800) && (*d<=0x2B7B) ) { pLCDC->SetDirtyBuf(*d-0x2800); pLCDC->redraw = true; return(1);	}
+    if ( (*d>=0x2800) && (*d<=0x2B7B) ) { pLCDC->SetDirtyBuf(*d-0x2800); pLCDC->updated = true; return(1);	}
     if ( (*d>=0x3400) && (*d<=0x35FF) )	{ RomBank = data &0x07;	return(1); }
 #if 0
     if ( (*d>=0x3C00) && (*d<=0x3DFF) )

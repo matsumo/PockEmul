@@ -67,12 +67,12 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new CHD61700(this);
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"pb1000.map");
-    pHD44352    = new CHD44352(P_RES(":/pb1000/chr.bin"));
+    pHD44352    = new CHD44352(this,P_RES(":/pb1000/chr.bin"));
 
     m_kb_matrix = 0;
 //    shift=fct = false;
 
-    closed = true;
+    closed = false;
     flipping = true;
     m_angle = 180;
     m_zoom = 1;
@@ -451,7 +451,7 @@ AddLog(LOG_KEYBOARD,tr("matrix=%1 ko=%2").arg(m_kb_matrix,2,16,QChar('0')).arg(k
             if (KEY(K_STOP))		data|=0x10;
             if (KEY(')'))			data|=0x20;
 //            if (KEY(K_CONTRAST))	data|=0x40;
-//            if (KEY(K_CONTRAST))	data|=0x80;
+            if (KEY(K_CON))         data|=0x80;
             if (KEY(K_LCKEY))		data|=0x2000;
 //            if (KEY(K_CONTRAST))	data|=0x4000;
 //            if (KEY(K_CONTRAST))	data|=0x8000;
@@ -559,11 +559,11 @@ void Cpb1000::writePort(UINT8 data)
 }
 
 void Cpb1000::lcdControlWrite(UINT8 data) {
-    pLCDC->redraw = true;
+    pLCDC->updated = true;
     pHD44352->control_write(data);
 }
 void Cpb1000::lcdDataWrite(UINT8 data) {
-    pLCDC->redraw = true;
+    pLCDC->updated = true;
     pHD44352->data_write(data);
 }
 UINT8 Cpb1000::lcdDataRead() {

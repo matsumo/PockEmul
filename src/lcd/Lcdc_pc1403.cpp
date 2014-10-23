@@ -250,8 +250,6 @@ void Clcdc_pc1403::disp(void)
     }
 #endif
 
-
-    redraw = 0;
     painter.end();
 }
 

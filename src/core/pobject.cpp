@@ -1205,67 +1205,66 @@ void CPObject::BuildContextMenu(QMenu * menu)
             menupocket->addAction(tr("Save ..."),this,SLOT(slotSaveSession()));
 	}
 	
-	QMenu * menuext = NULL;
-	for (int i=0;i<5;i++)
+    QMenu * menuext = NULL;
+    for (int i=0;i<5;i++)
     {
         if (extensionArray[i])
-            {
-                if (!menuext) menuext = menu->addMenu(tr("Extensions"));
-                menuext->addMenu(((CpcXXXX *)this)->extensionArray[i]->Menu);
-            }
+        {
+            if (!menuext) menuext = menu->addMenu(tr("Extensions"));
+            menuext->addMenu(((CpcXXXX *)this)->extensionArray[i]->Menu);
+        }
     }
-	
+
 	QMenu * menuconfig = menu->addMenu(tr("Configuration"));
 	
     if ( dynamic_cast<CpcXXXX *>(this) &&  ((CpcXXXX*)this)->pCPU )
     {
         QMenu * menucpuspeed = menuconfig->addMenu(tr("CPU Speed"));
-            menucpuspeed->addAction(tr("100%"));
-            menucpuspeed->addAction(tr("200%"));
-            menucpuspeed->addAction(tr("300%"));
-            menucpuspeed->addAction(tr("500%"));
-            menucpuspeed->addAction(tr("Maximum"));
+        menucpuspeed->addAction(tr("100%"));
+        menucpuspeed->addAction(tr("200%"));
+        menucpuspeed->addAction(tr("300%"));
+        menucpuspeed->addAction(tr("500%"));
+        menucpuspeed->addAction(tr("Maximum"));
 
-            connect(menucpuspeed, SIGNAL(triggered(QAction*)), this, SLOT(slotCpu(QAction*)));
-}
+        connect(menucpuspeed, SIGNAL(triggered(QAction*)), this, SLOT(slotCpu(QAction*)));
+    }
 	
     if (pLCDC)
     {
         QMenu * menulcd = menuconfig->addMenu(tr("LCD contrast"));
-            menulcd->addAction(tr("0"));
-            menulcd->addAction(tr("1"));
-            menulcd->addAction(tr("2"));
-            menulcd->addAction(tr("3"));
-            menulcd->addAction(tr("4"));
+        menulcd->addAction(tr("0"));
+        menulcd->addAction(tr("1"));
+        menulcd->addAction(tr("2"));
+        menulcd->addAction(tr("3"));
+        menulcd->addAction(tr("4"));
 
-            connect(menulcd, SIGNAL(triggered(QAction*)), this, SLOT(slotContrast(QAction*)));
+        connect(menulcd, SIGNAL(triggered(QAction*)), this, SLOT(slotContrast(QAction*)));
 
-        }
+    }
 
     if (pKEYB) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
     }
 
-    if (!SlotList.isEmpty()) menu->addAction(tr("Dump Memory"),this,SLOT(Dump()));
+    if (!SlotList.isEmpty()) menuconfig->addAction(tr("Dump Memory"),this,SLOT(Dump()));
 
     if ( dynamic_cast<CpcXXXX *>(this) &&  ((CpcXXXX*)this)->pCPU  ) {
 
-        menu->addAction(tr("Debug"),this,SLOT(Dasm()));
+        menuconfig->addAction(tr("Debug"),this,SLOT(Dasm()));
     }
 
     menu->addAction(tr("New Post-it"),this,SLOT(Postit()));
 
-	menu->addSeparator();
-	computeLinkMenu(menu);
-	computeUnLinkMenu(menu);
-	menu->addSeparator();
-	menu->addAction(tr("Close"),this,SLOT(slotExit()));
+    menuconfig->addSeparator();
+    computeLinkMenu(menuconfig);
+    computeUnLinkMenu(menuconfig);
+    menu->addSeparator();
     computeWebLinksMenu(menu);
+    menu->addSeparator();
+    menu->addAction(tr("Close"),this,SLOT(slotExit()));
 
 }
-
-
 
 void CPObject::computeWebLinksMenu(QMenu * menu) {
     menuweblink = menu->addMenu(tr("Web Links"));

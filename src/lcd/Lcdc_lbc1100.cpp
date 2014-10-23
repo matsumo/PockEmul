@@ -40,7 +40,14 @@ void Clcdc_lbc1100::disp(void)
     if (!ready) return;
     if (!lbc1100->upd16434[0]) return;
 
-//    qWarning()<<"update";
+
+    if (redraw) {
+        for (int i = 0 ; i<4; i++)
+        {
+            lbc1100->upd16434[i]->updated=true;
+        }
+    }
+    redraw=false;
 
 
     disp_symb();
@@ -72,7 +79,6 @@ void Clcdc_lbc1100::disp(void)
         }
     }
 
-    redraw = 0;
     painter.end();
 }
 

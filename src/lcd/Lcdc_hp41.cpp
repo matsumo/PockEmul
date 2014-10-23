@@ -68,7 +68,11 @@ void Clcdc_hp41::disp(void)
     Refresh = false;
 
     if (!ready) return;
-    if (!updated) return;
+
+    if (!redraw) {
+        if (!updated) return;
+    }
+    redraw = false;
 
     updated = false;
     Refresh= true;
@@ -107,7 +111,6 @@ void Clcdc_hp41::disp(void)
 //    qWarning()<<"Display:"<<GetLCD()<<" : ";
 
     Refresh = true;
-    redraw = 0;
     painter.end();
 }
 

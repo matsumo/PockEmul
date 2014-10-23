@@ -122,8 +122,11 @@ void Clcdc_pc1475::disp(void)
     int ind;
     WORD adr;
 
-    if (!redraw) return;
+    if (!redraw) {
+        if (!updated) return;
+    }
     redraw = false;
+    updated = false;
 
     Refresh = false;
     disp_symb();
@@ -227,7 +230,7 @@ void Clcdc_pc1475::disp(void)
         }
     }
 #endif
-    redraw = 0;
+    updated = 0;
     painter.end();
 }
 

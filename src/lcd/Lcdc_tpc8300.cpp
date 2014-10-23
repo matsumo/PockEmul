@@ -42,7 +42,16 @@ void Clcdc_tpc8300::disp(void)
 
     if (!ready) return;
     if (!tpc8300->upd16434[0]) return;
-//qWarning()<<"disp";
+
+
+    if (redraw) {
+        for (int i = 0 ; i<4; i++)
+        {
+            tpc8300->upd16434[i]->updated=true;
+        }
+    }
+    redraw=false;
+
     disp_symb();
 
     QPainter painter(LcdImage);
@@ -75,11 +84,7 @@ void Clcdc_tpc8300::disp(void)
         }
     }
 
-    redraw = 0;
+
     painter.end();
 }
-
-
-
-
 

@@ -79,8 +79,9 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
 //    if (pc->currentView!=FRONTview)
 //    qWarning()<<"currentView="<<pc->currentView;
 
-    if (pc->flipping | pc->closed)
-        return *(pc->AnimatedImage);
+    if ( (pc->flipping | pc->closed) && pc->AnimatedImage){
+       return *(pc->AnimatedImage);
+    }
 
     return *(pc->getViewImage(pc->currentView));
 

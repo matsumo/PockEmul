@@ -275,13 +275,13 @@ bool Ccc40::Chk_Adr(UINT32 *d, UINT32 data)
     if (*d==0x011E) {
 //        qWarning()<<"pHD44780->control_write:"<<data;
         pHD44780->control_write(data);
-        pLCDC->redraw = true;
+        pLCDC->updated = true;
         return false;
     }
     if (*d==0x011F) {
 //        qWarning()<<"pHD44780->data_write:"<<data;
         pHD44780->data_write(data);
-        pLCDC->redraw = true;
+        pLCDC->updated = true;
         return false;
     }
     if ( (*d>=0x0100) && (*d<=0x010B) )	{ ptms7000cpu->pf_write(*d-0x100,data); return false;	}

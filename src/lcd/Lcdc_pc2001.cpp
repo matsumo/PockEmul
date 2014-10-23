@@ -39,6 +39,14 @@ void Clcdc_pc2001::disp(void)
     if (!ready) return;
     if (!pc2001->upd16434[0]) return;
 
+
+    if (redraw) {
+        for (int i = 0 ; i<4; i++)
+        {
+            pc2001->upd16434[i]->updated=true;
+        }
+    }
+    redraw=false;
     disp_symb();
 
     QPainter painter(LcdImage);
@@ -70,7 +78,7 @@ void Clcdc_pc2001::disp(void)
     }
 
 //    Refresh = _toRefresh;
-    redraw = 0;
+
     painter.end();
 }
 

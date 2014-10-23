@@ -122,5 +122,7 @@
     <KEY description="OUT" height="34" left="315" scancode="0x204" top="273" width="36"/>
     <KEY description="IN" height="34" left="278" scancode="0x205" top="274" width="36"/>
     <KEY description="MEMO IN" height="34" left="237" scancode="0x206" top="273" width="36"/>
+    <KEY description="CONTRAST" height="34" left="237" scancode="0x209" top="273" width="36"/>
+    <KEY description="^" height="34" left="237" scancode="0x5e" top="273" width="36"/>
 </Keyboard>
 </KEYBMAP>

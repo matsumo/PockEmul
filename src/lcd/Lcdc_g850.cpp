@@ -131,8 +131,11 @@ void Clcdc_g850::disp(void)
 
     if (!ready) return;
     if (!g850->pSED1560) return;
-    if (!g850->pSED1560->updated) return;
-//AddLog(LOG_DISPLAY,"DISP");
+
+    if (!redraw) {
+        if (!g850->pSED1560->updated) return;
+    }
+    redraw = false;
     g850->pSED1560->updated = false;
 
     Refresh = true;
@@ -160,8 +163,6 @@ void Clcdc_g850::disp(void)
         }
     }
 
-
-    redraw = 0;
     painter.end();
 }
 

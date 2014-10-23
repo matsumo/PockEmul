@@ -54,13 +54,16 @@ struct hd44352_interface
 };
 
 // ======================> hd44352_device
+class CpcXXXX;
+
 
 class CHD44352 : public QObject
 {
 public:
     // construction/destruction
-    explicit CHD44352(QString fnCharSet,QObject *parent = 0);
+    explicit CHD44352(CpcXXXX *parent,QString fnCharSet);
 
+    CpcXXXX *pPC;
     // device interface
     QString fncharset;
     UINT8 data_read();
@@ -96,7 +99,7 @@ private:
     HD44352info info;
     UINT8 charset[0x1000];
 
-
+    QList<quint32> contrastList;
 
 };
 
