@@ -20,4 +20,13 @@ public:
 
 };
 
+class Clcdc_pc1280:public Clcdc_pc1475{
+public:
+
+    const char*	GetClassName(){ return("Clcdc_pc1280");}
+
+    Clcdc_pc1280(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
+
+};
+
 #endif // LCDC_PC1475_H

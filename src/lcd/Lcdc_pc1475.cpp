@@ -44,6 +44,34 @@ Clcdc_pc1475::Clcdc_pc1475(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
              << ClcdSymb(220,43, S_BAR25,0x287C	,0x40);     // PRINT
 }
 
+
+Clcdc_pc1280::Clcdc_pc1280(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc_pc1475(parent, _lcdRect, _symbRect, _lcdfname, _symbfname)
+{
+    symbList.clear();
+    symbList << ClcdSymb(0  , 0, S_BUSY	,0x283D	,0x01)
+             << ClcdSymb(24 , 0, S_DBL	,0x283D	,0x08)
+             << ClcdSymb(44 , 0, S_DEF	,0x283D	,0x02)
+             << ClcdSymb(61 , 0, S_SHIFT,0x283D	,0x04)
+             << ClcdSymb(90 , 0, S_JAP	,0x287D	,0x01)
+             << ClcdSymb(105, 0, S_JAP2	,0x287D	,0x02)
+             << ClcdSymb(115, 0, S_SML	,0x287D	,0x04)
+             << ClcdSymb(137, 0, S_DE	,0x287D	,0x08)
+             << ClcdSymb(145, 0, S_G	,0x287C	,0x08)
+             << ClcdSymb(150, 0, S_RAD	,0x287C	,0x04)
+//             << ClcdSymb(175, 0, S_HYP	,0x283C	,0x04)
+//             << ClcdSymb(190, 0, S_O_BRA,0x283C	,0x02)
+//             << ClcdSymb(195, 0, S_C_BRA,0x283C	,0x02)
+             << ClcdSymb(200, 0, S_REV_M,0x287C	,0x02)
+             << ClcdSymb(210, 0, S_E    ,0x287C	,0x01)
+             << ClcdSymb(220, 0, S_REV_BATT	,0x283C	,0x01)
+             << ClcdSymb(15, 45, S_CAL,0x283C	,0x40)      // CAL
+             << ClcdSymb(40, 45, S_RSV,0x283C	,0x08)      // RSV
+             << ClcdSymb(67, 45, S_RUN,0x283C	,0x20)      // RUN
+             << ClcdSymb(87,45, S_PRO,0x283C	,0x10)      // PRO
+             << ClcdSymb(220,45, S_PRINTL,0x287C	,0x40);     // PRINT
+}
+
 bool	Clcdc_pc1475::init(void)
 {
 
@@ -149,5 +177,6 @@ void Clcdc_pc1475::disp(void)
     updated = 0;
     painter.end();
 }
+
 
 
