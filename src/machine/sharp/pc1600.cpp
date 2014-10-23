@@ -897,6 +897,8 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
     return (false);
 }
 
+#define CS24 (pCPU->imem[0x3D] & 0x04)
+
 bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
     Q_UNUSED(data)
@@ -907,11 +909,12 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
         if (                 (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return true; }
         if ( (*d>=0x4000) && (*d<=0x7FFF) )
         {
+            readBus(d,data);
             *d += bank2 * 0x10000;
             if (!ce1600_connected && ((bank2==4)||(bank2==5))) *d -= 0x4000;
 
             //*d -= (pCPU->imem[0x3D] & 0x04) ? 0x00 : 0x4000;
-            if (!(pCPU->imem[0x3D] & 0x04) && (bank2 == 3))
+            if (!CS24 && (bank2 == 3))
             {
                 *d -= 0x4000;
 //                if (pCPU->fp_log) fprintf(pCPU->fp_log,"Acces Bank 3b\n");
@@ -1207,22 +1210,45 @@ void Cpc1600::Regs_Info(UINT8 Type)
 #define SIO_ER		14  // DTR
 #define SIO_PRQ		15  // NC
 
+void Cpc1600::setPUPVPT(CbusPc1500* bus, UINT32 adr) {
+    if (adr <= 0x3FFF) {
+        bus->setPV(bank1 & 0x01);
+    }
+    else if ( (adr >= 0x4000) && (adr <= 0x7FFF) ) {
+        bus->setPV(bank2 & 0x01);
+        bus->setPU((bank2>>1) & 0x01);
+        bus->setPT((bank2>>2) & 0x01);
+    }
+    else if ( (adr >= 0x8000) && (adr <= 0xBFFF) ) {
+        bus->setPV(bank3 & 0x01);
+        bus->setPU((bank3>>1) & 0x01);
+        bus->setPT((bank3>>2) & 0x01);
+    }
+    else if ( (adr >= 0xC000) && (adr <= 0xFFFF) ) {
+        bus->setPV(bank4 & 0x01);
+    }
+}
+
 bool Cpc1600::Set_Connector(void)
 {
-    pCONNECTOR->Set_pin(1	,0);
+//    pCONNECTOR->Set_pin(1	,0);
 
     // MANAGE SERIAL CONNECTOR
     // TO DO
 //    pSIOCONNECTOR->Set_pin(SIO_SD	,READ_BIT(v,b));
 
+    setPUPVPT(bus,bus->getAddr());
 
-
+    pCONNECTOR->Set_values(bus->toUInt64());
     return true;
 }
 
 bool Cpc1600::Get_Connector(void)
 {
-    ce1600_connected = pCONNECTOR->Get_pin(1);
+//    ce1600_connected = pCONNECTOR->Get_pin(1);
+
+    bus->fromUInt64(pCONNECTOR->Get_values());
+    bus->setEnable(false);
 
     // MANAGE SERIAL CONNECTOR
 

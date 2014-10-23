@@ -18,22 +18,6 @@
 class Cprinter;
 class CbusPc1500;
 
-extern void DoCe150Dialog(void);
-
-
-class CLH5810_CE150:public CLH5810{
-public:
-	bool	step(void);
-    const char*	GetClassName(){ return("CLH5810_CE150");}
-
-    CLH5810_CE150(CPObject *parent)	: CLH5810(parent){}
-    virtual ~CLH5810_CE150(){}
-
-private:
-};
-
-
-
 class Cce150:public Cprinter{						
 public:
 

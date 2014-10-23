@@ -462,7 +462,8 @@ void Cce150::Print(void)
 	QPainter painter;
 
     //pPC->Refresh_Display = true;
-	
+    ce150buf = checkPaper(ce150buf,Pen_Y);
+
 	if (Pen_Status==PEN_DOWN)
     {
 		painter.begin(ce150buf);
@@ -527,14 +528,6 @@ void Cce150::SaveAsText(void)
 	QMessageBox::warning(mainwindow, "PockEmul",
                          tr("This printer is a pure graphic printer\n") +
                          tr("Saving output as text is irrelevant") );
-}
-
-bool CLH5810_CE150::step()
-{
-
-    CLH5810::step();
-
-	return(1);
 }
 
 void Cce150::contextMenuEvent ( QContextMenuEvent * event )

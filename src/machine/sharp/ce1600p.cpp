@@ -36,15 +36,13 @@ Cce1600p::Cce1600p(CPObject *parent) : Cce150(this)
 
     setcfgfname(QString("ce1600p"));
 
-    setDXmm(317);//Pc_DX_mm = 317;
-    setDYmm(222);//Pc_DY_mm = 222;
-    setDZmm(48);//Pc_DZ_mm = 48;
+    setDXmm(317);
+    setDYmm(222);
+    setDZmm(48);
 
-    setDX(1100);//Pc_DX	= 1100;
-    setDY(780);//Pc_DY	= 773;
+    setDX(1100);
+    setDY(780);
 
-    KeyMap		= KeyMapce1600p;
-    KeyMapLenght= KeyMapce1600pLenght;
     delete pKEYB;
     pKEYB		= new Ckeyb(this,"ce1600p.map",0);
 
@@ -81,15 +79,16 @@ bool Cce1600p::init(void)
         if(pTIMER)	pTIMER->init();
 
         // Create CE-150 Paper Image
-        ce150buf	= new QImage(QSize(1920, 3000),QImage::Format_ARGB32);
+        ce150buf	= new QImage(QSize(1920, 1000),QImage::Format_ARGB32);
         ce150display= new QImage(QSize(1920, 567),QImage::Format_ARGB32);
         ce150pen	= new QImage(P_RES(":/ext/ce-150pen.png"));
         // Fill it blank
         clearPaper();
 
         // Create a paper widget
-        paperWidget = new CpaperWidget(QRect(195,30,695,170),ce150buf,this);
-        paperWidget->show();
+        setPaperPos(QRect(195,30,695,170));
+        paperWidget = new CpaperWidget(PaperPos(),ce150buf,this);
+        paperWidget->hide();
 
         initsound();
 
@@ -162,7 +161,7 @@ bool Cce1600p::run(void)
 //	if (pLH5810->lh5810.r_opa & 0x02)	((Cpc15XX *)pPC->pTIMER->pPC)->pce152->paused = FALSE;	// RMT 0 ON
 //	if (pLH5810->lh5810.r_opa & 0x04)	((Cpc15XX *)pPC->pTIMER->pPC)->pce152->paused = TRUE;	// RMT 0 OFF
 
-#if 0
+#if 1
     if (!bus->isEnable()) {
         if (keyEvent) {
             pLH5810->step();
@@ -337,6 +336,8 @@ void Cce1600p::Print(void)
 
     pPC->Refresh_Display = true;
 
+    ce150buf = checkPaper(ce150buf,Pen_Y);
+
     if (Pen_Status==PEN_DOWN)
     {
         painter.begin(ce150buf);
@@ -351,5 +352,6 @@ void Cce1600p::Print(void)
         painter.end();
     }
 
+    pPC->Refresh_Display = true;
     paperWidget->setOffset(QPoint(0,Pen_Y));
 }

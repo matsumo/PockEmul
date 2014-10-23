@@ -1,7 +1,7 @@
 #ifndef CE1600P_H
 #define CE1600P_H
 
-
+#include "ce150.h"
 
 
 
@@ -14,10 +14,6 @@
 class Cprinter;
 class Cmotor;
 class Ccpu;
-
-extern void DoCe150Dialog(void);
-extern TransMap KeyMapce1600p[];
-extern int KeyMapce1600pLenght;
 
 
 class Cce1600p:public Cce150{

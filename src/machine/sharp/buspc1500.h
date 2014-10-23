@@ -27,6 +27,9 @@ public:
     bool isPV() const { return pv; }
     void setPV(bool val) { pv = val; }
 
+    bool isPT() const { return pt; }
+    void setPT(bool val) { pt = val; }
+
     bool isINHIBIT() const { return inhibit; }
     void setINHIBIT(bool val) { inhibit = val; }
 
@@ -40,7 +43,7 @@ public:
 
 private:
     bool me1;
-    bool pu,pv;
+    bool pu,pv,pt;
     bool inhibit;
     bool cmtOut,cmtIn;
 };
