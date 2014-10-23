@@ -21,6 +21,9 @@ public:
     bool isME1() const { return me1; }
     void setME1(bool val) { me1 = val; }
 
+    bool isM1() const { return m1; }
+    void setM1(bool val) { m1 = val; }
+
     bool isPU() const { return pu; }
     void setPU(bool val) { pu = val; }
 
@@ -42,7 +45,7 @@ public:
     virtual QString toLog() const;
 
 private:
-    bool me1;
+    bool me1,m1;
     bool pu,pv,pt;
     bool inhibit;
     bool cmtOut,cmtIn;

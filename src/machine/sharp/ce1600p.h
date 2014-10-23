@@ -27,6 +27,9 @@ public:
 
     Cce1600p(CPObject *parent = 0);
 
+private:
+    BYTE motorX,motorY,motorZ;
+
 };
 
 

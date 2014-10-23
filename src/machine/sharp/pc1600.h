@@ -128,6 +128,7 @@ public:
     Cpc1600(CPObject *parent = 0);
     virtual ~Cpc1600();
 
+    void setPUPVPT(CbusPc1500 *bus, UINT32 adr);
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * event );
 };

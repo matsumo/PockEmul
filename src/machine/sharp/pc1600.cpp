@@ -125,13 +125,13 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 
     // Bank 4
     SlotList.append(CSlot(16, 0x40000 ,	""                              , "" , CSlot::NOT_USED , "NOT USED"));
-    SlotList.append(CSlot(16, 0x44000 ,P_RES(":/pc1600/romce1600-1.bin"), "" , CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(16, 0x44000 , ""                              , "" , CSlot::NOT_USED , "NOT USED"));
     SlotList.append(CSlot(16, 0x48000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
     SlotList.append(CSlot(16, 0x4C000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
 
     // Bank 5
     SlotList.append(CSlot(16, 0x50000 ,	""                              , "" , CSlot::NOT_USED , "NOT USED"));
-    SlotList.append(CSlot(16, 0x54000 ,P_RES(":/pc1600/romce1600-2.bin"), "" , CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(16, 0x54000 , ""                              , "" , CSlot::NOT_USED , "NOT USED"));
     SlotList.append(CSlot(16, 0x58000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
     SlotList.append(CSlot(16, 0x5C000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
 
@@ -802,12 +802,21 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
 
     if (masterCPU)
     {
-        if (                 (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return false; }
+        if (                 (*d<=0x3FFF) ) {
+            if (bank1) {
+                writeBus(d,data);
+                return false;
+            }
+            return false;
+        }
         if ( (*d>=0x4000) && (*d<=0x7FFF) )
         {
-            *d += bank2 * 0x10000;
-            if (!(pCPU->imem[0x3D] & 0x04) && (bank2 == 3)) { *d -= 0x4000; }
-            return false;
+            switch (bank2) {
+            case 0:
+            case 1:
+            case 3: return false;
+            default: writeBus(d,data); return false;
+            }
         }
         if ( (*d>=0x8000) && (*d<=0xBFFF) )
         {
@@ -854,15 +863,19 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
                     *d += 0xA0000 + (rambank-1) * 0x8000 + (bank3 - 2) * 0x4000 - 0x8000;
                     return ret;
                     break;
-            case 4:
-            case 5:
-            case 6:
-            case 7: *d += bank3 * 0x10000;
+            case 6: return false;   // Internal ROM
+            default: writeBus(d,data);
                     return false;
                     break;
             }
         }
-        if ( (*d>=0xC000) && (*d<=0xFFFF) ) { *d += bank4 * 0x10000; return ( bank4 ? false : true); }
+        if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
+            if (bank4) {
+                writeBus(d,data);
+                return false;
+            }
+            return true;    // Internal RAM 3
+        }
     }
     else
     {
@@ -906,21 +919,25 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
 
     if (masterCPU)
     {
-        if (                 (*d<=0x3FFF) ) { *d += bank1 * 0x10000; return true; }
-        if ( (*d>=0x4000) && (*d<=0x7FFF) )
-        {
-            readBus(d,data);
-            *d += bank2 * 0x10000;
-            if (!ce1600_connected && ((bank2==4)||(bank2==5))) *d -= 0x4000;
-
-            //*d -= (pCPU->imem[0x3D] & 0x04) ? 0x00 : 0x4000;
-            if (!CS24 && (bank2 == 3))
-            {
-                *d -= 0x4000;
-//                if (pCPU->fp_log) fprintf(pCPU->fp_log,"Acces Bank 3b\n");
+        if (                 (*d<=0x3FFF) ) {
+            if (bank1) {
+                readBus(d,data);
+                return false;
             }
             return true;
         }
+        if ( (*d>=0x4000) && (*d<=0x7FFF) )
+        {
+            switch (bank2) {
+            case 0: return true;    // internal ROM
+            case 1: *d += bank2 * 0x10000; break;
+            case 3: *d += bank2 * 0x10000 - (CS24 ? 0 : 0x4000); break;
+            default: readBus(d,data); return false;
+            }
+
+            return true;
+        }
+
         if ( (*d>=0x8000) && (*d<=0xBFFF) ) {
             int rambank = pCPU->imem[0x28];
             switch (bank3)
@@ -938,14 +955,18 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
                     *d += 0xA0000 + (rambank -1 ) * 0x8000 + (bank3 - 2) * 0x4000 - 0x8000;
                 }
                 break;
-            case 4:
-            case 5:
-            case 6:
-            case 7: *d += bank3 * 0x10000; break;
+            case 6: *d += bank3 * 0x10000; break;
+            default: readBus(d,data); return false;
             }
             return true;
         }
-        if ( (*d>=0xC000) && (*d<=0xFFFF) ) { *d += bank4 * 0x10000; return true; }
+        if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
+            if (bank4) {
+                readBus(d,data);
+                return false;
+            }
+            return true;
+        }
     }
     else
     {
@@ -1081,7 +1102,13 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
     case 0x80:
     case 0x81:
     case 0x82:
-    case 0x83:if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
+    case 0x83: {
+        if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
+        ((CbusPc1500*)bus)->setM1(true);
+        UINT32 _adr = address;
+        writeBus(&_adr,value);
+        ((CbusPc1500*)bus)->setM1(false);
+    }
         break;
     }
 
@@ -1237,7 +1264,7 @@ bool Cpc1600::Set_Connector(void)
     // TO DO
 //    pSIOCONNECTOR->Set_pin(SIO_SD	,READ_BIT(v,b));
 
-    setPUPVPT(bus,bus->getAddr());
+    setPUPVPT((CbusPc1500*)bus,bus->getAddr());
 
     pCONNECTOR->Set_values(bus->toUInt64());
     return true;

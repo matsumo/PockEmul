@@ -66,7 +66,7 @@ bool Cce1600p::init(void)
         clac = FSOUND_Sample_Load(FSOUND_FREE, (const char*) res.data(), FSOUND_LOADMEMORY, 0, res.size());
     #endif
 
-        setfrequency( 0);
+//        setfrequency( 0);
 
         pCONNECTOR	= new Cconnector(this,60,0,Cconnector::Sharp_60,"Connector 60 pins",true,QPoint(424,536));	publish(pCONNECTOR);
 
@@ -91,7 +91,7 @@ bool Cce1600p::init(void)
         paperWidget->hide();
 
         initsound();
-
+        Refresh_Display = true;
 
     return true;
 }
@@ -142,17 +142,18 @@ bool Cce1600p::run(void)
         Print_Mode = false;
         pKEYB->LastKey = 0;
     }
-    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],4,Print_Mode);
+
+//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],4,Print_Mode);
 
     ////////////////////////////////////////////////////////////////////
     //	PAPER FEED
     //////////////////////////////////////////////////////////////////
-    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],1,(pKEYB->LastKey==K_PFEED));
+//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],1,(pKEYB->LastKey==K_PFEED));
 
     ////////////////////////////////////////////////////////////////////
     //	REVERSE PAPER FEED
     //////////////////////////////////////////////////////////////////
-    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],2,(pKEYB->LastKey==K_PBFEED));
+//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],2,(pKEYB->LastKey==K_PBFEED));
 
 
     ////////////////////////////////////////////////////////////////////
@@ -163,9 +164,10 @@ bool Cce1600p::run(void)
 
 #if 1
     if (!bus->isEnable()) {
-        if (keyEvent) {
-            pLH5810->step();
-            bus->setINT(pLH5810->INT);
+        if (pKEYB->LastKey) {
+//            pLH5810->step();
+            qWarning()<<"senf INT";
+            bus->setINT(true);
             pCONNECTOR->Set_values(bus->toUInt64());
         }
         return true;
@@ -175,11 +177,32 @@ bool Cce1600p::run(void)
 
     if (bus->isEnable() &&
         !bus->isME1() &&
-        !bus->isPV() &&
+        !bus->isPU() &&
+         bus->isPT() &&
         !bus->isWrite() &&
-        (addr >=0xA000) && (addr < 0xC000) )
+        (addr >=0x4000) && (addr < 0x8000) )
     {
-        bus->setData(mem[addr - 0xA000]);
+//        qWarning()<<QString("Read ROM[%1]=%2").arg(addr,4,16).arg(mem[addr - (bus->isPV() ? 0:0x4000)],2,16,QChar('0'));
+        bus->setData(mem[addr - (bus->isPV() ? 0:0x4000)]);
+
+        forwardBus = false;
+        bus->setEnable(false);
+        pCONNECTOR->Set_values(bus->toUInt64());
+        return true;
+    }
+
+    // Left position detection
+    if (bus->isEnable() &&
+        bus->isM1() &&
+        !bus->isWrite() &&
+        (addr == 0x81) )
+    {
+        BYTE val = (Pen_X <= 0) ? 0x20 : 0x00;
+        val |= (pKEYB->LastKey==K_PFEED) ? 0x02 : 0x00; //	PAPER FEED
+        val |= (pKEYB->LastKey==K_PBFEED) ? 0x04 : 0x00;//	REVERSE PAPER FEED
+        val |= Print_Mode ? 0x10 : 0x00;
+qWarning()<<QString("return 81=%1").arg(val,2,16,QChar('0'));
+        bus->setData(val);
         forwardBus = false;
         bus->setEnable(false);
         pCONNECTOR->Set_values(bus->toUInt64());
@@ -187,17 +210,24 @@ bool Cce1600p::run(void)
     }
 
     if (bus->isEnable() &&
-        bus->isME1() &&
-        (addr >= 0xb000) &&
-        (addr <= 0xb00f) &&
-        (bus->isWrite()) )
+        bus->isM1() &&
+        bus->isWrite() &&
+        (addr >= 0x80) && (addr <= 0x83) )
     {
-        lh5810_write();
+//        lh5810_write();
+        qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+        switch (addr) {
+        case 0x82:
+            motorZ = bus->getData() & 0x0f; break;
+        case 0x83:
+            motorX = bus->getData() & 0x0f;
+            motorY = (bus->getData()>> 4) & 0x0f; break;
+        }
         forwardBus = false;
     }
 #endif
 
-    Direction = Motor_X.SendPhase(PORT_MOTOR_X);
+    Direction = Motor_X.SendPhase(motorX);
 
     switch (Direction)
     {
@@ -213,7 +243,7 @@ bool Cce1600p::run(void)
                         break;
     }
 
-    Direction = Motor_Y.SendPhase(PORT_MOTOR_Y);
+    Direction = Motor_Y.SendPhase(motorY);
 
     switch (Direction)
     {
@@ -229,7 +259,7 @@ bool Cce1600p::run(void)
                         break;
     }
 
-    Direction = Motor_Z.SendPhase(PORT_MOTOR_Z);
+    Direction = Motor_Z.SendPhase(motorZ);
 
     switch (Direction)
     {
@@ -314,8 +344,8 @@ bool Cce1600p::run(void)
 
 
 //    pTIMER->pPC->pCPU->imem[0x81] |= (Pen_X <= 0 ? 0x20 : 0x00);
-    // Left position detection
-    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],5,Pen_X <= 0);
+
+//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],5,Pen_X <= 0);
 
     //---------------------------------------------------
     // Draw printer

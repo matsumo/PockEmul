@@ -327,7 +327,7 @@ void CViewObject::renderAnimation()
 
         QPainter painter;
 
-        painter.setCompositionMode(QPainter::CompositionMode_Source);
+
         AnimatedImage->fill(Qt::transparent);
         if (FinalImage)
         {
@@ -337,7 +337,7 @@ void CViewObject::renderAnimation()
             int ht = viewRect(animationView2).height()* mainwindow->zoom/100.0;
 //            qWarning()<<"angle:"<<m_angle;
             painter.begin(AnimatedImage);
-
+            painter.setCompositionMode(QPainter::CompositionMode_Source);
             QTransform matrix,matrix2;
             matrix.scale(m_zoom,m_zoom);
 
@@ -353,6 +353,7 @@ void CViewObject::renderAnimation()
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
                 painter.translate(w/2 ,ht * m_angle/90);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
@@ -373,6 +374,7 @@ void CViewObject::renderAnimation()
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
+                painter.setCompositionMode(QPainter::CompositionMode_Source);
                 painter.translate(wt*m_angle/90,h/2);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
