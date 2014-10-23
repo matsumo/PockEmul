@@ -41,6 +41,7 @@ bool Cprinter::UpdateFinalImage(void) {
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
 
     QRect _target = QRect(PaperPos().topLeft()*internalImageRatio,PaperPos().size()*internalImageRatio);
+//    qWarning()<<"internalImageRatio="<<internalImageRatio<<PaperPos()<<_target;
     painter.drawImage(_target,
                       paperWidget->bufferImage->copy(source).scaled(_target.size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
@@ -144,8 +145,8 @@ bool Cprinter::SaveSession_File(QXmlStreamWriter *xmlOut)
 bool Cprinter::LoadSession_File(QXmlStreamReader *xmlIn)
 {
     if (xmlIn->name()=="session") {
-        pos.setX( xmlIn->attributes().value("posx").toString().toInt());
-        pos.setY( xmlIn->attributes().value("posy").toString().toInt());
+//        pos.setX( xmlIn->attributes().value("posx").toString().toInt());
+//        pos.setY( xmlIn->attributes().value("posy").toString().toInt());
         TextBuffer.clear();
         TextBuffer = QByteArray::fromBase64(xmlIn->attributes().value("posy").toString().toLatin1());
     }

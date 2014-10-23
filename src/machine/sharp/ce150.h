@@ -42,9 +42,6 @@ public:
 	bool		init(void);
 	bool		exit(void);
 
-    const char		*PaperFname;
-	int			Paper_X,Paper_Y,Paper_DX,Paper_DY;
-
 	bool		Print_Mode;
 	bool		needRedraw;
 	Cconnector	*pCONNECTOR;	qint64 pCONNECTOR_value;
@@ -73,6 +70,7 @@ public:
 
 public:
 
+    void PlayClac();
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );
 

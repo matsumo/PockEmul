@@ -63,18 +63,15 @@ Cce150::Cce150(CPObject *parent):Cprinter(this)
 
     //[constructor]
     BackGroundFname	= P_RES(":/ext/ce-150.png");
-    PaperFname		= "ext\\ce-150paper.jpg";
+
     setcfgfname(QString("ce150"));
-    Paper_X = 120;  Paper_DX = 382;//320;
-    Paper_Y = 110;
-    //PaperWidgetRect = QRect(80,46,167,170);
 
-    setDXmm(329);//Pc_DX_mm = 329;
-    setDYmm(115);//Pc_DY_mm = 115;
-    setDZmm(48);//Pc_DZ_mm = 48;
+    setDXmm(329);
+    setDYmm(115);
+    setDZmm(48);
 
-    setDX(1146);//Pc_DX	= 960;
-    setDY(382);//Pc_DY	= 320;
+    setDX(1146);
+    setDY(382);
 
     pTIMER		= new Ctimer(this);
     pLH5810		= new CLH5810(this);
@@ -99,12 +96,11 @@ Cce150::Cce150(CPObject *parent):Cprinter(this)
     Pen_Status = PEN_UP;
     Pen_Color = 0;
     Rot = 0;
-//960,320,388,0)
+
     ce150buf=0;
     ce150display=0;
     needRedraw = true;
-    setPaperPos(QRect(0,0,0,0));
-
+    setPaperPos(QRect(95,25,200,202));
 
     StartRot = false;
     Change_Color = true;
@@ -142,15 +138,16 @@ bool Cce150::init(void)
     pLH5810->init();
 
     // Create CE-150 Paper Image
-    ce150buf	= new QImage(QSize(320, 3000),QImage::Format_ARGB32);
+    ce150buf	= new QImage(QSize(320, 1000),QImage::Format_ARGB32);
     ce150display= new QImage(QSize(320, 567),QImage::Format_ARGB32);
     ce150pen	= new QImage(":/ext/ce-150pen.png");
     // Fill it blank
     clearPaper();
 
     // Create a paper widget
-    paperWidget = new CpaperWidget(QRect(95,25,200,202),ce150buf,this);
-    paperWidget->show();
+
+    paperWidget = new CpaperWidget(PaperPos(),ce150buf,this);
+    paperWidget->hide();
 
     rmt = false;
 
@@ -350,6 +347,7 @@ bool Cce150::run(void)
 //            qWarning()<<"PEN UP";
             has_moved=true;
 			Pen_Status = PEN_UP;
+//            PlayClac();
 //			AddLog(LOG_PRINTER,"PEN UP");
 
 //            fillSoundBuffer(0xFF);
@@ -364,6 +362,7 @@ bool Cce150::run(void)
 //            qWarning()<<"PEN DOWN";
             has_moved=true;
 			Pen_Status = PEN_DOWN;
+//            PlayClac();
 //			AddLog(LOG_PRINTER,"PEN DOWN");
 		}
 	}
@@ -400,6 +399,31 @@ bool Cce150::run(void)
     pCONNECTOR->Set_values(bus->toUInt64());
 
     return true;
+}
+
+extern bool soundEnabled;
+void Cce150::PlayClac() {
+    // Check is pen up/down status change to play the CLAC
+
+#ifndef NO_SOUND
+
+        if (soundEnabled) {
+            if (getfrequency()>0) {
+                fillSoundBuffer(0xFF);
+                fillSoundBuffer(0x00);
+            }
+            else {
+                //                int ps = m_audioOutput->periodSize();
+                mainwindow->audioMutex.lock();
+                QByteArray buff;
+                buff.append(0xFF);
+                buff.append((char)0);
+                m_output->write(buff.constData(),2);
+                mainwindow->audioMutex.unlock();
+            }
+        }
+#endif
+
 }
 
 bool Cce150::Next_Color(void)

@@ -33,16 +33,13 @@ Cce1600p::Cce1600p(CPObject *parent) : Cce150(this)
 {
     //[constructor]
     BackGroundFname	= P_RES(":/ext/ce-1600p.png");
-    PaperFname		= "ext\\ce-150paper.jpg";
+
     setcfgfname(QString("ce1600p"));
-    //SnapPts = QPoint(375,404);
 
     setDXmm(317);//Pc_DX_mm = 317;
     setDYmm(222);//Pc_DY_mm = 222;
     setDZmm(48);//Pc_DZ_mm = 48;
 
-    Paper_X = 192;
-    Paper_Y = 50;
     setDX(1100);//Pc_DX	= 1100;
     setDY(780);//Pc_DY	= 773;
 

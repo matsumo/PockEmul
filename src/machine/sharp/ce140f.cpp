@@ -37,8 +37,8 @@ Cce140f::Cce140f(CPObject *parent):CPObject(parent)
 
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"ce140f.map");
-    setDX(620);//Pc_DX	= 620;//480;
-    setDY(488);//Pc_DY	= 488;//420;
+    setDX(620);
+    setDY(488);
     setDXmm(118);
     setDYmm(145);
     setDZmm(39);
@@ -63,7 +63,7 @@ bool Cce140f::UpdateFinalImage(void) {
         painter.fillRect(411,390,20,7,QColor(Qt::green));
         painter.end();
     }
-    emit updatedPObject(this);
+
     return true;
 
 }
@@ -467,15 +467,15 @@ bool Cce140f::run(void)
 
         if (!busyLed) {
             busyLed = true;
+            Refresh_Display = true;
             update();
-            emit updatedPObject(this);
         }
     }
     else {
         if (busyLed) {
             busyLed = false;
+            Refresh_Display = true;
             update();
-            emit updatedPObject(this);
         }
     }
     Set_Connector();
