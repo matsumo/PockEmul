@@ -350,7 +350,9 @@ WORD CpcXXXX::Get_16(UINT32 adr)
     UINT32 extValue2 = 0;
 	UINT32	a;
 	a=adr+1;
-    if (Chk_Adr_R(&adr,&extValue1) && Chk_Adr_R(&a,&extValue2)) {
+    bool c1 = Chk_Adr_R(&adr,&extValue1);
+    bool c2 = Chk_Adr_R(&a,&extValue2);
+    if (c1 && c2) {
         checkBreakRead(adr,mem[adr]);
         checkBreakRead(a,mem[a]<<8);
         return(mem[adr]+(mem[a]<<8));
@@ -368,7 +370,9 @@ WORD CpcXXXX::Get_16r(UINT32 adr)
     UINT32 extValue2 = 0;
 	UINT32	a;
 	a=adr+1;
-    if (Chk_Adr_R(&adr,&extValue1) && Chk_Adr_R(&a,&extValue2)) {
+    bool c1 = Chk_Adr_R(&adr,&extValue1);
+    bool c2 = Chk_Adr_R(&a,&extValue2);
+    if (c1 && c2) {
         checkBreakRead(adr,mem[adr]<<8);
         checkBreakRead(a,mem[a]);
         return((mem[adr]<<8)+mem[a]);

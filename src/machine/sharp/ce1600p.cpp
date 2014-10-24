@@ -122,8 +122,6 @@ bool Cce1600p::run(void)
 
     bus->fromUInt64(pCONNECTOR->Get_values());
 
-//	lh5810_write();
-
     ////////////////////////////////////////////////////////////////////
     //	VOLTAGE OK :-)
     //////////////////////////////////////////////////////////////////
@@ -136,24 +134,14 @@ bool Cce1600p::run(void)
     {
         Print_Mode = true;
         pKEYB->LastKey = 0;
+        keyEvent = true;
     }
     if (pKEYB->LastKey==K_PRINT_OFF)
     {
         Print_Mode = false;
         pKEYB->LastKey = 0;
+        keyEvent = true;
     }
-
-//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],4,Print_Mode);
-
-    ////////////////////////////////////////////////////////////////////
-    //	PAPER FEED
-    //////////////////////////////////////////////////////////////////
-//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],1,(pKEYB->LastKey==K_PFEED));
-
-    ////////////////////////////////////////////////////////////////////
-    //	REVERSE PAPER FEED
-    //////////////////////////////////////////////////////////////////
-//    if (pTIMER->pPC) PUT_BIT(pTIMER->pPC->pCPU->imem[0x81],2,(pKEYB->LastKey==K_PBFEED));
 
 
     ////////////////////////////////////////////////////////////////////
@@ -164,9 +152,8 @@ bool Cce1600p::run(void)
 
 #if 1
     if (!bus->isEnable()) {
-        if (pKEYB->LastKey) {
-//            pLH5810->step();
-            qWarning()<<"senf INT";
+        if (keyEvent) {
+            qWarning()<<"send INT";
             bus->setINT(true);
             pCONNECTOR->Set_values(bus->toUInt64());
         }
@@ -177,13 +164,14 @@ bool Cce1600p::run(void)
 
     if (bus->isEnable() &&
         !bus->isME1() &&
+        !bus->isM1() &&
         !bus->isPU() &&
          bus->isPT() &&
         !bus->isWrite() &&
         (addr >=0x4000) && (addr < 0x8000) )
     {
 //        qWarning()<<QString("Read ROM[%1]=%2").arg(addr,4,16).arg(mem[addr - (bus->isPV() ? 0:0x4000)],2,16,QChar('0'));
-        bus->setData(mem[addr - (bus->isPV() ? 0:0x4000)]);
+        bus->setData(mem[addr - 0x4000 + (bus->isPV() ? 0x4000 : 0x00)]);
 
         forwardBus = false;
         bus->setEnable(false);
@@ -191,6 +179,7 @@ bool Cce1600p::run(void)
         return true;
     }
 
+    qWarning()<<bus->toLog();
     // Left position detection
     if (bus->isEnable() &&
         bus->isM1() &&
@@ -353,8 +342,8 @@ qWarning()<<QString("return 81=%1").arg(val,2,16,QChar('0'));
     if (has_moved_Y || (has_moved_X && (Pen_Status==PEN_DOWN))) Print();
 
 
-    pCONNECTOR->Set_pin(1	,1);
-//    pCONNECTOR->Set_pin(30	,pLH5810->INT);
+    bus->setEnable(false);
+    pCONNECTOR->Set_values(bus->toUInt64());
 
     return(1);
 }

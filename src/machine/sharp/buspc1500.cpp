@@ -64,9 +64,9 @@ QString CbusPc1500::toLog() const
     ret += QString(" INHIBIT:%1").arg(inhibit);
     ret += QString(" CMTIn:%1").arg(cmtIn);
     ret += QString(" CMTOut:%1").arg(cmtOut);
+    ret += QString(" PT:%1").arg(pt);
     ret += QString(" PU:%1").arg(pu);
     ret += QString(" PV:%1").arg(pv);
-    ret += QString(" PT:%1").arg(pt);
     ret += QString(" M1:%1").arg(m1);
     return ret;
 }

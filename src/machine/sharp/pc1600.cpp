@@ -33,7 +33,7 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 #ifndef QT_NO_DEBUG
     if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 #endif
-//if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
+if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 
     setfrequency( (int) 3500000);
     ioFreq = 20000;
@@ -242,7 +242,7 @@ void Cpc1600::initExtension(void)
     ext_MemSlot1->setAvailable(ID_CE159,true,false);
     ext_MemSlot1->setAvailable(ID_CE161,true,false);
     ext_MemSlot1->setAvailable(ID_CE1600M,true,false);
-//    ext_MemSlot1->setAvailable(ID_CE1601M,true,false);
+    ext_MemSlot1->setAvailable(ID_CE1601M,true,false);
     addExtMenu(ext_MemSlot1);
 
     // initialise ext_MemSlot2  S2
@@ -383,6 +383,7 @@ bool Cpc1600::run(void)
 //    previous_pc = pCPU->get_PC();
 
 // ---------------------------------------------------------
+
     CpcXXXX::run();
 
     if (pCPU->halt) {
@@ -395,12 +396,12 @@ bool Cpc1600::run(void)
 
     if (cpuSwitchPending)
     {
-        qWarning()<<"switching";
+//        qWarning()<<"switching";
         if (masterCPU)
         {
             if (pZ80->z80.r.halt) {
                 // Switch CPU
-                qWarning()<<"switch";
+//                qWarning()<<"switch";
                 if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nSWITCH CPU\n\n");
                 //pLH5803->lh5801.HLT = 0;
                 pCPU = pLH5803;
@@ -428,7 +429,7 @@ bool Cpc1600::run(void)
 //hack(Current_PC);
 #ifndef QT_NO_DEBUG
     UINT32 Current_PC = pCPU->get_PC();
-    hack(Current_PC);
+//    hack(Current_PC);
 #endif
 
     //----------------------------------
@@ -930,9 +931,11 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
         {
             switch (bank2) {
             case 0: return true;    // internal ROM
-            case 1: *d += bank2 * 0x10000; break;
-            case 3: *d += bank2 * 0x10000 - (CS24 ? 0 : 0x4000); break;
-            default: readBus(d,data); return false;
+            case 1: *d += bank2 * 0x10000; return true;
+            case 3: *d += bank2 * 0x10000 - (CS24 ? 0 : 0x4000); return true;
+            default:
+                readBus(d,data);
+                return false;
             }
 
             return true;
@@ -1201,8 +1204,20 @@ UINT8 Cpc1600::in(UINT8 address)
         if (fp_log) fprintf(fp_log,"IN [%02X]=%02X\n",address,pCPU->imem[address]);
 //        qWarning()<<QString("Read[%1]   pc=%2").arg(address,2,16,QChar('0')).arg(pCPU->get_PC(),4,16,QChar('0'));
         break;
+    case 0x80:
+    case 0x81:
+    case 0x82:
+    case 0x83: {
+        ((CbusPc1500*)bus)->setM1(true);
+        UINT32 _adr = address;
+        UINT32 _data=0;
+        readBus(&_adr,&_data);
+        pCPU->imem[address] = _data;
+        ((CbusPc1500*)bus)->setM1(false);
+        if (fp_log) fprintf(fp_log,"PRINTER - IN [%02X]=%02X\n",address,_data);
     }
-
+        break;
+    }
     return 1;
 
 }
@@ -1210,6 +1225,8 @@ UINT8 Cpc1600::in(UINT8 address)
 void Cpc1600::Regs_Info(UINT8 Type)
 {
     Q_UNUSED(Type)
+
+    sprintf(Log_String,"%s b1:%d b2:%d b3:%d b4:%d ",Log_String,bank1,bank2,bank3,bank4);
 
     strcat(Regs_String,	"");
     pCPU->Regs_Info(1);
