@@ -54,6 +54,8 @@ Cce1600p::Cce1600p(CPObject *parent) : Cce150(this)
     SlotList.append(CSlot(16, 0x0000 ,P_RES(":/pc1600/romce1600-1.bin"), "" , CSlot::ROM , "ROM"));
     SlotList.append(CSlot(16, 0x4000 ,P_RES(":/pc1600/romce1600-2.bin"), "" , CSlot::ROM , "ROM"));
 
+    ccKeyInt = pfKeyInt = revpfKeyInt = fdKeyInt = swKeyInt = crKeyInt= false;
+
 }
 
 bool Cce1600p::init(void)
@@ -66,10 +68,9 @@ bool Cce1600p::init(void)
         clac = FSOUND_Sample_Load(FSOUND_FREE, (const char*) res.data(), FSOUND_LOADMEMORY, 0, res.size());
     #endif
 
-//        setfrequency( 0);
+        setfrequency( 0);
 
         pCONNECTOR	= new Cconnector(this,60,0,Cconnector::Sharp_60,"Connector 60 pins",true,QPoint(424,536));	publish(pCONNECTOR);
-
 
         WatchPoint.add(&pCONNECTOR_value,64,60,this,"Standard 60pins connector");
 
@@ -142,7 +143,11 @@ bool Cce1600p::run(void)
         pKEYB->LastKey = 0;
         keyEvent = true;
     }
-
+    if (pKEYB->LastKey)
+    {
+        pKEYB->LastKey = 0;
+        keyEvent = true;
+    }
 
     ////////////////////////////////////////////////////////////////////
     //	RMT ON/OFF
@@ -179,19 +184,26 @@ bool Cce1600p::run(void)
         return true;
     }
 
-    qWarning()<<bus->toLog();
     // Left position detection
     if (bus->isEnable() &&
         bus->isM1() &&
         !bus->isWrite() &&
-        (addr == 0x81) )
+        (addr >= 0x80) && (addr <= 0x83) )
     {
-        BYTE val = (Pen_X <= 0) ? 0x20 : 0x00;
-        val |= (pKEYB->LastKey==K_PFEED) ? 0x02 : 0x00; //	PAPER FEED
-        val |= (pKEYB->LastKey==K_PBFEED) ? 0x04 : 0x00;//	REVERSE PAPER FEED
-        val |= Print_Mode ? 0x10 : 0x00;
-qWarning()<<QString("return 81=%1").arg(val,2,16,QChar('0'));
-        bus->setData(val);
+        BYTE _val = 0;
+        switch (addr) {
+        case 0x81:
+            _val |= (pKEYB->LastKey==K_PFEED) ? 0x02 : 0x00; //	PAPER FEED
+            _val |= (pKEYB->LastKey==K_PBFEED) ? 0x04 : 0x00;//	REVERSE PAPER FEED
+            _val |= Print_Mode ? 0x10 : 0x00;
+            _val |= (Pen_X <= 0) ? 0x20 : 0x00;
+            qWarning()<<QString("return %1=%2").arg(addr,4,16,QChar('0')).arg(_val,2,16,QChar('0'));
+
+            break;
+        default: _val = 0xff; break;
+        }
+
+        bus->setData(_val);
         forwardBus = false;
         bus->setEnable(false);
         pCONNECTOR->Set_values(bus->toUInt64());
@@ -203,14 +215,29 @@ qWarning()<<QString("return 81=%1").arg(val,2,16,QChar('0'));
         bus->isWrite() &&
         (addr >= 0x80) && (addr <= 0x83) )
     {
-//        lh5810_write();
-        qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+        BYTE _data = bus->getData();
+
         switch (addr) {
+        case 0x80:
+            qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+
+            ccKeyInt = _data & 0x01;
+            pfKeyInt = _data & 0x02;
+            revpfKeyInt = _data & 0x04;
+            fdKeyInt = _data & 0x08;
+            swKeyInt = _data & 0x10;
+            crKeyInt = _data & 0x20;
+            break;
+        case 0x81: // if ( !(_data & 0x01)) FDReset();
+            break;
         case 0x82:
-            motorZ = bus->getData() & 0x0f; break;
+            // rmtOn = _data & 10;
+            // rmtOff = _data & 20;
+            // cmtInEnable = _data & 80;
+            motorZ = _data & 0x0f; break;
         case 0x83:
-            motorX = bus->getData() & 0x0f;
-            motorY = (bus->getData()>> 4) & 0x0f; break;
+            motorX = _data & 0x0f;
+            motorY = (_data >> 4) & 0x0f; break;
         }
         forwardBus = false;
     }

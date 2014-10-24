@@ -29,6 +29,7 @@ public:
 
 private:
     BYTE motorX,motorY,motorZ;
+    bool ccKeyInt , pfKeyInt , revpfKeyInt , fdKeyInt , swKeyInt , crKeyInt;
 
 };
 
