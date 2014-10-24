@@ -1,3 +1,4 @@
+//TODO: replace all sprintf calls by snprintf. It's safer.
 
 #include <QApplication>
 #include <QtPlugin>

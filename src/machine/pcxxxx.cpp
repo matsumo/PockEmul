@@ -45,6 +45,8 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     setcfgfname(QString("pcXXXX"));
     SessionHeader	= "PCXXXXPKM";
 
+    memset(Log_String,0,sizeof(Log_String));
+    memset(Regs_String,0,sizeof(Regs_String));
 
     SoundOn			= 1;
     IO_A = IO_B = IO_C = IO_F = 0;

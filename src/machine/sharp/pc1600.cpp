@@ -1226,7 +1226,7 @@ void Cpc1600::Regs_Info(UINT8 Type)
 {
     Q_UNUSED(Type)
 
-    sprintf(Log_String,"%s b1:%d b2:%d b3:%d b4:%d ",Log_String,bank1,bank2,bank3,bank4);
+//    sprintf(Log_String,"%s b1:%d b2:%d b3:%d b4:%d ",Log_String,bank1,bank2,bank3,bank4);
 
     strcat(Regs_String,	"");
     pCPU->Regs_Info(1);

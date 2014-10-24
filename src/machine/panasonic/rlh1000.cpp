@@ -188,7 +188,7 @@ bool Crlh1000::Chk_Adr(UINT32 *d, UINT32 data)
 
     if(*d < 0x2000) {
         if (pCPU->fp_log) {
-            sprintf(Log_String,"%s Write[%04x]=%02x ",Log_String,*d,data);
+            snprintf(Log_String,sizeof(Log_String),"%s Write[%04x]=%02x ",Log_String,*d,data);
         }
         return true; /* RAM */
     }
@@ -201,7 +201,7 @@ bool Crlh1000::Chk_Adr(UINT32 *d, UINT32 data)
             fprintf(fp_log," %s\n",pCPU->Regs_String);
         }
         if (pCPU->fp_log) {
-            sprintf(Log_String,"%s Write ROM[%04x]=%02x ",Log_String,*d,data);
+            snprintf(Log_String,sizeof(Log_String),"%s Write ROM[%04x]=%02x ",Log_String,*d,data);
         }
         if (extrinsicROM!=0xff) {
             bus->setDest(extrinsicROM);
@@ -257,7 +257,7 @@ bool Crlh1000::Chk_Adr(UINT32 *d, UINT32 data)
         // 47FF : write from ext, read by nucleus
 
         if ( (*d>=0x47FC) && (*d<=(0x47FF+0xff))) {
-            if (pCPU->fp_log) sprintf(Log_String,"%s,WRITE ROM LINE [%04X]=%02X ",Log_String,*d,data);
+            if (pCPU->fp_log) snprintf(Log_String,sizeof(Log_String),"%s,WRITE ROM LINE [%04X]=%02X ",Log_String,*d,data);
             bool islineFC = ((*d-0x47FC)%4==0);
             bool islineFD = ((*d-0x47FD)%4==0);
             bool islineFE = ((*d-0x47FE)%4==0);
@@ -377,7 +377,7 @@ bool Crlh1000::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
     if (*d < 0x2000) {
         if (pCPU->fp_log) {
-            sprintf(Log_String,"%s Read[%04x]=%02x ",Log_String,*d,mem[*d]);
+            snprintf(Log_String,sizeof(Log_String),"%s Read[%04x]=%02x ",Log_String,*d,mem[*d]);
         }
         return true;   // RAM
     }
@@ -481,7 +481,7 @@ bool Crlh1000::Chk_Adr_R(UINT32 *d, UINT32 *data)
                     pCPU->Regs_Info(1);
                     fprintf(fp_log," %s\n",pCPU->Regs_String);
                 }
-                if (pCPU->fp_log) sprintf(Log_String,"%s,READ LINE%s [%i]=%04X ",Log_String,LINEID,t,*data);
+                if (pCPU->fp_log) snprintf(Log_String,sizeof(Log_String),"%s,READ LINE%s [%i]=%04X ",Log_String,LINEID,t,*data);
                 return false;
             }
 
