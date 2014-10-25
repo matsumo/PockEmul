@@ -33,7 +33,7 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 #ifndef QT_NO_DEBUG
     if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 #endif
-if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
+//if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 
     setfrequency( (int) 3500000);
     ioFreq = 20000;
@@ -1100,6 +1100,14 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
     case 0x70: case 0x71: case 0x72: case 0x73: case 0x74: case 0x75: case 0x76: case 0x77:
     case 0x78: case 0x79: case 0x7a: case 0x7b: case 0x7c: case 0x7d: case 0x7e: case 0x7f:
 //        qWarning()<<QString("Write[%1]=%2").arg(address,2,16,QChar('0')).arg(value,2,16,QChar('0'));
+        // FDD
+    {
+        if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
+        ((CbusPc1500*)bus)->setM1(true);
+        UINT32 _adr = address;
+        writeBus(&_adr,value);
+        ((CbusPc1500*)bus)->setM1(false);
+    }
         break;
 
     case 0x80:
@@ -1174,7 +1182,7 @@ UINT8 Cpc1600::in(UINT8 address)
     case 0x5b: pCPU->imem[address] = pHD61102_1->instruction(0x300); break;
 
         //////////////////////////////////////////////////////////
-       // DISPLAY CONTROL
+       // FDD CONTROL
       //////////////////////////////////////////////////////////
 /*
  *70-77: Floppy II, otherwise known as 78-7F
@@ -1203,6 +1211,15 @@ UINT8 Cpc1600::in(UINT8 address)
         pCPU->imem[0x7A] |= 0x42;   //   b7:ack ???  b6: changed Disk    b1: Ready  b0: Error (inverted)
         if (fp_log) fprintf(fp_log,"IN [%02X]=%02X\n",address,pCPU->imem[address]);
 //        qWarning()<<QString("Read[%1]   pc=%2").arg(address,2,16,QChar('0')).arg(pCPU->get_PC(),4,16,QChar('0'));
+    {
+            ((CbusPc1500*)bus)->setM1(true);
+            UINT32 _adr = address;
+            UINT32 _data=0;
+            readBus(&_adr,&_data);
+            pCPU->imem[address] = _data;
+            ((CbusPc1500*)bus)->setM1(false);
+            if (fp_log) fprintf(fp_log,"FDD - IN [%02X]=%02X\n",address,_data);
+        }
         break;
     case 0x80:
     case 0x81:
@@ -1468,6 +1485,13 @@ void Cpc1600::ComputeKey(KEYEVENT ke,int scancode)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+
+    if (KEY(K_F7)) {
+        qWarning()<<"LOG";
+        pCPU->logsw = true;
+        pCPU->Check_Log();
+        if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
+    }
 
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
