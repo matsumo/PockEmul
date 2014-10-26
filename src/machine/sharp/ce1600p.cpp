@@ -29,7 +29,7 @@
 //#define MACRO_ADD_LOG	AddLog(LOG_PRINTER,tr("X=%1 Y=%2 Rot=%3 Color=%4,   IF=%5").arg(Pen_X,Pen_Y,Rot,Pen_Color,pLH5810->lh5810.r_if))
 #define MACRO_ADD_LOG	if (pTIMER->pPC->fp_log) fprintf(pTIMER->pPC->fp_log,"X=%d Y=%d Z=%d Rot=%d Color=%d\n",Pen_X,Pen_Y,Pen_Z,Rot,Pen_Color)
 
-Cce1600p::Cce1600p(CPObject *parent) : Cce150(this),fdd(this)
+Cce1600p::Cce1600p(CPObject *parent) : Cce150(this)
 {
     //[constructor]
     BackGroundFname	= P_RES(":/ext/ce-1600p.png");
@@ -73,6 +73,7 @@ bool Cce1600p::init(void)
         pCONNECTOR	= new Cconnector(this,60,0,Cconnector::Sharp_60,"Connector 60 pins",true,QPoint(424,536));	publish(pCONNECTOR);
         pEXTCONNECTOR= new Cconnector(this,60,1,Cconnector::Sharp_60,"Connector 60 pins Ext",false,QPoint(565,0),Cconnector::NORTH);	publish(pEXTCONNECTOR);
         pTAPECONNECTOR= new Cconnector(this,3,2,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
+        pFDDCONNECTOR= new Cconnector(this,50,3,Cconnector::Sharp_50,"Connector 50 pins",true,QPoint(335,580),Cconnector::EAST);	publish(pFDDCONNECTOR);
 
         WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
         WatchPoint.add(&pCONNECTOR_value,64,60,this,"Standard 60pins connector");
@@ -126,6 +127,7 @@ bool Cce1600p::run(void)
     bool has_moved_Y = false;
     bool has_moved_Z = false;
     bool forwardBus = true;
+    bool forwardFDD = false;
     bool keyEvent = false;
 
     bus->fromUInt64(pCONNECTOR->Get_values());
@@ -191,7 +193,9 @@ bool Cce1600p::run(void)
             swKeyInt = _data & 0x10;
             crKeyInt = _data & 0x20;
             break;
-        case 0x81: if ( !(_data & 0x01)) fdd.fddReset();
+        case 0x81: if ( !(_data & 0x01)) {
+                forwardFDD = true; // fdd.fddReset();
+            }
             break;
         case 0x82:
             // rmtOn = _data & 10;
@@ -206,17 +210,14 @@ bool Cce1600p::run(void)
     }
 #endif
 
-#if 1   // FDD
+// FDD
 
     if (bus->isEnable() &&
         bus->isME1() &&
         bus->isWrite() &&
         (addr >= 0x78) && (addr <= 0x7F) )
     {
-        BYTE _data = bus->getData();
-
-        fdd.fddwrite(addr,_data);
-        forwardBus = false;
+        forwardFDD = true;
     }
 
     if (bus->isEnable() &&
@@ -224,11 +225,9 @@ bool Cce1600p::run(void)
         bus->isWrite() &&
         (addr >= 0x70) && (addr <= 0x77) )
     {
-        fdd.fddwrite(addr,bus->getData());
-       qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
-
+        forwardFDD = true;
     }
-#endif
+
 
 
     Direction = Motor_X.SendPhase(motorX);
@@ -351,8 +350,6 @@ bool Cce1600p::run(void)
     //---------------------------------------------------
     if (has_moved_Y || (has_moved_X && (Pen_Status==PEN_DOWN))) Print();
 
-    fdd.step();
-
     if (bus->isEnable() &&
         !bus->isME1() &&
         !bus->isPU() &&
@@ -395,40 +392,13 @@ bool Cce1600p::run(void)
         return true;
     }
 
-    /*
-     *70-77: Floppy II, otherwise known as 78-7F
-    78-7F; floppy I
-    78w: command (40 = Read, Write = 60, A0 = format)
-    78r: Motor and disk status
-            b7: Engine not started
-            b6: no write protection
-            b3: disk in the drive
-    79w: define Sector
-    79r: Read current Sector
-
-    7Aw: Motor b7: motor on
-    7Ar: Status
-            b7: busy ????
-            b6: changed Disk
-            b1: Ready
-            b0: Error (inverted)
-    7B: read / write data
-    7C-7F: unused
-    */
 
     if (bus->isEnable() &&
         bus->isME1() &&
         !bus->isWrite() &&
         (addr >= 0x78) && (addr <= 0x7F) )
     {
-        BYTE _val = fdd.fddRead(addr);
-
-
-        bus->setData(_val);
-        forwardBus = false;
-        bus->setEnable(false);
-        pCONNECTOR->Set_values(bus->toUInt64());
-        return true;
+        forwardFDD = true;
     }
 
     if (bus->isEnable() &&
@@ -436,18 +406,19 @@ bool Cce1600p::run(void)
         !bus->isWrite() &&
         (addr >= 0x70) && (addr <= 0x77) )
     {
-        BYTE _val = fdd.fddRead(addr);
-        qWarning()<<QString("read [%1]").arg(addr,4,16,QChar('0'));
-
-        bus->setData(_val);
-        forwardBus = false;
-        bus->setEnable(false);
-        pCONNECTOR->Set_values(bus->toUInt64());
-        return true;
+        forwardFDD = true;
     }
 
     // Manage EXT Connector
-    if (forwardBus) {
+    if (forwardFDD) {
+        qWarning()<<"FORWARD FDD";
+        // copy MainConnector to Ext Connectors
+        pFDDCONNECTOR->Set_values(bus->toUInt64());
+        // execute Fdd
+        mainwindow->pdirectLink->outConnector(pFDDCONNECTOR);
+        bus->fromUInt64(pFDDCONNECTOR->Get_values());
+    }
+    else if (forwardBus) {
         // copy MainConnector to Ext Connectors
         pEXTCONNECTOR->Set_values(bus->toUInt64());
         // execute Ext
@@ -488,295 +459,4 @@ void Cce1600p::Print(void)
     paperWidget->setOffset(QPoint(0,Pen_Y));
 }
 
-
-
-/*
- * Specification of FDU 250
-1) Memory capacity: -
-    64KB (512 Bytes/sector, 8 sectors/track)
-2) Recording method:
-    GCR (4/5) -
-3) Transfer speed:
-    250K bits (25K Bytes/sec)
-4) Track density:
-    48TPI
-5) Total tracks:
-    16
-6) Revolutions:
-    270 rpm
-7) Access time:
-    One step 80 milliseconds from track 00 to track 15.
-    170 milliseconds to restore from track 15 to track 00.
-    Settling time:
-    50 milliseconds
-8) Motor startup time:
-    0.5 second
-NOTE: GCR is an abbreviation of of Group Coded Recording.
-A single byte, 8 bits, data are divided into
-two 4-bit data whicis is also converted onto a 5-bit
-data. Tisus, s single byte (8 bits) is recorded on tise
-media as a 10-bit data.
- */
-CFDD::CFDD(QObject *parent):QObject(parent)
-{
-    qWarning()<<"parent"<<parent;
-    error = false;
-    ready = true;
-    ChangedDisk = false;
-    busy = false;
-    ack = false;
-
-    isDisk = true;
-    writeProtect = false;
-    motorRunning = false;
-
-    sector = 0;
-    startMotorState = 0;
-    countWrite = 0;
-
-    memset(data,0,sizeof(data));
-}
-
-CFDD::~CFDD()
-{
-
-}
-
-// (40 = Read, Write = 60, A0 = format)
-void CFDD::fddCmd(BYTE _data)
-{
-    CpcXXXX * _pc = ((CPObject*)parent())->pTIMER->pPC;
-    qWarning()<<"FDD - fddCmd:"<<QString("%1").arg(_data,2,16,QChar('0'))
-                <<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
-#if 0
-    ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
-    ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
-#endif
-    currentCMD = _data;
-    switch(_data) {
-    case 0x01:
-        ack = false;
-        offset = 0;
-        break;
-    case 0x20:
-        ack = true;
-        offset = 0;
-        break;
-    case 0x40:
-        qWarning()<<"READ";
-        busy = true;
-        break;
-    case 0x60:
-        qWarning()<<"WRITE";
-        error = false;
-        break;
-    case 0x80:
-        ack = true;
-//        ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
-//        ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
-        break;
-    case 0xA0:
-        qWarning()<<"format";
-        offset=0;
-        ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
-        ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
-        busy = true;
-        ack = false;
-        break;
-    default:
-//        qWarning()<<"ERROR:"<<QString("%1").arg(_data,2,16,QChar('0'));
-        ack = false;
-        break;
-    }
-}
-
-void CFDD::fddSetSector(BYTE _data)
-{
-    qWarning()<<QString("FDD - fddSetSector:%1").arg(_data,2,16,QChar('0'));
-
-    sector = _data;
-    offset = 0;
-}
-
-BYTE CFDD::fddGetSector()
-{
-    qWarning()<<QString("FDD - fddGetSector:%1").arg(sector,2,16,QChar('0'));
-
-    return sector;
-}
-
-void CFDD::fddSetMotor(BYTE _data)
-{
-    qWarning()<<QString("FDD - fddSetMotor:%1").arg(_data,2,16,QChar('0'))<<" running:"<<motorRunning;
-    if (_data & 0x80) {
-        if (!motorRunning) {
-            // Start timer and set motorRunning after 500ms
-            qWarning()<<"Start TIMER"<<((CPObject*)parent());
-            startMotorState = ((CPObject*)parent())->pTIMER->state;
-            busy = true;
-        }
-    }
-    else {
-        motorRunning = false;
-        startMotorState = 0;
-    }
-}
-
-void CFDD::fddWriteData(BYTE _data)
-{
-    qWarning()<<QString("FDD - Write (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
-
-    switch (currentCMD) {
-    case 0x01:
-        checksum = _data;
-        ack = true;
-        break;
-    case 0xA0:
-        data[sector][offset] = _data;
-        checksum += _data;
-        offset++;
-        if (offset==24) {
-            ack = true;
-        }
-        break;
-    }
-
-}
-
-BYTE CFDD::fddReadData()
-{
-    BYTE _data = 0;
-    qWarning()<<QString("FDD - Read (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
-
-    switch(currentCMD) {
-    case 0x40:
-        _data = data[sector][offset];
-        offset++;
-        if (offset==24) {
-            ack = true;
-        }
-    }
-
-
-    return _data;
-}
-
-
-//78r: Motor and disk status HB
-//    b7: Engine not started
-//    b6: no write protection
-//    b3: disk in the drive
-//7Ar: Status LB
-//        b7: busy ????
-//        b6: changed Disk
-//        b1: Ready
-//        b0: Error (inverted)
-WORD CFDD::fddStatus()
-{
-    WORD _val = 0;
-
-//    _val |= error       ? 0x00 : 0x01;
-    _val |= ack         ? 0x00 : 0x01;
-    _val |= ready       ? 0x02 : 0x00;
-    _val |= ChangedDisk ? 0x40 : 0x00;
-    _val |= busy        ? 0x80 : 0x00;
-
-    _val |= isDisk          ? 0x0800 : 0x00;
-    _val |= (motorRunning&&!writeProtect)   ? 0x4000 : 0x00;
-    _val |= !motorRunning   ? 0x8000 : 0x00;
-
-//    qWarning()<<"fddStatus:"<<QString("%1").arg(_val,2,16,QChar('0'));
-    return _val;
-}
-
-void CFDD::fddwrite(BYTE _offset,BYTE _data) {
-
-    switch (_offset & 0x07) {
-    case 0x00: // 78w: command (40 = Read, Write = 60, A0 = format)
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        fddCmd(_data);
-        break;
-    case 0x01: // 79w: define Sector
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        fddSetSector(_data);
-        break;
-    case 0x02: // 7Aw: Motor b7: motor on
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        fddSetMotor(_data );
-        break;
-    case 0x03: // 7B: write data
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        fddWriteData(_data);
-        break;
-    }
-}
-
-BYTE CFDD::fddRead(BYTE _offset) {
-
-    BYTE _val = 0;
-    switch (_offset & 0x07) {
-    case 0x00:
-//                78r: Motor and disk status
-//                    b7: Engine not started
-//                    b6: no write protection
-//                    b3: disk in the drive
-        _val = fddStatus() >> 8;
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
-                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
-                  <<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
-        break;
-    case 0x01: // 79r: Read current Sector
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        _val = fddGetSector();
-        break;
-    case 0x02:
-//                    7Ar: Status
-//                            b7: busy ????
-//                            b6: changed Disk
-//                            b1: Ready
-//                            b0: Error (inverted)
-        _val = fddStatus() & 0xff;
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
-                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
-                  <<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
-        break;
-    case 0x03: // 7B: read data
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
-        _val = fddReadData();
-        break;
-    default: _val = 0xff; break;
-    }
-
-    return _val;
-}
-
-void CFDD::fddReset()
-{
-    qWarning()<<"FDD - RESET";
-    error = false;
-    ready = true;
-    ChangedDisk = false;
-    busy = false;
-
-    isDisk = true;
-    writeProtect = false;
-    motorRunning = false;
-
-    sector = 0;
-    startMotorState = 0;
-    countWrite = 0;
-}
-
-void CFDD::step()
-{
-    CPObject *_pc = (CPObject*)parent();
-    if ((startMotorState>0) && _pc->pTIMER) {
-        if (_pc->pTIMER->msElapsed(startMotorState)>500) {
-            qWarning()<<"MOTOR RUNNING";
-            motorRunning = true;
-            startMotorState = 0;
-            busy = false;
-        }
-    }
-}
 

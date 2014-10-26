@@ -55,6 +55,7 @@ enum Models {
     Simulator,
 
     CE1600P,
+    CE1600F,
     X07,
     X710,
     E500,

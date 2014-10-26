@@ -28,7 +28,7 @@ public:
 
 	bool		Print_Mode;
 	bool		needRedraw;
-	Cconnector	*pCONNECTOR;	qint64 pCONNECTOR_value;
+    Cconnector	*pCONNECTOR;	qint64 pCONNECTOR_value;
     Cconnector	*pEXTCONNECTOR;	qint64 pEXTCONNECTOR_value;
     Cconnector	*pTAPECONNECTOR;qint64 pTAPECONNECTOR_value;
 

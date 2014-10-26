@@ -15,48 +15,6 @@ class Cprinter;
 class Cmotor;
 class Ccpu;
 
-class CFDD:public QObject{
-    Q_OBJECT
-public:
-    CFDD(QObject *parent);
-    ~CFDD();
-
-
-    void fddCmd(BYTE _data);
-    void fddSetSector(BYTE _data);
-    BYTE fddGetSector();
-    void fddSetMotor(BYTE );
-    void fddWriteData(BYTE _data);
-    BYTE fddReadData();
-    WORD fddStatus();
-
-    BYTE currentCMD;
-    BYTE checksum;
-    bool error;
-    bool ready;
-    bool ChangedDisk;
-    bool busy;
-    bool ack;
-
-    bool isDisk;
-    bool writeProtect;
-    bool motorRunning;
-
-    void fddwrite(BYTE _offset, BYTE _data);
-    BYTE fddRead(BYTE _offset);
-    void fddReset();
-
-    void step();
-
-    quint64 startMotorState;
-
-    int countWrite;
-
-    BYTE data[128][512];
-
-    BYTE sector;
-    BYTE offset;
-};
 
 class Cce1600p:public Cce150{
 Q_OBJECT
@@ -68,13 +26,13 @@ public:
 
      Cmotor		Motor_Z;
 
+     Cconnector	*pFDDCONNECTOR;	qint64 pFDDCONNECTOR_value;
+
     Cce1600p(CPObject *parent = 0);
 
 private:
     BYTE motorX,motorY,motorZ;
     bool ccKeyInt , pfKeyInt , revpfKeyInt , fdKeyInt , swKeyInt , crKeyInt;
-
-    CFDD fdd;
 
 };
 

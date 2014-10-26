@@ -41,7 +41,7 @@ bool Cprinter::UpdateFinalImage(void) {
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
 
     QRect _target = QRect(PaperPos().topLeft()*internalImageRatio,PaperPos().size()*internalImageRatio);
-    qWarning()<<"internalImageRatio="<<internalImageRatio<<PaperPos()<<_target;
+//    qWarning()<<"internalImageRatio="<<internalImageRatio<<PaperPos()<<_target;
     painter.drawImage(_target,
                       paperWidget->bufferImage->copy(source).scaled(_target.size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );

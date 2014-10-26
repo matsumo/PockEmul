@@ -258,6 +258,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Simulator"]=Simulator;
 
     objtable["CE-1600P"]=CE1600P;
+    objtable["CE-1600F"]=CE1600F;
     objtable["Canon X-07"]=X07;
     objtable["Canon X-710"]=X710;
     objtable["PC-E500"]=E500;
@@ -380,6 +381,7 @@ CPObject *pPC=0;
         case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
 
         case CE1600P: pPC = new Cce1600p;	pPC->setName("CE-1600P");break;
+        case CE1600F: pPC = new Cce1600f;	pPC->setName("CE-1600F");break;
 
         case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
         case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
@@ -459,16 +461,11 @@ CPObject *pPC=0;
 
     pPC->FinalImage = new QImage(QSize(pPC->getDX(), pPC->getDY()),QImage::Format_RGB32);
 
-
 #define NBFRAMEPERSEC		20
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 //#define TIMER_RES 30
 
     pPC->InitDisplay();
-
-
-
-
 
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
@@ -477,7 +474,7 @@ CPObject *pPC=0;
 //    pPC->show();
 //#endif
 
-
+qWarning()<<"init ok4";
     return pPC;
 }
 

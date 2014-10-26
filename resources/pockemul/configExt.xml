@@ -18,6 +18,7 @@
      <example brand="SHARP" idpocket="CE-1560" filename="./" name="Sharp ce-1560" image=":/pc1500/ce1560_1.png" connectortype="Sharp_60" conngender="male"/>
      <example brand="SHARP" idpocket="CE-140F" filename="./" name="Sharp ce-140f" image=":/ext/ce-140f.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-1600P" filename="./" name="Sharp ce-1600p" image=":/ext/ce-1600p.png" connectortype="Sharp_60" conngender="male"/>
+     <example brand="SHARP" idpocket="CE-1600F" filename="./" name="Sharp ce-1600f" image=":/ext/ce-1600f.png" connectortype="Sharp_50" conngender="male"/>
      <example brand="CANON" idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>

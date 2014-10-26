@@ -30,6 +30,7 @@
 
 #include "sharp/pc1600.h"
 #include "sharp/ce1600p.h"
+#include "sharp/ce1600f.h"
 
 #include "sharp/ce152.h"
 #include "sio.h"
