@@ -22,7 +22,7 @@ Cconnector::Cconnector(CPObject *parent , QString desc, bool newGender)
     values = 0;
 }
 
-Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QString desc, bool newGender, QPoint snap, ConnectorDir dir)
+Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QString desc, bool newGender, QPointF snap, ConnectorDir dir)
 {
     this->Parent = parent;
     this->Desc   = desc;
@@ -48,7 +48,7 @@ void Cconnector::ConnectTo(Cconnector * source)
 //    qWarning()<<source->Parent->getcfgfname()<<":"<<source->Id<<source->Desc<<" copied to "<<this->Parent->getcfgfname()<<":"<<Id<<Desc;
 }
 
-void Cconnector::setSnap(QPoint p)
+void Cconnector::setSnap(QPointF p)
 {
     snap = p;
 
@@ -96,6 +96,6 @@ void Cconnector::setType(Cconnector::ConnectorType type)
     this->Type = type;
 }
 
-QPoint Cconnector::pos() {
+QPointF Cconnector::pos() {
     return Parent->pos() + snap*mainwindow->zoom/100;
 }

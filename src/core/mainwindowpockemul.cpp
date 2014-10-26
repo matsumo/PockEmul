@@ -1261,7 +1261,7 @@ void MainWindowPockemul::mousePressEvent	( QMouseEvent *event){
     event->accept();
 }
 
-void MainWindowPockemul::MoveAll(QPoint p) {
+void MainWindowPockemul::MoveAll(QPointF p) {
     // Fetch all_object and move them
     for (int i=0;i<listpPObject.size();i++)
     {

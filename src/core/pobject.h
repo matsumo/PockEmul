@@ -109,8 +109,8 @@ public:
 	
     void    serialize(QXmlStreamWriter *,int id);
 
-    void    MoveWithLinkedRel(QPoint);
-    void    MoveWithLinkedAbs(QPoint p);
+    void    MoveWithLinkedRel(QPointF);
+    void    MoveWithLinkedAbs(QPointF p);
 
 
 	QImage* BackgroundImage;
@@ -214,7 +214,7 @@ public:
     virtual void TurnCLOSE(void);
 
     virtual int mapKey(QKeyEvent *event);
-    QRect RectWithLinked();
+    QRectF RectWithLinked();
 
 
 

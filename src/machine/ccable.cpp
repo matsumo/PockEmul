@@ -93,7 +93,7 @@ bool Ccable::exit(void)				//end
 
 bool Ccable::Adapt(Cconnector *A, Cconnector *B)
 {
-    QRect r = QRect(A->pos(),B->pos());
+    QRectF r = QRectF(A->pos(),B->pos());
 
     bool reverse = ((r.width() * r.height())<0);
     r=r.normalized();
@@ -142,10 +142,10 @@ bool Ccable::UpdateFinalImage(void) {
     case Cconnector::SOUTH: dy2 = -100; break;
     case Cconnector::WEST: dx2 = 100; break;
     }
-    QPoint start= pCONNECTOR_A->getSnap();
-    QPoint x1   = pCONNECTOR_A->getSnap() + QPoint(dx1,dy1);
-    QPoint x2   = pCONNECTOR_B->getSnap() + QPoint(dx2,dy2);
-    QPoint end  = pCONNECTOR_B->getSnap();
+    QPointF start= pCONNECTOR_A->getSnap();
+    QPointF x1   = pCONNECTOR_A->getSnap() + QPoint(dx1,dy1);
+    QPointF x2   = pCONNECTOR_B->getSnap() + QPoint(dx2,dy2);
+    QPointF end  = pCONNECTOR_B->getSnap();
      path.moveTo(start);
      path.cubicTo(x1,x2,end);
 

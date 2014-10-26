@@ -148,8 +148,8 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
 }
 
 
-QRect CPObject::RectWithLinked(void) {
-    QRect r(rect());
+QRectF CPObject::RectWithLinked(void) {
+    QRectF r(rect());
     // Search all conected objects then compute resulted rect
     QList<CPObject *> ConList;
 //    ConList.append(this);
@@ -173,9 +173,9 @@ void CPObject::maximizeWidth()
 {
     if (mainwindow->zoom <= 100) {
         // Compute global rect
-        QRect rs = RectWithLinked();
-        int rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
-        int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
+        QRectF rs = RectWithLinked();
+        float rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
+        float rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
         int r = MAX(rw,rh);
         if (r>100) {
             mainwindow->doZoom(QPoint(0,0),1,r-mainwindow->zoom);
@@ -200,7 +200,7 @@ void CPObject::maximizeHeight()
 {
     if (mainwindow->zoom <= 100) {
         // Compute global rect
-        QRect rs = RectWithLinked();
+        QRectF rs = RectWithLinked();
         int rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
         int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);
@@ -234,12 +234,12 @@ void CPObject::FindAllLinked(CPObject * search, QList<CPObject *> * liste) {
     }
 }
 
-void CPObject::MoveWithLinkedAbs(QPoint p) {
+void CPObject::MoveWithLinkedAbs(QPointF p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
     ConList.append(this);
 
-    QPoint delta = p - pos();
+    QPointF delta = p - pos();
     FindAllLinked(this,&ConList);
 
     for (int i=0;i<ConList.size();i++)
@@ -256,7 +256,7 @@ void CPObject::MoveWithLinkedAbs(QPoint p) {
     //    }
 }
 
-void CPObject::MoveWithLinkedRel(QPoint p) {
+void CPObject::MoveWithLinkedRel(QPointF p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
     ConList.append(this);
@@ -636,7 +636,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
 
     if (mainwindow->zoom <= 100) {
         // Compute global rect
-        QRect rs = RectWithLinked();
+        QRectF rs = RectWithLinked();
         int rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
         int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);

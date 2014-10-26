@@ -60,12 +60,12 @@ void CViewObject::setPosY(float val)
     move(QPoint(PosX,PosY));
     emit movePObject(this,QPoint(PosX,PosY));
 }
-void CViewObject::MoveRel(QPoint p)
+void CViewObject::MoveRel(QPointF p)
 {
     PosX += p.x();
     PosY += p.y();
     move(QPoint(PosX,PosY));
-    emit movePObject(this,QPoint(PosX,PosY));
+    emit movePObject(this,QPointF(PosX,PosY));
 #ifdef AVOID
     mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
     mainwindow->router->processTransaction();
@@ -73,7 +73,7 @@ void CViewObject::MoveRel(QPoint p)
 #endif
 }
 
-void CViewObject::MoveAbs(QPoint p)
+void CViewObject::MoveAbs(QPointF p)
 {
     PosX = p.x();
     PosY = p.y();
@@ -86,22 +86,22 @@ void CViewObject::MoveAbs(QPoint p)
 #endif
 }
 
-QPoint CViewObject::pos()
+QPointF CViewObject::pos()
 {
-    return QPoint(PosX,PosY);
+    return QPointF(PosX,PosY);
 }
 
-int CViewObject::getDX() {return Pc_DX;}
+float CViewObject::getDX() {return Pc_DX;}
 
-int CViewObject::getDY() {return Pc_DY;}
+float CViewObject::getDY() {return Pc_DY;}
 
-int CViewObject::getDZ() {return 0;}
+float CViewObject::getDZ() {return 0;}
 
-void CViewObject::setDX(int v) {Pc_DX = v;}
+void CViewObject::setDX(float v) {Pc_DX = v;}
 
-void CViewObject::setDY(int v) {Pc_DY = v;}
+void CViewObject::setDY(float v) {Pc_DY = v;}
 
-void CViewObject::setDZ(int v) {Q_UNUSED(v)}
+void CViewObject::setDZ(float v) {Q_UNUSED(v)}
 
 int CViewObject::getDXmm() {return Pc_DX_mm;}
 
@@ -115,9 +115,9 @@ void CViewObject::setDYmm(int v) {Pc_DY_mm = v;}
 
 void CViewObject::setDZmm(int v) {Pc_DZ_mm = v;}
 
-QRect CViewObject::rect()
+QRectF CViewObject::rect()
 {
-    return QRect(PosX,PosY,Pc_DX,Pc_DY);
+    return QRectF(PosX,PosY,Pc_DX,Pc_DY);
 }
 
 QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmirror,int angle)
@@ -405,14 +405,14 @@ void CViewObject::endAnimation(){
     emit updatedPObject(this);
 }
 
-void CViewObject::changeGeometrySize(int newposx,int newposy,int newwidth,int newheight) {
+void CViewObject::changeGeometrySize(float newposx,float newposy,float newwidth,float newheight) {
 
 
     changeGeometry(newposx,newposy,newwidth,newheight);
     setDX(newwidth);
     setDY(newheight);
 }
-void CViewObject::changeGeometry(int newposx,int newposy,int newwidth,int newheight) {
+void CViewObject::changeGeometry(float newposx,float newposy,float newwidth,float newheight) {
 
     setPosX(newposx);
     setPosY(newposy);
@@ -423,7 +423,7 @@ void CViewObject::changeGeometry(int newposx,int newposy,int newwidth,int newhei
                                Avoid::Point(newposx+newwidth+20, newposy+newheight+20));
     mainwindow->router->moveShape(mainwindow->shapeRefList[this], rectangle);
 #endif
-    emit sizePObject(this,QSize(newwidth,newheight));
+    emit sizePObject(this,QSizeF(newwidth,newheight));
 }
 
 void CViewObject::mousePressEvent(QMouseEvent *event) {

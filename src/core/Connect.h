@@ -108,8 +108,8 @@ public:
         }
     }
 
-    void    setSnap(QPoint p);
-    QPoint  getSnap(void) {return snap;}
+    void    setSnap(QPointF p);
+    QPointF  getSnap(void) {return snap;}
     int    getNbpins(void) {return nbpins;}
     void   setNbpins(int nb) { nbpins = nb;}
 
@@ -122,18 +122,18 @@ public:
                ConnectorType type,
                QString desc,
                bool newGender = false,
-               QPoint snap=QPoint(0,0),
+               QPointF snap=QPointF(0,0),
                ConnectorDir dir = WEST);
 
     virtual ~Cconnector(){}
 
-    QPoint pos();
+    QPointF pos();
 private:
 	bool	gender;		// Male = true   Female = false  :-)
     ConnectorType Type;
     int		nbpins;
     qint64	values;
-    QPoint  snap;
+    QPointF  snap;
     ConnectorDir dir;
 };
 

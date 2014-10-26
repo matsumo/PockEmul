@@ -52,22 +52,22 @@ public:
     QSize targetSize;
     QImage *getViewImage(View v);
 
-    void    MoveRel(QPoint);
-    void    MoveAbs(QPoint p);
-    QRect   rect();
-    QPoint  pos();
+    void    MoveRel(QPointF);
+    void    MoveAbs(QPointF p);
+    QRectF rect();
+    QPointF pos();
 
     float	posx();
     float   posy();
     void    setPosX(float);
     void    setPosY(float);
 
-    int     getDX();
-    int     getDY();
-    int     getDZ();
-    void    setDX(int v);
-    void    setDY(int v);
-    void    setDZ(int v);
+    float getDX();
+    float     getDY();
+    float     getDZ();
+    void    setDX(float v);
+    void    setDY(float v);
+    void    setDZ(float v);
 
     int     getDXmm();
     int     getDYmm();
@@ -83,12 +83,12 @@ public:
     virtual bool UpdateFinalImage(void) { return true;}
 
     static QImage * CreateImage(QSize size, QString fname, bool Hmirror=false, bool Vmirror=false, int angle=0);
-    void changeGeometry(int newposx, int newposy, int newwidth, int newheight);
-    void changeGeometrySize(int newposx, int newposy, int newwidth, int newheight);
+    void changeGeometry(float newposx, float newposy, float newwidth, float newheight);
+    void changeGeometrySize(float newposx, float newposy, float newwidth, float newheight);
 
 signals:
-    void movePObject(CViewObject*,QPoint);
-    void sizePObject(CViewObject*,QSize);
+    void movePObject(CViewObject*,QPointF);
+    void sizePObject(CViewObject*,QSizeF);
     void updatedPObject(CViewObject *);
 
 public slots:
@@ -96,7 +96,7 @@ public slots:
     void renderAnimation();
 
 private:
-    int		Pc_DX,Pc_DY;
+    float		Pc_DX,Pc_DY;
     float	PosX,PosY;
     int		Pc_DX_mm,Pc_DY_mm,Pc_DZ_mm;		// PC size (mm
 };

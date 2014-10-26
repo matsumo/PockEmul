@@ -90,7 +90,7 @@ public:
     bool event(QEvent *event);
     bool gestureEvent(QGestureEvent *event);
     void pinchTriggered(QPinchGesture *gesture);
-    void MoveAll(QPoint p);
+    void MoveAll(QPointF p);
 
     void initCommandLine();
 
