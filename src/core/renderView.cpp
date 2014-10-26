@@ -103,7 +103,7 @@ void CrenderView::movepocket(QString Id, int x, int y)
 {
 //    qWarning()<<"movepocket:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
-    QPoint pts(x , y);
+    QPointF pts(x , y);
 
     pc->MoveWithLinkedAbs(pts);
  }
@@ -111,7 +111,7 @@ void CrenderView::movepocket(QString Id, int x, int y)
 void CrenderView::moveallpocket(int x, int y)
 {
 //    qWarning()<<"moveallpocket:"<<x<<y;
-    QPoint pts(x , y);
+    QPointF pts(x , y);
     mainwindow->MoveAll(pts);
 }
 
@@ -189,8 +189,8 @@ void CrenderView::newPObject(CPObject *pObject) {
 //                pObject->pos().y()<<
 //                pObject->size();
 
-    connect (pObject,SIGNAL(movePObject(CViewObject*,QPoint)),this,SLOT(movePObject(CViewObject*,QPoint)));
-    connect (pObject,SIGNAL(sizePObject(CViewObject*,QSize)),this,SLOT(sizePObject(CViewObject*,QSize)));
+    connect (pObject,SIGNAL(movePObject(CViewObject*,QPointF)),this,SLOT(movePObject(CViewObject*,QPointF)));
+    connect (pObject,SIGNAL(sizePObject(CViewObject*,QSizeF)),this,SLOT(sizePObject(CViewObject*,QSizeF)));
     connect (pObject,SIGNAL(stackPosChanged()),this,SLOT(stackPosChanged()));
     connect( pObject,SIGNAL(updatedPObject(CViewObject*)),this,SLOT(pocketUpdated(CViewObject*)));
 
@@ -213,7 +213,7 @@ void CrenderView::delPObject(CPObject *pObject)
                               );
 }
 
-void CrenderView::movePObject(CViewObject *pObject, QPoint pos)
+void CrenderView::movePObject(CViewObject *pObject, QPointF pos)
 {
 //    qWarning()<<"movePocket:"<<pos;
     QMetaObject::invokeMethod(cloud.object, "movePocket",
@@ -222,7 +222,7 @@ void CrenderView::movePObject(CViewObject *pObject, QPoint pos)
                               Q_ARG(QVariant, pos.y())
                               );
 }
-void CrenderView::sizePObject(CViewObject *pObject, QSize size)
+void CrenderView::sizePObject(CViewObject *pObject, QSizeF size)
 {
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "sizePocket",

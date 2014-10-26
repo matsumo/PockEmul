@@ -36,8 +36,8 @@ public slots:
     void pocketUpdated(CViewObject *pObject);
     void newPObject(CPObject *pObject);
     void delPObject(CPObject *pObject);
-    void movePObject(CViewObject*pObject, QPoint pos);
-    void sizePObject(CViewObject*pObject, QSize size);
+    void movePObject(CViewObject*pObject, QPointF pos);
+    void sizePObject(CViewObject*pObject, QSizeF size);
     void stackPosChanged();
 
 
