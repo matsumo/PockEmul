@@ -16,7 +16,6 @@
 
 #include "lh5810.h"
 
-#include "ce150.h"
 #include "Connect.h"
 #include "Keyb.h"
 
@@ -30,6 +29,7 @@ extern TransMap KeyMap1600[];
 extern int KeyMap1600Lenght;
 
 class CZ80;
+class CbusPc1500;
 
 class CLH5810_PC1600:public CLH5810{
     Q_OBJECT

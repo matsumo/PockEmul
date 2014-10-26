@@ -174,15 +174,12 @@ bool Cce1600p::run(void)
 
     quint16 addr = bus->getAddr();
 
-
-
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         bus->isWrite() &&
         (addr >= 0x80) && (addr <= 0x83) )
     {
         BYTE _data = bus->getData();
-
         switch (addr) {
         case 0x80:
             qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
@@ -212,7 +209,7 @@ bool Cce1600p::run(void)
 #if 1   // FDD
 
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         bus->isWrite() &&
         (addr >= 0x78) && (addr <= 0x7F) )
     {
@@ -223,7 +220,7 @@ bool Cce1600p::run(void)
     }
 
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         bus->isWrite() &&
         (addr >= 0x70) && (addr <= 0x77) )
     {
@@ -241,6 +238,7 @@ bool Cce1600p::run(void)
         case RI_MOVE:   Pen_X++;
         case RI_MOVE_MID:	Pen_X++;
                         has_moved_X=true;
+                        qWarning()<<"moved";
                         MACRO_ADD_LOG;
                         break;
         case LE_MOVE:   Pen_X--;
@@ -358,7 +356,6 @@ bool Cce1600p::run(void)
 
     if (bus->isEnable() &&
         !bus->isME1() &&
-        !bus->isM1() &&
         !bus->isPU() &&
          bus->isPT() &&
         !bus->isWrite() &&
@@ -375,7 +372,7 @@ bool Cce1600p::run(void)
 
     // Left position detection
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         !bus->isWrite() &&
         (addr >= 0x80) && (addr <= 0x83) )
     {
@@ -421,7 +418,7 @@ bool Cce1600p::run(void)
     */
 
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         !bus->isWrite() &&
         (addr >= 0x78) && (addr <= 0x7F) )
     {
@@ -436,7 +433,7 @@ bool Cce1600p::run(void)
     }
 
     if (bus->isEnable() &&
-        bus->isM1() &&
+        bus->isME1() &&
         !bus->isWrite() &&
         (addr >= 0x70) && (addr <= 0x77) )
     {
@@ -535,6 +532,9 @@ CFDD::CFDD(QObject *parent):QObject(parent)
 
     sector = 0;
     startMotorState = 0;
+    countWrite = 0;
+
+    memset(data,0,sizeof(data));
 }
 
 CFDD::~CFDD()
@@ -563,6 +563,7 @@ void CFDD::fddCmd(BYTE _data)
         break;
     case 0xA0:
         qWarning()<<"format";
+        offset=0;
         ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
         ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
         error = false;
@@ -578,11 +579,13 @@ void CFDD::fddSetSector(BYTE _data)
     qWarning()<<"FDD - fddSetSector:"<<QString("%1").arg(_data,2,16,QChar('0'));
 
     sector = _data;
+    offset = 0;
 }
 
 BYTE CFDD::fddGetSector()
 {
-    qWarning()<<"FDD - fddGetSector";
+    qWarning()<<"FDD - fddGetSector:"<<QString("%1").arg(sector,2,16,QChar('0'));
+
     return sector;
 }
 
@@ -605,13 +608,23 @@ void CFDD::fddSetMotor(BYTE _data)
 
 void CFDD::fddWriteData(BYTE _data)
 {
-    qWarning()<<"FDD - Write :"<<QString("%1").arg(_data,2,16,QChar('0'));
+    qWarning()<<QString("FDD - Write (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
+    data[sector][offset] = _data;
+    offset++;
+    if (offset==24) {
+        error = true;
+    }
 }
 
 BYTE CFDD::fddReadData()
 {
-    qWarning()<<"FDD - Read";
-    return 0;
+    BYTE _data = data[sector][offset];
+    qWarning()<<QString("FDD - Read (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
+    offset++;
+    if (offset==24) {
+        error = true;
+    }
+    return _data;
 }
 
 
@@ -642,6 +655,7 @@ WORD CFDD::fddStatus()
 }
 
 void CFDD::fddwrite(BYTE _offset,BYTE _data) {
+
     switch (_offset & 0x07) {
     case 0x00: // 78w: command (40 = Read, Write = 60, A0 = format)
         fddCmd(_data);
@@ -659,6 +673,7 @@ void CFDD::fddwrite(BYTE _offset,BYTE _data) {
 }
 
 BYTE CFDD::fddRead(BYTE _offset) {
+
     BYTE _val = 0;
     switch (_offset & 0x07) {
     case 0x00:
@@ -704,6 +719,7 @@ void CFDD::fddReset()
 
     sector = 0;
     startMotorState = 0;
+    countWrite = 0;
 }
 
 void CFDD::step()

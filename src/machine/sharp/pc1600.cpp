@@ -33,7 +33,7 @@ Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
 #ifndef QT_NO_DEBUG
     if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 #endif
-//if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
+if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
 
     setfrequency( (int) 3500000);
     ioFreq = 20000;
@@ -1103,10 +1103,8 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
         // FDD
     {
         if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
-        ((CbusPc1500*)bus)->setM1(true);
-        UINT32 _adr = address;
+        UINT32 _adr = address | 0x10000;
         writeBus(&_adr,value);
-        ((CbusPc1500*)bus)->setM1(false);
     }
         break;
 
@@ -1115,10 +1113,8 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
     case 0x82:
     case 0x83: {
         if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
-        ((CbusPc1500*)bus)->setM1(true);
-        UINT32 _adr = address;
+        UINT32 _adr = address | 0x10000;
         writeBus(&_adr,value);
-        ((CbusPc1500*)bus)->setM1(false);
     }
         break;
     }
@@ -1212,12 +1208,10 @@ UINT8 Cpc1600::in(UINT8 address)
         if (fp_log) fprintf(fp_log,"IN [%02X]=%02X\n",address,pCPU->imem[address]);
 //        qWarning()<<QString("Read[%1]   pc=%2").arg(address,2,16,QChar('0')).arg(pCPU->get_PC(),4,16,QChar('0'));
     {
-            ((CbusPc1500*)bus)->setM1(true);
-            UINT32 _adr = address;
+            UINT32 _adr = address | 0x10000;
             UINT32 _data=0;
             readBus(&_adr,&_data);
             pCPU->imem[address] = _data;
-            ((CbusPc1500*)bus)->setM1(false);
             if (fp_log) fprintf(fp_log,"FDD - IN [%02X]=%02X\n",address,_data);
         }
         break;
@@ -1225,12 +1219,10 @@ UINT8 Cpc1600::in(UINT8 address)
     case 0x81:
     case 0x82:
     case 0x83: {
-        ((CbusPc1500*)bus)->setM1(true);
-        UINT32 _adr = address;
+        UINT32 _adr = address | 0x10000;
         UINT32 _data=0;
         readBus(&_adr,&_data);
         pCPU->imem[address] = _data;
-        ((CbusPc1500*)bus)->setM1(false);
         if (fp_log) fprintf(fp_log,"PRINTER - IN [%02X]=%02X\n",address,_data);
     }
         break;
@@ -1271,7 +1263,9 @@ void Cpc1600::Regs_Info(UINT8 Type)
 #define SIO_ER		14  // DTR
 #define SIO_PRQ		15  // NC
 
-void Cpc1600::setPUPVPT(CbusPc1500* bus, UINT32 adr) {
+void Cpc1600::setPUPVPT(CbusPc1500 *bus, UINT32 adr) {
+    if (bus->isME1()) return;
+
     if (adr <= 0x3FFF) {
         bus->setPV(bank1 & 0x01);
     }

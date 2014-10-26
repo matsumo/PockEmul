@@ -39,7 +39,6 @@ public:
     bool writeProtect;
     bool motorRunning;
 
-    BYTE sector;
     void fddwrite(BYTE _offset, BYTE _data);
     BYTE fddRead(BYTE _offset);
     void fddReset();
@@ -48,6 +47,12 @@ public:
 
     quint64 startMotorState;
 
+    int countWrite;
+
+    BYTE data[128][512];
+
+    BYTE sector;
+    BYTE offset;
 };
 
 class Cce1600p:public Cce150{
