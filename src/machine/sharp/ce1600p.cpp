@@ -238,7 +238,6 @@ bool Cce1600p::run(void)
         case RI_MOVE:   Pen_X++;
         case RI_MOVE_MID:	Pen_X++;
                         has_moved_X=true;
-                        qWarning()<<"moved";
                         MACRO_ADD_LOG;
                         break;
         case LE_MOVE:   Pen_X--;
@@ -525,6 +524,7 @@ CFDD::CFDD(QObject *parent):QObject(parent)
     ready = true;
     ChangedDisk = false;
     busy = false;
+    ack = false;
 
     isDisk = true;
     writeProtect = false;
@@ -552,31 +552,47 @@ void CFDD::fddCmd(BYTE _data)
     ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
     ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
 #endif
+    currentCMD = _data;
     switch(_data) {
+    case 0x01:
+        ack = false;
+        offset = 0;
+        break;
+    case 0x20:
+        ack = true;
+        offset = 0;
+        break;
     case 0x40:
         qWarning()<<"READ";
-        error = false;
+        busy = true;
         break;
     case 0x60:
         qWarning()<<"WRITE";
         error = false;
+        break;
+    case 0x80:
+        ack = true;
+//        ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
+//        ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
         break;
     case 0xA0:
         qWarning()<<"format";
         offset=0;
         ((CPObject*)parent())->pTIMER->pPC->pCPU->logsw = true;
         ((CPObject*)parent())->pTIMER->pPC->pCPU->Check_Log();
-        error = false;
+        busy = true;
+        ack = false;
         break;
     default:
-        qWarning()<<"ERROR:"<<QString("%1").arg(_data,2,16,QChar('0'));
-        error = true; break;
+//        qWarning()<<"ERROR:"<<QString("%1").arg(_data,2,16,QChar('0'));
+        ack = false;
+        break;
     }
 }
 
 void CFDD::fddSetSector(BYTE _data)
 {
-    qWarning()<<"FDD - fddSetSector:"<<QString("%1").arg(_data,2,16,QChar('0'));
+    qWarning()<<QString("FDD - fddSetSector:%1").arg(_data,2,16,QChar('0'));
 
     sector = _data;
     offset = 0;
@@ -584,14 +600,14 @@ void CFDD::fddSetSector(BYTE _data)
 
 BYTE CFDD::fddGetSector()
 {
-    qWarning()<<"FDD - fddGetSector:"<<QString("%1").arg(sector,2,16,QChar('0'));
+    qWarning()<<QString("FDD - fddGetSector:%1").arg(sector,2,16,QChar('0'));
 
     return sector;
 }
 
 void CFDD::fddSetMotor(BYTE _data)
 {
-    qWarning()<<"FDD - fddSetMotor:"<<QString("%1").arg(_data,2,16,QChar('0'))<<" running:"<<motorRunning;
+    qWarning()<<QString("FDD - fddSetMotor:%1").arg(_data,2,16,QChar('0'))<<" running:"<<motorRunning;
     if (_data & 0x80) {
         if (!motorRunning) {
             // Start timer and set motorRunning after 500ms
@@ -609,21 +625,39 @@ void CFDD::fddSetMotor(BYTE _data)
 void CFDD::fddWriteData(BYTE _data)
 {
     qWarning()<<QString("FDD - Write (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
-    data[sector][offset] = _data;
-    offset++;
-    if (offset==24) {
-        error = true;
+
+    switch (currentCMD) {
+    case 0x01:
+        checksum = _data;
+        ack = true;
+        break;
+    case 0xA0:
+        data[sector][offset] = _data;
+        checksum += _data;
+        offset++;
+        if (offset==24) {
+            ack = true;
+        }
+        break;
     }
+
 }
 
 BYTE CFDD::fddReadData()
 {
-    BYTE _data = data[sector][offset];
+    BYTE _data = 0;
     qWarning()<<QString("FDD - Read (%1):%2").arg(offset).arg(_data,2,16,QChar('0'));
-    offset++;
-    if (offset==24) {
-        error = true;
+
+    switch(currentCMD) {
+    case 0x40:
+        _data = data[sector][offset];
+        offset++;
+        if (offset==24) {
+            ack = true;
+        }
     }
+
+
     return _data;
 }
 
@@ -641,7 +675,8 @@ WORD CFDD::fddStatus()
 {
     WORD _val = 0;
 
-    _val |= error       ? 0x00 : 0x01;
+//    _val |= error       ? 0x00 : 0x01;
+    _val |= ack         ? 0x00 : 0x01;
     _val |= ready       ? 0x02 : 0x00;
     _val |= ChangedDisk ? 0x40 : 0x00;
     _val |= busy        ? 0x80 : 0x00;
@@ -658,15 +693,19 @@ void CFDD::fddwrite(BYTE _offset,BYTE _data) {
 
     switch (_offset & 0x07) {
     case 0x00: // 78w: command (40 = Read, Write = 60, A0 = format)
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddCmd(_data);
         break;
     case 0x01: // 79w: define Sector
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddSetSector(_data);
         break;
     case 0x02: // 7Aw: Motor b7: motor on
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddSetMotor(_data );
         break;
     case 0x03: // 7B: write data
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddWriteData(_data);
         break;
     }
@@ -682,9 +721,12 @@ BYTE CFDD::fddRead(BYTE _offset) {
 //                    b6: no write protection
 //                    b3: disk in the drive
         _val = fddStatus() >> 8;
-        qWarning()<<QString("read [%1] = %2").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'));
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
+                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
+                  <<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
         break;
     case 0x01: // 79r: Read current Sector
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         _val = fddGetSector();
         break;
     case 0x02:
@@ -694,9 +736,12 @@ BYTE CFDD::fddRead(BYTE _offset) {
 //                            b1: Ready
 //                            b0: Error (inverted)
         _val = fddStatus() & 0xff;
-        qWarning()<<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))<<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
+                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
+                  <<QString("%1").arg(((CPObject*)parent())->pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
         break;
     case 0x03: // 7B: read data
+        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         _val = fddReadData();
         break;
     default: _val = 0xff; break;

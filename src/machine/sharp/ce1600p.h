@@ -30,10 +30,13 @@ public:
     BYTE fddReadData();
     WORD fddStatus();
 
+    BYTE currentCMD;
+    BYTE checksum;
     bool error;
     bool ready;
     bool ChangedDisk;
     bool busy;
+    bool ack;
 
     bool isDisk;
     bool writeProtect;
