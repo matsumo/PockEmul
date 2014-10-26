@@ -411,8 +411,7 @@ bool Cce1600p::run(void)
 
     // Manage EXT Connector
     if (forwardFDD) {
-        qWarning()<<"FORWARD FDD";
-        // copy MainConnector to Ext Connectors
+        // copy MainConnector to FDD Connector
         pFDDCONNECTOR->Set_values(bus->toUInt64());
         // execute Fdd
         mainwindow->pdirectLink->outConnector(pFDDCONNECTOR);

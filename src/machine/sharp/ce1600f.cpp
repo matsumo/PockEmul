@@ -247,19 +247,15 @@ WORD Cce1600f::fddStatus()
 void Cce1600f::fddwrite(BYTE _offset,BYTE _data) {
     switch (_offset & 0x07) {
     case 0x00: // 78w: command (40 = Read, Write = 60, A0 = format)
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddCmd(_data);
         break;
     case 0x01: // 79w: define Sector
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddSetSector(_data);
         break;
     case 0x02: // 7Aw: Motor b7: motor on
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddSetMotor(_data );
         break;
     case 0x03: // 7B: write data
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         fddWriteData(_data);
         break;
     }
@@ -274,12 +270,11 @@ BYTE Cce1600f::fddRead(BYTE _offset) {
 //                    b6: no write protection
 //                    b3: disk in the drive
         _val = fddStatus() >> 8;
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
-                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
-                  <<QString("%1").arg(pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
+//        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
+//                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
+//                  <<QString("%1").arg(pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
         break;
     case 0x01: // 79r: Read current Sector
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         _val = fddGetSector();
         break;
     case 0x02:
@@ -289,12 +284,11 @@ BYTE Cce1600f::fddRead(BYTE _offset) {
 //                            b1: Ready
 //                            b0: Error (inverted)
         _val = fddStatus() & 0xff;
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
-                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
-                  <<QString("%1").arg(pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
+//        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ")
+//                  <<QString("read [%1] = %2 - ").arg(_offset,2,16,QChar('0')).arg(_val,2,16,QChar('0'))
+//                  <<QString("%1").arg(pTIMER->pPC->pCPU->get_PC(),4,16,QChar('0'));
         break;
     case 0x03: // 7B: read data
-        qWarning()<<((_offset & 0x08) ? "X: ":"Y: ");
         _val = fddReadData();
         break;
     default: _val = 0xff; break;
