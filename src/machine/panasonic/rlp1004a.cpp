@@ -422,11 +422,18 @@ void Crlp1004a::BuildContextMenu(QMenu * menu) {
     menu->addAction(tr("Rotate 180"),this,SLOT(Rotate()));
 }
 
+bool Crlp1004a::UpdateFinalImage(void) {
+    Cprinter::UpdateFinalImage();
+//    QImage _locImg = FinalImage->mirrored(rotate,rotate);
+//    delete FinalImage;
+//    FinalImage = new QImage(_locImg);
+    return true;
+}
 
 void Crlp1004a::Rotate()
 {
     rotate = ! rotate;
-
+#if 0
     delete BackgroundImageBackup;
     BackgroundImageBackup = CreateImage(QSize(getDX(), getDY()),BackGroundFname,false,false,rotate?180:0);
     delete BackgroundImage;
@@ -439,8 +446,8 @@ void Crlp1004a::Rotate()
     pCONNECTOR->setDir(rotate?Cconnector::WEST:Cconnector::EAST);
     mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
     setMask(mask.mask());
-
-
+#endif
+    Refresh_Display = true;
     update();
 
         // adapt SNAP connector

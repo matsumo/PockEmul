@@ -61,6 +61,7 @@ public:
     int		top;
     bool INTrequest;
     virtual void BuildContextMenu(QMenu *menu);
+    bool UpdateFinalImage();
 protected:
     void paintEvent(QPaintEvent *);
 protected slots:

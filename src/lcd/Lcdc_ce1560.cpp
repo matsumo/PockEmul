@@ -12,8 +12,16 @@ Clcdc_ce1560::Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
     pixelSize = 4;
     pixelGap = 1;
     internalSize = QSize(192,64);
+
 }
 
+bool	Clcdc_ce1560::init(void)
+{
+    Clcdc::init();
+    TurnON();
+
+    return true;
+}
 
 void Clcdc_ce1560::disp_symb(void)
 {
@@ -37,6 +45,7 @@ INLINE int Clcdc_ce1560::computeSL(CHD61102* pCtrl,int ord)
 void Clcdc_ce1560::disp(void)
 {
 
+
     BYTE b;
 
     Refresh = false;
@@ -58,7 +67,6 @@ void Clcdc_ce1560::disp(void)
     ((Cce1560 *)pPC)->ps6b0108[2]->updated = false;
 
     Refresh = true;
-
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 

@@ -138,6 +138,7 @@ bool Cce1560::run(void)
         return true;
     }
 
+
     quint32 addr = bus->getAddr();
 
     // RAMDISK ACCESS
@@ -229,6 +230,8 @@ bool Cce1560::run(void)
 //        || (bus->isME1() && (bus->getAddr()>=0x0000) && (bus->getAddr()<=0x000F))
          )
     {
+
+//        qWarning()<<bus->toLog();
         forwardBus = false;
         quint8 module = (bus->getAddr() >> 1 );
         quint8 reg = (bus->getAddr()&0x0f) - (module*2);
