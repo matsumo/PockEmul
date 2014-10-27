@@ -2546,16 +2546,17 @@ inline void Csc62015::Op_de(void)
     halt=1;
 	AddState(2);
 }
+
 /* OFF */
 inline void Csc62015::Op_df(void)
 {
 //AddLog(LOG_TEMP,"Software POWER OFF!!");/*exit(1);*/
-//debug.isdebug=1;
+
 	imem[IMEM_ISR]=0;
     off=1;
-//	sc.save=1;
 	AddState(2);
 }
+
 /* MV (n),[r3] */
 inline void Csc62015::Op_e0(void)
 {
@@ -3485,22 +3486,6 @@ void Csc62015::set_reg(REGNAME regname,UINT32 data)
 }
 
 
-
-/*****************************************************************************/
-/* Oparation memory															 */
-/*  ENTRY :DOWRD adr=address, OPRMODE opr=OPR_xxx DWORD data=value			 */
-/*  RETURN:none																 */
-/*****************************************************************************/
-inline void Csc62015::opr_mem(UINT32 adr,OPRMODE opr,BYTE data)
-{
-//	switch(opr){
-//	case OPR_AND:mem[adr]&=data; break;
-//	case OPR_OR :mem[adr]|=data; break;
-//	case OPR_XOR:mem[adr]^=data; break;
-//	case OPR_ADD:mem[adr]+=data; break;
-//	case OPR_SUB:mem[adr]-=data; break;
-//	}
-}
 /*****************************************************************************/
 /* Get data from internal memory											 */
 /*  ENTRY :BYTE adr=address													 */
@@ -3540,10 +3525,12 @@ void Csc62015::Load_Internal(QXmlStreamReader *xmlIn)
     if (xmlIn->readNextStartElement()) {
         if ( (xmlIn->name()=="cpu") &&
              (xmlIn->attributes().value("model").toString() == "sc62015")) {
+            off = xmlIn->attributes().value("off").toString().toInt(0,16);
+            halt = xmlIn->attributes().value("halt").toString().toInt(0,16);
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
-            memcpy((char *) &reg,ba_reg.data(),REG_LEN);
+            memcpy((char *) &reg,ba_reg.data(),sizeof(reg));
             QByteArray ba_imem = QByteArray::fromBase64(xmlIn->attributes().value("iMem").toString().toLatin1());
-            memcpy((char *) &imem,ba_imem.data(),IMEM_LEN);
+            memcpy((char *) &imem,ba_imem.data(),sizeof(imem));
         }
         xmlIn->skipCurrentElement();
     }
@@ -3553,11 +3540,13 @@ void Csc62015::save_internal(QXmlStreamWriter *xmlOut)
 {
     xmlOut->writeStartElement("cpu");
      xmlOut->writeAttribute("model","sc62015");
-     QByteArray ba_reg((char*)&reg,REG_LEN);
+     xmlOut->writeAttribute("off",QString("%1").arg(off));
+     xmlOut->writeAttribute("halt",QString("%1").arg(halt));
+     QByteArray ba_reg((char*)&reg,sizeof(reg));
      xmlOut->writeAttribute("registers",ba_reg.toBase64());
-     QByteArray ba_imem((char*)imem,IMEM_LEN);
+     QByteArray ba_imem((char*)imem,sizeof(imem));
      xmlOut->writeAttribute("iMem",ba_imem.toBase64());
-     xmlOut->writeEndElement();
+    xmlOut->writeEndElement();
 }
 
 #if 0

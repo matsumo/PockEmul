@@ -786,6 +786,7 @@ BYTE Ce500::getKey()
     }
 
     if (KEY(K_BRK)) {
+        qWarning()<<"BRK interrupt!!!";
         ((Csc62015*)pCPU)->opr_imem(IMEM_ISR,OPR_OR,INT_ONKEY);
         pCPU->setImemBit(IMEM_SSR,4,1);
     }

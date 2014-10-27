@@ -100,9 +100,6 @@ public:
     void    Set_r2(BYTE r,UINT32 d);
     UINT32   get_reg(REGNAME regname);			//get register
     void    set_reg(REGNAME regname,UINT32 data);	//set register
-//	DWORD get_mem(DWORD adr,int size);		//get memory
-//	void set_mem(DWORD adr,int size,DWORD data);	//set memory
-    void    opr_mem(UINT32 adr,OPRMODE opr,BYTE data);	//operation memory
     UINT32   get_imem(BYTE adr);				//get i-mem
     void    set_imem(BYTE adr,BYTE data);		//set i-mem
     void    opr_imem(BYTE adr,OPRMODE opr,BYTE data);	//operation i-mem
