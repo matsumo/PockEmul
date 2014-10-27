@@ -193,12 +193,15 @@ bool Ce500::run(void) {
     }
 #endif
 
+    Csc62015 * sc = (Csc62015*)pCPU;
+
+    if( sc->off &&
+       (sc->get_imem(IMEM_ISR)&INT_ONKEY))
+        sc->off=0;
+
     CpcXXXX::run();
 
-
-
     getKey();
-    Csc62015 * sc = (Csc62015*)pCPU;
 
     if(sc->get_imem(IMEM_ISR)) sc->halt=false;
 
@@ -415,42 +418,43 @@ BYTE Ce500::disp(qint8 cmd,UINT32 data)
 
 void Ce500::MemMirror(UINT32 *d) {
 
-    if ((ext_MemSlot1->ExtArray[ID_CE210M]->IsChecked ||
+    if ((*d>=0x40000) && (*d<=0x4FFFF) &&
+        (ext_MemSlot1->ExtArray[ID_CE210M]->IsChecked ||
          ext_MemSlot1->ExtArray[ID_CE211M]->IsChecked ||
          ext_MemSlot1->ExtArray[ID_CE212M]->IsChecked ||
          ext_MemSlot1->ExtArray[ID_CE2H16M]->IsChecked ||
          ext_MemSlot1->ExtArray[ID_CE2H32M]->IsChecked ||
-         ext_MemSlot1->ExtArray[ID_CE2H64M]->IsChecked) &&
-            (*d>=0x40000) && (*d<=0xB7FFF))
+         ext_MemSlot1->ExtArray[ID_CE2H64M]->IsChecked))
     {
         if (ext_MemSlot1->ExtArray[ID_CE2H64M]->IsChecked) {
-            *d = (*d & 0xffff) | 0x40000;
+            *d &= 0xffff;
         }
         else
         if (ext_MemSlot1->ExtArray[ID_CE2H32M]->IsChecked) {
-            *d = (*d & 0x7fff) | 0x40000;
+            *d &= 0x7fff;
         }
         else
         if (ext_MemSlot1->ExtArray[ID_CE2H16M]->IsChecked) {
-            *d = (*d & 0x3fff) | 0x40000;
+            *d &= 0x3fff;
         }
         else
         if (ext_MemSlot1->ExtArray[ID_CE212M]->IsChecked) {
-            *d = (*d & 0x1fff) | 0x40000;
+            *d &= 0x1fff;
         }
         else
         if (ext_MemSlot1->ExtArray[ID_CE211M]->IsChecked) {
-            *d = (*d & 0xfff) | 0x40000;
+            *d &= 0xfff;
         }
         else
         if (ext_MemSlot1->ExtArray[ID_CE210M]->IsChecked) {
-            *d = (*d & 0x7ff) | 0x40000;
+            *d &= 0x7ff;
         }
+        *d |= 0x40000;
     }
     // 32Ko internal
-    else if ( (*d>=0x80000) && (*d<=0xB7FFF)) {
+    else if ( (*d>=0x80000) && (*d<=0xBFFFF)) {
 //        quint32 tmp = *d;
-        *d = (*d & 0x7fff) | 0xB8000;
+//        *d = (*d & 0x7fff) | 0xB8000;
 //        AddLog(LOG_MASTER,QString("adr;%1 -> %2").arg(tmp,6,16,QChar('0')).arg(*d,6,16,QChar('0')));
     }
 }
@@ -498,6 +502,7 @@ void Ce550::MemMirror(UINT32 *d)
 
 bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
 {
+    MemMirror(d);
 #if (TEST_MEMORY_MAPPING)
     quint32 tmp = *d;
     MemMirror(d);
@@ -515,70 +520,27 @@ bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
 
         if((*d & 0x6000)==0x2000){
             *d &= 0x200f;
-            disp(*d&15,data);//lcdc.access=1; lcdc.lcdcadr=*d&15;
-            return 0; //(1-(*d&1));			/* LCDC (0200x) */
+            disp(*d&15,data);
+            return false; //(1-(*d&1));			/* LCDC (0200x) */
         }
         else {
             qWarning()<<"write:"<<*d<<data;
         }
-        return 1;
+        return false;
     }
 
     if ( (*d>=0x20000) && (*d<=0x3FFFF)) {
-
-        switch (model) {
-        case E500: return 0;
-        case E500S: return 1;
-        default: return 0;
-        }
-    }
-#if (TEST_MEMORY_MAPPING)
-
-    if ( (*d>=0x40000) && (*d<=0x4FFFF)) return (ext_MemSlot1->ExtArray[ID_CE210M]->IsChecked ||
-                                                 ext_MemSlot1->ExtArray[ID_CE211M]->IsChecked ||
-                                                 ext_MemSlot1->ExtArray[ID_CE212M]->IsChecked ||
-                                                 ext_MemSlot1->ExtArray[ID_CE2H16M]->IsChecked ||
-                                                 ext_MemSlot1->ExtArray[ID_CE2H32M]->IsChecked ||
-                                                 ext_MemSlot1->ExtArray[ID_CE2H64M]->IsChecked);
-    if ( (*d>=0x80000) && (*d<=0xB7FFF)) {
-        AddLog(LOG_RAM,QString("adr;%1").arg(*d,6,16,QChar('0')));
-    }
-    if ( (*d>=0xB8000) && (*d<=0xBFFFF)) return 1;
-#endif
-
-    if ( (*d>=0x40000) && (*d<=0xBFFFF)) return 1;
-
-    if ( (*d>=0xC0000) && (*d<=0xFFFFF)) return 0;
-
-//    if(*d>0xbffff) return(0);			/* ROM area(c0000-fffff) S3: */
-//    if(*d>0x7ffff) return(1);			/* RAM area(80000-bffff) S1: */
-//    if(*d>0x3ffff) return(1);			/* RAM area(40000-7ffff) S2: */
-
-
-#if 0
-
-    if(*d>0x1ffff){
-//        if(sc.e6) return(0);			/* ROM area(20000-3ffff) ->E650/U6000 */
-//        else{
-//            *d=BASE_128[GetBank()]+(*d&0x1ffff);
-//            return(1-(sc.emsmode>>4));		/* RAM area(20000-3ffff) EMS */
+        return false;
+//        switch (model) {
+//        case E500: return 0;
+//        case E500S: return 1;
+//        default: return 0;
 //        }
     }
-    if(*d>0x0ffff){
-        *d=BASE_64[GetBank()]+(*d&0xffff);
-        return(1-(sc.emsmode>>4));			/* RAM area(10000-1ffff) EMS */
-    }
-    if((*d&0xf000)==0xe000){
-        *d&=0xf005; ssfdc.access=1; ssfdc.adr=*d;
-        return(1);					/* SSFDC (0e00x) */
-    }
+    if ( (*d>=0x40000) && (*d<=0x4FFFF)) return 1;
+    if ( (*d>=0x80000) && (*d<=0xBFFFF)) return 1;
 
-    if((*d&0x3000)==0x1000){
-        *d&=0x103f; rtc.access=1; rtc.adr=*d&31;
-        return((*d&0x10)==0);		/* CLOCK (010xx) */
-    }
-#endif
-    return true;
+    return false;
 }
 
 /*****************************************************************************/
@@ -657,10 +619,11 @@ void Ce500::TurnON()
         else hardreset = false;
 
         if (pLCDC) pLCDC->TurnON();
-        this->Reset();
+//        this->Reset();
         off = 0;
         Power = true;
         PowerSwitch = PS_RUN;
+        getKey();
     }
 }
 

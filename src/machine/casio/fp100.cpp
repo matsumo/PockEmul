@@ -197,8 +197,6 @@ bool Cfp100::UpdateFinalImage(void) {
 #endif
     painter.end();
 
-    emit updatedPObject(this);
-
     return true;
 }
 

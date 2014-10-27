@@ -94,6 +94,7 @@ public:
 
 
 	bool	halt;					//halt,off flag
+    bool    off;
     bool	end,savesw, cpulog,logsw;	//etc.flag
     bool    resetFlag;
     char	Regs_String[1024];

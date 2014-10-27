@@ -82,6 +82,8 @@ public:
     void flip(Direction dir);
     virtual bool UpdateFinalImage(void) { return true;}
 
+    bool	Refresh_Display;
+
     static QImage * CreateImage(QSize size, QString fname, bool Hmirror=false, bool Vmirror=false, int angle=0);
     void changeGeometry(float newposx, float newposy, float newwidth, float newheight);
     void changeGeometrySize(float newposx, float newposy, float newwidth, float newheight);

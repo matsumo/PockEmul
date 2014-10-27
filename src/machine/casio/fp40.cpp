@@ -67,7 +67,7 @@ void Cfp40::ComputeKey(KEYEVENT ke,int scancode)
     if (pKEYB->LastKey == K_PRT_COND) {
         if (charsize==1) charsize=2;
         else charsize = 1;
-        emit updatedPObject(this);
+        Refresh_Display = true;
         update();
     }
 //    if (pKEYB->LastKey == K_PRINT_ON) {
@@ -213,7 +213,6 @@ bool Cfp40::UpdateFinalImage(void) {
     painter.drawImage(650,280,BackgroundImageBackup->copy(650,280,33,60).mirrored(false,charsize==1?false:true));
     painter.end();
 
-    emit updatedPObject(this);
     return true;
 }
 

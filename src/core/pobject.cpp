@@ -600,7 +600,8 @@ void CPObject::swipeTriggered(QSwipeGesture *gesture)
                 // move to right
                 qWarning()<<"SWIPE LEFT";
             }
-            emit updatedPObject(this);
+
+            Refresh_Display = true;
             update();
         }
     }
@@ -800,7 +801,7 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
                 }
                 MoveWithLinkedRel(delta);
                 PosDrag = event->globalPos();
-                emit updatedPObject(this);
+                Refresh_Display = true;
                 update();
                 event->accept();
                 return;
@@ -924,6 +925,10 @@ void CPObject::TurnCLOSE()
 {
 
 }
+
+//FIXME: StackPosition managed by widget
+//       If we want to be independent from QWidget, need to implement
+//       stackUnder function
 
 void CPObject::manageStackPos(QList<CPObject *> *l) {
     // fetch connectors connected
@@ -1420,7 +1425,7 @@ bool CPObject::UpdateFinalImage(void)
 	}
 //	Refresh_Display = false;
 //qWarning()<<"UpdateFinalImage";
-    emit updatedPObject(this);
+    Refresh_Display = true;
     return true;
 }
 

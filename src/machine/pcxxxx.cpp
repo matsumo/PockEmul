@@ -139,9 +139,8 @@ bool CpcXXXX::UpdateFinalImage(void)
 
         if (pLCDC) pLCDC->Refresh = false;
     }
-//    Refresh_Display = false;
 
-    emit updatedPObject(this);
+
     return true;
 }
 
@@ -163,7 +162,7 @@ bool CpcXXXX::InitDisplay(void)
     }
 
     UpdateDisplayRunning = true;
-    emit updatedPObject(this);
+    Refresh_Display = true;
     return(1);
 }
 
@@ -189,8 +188,8 @@ void CpcXXXX::TurnOFF(void)
     PowerSwitch = PS_OFF;
     if (pLCDC) pLCDC->TurnOFF();
     InitDisplay();
-    UpdateFinalImage();
-    emit updatedPObject(this);
+
+    Refresh_Display = true;
     update();
 }
 
@@ -624,7 +623,7 @@ bool CpcXXXX::run(void)
     if (pCONNECTOR) pCONNECTOR_value = pCONNECTOR->Get_values();
 
 
-	if(!pCPU->halt && !off)
+    if(!(pCPU->halt|pCPU->off) && !off)
 	{
 #if 0
         if ( (pCPU->logsw) && (pCPU->fp_log) )

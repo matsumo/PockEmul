@@ -121,7 +121,6 @@ public:
     void	setfrequency(int f);
 
 
-	bool	Refresh_Display;
 
 	QList<Cconnector*> ConnList;
 	void publish(Cconnector* newConn);

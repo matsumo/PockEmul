@@ -66,7 +66,7 @@ bool Cfa80::UpdateFinalImage(void) {
 //    }
 
     painter.end();
-    emit updatedPObject(this);
+    Refresh_Display = true;
     return true;
 
 }

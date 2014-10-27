@@ -389,7 +389,7 @@ void CViewObject::renderAnimation()
 
             painter.end();
 //            qWarning()<<"animation - currentview="<<currentView;
-            emit updatedPObject(this);
+            Refresh_Display = true;
             update();
         }
     }
@@ -402,7 +402,8 @@ void CViewObject::endAnimation(){
 
 //    qWarning()<<"endAnimation";
     changeGeometry(this->posx(),this->posy(),viewRect(currentView).width()*mainwindow->zoom/100.0,viewRect(currentView).height()*mainwindow->zoom/100.0);
-    emit updatedPObject(this);
+
+    Refresh_Display = true;
 }
 
 void CViewObject::changeGeometrySize(float newposx,float newposy,float newwidth,float newheight) {
@@ -501,7 +502,8 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
         delete AnimatedImage;
         AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
-        flipping = true;
+
+        Refresh_Display = true;
         emit updatedPObject(this);
         changeGeometry(this->posx(),this->posy(),
                        _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);

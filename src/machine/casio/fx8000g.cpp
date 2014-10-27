@@ -139,7 +139,6 @@ bool Cfx8000g::UpdateFinalImage(void) {
                                                          55*internalImageRatio,24*internalImageRatio).mirrored(hdFlag,false));
     painter.end();
 
-    emit updatedPObject(this);
     return true;
 }
 
@@ -150,9 +149,8 @@ bool Cfx8000g::run() {
     if (pKEYB->LastKey == K_DEF) {
         hdFlag = !hdFlag;
         pKEYB->LastKey = 0;
-        UpdateFinalImage();
+        Refresh_Display = true;
         update();
-        emit updatedPObject(this);
     }
 
 #if 1

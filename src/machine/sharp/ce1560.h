@@ -45,6 +45,7 @@ public:
 
 public slots:
     void endscreenAnimation(void);
+    void updateAnimation();
 
 private:
     void setZoom(qreal value){ m_zoom = value; }

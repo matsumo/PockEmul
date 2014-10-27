@@ -9,6 +9,7 @@ CCPU::CCPU(CPObject *parent)
     pPC = (CpcXXXX*) parent;
 
     halt=0;				//halt?(0:none, 1:halting)
+    off = 0;
     end=0;				//program end?(0:none, 1:end)
     savesw=1;			//end with memory save?(0:no, 1:yes)
     cpulog=0;				//execute log?(0:off, 1:on)

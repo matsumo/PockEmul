@@ -364,29 +364,29 @@ void Cce1560::ComputeKey(KEYEVENT ke,int scancode)
         inhibitSwitch = false;
         qWarning()<<"INHIBIT FALSE";
         pKEYB->keyPressedList.removeAll(0x242);
+        Refresh_Display = true;
         update();
-        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x243)) {
         inhibitSwitch = true;
         qWarning()<<"INHIBIT TRUE";
         pKEYB->keyPressedList.removeAll(0x243);
+        Refresh_Display = true;
         update();
-        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x244)) {
         firmwarePg = 0;
         qWarning()<<"Firmware Pg 0";
         pKEYB->keyPressedList.removeAll(0x244);
+        Refresh_Display = true;
         update();
-        emit updatedPObject(this);
     }
     if (screenOpen && KEY(0x245)) {
         firmwarePg = 1;
         qWarning()<<"Firmware Pg 1";
         pKEYB->keyPressedList.removeAll(0x245);
+        Refresh_Display = true;
         update();
-        emit updatedPObject(this);
     }
 
 
@@ -416,10 +416,14 @@ bool Cce1560::UpdateFinalImage(void) {
 
     // update inhibitSwitch
     if (inhibitSwitch) {
-        painter.drawImage(164,258,BackgroundImageBackup->copy(164,258,56,27).mirrored(inhibitSwitch,false));
+        painter.drawImage(164*internalImageRatio,258*internalImageRatio,
+                          BackgroundImageBackup->copy(164*internalImageRatio,258*internalImageRatio,
+                                                      56*internalImageRatio,27*internalImageRatio).mirrored(inhibitSwitch,false));
     }
     if (firmwarePg==1) {
-        painter.drawImage(164,287,BackgroundImageBackup->copy(164,287,56,27).mirrored(firmwarePg==1,false));
+        painter.drawImage(164*internalImageRatio,287*internalImageRatio,
+                          BackgroundImageBackup->copy(164*internalImageRatio,287*internalImageRatio,
+                                                              56*internalImageRatio,27*internalImageRatio).mirrored(firmwarePg==1,false));
     }
 
 
@@ -460,6 +464,8 @@ bool Cce1560::UpdateFinalImage(void) {
         list.clear();
 
         manageStackPos(&list);
+        emit stackPosChanged();
+
     }
     if ( forceStackOver && (m_screenAngle > 90)) {
         forceStackOver=false;
@@ -471,9 +477,9 @@ bool Cce1560::UpdateFinalImage(void) {
         list.clear();
 
         manageStackPos(&list);
+        emit stackPosChanged();
     }
 
-    emit updatedPObject(this);
     return true;
 }
 
@@ -507,7 +513,7 @@ void Cce1560::animateScreen() {
      group->addAnimation(animation1);
      group->addAnimation(animation2);
 
-     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(update()));
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(updateAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endscreenAnimation()));
      screenFlipping = true;
      group->start();
@@ -523,4 +529,10 @@ void Cce1560::endscreenAnimation()
     else {
 //        pKEYB->Keys[backdoorKeyIndex].Rect.setSize(QSize(365,145));
     }
+}
+
+void Cce1560::updateAnimation()
+{
+    Refresh_Display = true;
+    update();
 }

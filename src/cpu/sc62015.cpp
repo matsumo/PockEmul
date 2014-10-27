@@ -3535,27 +3535,18 @@ void Csc62015::opr_imem(BYTE adr,OPRMODE opr,BYTE data)
 	}
 }
 
-void Csc62015::Load_Internal(QFile *)
-{
-}
-
 void Csc62015::Load_Internal(QXmlStreamReader *xmlIn)
 {
     if (xmlIn->readNextStartElement()) {
         if ( (xmlIn->name()=="cpu") &&
              (xmlIn->attributes().value("model").toString() == "sc62015")) {
-//            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toAscii());
-//            memcpy((char *) &reg,ba_reg.data(),REG_LEN);
-//            QByteArray ba_imem = QByteArray::fromBase64(xmlIn->attributes().value("iMem").toString().toAscii());
-//            memcpy((char *) &imem,ba_imem.data(),IMEM_LEN);
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) &reg,ba_reg.data(),REG_LEN);
+            QByteArray ba_imem = QByteArray::fromBase64(xmlIn->attributes().value("iMem").toString().toLatin1());
+            memcpy((char *) &imem,ba_imem.data(),IMEM_LEN);
         }
         xmlIn->skipCurrentElement();
     }
-}
-
-void Csc62015::save_internal(QFile *)
-{
-
 }
 
 void Csc62015::save_internal(QXmlStreamWriter *xmlOut)

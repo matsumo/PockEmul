@@ -91,9 +91,7 @@ public:
     bool exit(void);						//end
     void step(void);						//step SC62015
 
-    virtual	void	Load_Internal(QFile *);
     virtual	void	Load_Internal(QXmlStreamReader *);
-    virtual	void	save_internal(QFile *);
     virtual	void	save_internal(QXmlStreamWriter *);
 
     UINT32   Get_r(BYTE r);
@@ -148,15 +146,8 @@ public:
     UINT32	get_PC(void);
     void    OpExec(BYTE Op);
 
-    bool *SlotName[4];					//slot filename
-    bool	off;					//halt,off flag
     bool	end,save, e6, cpulog,logsw;	//etc.flag
     BYTE	emsmode;					//ems memory size
-
-
-
-
-
 
     void compute_xout();
 private:
