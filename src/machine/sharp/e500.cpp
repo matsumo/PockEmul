@@ -240,8 +240,8 @@ INLINE void Ce500::computeSound(void)
     Csc62015 * sc = (Csc62015*)pCPU;
 
 //    qint64 delta;
-    qint64 wait2khz = getfrequency()/1000/4;
-    qint64 wait4khz = getfrequency()/1000/8;
+    quint64 wait2khz = getfrequency()/1000/4;
+    quint64 wait4khz = getfrequency()/1000/8;
 
     switch ( (sc->get_imem(IMEM_SCR)>>4) & 0x07)
     {
@@ -477,7 +477,7 @@ bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
 {
     MemMirror(d);
 
-    if ( (*d>=0x00000) && (*d<=0x0FFFF)) {
+    if (             (*d<=0x0FFFF)) {
 
 //        if((*d&0x3000)==0x1000){
 //            *d&=0x103f; pRP5C01->write(*d&31,data);
@@ -518,7 +518,7 @@ bool Ce500::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
     MemMirror(d);
 
-    if ( (*d>=0x00000) && (*d<=0x0FFFF)) {
+    if (       (*d<=0x0FFFF)) {
         if((*d&0x6000)==0x2000){
             *data = disp(*d&15,*data);//pLCDC->SetDirtyBuf(pLCDC->SetDirtyBuf(*d & 15));
             return false;
@@ -610,11 +610,16 @@ void Ce500::TurnOFF()
 
 UINT8 Ce500::in(UINT8 address)
 {
+    Q_UNUSED(address)
+
     return 0;
 }
 
 UINT8 Ce500::out(UINT8 address, UINT8 value)
 {
+    Q_UNUSED(address)
+    Q_UNUSED(value)
+
     return 0;
 }
 

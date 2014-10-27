@@ -56,7 +56,8 @@ protected:
 //	BYTE previous_key;
 
 private:
-    bool Xin,Xout,start2khz,start4khz;
+    bool Xin,Xout;
+    quint64 start2khz,start4khz;
     qint64 tmp_state;
     Models model;
 
