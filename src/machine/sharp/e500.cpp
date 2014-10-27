@@ -769,7 +769,7 @@ BYTE Ce500::getKey()
         }
         if (ks&0x400) {
             if (KEY('P'))			data|=0x01;
-            if (KEY(K_SHT2))		data|=0x02;
+            if (KEY(K_SHT))         data|=0x02;
             if (KEY(K_F5))			data|=0x04;
             if (KEY(K_F4))			data|=0x08;
             if (KEY(K_F3))			data|=0x10;
