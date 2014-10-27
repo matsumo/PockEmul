@@ -27,9 +27,8 @@ public:
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
 
-
-    virtual bool	LoadExtra(QFile *);
-    virtual bool	SaveExtra(QFile *);
+    virtual bool	LoadConfig(QXmlStreamReader *xmlIn);	// Load PC Configuration
+    virtual bool	SaveConfig(QXmlStreamWriter *xmlOut);	// Save PC Configuration
 
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
@@ -61,25 +60,10 @@ private:
     qint64 tmp_state;
     Models model;
 
-
-};
-
-class Ce550:public Ce500{						//E500 emulator main class
-Q_OBJECT
-public:
-    const char*	GetClassName(){ return("Ce550");}
-
-    virtual void MemMirror(UINT32 *d);
-    virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
-    virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-
-    Ce550(CPObject *parent = 0);
-
-    virtual ~Ce550()
-    {								//[constructor]
-    }
-
+    BYTE internalRamKb;
 
 
 };
+
+
 #endif // E500_H

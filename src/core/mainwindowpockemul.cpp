@@ -387,7 +387,7 @@ CPObject *pPC=0;
         case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
         case E500   : pPC = new Ce500;      pPC->setName("PC-E500"); break;
         case E500S  : pPC = new Ce500(0,E500S);      pPC->setName("PC-E500S"); break;
-        case E550   : pPC = new Ce550;      pPC->setName("PC-E550"); break;
+        case E550   : pPC = new Ce500(0,E550);;      pPC->setName("PC-E550"); break;
         case G850V  : pPC = new Cg850v;     pPC->setName("PC-G850V"); break;
 
         case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
