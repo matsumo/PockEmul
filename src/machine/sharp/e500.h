@@ -51,17 +51,21 @@ public:
     void computeSound();
     virtual void MemMirror(UINT32 *d);
     virtual void initExtension();
+    virtual void BuildContextMenu(QMenu * menu);
+protected slots:
+    void internalRam();
 
 protected:
 //	BYTE previous_key;
 
 private:
+    QAction *internalRamAction;
     bool Xin,Xout;
     quint64 start2khz,start4khz;
     qint64 tmp_state;
     Models model;
 
-    BYTE internalRamKb;
+    int internalRamKb;
 
 
 };

@@ -89,6 +89,8 @@ public:
     Cbus   *bus;
     QMutex       busMutex;
 
+
+
     FILE	*fp_log;
 
     int rate;
@@ -131,8 +133,16 @@ public:
 
     enum LINKTYPE {WEBLINK,DOCUMENT};
     void insertLinkAction(LINKTYPE type, QString desc, QString link);
-    QMenu * menuweblink;
-    QMenu * menuDocument;
+    QMenu *contextMenu;
+    QMenu *menupocket;
+    QMenu *menuext;
+    QMenu *menuconfig;
+    QMenu *menucpuspeed;
+    QMenu *menulcd;
+    QMenu *menulink;
+    QMenu *menuunlink;
+    QMenu *menuweblink;
+    QMenu *menuDocument;
 	void computeLinkMenu(QMenu * menu);
 	void computeUnLinkMenu(QMenu * menu);
 	

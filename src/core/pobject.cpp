@@ -91,6 +91,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     Power = false;
     audioBuff.clear();
 
+    contextMenu=menupocket=menuext=menuconfig=menucpuspeed=menulcd=menulink=menuunlink=menuweblink=menuDocument=0;
     ioFreq = 0;
     off =true;
     closed = false;
@@ -119,7 +120,7 @@ CPObject::~CPObject()
 
     delete BackgroundImage;
 
-
+    delete contextMenu;
 
 //    delete extensionArray[0];
 //    delete extensionArray[1];
@@ -1179,12 +1180,11 @@ void CPObject::contextMenuEvent ( QContextMenuEvent * event )
 //    qWarning()<<"contextMenuEvent";
 //    Vibrate();
 
-    QMenu *menu = new QMenu(this);
-    BuildContextMenu(menu);
+    delete contextMenu;
+    contextMenu = new QMenu(this);
+    BuildContextMenu(contextMenu);
 
-//    menu->setStyleSheet("QMenu { color: black }");
-    //menu->exec(event->globalPos () );
-menu->popup(event->globalPos () );
+    contextMenu->popup(event->globalPos () );
     event->accept();
 }
 
@@ -1198,8 +1198,8 @@ void CPObject::BuildContextMenu(QMenu * menu)
 #endif
 
     if ( ( dynamic_cast<CpcXXXX *>(this) ) &&  ((CpcXXXX*)this)->pCPU)
-	{
-		QMenu * menupocket = menu->addMenu(tr("Pocket"));
+    {
+        menupocket = menu->addMenu(tr("Pocket"));
 			menupocket->addAction(tr("Turn On"),this,SLOT(slotPower()));
             menupocket->addAction(tr("Reset"),this,SLOT(slotResetNow()));
             menupocket->addAction(tr("Reset (5s delay)"),this,SLOT(slotReset()));
@@ -1208,23 +1208,24 @@ void CPObject::BuildContextMenu(QMenu * menu)
             menupocket->addSeparator();
             menupocket->addAction(tr("Load ..."),this,SLOT(slotLoadSession()));
             menupocket->addAction(tr("Save ..."),this,SLOT(slotSaveSession()));
-	}
-	
-    QMenu * menuext = NULL;
+    }
+
+    menuext = NULL;
     for (int i=0;i<5;i++)
     {
         if (extensionArray[i])
         {
-            if (!menuext) menuext = menu->addMenu(tr("Extensions"));
-            menuext->addMenu(((CpcXXXX *)this)->extensionArray[i]->Menu);
+            if (!menuext)
+                menuext = menu->addMenu(tr("Extensions"));
+            menuext->addMenu(extensionArray[i]->Menu);
         }
     }
 
-	QMenu * menuconfig = menu->addMenu(tr("Configuration"));
-	
+    menuconfig = menu->addMenu(tr("Configuration"));
+
     if ( dynamic_cast<CpcXXXX *>(this) &&  ((CpcXXXX*)this)->pCPU )
     {
-        QMenu * menucpuspeed = menuconfig->addMenu(tr("CPU Speed"));
+        menucpuspeed = menuconfig->addMenu(tr("CPU Speed"));
         menucpuspeed->addAction(tr("100%"));
         menucpuspeed->addAction(tr("200%"));
         menucpuspeed->addAction(tr("300%"));
@@ -1233,10 +1234,10 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
         connect(menucpuspeed, SIGNAL(triggered(QAction*)), this, SLOT(slotCpu(QAction*)));
     }
-	
+
     if (pLCDC)
     {
-        QMenu * menulcd = menuconfig->addMenu(tr("LCD contrast"));
+        menulcd = menuconfig->addMenu(tr("LCD contrast"));
         menulcd->addAction(tr("0"));
         menulcd->addAction(tr("1"));
         menulcd->addAction(tr("2"));
@@ -1246,7 +1247,6 @@ void CPObject::BuildContextMenu(QMenu * menu)
         connect(menulcd, SIGNAL(triggered(QAction*)), this, SLOT(slotContrast(QAction*)));
 
     }
-
     if (pKEYB) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
@@ -1272,7 +1272,9 @@ void CPObject::BuildContextMenu(QMenu * menu)
 }
 
 void CPObject::computeWebLinksMenu(QMenu * menu) {
+
     menuweblink = menu->addMenu(tr("Web Links"));
+
     menuDocument = menu->addMenu(tr("Documents"));
     connect(menuweblink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotWebLink( QAction *)));
 // FETCH XML FILE TO ADD MENU ACTIONS
@@ -1318,7 +1320,7 @@ void CPObject::insertLinkAction(LINKTYPE type,QString desc,QString link) {
 
 void CPObject::computeLinkMenu(QMenu * menu)
 {
-	QMenu * menulink = menu->addMenu(tr("Link"));
+    menulink = menu->addMenu(tr("Link"));
 	connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotNewLink( QAction *)));    
 	for (int i = 0;i < ConnList.size(); i++)
  	{
@@ -1342,18 +1344,18 @@ void CPObject::computeLinkMenu(QMenu * menu)
 
 void CPObject::computeUnLinkMenu(QMenu * menu)
 {
-	QMenu * menulink = menu->addMenu(tr("Remove Link"));
+    menuunlink = menu->addMenu(tr("Remove Link"));
     if(ConnList.size()>1) {
-        QAction * actionLocAllConn = menulink->addAction("All");
+        QAction * actionLocAllConn = menuunlink->addAction("All");
         actionLocAllConn->setData(tr("A%1").arg((long)this));
-        menulink->addSeparator();
-    //connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLinkAll( QAction *)));
+        menuunlink->addSeparator();
+    //connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLinkAll( QAction *)));
     }
 	for (int i = 0;i < ConnList.size(); i++)
  	{
-		QAction * actionLocConn = menulink->addAction(ConnList.at(i)->Desc);
+        QAction * actionLocConn = menuunlink->addAction(ConnList.at(i)->Desc);
         actionLocConn->setData(tr("C%1").arg((long)ConnList.at(i)));
-		connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));    
+        connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));
 	}	
 }
 

@@ -156,6 +156,29 @@ void	Ce500::initExtension(void)
 
 }
 
+void Ce500::BuildContextMenu(QMenu *menu)
+{
+    CpcXXXX::BuildContextMenu(menu);
+
+    menuext->addSeparator();
+    internalRamAction = menuext->addAction(tr("256KB internal RAM"),this,SLOT(internalRam()));
+    internalRamAction->setCheckable(true);
+    if (internalRamKb==256) internalRamAction->setChecked(true);
+}
+
+void Ce500::internalRam()
+{
+    if (internalRamKb == 256) {
+        if (model==E500 || model==E500S) internalRamKb=32;
+        if (model==E550) internalRamKb=64;
+        internalRamAction->setChecked(false);
+    }
+    else {
+        internalRamKb=256;
+        internalRamAction->setChecked(true);
+    }
+}
+
 bool Ce500::init(void) {
 //    pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
@@ -566,7 +589,7 @@ bool Ce500::LoadConfig(QXmlStreamReader *xmlIn)
 
 bool Ce500::SaveConfig(QXmlStreamWriter *xmlOut)
 {
-    xmlOut->writeAttribute("InternalRam",QString("%1").arg(internalRamKb,2,10));
+    xmlOut->writeAttribute("InternalRam",QString("%1").arg(internalRamKb));
 
     return true;
 }
