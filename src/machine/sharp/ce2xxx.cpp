@@ -11,11 +11,11 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
 {
 
 
-    setDXmm(85);
+    setDXmm(42);
     setDYmm(54);
     setDZmm(3);
 
-    setDX(303);
+    setDX(150);
     setDY(192);
 
     SlotList.clear();
@@ -24,18 +24,36 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
     model = mod;
     switch(model) {
     case CE201M:    // 8KB Wide RAM card
+        setDXmm(85);
+        setDYmm(54);
+        setDZmm(3);
+
+        setDX(303);
+        setDY(192);
         BackGroundFname	= P_RES(":/ce2xxx/ce201m.png");
         setcfgfname(QString("ce201m"));
         memsize      = 0x2000;
         SlotList.append(CSlot(8 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 8KB"));
         break;
     case CE202M:    // 16KB Wide RAM card
+        setDXmm(85);
+        setDYmm(54);
+        setDZmm(3);
+
+        setDX(303);
+        setDY(192);
         BackGroundFname	= P_RES(":/ce2xxx/ce202m.png");
         setcfgfname(QString("ce202m"));
         memsize      = 0x4000;
         SlotList.append(CSlot(16 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 16KB"));
         break;
     case CE203M:    // 32KB Wide RAM card
+        setDXmm(85);
+        setDYmm(54);
+        setDZmm(3);
+
+        setDX(303);
+        setDY(192);
         BackGroundFname	= P_RES(":/ce2xxx/ce203m.png");
         setcfgfname(QString("ce203m"));
         memsize      = 0x8000;
@@ -79,6 +97,8 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
         break;
     default: break;
     }
+
+    bus = new Cbus();
 }
 
 Cce2xxx::~Cce2xxx()

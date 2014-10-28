@@ -101,7 +101,7 @@ bool Cpc1360::init()
 {
     Cpc13XX::init();
 
-    pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 1",false,QPoint(0,90));	publish(pS2CONNECTOR);
+    pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 2",false,QPoint(0,90));	publish(pS2CONNECTOR);
 
     return true;
 }
