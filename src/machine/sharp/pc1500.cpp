@@ -459,7 +459,7 @@ bool Cpc15XX::Chk_Adr_R(UINT32 *d,UINT32 *data)
 
     if ( (*d>=0x8000) && (*d<=0xBFFF) )
     {
-        readBus(d,data);
+        readBus(bus,d,data);
         return false;
     }
 
@@ -472,9 +472,9 @@ bool Cpc15XX::Chk_Adr_R(UINT32 *d,UINT32 *data)
 //        qWarning()<<"Bus is INHIBIT adr="<<QString("%1").arg(*d,5,16,QChar('0'))<<"  iswrite:"<<bus->isWrite();
 
     if ( (*d>=0xC000) && (*d<=0xFFFF) && ((CbusPc1500*)bus)->isINHIBIT() ) {
-        readBus(d,data); return false; }
+        readBus(bus,d,data); return false; }
 
-    if ( (*d>=0x10000) && (*d<=0x1FFFF) ) { readBus(d,data); return false; }
+    if ( (*d>=0x10000) && (*d<=0x1FFFF) ) { readBus(bus,d,data); return false; }
 
 
     return true ;

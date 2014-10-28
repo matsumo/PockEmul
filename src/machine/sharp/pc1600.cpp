@@ -922,7 +922,7 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
     {
         if (                 (*d<=0x3FFF) ) {
             if (bank1) {
-                readBus(d,data);
+                readBus(bus,d,data);
                 return false;
             }
             return true;
@@ -934,7 +934,7 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
             case 1: *d += bank2 * 0x10000; return true;
             case 3: *d += bank2 * 0x10000 - (CS24 ? 0 : 0x4000); return true;
             default:
-                readBus(d,data);
+                readBus(bus,d,data);
                 return false;
             }
 
@@ -959,13 +959,13 @@ bool Cpc1600::Chk_Adr_R(UINT32 *d,UINT32 *data)
                 }
                 break;
             case 6: *d += bank3 * 0x10000; break;
-            default: readBus(d,data); return false;
+            default: readBus(bus,d,data); return false;
             }
             return true;
         }
         if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
             if (bank4) {
-                readBus(d,data);
+                readBus(bus,d,data);
                 return false;
             }
             return true;
@@ -1210,7 +1210,7 @@ UINT8 Cpc1600::in(UINT8 address)
     {
             UINT32 _adr = address | 0x10000;
             UINT32 _data=0;
-            readBus(&_adr,&_data);
+            readBus(bus,&_adr,&_data);
             pCPU->imem[address] = _data;
             if (fp_log) fprintf(fp_log,"FDD - IN [%02X]=%02X\n",address,_data);
         }
@@ -1221,7 +1221,7 @@ UINT8 Cpc1600::in(UINT8 address)
     case 0x83: {
         UINT32 _adr = address | 0x10000;
         UINT32 _data=0;
-        readBus(&_adr,&_data);
+        readBus(bus,&_adr,&_data);
         pCPU->imem[address] = _data;
         if (fp_log) fprintf(fp_log,"PRINTER - IN [%02X]=%02X\n",address,_data);
     }

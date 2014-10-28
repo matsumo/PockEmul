@@ -41,6 +41,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 
 Cpc13XX::~Cpc13XX()
 {								//[constructor]
+    delete busS1;
 }
 
 bool Cpc13XX::init(void)

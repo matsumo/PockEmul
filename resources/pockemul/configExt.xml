@@ -19,6 +19,17 @@
      <example brand="SHARP" idpocket="CE-140F" filename="./" name="Sharp ce-140f" image=":/ext/ce-140f.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-1600P" filename="./" name="Sharp ce-1600p" image=":/ext/ce-1600p.png" connectortype="Sharp_60" conngender="male"/>
      <example brand="SHARP" idpocket="CE-1600F" filename="./" name="Sharp ce-1600f" image=":/ext/ce-1600f.png" connectortype="Sharp_50" conngender="male"/>
+
+     <example brand="SHARP" idpocket="CE-201M" filename="./" name="Sharp ce-201m" image=":/ce2xxx/ce201m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-202M" filename="./" name="Sharp ce-202m" image=":/ce2xxx/ce202m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-203M" filename="./" name="Sharp ce-203m" image=":/ce2xxx/ce203m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-210M" filename="./" name="Sharp ce-210m" image=":/ce2xxx/ce210m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-211M" filename="./" name="Sharp ce-211m" image=":/ce2xxx/ce211m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-212M" filename="./" name="Sharp ce-212m" image=":/ce2xxx/ce212m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-2H16M" filename="./" name="Sharp ce-2h16m" image=":/ce2xxx/ce2h16m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-2H32M" filename="./" name="Sharp ce-2h32m" image=":/ce2xxx/ce2h32m.png" connectortype="Sharp_35" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-2H64M" filename="./" name="Sharp ce-2h64m" image=":/ce2xxx/ce2h64m.png" connectortype="Sharp_35" conngender="female"/>
+
      <example brand="CANON" idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>

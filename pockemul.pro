@@ -594,7 +594,8 @@ HEADERS += src/core/Connect.h \
     src/core/renderView.h \
     src/machine/panasonic/rlp1005.h \
     src/cpu/hpnutd.h \
-    src/machine/sharp/ce1600f.h
+    src/machine/sharp/ce1600f.h \
+    src/machine/sharp/ce2xxx.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -672,7 +673,8 @@ RESOURCES +=  \
     resources/hp15c.qrc \
     resources/hp11c.qrc \
     resources/hp12c.qrc \
-    resources/hp16c.qrc
+    resources/hp16c.qrc \
+    resources/ce2xxx.qrc
 
 SOURCES +=  \
     src/core/viewobject.cpp \
@@ -886,7 +888,8 @@ SOURCES +=  \
     src/core/renderView.cpp \
     src/machine/panasonic/rlp1005.cpp \
     src/cpu/hpnutd.cpp \
-    src/machine/sharp/ce1600f.cpp
+    src/machine/sharp/ce1600f.cpp \
+    src/machine/sharp/ce2xxx.cpp
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 

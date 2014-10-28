@@ -106,7 +106,16 @@ enum Models {
     CC40,
     TI74,
     TI95,
-    FX8000G
+    FX8000G,
+    CE201M,
+    CE202M,
+    CE203M,
+    CE210M,
+    CE211M,
+    CE212M,
+    CE2H16M,
+    CE2H32M,
+    CE2H64M
 };
 
 #endif // MODELIDS_H

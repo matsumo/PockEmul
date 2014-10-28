@@ -217,7 +217,7 @@ bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
 
 
         *d &= 0x07;
-        readBus(d,data);
+        readBus(bus,d,data);
         return false;
         if (*d==0x7FF3) { *data = 0xF4; return false; }
         if (*d==0x7FF4) { *data = 0x02; return false; }     // F2:PRINTER  F8:I/O

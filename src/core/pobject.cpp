@@ -1713,7 +1713,7 @@ void CPObject::writeBus(Cbus *bus, UINT32 *d, UINT32 data) {
     busMutex.unlock();
 }
 
-void CPObject::readBus(UINT32 *d,UINT32 *data) {
+void CPObject::readBus(Cbus *bus,UINT32 *d,UINT32 *data) {
     busMutex.lock();
 
     bus->setWrite(false);

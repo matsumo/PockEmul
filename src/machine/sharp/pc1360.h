@@ -36,9 +36,7 @@ public:
     Cbus *busS2;
 
     Cpc1360(CPObject *parent = 0);
-	virtual ~Cpc1360()
-	{								//[constructor]
-	}
+    virtual ~Cpc1360();
 
 private:
 

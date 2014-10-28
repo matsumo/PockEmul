@@ -40,6 +40,7 @@
 #include "sharp/ce125.h"
 #include "sharp/ce140p.h"
 #include "sharp/ce140f.h"
+#include "sharp/ce2xxx.h"
 #include "ccable.h"
 
 #include "potar.h"

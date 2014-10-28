@@ -257,6 +257,16 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Potar"]=POTAR;
     objtable["Simulator"]=Simulator;
 
+    objtable["CE-201M"]=CE201M;
+    objtable["CE-202M"]=CE202M;
+    objtable["CE-203M"]=CE203M;
+    objtable["CE-210M"]=CE210M;
+    objtable["CE-211M"]=CE211M;
+    objtable["CE-212M"]=CE212M;
+    objtable["CE-2H16M"]=CE2H16M;
+    objtable["CE-2H32M"]=CE2H32M;
+    objtable["CE-2H64M"]=CE2H64M;
+
     objtable["CE-1600P"]=CE1600P;
     objtable["CE-1600F"]=CE1600F;
     objtable["Canon X-07"]=X07;
@@ -374,6 +384,16 @@ CPObject *pPC=0;
         case CE127R : pPC = new Cce127r;	pPC->setName("CE-127R");break;
         case TANDY263591: pPC = new C263591;pPC->setName("26-3591");break;
         case CE1560 : pPC = new Cce1560;    pPC->setName("CE-1560");break;
+
+        case CE201M : pPC = new Cce2xxx(0,CE201M); pPC->setName("CE-201M");break;
+        case CE202M : pPC = new Cce2xxx(0,CE202M); pPC->setName("CE-202M");break;
+        case CE203M : pPC = new Cce2xxx(0,CE203M); pPC->setName("CE-203M");break;
+        case CE210M : pPC = new Cce2xxx(0,CE210M); pPC->setName("CE-210M");break;
+        case CE211M : pPC = new Cce2xxx(0,CE211M); pPC->setName("CE-211M");break;
+        case CE212M : pPC = new Cce2xxx(0,CE212M); pPC->setName("CE-212M");break;
+        case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
+        case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
+        case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
 
         case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
         case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;

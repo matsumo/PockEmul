@@ -1,0 +1,13 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ce2xxx/ce201m.png</file>
+        <file>ce2xxx/ce202m.png</file>
+        <file>ce2xxx/ce203m.png</file>
+        <file>ce2xxx/ce2h64m.png</file>
+        <file>ce2xxx/ce2h32m.png</file>
+        <file>ce2xxx/ce2h16m.png</file>
+        <file>ce2xxx/ce212m.png</file>
+        <file>ce2xxx/ce211m.png</file>
+        <file>ce2xxx/ce210m.png</file>
+    </qresource>
+</RCC>
