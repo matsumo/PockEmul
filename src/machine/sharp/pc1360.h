@@ -38,6 +38,7 @@ public:
     Cpc1360(CPObject *parent = 0);
     virtual ~Cpc1360();
 
+    virtual void ComputeKey(KEYEVENT ke, int scancode);
 private:
 
 };

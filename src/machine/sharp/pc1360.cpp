@@ -12,6 +12,7 @@
 #include "Keyb1360.h"
 #include	"Log.h"
 #include "bus.h"
+#include "fluidlauncher.h"
 
 Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 {								//[constructor]
@@ -21,8 +22,13 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     Initial_Session_Fname ="pc1360.pkm";
 
     BackGroundFname	= P_RES(":/pc1360/pc1360.png");
-//    LcdFname		= P_RES(":/pc1360/1360lcd.png");
-//    SymbFname		= P_RES(":/pc1360/1360symb.png");
+
+
+//    RightFname  = P_RES(":/pc1360/pc1360Right.png");
+    BackFname   = P_RES(":/pc1360/pc1360Back.png");
+//    TopFname    = P_RES(":/pc1360/pc1360Top.png");
+//    BottomFname = P_RES(":/pc1360/pc1360Bottom.png");
+
     memsize			= 0x40000;
 //    InitMemValue    = 0xff;
 
@@ -98,6 +104,7 @@ bool Cpc1360::init()
 
     pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 1",false,QPoint(0,90));	publish(pS2CONNECTOR);
 
+    return true;
 }
 
 BYTE	Cpc1360::Get_PortA(void)
@@ -302,4 +309,38 @@ bool Cpc1360::Chk_Adr_R(UINT32 *d,UINT32 *data)
 	return(1);
 }
 
+extern int ask(QWidget *parent,QString msg,int nbButton);
+#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
+                  pKEYB->keyPressedList.contains(c) || \
+                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+void Cpc1360::ComputeKey(KEYEVENT ke,int scancode)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
 
+    if (KEY(0x240) && (currentView==LEFTview)) {
+        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                     FluidLauncher::PictureFlowType,QString(),
+                                     "Sharp_11");
+        launcher->show();
+    }
+
+    // Manage left connector click
+    if (KEY(0x241) && (currentView==BACKview)) {
+        pKEYB->keyPressedList.removeAll(0x241);
+        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                     FluidLauncher::PictureFlowType,QString(),
+                                     "Sharp_35");
+        launcher->show();
+    }
+    if (KEY(0x242) && (currentView==BACKview)) {
+        pKEYB->keyPressedList.removeAll(0x242);
+        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                     FluidLauncher::PictureFlowType,QString(),
+                                     "Sharp_35");
+        launcher->show();
+    }
+}

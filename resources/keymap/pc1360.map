@@ -1,6 +1,10 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1360</model>
 <Keyboard>
+    <KEY description="Left Connector" height="235" left="32" scancode="0x240" top="52" width="30" view="LEFT"/>
+    <KEY description="S1" height="46" left="555" scancode="0x241" top="76" width="36" view="BACK"/>
+    <KEY description="S2" height="46" left="555" scancode="0x241" top="76" width="36" view="BACK"/>
+
     <KEY description="-" height="22" left="542" scancode="0x2d" top="218" width="32"/>
     <KEY description="(" height="22" left="542" scancode="0x28" top="107" width="32"/>
     <KEY description=")" height="22" left="584" scancode="0x29" top="107" width="32"/>
