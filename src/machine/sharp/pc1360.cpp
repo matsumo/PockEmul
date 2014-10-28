@@ -57,7 +57,7 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
 
-    busS2 = new Cbus();
+    busS2 = new Cbus("RAM Bus S2");
 }
 
 Cpc1360::~Cpc1360()
@@ -270,7 +270,9 @@ bool Cpc1360::Chk_Adr(UINT32 *d,UINT32 data)
 
 	if ( (*d>=0x8000) && (*d<=0xFFFF) )
 	{
-        writeBus(RamBank ? busS2 : busS1 ,d,data);
+        UINT32 _addr = *d &0x7FFF;
+        qWarning()<<(RamBank ? "S2:" : "S1:");
+        writeBus(RamBank ? busS2 : busS1 ,&_addr,data);
 //		*d += 0x28000 + (RamBank * 0x8000);
 //		if ( (*d>=0x30000) && (*d<=0x33FFF) )	return(S1_EXTENSION_CE2H32M_CHECK);
 //		if ( (*d>=0x34000) && (*d<=0x35FFF) )	return(S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK);
@@ -300,7 +302,10 @@ bool Cpc1360::Chk_Adr_R(UINT32 *d,UINT32 *data)
     if ( (*d>=0x8000) && (*d<=0xFFFF) )	{
 //        *d += 0x28000 + ( RamBank * 0x8000 );
 //        return true;
-        readBus(RamBank ? busS2 : busS1 ,d,data);
+        UINT32 _addr = *d &0x7FFF;
+
+        qWarning()<<(RamBank ? "S2:" : "S1:");
+        readBus(RamBank ? busS2 : busS1 ,&_addr,data);
         return false;
     }
 	

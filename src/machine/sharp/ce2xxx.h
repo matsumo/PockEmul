@@ -15,11 +15,14 @@ public:
     virtual bool init(void);				//initialize
     virtual bool exit(void);				//end
     virtual	bool run(void);					//check access
+    virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
+    virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
 
 private:
     Models model;
+    bool rotate;
 };
 
 #endif // CE2XXX_H

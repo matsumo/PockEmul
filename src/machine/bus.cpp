@@ -1,8 +1,9 @@
 #include "bus.h"
 
-Cbus::Cbus::Cbus()
+Cbus::Cbus::Cbus(QString _desc)
 {
     enable = false;
+    this->desc = _desc;
 }
 
 quint64 Cbus::toUInt64() const
@@ -29,8 +30,8 @@ void Cbus::fromUInt64(quint64 val)
 
 QString Cbus::toLog() const
 {
-    QString ret;
-    ret = QString("addr=%1").arg(getAddr(),6,16,QChar('0'));
+    QString ret = desc.isEmpty() ? "" : desc+":";
+    ret += QString("addr=%1").arg(getAddr(),6,16,QChar('0'));
     ret += QString(" - data=%1").arg(getData(),2,16,QChar('0'));
     ret += QString(" Write:%1").arg(writeMode);
     ret += QString(" INT:%1").arg(interrupt);

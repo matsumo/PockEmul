@@ -12,7 +12,7 @@
 class Cbus {
 
 public:
-    Cbus();
+    Cbus(QString _desc = QString());
     virtual ~Cbus() {}
 
     virtual quint64 toUInt64() const;
@@ -36,6 +36,7 @@ public:
     virtual QString toLog() const;
 
 protected:
+    QString desc;
     quint32 addr;
     quint32 data;
     bool    enable;
@@ -44,7 +45,7 @@ protected:
 
 };
 
-Q_DECLARE_METATYPE(Cbus);
+Q_DECLARE_METATYPE(Cbus)
 
 QDebug operator<<(QDebug dbg, const Cbus &bus);
 

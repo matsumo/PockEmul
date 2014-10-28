@@ -6,6 +6,7 @@
 #include "Keyb.h"
 #include "bus.h"
 #include "Inter.h"
+#include "Log.h"
 
 Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
 {
@@ -99,6 +100,7 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
     }
 
     bus = new Cbus();
+    rotate = false;
 }
 
 Cce2xxx::~Cce2xxx()
@@ -133,12 +135,13 @@ bool Cce2xxx::run()
         return true;
     }
 
-    quint16 addr = bus->getAddr();
+    quint16 addr = bus->getAddr() & (memsize - 1);
 
-    if ( bus->isEnable() &&
-        (addr<=memsize))
+    if ( bus->isEnable())
     {
+        qWarning()<<bus->toLog();
         if (bus->isWrite()) {
+            qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
             mem[addr] = bus->getData();
             bus->setEnable(false);
             pCONNECTOR->Set_values(bus->toUInt64());
@@ -146,6 +149,7 @@ bool Cce2xxx::run()
         }
         else {
             bus->setData(mem[addr]);
+            qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
             bus->setEnable(false);
             pCONNECTOR->Set_values(bus->toUInt64());
             return true;
@@ -158,4 +162,43 @@ bool Cce2xxx::run()
     return(1);
 }
 
+bool Cce2xxx::SaveSession_File(QXmlStreamWriter *xmlOut)
+{
+    xmlOut->writeStartElement("session");
+        xmlOut->writeAttribute("version", "2.0");
+        xmlOut->writeAttribute("rotate",QString("%1").arg(rotate));
+        xmlOut->writeStartElement("memory");
+            for (int s=0; s<SlotList.size(); s++)                               // Save Memory
+            {
+                switch (SlotList[s].getType()) {
+                case CSlot::RAM:
+                case CSlot::CUSTOM_ROM: Mem_Save(xmlOut,s); break;
+                default: break;
+                }
+            }
+        xmlOut->writeEndElement();  // memory
+    xmlOut->writeEndElement();  // session
+    return true;
+}
 
+bool Cce2xxx::LoadSession_File(QXmlStreamReader *xmlIn)
+{
+    if (xmlIn->name()=="session") {
+        bool rot = xmlIn->attributes().value("rotate").toString().toInt(0,16);
+
+        if (xmlIn->readNextStartElement() && xmlIn->name() == "memory" ) {
+            AddLog(LOG_MASTER,"Load Memory");
+            for (int s=0; s<SlotList.size(); s++)                               // Save Memory
+            {
+                switch (SlotList[s].getType()) {
+                case CSlot::RAM:
+                case CSlot::CUSTOM_ROM:
+                    AddLog(LOG_MASTER,"    Load Slot"+SlotList[s].getLabel());
+                    Mem_Load(xmlIn,s); break;
+                default: break;
+                }
+            }
+        }
+    }
+    return true;
+}
