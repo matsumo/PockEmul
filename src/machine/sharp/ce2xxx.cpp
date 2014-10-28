@@ -139,9 +139,9 @@ bool Cce2xxx::run()
 
     if ( bus->isEnable())
     {
-        qWarning()<<bus->toLog();
+//        qWarning()<<bus->toLog();
         if (bus->isWrite()) {
-            qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+//            qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
             mem[addr] = bus->getData();
             bus->setEnable(false);
             pCONNECTOR->Set_values(bus->toUInt64());
@@ -149,7 +149,7 @@ bool Cce2xxx::run()
         }
         else {
             bus->setData(mem[addr]);
-            qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+//            qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
             bus->setEnable(false);
             pCONNECTOR->Set_values(bus->toUInt64());
             return true;
