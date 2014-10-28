@@ -244,6 +244,7 @@ Rectangle {
     id:menu
     x:5
     property int iconsize: 48
+
     Image {
         id:newPocket
         source: "qrc:/core/pocket.png"

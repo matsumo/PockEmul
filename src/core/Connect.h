@@ -116,6 +116,7 @@ public:
     void   setNbpins(int nb) { nbpins = nb;}
 
     static bool arePluggable(Cconnector *a,Cconnector *b);
+    bool isPluggableWith(Cconnector *b);
 	
     Cconnector(CPObject *parent , QString desc, bool newGender = false);
     Cconnector(CPObject *parent ,

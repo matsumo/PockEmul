@@ -35,6 +35,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     RightFname = P_RES(":/pc1350/pc1350Right.png");
     LeftFname  = P_RES(":/pc1350/pc1350Left.png");
     TopFname   = P_RES(":/pc1350/pc1350Top.png");
+    BottomFname= P_RES(":/pc1350/pc1350Bottom.png");
 
     cnt=0;
 

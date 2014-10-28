@@ -1191,9 +1191,9 @@ void CPObject::contextMenuEvent ( QContextMenuEvent * event )
 void CPObject::BuildContextMenu(QMenu * menu)
 {
     Vibrate();
+#ifdef Q_OS_ANDROID
     menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
     menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
-#ifdef Q_OS_ANDROID
      menu->addAction(tr("Create desktop Shortcut"),this,SLOT(createShortcut()));
 #endif
 
@@ -1332,13 +1332,14 @@ void CPObject::computeLinkMenu(QMenu * menu)
 			{
 				QMenu * menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
 				for (int k = 0; k < listpPObject.at(j)->ConnList.size(); k++)
-				{
-					QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
-					actionDistConn->setData(tr("%1:%2").arg((long)ConnList.at(i)).arg((long)listpPObject.at(j)->ConnList.at(k)));
-
-				}
-			}
-		}
+                {
+                    if (ConnList.at(i)->isPluggableWith(listpPObject.at(j)->ConnList.at(k))) {
+                        QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
+                        actionDistConn->setData(tr("%1:%2").arg((long)ConnList.at(i)).arg((long)listpPObject.at(j)->ConnList.at(k)));
+                    }
+                }
+            }
+        }
 	}	
 }
 

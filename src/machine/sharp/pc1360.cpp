@@ -22,11 +22,7 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 
     BackGroundFname	= P_RES(":/pc1360/pc1360.png");
 
-
-//    RightFname  = P_RES(":/pc1360/pc1360Right.png");
     BackFname   = P_RES(":/pc1360/pc1360Back.png");
-//    TopFname    = P_RES(":/pc1360/pc1360Top.png");
-//    BottomFname = P_RES(":/pc1360/pc1360Bottom.png");
 
     memsize			= 0x40000;
 //    InitMemValue    = 0xff;

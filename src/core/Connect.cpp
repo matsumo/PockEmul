@@ -40,6 +40,10 @@ bool Cconnector::arePluggable(Cconnector *a,Cconnector *b) {
     return ( (a->nbpins==b->nbpins) && (a->gender != b->gender) && (a->Type == b->Type) );
 }
 
+bool Cconnector::isPluggableWith(Cconnector *b) {
+    return ( (nbpins==b->nbpins) && (gender != b->gender) && (Type == b->Type) );
+}
+
 // Link current connector to Source connector
 void Cconnector::ConnectTo(Cconnector * source)
 {

@@ -1219,10 +1219,14 @@ void MainWindowPockemul::updateFrameTimer()
                         rate = (int) ((100L*CurrentpPC->pTIMER->nb_state)/((statepersec/1000L)*deltaTime));
                         CurrentpPC->pTIMER->nb_state=0;
 #ifndef Q_OS_ANDROID
-                        CurrentpPC->rate = nbframe;//rate;
+                        CurrentpPC->rate = rate;
 #else
                         CurrentpPC->rate = nbframe;
 #endif
+
+
+                        if (CurrentpPC->isActiveWindow())
+                            mainwindow->setWindowTitle(QString("Pockemul :%1").arg(rate)+"%");
                         nbframe = 0;
                         str.setNum((int)rate);
                         str = ": "+str+tr("% original speed");
