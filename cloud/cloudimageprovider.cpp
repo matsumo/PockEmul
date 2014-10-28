@@ -84,6 +84,7 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
     }
 
     return *(pc->getViewImage(pc->currentView));
+//    return *(pc->FinalImage);
 
 }
 

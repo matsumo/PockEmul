@@ -1404,15 +1404,26 @@ bool CPObject::UpdateFinalImage(void)
 	{
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
+        painter.end();
 
         if (dialogkeylist)
         {
+            InitView(currentView);
+            switch(currentView) {
+            case TOPview:  painter.begin(TopImage); break;
+            case LEFTview: painter.begin(LeftImage); break;
+            case RIGHTview: painter.begin(RightImage); break;
+            case BOTTOMview: painter.begin(BottomImage); break;
+            case BACKview: painter.begin(BackImage); break;
+            default: painter.begin(FinalImage); break;
+            }
             painter.setPen(QPen(Qt::red));
             QList<QRect> _rectList = dialogkeylist->getkeyFoundRect();
 //            qWarning()<<"drawRect:"<<_rectList;
 
             for (int i=0; i<dialogkeylist->lwKeys->count();i++) {
-                if (dialogkeylist->lwKeys->item(i)->isSelected()) {
+                if (dialogkeylist->lwKeys->item(i)->isSelected() &&
+                    pKEYB->Keys.at(i).view == currentView ) {
                 painter.fillRect(QRect(pKEYB->Keys.at(i).Rect.x()*internalImageRatio,
                                        pKEYB->Keys.at(i).Rect.y()*internalImageRatio,
                                        pKEYB->Keys.at(i).Rect.width()*internalImageRatio,
@@ -1420,14 +1431,12 @@ bool CPObject::UpdateFinalImage(void)
                                  QBrush(Qt::red,Qt::BDiagPattern));
                 }
             }
+            painter.end();
         }
-        painter.end();
 
 
 	}
-//	Refresh_Display = false;
-//qWarning()<<"UpdateFinalImage";
-    Refresh_Display = true;
+
     return true;
 }
 

@@ -163,6 +163,16 @@ bool CViewObject::InitDisplay(void)
     return(1);
 }
 
+void CViewObject::InitView(View v) {
+    switch (v) {
+    case TOPview:   if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname); break;
+    case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
+    case RIGHTview: if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname); break;
+    case BOTTOMview:if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname); break;
+    case BACKview:  if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname); break;
+    }
+}
+
 #define RANGEPERCENT 50
 #define THIN 5          // Percentage
 #define MIN_THIN 30

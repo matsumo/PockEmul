@@ -7,7 +7,6 @@
 #include "Lcdc_pc1350.h"
 #include "sc61860.h"
 #include	"Inter.h"
-//#include	"debug.h"
 #include	"Keyb.h"
 #include "Keyb1360.h"
 #include	"Log.h"

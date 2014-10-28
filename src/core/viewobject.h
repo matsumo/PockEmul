@@ -88,6 +88,7 @@ public:
     void changeGeometry(float newposx, float newposy, float newwidth, float newheight);
     void changeGeometrySize(float newposx, float newposy, float newwidth, float newheight);
 
+    void InitView(View v);
 signals:
     void movePObject(CViewObject*,QPointF);
     void sizePObject(CViewObject*,QSizeF);
