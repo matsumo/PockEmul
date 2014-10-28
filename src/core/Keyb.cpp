@@ -294,6 +294,16 @@ bool Ckeyb::exit(void)
     	attrs.insert( "width", QString("%1").arg(j->Rect.width() ) );
     	attrs.insert( "height", QString("%1").arg(j->Rect.height() ) );
         attrs.insert( "modifier", j->Modifier );
+        QString _view;
+        switch (j->view) {
+        case FRONTview: _view = "FRONT"; break;
+        case TOPview: _view = "TOP"; break;
+        case LEFTview: _view = "LEFT"; break;
+        case RIGHTview: _view = "RIGHT"; break;
+        case BACKview: _view = "BACK"; break;
+        case BOTTOMview: _view = "BOTTOM"; break;
+        }
+        attrs.insert( "view",_view);
     	xw.writeAtomTag( "KEY", attrs );
     }
 
