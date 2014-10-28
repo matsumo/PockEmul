@@ -42,26 +42,38 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
         SlotList.append(CSlot(32 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 32KB"));
         break;
     case CE210M:    // 2KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce210m.png");
+        setcfgfname(QString("ce210m"));
         memsize      = 0x0800;
         SlotList.append(CSlot(2 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 2KB"));
         break;
     case CE211M:    // 4KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce211m.png");
+        setcfgfname(QString("ce211m"));
         memsize      = 0x1000;
         SlotList.append(CSlot(4 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 4KB"));
         break;
     case CE212M:    // 8KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce212m.png");
+        setcfgfname(QString("ce212m"));
         memsize      = 0x2000;
         SlotList.append(CSlot(8 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 8KB"));
         break;
     case CE2H16M:    // 16KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce2h16m.png");
+        setcfgfname(QString("ce2h16m"));
         memsize      = 0x4000;
         SlotList.append(CSlot(16 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 16KB"));
         break;
     case CE2H32M:    // 32KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce2h32m.png");
+        setcfgfname(QString("ce2h32m"));
         memsize      = 0x8000;
         SlotList.append(CSlot(32 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 32KB"));
         break;
     case CE2H64M:    // 64KB short RAM card
+        BackGroundFname	= P_RES(":/ce2xxx/ce2h64m.png");
+        setcfgfname(QString("ce2h64m"));
         memsize      = 0x10000;
         SlotList.append(CSlot(64 , 0x0000 , "" , ""        , CSlot::RAM , "RAM 64KB"));
         break;
