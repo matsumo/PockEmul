@@ -310,7 +310,8 @@ void CViewObject::flip(Direction dir) {
      connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
      flipping = true;
-
+     Refresh_Display=true;
+     changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
      group->start();
 
 }
@@ -513,10 +514,10 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         delete AnimatedImage;
         AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
 
-        Refresh_Display = true;
-        emit updatedPObject(this);
-        changeGeometry(this->posx(),this->posy(),
-                       _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
+//        emit updatedPObject(this);
+//        changeGeometry(this->posx(),this->posy(),
+//                       _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
+//        Refresh_Display = true;
         flip(dir);
     }
 

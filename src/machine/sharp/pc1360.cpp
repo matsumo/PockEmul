@@ -271,7 +271,7 @@ bool Cpc1360::Chk_Adr(UINT32 *d,UINT32 data)
 	if ( (*d>=0x8000) && (*d<=0xFFFF) )
 	{
         UINT32 _addr = *d &0x7FFF;
-        qWarning()<<(RamBank ? "S2:" : "S1:");
+//        qWarning()<<(RamBank ? "S2:" : "S1:");
         writeBus(RamBank ? busS2 : busS1 ,&_addr,data);
 //		*d += 0x28000 + (RamBank * 0x8000);
 //		if ( (*d>=0x30000) && (*d<=0x33FFF) )	return(S1_EXTENSION_CE2H32M_CHECK);
@@ -304,7 +304,7 @@ bool Cpc1360::Chk_Adr_R(UINT32 *d,UINT32 *data)
 //        return true;
         UINT32 _addr = *d &0x7FFF;
 
-        qWarning()<<(RamBank ? "S2:" : "S1:");
+//        qWarning()<<(RamBank ? "S2:" : "S1:");
         readBus(RamBank ? busS2 : busS1 ,&_addr,data);
         return false;
     }

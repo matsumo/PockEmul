@@ -715,7 +715,7 @@ void Crlh1000::ComputeKey(KEYEVENT ke,int scancode)
         currentAdr = _adr;
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                                    FluidLauncher::PictureFlowType,
+                                                    FluidLauncher::PictureFlowType,QString(),
                                                     "Panasonic_Capsule");
         connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
         launcher->show();
@@ -774,6 +774,12 @@ void Crlh1000::addModule(QString item,CPObject *pPC)
 
     currentSlot = -1;
     currentAdr=0;
+}
+
+void Crlh1000::RefreshDisplay()
+{
+    Refresh_Display = true;
+    update();
 }
 
 UINT8 Crlh1000::getKey(quint8 row )
@@ -928,7 +934,7 @@ bool Crlh1000::UpdateFinalImage(void) {
         painter.end();
     }
 
-    emit updatedPObject(this);
+//    emit updatedPObject(this);
     return true;
 }
 
@@ -949,7 +955,7 @@ void Crlh1000::animateBackDoor(void) {
      QParallelAnimationGroup *group = new QParallelAnimationGroup;
      group->addAnimation(animation1);
 
-     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(update()));
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(RefreshDisplay()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endbackdoorAnimation()));
      backdoorFlipping = true;
      group->start();
