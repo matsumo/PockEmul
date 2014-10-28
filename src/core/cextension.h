@@ -105,10 +105,6 @@ public:
     ~CExtensionArray(void)							//[constructor]
     {
         delete Menu;
-        delete emptyAction;
-        delete loadAction;
-        delete saveAction;
-        delete actionGroup;
         for (int i=0;i<NB_EXT;i++) delete ExtArray[i];
 
     }
