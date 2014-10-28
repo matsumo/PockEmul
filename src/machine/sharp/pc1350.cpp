@@ -18,6 +18,7 @@
 #include "Keyb1350.h"
 #include "Log.h"
 #include "dialoganalog.h"
+#include "bus.h"
 
 Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
@@ -34,6 +35,12 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     RightFname = P_RES(":/pc1350/pc1350Right.png");
 
     cnt=0;
+
+    busS1 = new Cbus();
+}
+
+Cpc13XX::~Cpc13XX()
+{								//[constructor]
 }
 
 bool Cpc13XX::init(void)
@@ -48,7 +55,9 @@ bool Cpc13XX::init(void)
     pSIOCONNECTOR	= new Cconnector(this,15,1,Cconnector::Sharp_15,"Connector 15 pins",false,QPoint(633,105));	publish(pSIOCONNECTOR);
 
 	WatchPoint.add(&pSIOCONNECTOR_value,64,15,this,"Serial 15pins connector");
-	
+
+    pS1CONNECTOR = new Cconnector(this,35,2,Cconnector::Sharp_35,"Memory SLOT 1",false,QPoint(0,90));	publish(pS1CONNECTOR);
+
 	return true;
 }
 

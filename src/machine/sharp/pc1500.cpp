@@ -417,15 +417,15 @@ bool Cpc15XX::Chk_Adr(UINT32 *d,UINT32 data)
 	if ( (*d>=0x7600) && (*d<=0x77FF) ) { pLCDC->SetDirtyBuf(*d-0x7600);return(1);}
 	if ( (*d>=0x7800) && (*d<=0x7BFF) ) { return(1); }										// RAM area(7800-7BFF)
 	if ( (*d>=0x7C00) && (*d<=0x7FFF) ) { return(0); }										// INHIBITED MIRRORING
-    if ( (*d>=0x8000) && (*d<=0xBFFF) ) { writeBus(d,data); return false; }										// RAM area(4000-7FFFF)
+    if ( (*d>=0x8000) && (*d<=0xBFFF) ) { writeBus(bus,d,data); return false; }										// RAM area(4000-7FFFF)
 
     if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
-        if (((CbusPc1500*)bus)->isINHIBIT()) writeBus(d,data);
+        if (((CbusPc1500*)bus)->isINHIBIT()) writeBus(bus,d,data);
         return false;
     }
     if ( (*d>=0x1F000) && (*d<=0x1F00F) ) { lh5810_write(*d,data); return false; }	// I/O area(LH5810)
 
-    if ( (*d>=0x10000) && (*d<=0x1FFFF) ) { writeBus(d,data); return false; }
+    if ( (*d>=0x10000) && (*d<=0x1FFFF) ) { writeBus(bus,d,data); return false; }
 
 	// else it's ROM
     return false;
@@ -443,7 +443,7 @@ bool Cpc1500A::Chk_Adr(UINT32 *d,UINT32 data)
     if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
         qWarning()<<"PC="<<QString("%1").arg(pCPU->get_PC(),4,16,QChar('0'));
         qWarning()<<"Write :"<<QString("%1").arg(*d,4,16,QChar('0'))<<"="<<QString("%1").arg(data,2,16,QChar('0'));
-        if (((CbusPc1500*)bus)->isINHIBIT()) writeBus(d,data);
+        if (((CbusPc1500*)bus)->isINHIBIT()) writeBus(bus,d,data);
         return false;
          }										// RAM area(4000-7FFFF)
 

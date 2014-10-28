@@ -805,7 +805,7 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
     {
         if (                 (*d<=0x3FFF) ) {
             if (bank1) {
-                writeBus(d,data);
+                writeBus(bus,d,data);
                 return false;
             }
             return false;
@@ -816,7 +816,7 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
             case 0:
             case 1:
             case 3: return false;
-            default: writeBus(d,data); return false;
+            default: writeBus(bus,d,data); return false;
             }
         }
         if ( (*d>=0x8000) && (*d<=0xBFFF) )
@@ -865,14 +865,14 @@ bool Cpc1600::Chk_Adr(UINT32 *d,UINT32 data)
                     return ret;
                     break;
             case 6: return false;   // Internal ROM
-            default: writeBus(d,data);
+            default: writeBus(bus,d,data);
                     return false;
                     break;
             }
         }
         if ( (*d>=0xC000) && (*d<=0xFFFF) ) {
             if (bank4) {
-                writeBus(d,data);
+                writeBus(bus,d,data);
                 return false;
             }
             return true;    // Internal RAM 3
@@ -1104,7 +1104,7 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
     {
         if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
         UINT32 _adr = address | 0x10000;
-        writeBus(&_adr,value);
+        writeBus(bus,&_adr,value);
     }
         break;
 
@@ -1114,7 +1114,7 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
     case 0x83: {
         if (fp_log) fprintf(fp_log,"PRINTER - OUT [%02X]=%02X\n",address,value);
         UINT32 _adr = address | 0x10000;
-        writeBus(&_adr,value);
+        writeBus(bus,&_adr,value);
     }
         break;
     }

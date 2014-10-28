@@ -191,7 +191,7 @@ bool Cfx8000g::Chk_Adr(UINT32 *d, UINT32 data) {
     case 1:
 
         *d &= 0x07;
-        writeBus(d,data);
+        writeBus(bus,d,data);
         return false;
         break;
 

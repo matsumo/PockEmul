@@ -11,6 +11,7 @@
 #include	"Keyb.h"
 #include "Keyb1360.h"
 #include	"Log.h"
+#include "bus.h"
 
 Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 {								//[constructor]
@@ -51,7 +52,7 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
 
-
+    busS2 = new Cbus();
 }
 
 
@@ -83,7 +84,15 @@ void	Cpc1360::initExtension(void)
     extensionArray[1] = ext_MemSlot1;
     extensionArray[2] = ext_MemSlot2;
     extensionArray[3] = ext_Serial;
-	
+
+}
+
+bool Cpc1360::init()
+{
+    Cpc13XX::init();
+
+    pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 1",false,QPoint(0,90));	publish(pS2CONNECTOR);
+
 }
 
 BYTE	Cpc1360::Get_PortA(void)
@@ -131,6 +140,9 @@ bool Cpc1360::run(void)
 
 bool Cpc1360::Set_Connector(void)
 {
+    pS1CONNECTOR->Set_values(busS1->toUInt64());
+    pS2CONNECTOR->Set_values(busS2->toUInt64());
+
 	int port1 = Get_8(0x3800);
 	int port2 = Get_8(0x3A00);
 	
@@ -156,6 +168,11 @@ bool Cpc1360::Set_Connector(void)
 
 bool Cpc1360::Get_Connector(void)
 {
+    busS1->fromUInt64(pS1CONNECTOR->Get_values());
+    busS1->setEnable(false);
+    busS2->fromUInt64(pS2CONNECTOR->Get_values());
+    busS2->setEnable(false);
+
     Set_Port_Bit(PORT_B,1,pCONNECTOR->Get_pin(PIN_SEL1));	// DIN	:	IB1
     Set_Port_Bit(PORT_B,2,pCONNECTOR->Get_pin(PIN_SEL2));	// DIN	:	IB2
     Set_Port_Bit(PORT_B,3,pCONNECTOR->Get_pin(PIN_D_OUT));	// DIN	:	IB2

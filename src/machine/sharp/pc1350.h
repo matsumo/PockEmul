@@ -12,6 +12,8 @@
 
 extern BYTE scandef_pc1350[];
 
+class Cbus;
+
 class Cpc13XX:public CpcXXXX{						//PC1350 emulator main class
 Q_OBJECT
 public:
@@ -26,11 +28,13 @@ public:
     virtual bool    CheckUpdateExtension(CExtension *ext);
     virtual int     mapKey(QKeyEvent *event);
 	
+    Cconnector	*pS1CONNECTOR;		qint64 pS1CONNECTOR_value;
+
+    Cbus *busS1;
+
     Cpc13XX(CPObject *parent = 0);
 
-	virtual ~Cpc13XX()
-	{								//[constructor]
-	}
+    virtual ~Cpc13XX();
 private:
     BYTE cnt;
 };

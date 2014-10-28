@@ -28,7 +28,12 @@ public:
 	virtual bool	Get_Connector(void);
 
     virtual void	initExtension(void);
+
+    virtual bool	init(void);
     virtual bool	run(void);
+
+    Cconnector	*pS2CONNECTOR;		qint64 pS2CONNECTOR_value;
+    Cbus *busS2;
 
     Cpc1360(CPObject *parent = 0);
 	virtual ~Cpc1360()

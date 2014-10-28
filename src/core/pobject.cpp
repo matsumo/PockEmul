@@ -1700,7 +1700,7 @@ void CPObject::manageBus() {
 }
 
 
-void CPObject::writeBus(UINT32 *d,UINT32 data) {
+void CPObject::writeBus(Cbus *bus, UINT32 *d, UINT32 data) {
     busMutex.lock();
 
     bus->setWrite(true);
