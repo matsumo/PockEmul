@@ -236,7 +236,7 @@ void CrenderView::sizePObject(CViewObject *pObject, QSizeF size)
 void CrenderView::cloudClose()
 {
 //    qWarning()<<"sizePObject:"<<size;
-    QMetaObject::invokeMethod(cloud.object, "cloudClose");
+    QMetaObject::invokeMethod(cloud.object, "cloudHide");
 }
 
 void CrenderView::stackPosChanged()

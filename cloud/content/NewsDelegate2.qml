@@ -305,20 +305,22 @@ Item {
             visible: ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             onClicked: {
-                if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
                 var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
                 var url = serverURL+ '?method=file.update_pmldata'+
                         '&file_guid='+pmlid+
                         '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                         '&auth_token='+auth_token;
+                cloudHide();
+                if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
                 var xml = cloud.save();
-                console.log('url:'+url);
+                cloudShow();
+//                console.log('url:'+url);
                 requestPost(url, xml , function (o) {
 
                     if (o.readyState == 4 ) {
                         if (o.status==200) {
                             var obj = JSON.parse(o.responseText);
-                            console.log(o.responseText);
+//                            console.log(o.responseText);
                             if (obj.status == 0) {
                                 message.showMessage("Session updated",5000);
                                 // refresh thumb
@@ -332,9 +334,6 @@ Item {
                         }
                     }
                 });
-
-
-
             }
 
         }

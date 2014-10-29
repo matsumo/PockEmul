@@ -12,7 +12,9 @@ Column {
         expand: false
         font.pointSize: 16
         onClicked: {
+            cloudHide();
             save_pml("un titre provisoire","une description provisoire");
+            cloudShow();
         }
     }
 

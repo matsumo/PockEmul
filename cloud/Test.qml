@@ -308,10 +308,10 @@ Rectangle {
         anchors.top: load.bottom
         MouseArea {
             anchors.fill: parent
-            onClicked: {
-                thecloud.visible = true;
-                scene.visible = false;
-                menu.visible = false;
+            onClicked: { cloudShow();
+//                thecloud.visible = true;
+//                scene.visible = false;
+//                menu.visible = false;
             }
         }
     }
@@ -342,17 +342,23 @@ Rectangle {
         id: thecloud
         anchors.fill: parent
         visible: false;
+
     }
     Component.onCompleted: {
-        thecloud.close.connect(cloudClose)
+        thecloud.close.connect(cloudHide)
     }
-    function cloudClose() {
-        console.log("close");
+    function cloudHide() {
+        console.log("Hide");
         thecloud.visible = false;
         scene.visible = true;
         menu.visible = true;
     }
-
+    function cloudShow() {
+        console.log("Show");
+        thecloud.visible = true;
+        scene.visible = false;
+        menu.visible = false;
+    }
     function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
         renderArea.xmlThumbModel.append(   {name:_name,
                                  imageFileName:_url,
