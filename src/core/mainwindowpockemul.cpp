@@ -813,8 +813,8 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                             QString eltname = xml->name().toString();
 //                            AddLog(LOG_TEMP,eltname);
                             if (eltname == "position") {
-                                int posX = xml->attributes().value("x").toLatin1().toInt();
-                                int posY = xml->attributes().value("y").toLatin1().toInt();
+                                float posX = xml->attributes().value("x").toLatin1().toFloat();
+                                float posY = xml->attributes().value("y").toLatin1().toFloat();
                                 int width = xml->attributes().value("width").toLatin1().toInt();
                                 int height = xml->attributes().value("height").toLatin1().toInt();
                                 locPC->setPosX(posX);
