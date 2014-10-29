@@ -48,6 +48,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(loadSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
 
+    QObject::connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(cloudClose()));
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
     connect(mainwindow,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 
@@ -230,6 +231,12 @@ void CrenderView::sizePObject(CViewObject *pObject, QSizeF size)
                               Q_ARG(QVariant, size.width()),
                               Q_ARG(QVariant, size.height())
                               );
+}
+
+void CrenderView::cloudClose()
+{
+//    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(cloud.object, "cloudClose");
 }
 
 void CrenderView::stackPosChanged()

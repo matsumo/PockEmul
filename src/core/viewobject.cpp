@@ -310,7 +310,6 @@ void CViewObject::flip(Direction dir) {
      connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
      flipping = true;
-//     changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
      group->start();
 
 }

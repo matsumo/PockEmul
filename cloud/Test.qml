@@ -344,9 +344,9 @@ Rectangle {
         visible: false;
     }
     Component.onCompleted: {
-        thecloud.close.connect(test)
+        thecloud.close.connect(cloudClose)
     }
-    function test() {
+    function cloudClose() {
         console.log("close");
         thecloud.visible = false;
         scene.visible = true;
