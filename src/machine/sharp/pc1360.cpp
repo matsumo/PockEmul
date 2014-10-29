@@ -61,38 +61,6 @@ Cpc1360::~Cpc1360()
     delete busS2;
 }
 
-
-void	Cpc1360::initExtension(void)
-{
-
-    // initialise ext_MemSlot1
-	ext_MemSlot1 = new CExtensionArray("Memory Slot 1","Add memory credit card");
-    ext_MemSlot1->setAvailable(ID_CE210M,true);		ext_MemSlot1->setChecked(ID_CE2H32M,true);
-	ext_MemSlot1->setAvailable(ID_CE211M,true);
-	ext_MemSlot1->setAvailable(ID_CE212M,true);
-	ext_MemSlot1->setAvailable(ID_CE2H16M,true);
-	ext_MemSlot1->setAvailable(ID_CE2H32M,true);
-	ext_MemSlot1->setAvailable(ID_CE2H64M,true);
-
-	// initialise ext_MemSlot2
-	ext_MemSlot2 = new CExtensionArray("Memory Slot 2","Add memory credit card");
-	ext_MemSlot2->setAvailable(ID_CE210M,true);		ext_MemSlot2->setChecked(ID_CE2H32M,false);
-	ext_MemSlot2->setAvailable(ID_CE211M,true);
-	ext_MemSlot2->setAvailable(ID_CE212M,true);
-	ext_MemSlot2->setAvailable(ID_CE2H16M,true);
-	ext_MemSlot2->setAvailable(ID_CE2H32M,true);
-	ext_MemSlot2->setAvailable(ID_CE2H64M,true);
-	
-	addExtMenu(ext_MemSlot1);
-	addExtMenu(ext_MemSlot2);
-
-    extensionArray[0] = ext_11pins;
-    extensionArray[1] = ext_MemSlot1;
-    extensionArray[2] = ext_MemSlot2;
-    extensionArray[3] = ext_Serial;
-
-}
-
 bool Cpc1360::init()
 {
     Cpc13XX::init();

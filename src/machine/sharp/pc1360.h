@@ -27,8 +27,6 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
-    virtual void	initExtension(void);
-
     virtual bool	init(void);
     virtual bool	run(void);
 
