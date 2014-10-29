@@ -1,3 +1,6 @@
+// TODO: multithreading for cpu emulation. see MONOTHREAD
+
+
 #include <qglobal.h>
 #if QT_VERSION >= 0x050000
 #   include <QtWidgets>
@@ -77,6 +80,8 @@ extern QString m_getArgs();
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 #define TIMER_RES			1
 
+#define MONOTHREAD
+
 QTime t,tf;
 QElapsedTimer et;
 QTimer *timer;
@@ -132,13 +137,16 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     timer->start(TIMER_RES);
     qWarning()<<"after start timer";
 
+#ifdef MONOTHREAD
     // Create the Pocket Thread
     PcThread = new CPocketThread(this);
     PcThread->connect(PcThread,SIGNAL(Resize(QSize,CPObject * )),this,SLOT(resizeSlot(QSize,CPObject * )));
     PcThread->connect(PcThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
 #ifndef EMSCRIPTEN
-//    PcThread->start();
+    PcThread->start();
 #endif
+#endif
+
 
     grabGesture(Qt::PanGesture);
     grabGesture(Qt::PinchGesture);
@@ -645,12 +653,13 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                 {
                     AddLog(LOG_MASTER,tr("%1").arg((long)newpPC));
                     listpPObject.append(newpPC);
+#ifndef MONOTHREAD
                     // Create the Pocket Thread
                     CPocketThreadRun *pocketThread = new CPocketThreadRun(newpPC);
                     pocketThread->connect(pocketThread,SIGNAL(Resize(QSize,CPObject * )),this,SLOT(resizeSlot(QSize,CPObject * )));
                     pocketThread->connect(pocketThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
                     pocketThread->start();
-
+#endif
                     QAction * actionDistConn = menuPockets->addAction(newpPC->getName());
                     actionDistConn->setData(tr("%1").arg((long)newpPC));
                     QMenu *ctxMenu = new QMenu(newpPC);

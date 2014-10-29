@@ -374,6 +374,7 @@ Rectangle {
 
     function delPocket(_pocketId) {
         var index = getIndex(_pocketId);
+        if (index == -1) return;
         renderArea.xmlThumbModel.remove(index);
     }
 
@@ -399,6 +400,7 @@ Rectangle {
 
             renderArea.xmlThumbModel.get(index)._width = _width;
             renderArea.xmlThumbModel.get(index)._height = _height;
+            refreshPocket(_pocketId);
     //        console.log("object sized to ("+_width+","+_height+")");
         }
     }

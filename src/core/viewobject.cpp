@@ -310,8 +310,7 @@ void CViewObject::flip(Direction dir) {
      connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
      flipping = true;
-     Refresh_Display=true;
-     changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
+//     changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
      group->start();
 
 }
@@ -400,6 +399,9 @@ void CViewObject::renderAnimation()
 
             painter.end();
 //            qWarning()<<"animation - currentview="<<currentView;
+            if (this->size() != AnimatedImage->size())
+                changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
+
             Refresh_Display = true;
             update();
         }
