@@ -9,7 +9,7 @@
 #include "Connect.h"
 #include "dialogconsole.h"
 #include "dialoganalog.h"
-#include "init.h"
+#include "watchpoint.h"
 
 //#define SIO_GET_PIN(n)		(getPinId(n) == 0xff ? 0 : (getPinId(n)==0xfe?1:pSIOCONNECTOR->Get_pin(getPinId(n))))
 #define SIO_SET_PIN(n,v)	pSIOCONNECTOR->Set_pin(getPinId(n),v)

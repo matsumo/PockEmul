@@ -29,7 +29,6 @@
 #include "version.h"
 
 
-
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
 
@@ -38,6 +37,10 @@
 MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
 CrenderView* view;
+
+
+#include "watchpoint.h"
+CWatchPoint WatchPoint;
 
 LaunchButtonWidget* launch1;
 LaunchButtonWidget* launch2;

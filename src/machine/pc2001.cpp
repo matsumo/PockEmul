@@ -12,6 +12,7 @@
 #include "Inter.h"
 #include "Lcdc_pc2001.h"
 #include "Connect.h"
+#include "watchpoint.h"
 
 // TODO: Keyboard map is not complete
 

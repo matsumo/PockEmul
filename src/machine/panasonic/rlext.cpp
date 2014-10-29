@@ -13,6 +13,7 @@
 #include "Keyb.h"
 #include "Connect.h"
 #include "buspanasonic.h"
+#include "watchpoint.h"
 
 #define DOWN    0
 #define UP              1

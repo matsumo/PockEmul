@@ -9,7 +9,7 @@
 #include "Lcdc_e500.h"
 #include "Inter.h"
 #include "Log.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "cextension.h"
 
 //TODO: Connector output for ce-126p and ce-140f

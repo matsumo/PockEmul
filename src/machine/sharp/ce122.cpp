@@ -5,7 +5,7 @@
 #include "ce122.h"
 #include "Connect.h"
 #include "Keyb.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Log.h"
 #include "paperwidget.h"
 

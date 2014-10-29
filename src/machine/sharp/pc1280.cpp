@@ -9,7 +9,7 @@
 #include "Lcdc_pc1475.h"
 #include "cextension.h"
 #include "cpu.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Keyb1280.h"
 #include "clink.h"
 

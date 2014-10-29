@@ -11,6 +11,7 @@
 #include "ce152.h"
 #include "Keyb.h"
 #include "keybce152.h"
+#include "watchpoint.h"
 
 #define sample_freq		44100
 #define rec_speed		1200

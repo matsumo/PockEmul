@@ -11,7 +11,7 @@
 #include "rlh1000.h"
 #include "pcxxxx.h"
 #include "Log.h"
-#include "dialoganalog.h"
+#include "watchpoint.h"
 #include "paperwidget.h"
 #include "Keyb.h"
 #include "Connect.h"

@@ -5,6 +5,7 @@
 #include "cesimu.h"
 #include "dialogsimulator.h"
 #include "dialoganalog.h"
+#include "watchpoint.h"
 #include "Connect.h"
 #include "Inter.h"
 

@@ -24,6 +24,7 @@
 #include "Inter.h"
 #include "Connect.h"
 #include "bus.h"
+#include "watchpoint.h"
 
 
 

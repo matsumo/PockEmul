@@ -23,6 +23,7 @@
 #include "Inter.h"
 #include "Connect.h"
 #include "dialoganalog.h"
+#include "watchpoint.h"
 #include "Keyb.h"
 
 #define DOWN	0

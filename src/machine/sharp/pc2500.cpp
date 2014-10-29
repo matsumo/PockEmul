@@ -12,6 +12,7 @@
 #include "Keyb2500.h"
 #include "paperwidget.h"
 #include "ce515p.h"
+#include "watchpoint.h"
 
 #define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 

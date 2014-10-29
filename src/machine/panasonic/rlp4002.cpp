@@ -10,7 +10,7 @@
 #include "rlp4002.h"
 
 #include "Log.h"
-#include "dialoganalog.h"
+#include "watchpoint.h"
 #include "paperwidget.h"
 #include "Keyb.h"
 #include "Connect.h"

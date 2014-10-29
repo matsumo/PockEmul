@@ -35,6 +35,7 @@ media as a 10-bit data.
 #include "Keyb.h"
 #include "cpu.h"
 #include "buspc1500.h"
+#include "watchpoint.h"
 
 
 Cce1600f::Cce1600f(CPObject *parent):CPObject(parent)

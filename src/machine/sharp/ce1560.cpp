@@ -1,5 +1,4 @@
-//TODO Migrate sound to QMultimedia
-//TODO: Save session with Pen position and paper image
+
 
 #include <QPainter>
 #include <QResource>
@@ -12,6 +11,7 @@
 #include "Lcdc_ce1560.h"
 #include "buspc1500.h"
 #include "clink.h"
+#include "watchpoint.h"
 
 Cce1560::Cce1560(CPObject *parent):CpcXXXX(this)
 {

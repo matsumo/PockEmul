@@ -1,15 +1,15 @@
 
 #include <QDebug>
 
-#include	"common.h"
-#include	"pc1360.h"
+#include "common.h"
+#include "pc1360.h"
 #include "cextension.h"
 #include "Lcdc_pc1350.h"
 #include "sc61860.h"
-#include	"Inter.h"
-#include	"Keyb.h"
+#include "Inter.h"
+#include "Keyb.h"
 #include "Keyb1360.h"
-#include	"Log.h"
+#include "Log.h"
 #include "bus.h"
 #include "fluidlauncher.h"
 
@@ -263,16 +263,6 @@ bool Cpc1360::Chk_Adr(UINT32 *d,UINT32 data)
 
 		return(1);
 	}
-
-#if 0
-	if ( (*d>=0x3C00) && (*d<=0x3DFF) )
-	{
-		AddLog(LOG_MASTER,tr("Write Slot Register %1=%2").arg(*d).arg(mem[*d]));	
-		RamBank = (data == 0x04 ? 0 : 1);
-		return(1);
-	}
-#endif
-
 	if ( (*d>=0x2800) && (*d<=0x3FFF) )	return(1);
 	if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d += 0xC000 + ( RomBank * 0x4000 );	return(0); }
 

@@ -9,7 +9,7 @@
 #include "Connect.h"
 #include "Keyb.h"
 #include "dialogconsole.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "sio.h"
 
 

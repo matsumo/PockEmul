@@ -63,6 +63,7 @@ PockEmul is a Sharp Pocket Computer Emulator.
 #include "servertcp.h"
 #include "cloud/cloudwindow.h"
 #include "renderView.h"
+#include "watchpoint.h"
 
 #include "allobjects.h"
 
@@ -136,7 +137,7 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     PcThread->connect(PcThread,SIGNAL(Resize(QSize,CPObject * )),this,SLOT(resizeSlot(QSize,CPObject * )));
     PcThread->connect(PcThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
 #ifndef EMSCRIPTEN
-    PcThread->start();
+//    PcThread->start();
 #endif
 
     grabGesture(Qt::PanGesture);
@@ -643,7 +644,12 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                 else
                 {
                     AddLog(LOG_MASTER,tr("%1").arg((long)newpPC));
-                                listpPObject.append(newpPC);
+                    listpPObject.append(newpPC);
+                    // Create the Pocket Thread
+                    CPocketThreadRun *pocketThread = new CPocketThreadRun(newpPC);
+                    pocketThread->connect(pocketThread,SIGNAL(Resize(QSize,CPObject * )),this,SLOT(resizeSlot(QSize,CPObject * )));
+                    pocketThread->connect(pocketThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
+                    pocketThread->start();
 
                     QAction * actionDistConn = menuPockets->addAction(newpPC->getName());
                     actionDistConn->setData(tr("%1").arg((long)newpPC));

@@ -26,6 +26,7 @@
 #include	"ce152.h"
 #include	"dialoganalog.h"
 #include    "buspc1500.h"
+#include "watchpoint.h"
 
 
 Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)

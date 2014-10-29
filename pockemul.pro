@@ -595,7 +595,8 @@ HEADERS += src/core/Connect.h \
     src/machine/panasonic/rlp1005.h \
     src/cpu/hpnutd.h \
     src/machine/sharp/ce1600f.h \
-    src/machine/sharp/ce2xxx.h
+    src/machine/sharp/ce2xxx.h \
+    src/core/watchpoint.h
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 

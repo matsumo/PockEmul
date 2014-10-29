@@ -1,7 +1,7 @@
 #include "ce120p.h"
-#include "dialoganalog.h"
 #include "Connect.h"
 #include "Keyb.h"
+#include "watchpoint.h"
 
 
 

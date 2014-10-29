@@ -15,6 +15,7 @@
 #include "Connect.h"
 #include "ctronics.h"
 #include "cextension.h"
+#include "watchpoint.h"
 
 #ifdef POCKEMUL_BIG_ENDIAN
 #	define LOW(x)	((uint8 *)&(x) + 1)

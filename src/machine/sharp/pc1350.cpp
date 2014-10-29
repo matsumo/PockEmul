@@ -19,6 +19,7 @@
 #include "Log.h"
 #include "dialoganalog.h"
 #include "bus.h"
+#include "watchpoint.h"
 
 Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]

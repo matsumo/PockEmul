@@ -12,9 +12,8 @@
 #include "fa80.h"
 #include "Connect.h"
 #include "Inter.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Log.h"
-#include "dialoganalog.h"
 #include "bus.h"
 #include "hd61710.h"
 

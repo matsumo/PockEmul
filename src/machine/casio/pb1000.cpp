@@ -12,7 +12,7 @@
 #include "hd44352.h"
 
 #include "Inter.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "ct6834.h"
 #include "uart.h"
 #include "Log.h"

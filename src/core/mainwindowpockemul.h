@@ -11,7 +11,6 @@
 //
 #include "ui_pockemul.h"
 #include "common.h"
-#include "init.h"
 
 
 class DialogLog;

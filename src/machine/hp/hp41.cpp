@@ -33,7 +33,7 @@
 #include "Lcdc_hp41.h"
 #include "Keyb.h"
 #include "Inter.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Connect.h"
 #include "ctronics.h"
 #include "clink.h"

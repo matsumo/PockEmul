@@ -13,6 +13,7 @@
 #include "clink.h"
 #include "dialoganalog.h"
 #include "buspc1500.h"
+#include "watchpoint.h"
 
 #define NO_MOVE	0
 #define RI_MOVE	1

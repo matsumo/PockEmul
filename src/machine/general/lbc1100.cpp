@@ -9,6 +9,7 @@
 #include "Inter.h"
 #include "Lcdc_lbc1100.h"
 #include "Connect.h"
+#include "watchpoint.h"
 
 /*
 

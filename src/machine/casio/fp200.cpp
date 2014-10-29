@@ -14,7 +14,7 @@
 #include "ctronics.h"
 
 #include "Connect.h"
-#include "dialoganalog.h"
+#include "watchpoint.h"
 
 #include "Log.h"
 

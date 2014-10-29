@@ -24,6 +24,7 @@
 #include    "Connect.h"
 
 #include "breakpoint.h"
+#include "watchpoint.h"
 
 
 extern int	g_DasmStep;

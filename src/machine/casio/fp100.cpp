@@ -6,7 +6,7 @@
 #include "Connect.h"
 #include "Keyb.h"
 #include "dialogconsole.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Inter.h"
 #include "Log.h"
 #include "paperwidget.h"

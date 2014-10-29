@@ -12,7 +12,7 @@
 #include "Lcdc_rlh1000.h"
 #include "ui/dialogdasm.h"
 #include "clink.h"
-#include "dialoganalog.h"
+#include "watchpoint.h"
 
 
 

@@ -33,7 +33,7 @@
 #include "Lcdc_hp15c.h"
 #include "Keyb.h"
 #include "Inter.h"
-#include "init.h"
+#include "watchpoint.h"
 #include "Connect.h"
 #include "clink.h"
 
