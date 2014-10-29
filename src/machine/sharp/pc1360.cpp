@@ -147,8 +147,14 @@ bool Cpc1360::run(void)
 
 bool Cpc1360::Set_Connector(Cbus *_bus)
 {
-    pS1CONNECTOR->Set_values(busS1->toUInt64());
-    pS2CONNECTOR->Set_values(busS2->toUInt64());
+    if (_bus == busS1) {
+        pS1CONNECTOR->Set_values(busS1->toUInt64());
+        return true;
+    }
+    if (_bus == busS2) {
+        pS2CONNECTOR->Set_values(busS2->toUInt64());
+        return true;
+    }
 
 	int port1 = Get_8(0x3800);
 	int port2 = Get_8(0x3A00);
@@ -175,10 +181,16 @@ bool Cpc1360::Set_Connector(Cbus *_bus)
 
 bool Cpc1360::Get_Connector(Cbus *_bus)
 {
-    busS1->fromUInt64(pS1CONNECTOR->Get_values());
-    busS1->setEnable(false);
-    busS2->fromUInt64(pS2CONNECTOR->Get_values());
-    busS2->setEnable(false);
+    if (_bus == busS1) {
+        busS1->fromUInt64(pS1CONNECTOR->Get_values());
+        busS1->setEnable(false);
+        return true;
+    }
+    if (_bus == busS2) {
+        busS2->fromUInt64(pS2CONNECTOR->Get_values());
+        busS2->setEnable(false);
+        return true;
+    }
 
     Set_Port_Bit(PORT_B,1,pCONNECTOR->Get_pin(PIN_SEL1));	// DIN	:	IB1
     Set_Port_Bit(PORT_B,2,pCONNECTOR->Get_pin(PIN_SEL2));	// DIN	:	IB2

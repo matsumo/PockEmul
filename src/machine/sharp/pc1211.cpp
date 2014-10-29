@@ -412,7 +412,7 @@ bool Cpc1211::exit()
     return true;
 }
 
-bool Cpc1211::Set_Connector()
+bool Cpc1211::Set_Connector(Cbus *_bus)
 {
     sendToPrinter();
     return true;
