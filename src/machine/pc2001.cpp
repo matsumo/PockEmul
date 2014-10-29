@@ -220,7 +220,7 @@ UINT16 Cpc2001::out16(UINT16 address, UINT16 value)
     return 0;
 }
 
-bool Cpc2001::Set_Connector()
+bool Cpc2001::Set_Connector(Cbus *_bus)
 {
     pTAPECONNECTOR->Set_pin(3,true);       // RMT
     pTAPECONNECTOR->Set_pin(2,upd7907->upd7907stat.imem[0x00] & 0x10 ? 0xff : 0x00);    // Out
@@ -235,7 +235,7 @@ bool Cpc2001::Set_Connector()
     return true;
 }
 
-bool Cpc2001::Get_Connector()
+bool Cpc2001::Get_Connector(Cbus *_bus)
 {
     if (pPRINTERCONNECTOR->Get_pin(9)) {
         sendToPrinter = 0;

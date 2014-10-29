@@ -531,14 +531,14 @@ quint16 Cfp200::getKey()
 //    CpcXXXX::keyPressEvent(event);
 //}
 
-bool Cfp200::Get_Connector(void) {
+bool Cfp200::Get_Connector(Cbus *_bus) {
     Get_MainConnector();
     Get_CentConnector();
     Get_SIOConnector();
 
     return true;
 }
-bool Cfp200::Set_Connector(void) {
+bool Cfp200::Set_Connector(Cbus *_bus) {
     Set_SIOConnector();
     Set_CentConnecor();
     Set_MainConnector();

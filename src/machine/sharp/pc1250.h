@@ -25,8 +25,8 @@ public:
 
     virtual bool	run(void);
     virtual bool init(void);
-    virtual bool	Set_Connector(void);
-    virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual BYTE	Get_PortA(void);
 	virtual BYTE	Get_PortB(void);
 

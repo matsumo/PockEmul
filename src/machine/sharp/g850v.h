@@ -35,8 +35,8 @@ public:
     virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
-    virtual bool Set_Connector(void);
-    virtual bool Get_Connector(void);
+    virtual bool Set_Connector(Cbus *_bus = 0);
+    virtual bool Get_Connector(Cbus *_bus = 0);
     BYTE        getKey(void);
 
     virtual bool	init(void);				// initialize

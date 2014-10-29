@@ -189,7 +189,7 @@ bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
     return(1);
 }
 
-bool Cpc1280::Set_Connector(void)
+bool Cpc1280::Set_Connector(Cbus *_bus)
 {
 
     int port1 = Get_8(0x3800);
@@ -209,7 +209,7 @@ bool Cpc1280::Set_Connector(void)
     return(1);
 }
 
-bool Cpc1280::Get_Connector(void)
+bool Cpc1280::Get_Connector(Cbus *_bus)
 {
     Set_Port_Bit(PORT_B,1,pCONNECTOR->Get_pin(PIN_SEL1));	// DIN	:	IB1
     Set_Port_Bit(PORT_B,2,pCONNECTOR->Get_pin(PIN_SEL2));	// DIN	:	IB2

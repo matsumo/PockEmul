@@ -508,11 +508,11 @@ quint8 Cti95::getKey()
 }
 
 
-bool Cti74::Get_Connector(void) {
+bool Cti74::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Cti74::Set_Connector(void) {
+bool Cti74::Set_Connector(Cbus *_bus) {
     return true;
 }
 

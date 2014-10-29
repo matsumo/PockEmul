@@ -22,8 +22,8 @@ public:
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
 //    virtual void	initExtension(void);
-    virtual bool	Set_Connector(void);
-    virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual bool	run(void);				// emulator main
     virtual bool	init(void);
     virtual void resizeEvent ( QResizeEvent * );

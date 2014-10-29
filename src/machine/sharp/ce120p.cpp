@@ -46,7 +46,7 @@ bool Cce120p::exit(void) {
 }
 
 
-bool Cce120p::Get_Connector(void) {
+bool Cce120p::Get_Connector(Cbus *_bus) {
     MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     BUSY    = GET_PIN(PIN_BUSY);
     D_OUT	= GET_PIN(PIN_D_OUT);
@@ -60,7 +60,7 @@ bool Cce120p::Get_Connector(void) {
     return true;
 }
 
-bool Cce120p::Set_Connector(void) {
+bool Cce120p::Set_Connector(Cbus *_bus) {
     //MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     //BUSY    = GET_PIN(PIN_BUSY);
     bool extD_OUT	= pCONNECTOR_Ext->Get_pin(PIN_D_OUT);

@@ -86,7 +86,7 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
 }
 
 
-bool Cpc1403::Set_Connector(void)
+bool Cpc1403::Set_Connector(Cbus *_bus)
 {
 	int port1 = Get_8(0x3A00);
 	
@@ -102,7 +102,7 @@ bool Cpc1403::Set_Connector(void)
 	return(1);
 }
 
-bool Cpc1403::Get_Connector(void)
+bool Cpc1403::Get_Connector(Cbus *_bus)
 {
 
     pCPU->Set_Xin(pCONNECTOR->Get_pin(PIN_MT_IN));

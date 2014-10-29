@@ -290,14 +290,14 @@ bool Cmd100::exit(void)
     return true;
 }
 
-bool Cmd100::Get_Connector(void) {
+bool Cmd100::Get_Connector(Cbus *_bus) {
     Get_MainConnector();
     Get_CentConnector();
     Get_SIOConnector();
 
     return true;
 }
-bool Cmd100::Set_Connector(void) {
+bool Cmd100::Set_Connector(Cbus *_bus) {
     Set_SIOConnector();
     Set_CentConnecor();
     Set_MainConnector();

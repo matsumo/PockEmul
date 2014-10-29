@@ -279,11 +279,11 @@ bool Crlp4002::exit(void)
     return true;
 }
 
-bool Crlp4002::Get_Connector(void) {
+bool Crlp4002::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Crlp4002::Set_Connector(void) {
+bool Crlp4002::Set_Connector(Cbus *_bus) {
     return true;
 }
 

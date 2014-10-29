@@ -768,7 +768,7 @@ UINT16 Cz1::getKey()
 
 }
 
-bool Cz1::Get_Connector(void) {
+bool Cz1::Get_Connector(Cbus *_bus) {
     Get_SerialConnector();
     Get_CentConnector();
     Get_SIOConnector();
@@ -776,7 +776,7 @@ bool Cz1::Get_Connector(void) {
     return true;
 }
 
-bool Cz1::Set_Connector(void) {
+bool Cz1::Set_Connector(Cbus *_bus) {
     Set_SerialConnector();
     Set_SIOConnector();
     Set_CentConnector();

@@ -583,14 +583,14 @@ UINT8 Crlh1000::out(UINT8 Port, UINT8 x)
 }
 
 
-bool Crlh1000::Set_Connector()
+bool Crlh1000::Set_Connector(Cbus *_bus)
 {
     // transfert busValue to Connector
     pCONNECTOR->Set_values(bus->toUInt64());
     return true;
 }
 
-bool Crlh1000::Get_Connector()
+bool Crlh1000::Get_Connector(Cbus *_bus)
 {
 
     bus->fromUInt64(pCONNECTOR->Get_values());

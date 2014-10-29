@@ -136,7 +136,7 @@ void	Cpc1401::Set_PortB(BYTE data)
 // PIN_SEL2		10
 // PIN_SEL1		11
 
-bool Cpc1401::Set_Connector(void)
+bool Cpc1401::Set_Connector(Cbus *_bus)
 {
     pCONNECTOR->Set_pin(PIN_MT_OUT2	,0);
 	pCONNECTOR->Set_pin(PIN_VGG		,1);
@@ -149,7 +149,7 @@ bool Cpc1401::Set_Connector(void)
     return(1);
 }
 
-bool Cpc1401::Get_Connector(void)
+bool Cpc1401::Get_Connector(Cbus *_bus)
 {
 	Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB7
 	Set_Port_Bit(PORT_B,7,pCONNECTOR->Get_pin(PIN_ACK));	// ACK	:	IB8

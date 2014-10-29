@@ -116,7 +116,7 @@ bool Cg850v::init()
 }
 
 
-bool Cg850v::Set_Connector()
+bool Cg850v::Set_Connector(Cbus *_bus)
 {
 #if 0
     switch(pin11If) {
@@ -133,7 +133,7 @@ bool Cg850v::Set_Connector()
     return true;
 }
 
-bool Cg850v::Get_Connector()
+bool Cg850v::Get_Connector(Cbus *_bus)
 {
     pin11If = pCONNECTOR->Get_values() >> 3;
 

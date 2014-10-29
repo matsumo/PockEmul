@@ -18,8 +18,8 @@ public:
     const char*	GetClassName(){ return("Cpc1403");}
 
 
-    virtual bool	Set_Connector(void);
-    virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
 
 
     virtual bool Chk_Adr(UINT32 *d,UINT32 data);

@@ -311,7 +311,7 @@ void Cce126::pulldownsignal(void)
 {
 }
 
-bool Cce126::Get_Connector(void) {
+bool Cce126::Get_Connector(Cbus *_bus) {
     MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     BUSY    = GET_PIN(PIN_BUSY);
     D_OUT	= GET_PIN(PIN_D_OUT);
@@ -322,7 +322,7 @@ bool Cce126::Get_Connector(void) {
     return true;
 }
 
-bool Cce126::Set_Connector(void) {
+bool Cce126::Set_Connector(Cbus *_bus) {
     SET_PIN(PIN_MT_IN,MT_IN);
     SET_PIN(PIN_D_IN,D_IN);
     SET_PIN(PIN_ACK,ACK);

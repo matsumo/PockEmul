@@ -837,14 +837,14 @@ UINT8 Chp41::getKey()
 
 }
 
-bool Chp41::Get_Connector(void) {
+bool Chp41::Get_Connector(Cbus *_bus) {
     for (int i=0;i<4;i++) {
         bus[i]->fromUInt64(pConnector[i]->Get_values());
     }
     return true;
 }
 
-bool Chp41::Set_Connector(void) {
+bool Chp41::Set_Connector(Cbus *_bus) {
 
     for (int i=0;i<4;i++) {
         pConnector[i]->Set_values(bus[i]->toUInt64());

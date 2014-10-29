@@ -221,7 +221,7 @@ void Cce140f::Push4(BYTE b) {
     }
 }
 
-bool Cce140f::Get_Connector(void) {
+bool Cce140f::Get_Connector(Cbus *_bus) {
     MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     BUSY    = GET_PIN(PIN_BUSY);
     D_OUT	= GET_PIN(PIN_D_OUT);
@@ -235,7 +235,7 @@ bool Cce140f::Get_Connector(void) {
     return true;
 }
 
-bool Cce140f::Set_Connector(void) {
+bool Cce140f::Set_Connector(Cbus *_bus) {
     //MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     //BUSY    = GET_PIN(PIN_BUSY);
     bool extD_OUT	= pCONNECTOR_Ext->Get_pin(PIN_D_OUT);

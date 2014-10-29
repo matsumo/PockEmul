@@ -70,7 +70,7 @@ bool Cpb2000::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
-    // Draw switch by 180° rotation
+    // Draw switch by 180ï¿½ rotation
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -498,7 +498,7 @@ bool Cpb2000::SaveConfig(QXmlStreamWriter *xmlOut)
 #define P(a)  (((x)>>(a)) & 0x01)
 #define I(a) (((d)>>(a))&0x01)
 #define PIN(x)    pCONNECTOR->Get_pin(x)
-bool Cpb2000::Set_Connector(void)
+bool Cpb2000::Set_Connector(Cbus *_bus)
 {
     pCONNECTOR->Set_pin(4	,READ_BIT(adrBus,0));
     pCONNECTOR->Set_pin(18	,READ_BIT(adrBus,1));
@@ -539,7 +539,7 @@ bool Cpb2000::Set_Connector(void)
 
 
 
-bool Cpb2000::Get_Connector(void)
+bool Cpb2000::Get_Connector(Cbus *_bus)
 {
     BYTE p = PIN(22) |
             (PIN(19)<<1) |

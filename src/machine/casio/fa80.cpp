@@ -126,14 +126,14 @@ bool Cfa80::exit(void)
     return true;
 }
 
-bool Cfa80::Get_Connector(void) {
+bool Cfa80::Get_Connector(Cbus *_bus) {
     Get_MainConnector();
     pHD61710->Get_CentConnector();
     pHD61710->Get_TAPEConnector();
 
     return true;
 }
-bool Cfa80::Set_Connector(void) {
+bool Cfa80::Set_Connector(Cbus *_bus) {
     pHD61710->Set_CentConnector();
     pHD61710->Set_TAPEConnector();
     Set_MainConnector();

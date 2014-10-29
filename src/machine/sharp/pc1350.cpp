@@ -60,7 +60,7 @@ bool Cpc13XX::init(void)
 
 	WatchPoint.add(&pSIOCONNECTOR_value,64,15,this,"Serial 15pins connector");
 
-    pS1CONNECTOR = new Cconnector(this,35,2,Cconnector::Sharp_35,"Memory SLOT 1",false,QPoint(0,90));	publish(pS1CONNECTOR);
+    pS1CONNECTOR = new Cconnector(this,35,2,Cconnector::Sharp_35,"Memory SLOT 1",true,QPoint(0,90));	publish(pS1CONNECTOR);
 
 	return true;
 }
@@ -224,7 +224,7 @@ void	Cpc1350::Set_PortF(BYTE data)
 #define SIO_ER		14
 #define SIO_PRQ		15
 
-bool Cpc1350::Set_Connector(void)
+bool Cpc1350::Set_Connector(Cbus *_bus)
 {
 #if 1
 	// MANAGE STANDARD CONNECTOR
@@ -248,7 +248,7 @@ bool Cpc1350::Set_Connector(void)
 	return(1);
 }
 
-bool Cpc1350::Get_Connector(void)
+bool Cpc1350::Get_Connector(Cbus *_bus)
 {
 	// MANAGE STANDARD CONNECTOR
 	Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB8

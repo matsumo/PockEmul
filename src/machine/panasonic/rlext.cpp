@@ -230,11 +230,11 @@ bool CrlExt::exit(void)
 
 
 
-bool CrlExt::Get_Connector(void) {
+bool CrlExt::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool CrlExt::Set_Connector(void) {
+bool CrlExt::Set_Connector(Cbus *_bus) {
     return true;
 }
 

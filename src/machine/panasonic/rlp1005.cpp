@@ -428,11 +428,11 @@ bool Crlp1005::exit(void)
 
 
 
-bool Crlp1005::Get_Connector(void) {
+bool Crlp1005::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Crlp1005::Set_Connector(void) {
+bool Crlp1005::Set_Connector(Cbus *_bus) {
     return true;
 }
 

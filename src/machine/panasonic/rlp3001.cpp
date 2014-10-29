@@ -280,11 +280,11 @@ bool Crlp3001::exit(void)
     return true;
 }
 
-bool Crlp3001::Get_Connector(void) {
+bool Crlp3001::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Crlp3001::Set_Connector(void) {
+bool Crlp3001::Set_Connector(Cbus *_bus) {
     return true;
 }
 

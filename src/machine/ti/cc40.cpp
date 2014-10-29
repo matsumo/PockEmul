@@ -631,12 +631,12 @@ quint8 Ccc40::getKey()
 //    CpcXXXX::keyPressEvent(event);
 //}
 
-bool Ccc40::Get_Connector(void) {
+bool Ccc40::Get_Connector(Cbus *_bus) {
 
 
     return true;
 }
-bool Ccc40::Set_Connector(void) {
+bool Ccc40::Set_Connector(Cbus *_bus) {
 
 
     return true;

@@ -291,7 +291,7 @@ bool Cpc2500::run(void)
 #define SIO_ER		14
 #define SIO_PRQ		15
 
-bool Cpc2500::Set_Connector(void)
+bool Cpc2500::Set_Connector(Cbus *_bus)
 {
     pTAPECONNECTOR->Set_pin(2,pCPU->Get_Xout());
 
@@ -305,7 +305,7 @@ bool Cpc2500::Set_Connector(void)
     return(1);
 }
 
-bool Cpc2500::Get_Connector(void)
+bool Cpc2500::Get_Connector(Cbus *_bus)
 {
     // MANAGE STANDARD CONNECTOR
     Set_Port_Bit(PORT_B,8,0);	// DIN	:	IB8

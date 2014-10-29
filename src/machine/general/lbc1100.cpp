@@ -263,7 +263,7 @@ UINT16 Clbc1100::out16(UINT16 address, UINT16 value)
     return 0;
 }
 
-bool Clbc1100::Set_Connector()
+bool Clbc1100::Set_Connector(Cbus *_bus)
 {
 //    pTAPECONNECTOR->Set_pin(3,true);       // RMT
 //    pTAPECONNECTOR->Set_pin(2,upd7907->upd7907stat.imem[0x00] & 0x10 ? 0xff : 0x00);    // Out
@@ -278,7 +278,7 @@ bool Clbc1100::Set_Connector()
     return true;
 }
 
-bool Clbc1100::Get_Connector()
+bool Clbc1100::Get_Connector(Cbus *_bus)
 {
 
     if (pCONNECTOR->Get_pin(9)) {

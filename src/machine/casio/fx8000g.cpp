@@ -264,12 +264,12 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
     return 0;
 }
 
-bool Cfx8000g::Set_Connector() {
+bool Cfx8000g::Set_Connector(Cbus *_bus) {
     pCONNECTOR->Set_values(bus->toUInt64());
     return true;
 }
 
-bool Cfx8000g::Get_Connector() {
+bool Cfx8000g::Get_Connector(Cbus *_bus) {
     bus->fromUInt64(pCONNECTOR->Get_values());
     return true;
 }

@@ -398,11 +398,11 @@ bool Crlp1004a::exit(void)
 
 
 
-bool Crlp1004a::Get_Connector(void) {
+bool Crlp1004a::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Crlp1004a::Set_Connector(void) {
+bool Crlp1004a::Set_Connector(Cbus *_bus) {
     return true;
 }
 

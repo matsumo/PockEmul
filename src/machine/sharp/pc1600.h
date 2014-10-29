@@ -90,8 +90,8 @@ public:
     virtual bool		Chk_Adr_R(UINT32 *d, UINT32 *data);
     UINT8		in(UINT8 address);
     UINT8       out(UINT8 address,UINT8 value);
-    bool		Set_Connector(void);
-    bool		Get_Connector(void);
+    bool		Set_Connector(Cbus *_bus = 0);
+    bool		Get_Connector(Cbus *_bus = 0);
     BYTE        getKey(void);
 
     CZ80            *pZ80;

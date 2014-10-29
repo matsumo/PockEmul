@@ -606,7 +606,7 @@ void Cpc15XX::Regs_Info(UINT8 Type)
 }
 
 
-bool Cpc15XX::Set_Connector(void)
+bool Cpc15XX::Set_Connector(Cbus *_bus)
 {
     // transfert busValue to Connector
 
@@ -617,7 +617,7 @@ bool Cpc15XX::Set_Connector(void)
 //    qWarning()<<"Cpc15XX::Set_Connector:"<<bus->toLog();
     return true;
 }
-bool Cpc15XX::Get_Connector(void)
+bool Cpc15XX::Get_Connector(Cbus *_bus)
 {
     bus->fromUInt64(pCONNECTOR->Get_values());
     bus->setEnable(false);

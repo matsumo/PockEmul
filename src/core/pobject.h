@@ -59,8 +59,8 @@ public:
     virtual bool	UpdateFinalImage(void);
     virtual	bool	run(void);					// emulator main step
     virtual bool	exit();					// exit
-    virtual bool	Set_Connector(void) { return true; }
-    virtual bool	Get_Connector(void) { return true; }
+    virtual bool	Set_Connector(Cbus *_bus = 0) { return true; }
+    virtual bool	Get_Connector(Cbus *_bus = 0) { return true; }
     virtual void    keyPressEvent(QKeyEvent *event);
     virtual void    keyReleaseEvent(QKeyEvent *event);
     virtual void    TurnON();
@@ -228,7 +228,7 @@ public:
 
 
     void swipeTriggered(QSwipeGesture *gesture);
-    void manageBus();
+    void manageBus(Cbus *_bus = 0);
     void writeBus(Cbus *bus,UINT32 *d, UINT32 data);
     void readBus(Cbus *bus, UINT32 *d, UINT32 *data);
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);

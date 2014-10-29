@@ -232,7 +232,7 @@ UINT16 Ctpc8300::out16(UINT16 address, UINT16 value)
     return 0;
 }
 
-bool Ctpc8300::Set_Connector()
+bool Ctpc8300::Set_Connector(Cbus *_bus)
 {
     if (sendToPrinter>0) {
         pCONNECTOR->Set_values(sendToPrinter);
@@ -248,7 +248,7 @@ bool Ctpc8300::Set_Connector()
     return true;
 }
 
-bool Ctpc8300::Get_Connector()
+bool Ctpc8300::Get_Connector(Cbus *_bus)
 {
 
     if (pCONNECTOR->Get_pin(9)) {

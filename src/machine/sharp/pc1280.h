@@ -21,8 +21,8 @@ public:
     bool Chk_Adr_R(UINT32 *d, UINT32 *data);
 
     virtual bool	init(void);
-    virtual bool	Set_Connector(void);
-    virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual void	initExtension(void);
     virtual void    TurnON(void);
     virtual void    TurnOFF(void);

@@ -113,7 +113,7 @@ bool Cce2xxx::init()
     CPObject::init();
     setfrequency( 0);
 
-    pCONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT",false,QPoint(0,90));	publish(pCONNECTOR);
+    pCONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory connector",false,QPoint(0,90));	publish(pCONNECTOR);
 
     if(pKEYB)	pKEYB->init();
     if(pTIMER)	pTIMER->init();
@@ -139,27 +139,20 @@ bool Cce2xxx::run()
 
     if ( bus->isEnable())
     {
-//        qWarning()<<bus->toLog();
         if (bus->isWrite()) {
 //            qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
             mem[addr] = bus->getData();
-            bus->setEnable(false);
-            pCONNECTOR->Set_values(bus->toUInt64());
-            return true;
         }
         else {
             bus->setData(mem[addr]);
 //            qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
-            bus->setEnable(false);
-            pCONNECTOR->Set_values(bus->toUInt64());
-            return true;
         }
     }
 
     bus->setEnable(false);
     pCONNECTOR->Set_values(bus->toUInt64());
 
-    return(1);
+    return true;
 }
 
 bool Cce2xxx::SaveSession_File(QXmlStreamWriter *xmlOut)

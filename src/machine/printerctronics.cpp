@@ -170,11 +170,11 @@ bool CprinterCtronics::exit(void)
 
 
 
-bool CprinterCtronics::Get_Connector(void) {
+bool CprinterCtronics::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool CprinterCtronics::Set_Connector(void) {
+bool CprinterCtronics::Set_Connector(Cbus *_bus) {
     return true;
 }
 

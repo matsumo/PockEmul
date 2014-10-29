@@ -264,11 +264,11 @@ void Cpc2021::Printer(qint8 d)
 
 
 
-bool Cpc2021::Get_Connector(void) {
+bool Cpc2021::Get_Connector(Cbus *_bus) {
     return true;
 }
 
-bool Cpc2021::Set_Connector(void) {
+bool Cpc2021::Set_Connector(Cbus *_bus) {
     return true;
 }
 

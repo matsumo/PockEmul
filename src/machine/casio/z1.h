@@ -26,8 +26,8 @@ public:
     virtual UINT8 out8(UINT16 Port,UINT8 x);
     virtual UINT16 in16(UINT16 Port);
     virtual UINT16 out16(UINT16 Port, UINT16 x);
-    virtual bool Set_Connector(void);
-    virtual bool Get_Connector(void);
+    virtual bool Set_Connector(Cbus *_bus = 0);
+    virtual bool Get_Connector(Cbus *_bus = 0);
     virtual void Get_SerialConnector();
     virtual void Set_SerialConnector();
     virtual void Get_CentConnector();

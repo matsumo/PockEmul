@@ -16,8 +16,8 @@ public:
 	void	TurnON(void);
 
     virtual bool    init(void);
-	virtual bool	Set_Connector(void);
-	virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual BYTE	Get_PortA(void);
     virtual void	Set_PortA(BYTE data);
     virtual void	Set_PortB(BYTE data);

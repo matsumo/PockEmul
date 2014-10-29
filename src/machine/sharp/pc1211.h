@@ -17,7 +17,7 @@ public:
     virtual	bool	run(void);					// emulator main
     virtual bool	exit(void);
 
-    virtual bool	Set_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data) {Q_UNUSED(d) Q_UNUSED(data) return true;}
     virtual bool	Chk_Adr_R(UINT32 *d,UINT32 *data) {Q_UNUSED(d) Q_UNUSED(data)return true;}

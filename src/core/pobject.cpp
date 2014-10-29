@@ -1324,16 +1324,22 @@ void CPObject::computeLinkMenu(QMenu * menu)
 	connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotNewLink( QAction *)));    
 	for (int i = 0;i < ConnList.size(); i++)
  	{
-		QMenu * menuLocConn = menulink->addMenu(ConnList.at(i)->Desc);
+        QMenu * menuLocConn = 0;
+        if (ConnList.size() == 1)
+            menuLocConn = menulink;
+        else
+            menuLocConn = menulink->addMenu(ConnList.at(i)->Desc);
 		
 		for (int j = 0;j < listpPObject.size(); j++)
 		{
 			if (listpPObject.at(j) != this)
 			{
-				QMenu * menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
+                QMenu * menuAllPc = 0;//menuLocConn->addMenu(listpPObject.at(j)->getName());
 				for (int k = 0; k < listpPObject.at(j)->ConnList.size(); k++)
                 {
                     if (ConnList.at(i)->isPluggableWith(listpPObject.at(j)->ConnList.at(k))) {
+                        if (menuAllPc==0)
+                            menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
                         QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
                         actionDistConn->setData(tr("%1:%2").arg((long)ConnList.at(i)).arg((long)listpPObject.at(j)->ConnList.at(k)));
                     }
@@ -1691,11 +1697,11 @@ bool CPObject::Mem_Load(qint32 adr, QByteArray data ) {
     return true;
 }
 
-void CPObject::manageBus() {
+void CPObject::manageBus(Cbus *_bus) {
 
     // write connector
 
-    Set_Connector();
+    Set_Connector(_bus);
 
     // Execute all connected objetcs
     // WRITE the LINK BOX Connector
@@ -1705,7 +1711,7 @@ void CPObject::manageBus() {
         mainwindow->dialoganalogic->captureData();
     }
     // Read connector
-    Get_Connector();
+    Get_Connector(_bus);
 
 }
 
@@ -1717,7 +1723,7 @@ void CPObject::writeBus(Cbus *bus, UINT32 *d, UINT32 data) {
     bus->setAddr(*d);
     bus->setData((quint8)data);
     bus->setEnable(true);
-    manageBus();
+    manageBus(bus);
     bus->setEnable(false);
 
     busMutex.unlock();
@@ -1731,7 +1737,7 @@ void CPObject::readBus(Cbus *bus,UINT32 *d,UINT32 *data) {
     bus->setData(0xff);
     bus->setEnable(true);
 //    qWarning()<<"ReadBus:"<<bus->toLog();
-    manageBus();
+    manageBus(bus);
 //    qWarning()<<"ReadBus after manage:"<<bus->toLog();
     *data = bus->getData();
     bus->setEnable(false);

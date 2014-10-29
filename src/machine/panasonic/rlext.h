@@ -16,8 +16,8 @@ public:
     virtual bool exit(void);				//end
     virtual	bool run(void);					//check access
 
-    virtual bool	Set_Connector(void);
-    virtual bool	Get_Connector(void);
+    virtual bool	Set_Connector(Cbus *_bus = 0);
+    virtual bool	Get_Connector(Cbus *_bus = 0);
 
 
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);

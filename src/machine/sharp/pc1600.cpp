@@ -521,8 +521,8 @@ INLINE void Cpc1600::hack(UINT32 pc)
 
 
 
-    FUNC_CALL(6,0x809C,QT_TR_NOOP("[%1] - CRSRCL  - Cursor 1öschen\n"));                break;
-    FUNC_CALL(6,0x80A2,QT_TR_NOOP("[%1] - CRSRSTATN-Setze Cursor wie 011E,aber vorher Cursor nicht löschen\n"));                break;
+    FUNC_CALL(6,0x809C,QT_TR_NOOP("[%1] - CRSRCL  - Cursor 1ï¿½schen\n"));                break;
+    FUNC_CALL(6,0x80A2,QT_TR_NOOP("[%1] - CRSRSTATN-Setze Cursor wie 011E,aber vorher Cursor nicht lï¿½schen\n"));                break;
     FUNC_CALL(6,0x809F,QT_TR_NOOP("[%1] - CHARADR - Pixe1code des Zeichens Aregermitteln,Startadresse>HLreg\n"));                break;
 
 
@@ -1284,7 +1284,7 @@ void Cpc1600::setPUPVPT(CbusPc1500 *bus, UINT32 adr) {
     }
 }
 
-bool Cpc1600::Set_Connector(void)
+bool Cpc1600::Set_Connector(Cbus *_bus)
 {
 //    pCONNECTOR->Set_pin(1	,0);
 
@@ -1298,7 +1298,7 @@ bool Cpc1600::Set_Connector(void)
     return true;
 }
 
-bool Cpc1600::Get_Connector(void)
+bool Cpc1600::Get_Connector(Cbus *_bus)
 {
 //    ce1600_connected = pCONNECTOR->Get_pin(1);
 
