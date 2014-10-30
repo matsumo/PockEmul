@@ -227,6 +227,8 @@ void	Cpc1350::Set_PortF(BYTE data)
 
 bool Cpc1350::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 #if 1
 	// MANAGE STANDARD CONNECTOR
 	pCONNECTOR->Set_pin(PIN_MT_OUT2	,0);
@@ -251,6 +253,8 @@ bool Cpc1350::Set_Connector(Cbus *_bus)
 
 bool Cpc1350::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 	// MANAGE STANDARD CONNECTOR
 	Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB8
 	Set_Port_Bit(PORT_B,7,pCONNECTOR->Get_pin(PIN_ACK));	// ACK	:	IB7
