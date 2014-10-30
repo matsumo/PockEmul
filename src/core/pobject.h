@@ -59,8 +59,8 @@ public:
     virtual bool	UpdateFinalImage(void);
     virtual	bool	run(void);					// emulator main step
     virtual bool	exit();					// exit
-    virtual bool	Set_Connector(Cbus *_bus = 0) { return true; }
-    virtual bool	Get_Connector(Cbus *_bus = 0) { return true; }
+    virtual bool	Set_Connector(Cbus *_bus = 0) { Q_UNUSED(_bus); return true; }
+    virtual bool	Get_Connector(Cbus *_bus = 0) { Q_UNUSED(_bus); return true; }
     virtual void    keyPressEvent(QKeyEvent *event);
     virtual void    keyReleaseEvent(QKeyEvent *event);
     virtual void    TurnON();

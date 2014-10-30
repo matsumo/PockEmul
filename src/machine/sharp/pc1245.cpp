@@ -38,19 +38,17 @@ bool Cpc1245::UpdateFinalImage(void)
     QPainter painter;
     painter.begin(FinalImage);
 
-    QPoint ptPower(448,32);
-
+    QPoint ptPower(448*internalImageRatio,32*internalImageRatio);
 
     switch (PowerSwitch)
     {
-    case PS_RUN :	painter.drawImage(ptPower,iPowerRUN); break;
-    case PS_PRO :	painter.drawImage(ptPower,iPowerPRO); break;
-    case PS_OFF :	painter.drawImage(ptPower,iPowerOFF); break;
+    case PS_RUN :	painter.drawImage(ptPower,iPowerRUN.scaled(iPowerRUN.size()*internalImageRatio)); break;
+    case PS_PRO :	painter.drawImage(ptPower,iPowerPRO.scaled(iPowerPRO.size()*internalImageRatio)); break;
+    case PS_OFF :	painter.drawImage(ptPower,iPowerOFF.scaled(iPowerOFF.size()*internalImageRatio)); break;
     }
 
     painter.end();
 
-    emit updatedPObject(this);
     return true;
 }
 

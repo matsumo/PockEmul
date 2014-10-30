@@ -88,6 +88,8 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
 
 bool Cpc1403::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 	int port1 = Get_8(0x3A00);
 	
 	pCONNECTOR->Set_pin(PIN_MT_OUT2	,0);
@@ -104,7 +106,7 @@ bool Cpc1403::Set_Connector(Cbus *_bus)
 
 bool Cpc1403::Get_Connector(Cbus *_bus)
 {
-    Q_UNUSED(bus)
+    Q_UNUSED(_bus)
 
     pCPU->Set_Xin(pCONNECTOR->Get_pin(PIN_MT_IN));
 
@@ -157,7 +159,7 @@ bool Cpc1403::Chk_Adr(UINT32 *d,UINT32 data)
     }
 //    if ( (*d>=0x4000) && (*d<=0x7FFF) )	{*d += 0xC000 + (RomBank * 0x4000); return(0); }
     if ( (*d>=0x4000) && (*d<=0x7FFF) )	{*d += memOffset; return(0); }
-    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d = *d & 0x1FFF | 0xE000; return(1); }
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) | 0xE000; return(1); }
 
 	return(0);
 
@@ -172,7 +174,7 @@ bool Cpc1403::Chk_Adr_R(UINT32 *d,UINT32 *data)
         *d += memOffset;
         return(1);
     }
-    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d = *d & 0x1FFF | 0xE000; return(1); }
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ (*d = *d & 0x1FFF) | 0xE000; return(1); }
 	return(1);	
 }
 

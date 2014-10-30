@@ -68,6 +68,21 @@ Cpc2500::~Cpc2500()
     delete pce515p;
 }
 
+bool Cpc2500::init(void) {
+//    pCPU->logsw = true;
+    Cpc1350::init();
+    pce515p->init();
+    pTAPECONNECTOR	= new Cconnector(this,2,2,Cconnector::Jack,"Line in / Rec",false);	publish(pTAPECONNECTOR);
+    pSIOCONNECTOR->setSnap(QPoint(960,480));
+
+    remove(pCONNECTOR); // delete pCONNECTOR;
+
+    WatchPoint.remove(&pCONNECTOR_value);    // Remove the pc130 11pins connector from the analogic monitor
+    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
+    return true;
+}
+
+
 void Cpc2500::contextMenuEvent(QContextMenuEvent *e)
 {
     if (pce515p->PaperPos().contains(e->pos())) {
@@ -82,14 +97,10 @@ void Cpc2500::contextMenuEvent(QContextMenuEvent *e)
 bool Cpc2500::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
-
-    // Draw switch by 180° rotation
     QPainter painter;
 
     // PRINTER SWITCH
     painter.begin(FinalImage);
-
-
 
     float ratio = ( (float) pce515p->paperWidget->width() ) / ( pce515p->paperWidget->bufferImage->width() - pce515p->paperWidget->getOffset().x() );
 
@@ -99,8 +110,8 @@ bool Cpc2500::UpdateFinalImage(void) {
                                  pce515p->paperWidget->getOffset().y() +10)
                           );
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(pce515p->PaperPos(),
-                      pce515p->paperWidget->bufferImage->copy(source).scaled(pce515p->PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+    painter.drawImage(pce515p->PaperPos().x()*internalImageRatio,pce515p->PaperPos().y()*internalImageRatio,
+                      pce515p->paperWidget->bufferImage->copy(source).scaled(pce515p->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
 
     painter.drawImage(580*internalImageRatio,239*internalImageRatio,
@@ -114,7 +125,6 @@ bool Cpc2500::UpdateFinalImage(void) {
     }
     painter.end();
 
-    emit updatedPObject(this);
     return true;
 }
 
@@ -144,26 +154,42 @@ BYTE	Cpc2500::Get_PortA(void)
 
 void	Cpc2500::Set_PortF(BYTE data)
 {
+    if (pCPU->fp_log) fprintf(pCPU->fp_log,"WRITE PORT F = %i\n",data);
     IO_F = data;
+
     ProtectMemory = GET_PORT_BIT(PORT_F,1);
+    romExt = GET_PORT_BIT(PORT_F,1) ? 0 : 1;
+    qWarning()<<"romExt:"<<romExt;
+
+//    if (ProtectMemory == GET_PORT_BIT(PORT_F,1)) {
+//        ProtectMemory = GET_PORT_BIT(PORT_F,1) ? 0 : 1;
+//        if (pCPU->fp_log) fprintf(pCPU->fp_log,"PROTECTMEMORY = %i\n",ProtectMemory);
+//    }
 }
 
 BYTE Cpc2500::Get_PC(UINT32 adr)
 {
+#if 1
     //Chk_Adr_R(&adr,bREAD);
     if ( (adr >= 0x8000) && (adr<=0xFFFF) && (RomBank & 0x02) ) {
         adr += 0x8000;
     }
+
     return(mem[adr]);
+#else
+    return Get_8(adr);
+#endif
 }
 
 WORD Cpc2500::Get_16rPC(UINT32 adr)
 {
+//    return Get_16r(adr);
     UINT32	a;
 
     if ( (adr >= 0x8000) && (adr<=0xFFFF) && (RomBank & 0x02) ) {
         adr += 0x8000;
     }
+
     a=adr+1;
     //Chk_Adr_R(&adr,bREAD);
     //Chk_Adr_R(&a,bREAD);
@@ -173,28 +199,30 @@ WORD Cpc2500::Get_16rPC(UINT32 adr)
 
 bool Cpc2500::Chk_Adr(UINT32 *d,UINT32 data)
 {
-    if (ProtectMemory) {
-        if (pCPU->fp_log) fprintf(pCPU->fp_log,"ECRITURE EXT [%04x]=%02x (%c)\n",(uint)*d,(BYTE)data,(int)data);
-        if ( (*d>=0x8000) && (*d<=0xFFFF) ){
-
-            *d += 0x8000 ;
-            return(1);
-        }
-        return (1);
-    }
 
     if ( (*d>=0x7000) && (*d<=0x7BFF) ) {
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"ECRITURE [%04x]=%02x (%c)\n",(uint)*d,(BYTE)data,(int)data);
     }
     if ( (*d>=0x7100) && (*d<=0x71FF) )	{
         RomBank = data;
+        qWarning()<<"RomBank: "<<RomBank;
+        if (pCPU->fp_log) fprintf(pCPU->fp_log,"ROMBANK [%04x]=%02x\n",(uint)*d,(BYTE)data);
         return(1);
     }
     if ( (*d>=0x7700) && (*d<=0x77FF) )	{
         capslock = data;
         return(1);
     }
-    if ( (*d>=0x7000) && (*d<=0x79FF) )	{pLCDC->SetDirtyBuf(*d-0x7000);return(1);}
+    if ( ( (*d>=0x7000) && (*d<=0x707C) ) ||
+         ( (*d>=0x7200) && (*d<=0x727C) ) ||
+         ( (*d>=0x7400) && (*d<=0x747C) ) ||
+         ( (*d>=0x7600) && (*d<=0x767C) ) ||
+         ( (*d>=0x7800) && (*d<=0x787C) ))	{
+        if (mem[*d] != data) {
+            pLCDC->SetDirtyBuf(*d-0x7000);
+        }
+        return(1);
+    }
     if ( (*d>=0x7A00) && (*d<=0x7AFF) )
     {
         pKEYB->Set_KS( (pKEYB->Get_KS() & 0xF0) | ((BYTE) data & 0x0F ));
@@ -216,39 +244,27 @@ bool Cpc2500::Chk_Adr(UINT32 *d,UINT32 data)
 
 }
 
-bool Cpc2500::init(void) {
-    Cpc1350::init();
-    pce515p->init();
-    pTAPECONNECTOR	= new Cconnector(this,2,2,Cconnector::Jack,"Line in / Rec",false);	publish(pTAPECONNECTOR);
-    pSIOCONNECTOR->setSnap(QPoint(960,480));
-
-    remove(pCONNECTOR); // delete pCONNECTOR;
-
-    WatchPoint.remove(&pCONNECTOR_value);    // Remove the pc130 11pins connector from the analogic monitor
-    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
-    return true;
-}
 
 bool Cpc2500::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
     Q_UNUSED(data)
 
-    if (                   (*d<=0x1FFF) ) { return(0);}
+    if (                   (*d<=0x1FFF) ) { return true;}
     if ( (*d >= 0x2000) && (*d<=0x3FFF) && EXTENSION_CE201M_CHECK ) { *d+=0x2000; return true;}  // 8Kb Ram Card Image
     if ( (*d >= 0x8000) && (*d<=0xFFFF) && (RomBank & 0x02) ) { *d += 0x8000; return true; }
 
     if (ProtectMemory) {
         if ( (*d>=0x8000) && (*d<=0xFFFF) )	{
             *d += 0x8000 ;
-            if (pCPU->fp_log) {
-                fprintf(pCPU->fp_log,"READ EXT ROM [%04x] : %c (%02x)\n",(uint)(*d-0x8000),mem[*d],mem[*d]);
-            }
+//            if (pCPU->fp_log) {
+//                fprintf(pCPU->fp_log,"READ EXT ROM [%04x] : %c (%02x)\n",(uint)(*d-0x8000),mem[*d],mem[*d]);
+//            }
             return (1);
         }
         return (1);
     }
 
-    if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]=%02x (%c)\n",(uint)*d,mem[*d],mem[*d]);
+//    if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]=%02x (%c)\n",(uint)*d,mem[*d],mem[*d]);
 
     return true;
 }
@@ -294,6 +310,8 @@ bool Cpc2500::run(void)
 
 bool Cpc2500::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     pTAPECONNECTOR->Set_pin(2,pCPU->Get_Xout());
 
     // MANAGE SERIAL CONNECTOR
@@ -308,6 +326,8 @@ bool Cpc2500::Set_Connector(Cbus *_bus)
 
 bool Cpc2500::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     // MANAGE STANDARD CONNECTOR
     Set_Port_Bit(PORT_B,8,0);	// DIN	:	IB8
     Set_Port_Bit(PORT_B,7,1);	// ACK	:	IB7

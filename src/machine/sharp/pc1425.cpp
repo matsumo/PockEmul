@@ -11,8 +11,6 @@ Cpc1425::Cpc1425(CPObject *parent) : Cpc1403(parent)
     Initial_Session_Fname ="pc1425.pkm";
 
     BackGroundFname	= P_RES(":/pc1425/pc1425.png");
-//    LcdFname		= P_RES(":/pc1403/1403lcd.png");
-//    SymbFname		= P_RES(":/pc1403/1403symb.png");
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1425/cpu-1425.bin")	, "" , CSlot::ROM , "CPU ROM"));

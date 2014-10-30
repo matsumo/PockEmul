@@ -1005,6 +1005,13 @@ void Parser::ConvertBinHex(void) {
         s.replace(f,QString("%1").arg(f.toUInt(&ok,16)));
      }
 
+    rx.setPattern("($[0-9A-F]+)"); //
+    while ((pos = rx.indexIn(s, pos)) != -1) {
+        pos = rx.indexIn(s,pos);
+        QString f = rx.cap(0);
+        s.replace(f,QString("%1").arg(f.toUInt(&ok,16)));
+     }
+
     rx.setPattern("(0b[01]+)"); //
     pos=0;
     while ((pos = rx.indexIn(s, pos)) != -1) {

@@ -121,9 +121,9 @@ void Clcdc::disp_symb(void)
                            COLOR((pPC->Get_8(symbList.at(ii).addr)) & symbList.at(ii).bit),
                            symbList.at(ii).x,
                            symbList.at(ii).y);
-        }
 
-        Refresh = true;
+            Refresh = true;
+        }
     }
     for (int ii=0;ii<symbList.count();ii++) {
         DirtyBuf[symbList.at(ii).addr-baseAdr] = 0;

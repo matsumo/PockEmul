@@ -40,6 +40,7 @@ protected slots:
 private:
     bool printMode;
     bool capslock;
+    BYTE romExt;
 };
 
 #endif // PC2500_H

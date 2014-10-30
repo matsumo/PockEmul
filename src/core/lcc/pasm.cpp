@@ -1020,7 +1020,7 @@ void Cpasm::parsefile(QString fname,QString source) {
 //                        }
                     } else
                     {
-//                        addcode(ord(params[1]));
+                        addcode(params[1].toLatin1());
                         params.remove(0,1);
                     }
                 }

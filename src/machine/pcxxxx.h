@@ -168,9 +168,6 @@ public:
 	virtual	bool	init(void);				// initialize
 	virtual	bool	run(void);					// emulator main
 	virtual bool	exit(void);					// exit
-    virtual bool	Set_Connector(Cbus *_bus = 0) { return (1); }
-    virtual bool	Get_Connector(Cbus *_bus = 0) { return (1); }
-
 
     virtual void    ExtChanged(void);
 

@@ -304,8 +304,6 @@ void Cce515p::Print(CMove point)
     static bool old_penDown = true;
     QPainter painter;
 
-    pPC->Refresh_Display = true;
-
     if (point.changeColor) {
         Pen_Color = point.newColor;
     }

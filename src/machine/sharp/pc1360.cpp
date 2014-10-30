@@ -201,8 +201,18 @@ bool Cpc1360::Chk_Adr(UINT32 *d,UINT32 data)
 {
     if (                 (*d<=0x1FFF) )	{ return(0); }	// ROM area(0000-1fff)
 	if ( (*d>=0x2000) && (*d<=0x27FF) )	{ return(0); }
-	if ( (*d>=0x2800) && (*d<=0x33FF) ) { pLCDC->SetDirtyBuf(*d-0x2800); return(1);			/* LCDC (0200x) */	}
-	if ( (*d>=0x3400) && (*d<=0x35FF) )	{ RomBank = data &0x07;	return(1); }
+//	if ( (*d>=0x2800) && (*d<=0x33FF) ) { pLCDC->SetDirtyBuf(*d-0x2800); return(1);			/* LCDC (0200x) */	}
+    if ( ( (*d>=0x2800) && (*d<=0x287C) ) ||
+         ( (*d>=0x2A00) && (*d<=0x2A7C) ) ||
+         ( (*d>=0x2C00) && (*d<=0x2C7C) ) ||
+         ( (*d>=0x2E00) && (*d<=0x2E7C) ) ||
+         ( (*d>=0x3000) && (*d<=0x307C) ))	{
+        if (mem[*d] != data) {
+            pLCDC->SetDirtyBuf(*d-0x7000);
+        }
+        return(1);
+    }
+    if ( (*d>=0x3400) && (*d<=0x35FF) )	{ RomBank = data &0x07;	return(1); }
 	if ( (*d>=0x3E00) && (*d<=0x3FFF) )
 	{
         BYTE KStrobe=0;

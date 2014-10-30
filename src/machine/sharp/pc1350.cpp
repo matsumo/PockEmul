@@ -313,7 +313,17 @@ if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
     if (pCPU->fp_log) fprintf(pCPU->fp_log,"ECRITURE [%04x]=%02x (%c)\n",*d,data,data);
 }
 
-	if ( (*d>=0x7000) && (*d<=0x79FF) )	{pLCDC->SetDirtyBuf(*d-0x7000);return(1);}
+//	if ( (*d>=0x7000) && (*d<=0x79FF) )	{pLCDC->SetDirtyBuf(*d-0x7000);return(1);}
+    if ( ( (*d>=0x7000) && (*d<=0x707C) ) ||
+         ( (*d>=0x7200) && (*d<=0x727C) ) ||
+         ( (*d>=0x7400) && (*d<=0x747C) ) ||
+         ( (*d>=0x7600) && (*d<=0x767C) ) ||
+         ( (*d>=0x7800) && (*d<=0x787C) ))	{
+        if (mem[*d] != data) {
+            pLCDC->SetDirtyBuf(*d-0x7000);
+        }
+        return(1);
+    }
 	if ( (*d>=0x7E00) && (*d<=0x7FFF) )	
 	{
 		pKEYB->Set_KS( (BYTE) data & 0x7F );

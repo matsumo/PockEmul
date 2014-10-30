@@ -225,7 +225,7 @@ INLINE void CSC61860::compute_xout(void)
 /*****************************************************************************/
 INLINE BYTE CSC61860::Get_i8(BYTE adr)
 {
-    if (fp_log) fprintf(fp_log,"LECTURE INT [%02x]=%02x (%c)\n",adr,imem[adr],imem[adr]);
+//    if (fp_log) fprintf(fp_log,"LECTURE INT [%02x]=%02x (%c)\n",adr,imem[adr],imem[adr]);
 	return(imem[adr]);
 }
 INLINE WORD CSC61860::Get_i16(BYTE adr)
@@ -240,7 +240,7 @@ INLINE WORD CSC61860::Get_i16(BYTE adr)
 /*****************************************************************************/
 INLINE void CSC61860::Set_i8(BYTE adr,BYTE d)
 {
-    if (fp_log) fprintf(fp_log,"ECRITURE INT [%02x]=%02x (%c)\n",adr,d,d);
+//    if (fp_log) fprintf(fp_log,"ECRITURE INT [%02x]=%02x (%c)\n",adr,d,d);
 	imem[adr] = d;
 }
 INLINE void CSC61860::Set_i16(BYTE adr,WORD d)
