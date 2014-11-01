@@ -217,6 +217,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["PC-1250"]=PC1250;
     objtable["PC-1251"]=PC1251;
     objtable["PC-1251H"]=PC1251H;
+    objtable["PC-1253"]=PC1253;
     objtable["PC-1255"]=PC1255;
     objtable["Tandy PC-3"]=TandyPC3;
     objtable["Tandy PC-3 (4Ko)"]=TandyPC3EXT;
@@ -349,6 +350,7 @@ CPObject *pPC=0;
         case PC1250	: pPC = new Cpc1250;	pPC->setName("PC-1250");break;
         case PC1251	: pPC = new Cpc1251;	pPC->setName("PC-1251");break;
         case PC1251H: pPC = new Cpc1251H;	pPC->setName("PC-1251H");break;
+        case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
         case PC1255	: pPC = new Cpc1255;	pPC->setName("PC-1255");break;
         case TandyPC3:pPC = new Ctrspc3;	pPC->setName("Tandy PC-3");break;
         case TandyPC3EXT:pPC = new Ctrspc3Ext;	pPC->setName("Tandy PC-3 (4Ko)");break;
@@ -944,11 +946,17 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     qWarning()<<"ok1";
     qWarning()<<view;
 //    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
-    view->grab().toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+
+    view->grabFramebuffer().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
     qWarning()<<"ok2";
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
 #endif
+
+//    QFile outFile("test.jpg");
+//    outFile.open(QIODevice::WriteOnly);
+//    outFile.write(ba);
+//    outFile.close();
 
 
     qWarning()<<"screenshot done";

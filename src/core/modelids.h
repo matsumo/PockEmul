@@ -30,6 +30,7 @@ enum Models {
     PC1500A,
     TandyPC2,
     PC1251H,
+    PC1253,
     PC1600,
     PC2500,
 

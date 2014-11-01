@@ -8,5 +8,7 @@
         <file>pc1251/pc1251h.png</file>
         <file>pc1251/1251hlcd.png</file>
         <file>pc1251/1251hsymb.png</file>
+        <file>pc1251/pc1253.png</file>
+        <file>pc1251/pc1252h.png</file>
     </qresource>
 </RCC>
