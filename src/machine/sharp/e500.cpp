@@ -362,6 +362,8 @@ INLINE void Ce500::computeSound(void)
 
 bool Ce500::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     int port1 = pCPU->imem[IMEM_EOL];
     int port2 = pCPU->imem[IMEM_EOH];
 
@@ -383,6 +385,8 @@ bool Ce500::Set_Connector(Cbus *_bus)
 
 bool Ce500::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     pCPU->setImemBit(IMEM_EIL,8,pCONNECTOR->Get_pin(PIN_ACK));
 
     if (pCONNECTOR->Get_pin(PIN_ACK))

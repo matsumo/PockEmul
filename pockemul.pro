@@ -1118,7 +1118,8 @@ OTHER_FILES += \
     resources/keymap/hp15c.map \
     resources/keymap/rlp1002.map \
     resources/keymap/rlp1005.map \
-    cloud/Main.qml
+    cloud/Main.qml \
+    resources/keymap/pc1253.map
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
