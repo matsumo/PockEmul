@@ -342,7 +342,13 @@ Rectangle {
         id: thecloud
         anchors.fill: parent
         visible: false;
+//        onVisibleChanged: {
 
+//            if (!visible) {
+//                console.log('onVisibleChanged:'+visible);
+//                cloud.save();
+//            }
+//        }
     }
     Component.onCompleted: {
         thecloud.close.connect(cloudHide)

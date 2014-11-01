@@ -15,6 +15,7 @@
      <example brand="SHARP_PC12XX" idpocket="PC-1251" filename="./" name="Sharp pc-1251" image=":/pc1251/pc1251.png"/>
      <example brand="TANDY" idpocket="Tandy PC-3 (4Ko)" filename="./" name="Tandy PC-3 (4Ko)" image=":/pc1250/pc31k.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1251H" filename="./" name="Sharp pc-1251H" image=":/pc1251/pc1251h.png"/>
+     <example brand="SHARP_PC12XX" idpocket="PC-1253" filename="./" name="Sharp pc-1253" image=":/pc1251/pc1253.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1255" filename="./" name="Sharp pc-1255" image=":/pc1255/pc1255.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1260" filename="./" name="Sharp pc-1260" image=":/pc1260/pc1260.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1261" filename="./" name="Sharp pc-1261" image=":/pc1261/pc1261.png"/>

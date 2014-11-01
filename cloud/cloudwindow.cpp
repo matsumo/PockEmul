@@ -135,8 +135,6 @@ QString Cloud::save()
 //    hide();
 //    mainwindow->repaint();
 
-
-
     QString s = mainwindow->saveassessionString().remove(0,1);
 //    qWarning()<<"session saved";
 //    qWarning()<<s.left(500);
