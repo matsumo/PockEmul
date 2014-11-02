@@ -142,8 +142,8 @@ private:
 
 	void	compute_xout(void);
     void    backgroundTasks(void);
-	qint64	start2khz;
-	qint64	start4khz;
+    quint64	start2khz;
+    quint64	start4khz;
 	
     bool	wait_loop_running,cup_loop_running,cdn_loop_running;
     int     op_local_counter;

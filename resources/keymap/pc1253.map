@@ -64,5 +64,6 @@
     <KEY description="X" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x78" top="0" view="FRONT" width="25"/>
     <KEY description="Y" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x79" top="0" view="FRONT" width="13"/>
     <KEY description="Z" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x7a" top="0" view="FRONT" width="13"/>
+    <KEY description="11pins connector" height="137" left="6" scancode="0x240" top="89" width="14" view="LEFT"/>
 </Keyboard>
 </KEYBMAP>

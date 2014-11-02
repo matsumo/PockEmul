@@ -22,10 +22,7 @@ public:
  
     bool standard;
 	
-	virtual ~Ccable(){
-		delete(pCONNECTOR_A);
-		delete(pCONNECTOR_B);
-    }
+    virtual ~Ccable();
 
     bool UpdateFinalImage();
 private:

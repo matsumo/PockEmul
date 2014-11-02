@@ -139,8 +139,8 @@ extern FILE	*fp_tmp;
 INLINE void CSC61860::compute_xout(void)
 {
 	qint64 delta;
-	qint64 wait2khz = pPC->getfrequency()/1000/4;
-	qint64 wait4khz = pPC->getfrequency()/1000/8;
+    quint64 wait2khz = pPC->getfrequency()/1000/4;
+    quint64 wait4khz = pPC->getfrequency()/1000/8;
 
 	switch (pPC->IO_C>>4)
 	{
@@ -515,14 +515,13 @@ INLINE void CSC61860::Op_0b(void)
 //--------------------------
 INLINE void CSC61860::Op_0c(void)
 {
-	BYTE	d,b;
+    BYTE	b;
 	WORD	w;
 	BYTE l;
 	l = I_REG_I;
 
     AddState(7);
 
-	d=Get_i8(reg.r.p);
 	w=hex2bcd(
 		bcd2hex(Get_i8(reg.d.p)) + bcd2hex(I_REG_A)
 		);
@@ -1183,7 +1182,6 @@ INLINE void CSC61860::Op_39(void)
     AddState(st+4);
 #else
     BYTE	t;
-    BYTE st=0;
     if (first_pass) {
         AddState(4);
         first_pass=false;
@@ -2297,11 +2295,9 @@ INLINE void CSC61860::Op_e0(BYTE Op)
 {
 
 	BYTE h,l;
-	WORD t;
+
 	h = Op - 0xE0;
     l = pPC->Get_PC(reg.d.pc++);
-
-	t = (h<<8)+l;
 
 	reg.r.r-=SIZE_16;
 	Set_i16(reg.r.r, reg.d.pc);
@@ -2333,7 +2329,13 @@ INLINE void CSC61860::Op_6f(void)
         cdn_loop_running = false;
 	}
     else {
-        if (op_local_counter )	{	reg.d.pc--;	}
+        if (op_local_counter>0 )	{
+            op_local_counter--;
+            reg.d.pc--;
+        }
+        else {
+            cup_loop_running = false;
+        }
     }
     AddState(4);
 }
@@ -2351,14 +2353,21 @@ INLINE void CSC61860::Op_4f(void)
 	}
 
 	reg.r.z = 1;
-    op_local_counter--;
+
     reg.r.p++;	reg.r.p &=0x7F;
     if (Get_Xin()) {
 		reg.r.z = 0;
+        qWarning()<<"CUP:ping";
         cup_loop_running = false;
 	}
     else {
-        if (op_local_counter)	{	reg.d.pc--;	}
+        if (op_local_counter>0)	{
+            op_local_counter--;
+            reg.d.pc--;
+        }
+        else {
+            cup_loop_running = false;
+        }
     }
     AddState(4);
 }

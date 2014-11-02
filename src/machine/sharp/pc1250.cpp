@@ -152,6 +152,8 @@ bool Cpc1250::run(void)
 
 bool Cpc1250::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 	pCONNECTOR->Set_pin(PIN_MT_OUT2	,0);
 	pCONNECTOR->Set_pin(PIN_VGG		,1);
 	pCONNECTOR->Set_pin(PIN_BUSY	,GET_PORT_BIT(PORT_F,1));		// F01
@@ -165,7 +167,9 @@ bool Cpc1250::Set_Connector(Cbus *_bus)
 
 bool Cpc1250::Get_Connector(Cbus *_bus)
 {
-	Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB7
+    Q_UNUSED(_bus)
+
+    Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB7
 	Set_Port_Bit(PORT_B,7,pCONNECTOR->Get_pin(PIN_ACK));	// ACK	:	IB8
 	pCPU->Set_Xin(pCONNECTOR->Get_pin(PIN_MT_IN));
 

@@ -11,11 +11,11 @@
 
 extern MainWindowPockemul *mainwindow;
 
-Ccable::Ccable(CPObject *parent)	: CPObject(this)
+Ccable::Ccable(CPObject *parent)	: CPObject(parent)
 {							//[constructor]
 
     setfrequency( 0);
-    BackGroundFname	= P_RES(":/ext/cable_blank.png");
+    BackGroundFname	= P_RES(":/ext/cable.png");
 
     pTIMER		= new Ctimer(this);
     setDX(150);
@@ -23,7 +23,12 @@ Ccable::Ccable(CPObject *parent)	: CPObject(this)
     setDXmm(196);
     setDYmm(155);
     setDZmm(33);
-    standard = true;
+    standard = false;
+}
+
+Ccable::~Ccable(){
+//    delete(pCONNECTOR_A);
+//    delete(pCONNECTOR_B);
 }
 
 
@@ -68,14 +73,20 @@ bool Ccable::run(void)
         // 6 : tape in
         // 7 : tape out
 
-        pCONNECTOR_A->Set_pin(4,pCONNECTOR_B->Get_pin(9));
-        pCONNECTOR_B->Set_pin(4,pCONNECTOR_A->Get_pin(9));
+//        pCONNECTOR_A->Set_pin(4,pCONNECTOR_B->Get_pin(9));
+//        pCONNECTOR_B->Set_pin(4,pCONNECTOR_A->Get_pin(9));
 
-        pCONNECTOR_A->Set_pin(8,pCONNECTOR_B->Get_pin(5));
-        pCONNECTOR_B->Set_pin(8,pCONNECTOR_A->Get_pin(5));
+//        pCONNECTOR_A->Set_pin(8,pCONNECTOR_B->Get_pin(5));
+//        pCONNECTOR_B->Set_pin(8,pCONNECTOR_A->Get_pin(5));
 
-        pCONNECTOR_A->Set_pin(6,pCONNECTOR_B->Get_pin(7));
-        pCONNECTOR_B->Set_pin(6,pCONNECTOR_A->Get_pin(7));
+        bool _tmp6A = pCONNECTOR_A->Get_pin(6);
+        bool _tmp7A = pCONNECTOR_A->Get_pin(7);
+        bool _tmp6B = pCONNECTOR_B->Get_pin(6);
+        bool _tmp7B = pCONNECTOR_B->Get_pin(7);
+        pCONNECTOR_B->Set_pin(6,_tmp7A);
+        pCONNECTOR_A->Set_pin(6,_tmp7B);
+//        pCONNECTOR_B->Set_pin(6,_tmp7A);
+//        pCONNECTOR_B->Set_pin(7,_tmp6A);
 
     }
 //    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->dataplot.Marker = 8;
@@ -156,7 +167,7 @@ bool Ccable::UpdateFinalImage(void) {
      QPen pen;
      pen.setWidth(10);
      painter.setPen(pen);
-//     painter.setBrush(QColor(122, 163, 39));
+     painter.setBrush(QColor(122, 163, 39));
 
      painter.drawPath(path);
 

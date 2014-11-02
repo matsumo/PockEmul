@@ -14,7 +14,7 @@
 
 extern MainWindowPockemul* mainwindow;
 
-Cconnector::Cconnector(CPObject *parent , QString desc, bool newGender)
+Cconnector::Cconnector(CPObject *parent , QString desc, bool newGender):QObject(parent)
 {
     Parent	= parent;
     Desc = desc;
@@ -22,7 +22,7 @@ Cconnector::Cconnector(CPObject *parent , QString desc, bool newGender)
     values = 0;
 }
 
-Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QString desc, bool newGender, QPointF snap, ConnectorDir dir)
+Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QString desc, bool newGender, QPointF snap, ConnectorDir dir):QObject(parent)
 {
     this->Parent = parent;
     this->Desc   = desc;

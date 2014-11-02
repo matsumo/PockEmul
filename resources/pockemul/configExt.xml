@@ -31,10 +31,10 @@
      <example brand="SHARP" idpocket="CE-2H64M" filename="./" name="Sharp ce-2h64m" image=":/ce2xxx/ce2h64m.png" connectortype="Sharp_35" conngender="female"/>
 
      <example brand="CANON" idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
-     <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_1" conngender="male"/>
      <example idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>
-     <example idpocket="Simulator" filename="./" name="Simulator" image=":/ext/simu.png" connectortype="Sharp_9" conngender="female"/>
-     <example idpocket="11Pins Cable" filename="./" name="Sharp EA-129C" image=":/ext/cable.png" connectortype="Sharp_9" conngender="female"/>
+     <example idpocket="Simulator" filename="./" name="Simulator" image=":/ext/simu.png" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="11Pins Cable" filename="./" name="Sharp EA-129C" image=":/ext/cable.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="CASIO" idpocket="Casio MD-100" filename="./" name="Casio MD-100" image=":/ext/md-100.png" connectortype="Casio_30" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FA-80" filename="./" name="Casio FA-80" image=":/fx8000g/fa80.png" connectortype="Casio_30" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FP-100" filename="./" name="Casio FP-100" image=":/ext/fp100.png" connectortype="Centronics_36" conngender="female"/>
