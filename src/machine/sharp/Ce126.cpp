@@ -38,7 +38,7 @@ TransMap KeyMapce126[]={
 };
 int KeyMapce126Lenght = 5;
 
-Cce126::Cce126(CPObject *parent):Cprinter(this)
+Cce126::Cce126(CPObject *parent):Cprinter(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 

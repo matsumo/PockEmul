@@ -12,9 +12,12 @@
 
 extern MainWindowPockemul* mainwindow;
 
-CViewObject::CViewObject(CViewObject *parent):MAINCLASS(mainwindow->centralwidget)
+CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow->centralwidget)
 {
     Q_UNUSED(parent)
+
+//    if (parent==0)
+//        setParent(mainwindow->centralwidget);
 
     FrontImage=TopImage=LeftImage=RightImage=BottomImage=BackImage=0;
     Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;

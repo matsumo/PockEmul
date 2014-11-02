@@ -107,6 +107,8 @@ INLINE void CSC61860::AddState(BYTE n)
 
 INLINE void CSC61860::Chk_imemAdr(BYTE d,BYTE len)
 {
+    Q_UNUSED(d)
+    Q_UNUSED(len)
 }
 
 bool	CSC61860::Get_Xin(void)
@@ -138,7 +140,6 @@ void CSC61860::set_PC(UINT32 data)
 extern FILE	*fp_tmp;
 INLINE void CSC61860::compute_xout(void)
 {
-	qint64 delta;
     quint64 wait2khz = pPC->getfrequency()/1000/4;
     quint64 wait4khz = pPC->getfrequency()/1000/8;
 
@@ -164,7 +165,7 @@ INLINE void CSC61860::compute_xout(void)
                         if (fp_log) fprintf(fp_log,"XOUT 2Khz INIT\n");
                         Xout = true;
 					}
-					delta = pPC->pTIMER->state - start2khz;
+
                     //while
                     if ((pPC->pTIMER->state - start2khz) >= wait2khz){
                         Xout = !Xout;
@@ -182,7 +183,7 @@ INLINE void CSC61860::compute_xout(void)
                         if (fp_log) fprintf(fp_log,"XOUT 4Khz INIT\n");
                         Xout = true;
 					}
-					delta = pPC->pTIMER->state - start4khz;
+
                     //while
                     if (( pPC->pTIMER->state - start4khz) >= wait4khz)
 					{
@@ -2316,16 +2317,14 @@ INLINE void CSC61860::Op_6f(void)
     if (! cdn_loop_running) {
         cdn_loop_running = true;
 		op_local_counter = I_REG_I;
+        reg.r.z = 0;
 		AddState(1);
 	}
-
-	reg.r.z = 1;
 
     op_local_counter--;
 	reg.r.p++;	reg.r.p &=0x7F;
 
     if (!Get_Xin()) {
-		reg.r.z = 0;
         cdn_loop_running = false;
 	}
     else {
@@ -2334,6 +2333,7 @@ INLINE void CSC61860::Op_6f(void)
             reg.d.pc--;
         }
         else {
+            reg.r.z = 1;
             cup_loop_running = false;
         }
     }
@@ -2349,15 +2349,13 @@ INLINE void CSC61860::Op_4f(void)
     if (! cup_loop_running) {
         cup_loop_running = true;
 		op_local_counter = I_REG_I;
+        reg.r.z = 0;
 		AddState(1);
 	}
 
-	reg.r.z = 1;
 
     reg.r.p++;	reg.r.p &=0x7F;
     if (Get_Xin()) {
-		reg.r.z = 0;
-        qWarning()<<"CUP:ping";
         cup_loop_running = false;
 	}
     else {
@@ -2366,6 +2364,7 @@ INLINE void CSC61860::Op_4f(void)
             reg.d.pc--;
         }
         else {
+            reg.r.z = 1;
             cup_loop_running = false;
         }
     }

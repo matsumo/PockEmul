@@ -6,5 +6,8 @@
     <KEY description="RMT OFF" height="49" left="247" scancode="0xc6" top="221" width="48"/>
     <KEY description="POWER ON" height="48" left="491" scancode="0xc7" top="224" width="41"/>
     <KEY description="POWER OFF" height="49" left="438" scancode="0xc8" top="224" width="48"/>
+    <KEY description="EJECT/LOAD" height="31" left="34" scancode="0xd0" top="234" width="36"/>
+    <KEY description="PLAY" height="31" left="156" scancode="0xd1" top="234" width="31"/>
+    <KEY description="RECORD" height="31" left="194" scancode="0xd4" top="234" width="31"/>
 </Keyboard>
 </KEYBMAP>

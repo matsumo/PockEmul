@@ -13,18 +13,7 @@ class Cce125tape:public Cce152
 public:
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 	
-	Cce125tape(CPObject *parent = 0)	: Cce152(parent)
-	{									//[constructor]
-        BackGroundFname	= P_RES(":/ext/ce-125tape.png");
-        playImage = P_RES(":/ext/ce-125play.png");
-        recordImage=P_RES(":/ext/ce-125record.png");
-        loadImage = P_RES(":/ext/ce-125load.png");
-        setDX(249);
-        setDY(299);
-		KeyMap		= KeyMapce125tape;
-		KeyMapLenght= KeyMapce125tapeLenght;
-		pKEYB		= new Ckeyb(this,"ce125tape.map");
-    }
+    Cce125tape(CPObject *parent = 0);
 
     QString playImage;
     QString recordImage;
@@ -40,12 +29,13 @@ public:
 	virtual	bool run(void);					//check access
     virtual void resizeEvent ( QResizeEvent * );
     virtual bool UpdateFinalImage(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
     Cce125(CPObject *parent = 0);
     virtual ~Cce125();
 	
 private:
-	Cce125tape* pTAPE;
+    Cce125tape Tape;
 };
 
 class Cmp220:public Cce125
