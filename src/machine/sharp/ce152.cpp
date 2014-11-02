@@ -100,11 +100,11 @@ Cce127r::Cce127r(CPObject *parent) : Cce152(parent)
 {
     BackGroundFname	= P_RES(":/ext/ce-127r.png");
     setcfgfname("ce127r");
-    setDXmm(132);//Pc_DX_mm = 135;
-    setDYmm(74);//Pc_DY_mm = 70;
-    setDZmm(25);//Pc_DZ_mm = 10;
-    setDX(472);//Pc_DX		= 483;//409;
-    setDY(266);//Pc_DY		= 252;//213;
+    setDXmm(132);
+    setDYmm(74);
+    setDZmm(25);
+    setDX(472);
+    setDY(266);
     pKEYB->fn_KeyMap = "ce127r.map";
 
     //touche play 460,293 : 60x70
@@ -416,16 +416,12 @@ int Cce152::LoadTape(void)
 
     char * str = qstrdup(ofn.toLocal8Bit());
 
-    if ((info.ptrFd = fopen(str,"rb"))==NULL)
-//	if (!file.open(QIODevice::ReadOnly))
-    {
+    if ((info.ptrFd = fopen(str,"rb"))==NULL) {
         MSG_ERROR(tr("Failed to open file"));
         return 0;
     }
 
     TapeFileName = ofn;
-
-//	info.ptrFd = (FILE *) file.handle();
 
     /* Seek to the end of the source file */
     error = fseek (info.ptrFd, 0, SEEK_END) ;
@@ -462,7 +458,7 @@ int Cce152::LoadTape(void)
     /* Check the lower frequency limit */
     if (info.freq < 5000) {
         AddLog(LOG_TAPE,tr("ERROR: Sampling frequency is lower than 5000 Hz : %1 Hz").arg(info.freq));
-        MSG_ERROR(tr("Sampling frequency is lower than 5000 Hz"));
+        MSG_ERROR(tr("Sampling frequency is lower than 5000 Hz : %1 Hz").arg(info.freq));
         error = ERR_NOK ;
         return 0;
     }
@@ -501,7 +497,6 @@ int Cce152::RecTape(void)
 
     char * str = qstrdup(TapeFileName.toLocal8Bit());
 
-    //if (!file.open(QIODevice::WriteOnly))
     if ((info.ptrFd = fopen(str,"wb"))==NULL)
     {
         AddLog(LOG_TAPE,tr("ERROR: Can't create the wav file."));
@@ -511,12 +506,11 @@ int Cce152::RecTape(void)
 
     // create th header
     WriteHeadToWav (10,
-                    16000,//pTIMER->pPC->Tape_Base_Freq*2,
+                    16000,
                     &info);
     info.bitLen = 0x20;
     info.freq = 16000;//pTIMER->pPC->Tape_Base_Freq*2;
 //       ptrFile->bitLen = (freq * 8) / ptrFile->freq ;
-
 
     mode = RECORD;
 

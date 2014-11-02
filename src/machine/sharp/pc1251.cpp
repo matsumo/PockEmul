@@ -38,7 +38,7 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(this)
 
     SlotList.clear();
     SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1251/cpu-1251.rom"), "", CSlot::ROM , "CPU ROM"));
-    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1251/bas-1251.rom"), "", CSlot::ROM , "BASIC ROM"));
+    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1251/bas-1253.rom"), "", CSlot::ROM , "BASIC ROM"));
     SlotList.append(CSlot(32, 0x8000 ,	""						, "" , CSlot::RAM , "RAM"));
 
     pKEYB->fn_KeyMap = "pc1253.map";
