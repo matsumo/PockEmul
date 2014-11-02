@@ -2,6 +2,7 @@
 
 #include "pc1251.h"
 #include "Lcdc.h"
+#include "Keyb.h"
 
 Cpc1251::Cpc1251(CPObject *parent)	: Cpc1250(this)
 {								//[constructor]
