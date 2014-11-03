@@ -86,15 +86,19 @@ BYTE	Cpc1253::Get_PortA(void)
 //        if (KEY('S'))			data|=0x40;
 //        if (KEY('X'))			data|=0x80;
 //    }
-    if (IO_B & 4) {
+    if (IO_B & 0x1) {
         if (KEY('R'))			data|=0x01;
         if (KEY('Q'))			data|=0x02;
-        if (KEY('P'))			data|=0x04;
+        if (KEY(K_IN))			data|=0x04;   // Or OUT ????
         if (KEY('O'))			data|=0x08;
         if (KEY('N'))			data|=0x10;
-        if (KEY('M'))			data|=0x20;
-        if (KEY('L'))			data|=0x40;
-        if (KEY('K'))			data|=0x80;
+        if (KEY(K_RM))			data|=0x20;
+        if (KEY(K_CM))			data|=0x40;
+        if (KEY(K_MIN))			data|=0x80;
+    }
+    if (IO_B & 0x2) {
+        if (KEY(K_F1))			data|=0x04;
+        if (KEY('7'))			data|=0x08;
     }
     if (IO_A & 1) {
         if (KEY('J'))			data|=0x02;

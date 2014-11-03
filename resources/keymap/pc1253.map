@@ -2,19 +2,19 @@
 <model>pc1253</model>
 <Keyboard>
     <KEY description="-" height="16" left="351" masterscancode="0x00" modifier="" scancode="0x2d" top="182" view="FRONT" width="25"/>
-    <KEY description="(" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x28" top="0" view="FRONT" width="13"/>
-    <KEY description=")" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x29" top="0" view="FRONT" width="13"/>
+    <KEY description="SQR" height="16" left="395" masterscancode="0x00" modifier="" scancode="0xe3" top="181" view="FRONT" width="25"/>
+    <KEY description="CE" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x23c" top="147" view="FRONT" width="25"/>
     <KEY description="*" height="16" left="350" masterscancode="0x00" modifier="" scancode="0x2a" top="145" view="FRONT" width="25"/>
-    <KEY description="," height="13" left="0" masterscancode="0x00" modifier="" scancode="0x2c" top="0" view="FRONT" width="13"/>
+    <KEY description="%" height="16" left="352" masterscancode="0x00" modifier="" scancode="0x25" top="181" view="FRONT" width="25"/>
     <KEY description="." height="16" left="266" masterscancode="0x00" modifier="" scancode="0x2e" top="216" view="FRONT" width="25"/>
     <KEY description="/" height="16" left="352" masterscancode="0x00" modifier="" scancode="0x2f" top="114" view="FRONT" width="25"/>
-    <KEY description=":" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x3a" top="0" view="FRONT" width="13"/>
-    <KEY description=";" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x3b" top="0" view="FRONT" width="13"/>
+    <KEY description="IN" height="13" left="19" masterscancode="0x00" modifier="" scancode="0x205" top="217" view="FRONT" width="13"/>
+    <KEY description="OUT" height="13" left="48" masterscancode="0x00" modifier="" scancode="0x204" top="218" view="FRONT" width="13"/>
     <KEY description="+" height="16" left="349" masterscancode="0x00" modifier="" scancode="0x2b" top="217" view="FRONT" width="25"/>
-    <KEY description="CLS" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x0c" top="0" view="FRONT" width="25"/>
-    <KEY description="DEF" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x0b" top="0" view="FRONT" width="21"/>
-    <KEY description="Down Arrow" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x04" top="0" view="FRONT" width="21"/>
-    <KEY description="ENTER" height="17" left="0" masterscancode="0x00" modifier="" scancode="0x0d" top="0" view="FRONT" width="70"/>
+    <KEY description="CLS" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x0c" top="113" view="FRONT" width="25"/>
+    <KEY description="RM" height="16" left="437" masterscancode="0x00" modifier="" scancode="0xf5" top="146" view="FRONT" width="25"/>
+    <KEY description="CM" height="16" left="438" masterscancode="0x00" modifier="" scancode="0x25c" top="113" view="FRONT" width="25"/>
+    <KEY description="M-" height="16" left="438" masterscancode="0x00" modifier="" scancode="0xaa" top="181" view="FRONT" width="25"/>
     <KEY description="ENTER" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x0d" top="0" view="FRONT" width="13"/>
     <KEY description="ENTER" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x0d" top="0" view="FRONT" width="13"/>
     <KEY description="Equal" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x3d" top="216" view="FRONT" width="25"/>
@@ -54,9 +54,9 @@
     <KEY description="N" height="20" left="133" masterscancode="0x00" modifier="" scancode="0x6e" top="179" view="FRONT" width="28"/>
     <KEY description="O" height="20" left="91" masterscancode="0x00" modifier="" scancode="0x6f" top="180" view="FRONT" width="28"/>
     <KEY description="P" height="20" left="89" masterscancode="0x00" modifier="" scancode="0x70" top="215" view="FRONT" width="70"/>
-    <KEY description="Q" height="16" left="307" masterscancode="0x00" modifier="" scancode="0x71" top="216" view="FRONT" width="25"/>
-    <KEY description="R" height="16" left="392" masterscancode="0x00" modifier="" scancode="0x72" top="112" view="FRONT" width="25"/>
-    <KEY description="S" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x73" top="146" view="FRONT" width="25"/>
+    <KEY description="Q" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x71" top="0" view="FRONT" width="25"/>
+    <KEY description="R" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x72" top="0" view="FRONT" width="25"/>
+    <KEY description="S" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x73" top="0" view="FRONT" width="25"/>
     <KEY description="T" height="16" left="436" masterscancode="0x00" modifier="" scancode="0x74" top="113" view="FRONT" width="25"/>
     <KEY description="U" height="16" left="435" masterscancode="0x00" modifier="" scancode="0x75" top="146" view="FRONT" width="25"/>
     <KEY description="V" height="16" left="436" masterscancode="0x00" modifier="" scancode="0x76" top="181" view="FRONT" width="25"/>
@@ -64,6 +64,5 @@
     <KEY description="X" height="16" left="0" masterscancode="0x00" modifier="" scancode="0x78" top="0" view="FRONT" width="25"/>
     <KEY description="Y" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x79" top="0" view="FRONT" width="13"/>
     <KEY description="Z" height="13" left="0" masterscancode="0x00" modifier="" scancode="0x7a" top="0" view="FRONT" width="13"/>
-    <KEY description="11pins connector" height="137" left="6" scancode="0x240" top="89" width="14" view="LEFT"/>
 </Keyboard>
 </KEYBMAP>
