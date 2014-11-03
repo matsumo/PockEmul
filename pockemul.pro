@@ -479,41 +479,41 @@ HEADERS += \
 HEADERS += \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
-    src/machine/sharp/ce125.h \
-    src/machine/sharp/Ce126.h \
-    src/machine/sharp/ce150.h \
-    src/machine/sharp/ce152.h \
+    src/machine/sharp/pc1211.h \
     src/machine/sharp/pc1245.h \
     src/machine/sharp/pc1250.h \
     src/machine/sharp/pc1251.h \
     src/machine/sharp/pc1255.h \
     src/machine/sharp/pc1260.h \
+    src/machine/sharp/pc1280.h \
     src/machine/sharp/pc1350.h \
     src/machine/sharp/pc1360.h \
     src/machine/sharp/pc1401.h \
     src/machine/sharp/pc1402.h \
     src/machine/sharp/pc1403.h \
+    src/machine/sharp/pc1421.h \
+    src/machine/sharp/pc1425.h \
     src/machine/sharp/pc1450.h \
     src/machine/sharp/pc1475.h \
+    src/machine/sharp/buspc1500.h \
     src/machine/sharp/pc1500.h \
     src/machine/sharp/pc1600.h \
-    src/machine/sharp/ce1600p.h \
     src/machine/sharp/pc2500.h \
-    src/machine/sharp/pc1421.h \
-    src/machine/sharp/pc1280.h \
     src/machine/sharp/e500.h \
     src/machine/sharp/g850v.h \
+    src/machine/sharp/ce122.h \
+    src/machine/sharp/ce125.h \
+    src/machine/sharp/Ce126.h \
+    src/machine/sharp/ce150.h \
+    src/machine/sharp/ce152.h \
     src/machine/sharp/ce140p.h \
-    src/machine/sharp/pc1425.h \
     src/machine/sharp/ce140f.h \
     src/machine/sharp/ce1560.h \
-    src/machine/sharp/buspc1500.h \
     src/machine/sharp/ce162e.h \
     src/machine/sharp/ce153.h \
+    src/machine/sharp/ce1600p.h \
     src/machine/sharp/ce1600f.h \
     src/machine/sharp/ce2xxx.h \
-    src/machine/sharp/pc1211.h \
-    src/machine/sharp/ce122.h \
     src/machine/sio.h \
     src/machine/potar.h \
     src/machine/cmotor.h \
@@ -532,11 +532,11 @@ HEADERS += \
     src/machine/panasonic/buspanasonic.h \
     src/machine/panasonic/rlp3001.h \
     src/machine/panasonic/rlext.h \
+    src/machine/panasonic/rlh1000.h \
     src/machine/panasonic/rlp4002.h \
     src/machine/panasonic/rlp1002.h \
     src/machine/panasonic/rlp2001.h \
     src/machine/panasonic/rlp1005.h \
-    src/machine/panasonic/rlh1000.h \
     src/machine/panasonic/rlp6001.h \
     src/machine/panasonic/rlp9001.h \
     src/machine/panasonic/rlp1004a.h \
@@ -634,6 +634,7 @@ RESOURCES +=  \
     qcodeedit/qxs/qxs.qrc \
     resources/asmlibs.qrc \
     resources/core.qrc \
+    resources/pockemul.qrc \
     resources/cc40.qrc \
     resources/ti74.qrc \
     resources/fx8000g.qrc \
@@ -658,7 +659,6 @@ RESOURCES +=  \
     resources/pc1450.qrc \
     resources/pc1475.qrc \
     resources/pc1500.qrc \
-    resources/pockemul.qrc \
     resources/pc1600.qrc \
     resources/pc2500.qrc \
     resources/pc1421.qrc \
@@ -679,7 +679,9 @@ RESOURCES +=  \
     resources/tpc8300.qrc \
     resources/rlh1000.qrc \
     resources/ti57.qrc \
-    resources/hp41.qrc
+    resources/hp41.qrc \
+
+
 }
 else {
 DEFINES += LOCRES
@@ -714,6 +716,27 @@ SOURCES +=  \
     src/core/slot.cpp \
     src/core/xmlwriter.cpp \
     src/core/lcc/parser/parser.cpp \
+    src/core/dialogsimulator.cpp \
+    src/core/bineditor/bineditor.cpp \
+    src/core/bineditor/colorscheme.cpp \
+    src/core/dialogpotar.cpp \
+    src/core/weblinksparser.cpp \
+#    src/core/wavfile.cpp \
+    src/core/launchbuttonwidget.cpp \
+    src/core/qcommandline.cpp \
+    src/core/renderView.cpp \
+    src/core/breakpoint.cpp \
+    src/core/sizegrip.cpp \
+    src/core/servertcp.cpp \
+    src/core/downloadmanager.cpp \
+    src/core/cextension.cpp \
+
+
+SOURCES +=  \
+    src/machine/pcxxxx.cpp \
+    src/machine/bus.cpp \
+    src/machine/sharp/pc1211.cpp \
+    src/machine/sharp/pc1425.cpp \
     src/machine/sharp/Ce126.cpp \
     src/machine/ccable.cpp \
     src/machine/sharp/ce125.cpp \
@@ -741,9 +764,10 @@ SOURCES +=  \
     src/machine/sharp/ce1600p.cpp \
     src/machine/sharp/ce120p.cpp \
     src/machine/sharp/e500.cpp \
-    src/machine/sharp/pc1211.cpp \
-    src/machine/sharp/pc1425.cpp \
-    src/machine/pcxxxx.cpp \
+    src/machine/sharp/ce1560.cpp \
+    src/machine/sharp/buspc1500.cpp \
+    src/machine/sharp/ce162e.cpp \
+    src/machine/sharp/ce153.cpp \
     src/machine/sio.cpp \
     src/machine/cx07.cpp \
     src/machine/cx710.cpp \
@@ -763,21 +787,49 @@ SOURCES +=  \
     src/machine/potar.cpp \
     src/machine/cmotor.cpp \
     src/machine/ce515p.cpp \
-    src/core/weblinksparser.cpp \
-#    src/core/wavfile.cpp \
+    src/machine/tpc8300.cpp \
+    src/machine/tp83.cpp \
+    src/machine/panasonic/buspanasonic.cpp \
+    src/machine/panasonic/rlh1000.cpp \
+    src/machine/panasonic/rlp6001.cpp \
+    src/machine/panasonic/rlp9001.cpp \
+    src/machine/panasonic/rlp1004a.cpp \
+    src/machine/panasonic/rlp4002.cpp \
+    src/machine/panasonic/rlp1002.cpp \
+    src/machine/panasonic/rlp2001.cpp \
+    src/machine/panasonic/rlp3001.cpp \
+    src/machine/panasonic/rlext.cpp \
+    src/machine/postit.cpp \
+    src/machine/hp/hp41.cpp \
+    src/machine/ti/ti57.cpp \
+    src/machine/hp/hp41trace.cpp \
+    src/machine/hp/hp41display.cpp \
+    src/machine/hp/hp41Timer.cpp \
+    src/machine/hp/hp41File.cpp \
+    src/machine/hp/hp41Cpu.cpp \
+    src/machine/hp/hp41mod.cpp \
+    src/machine/hp/hp82143A.cpp \
+    src/machine/ti/cc40.cpp \
+    src/machine/ti/ti74.cpp \
+    src/machine/casio/fx8000g.cpp \
+    src/machine/casio/fa80.cpp \
+    src/machine/hp/hp15c.cpp \
+    src/machine/panasonic/rlp1005.cpp \
+    src/machine/sharp/ce1600f.cpp \
+    src/machine/sharp/ce2xxx.cpp \
     src/machine/sharp/ce140f.cpp \
     src/machine/cesimu.cpp \
-    src/core/dialogsimulator.cpp \
-    src/core/bineditor/bineditor.cpp \
-    src/core/bineditor/colorscheme.cpp \
-    src/core/dialogpotar.cpp \
-    src/lcd/Lcdc_pc1211.cpp \
     src/machine/sharp/ce122.cpp \
     qcodemodel2/qcodenode.cpp \
+
+
+SOURCES +=  \
     ui/dialogdasm.cpp \
     ui/cregssc61860widget.cpp \
     ui/cregcpu.cpp \
     ui/cregslh5801widget.cpp \
+    ui/cregsz80widget.cpp \
+    ui/cregshd61700widget.cpp \
     src/cpu/cpu.cpp \
     src/cpu/lh5801.cpp \
     src/cpu/lh5810.cpp \
@@ -790,7 +842,6 @@ SOURCES +=  \
     src/cpu/z80_dasm.cpp \
     src/cpu/hd61102.cpp \
     src/cpu/lu57813p.cpp \
-    ui/cregsz80widget.cpp \
     src/cpu/tc8576p.cpp \
     src/cpu/hd61700d.cpp \
     src/cpu/hd61700.cpp \
@@ -805,90 +856,44 @@ SOURCES +=  \
     src/cpu/i8085.cpp \
     src/cpu/rp5c01.cpp \
     src/cpu/ctronics.cpp \
-    src/core/cextension.cpp \
-    ui/cregshd61700widget.cpp \
+    tinybasic/tinybasic.cpp \
+    src/cpu/upd7907/upd7907d.cpp \
+    src/cpu/upd7907/upd7907.cpp \
+    src/cpu/i80L188EB.cpp \
+    src/cpu/pit8253.cpp \
+    src/cpu/m6502/m6502.cpp \
+    src/cpu/m6502/m6502_dasm.cpp \
+    src/cpu/ti57cpu.cpp \
+    src/cpu/ti57cpu_dasm.cpp \
+    src/cpu/s6b0108.cpp \
+    src/cpu/mc6847.cpp \
+    src/cpu/tms7000/tms7000.cpp \
+    src/cpu/tms7000/tms7000d.cpp \
+    src/cpu/hd44780.cpp \
+    src/cpu/upd1007.cpp \
+    src/cpu/upd1007d.cpp \
+    src/cpu/hd61710.cpp \
+    src/cpu/hpnut.cpp \
+    src/cpu/hpnutd.cpp \
+    src/cpu/sed1560.cpp \
+
+
+SOURCES +=  \
+    src/lcd/Lcdc_pc1211.cpp \
     src/lcd/Lcdc_x07.cpp \
     src/lcd/Lcdc_pc1600.cpp \
     src/lcd/Lcdc_pb1000.cpp \
     src/lcd/Lcdc_e500.cpp \
     src/lcd/Lcdc.cpp \
-    ui/uartconsole.cpp \
-    pictureflow/pictureflow.cpp \
-    pictureflow/materialflow.cpp \
-    pictureflow/fluidlauncher.cpp \
-    pictureflow/launcher.cpp \
-    pictureflow/slideshow.cpp \
-    src/core/launchbuttonwidget.cpp \
-    src/cpu/sed1560.cpp \
-    src/lcd/Lcdc_g850.cpp \
-    src/lcd/Lcdc_fp200.cpp \
-    src/lcd/Lcdc_z1.cpp \
-    ui/dialogvkeyboard.cpp \
-    src/core/qcommandline.cpp \
-    tinybasic/tinybasic.cpp \
-    src/core/downloadmanager.cpp \
     src/lcd/Lcdc_pc2001.cpp \
-    src/cpu/upd7907/upd7907d.cpp \
-    src/cpu/upd7907/upd7907.cpp \
-    src/cpu/i80L188EB.cpp \
-    src/cpu/pit8253.cpp \
-    src/core/servertcp.cpp \
     src/lcd/Lcdc_lbc1100.cpp \
-    src/machine/tpc8300.cpp \
     src/lcd/Lcdc_tpc8300.cpp \
-    src/machine/tp83.cpp \
-    src/machine/panasonic/rlh1000.cpp \
-    src/machine/panasonic/rlp6001.cpp \
-    src/machine/panasonic/rlp9001.cpp \
-    src/machine/panasonic/rlp1004a.cpp \
     src/lcd/Lcdc_rlh1000.cpp \
-    src/cpu/m6502/m6502.cpp \
-    src/cpu/m6502/m6502_dasm.cpp \
-    src/machine/postit.cpp \
-    src/core/sizegrip.cpp \
-    src/machine/hp/hp41.cpp \
-    src/cpu/ti57cpu.cpp \
-    src/machine/ti/ti57.cpp \
-    src/cpu/ti57cpu_dasm.cpp \
     src/lcd/Lcdc_ti57.cpp \
-    src/machine/hp/hp41trace.cpp \
-    src/machine/hp/hp41display.cpp \
-    src/machine/hp/hp41Timer.cpp \
-    src/machine/hp/hp41File.cpp \
-    src/machine/hp/hp41Cpu.cpp \
-    src/machine/hp/hp41mod.cpp \
     src/lcd/Lcdc_hp41.cpp \
-    src/machine/hp/hp82143A.cpp \
-    src/machine/bus.cpp \
-    src/machine/panasonic/rlp4002.cpp \
-    src/machine/panasonic/rlp1002.cpp \
-    src/machine/panasonic/rlp2001.cpp \
-    src/machine/sharp/ce1560.cpp \
-    src/cpu/s6b0108.cpp \
     src/lcd/Lcdc_ce1560.cpp \
-    src/machine/panasonic/buspanasonic.cpp \
-    src/machine/sharp/buspc1500.cpp \
-    src/machine/sharp/ce162e.cpp \
-    src/machine/sharp/ce153.cpp \
-    src/core/breakpoint.cpp \
-    src/cpu/mc6847.cpp \
-    src/machine/panasonic/rlp3001.cpp \
-    src/machine/panasonic/rlext.cpp \
-    src/cpu/tms7000/tms7000.cpp \
-    src/cpu/tms7000/tms7000d.cpp \
-    src/machine/ti/cc40.cpp \
-    src/cpu/hd44780.cpp \
     src/lcd/Lcdc_cc40.cpp \
-    src/machine/ti/ti74.cpp \
     src/lcd/Lcdc_ti74.cpp \
-    src/cpu/upd1007.cpp \
-    src/machine/casio/fx8000g.cpp \
-    src/lcd/Lcdc_fx8000g.cpp \
-    src/cpu/upd1007d.cpp \
-    src/machine/casio/fa80.cpp \
-    src/cpu/hd61710.cpp \
-    src/machine/hp/hp15c.cpp \
-    src/cpu/hpnut.cpp \
     src/lcd/Lcdc_hp15c.cpp \
     src/lcd/Lcdc_pc1350.cpp \
     src/lcd/Lcdc_pc1250.cpp \
@@ -897,11 +902,18 @@ SOURCES +=  \
     src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
     src/lcd/Lcdc_pc1401.cpp \
-    src/core/renderView.cpp \
-    src/machine/panasonic/rlp1005.cpp \
-    src/cpu/hpnutd.cpp \
-    src/machine/sharp/ce1600f.cpp \
-    src/machine/sharp/ce2xxx.cpp
+    src/lcd/Lcdc_fx8000g.cpp \
+    src/lcd/Lcdc_g850.cpp \
+    src/lcd/Lcdc_fp200.cpp \
+    src/lcd/Lcdc_z1.cpp \
+    ui/uartconsole.cpp \
+    ui/dialogvkeyboard.cpp \
+    pictureflow/pictureflow.cpp \
+    pictureflow/materialflow.cpp \
+    pictureflow/fluidlauncher.cpp \
+    pictureflow/launcher.cpp \
+    pictureflow/slideshow.cpp \
+
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 
