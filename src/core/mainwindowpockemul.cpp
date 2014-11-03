@@ -338,140 +338,145 @@ void MainWindowPockemul::initObjectTable() {
 
 CPObject * MainWindowPockemul::InitApp(int idPC )
 {
-CPObject *pPC=0;
+    CPObject *pPC=0;
 
     switch (idPC)
     {
+    case EMPTY	: return 0;
 
-        case EMPTY	: return 0;
-        case PC1211	: pPC = new Cpc1211;	pPC->setName("PC-1211");break;
-        case PC1245	: pPC = new Cpc1245;	pPC->setName("PC-1245");break;
-        case MC2200	: pPC = new Cmc2200;	pPC->setName("MC-2200");break;
-        case PC1250	: pPC = new Cpc1250;	pPC->setName("PC-1250");break;
-        case PC1251	: pPC = new Cpc1251;	pPC->setName("PC-1251");break;
-        case PC1251H: pPC = new Cpc1251H;	pPC->setName("PC-1251H");break;
-        case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
-        case PC1255	: pPC = new Cpc1255;	pPC->setName("PC-1255");break;
-        case TandyPC3:pPC = new Ctrspc3;	pPC->setName("Tandy PC-3");break;
-        case TandyPC3EXT:pPC = new Ctrspc3Ext;	pPC->setName("Tandy PC-3 (4Ko)");break;
+#ifdef P_PC1253
+    case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
+#else
+    case PC1211	: pPC = new Cpc1211;	pPC->setName("PC-1211");break;
+    case PC1245	: pPC = new Cpc1245;	pPC->setName("PC-1245");break;
+    case MC2200	: pPC = new Cmc2200;	pPC->setName("MC-2200");break;
+    case PC1250	: pPC = new Cpc1250;	pPC->setName("PC-1250");break;
 
-        case PC1260	: pPC = new Cpc1260;	pPC->setName("PC-1260");break;
-        case PC1261	: pPC = new Cpc1261;	pPC->setName("PC-1261");break;
-        case PC1262	: pPC = new Cpc1262;	pPC->setName("PC-1262");break;
-        case PC1280	: pPC = new Cpc1280;	pPC->setName("PC-1280");break;
+    case PC1251	: pPC = new Cpc1251;	pPC->setName("PC-1251");break;
+    case PC1251H: pPC = new Cpc1251H;	pPC->setName("PC-1251H");break;
+    case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
+    case PC1255	: pPC = new Cpc1255;	pPC->setName("PC-1255");break;
+    case TandyPC3:pPC = new Ctrspc3;	pPC->setName("Tandy PC-3");break;
+    case TandyPC3EXT:pPC = new Ctrspc3Ext;	pPC->setName("Tandy PC-3 (4Ko)");break;
 
-        case PC1350	: pPC = new Cpc1350;	pPC->setName("PC-1350");break;
-        case PC1360	: pPC = new Cpc1360;	pPC->setName("PC-1360");break;
-        case PC1401	: pPC = new Cpc1401;	pPC->setName("PC-1401");break;
-        case PC1402	: pPC = new Cpc1402;	pPC->setName("PC-1402");break;
-        case PC1403	: pPC = new Cpc1403;	pPC->setName("PC-1403");break;
-        case PC1403H: pPC = new Cpc1403H;	pPC->setName("PC-1403H");break;
-        case PC1421	: pPC = new Cpc1421;	pPC->setName("PC-1421");break;
-        case PC1450	: pPC = new Cpc1450;	pPC->setName("PC-1450");break;
-        case PC1475	: pPC = new Cpc1475;	pPC->setName("PC-1475");break;
-        case PC1425	: pPC = new Cpc1425;	pPC->setName("PC-1425");break;
+    case PC1260	: pPC = new Cpc1260;	pPC->setName("PC-1260");break;
+    case PC1261	: pPC = new Cpc1261;	pPC->setName("PC-1261");break;
+    case PC1262	: pPC = new Cpc1262;	pPC->setName("PC-1262");break;
+    case PC1280	: pPC = new Cpc1280;	pPC->setName("PC-1280");break;
 
-        case PC1500	: pPC = new Cpc1500;	pPC->setName("PC-1500");break;
-        case PC1500A: pPC = new Cpc1500A;	pPC->setName("PC-1500A");break;
-        case TandyPC2:pPC = new Ctrspc2;	pPC->setName("Tandy PC-2");break;
+    case PC1350	: pPC = new Cpc1350;	pPC->setName("PC-1350");break;
+    case PC1360	: pPC = new Cpc1360;	pPC->setName("PC-1360");break;
+    case PC1401	: pPC = new Cpc1401;	pPC->setName("PC-1401");break;
+    case PC1402	: pPC = new Cpc1402;	pPC->setName("PC-1402");break;
+    case PC1403	: pPC = new Cpc1403;	pPC->setName("PC-1403");break;
+    case PC1403H: pPC = new Cpc1403H;	pPC->setName("PC-1403H");break;
+    case PC1421	: pPC = new Cpc1421;	pPC->setName("PC-1421");break;
+    case PC1450	: pPC = new Cpc1450;	pPC->setName("PC-1450");break;
+    case PC1475	: pPC = new Cpc1475;	pPC->setName("PC-1475");break;
+    case PC1425	: pPC = new Cpc1425;	pPC->setName("PC-1425");break;
 
-        case PC1600 : pPC = new Cpc1600;	pPC->setName("PC-1600");break;
+    case PC1500	: pPC = new Cpc1500;	pPC->setName("PC-1500");break;
+    case PC1500A: pPC = new Cpc1500A;	pPC->setName("PC-1500A");break;
+    case TandyPC2:pPC = new Ctrspc2;	pPC->setName("Tandy PC-2");break;
 
-        case PC2500 : pPC = new Cpc2500;	pPC->setName("PC-2500");break;
+    case PC1600 : pPC = new Cpc1600;	pPC->setName("PC-1600");break;
 
-        case CE122  : pPC = new Cce122;		pPC->setName("CE-122");break;
-        case CE125  : pPC = new Cce125;		pPC->setName("CE-125");break;
-        case MP220  : pPC = new Cmp220;     pPC->setName("MP-220");break;
-        case CE120P : pPC = new Cce120p;	pPC->setName("CE-120P");break;
-        case CE126P : pPC = new Cce126;		pPC->setName("CE-126P");break;
-        case CE123P : pPC = new Cce123;		pPC->setName("CE-123P");break;
-        case CE129P : pPC = new Cce129;		pPC->setName("CE-129P");break;
-        case CE140P : pPC = new Cce140p;	pPC->setName("CE-140P");break;
-        case CE140F : pPC = new Cce140f;	pPC->setName("CE-140F");break;
-        case CE150  : pPC = new Cce150;		pPC->setName("CE-150");break;
-        case CE153  : pPC = new Cce153;		pPC->setName("CE-153");break;
-        case CE162E : pPC = new Cce162e;	pPC->setName("CE-162E");break;
-        case CE152  : pPC = new Cce152;		pPC->setName("CE-152");break;
-        case CE127R : pPC = new Cce127r;	pPC->setName("CE-127R");break;
-        case TANDY263591: pPC = new C263591;pPC->setName("26-3591");break;
-        case CE1560 : pPC = new Cce1560;    pPC->setName("CE-1560");break;
+    case PC2500 : pPC = new Cpc2500;	pPC->setName("PC-2500");break;
 
-        case CE201M : pPC = new Cce2xxx(0,CE201M); pPC->setName("CE-201M");break;
-        case CE202M : pPC = new Cce2xxx(0,CE202M); pPC->setName("CE-202M");break;
-        case CE203M : pPC = new Cce2xxx(0,CE203M); pPC->setName("CE-203M");break;
-        case CE210M : pPC = new Cce2xxx(0,CE210M); pPC->setName("CE-210M");break;
-        case CE211M : pPC = new Cce2xxx(0,CE211M); pPC->setName("CE-211M");break;
-        case CE212M : pPC = new Cce2xxx(0,CE212M); pPC->setName("CE-212M");break;
-        case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
-        case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
-        case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
+    case CE122  : pPC = new Cce122;		pPC->setName("CE-122");break;
+    case CE125  : pPC = new Cce125;		pPC->setName("CE-125");break;
+    case MP220  : pPC = new Cmp220;     pPC->setName("MP-220");break;
+    case CE120P : pPC = new Cce120p;	pPC->setName("CE-120P");break;
+    case CE126P : pPC = new Cce126;		pPC->setName("CE-126P");break;
+    case CE123P : pPC = new Cce123;		pPC->setName("CE-123P");break;
+    case CE129P : pPC = new Cce129;		pPC->setName("CE-129P");break;
+    case CE140P : pPC = new Cce140p;	pPC->setName("CE-140P");break;
+    case CE140F : pPC = new Cce140f;	pPC->setName("CE-140F");break;
+    case CE150  : pPC = new Cce150;		pPC->setName("CE-150");break;
+    case CE153  : pPC = new Cce153;		pPC->setName("CE-153");break;
+    case CE162E : pPC = new Cce162e;	pPC->setName("CE-162E");break;
+    case CE152  : pPC = new Cce152;		pPC->setName("CE-152");break;
+    case CE127R : pPC = new Cce127r;	pPC->setName("CE-127R");break;
+    case TANDY263591: pPC = new C263591;pPC->setName("26-3591");break;
+    case CE1560 : pPC = new Cce1560;    pPC->setName("CE-1560");break;
 
-        case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
-        case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
-        case POTAR      : pPC = new Cpotar;	pPC->setName("Potar");break;
-        case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
+    case CE201M : pPC = new Cce2xxx(0,CE201M); pPC->setName("CE-201M");break;
+    case CE202M : pPC = new Cce2xxx(0,CE202M); pPC->setName("CE-202M");break;
+    case CE203M : pPC = new Cce2xxx(0,CE203M); pPC->setName("CE-203M");break;
+    case CE210M : pPC = new Cce2xxx(0,CE210M); pPC->setName("CE-210M");break;
+    case CE211M : pPC = new Cce2xxx(0,CE211M); pPC->setName("CE-211M");break;
+    case CE212M : pPC = new Cce2xxx(0,CE212M); pPC->setName("CE-212M");break;
+    case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
+    case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
+    case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
 
-        case CE1600P: pPC = new Cce1600p;	pPC->setName("CE-1600P");break;
-        case CE1600F: pPC = new Cce1600f;	pPC->setName("CE-1600F");break;
+    case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
+    case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
+    case POTAR      : pPC = new Cpotar;	pPC->setName("Potar");break;
+    case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
 
-        case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
-        case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
-        case E500   : pPC = new Ce500;      pPC->setName("PC-E500"); break;
-        case E500S  : pPC = new Ce500(0,E500S);      pPC->setName("PC-E500S"); break;
-        case E550   : pPC = new Ce500(0,E550);;      pPC->setName("PC-E550"); break;
-        case G850V  : pPC = new Cg850v;     pPC->setName("PC-G850V"); break;
+    case CE1600P: pPC = new Cce1600p;	pPC->setName("CE-1600P");break;
+    case CE1600F: pPC = new Cce1600f;	pPC->setName("CE-1600F");break;
 
-        case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
-        case PB2000 : pPC = new Cpb2000;    pPC->setName("Casio PB-2000C"); break;
-        case FP200  : pPC = new Cfp200;     pPC->setName("Casio FP-200"); break;
-        case FA80   : pPC = new Cfa80;      pPC->setName("Casio FA-80"); break;
-        case MD100  : pPC = new Cmd100;     pPC->setName("Casio MD-100"); break;
-        case FP100  : pPC = new Cfp100;     pPC->setName("Casio FP-100"); break;
-        case FP40   : pPC = new Cfp40;      pPC->setName("Casio FP-40"); break;
-        case FX890P : pPC = new Cz1(0,FX890P);  pPC->setName("Casio FX-890P"); break;
-        case Z1     : pPC = new Cz1;            pPC->setName("Casio Z-1"); break;
-        case Z1GR   : pPC = new Cz1(0,Z1GR);    pPC->setName("Casio Z-1GR"); break;
-        case FX8000G: pPC = new Cfx8000g;    pPC->setName("Casio FX-8000G"); break;
+    case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
+    case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
+    case E500   : pPC = new Ce500;      pPC->setName("PC-E500"); break;
+    case E500S  : pPC = new Ce500(0,E500S);      pPC->setName("PC-E500S"); break;
+    case E550   : pPC = new Ce500(0,E550);;      pPC->setName("PC-E550"); break;
+    case G850V  : pPC = new Cg850v;     pPC->setName("PC-G850V"); break;
 
-        case PC2001   : pPC = new Cpc2001;      pPC->setName("Nec PC-2001"); break;
-        case PC2021   : pPC = new Cpc2021;      pPC->setName("Nec PC-2021"); break;
-        case PC2081   : pPC = new Cpc2081;      pPC->setName("Nec PC-2081"); break;
-        case LBC1100  : pPC = new Clbc1100;     pPC->setName("General LBC-1100"); break;
+    case PB1000 : pPC = new Cpb1000;    pPC->setName("Casio PB-1000"); break;
+    case PB2000 : pPC = new Cpb2000;    pPC->setName("Casio PB-2000C"); break;
+    case FP200  : pPC = new Cfp200;     pPC->setName("Casio FP-200"); break;
+    case FA80   : pPC = new Cfa80;      pPC->setName("Casio FA-80"); break;
+    case MD100  : pPC = new Cmd100;     pPC->setName("Casio MD-100"); break;
+    case FP100  : pPC = new Cfp100;     pPC->setName("Casio FP-100"); break;
+    case FP40   : pPC = new Cfp40;      pPC->setName("Casio FP-40"); break;
+    case FX890P : pPC = new Cz1(0,FX890P);  pPC->setName("Casio FX-890P"); break;
+    case Z1     : pPC = new Cz1;            pPC->setName("Casio Z-1"); break;
+    case Z1GR   : pPC = new Cz1(0,Z1GR);    pPC->setName("Casio Z-1GR"); break;
+    case FX8000G: pPC = new Cfx8000g;    pPC->setName("Casio FX-8000G"); break;
 
-        case CL1000  : pPC = new Ccl1000;       pPC->setName("General CL-1000"); break;
-        case TPC8300 : pPC = new Ctpc8300;      pPC->setName("SANCO TPC-8300"); break;
-        case TP83    : pPC = new Ctp83;         pPC->setName("SANCO TP-83"); break;
+    case PC2001   : pPC = new Cpc2001;      pPC->setName("Nec PC-2001"); break;
+    case PC2021   : pPC = new Cpc2021;      pPC->setName("Nec PC-2021"); break;
+    case PC2081   : pPC = new Cpc2081;      pPC->setName("Nec PC-2081"); break;
+    case LBC1100  : pPC = new Clbc1100;     pPC->setName("General LBC-1100"); break;
 
-        case RLH1000 : pPC = new Crlh1000;      pPC->setName("Panasonic HHC RL-H1000"); break;
-        case RLP3001 : pPC = new Crlp3001;      pPC->setName("Panasonic RL-P3001 RS-232C"); break;
-        case RLP4002 : pPC = new Crlp4002;      pPC->setName("Panasonic RL-P4002 Modem"); break;
-        case RLP6001 : pPC = new Crlp6001;      pPC->setName("Panasonic RL-P6001"); break;
-        case RLP9001 : pPC = new Crlp9001;      pPC->setName("Panasonic RL-P9001 4Ko"); break;
-        case RLP9002 : pPC = new Crlp9001(0,RLP9002);      pPC->setName("Panasonic RL-P9002 8Ko"); break;
-        case RLP9003 : pPC = new Crlp9001(0,RLP9003);      pPC->setName("Panasonic RL-P9003 16Ko"); break;
-        case RLP9003R: pPC = new Crlp9001(0,RLP9003R);     pPC->setName("Panasonic RL-P9003R 16Ko ROM Simulator"); break;
-        case RLP9004 : pPC = new Crlp9001(0,RLP9004);      pPC->setName("Panasonic RL-P9004 32Ko"); break;
-        case RLP9005 : pPC = new Crlp9001(0,RLP9005);      pPC->setName("Panasonic RL-P9005 128Ko"); break;
-        case RLP9006 : pPC = new Crlp9001(0,RLP9006);      pPC->setName("Panasonic RL-P9006 EPROM Expander"); break;
-        case RLP1004A: pPC = new Crlp1004a;      pPC->setName("Panasonic RL-P1004A"); break;
-        case RLP1002: pPC = new Crlp1002;      pPC->setName("Panasonic RL-P1002"); break;
-        case RLP2001: pPC = new Crlp2001;      pPC->setName("Panasonic RL-P2001"); break;
-        case RLP1005: pPC = new Crlp1005;      pPC->setName("Panasonic RL-P1005"); break;
+    case CL1000  : pPC = new Ccl1000;       pPC->setName("General CL-1000"); break;
+    case TPC8300 : pPC = new Ctpc8300;      pPC->setName("SANCO TPC-8300"); break;
+    case TP83    : pPC = new Ctp83;         pPC->setName("SANCO TP-83"); break;
 
-        case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
+    case RLH1000 : pPC = new Crlh1000;      pPC->setName("Panasonic HHC RL-H1000"); break;
+    case RLP3001 : pPC = new Crlp3001;      pPC->setName("Panasonic RL-P3001 RS-232C"); break;
+    case RLP4002 : pPC = new Crlp4002;      pPC->setName("Panasonic RL-P4002 Modem"); break;
+    case RLP6001 : pPC = new Crlp6001;      pPC->setName("Panasonic RL-P6001"); break;
+    case RLP9001 : pPC = new Crlp9001;      pPC->setName("Panasonic RL-P9001 4Ko"); break;
+    case RLP9002 : pPC = new Crlp9001(0,RLP9002);      pPC->setName("Panasonic RL-P9002 8Ko"); break;
+    case RLP9003 : pPC = new Crlp9001(0,RLP9003);      pPC->setName("Panasonic RL-P9003 16Ko"); break;
+    case RLP9003R: pPC = new Crlp9001(0,RLP9003R);     pPC->setName("Panasonic RL-P9003R 16Ko ROM Simulator"); break;
+    case RLP9004 : pPC = new Crlp9001(0,RLP9004);      pPC->setName("Panasonic RL-P9004 32Ko"); break;
+    case RLP9005 : pPC = new Crlp9001(0,RLP9005);      pPC->setName("Panasonic RL-P9005 128Ko"); break;
+    case RLP9006 : pPC = new Crlp9001(0,RLP9006);      pPC->setName("Panasonic RL-P9006 EPROM Expander"); break;
+    case RLP1004A: pPC = new Crlp1004a;      pPC->setName("Panasonic RL-P1004A"); break;
+    case RLP1002: pPC = new Crlp1002;      pPC->setName("Panasonic RL-P1002"); break;
+    case RLP2001: pPC = new Crlp2001;      pPC->setName("Panasonic RL-P2001"); break;
+    case RLP1005: pPC = new Crlp1005;      pPC->setName("Panasonic RL-P1005"); break;
 
-        case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
-        case HP41 : pPC = new Chp41;      pPC->setName("HP-41"); break;
-        case HP15 : pPC = new Chp15c;      pPC->setName("HP-15C"); break;
-        case HP11 : pPC = new Chp15c(0,HP11);      pPC->setName("HP-11C"); break;
-        case HP12 : pPC = new Chp15c(0,HP12);      pPC->setName("HP-12C"); break;
-        case HP16 : pPC = new Chp15c(0,HP16);      pPC->setName("HP-16C"); break;
-        case HP82143A : pPC = new Chp82143A;      pPC->setName("HP82143A"); break;
+    case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
 
-        case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;
-        case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
-        case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;
+    case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
+    case HP41 : pPC = new Chp41;      pPC->setName("HP-41"); break;
+    case HP15 : pPC = new Chp15c;      pPC->setName("HP-15C"); break;
+    case HP11 : pPC = new Chp15c(0,HP11);      pPC->setName("HP-11C"); break;
+    case HP12 : pPC = new Chp15c(0,HP12);      pPC->setName("HP-12C"); break;
+    case HP16 : pPC = new Chp15c(0,HP16);      pPC->setName("HP-16C"); break;
+    case HP82143A : pPC = new Chp82143A;      pPC->setName("HP82143A"); break;
 
+    case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;
+    case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
+    case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;
+
+#endif
 
         default			: return 0;
     }

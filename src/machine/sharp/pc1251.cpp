@@ -146,11 +146,11 @@ BYTE	Cpc1253::Get_PortA(void)
         if (KEY('1'))			data|=0x80;
     }
     if (IO_A & 0x20) {
-        if (KEY(K_F3))			data|=0x40;
-        if (KEY(K_F2))			data|=0x80;
+        if (KEY(K_RET))			data|=0x40;
+        if (KEY('N'))			data|=0x80;
     }
     if (IO_A & 0x40) {
-        if (KEY(K_F1))			data|=0x80;
+        if (KEY('O'))			data|=0x80;
     }
 
     return data;
