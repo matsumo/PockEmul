@@ -115,71 +115,6 @@ win32 {
     QMAKE_LFLAGS += -static-libgcc -static-libstdc++
 }
 
-contains(PROJECT_MODULE,M_LIBAVOID) {
-DEFINES += P_AVOID
-
-HEADERS += \
-    libavoid/vpsc.h \
-    libavoid/visibility.h \
-    libavoid/viscluster.h \
-    libavoid/vertices.h \
-    libavoid/timer.h \
-    libavoid/shape.h \
-    libavoid/router.h \
-    libavoid/orthogonal.h \
-    libavoid/obstacle.h \
-    libavoid/makepath.h \
-    libavoid/libavoid.h \
-    libavoid/junction.h \
-    libavoid/graph.h \
-    libavoid/geomtypes.h \
-    libavoid/geometry.h \
-    libavoid/debug.h \
-    libavoid/connend.h \
-    libavoid/connector.h \
-    libavoid/connectionpin.h \
-    libavoid/assertions.h \
-
-SOURCES += \
-    libavoid/vpsc.cpp \
-    libavoid/visibility.cpp \
-    libavoid/viscluster.cpp \
-    libavoid/vertices.cpp \
-    libavoid/timer.cpp \
-    libavoid/shape.cpp \
-    libavoid/router.cpp \
-    libavoid/orthogonal.cpp \
-    libavoid/obstacle.cpp \
-    libavoid/makepath.cpp \
-    libavoid/junction.cpp \
-    libavoid/graph.cpp \
-    libavoid/geomtypes.cpp \
-    libavoid/geometry.cpp \
-    libavoid/connend.cpp \
-    libavoid/connector.cpp \
-    libavoid/connectionpin.cpp \
-
-
-}
-
-contains(PROJECT_MODULE,M_CLOUD) {
-DEFINES += P_CLOUD
-
-RESOURCES +=  \
-    cloud/cloud.qrc \
-
-
-HEADERS+= \
-    cloud/cloudwindow.h \
-    cloud/cloudimageprovider.h
-
-
-SOURCES+= \
-    cloud/cloudwindow.cpp \
-    cloud/cloudimageprovider.cpp
-
-}
-
 
 
 FORMS += ui/about.ui \
@@ -576,6 +511,8 @@ SOURCES +=  \
 SOURCES +=  \
     src/machine/pcxxxx.cpp \
     src/machine/bus.cpp \
+    src/machine/cprinter.cpp \
+    src/machine/paperwidget.cpp \
     src/machine/sharp/pc1211.cpp \
     src/machine/sharp/pc1425.cpp \
     src/machine/sharp/pc1245.cpp \
@@ -599,7 +536,6 @@ SOURCES +=  \
     src/machine/sharp/g850v.cpp \
     src/machine/sharp/Ce126.cpp \
     src/machine/sharp/ce140p.cpp \
-    src/machine/ccable.cpp \
     src/machine/sharp/ce125.cpp \
     src/machine/sharp/ce150.cpp \
     src/machine/sharp/ce152.cpp \
@@ -637,10 +573,10 @@ SOURCES +=  \
     src/machine/panasonic/rlp3001.cpp \
     src/machine/panasonic/rlp1005.cpp \
     src/machine/panasonic/rlext.cpp \
-    src/machine/hp/hp41.cpp \
     src/machine/ti/ti57.cpp \
     src/machine/ti/cc40.cpp \
     src/machine/ti/ti74.cpp \
+    src/machine/hp/hp41.cpp \
     src/machine/hp/hp41trace.cpp \
     src/machine/hp/hp41display.cpp \
     src/machine/hp/hp41Timer.cpp \
@@ -655,15 +591,14 @@ SOURCES +=  \
     src/machine/pc2001.cpp \
     src/machine/pc2021.cpp \
     src/machine/cesimu.cpp \
-    qcodemodel2/qcodenode.cpp \
     src/machine/postit.cpp \
     src/machine/potar.cpp \
     src/machine/cmotor.cpp \
     src/machine/ce515p.cpp \
     src/machine/tpc8300.cpp \
     src/machine/tp83.cpp \
-    src/machine/paperwidget.cpp \
-    src/machine/cprinter.cpp \
+    src/machine/ccable.cpp \
+    qcodemodel2/qcodenode.cpp \
 
 
 SOURCES +=  \
@@ -674,58 +609,65 @@ SOURCES +=  \
     ui/cregsz80widget.cpp \
     ui/cregshd61700widget.cpp \
     src/cpu/cpu.cpp \
-    src/cpu/lh5801.cpp \
-    src/cpu/lh5810.cpp \
-    src/cpu/pd1990ac.cpp \
+    tinybasic/tinybasic.cpp \
     src/cpu/sc61860.cpp \
     src/cpu/sc62015.cpp \
-    src/cpu/ct6834.cpp \
-    src/cpu/z80.cpp \
+    src/cpu/lh5801.cpp \
     src/cpu/lh5803.cpp \
+    src/cpu/z80.cpp \
     src/cpu/z80_dasm.cpp \
+    src/cpu/hd61700.cpp \
+    src/cpu/hd61700d.cpp \
+    src/cpu/i8085.cpp \
+    src/cpu/i8085_dasm.cpp \
+    src/cpu/i80x86.cpp \
+    src/cpu/i80x86_dasm.cpp \
+    src/cpu/i80L188EB.cpp \
+    src/cpu/m6502/m6502.cpp \
+    src/cpu/m6502/m6502_dasm.cpp \
+    src/cpu/upd7907/upd7907d.cpp \
+    src/cpu/upd7907/upd7907.cpp \
+    src/cpu/tms7000/tms7000.cpp \
+    src/cpu/tms7000/tms7000d.cpp \
+    src/cpu/hpnut.cpp \
+    src/cpu/hpnutd.cpp \
+    src/cpu/ti57cpu.cpp \
+    src/cpu/ti57cpu_dasm.cpp \
+    src/cpu/pd1990ac.cpp \
+    src/cpu/lh5810.cpp \
+    src/cpu/ct6834.cpp \
     src/cpu/hd61102.cpp \
     src/cpu/lu57813p.cpp \
     src/cpu/tc8576p.cpp \
-    src/cpu/hd61700d.cpp \
-    src/cpu/hd61700.cpp \
     src/cpu/uart.cpp \
     src/cpu/hd44352.cpp \
-    src/cpu/i80x86.cpp \
     src/cpu/hd66108.cpp \
     src/cpu/upd16434.cpp \
-    src/cpu/i8085_dasm.cpp \
-    src/cpu/i80x86_dasm.cpp \
     src/cpu/cf79107pj.cpp \
-    src/cpu/i8085.cpp \
     src/cpu/rp5c01.cpp \
     src/cpu/ctronics.cpp \
-    tinybasic/tinybasic.cpp \
-    src/cpu/upd7907/upd7907d.cpp \
-    src/cpu/upd7907/upd7907.cpp \
-    src/cpu/i80L188EB.cpp \
     src/cpu/pit8253.cpp \
-    src/cpu/m6502/m6502.cpp \
-    src/cpu/m6502/m6502_dasm.cpp \
-    src/cpu/ti57cpu.cpp \
-    src/cpu/ti57cpu_dasm.cpp \
     src/cpu/s6b0108.cpp \
     src/cpu/mc6847.cpp \
-    src/cpu/tms7000/tms7000.cpp \
-    src/cpu/tms7000/tms7000d.cpp \
     src/cpu/hd44780.cpp \
     src/cpu/upd1007.cpp \
     src/cpu/upd1007d.cpp \
     src/cpu/hd61710.cpp \
-    src/cpu/hpnut.cpp \
-    src/cpu/hpnutd.cpp \
     src/cpu/sed1560.cpp \
 
 
 SOURCES +=  \
     src/lcd/Lcdc.cpp \
     src/lcd/Lcdc_pc1211.cpp \
-    src/lcd/Lcdc_x07.cpp \
+    src/lcd/Lcdc_pc1250.cpp \
+    src/lcd/Lcdc_pc1350.cpp \
+    src/lcd/Lcdc_pc1401.cpp \
+    src/lcd/Lcdc_pc1403.cpp \
+    src/lcd/Lcdc_pc1450.cpp \
+    src/lcd/Lcdc_pc1475.cpp \
+    src/lcd/Lcdc_pc1500.cpp \
     src/lcd/Lcdc_pc1600.cpp \
+    src/lcd/Lcdc_x07.cpp \
     src/lcd/Lcdc_pb1000.cpp \
     src/lcd/Lcdc_e500.cpp \
     src/lcd/Lcdc_pc2001.cpp \
@@ -738,13 +680,6 @@ SOURCES +=  \
     src/lcd/Lcdc_cc40.cpp \
     src/lcd/Lcdc_ti74.cpp \
     src/lcd/Lcdc_hp15c.cpp \
-    src/lcd/Lcdc_pc1350.cpp \
-    src/lcd/Lcdc_pc1250.cpp \
-    src/lcd/Lcdc_pc1500.cpp \
-    src/lcd/Lcdc_pc1475.cpp \
-    src/lcd/Lcdc_pc1403.cpp \
-    src/lcd/Lcdc_pc1450.cpp \
-    src/lcd/Lcdc_pc1401.cpp \
     src/lcd/Lcdc_fx8000g.cpp \
     src/lcd/Lcdc_g850.cpp \
     src/lcd/Lcdc_fp200.cpp \
@@ -755,6 +690,12 @@ greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
 
 
 OTHER_FILES += \
+    resources/weblinks.xml \
+    resources/notes.txt \
+    resources/pockemul/release_notes.html \
+    resources/pockemul/script_help.html \
+    resources/pockemul/config.xml \
+    resources/pockemul/configExt.xml \
     resources/keymap/trspc2.map \
     resources/keymap/pc2500.map \
     resources/keymap/pc1600.map \
@@ -768,7 +709,6 @@ OTHER_FILES += \
     resources/keymap/pc1250.map \
     resources/keymap/ce1600p.map \
     resources/keymap/ce150.map \
-    resources/pockemul/release_notes.html \
     resources/keymap/ce125tape.map \
     resources/keymap/ce126.map \
     resources/keymap/ce125.map \
@@ -777,9 +717,46 @@ OTHER_FILES += \
     resources/keymap/ce120.map \
     resources/keymap/263591.map \
     resources/keymap/ce140p.map \
-    resources/weblinks.xml \
-    resources/notes.txt \
-    resources/pockemul/script_help.html \
+    resources/keymap/x07.map \
+    resources/keymap/e500.map \
+    resources/keymap/pb1000.map \
+    resources/keymap/x710.map \
+    resources/keymap/pb2000.map \
+    resources/keymap/g850v.map \
+    resources/keymap/z1.map \
+    resources/keymap/fp200.map \
+    resources/keymap/pc1260.map \
+    resources/keymap/pc1211.map \
+    resources/keymap/ce122.map \
+    resources/keymap/pc2001.map \
+    resources/keymap/pc2021.map \
+    resources/keymap/ce127r.map \
+    resources/keymap/ce152.map \
+    resources/keymap/pc2081.map \
+    resources/keymap/fp40.map \
+    resources/keymap/lbc1100.map \
+    resources/keymap/cl1000.map \
+    resources/keymap/pc1425.map \
+    resources/pockemul/weblinks.xml \
+    resources/keymap/tpc8300.map \
+    resources/keymap/tp83.map \
+    resources/keymap/rlh1000.map \
+    resources/keymap/ti57.map \
+    resources/keymap/hp41.map \
+    resources/keymap/hp82143a.map \
+    resources/keymap/rlp9006.map \
+    resources/keymap/rlp1004a.map \
+    resources/keymap/rlp4002.map \
+    resources/keymap/ce1560.map \
+    resources/keymap/ce140f.map \
+    resources/keymap/cc40.map \
+    resources/keymap/ti74.map \
+    resources/keymap/ti95.map \
+    resources/keymap/fx8000g.map \
+    resources/keymap/hp15c.map \
+    resources/keymap/rlp1002.map \
+    resources/keymap/rlp1005.map \
+    resources/keymap/pc1253.map \
     logitheque/serial1251.qs \
     qcodeedit/qxs/marks.qxm \
     qcodeedit/qxs/xml.qxf \
@@ -826,32 +803,6 @@ OTHER_FILES += \
     resources/asmlibs/sc61860/cpeq16.lib \
     resources/asmlibs/sc61860/cpe16.lib \
     resources/asmlibs/sc61860/divmod16.lib \
-    resources/keymap/x07.map \
-    resources/keymap/e500.map \
-    resources/keymap/pb1000.map \
-    resources/keymap/x710.map \
-    resources/pockemul/config.xml \
-    resources/pockemul/configExt.xml \
-    resources/keymap/pb2000.map \
-    resources/keymap/g850v.map \
-    resources/keymap/z1.map \
-    resources/keymap/fp200.map \
-    resources/keymap/pc1260.map \
-    resources/keymap/pc1211.map \
-    resources/keymap/ce122.map \
-    resources/keymap/pc2001.map \
-    resources/keymap/pc2021.map \
-    resources/keymap/ce127r.map \
-    resources/keymap/ce152.map \
-    resources/keymap/pc2081.map \
-    resources/keymap/fp40.map \
-    resources/keymap/lbc1100.map \
-    resources/keymap/cl1000.map \
-    resources/keymap/pc1425.map \
-    resources/pockemul/weblinks.xml \
-    resources/keymap/tpc8300.map \
-    resources/keymap/tp83.map \
-    resources/keymap/rlh1000.map \
     android/src/org/kde/necessitas/ministro/IMinistro.aidl \
     android/src/org/kde/necessitas/ministro/IMinistroCallback.aidl \
     android/src/org/qtproject/qt5/android/bindings/QtActivity.java \
@@ -916,6 +867,8 @@ OTHER_FILES += \
     android/version.xml \
     android/AndroidManifest.xml \
     android/res/values/libs.xml \
+    android/AndroidManifest.xml \
+    android/src/org/qtproject/pockemul/PockemulActivity.java \
     cloud/content/ScrollBar.qml \
     cloud/content/NewsDelegate.qml \
     cloud/content/CategoryDelegate.qml \
@@ -945,7 +898,6 @@ OTHER_FILES += \
     cloud/content/Settings.qml \
     cloud/content/SearchBox.qml \
     cloud/content/LineInput.qml \
-    cloud/PmlView.qml \
     cloud/content/SettingsDelegate.qml \
     cloud/content/Edit.qml \
     cloud/content/ComboBox.qml \
@@ -955,30 +907,13 @@ OTHER_FILES += \
     cloud/content/SortListModel.qml \
     cloud/content/Test2.qml \
     cloud/content/Grid.qml \
-    resources/keymap/ti57.map \
-    resources/keymap/hp41.map \
-    resources/keymap/hp82143a.map \
     cloud/content/Message.qml \
-    cloud/PmlView2.qml \
-    cloud/Test.qml \
     cloud/content/NewsDelegate2.qml \
     cloud/content/Actions.qml \
-    resources/keymap/rlp9006.map \
-    resources/keymap/rlp1004a.map \
-    resources/keymap/rlp4002.map \
-    resources/keymap/ce1560.map \
-    resources/keymap/ce140f.map \
-    android/AndroidManifest.xml \
-    android/src/org/qtproject/pockemul/PockemulActivity.java \
-    resources/keymap/cc40.map \
-    resources/keymap/ti74.map \
-    resources/keymap/ti95.map \
-    resources/keymap/fx8000g.map \
-    resources/keymap/hp15c.map \
-    resources/keymap/rlp1002.map \
-    resources/keymap/rlp1005.map \
+    cloud/PmlView.qml \
+    cloud/PmlView2.qml \
+    cloud/Test.qml \
     cloud/Main.qml \
-    resources/keymap/pc1253.map
 
 
 contains(PROJECT_MODULE,M_IDE) {
@@ -1145,6 +1080,73 @@ FORMS += \
 
 
 }
+
+
+contains(PROJECT_MODULE,M_LIBAVOID) {
+DEFINES += P_AVOID
+
+HEADERS += \
+    libavoid/vpsc.h \
+    libavoid/visibility.h \
+    libavoid/viscluster.h \
+    libavoid/vertices.h \
+    libavoid/timer.h \
+    libavoid/shape.h \
+    libavoid/router.h \
+    libavoid/orthogonal.h \
+    libavoid/obstacle.h \
+    libavoid/makepath.h \
+    libavoid/libavoid.h \
+    libavoid/junction.h \
+    libavoid/graph.h \
+    libavoid/geomtypes.h \
+    libavoid/geometry.h \
+    libavoid/debug.h \
+    libavoid/connend.h \
+    libavoid/connector.h \
+    libavoid/connectionpin.h \
+    libavoid/assertions.h \
+
+SOURCES += \
+    libavoid/vpsc.cpp \
+    libavoid/visibility.cpp \
+    libavoid/viscluster.cpp \
+    libavoid/vertices.cpp \
+    libavoid/timer.cpp \
+    libavoid/shape.cpp \
+    libavoid/router.cpp \
+    libavoid/orthogonal.cpp \
+    libavoid/obstacle.cpp \
+    libavoid/makepath.cpp \
+    libavoid/junction.cpp \
+    libavoid/graph.cpp \
+    libavoid/geomtypes.cpp \
+    libavoid/geometry.cpp \
+    libavoid/connend.cpp \
+    libavoid/connector.cpp \
+    libavoid/connectionpin.cpp \
+
+
+}
+
+contains(PROJECT_MODULE,M_CLOUD) {
+DEFINES += P_CLOUD
+
+RESOURCES +=  \
+    cloud/cloud.qrc \
+
+
+HEADERS+= \
+    cloud/cloudwindow.h \
+    cloud/cloudimageprovider.h
+
+
+SOURCES+= \
+    cloud/cloudwindow.cpp \
+    cloud/cloudimageprovider.cpp
+
+}
+
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 

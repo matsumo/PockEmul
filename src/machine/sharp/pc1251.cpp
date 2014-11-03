@@ -21,10 +21,10 @@ Cpc1251::Cpc1251(CPObject *parent)	: Cpc1250(parent)
     memsize			= 0x10000;
 
     SlotList.clear();
-    SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1251/cpu-1251.rom"), "pc-1251/cpu-1251.rom", CSlot::ROM , "CPU ROM"));
-    SlotList.append(CSlot(8 , 0x2000 ,	""						, "pc-1251/R1-1251.ram"	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1251/bas-1251.rom"), "pc-1251/bas-1251.rom", CSlot::ROM , "BASIC ROM"));
-    SlotList.append(CSlot(32, 0x8000 ,	""						, "pc-1251/R2-1251.ram" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1251/cpu-1251.rom"), "", CSlot::ROM , "CPU ROM"));
+    SlotList.append(CSlot(8 , 0x2000 ,	""						, ""	, CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1251/bas-1251.rom"), "", CSlot::ROM , "BASIC ROM"));
+    SlotList.append(CSlot(32, 0x8000 ,	""						, "" , CSlot::RAM , "RAM"));
 
 }
 
@@ -39,13 +39,15 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
 
     BackGroundFname	= P_RES(":/pc1251/pc1253.png");
 
+    memsize			= 0x30000;
     SlotList.clear();
     SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1251/cpu-1253.rom"), "", CSlot::ROM , "CPU ROM"));
     SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1251/bas-1253.rom"), "", CSlot::ROM , "BASIC ROM"));
     SlotList.append(CSlot(32, 0x8000 ,	""						, "" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(128, 0x10000 ,	""						, "" , CSlot::RAM , "RAM"));
 
     delete pKEYB;
-    pKEYB		= new Ckeyb(this,"pc1253.map",scandef_pc1253);
+    pKEYB		= new Ckeyb(this,"pc1253.map");
 
     pLCDC->symbList.clear();
      pLCDC->symbList
@@ -62,7 +64,6 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
 
 bool Cpc1251::Chk_Adr(UINT32 *d,UINT32 data)
 {
-
 	if ( (*d>=0xB000) && (*d<=0xB7FF) )	{ *d+=0x800;}
 	if ( (*d>=0xB800) && (*d<=0xC7FF) )	return(1);		// RAM area(B800-C7ff) 
 
@@ -75,30 +76,38 @@ bool Cpc1251::Chk_Adr_R(UINT32 *d,UINT32 *data)
 	return(Cpc1250::Chk_Adr_R(d,data));
 }
 
+bool Cpc1253::Chk_Adr(UINT32 *d,UINT32 data)
+{
+//	Cpc1250::Mem_Mirror(d);
+
+    if ( (*d>=0xB000) && (*d<=0xC7FF) )	{
+        if (RomBank>0) {
+            *d -= 0xB000;
+            *d += 0x10000 + RomBank * 0x2000;
+        }
+        return(1);			// RAM area(C800-C7ff)
+    }
+
+    return (Cpc1250::Chk_Adr(d,data));
+}
+
+bool Cpc1253::Chk_Adr_R(UINT32 *d,UINT32 *data)
+{
+    if ( (*d>=0xB000) && (*d<=0xC7FF) )	{
+        if (RomBank>0) {
+            *d -= 0xB800;
+            *d += 0x10000 + RomBank * 0x2000;
+        }
+        return true;
+    }
+    return(Cpc1250::Chk_Adr_R(d,data));
+}
+
 BYTE	Cpc1253::Get_PortA(void)
 {
     int data = 0;
 
-//    if (IO_B & 1) {
-//        if (KEY('-'))			data|=0x01;
-//        if (KEY(K_CLR))			data|=0x02;
-//        if (KEY('*'))			data|=0x04;
-//        if (KEY('/'))			data|=0x08;
-//        if (KEY(K_DA))			data|=0x10;
-//        if (KEY('E'))			data|=0x20;
-//        if (KEY('D'))			data|=0x40;
-//        if (KEY('C'))			data|=0x80;
-//    }
-    if (IO_B & 2) {
-        if (KEY('Y'))			data|=0x01;
-        if (KEY('X'))			data|=0x02;
-        if (KEY('M'))			data|=0x04; // FUNC
-        if (KEY('7'))			data|=0x08;
-        if (KEY('V'))			data|=0x10;
-        if (KEY('U'))			data|=0x20;
-        if (KEY('T'))			data|=0x40;
-        if (KEY('S'))			data|=0x80;
-    }
+
     if (IO_B & 0x1) {
         if (KEY('R'))			data|=0x01;
         if (KEY(K_IN))			data|=0x02;
@@ -109,7 +118,10 @@ BYTE	Cpc1253::Get_PortA(void)
         if (KEY(K_MPLUS))		data|=0x40;
         if (KEY(K_MIN))			data|=0x80;
     }
-
+    if (IO_B & 2) {
+        if (KEY('M'))			data|=0x04; // FUNC
+        if (KEY('7'))			data|=0x08;
+    }
     if (IO_A & 1) {
         if (KEY(K_OUT))			data|=0x02;
         if (KEY('K'))			data|=0x04; // FUNC

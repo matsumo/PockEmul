@@ -336,6 +336,7 @@ void MainWindowPockemul::initObjectTable() {
 }
 
 
+
 CPObject * MainWindowPockemul::InitApp(int idPC )
 {
     CPObject *pPC=0;

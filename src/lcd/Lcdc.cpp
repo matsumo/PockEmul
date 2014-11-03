@@ -179,7 +179,7 @@ bool	Clcdc::init(void)
     redraw = true;
 
     origColor_Off = Color_Off;
-    Contrast(3);
+    Contrast(2);
     AddLog(LOG_MASTER,"Lcd INIT");
 	return(true);
 }

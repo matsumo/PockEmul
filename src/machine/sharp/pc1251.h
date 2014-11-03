@@ -9,8 +9,8 @@ public:
     const char*	GetClassName(){ return("Cpc1251");}
 
 
-	bool	Chk_Adr(UINT32 *d,UINT32 data);
-    bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
+    virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
+    virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
 
 
     Cpc1251(CPObject *parent = 0);
@@ -46,6 +46,8 @@ public:
     Cpc1253(CPObject *parent = 0);
 
 
+    virtual bool Chk_Adr(UINT32 *d, UINT32 data);
+    virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
 private:
 };
 

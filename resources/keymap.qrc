@@ -58,6 +58,7 @@
         <file>keymap/hp15c.map</file>
         <file>keymap/rlp1002.map</file>
         <file>keymap/rlp1005.map</file>
+        <file>keymap/pc1253.map</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

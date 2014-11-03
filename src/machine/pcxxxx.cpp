@@ -39,6 +39,7 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     KeyMapLenght = 0;
     pBreakpointManager = new CbreakpointManager(this);
 
+    RomBank=RamBank=0;
     fp_log  = 0;
     off			= true;
     setcfgfname(QString("pcXXXX"));
