@@ -91,6 +91,7 @@ Clcdc_pc1250::Clcdc_pc1250(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
              << ClcdSymb(0,  0, S_BUSY,  0xF83D, 0x01);	// BUSY
 }
 
+
 void Clcdc_pc1250::disp(void)
 {
     BYTE b,data,x,y;

@@ -1804,14 +1804,16 @@ INLINE void CSC61860::Op_6b(void)
                    ticks2=0;
                 }
 				break;
-	case 0x08: if (t==0x08)
-				{
-					pPC->pKEYB->CheckKon();
-			//		AddLog(0x80,"TEST %02x : Div2=%i  Div500=%i   Kon=%i",t,div2,div500,pPC->pKEYB->Kon);
-					if (pPC->pKEYB->Kon)
-						 reg.r.z = 0;
-					else reg.r.z = 1;
-				}
+    case 0x08:
+                pPC->pKEYB->CheckKon();
+                //		AddLog(0x80,"TEST %02x : Div2=%i  Div500=%i   Kon=%i",t,div2,div500,pPC->pKEYB->Kon);
+                if (pPC->pKEYB->Kon) {
+                    reg.r.z = 0;
+                    qWarning()<<"TEST08: BRK";
+                }
+                else {
+                    reg.r.z = 1;
+                }
 				break;
 	case 0x80: 	
 				if (Get_Xin()) 
