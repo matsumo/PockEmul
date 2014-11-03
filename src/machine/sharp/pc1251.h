@@ -41,6 +41,8 @@ class Cpc1253:public Cpc1251{						//PC1360 emulator main class
 public:
     const char*	GetClassName(){ return("Cpc1253");}
 
+    virtual BYTE	Get_PortA(void);
+
     Cpc1253(CPObject *parent = 0);
 
 

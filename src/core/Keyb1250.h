@@ -1,5 +1,7 @@
 #ifndef _KEYB1250_H
 #define _KEYB1250_H
+#include "Keyb.h"
+
 BYTE scandef_pc1250[] = {
 //+0		+1			+2			+3			+4			+5			+6			+7
 '-',		K_CLR,		'*',		'/',		K_DA,		'e',		'd',		'c',
@@ -19,6 +21,48 @@ NUL,		NUL,		NUL,		NUL,		NUL,		'i',		'k',		' ',
 NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'l',		K_RET,
 NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'0',
 };
+
+
+//BYTE scandef_pc1253[] = {
+////+0		+1			+2			+3			+4			+5			+6			+7
+//'0'*,		K_CLR,		'*',		'/',		K_DA,		'RM'*,		'd',		'c',
+//'+',		'9',		'3',		'6',		K_SHT,		'0'*,		's',		'x',
+//'.',		'8',		'2',		'5',		K_DEF,		'q',		'a',		'z',
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+
+//NUL,		'7',		'1',		'4',		'CL'*,		'CE'*,		'='*,		'SQR'*,
+//NUL,		NUL,		'=',		'p',		'/'*,		'*'*,		'+'*,		'-'*,
+//NUL,		NUL,		NUL,		'o',		'9'*,		'6'*,		'%'*,		'3'*,
+//NUL,		NUL,		NUL,		NUL,		NUL,		'5'*,		'.'*,		'2'*,
+//NUL,		NUL,		NUL,		NUL,		NUL,		'4'*,		'0'*,		'1'*,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'l',		K_RET,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'0',
+//};
+
+BYTE scandef_pc1253[] = {
+//+0		+1			+2			+3			+4			+5			+6			+7
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+
+NUL,		'j',		'i',		'g',		K_CLR,		K_CE,		'=',		K_SQR,
+NUL,		NUL,		'h',		'f',		'/',		'*',		'+',		'-',
+NUL,		NUL,		NUL,		'e',		'9',		'6',		'%',		'3',
+NUL,		NUL,		NUL,		NUL,		'd',		'5',		'.',		'2',
+NUL,		NUL,		NUL,		NUL,		NUL,		'4',		'0',		'1',
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'a',		'b',
+NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'c',
+};
+
 
 
 TransMap KeyMap1250[]={

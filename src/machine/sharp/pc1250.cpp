@@ -137,6 +137,8 @@ void Cpc1250::TurnON(void)
 
 bool Cpc1250::init()
 {
+//    pCPU->logsw = true;
+
     CpcXXXX::init();
     pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(1,87));		publish(pCONNECTOR);
     return true;

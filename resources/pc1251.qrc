@@ -11,5 +11,6 @@
         <file>pc1251/pc1253.png</file>
         <file>pc1251/pc1252h.png</file>
         <file>pc1251/bas-1253.rom</file>
+        <file>pc1251/cpu-1253.rom</file>
     </qresource>
 </RCC>
