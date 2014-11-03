@@ -366,7 +366,8 @@ FORMS += ui/about.ui \
     ui/dialogvkeyboard.ui \
 
 
-HEADERS += src/core/Connect.h \
+HEADERS += \
+    src/core/Connect.h \
     src/core/Dasm.h \
     src/core/Debug.h \
     src/core/Inter.h \
@@ -402,6 +403,30 @@ HEADERS += src/core/Connect.h \
     src/core/slot.h \
     src/core/xmlwriter.h \
     src/core/lcc/parser/parser.h \
+    src/core/Keyb1600.h \
+    src/core/dialogpotar.h \
+    src/core/cextension.h \
+    src/core/Keyb2500.h \
+    src/core/Keyb1280.h \
+    src/core/weblinksparser.h \
+#    src/core/wavfile.h \
+    src/core/qcommandline.h \
+    src/core/version.h \
+    src/core/downloadmanager.h \
+    src/core/servertcp.h \
+    src/core/dialogsimulator.h \
+    src/core/bineditor/bineditor.h \
+    src/core/bineditor/colorscheme.h \
+    src/core/sizegrip.h \
+    src/core/viewobject.h \
+    src/core/allobjects.h \
+    src/core/renderView.h \
+    src/core/breakpoint.h \
+    src/core/watchpoint.h \
+    src/core/launchbuttonwidget.h \
+
+
+HEADERS += \
     src/cpu/cpu.h \
     src/cpu/lh5801.h \
     src/cpu/lh5810.h \
@@ -409,6 +434,51 @@ HEADERS += src/core/Connect.h \
     src/cpu/sc61860.h \
     src/cpu/sc62015.h \
     src/machine/ccable.h \
+    src/cpu/z80.h \
+    src/cpu/z80memory.h \
+    src/cpu/lh5803.h \
+    src/cpu/hd61102.h \
+    src/cpu/z80-2.h \
+    src/cpu/lu57813p.h \
+    src/cpu/ct6834.h \
+    src/cpu/tc8576p.h \
+    src/cpu/hd61700.h \
+    src/cpu/uart.h \
+    src/cpu/hd44352.h \
+    src/cpu/cf79107pj.h \
+    src/cpu/i8085.h \
+    src/cpu/i8085cpu.h \
+    src/cpu/i8085daa.h \
+    src/cpu/rp5c01.h \
+    src/cpu/ctronics.h \
+    src/cpu/sed1560.h \
+    src/cpu/i80x86.h \
+    src/cpu/hd66108.h \
+    src/cpu/upd16434.h \
+    src/cpu/upd7907/upd7907.h \
+    src/cpu/i80L188EB.h \
+    src/cpu/pit8253.h \
+    src/cpu/m6502/m6502.h \
+    src/cpu/m6502/opsc02.h \
+    src/cpu/m6502/ops02.h \
+    tinybasic/tinybasic.h \
+    src/cpu/ti57cpu.h \
+    src/cpu/s6b0108.h \
+    src/cpu/mc6847.h \
+    src/cpu/tms7000/tms7000.h \
+    src/cpu/hd44780.h \
+    src/cpu/upd1007.h \
+    src/cpu/upd1007d.h \
+    src/cpu/i8085_dasm.h \
+    src/cpu/i80x86_dasm.h \
+    src/core/modelids.h \
+    src/cpu/hd61710.h \
+    src/cpu/hpnut.h \
+    src/cpu/hpnutd.h \
+
+HEADERS += \
+    src/machine/pcxxxx.h \
+    src/machine/bus.h \
     src/machine/sharp/ce125.h \
     src/machine/sharp/Ce126.h \
     src/machine/sharp/ce150.h \
@@ -436,54 +506,20 @@ HEADERS += src/core/Connect.h \
     src/machine/sharp/ce140p.h \
     src/machine/sharp/pc1425.h \
     src/machine/sharp/ce140f.h \
-    src/machine/pcxxxx.h \
+    src/machine/sharp/ce1560.h \
+    src/machine/sharp/buspc1500.h \
+    src/machine/sharp/ce162e.h \
+    src/machine/sharp/ce153.h \
+    src/machine/sharp/ce1600f.h \
+    src/machine/sharp/ce2xxx.h \
+    src/machine/sharp/pc1211.h \
+    src/machine/sharp/ce122.h \
     src/machine/sio.h \
-    src/cpu/z80.h \
-    src/cpu/z80memory.h \
-    src/cpu/lh5803.h \
-    src/cpu/hd61102.h \
-    src/cpu/z80-2.h \
-    src/cpu/lu57813p.h \
-    src/core/Keyb1600.h \
     src/machine/potar.h \
-    src/core/dialogpotar.h \
     src/machine/cmotor.h \
-    src/cpu/tc8576p.h \
-    src/core/cextension.h \
-    src/core/Keyb2500.h \
     src/machine/ce515p.h \
-    src/core/Keyb1280.h \
-    src/core/weblinksparser.h \
-#    src/core/wavfile.h \
-    qcodemodel2/qcodenode.h \
-    ui/dialogdasm.h \
-    ui/cregssc61860widget.h \
-    ui/cregcpu.h \
-    ui/cregslh5801widget.h \
     src/machine/cx07.h \
-    src/cpu/ct6834.h \
-    src/machine/cx07char.h \
-    ui/cregsz80widget.h \
-    src/cpu/hd61700.h \
     src/machine/cx710.h \
-    src/cpu/uart.h \
-    ui/uartconsole.h \
-    src/cpu/hd44352.h \
-    ui/cregshd61700widget.h \
-    src/lcd/Lcdc_x07.h \
-    src/lcd/Lcdc_symb.h \
-    src/lcd/Lcdc_pc1600.h \
-    src/lcd/Lcdc_pb1000.h \
-    src/lcd/Lcdc_e500.h \
-    src/lcd/Lcdc_fp200.h \
-    src/lcd/Lcdc_pc1211.h \
-    src/lcd/Lcdc.h \
-    pictureflow/pictureflow.h \
-    pictureflow/materialflow.h \
-    pictureflow/fluidlauncher.h \
-    pictureflow/launcher.h \
-    pictureflow/slideshow.h \
-    src/core/launchbuttonwidget.h \
     src/machine/casio/pb1000.h \
     src/machine/casio/pb2000.h \
     src/machine/casio/md100.h \
@@ -491,97 +527,60 @@ HEADERS += src/core/Connect.h \
     src/machine/casio/fp100.h \
     src/machine/casio/fp200.h \
     src/machine/casio/z1.h \
-    src/cpu/sed1560.h \
-    src/lcd/Lcdc_g850.h \
-    src/cpu/i80x86.h \
-    src/cpu/hd66108.h \
-    src/lcd/Lcdc_z1.h \
-    src/cpu/cf79107pj.h \
-    src/cpu/i8085.h \
-    src/cpu/i8085cpu.h \
-    src/cpu/i8085daa.h \
-    src/cpu/rp5c01.h \
-    src/cpu/ctronics.h \
-    ui/dialogvkeyboard.h \
-    src/core/qcommandline.h \
-    src/core/version.h \
-    tinybasic/tinybasic.h \
-    src/machine/sharp/pc1211.h \
-    src/machine/sharp/ce122.h \
-    src/core/downloadmanager.h \
-    src/machine/pc2001.h \
-    src/cpu/upd16434.h \
-    src/lcd/Lcdc_pc2001.h \
-    src/cpu/upd7907/upd7907.h \
-    src/machine/pc2021.h \
-    src/machine/printerctronics.h \
-    src/machine/casio/fp40.h \
-    src/cpu/i80L188EB.h \
-    src/cpu/pit8253.h \
-    src/core/servertcp.h \
-    src/machine/general/lbc1100.h \
-    src/machine/general/cl1000.h \
-    src/machine/cesimu.h \
-    src/core/dialogsimulator.h \
-    src/core/bineditor/bineditor.h \
-    src/core/bineditor/colorscheme.h \
-    src/lcd/Lcdc_lbc1100.h \
-    src/machine/tpc8300.h \
-    src/lcd/Lcdc_tpc8300.h \
-    src/machine/tp83.h \
+    src/machine/casio/fx8000g.h \
+    src/machine/casio/fa80.h \
+    src/machine/panasonic/buspanasonic.h \
+    src/machine/panasonic/rlp3001.h \
+    src/machine/panasonic/rlext.h \
+    src/machine/panasonic/rlp4002.h \
+    src/machine/panasonic/rlp1002.h \
+    src/machine/panasonic/rlp2001.h \
+    src/machine/panasonic/rlp1005.h \
     src/machine/panasonic/rlh1000.h \
     src/machine/panasonic/rlp6001.h \
     src/machine/panasonic/rlp9001.h \
     src/machine/panasonic/rlp1004a.h \
-    src/lcd/Lcdc_rlh1000.h \
-    src/cpu/m6502/m6502.h \
-    src/cpu/m6502/opsc02.h \
-    src/cpu/m6502/ops02.h \
-    src/machine/postit.h \
-    src/core/sizegrip.h \
-    src/machine/hp/hp41.h \
-    src/cpu/ti57cpu.h \
+    src/machine/ti/cc40.h \
+    src/machine/ti/ti74.h \
+    src/machine/cx07char.h \
+    src/machine/hp/hp15c.h \
+    src/machine/pc2001.h \
+    src/machine/pc2021.h \
+    src/machine/printerctronics.h \
+    src/machine/casio/fp40.h \
+    src/machine/general/lbc1100.h \
+    src/machine/general/cl1000.h \
+    src/machine/cesimu.h \
+    src/machine/tpc8300.h \
+    src/machine/tp83.h \
     src/machine/ti/ti57.h \
-    src/lcd/Lcdc_ti57.h \
+    src/machine/postit.h \
+    src/machine/hp/hp41.h \
     src/machine/hp/hp41Cpu.h \
     src/machine/hp/hp41mod.h \
-    src/lcd/Lcdc_hp41.h \
     src/machine/hp/hp82143A.h \
-    src/core/viewobject.h \
-    src/machine/bus.h \
-    src/core/allobjects.h \
-    src/machine/panasonic/rlp4002.h \
-    src/machine/panasonic/rlp1002.h \
-    src/machine/panasonic/rlp2001.h \
-    src/machine/sharp/ce1560.h \
-    src/cpu/s6b0108.h \
+
+HEADERS += \
+    src/lcd/Lcdc.h \
+    src/lcd/Lcdc_x07.h \
+    src/lcd/Lcdc_symb.h \
+    src/lcd/Lcdc_pc1600.h \
+    src/lcd/Lcdc_pb1000.h \
+    src/lcd/Lcdc_e500.h \
+    src/lcd/Lcdc_fp200.h \
+    src/lcd/Lcdc_pc1211.h \
+    src/lcd/Lcdc_g850.h \
+    src/lcd/Lcdc_z1.h \
+    src/lcd/Lcdc_lbc1100.h \
+    src/lcd/Lcdc_tpc8300.h \
+    src/lcd/Lcdc_rlh1000.h \
+    src/lcd/Lcdc_pc2001.h \
+    src/lcd/Lcdc_ti57.h \
     src/lcd/Lcdc_ce1560.h \
-    src/machine/panasonic/buspanasonic.h \
-    src/machine/sharp/buspc1500.h \
-    src/machine/sharp/ce162e.h \
-    src/machine/sharp/ce153.h \
-    src/core/breakpoint.h \
-    resources/lcc/model/__graph.h \
-    src/cpu/mc6847.h \
-    src/machine/panasonic/rlp3001.h \
-    src/machine/panasonic/rlext.h \
-    src/cpu/tms7000/tms7000.h \
-    src/machine/ti/cc40.h \
-    src/cpu/hd44780.h \
     src/lcd/Lcdc_cc40.h \
-    src/machine/ti/ti74.h \
+    src/lcd/Lcdc_hp41.h \
     src/lcd/Lcdc_ti74.h \
-    src/cpu/upd1007.h \
-    src/machine/casio/fx8000g.h \
     src/lcd/Lcdc_fx8000g.h \
-    src/cpu/upd1007d.h \
-    src/cpu/i8085_dasm.h \
-    src/cpu/i80x86_dasm.h \
-    src/machine/casio/fa80.h \
-    src/core/modelids.h \
-    src/cpu/hd61710.h \
-    src/machine/hp/hp15c.h \
-    src/cpu/hpnut.h \
     src/lcd/Lcdc_hp15c.h \
     src/lcd/Lcdc_pc1350.h \
     src/lcd/Lcdc_pc1250.h \
@@ -591,12 +590,23 @@ HEADERS += src/core/Connect.h \
     src/lcd/Lcdc_pc1450.h \
     src/lcd/Lcdc_pc1401.h \
     src/lcd/Lcdc_symb2x.h \
-    src/core/renderView.h \
-    src/machine/panasonic/rlp1005.h \
-    src/cpu/hpnutd.h \
-    src/machine/sharp/ce1600f.h \
-    src/machine/sharp/ce2xxx.h \
-    src/core/watchpoint.h
+
+
+HEADERS += \
+    qcodemodel2/qcodenode.h \
+    ui/dialogdasm.h \
+    ui/cregssc61860widget.h \
+    ui/cregcpu.h \
+    ui/cregslh5801widget.h \
+    ui/cregsz80widget.h \
+    ui/uartconsole.h \
+    ui/cregshd61700widget.h \
+    ui/dialogvkeyboard.h \
+    pictureflow/pictureflow.h \
+    pictureflow/materialflow.h \
+    pictureflow/fluidlauncher.h \
+    pictureflow/launcher.h \
+    pictureflow/slideshow.h \
 
 greaterThan(QT_MAJOR_VERSION, 4): HEADERS += \
 
@@ -619,6 +629,19 @@ RCC_DIR += build/rcc
 
 contains(PROJECT_MODULE, M_EMB_QRC) {
 RESOURCES +=  \
+    resources/keymap.qrc \
+    resources/stdlibs.qrc \
+    qcodeedit/qxs/qxs.qrc \
+    resources/asmlibs.qrc \
+    resources/core.qrc \
+    resources/cc40.qrc \
+    resources/ti74.qrc \
+    resources/fx8000g.qrc \
+    resources/hp15c.qrc \
+    resources/hp11c.qrc \
+    resources/hp12c.qrc \
+    resources/hp16c.qrc \
+    resources/ce2xxx.qrc \
     resources/ext.qrc \
     resources/pc1245.qrc \
     resources/pc1250.qrc \
@@ -663,19 +686,7 @@ DEFINES += LOCRES
 }
 
 RESOURCES +=  \
-    resources/keymap.qrc \
-    resources/stdlibs.qrc \
-    qcodeedit/qxs/qxs.qrc \
-    resources/asmlibs.qrc \
-    resources/core.qrc \
-    resources/cc40.qrc \
-    resources/ti74.qrc \
-    resources/fx8000g.qrc \
-    resources/hp15c.qrc \
-    resources/hp11c.qrc \
-    resources/hp12c.qrc \
-    resources/hp16c.qrc \
-    resources/ce2xxx.qrc
+
 
 SOURCES +=  \
     src/core/viewobject.cpp \
