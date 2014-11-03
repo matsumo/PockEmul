@@ -81,7 +81,7 @@ Cpc15XX::~Cpc15XX()
     delete pLH5810;
 }
 
-Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(this)
+Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 
@@ -104,7 +104,7 @@ Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(this)
 
 }
 
-Ctrspc2::Ctrspc2(CPObject *parent)	: Cpc1500(this)
+Ctrspc2::Ctrspc2(CPObject *parent)	: Cpc1500(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 

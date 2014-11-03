@@ -65,7 +65,7 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 }
 
 
-Ctrspc3::Ctrspc3(CPObject *parent)	: Cpc1250(this)
+Ctrspc3::Ctrspc3(CPObject *parent)	: Cpc1250(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 

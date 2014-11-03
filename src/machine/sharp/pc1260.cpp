@@ -4,7 +4,7 @@
 #include "Lcdc_pc1250.h"
 #include "Keyb.h"
 
-Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(this)
+Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 
@@ -56,7 +56,7 @@ bool Cpc1260::Chk_Adr(UINT32 *d,UINT32 data)
 	return(0);
 }
 
-Cpc1261::Cpc1261(CPObject *parent)	: Cpc1260(this)
+Cpc1261::Cpc1261(CPObject *parent)	: Cpc1260(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 
@@ -83,7 +83,7 @@ bool Cpc1261::Chk_Adr(UINT32 *d,UINT32 data)
 	return(Cpc1260::Chk_Adr(d,data));
 }
 
-Cpc1262::Cpc1262(CPObject *parent)	: Cpc1261(this)
+Cpc1262::Cpc1262(CPObject *parent)	: Cpc1261(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 

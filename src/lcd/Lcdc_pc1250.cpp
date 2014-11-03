@@ -12,63 +12,6 @@
 //
 ///////////////////////////////////////////////////////////////////////
 
-
-//static const struct {
-//	int x,y;
-//} pc1250_pos[11]={
-//    {250,0},	// SHIFT
-//    {48, 0},	// DEF
-//    {72, 0},	// PRO
-//    {100, 0},	// RUN
-//    {118, 0},	// RESERVE
-//    {158,0},	// DE
-//    {166,0},	// G
-//    {171,0},	// RAD
-//    {290,0},	// E
-//    {30,0},		// P
-//	{0,0}		// BUSY
-//};
-
-
-//#define SYMB1_ADR_1250	0xF83C
-//#define SYMB2_ADR_1250	0xF83D
-//#define SYMB3_ADR_1250	0xF83E
-//#define SYMB1_1250		(pPC->Get_8(SYMB1_ADR_1250))
-//#define SYMB2_1250		(pPC->Get_8(SYMB2_ADR_1250))
-//#define SYMB3_1250		(pPC->Get_8(SYMB3_ADR_1250))
-
-//void Clcdc_pc1250::disp_symb(void)
-//{
-
-//	if ( (DirtyBuf[SYMB1_ADR_1250-0xF800]) ||
-//		 (DirtyBuf[SYMB2_ADR_1250-0xF800]) ||
-//		 (DirtyBuf[SYMB3_ADR_1250-0xF800])
-//		)
-//    {
-
-//        disp_one_symb(S_SHIFT,	COLOR(SYMB2_1250&0x02),	pc1250_pos[0].x,	pc1250_pos[0].y);
-//        disp_one_symb(S_DEF,		COLOR(SYMB1_1250&0x01),	pc1250_pos[1].x,	pc1250_pos[1].y);
-//        disp_one_symb(S_PRO,		COLOR(SYMB3_1250&0x01),	pc1250_pos[2].x,	pc1250_pos[2].y);
-//        disp_one_symb(S_RUN,		COLOR(SYMB3_1250&0x02),	pc1250_pos[3].x,	pc1250_pos[3].y);
-//        disp_one_symb(S_RESERVE,	COLOR(SYMB3_1250&0x04),	pc1250_pos[4].x,	pc1250_pos[4].y);
-//        disp_one_symb(S_DE,		COLOR(SYMB1_1250&0x08),	pc1250_pos[5].x,	pc1250_pos[5].y);
-//        disp_one_symb(S_G,		COLOR(SYMB1_1250&0x04),	pc1250_pos[6].x,	pc1250_pos[6].y);
-//        disp_one_symb(S_RAD,		COLOR(SYMB2_1250&0x04),	pc1250_pos[7].x,	pc1250_pos[7].y);
-//        disp_one_symb(S_E,		COLOR(SYMB2_1250&0x08),	pc1250_pos[8].x,	pc1250_pos[8].y);
-//        disp_one_symb(S_PRINT,	COLOR(SYMB1_1250&0x02),	pc1250_pos[9].x,	pc1250_pos[9].y);
-//        disp_one_symb(S_BUSY,	COLOR(SYMB2_1250&0x01),	pc1250_pos[10].x,	pc1250_pos[10].y);
-
-//        DirtyBuf[SYMB1_ADR_1250-0xF800] = false;
-//        DirtyBuf[SYMB2_ADR_1250-0xF800] = false;
-//        DirtyBuf[SYMB3_ADR_1250-0xF800] = false;
-
-//        Refresh = true;
-//    }
-
-//	Clcdc::disp_symb();
-
-//}
-
 Clcdc_pc1250::Clcdc_pc1250(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {						//[constructor]
@@ -111,14 +54,13 @@ void Clcdc_pc1250::disp(void)
         if (DirtyBuf[adr-baseAdr])
         {
             Refresh = true;
-            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+            data = pPC->Get_8(adr);
 
             x =ind + (ind/5);			// +1 every 5 cols
-            y = 0;
 
             for (b=0; b<7;b++)
             {
-                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off);
             }
             DirtyBuf[adr-baseAdr] = 0;
         }
@@ -129,21 +71,16 @@ void Clcdc_pc1250::disp(void)
         if (DirtyBuf[adr-baseAdr])
         {
             Refresh = true;
-            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+            data = pPC->Get_8(adr);
 
             x = 142 - ind - (ind/5);			// +2 every 5 cols
-            y = 0;
 
-            for (b=0; b<7;b++)
-            {
-                drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, y+b);
+            for (b=0; b<7;b++) {
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off);
             }
             DirtyBuf[adr-baseAdr] = 0;
         }
     }
-
 
     painter.end();
 }
@@ -154,58 +91,21 @@ void Clcdc_pc1250::disp(void)
 //
 ///////////////////////////////////////////////////////////////////////
 
+Clcdc_pc1245::Clcdc_pc1245(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
+{						//[constructor]
 
-static const struct {
-    int x,y;
-} pc1245_pos[9]={
-    {0, 0},		// SHIFT
-    {20, 0},	// DEF
-    {38, 0},	// PRO
-    {53, 0},	// RUN
-    {68, 0},	// RESERVE
-    {134,0},	// DE
-    {142,0},	// G
-    {147,0},	// RAD
-    {125,0}
-};
-
-
-#define SYMB1_ADR_1245	0xF83C
-#define SYMB2_ADR_1245	0xF83D
-#define SYMB3_ADR_1245	0xF83E
-#define SYMB1_1245		(pPC->Get_8(SYMB1_ADR_1245))
-#define SYMB2_1245		(pPC->Get_8(SYMB2_ADR_1245))
-#define SYMB3_1245		(pPC->Get_8(SYMB3_ADR_1245))
-
-void Clcdc_pc1245::disp_symb(void)
-{
-
-
-    if ( (DirtyBuf[SYMB1_ADR_1245-0xF800]) ||
-         (DirtyBuf[SYMB2_ADR_1245-0xF800]) ||
-         (DirtyBuf[SYMB3_ADR_1245-0xF800])
-        )
-    {
-
-    disp_one_symb(S_SHIFT,	COLOR(SYMB2_1245&0x02),	pc1245_pos[0].x,	pc1245_pos[0].y);
-    disp_one_symb(S_DEF,		COLOR(SYMB1_1245&0x01),	pc1245_pos[1].x,	pc1245_pos[1].y);
-    disp_one_symb(S_PRO,		COLOR(SYMB3_1245&0x01),	pc1245_pos[2].x,	pc1245_pos[2].y);
-    disp_one_symb(S_RUN,		COLOR(SYMB3_1245&0x02),	pc1245_pos[3].x,	pc1245_pos[3].y);
-//	disp_one_symb(S_RESERVE,	COLOR(SYMB3_1245&0x04),	pc1245_pos[4].x,	pc1245_pos[4].y);
-    disp_one_symb(S_DE,		COLOR(SYMB1_1245&0x08),	pc1245_pos[5].x,	pc1245_pos[5].y);
-    disp_one_symb(S_G,		COLOR(SYMB1_1245&0x04),	pc1245_pos[6].x,	pc1245_pos[6].y);
-    disp_one_symb(S_RAD,		COLOR(SYMB2_1245&0x04),	pc1245_pos[7].x,	pc1245_pos[7].y);
-    disp_one_symb(S_PRINT,	COLOR(SYMB1_1245&0x02),	125,	0);
-
-    DirtyBuf[SYMB1_ADR_1245-0xF800] = false;
-    DirtyBuf[SYMB2_ADR_1245-0xF800] = false;
-    DirtyBuf[SYMB3_ADR_1245-0xF800] = false;
-
-        Refresh = true;
-
-    }
-
-    Clcdc::disp_symb();
+    internalSize = QSize(96,8);
+    symbList.clear();
+    symbList << ClcdSymb(  0,0, S_SHIFT, 0xF83D, 0x02)	// SHIFT
+             << ClcdSymb( 20,0, S_DEF,   0xF83C, 0x01)	// DEF
+             << ClcdSymb( 38,0, S_PRO,   0xF83E, 0x01)	// PRO
+             << ClcdSymb( 53,0, S_RUN,   0xF83E, 0x02)	// RUN
+             << ClcdSymb(125,0, S_PRINT, 0xF83C, 0x02)	// P
+             << ClcdSymb(134,0, S_DE,    0xF83C, 0x08)	// DE
+             << ClcdSymb(142,0, S_G,     0xF83C, 0x04)	// G
+             << ClcdSymb(147,0, S_RAD,   0xF83D, 0x04)	// RAD
+                ;
 }
 
 void Clcdc_pc1245::disp(void)
@@ -215,6 +115,7 @@ void Clcdc_pc1245::disp(void)
     WORD adr;
 
     Refresh = false;
+    if (!On) return;
 
     disp_symb();
 
@@ -230,11 +131,8 @@ void Clcdc_pc1245::disp(void)
             x =ind + (ind/5);			// +1 every 5 cols
             y = 0;
 
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0xF800] = 0;
         }
@@ -250,11 +148,8 @@ void Clcdc_pc1245::disp(void)
             x = 142 - ind - (ind/5);			// +1 every 5 cols
             y = 0;
 
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, y+b);
             }
             DirtyBuf[adr-0xF800] = 0;
         }
@@ -263,73 +158,42 @@ void Clcdc_pc1245::disp(void)
     painter.end();
 }
 
-Clcdc_pc1245::Clcdc_pc1245(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
-    Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
-{						//[constructor]
-
-    internalSize = QSize(96,8);
-}
-
 ///////////////////////////////////////////////////////////////////////
 //
 //  PC 1260
 //
 ///////////////////////////////////////////////////////////////////////
 
-static const struct {
-    int x,y;
-} pc1260_pos[11]={
-    {27, 31},	// BUSY
-    {67, 31},	// PRINT
-    {107, 31},	// DEG
-    {133,31},	// RAD
-    {160,31},	// GRAD
-    {200,31},	// ERROR
-    {0,0},		// JAP
-    {0,8},		// SMALL
-    {0,16},		// SHIFT
-    {0,24}		// DEF
-};
 
 
-#define SYMB1_ADR_1260	0x207C
-#define SYMB2_ADR_1260	0x203D
-#define SYMB3_ADR_1260	0x283E
-#define SYMB1_1260		(pPC->Get_8(SYMB1_ADR_1260))
-#define SYMB2_1260		(pPC->Get_8(SYMB2_ADR_1260))
-#define SYMB3_1260		(pPC->Get_8(SYMB3_ADR_1260))
 
-void Clcdc_pc1260::disp_symb(void)
+///////////////////////////////////////////////////////////////////////
+//
+//  PC 1260
+//
+///////////////////////////////////////////////////////////////////////
+Clcdc_pc1260::Clcdc_pc1260(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
+    Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
 {
+    Color_Off = Qt::transparent;
 
-    if ( (DirtyBuf[SYMB1_ADR_1260-0x2000]) ||
-         (DirtyBuf[SYMB2_ADR_1260-0x2000]) ||
-         (DirtyBuf[SYMB3_ADR_1260-0x2000])
-        )
-    {
-
-    disp_one_symb(S_BAR25,	COLOR(SYMB2_1260&0x01),	pc1260_pos[0].x,	pc1260_pos[0].y);
-    disp_one_symb(S_BAR25,	COLOR(SYMB2_1260&0x02),	pc1260_pos[1].x,	pc1260_pos[1].y);
-    disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x01),	pc1260_pos[2].x,	pc1260_pos[2].y);
-    disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x02),	pc1260_pos[3].x,	pc1260_pos[3].y);
-    disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x04),	pc1260_pos[4].x,	pc1260_pos[4].y);
-    disp_one_symb(S_BAR25,	COLOR(SYMB1_1260&0x20),	pc1260_pos[5].x,	pc1260_pos[5].y);
-    disp_one_symb(S_JAP,	COLOR(SYMB2_1260&0x08),	pc1260_pos[6].x,	pc1260_pos[6].y);
-    disp_one_symb(S_SMALL,	COLOR(SYMB2_1260&0x10),	pc1260_pos[7].x,	pc1260_pos[7].y);
-    disp_one_symb(S_SHIFT,	COLOR(SYMB2_1260&0x20),	pc1260_pos[8].x,	pc1260_pos[8].y);
-    disp_one_symb(S_DEF,	COLOR(SYMB2_1260&0x40),	pc1260_pos[9].x,	pc1260_pos[9].y);
-
-    DirtyBuf[SYMB1_ADR_1260-0x2000] = false;
-    DirtyBuf[SYMB2_ADR_1260-0x2000] = false;
-    DirtyBuf[SYMB3_ADR_1260-0x2000] = false;
-
-    Refresh = true;
-    }
-
-//    Clcdc::disp_symb();
-
+    internalSize = QSize(156,16);
+    pixelSize = 4;
+    pixelGap = 1;
+    baseAdr = 0x2000;
+    symbList.clear();
+    symbList << ClcdSymb( 27,31, S_BAR25, 0x203D, 0x01)	// BUSY
+             << ClcdSymb( 67,31, S_BAR25, 0x203D, 0x02)	// PRINT
+             << ClcdSymb(107,31, S_BAR25, 0x207C, 0x01)	// DEG
+             << ClcdSymb(133,31, S_BAR25, 0x207C, 0x02)	// RAD
+             << ClcdSymb(160,31, S_BAR25, 0x207C, 0x04)	// GRAD
+             << ClcdSymb(200,31, S_BAR25, 0x207C, 0x20)	// ERROR
+             << ClcdSymb(0  , 0, S_JAP,   0x203D, 0x08)	// JAP
+             << ClcdSymb(0  , 8, S_SMALL, 0x203D, 0x10)	// SMALL
+             << ClcdSymb(0  ,16, S_SHIFT, 0x203D, 0x20)	// SHIFT
+             << ClcdSymb(0  ,24, S_DEF,   0x203D, 0x40)	// DEF
+                ;
 }
-
 
 void Clcdc_pc1260::disp(void)
 {
@@ -339,6 +203,7 @@ void Clcdc_pc1260::disp(void)
     WORD adr;
 
     Refresh = false;
+    if (!On) return;
 
     disp_symb();
 
@@ -358,31 +223,19 @@ void Clcdc_pc1260::disp(void)
         }
 
         for (ind=0; ind<0x3c; ind++)
-        {	adr = memOffset + 0x2000 + ind;
-            if (DirtyBuf[adr-0x2000])
+        {	adr = memOffset + baseAdr + ind;
+            if (DirtyBuf[adr-baseAdr])
             {
                 Refresh = true;
-                data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+                data = pPC->Get_8(adr);
 
                 x = xOffset + ind /*+ (ind/5)*/;			// +1 every 5 cols
                 y = yOffset;
 
-                for (b=0; b<7;b++)
-                {
+                for (b=0; b<7;b++) {
                     drawPixel(&painter,x + (ind/5)*1.5f ,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                    if (pixelSize>1) {
-//                        painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
-//                        painter.drawRect(x*(pixelSize+pixelGap) + (ind/5)*(pixelSize+pixelGap)*3/2,
-//                                         (y+b)*(pixelSize+pixelGap),
-//                                         pixelSize-1,
-//                                         pixelSize-1);
-//                    }
-//                    else {
-//                        painter.drawPoint( x, y+b);
-//                    }
                 }
-                DirtyBuf[adr-0x2000] = 0;
+                DirtyBuf[adr-baseAdr] = 0;
             }
         }
     }
@@ -391,15 +244,5 @@ void Clcdc_pc1260::disp(void)
 
 }
 
-Clcdc_pc1260::Clcdc_pc1260(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
-    Clcdc_pc1250(parent,_lcdRect,_symbRect,_lcdfname,_symbfname)
-{
-    Color_Off = Qt::transparent;
-
-    internalSize = QSize(156,16);
-    pixelSize = 4;
-    pixelGap = 1;
-
-}
 
 

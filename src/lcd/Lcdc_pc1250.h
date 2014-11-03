@@ -18,7 +18,7 @@ public:
 
 class Clcdc_pc1245:public Clcdc_pc1250{
 public:
-    void disp_symb(void);
+
     void disp(void);				//display LCDC data to screen
     const char*	GetClassName(){ return("Clcdc_pc1245");}
 
@@ -31,7 +31,7 @@ public:
 
 class Clcdc_pc1260:public Clcdc_pc1250{
 public:
-    void disp_symb(void);
+
     void disp(void);				//display LCDC data to screen
     const char*	GetClassName(){ return("Clcdc_pc1260");}
 
