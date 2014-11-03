@@ -99,6 +99,7 @@ void Clcdc_pc1250::disp(void)
     WORD adr;
 
     Refresh = false;
+    if (!On) return;
 
     disp_symb();
 

@@ -1544,6 +1544,8 @@ bool CPObject::getdisp_onRaised()
 
 void CPObject::setDisp_on(bool v)
 {
+    pLCDC->On = v;
+
     if (v && !disp_on) disp_onRaised=true;
     else disp_onRaised = false;
     disp_on = v;
