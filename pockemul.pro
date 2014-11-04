@@ -916,6 +916,7 @@ OTHER_FILES += \
     cloud/PmlView2.qml \
     cloud/Test.qml \
     cloud/Main.qml \
+    cloud/Launchmenu.qml
 
 
 contains(PROJECT_MODULE,M_IDE) {

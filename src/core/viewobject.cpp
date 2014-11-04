@@ -27,6 +27,7 @@ CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow
     BackgroundImageBackup = 0;
     AnimatedImage = 0;
     internalImageRatio = 1;
+    rotation = 0;
 }
 
 CViewObject::~CViewObject()

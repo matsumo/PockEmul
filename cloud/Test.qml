@@ -41,7 +41,7 @@ import QtQuick 2.3
 import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
-
+import "."
 
 
 Rectangle {
@@ -70,7 +70,7 @@ Rectangle {
 
     visible: true
     width: 1024; height: 600
-//    color: "black"
+    color: "transparent"
 
     property int highestZ: 0
     property real defaultSize: 200
@@ -82,11 +82,12 @@ Rectangle {
 Rectangle {
     id: scene
     anchors.fill: parent
+    color: "transparent"
 
     PinchArea {
         id: mainpinch
+        z: -9999
         anchors.fill: parent
-        //pinch.target: photoFrame
         pinch.minimumRotation: -360
         pinch.maximumRotation: 360
         pinch.minimumScale: 0.1
@@ -99,8 +100,8 @@ Rectangle {
             hoverEnabled: false
             anchors.fill: parent
             onWheel: {
-//                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
-                    setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12);
+                //                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
+                setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12);
             }
             onPressed: {
                 prevX = mouseX;
@@ -237,119 +238,23 @@ Rectangle {
             }
         }
     }
+
+    Launchmenu {
+        id:menu
+        z: mainpinch.z+1
+    }
+
 }
 
 
-Rectangle {
-    id:menu
-    x:5
-    property int iconsize: 48
 
-    Image {
-        id:newPocket
-        source: "qrc:/core/pocket.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        y:12
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendNewPocket()
-        }
-    }
-    Image {
-        id:newExt
-        source: "qrc:/core/ext.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: newPocket.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendNewExt()
-        }
-    }
-    Image {
-        id:dev
-        source: "qrc:/core/dev.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: newExt.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendDev()
-        }
-    }
-    Image {
-        id:save
-        source: "qrc:/core/save.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: dev.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendSave()
-        }
-    }
-    Image {
-        id:load
-        source: "qrc:/core/load.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: save.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendLoad()
-        }
-    }
-    Image {
-        id: cloudImag
-        source: "qrc:/core/cloud.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: load.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: { cloudShow();
-//                thecloud.visible = true;
-//                scene.visible = false;
-//                menu.visible = false;
-            }
-        }
-    }
-    Image {
-        id:book
-        source: "qrc:/core/bookcase.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: cloudImag.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendBook()
-        }
-    }
-    Image {
-        id:exit
-        source: "qrc:/core/exit.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: book.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendExit()
-        }
-    }
-}
+
     Main {
         id: thecloud
         anchors.fill: parent
         visible: false;
-//        onVisibleChanged: {
-
-//            if (!visible) {
-//                console.log('onVisibleChanged:'+visible);
-//                cloud.save();
-//            }
-//        }
     }
+
     Component.onCompleted: {
         thecloud.close.connect(cloudHide)
     }

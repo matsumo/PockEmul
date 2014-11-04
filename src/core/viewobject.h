@@ -37,6 +37,7 @@ public:
     bool flipping;
     QImage* AnimatedImage;
 
+
     void setAngle(int value);
     int angle() const { return m_angle; }
     int m_angle;
@@ -76,6 +77,9 @@ public:
     void    setDYmm(int v);
     void    setDZmm(int v);
 
+    void setRotation(int v) { rotation = v; }
+    int getRotation() { return rotation; }
+
     virtual bool InitDisplay(void);
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
@@ -102,6 +106,7 @@ private:
     float		Pc_DX,Pc_DY;
     float	PosX,PosY;
     int		Pc_DX_mm,Pc_DY_mm,Pc_DZ_mm;		// PC size (mm
+    int rotation;
 };
 
 #endif // VIEWOBJECT_H

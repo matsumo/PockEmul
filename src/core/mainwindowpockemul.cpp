@@ -840,6 +840,8 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                                 float posY = xml->attributes().value("y").toLatin1().toFloat();
                                 int width = xml->attributes().value("width").toLatin1().toInt();
                                 int height = xml->attributes().value("height").toLatin1().toInt();
+                                int _rot = xml->attributes().value("rotation").toLatin1().toInt();
+                                locPC->setRotation(_rot);
                                 locPC->setPosX(posX);
                                 locPC->setPosY(posY);
                                 if ((width>0) && (height>0)) {

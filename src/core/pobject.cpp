@@ -142,6 +142,7 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
         xml->writeAttribute("y", QString("%1").arg(posy()));
         xml->writeAttribute("width", QString("%1").arg(getDX()));
         xml->writeAttribute("height", QString("%1").arg(getDY()));
+        xml->writeAttribute("rotation", QString("%1").arg(getRotation()));
         xml->writeEndElement(); // position
         this->SaveSession_File(xml);
     xml->writeEndElement(); // object
