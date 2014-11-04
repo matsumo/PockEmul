@@ -697,9 +697,11 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
     if (pKEYB)
     {
-        pKEYB->LastKey = pKEYB->KeyClick(pts);
+//        qWarning()<<"ok"
+;        pKEYB->LastKey = pKEYB->KeyClick(pts);
         if (pKEYB->LastKey != 0)  {
             ungrabGesture(Qt::TapAndHoldGesture);
+//            qWarning()<<"lastKey="<<pKEYB->LastKey;
         }
 
 

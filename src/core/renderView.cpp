@@ -133,7 +133,7 @@ void CrenderView::contextMenu(QString Id, int x, int y)
 
 void CrenderView::click(QString Id, int x, int y)
 {
-//    qWarning()<<"click:"<<Id<<x<<y;
+    qWarning()<<"click:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 
@@ -148,7 +148,7 @@ void CrenderView::click(QString Id, int x, int y)
 }
 void CrenderView::unclick(QString Id, int x, int y)
 {
-//    qWarning()<<"unclick:"<<Id<<x<<y;
+    qWarning()<<"unclick:"<<Id<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 

@@ -87,6 +87,7 @@ int Ckeyb::KeyClick(QPoint pts)
             int tmpDistance = 0;
             if ( r.contains(pts) ) {
                 tmpDistance = 0;
+
             }
             else {
                 tmpDistance = (r.center()-pts).manhattanLength();
@@ -105,12 +106,15 @@ int Ckeyb::KeyClick(QPoint pts)
             }
 
     }
+//    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom/100);
     if ((smallerDistance < (30*mainwindow->zoom/100)) && (nearestIndex>=0)) {
         if (!pPC->closed) {
-        return Keys.at(nearestIndex).ScanCode;
-}
+//            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
+            return Keys.at(nearestIndex).ScanCode;
+        }
         else
         {
+//            qWarning()<<"CLOSE";
             if (Keys.at(nearestIndex).ScanCode == K_CLOSE) return Keys.at(nearestIndex).ScanCode;
         }
     }

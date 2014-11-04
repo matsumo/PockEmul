@@ -193,7 +193,6 @@ HEADERS += \
     src/core/breakpoint.h \
     src/core/watchpoint.h \
     src/core/launchbuttonwidget.h \
-    src/machine/sharp/pc1253.h
 
 
 HEADERS += \
@@ -253,6 +252,7 @@ HEADERS += \
     src/machine/sharp/pc1245.h \
     src/machine/sharp/pc1250.h \
     src/machine/sharp/pc1251.h \
+    src/machine/sharp/pc1253.h \
     src/machine/sharp/pc1255.h \
     src/machine/sharp/pc1260.h \
     src/machine/sharp/pc1280.h \
@@ -284,12 +284,6 @@ HEADERS += \
     src/machine/sharp/ce1600p.h \
     src/machine/sharp/ce1600f.h \
     src/machine/sharp/ce2xxx.h \
-    src/machine/sio.h \
-    src/machine/potar.h \
-    src/machine/cmotor.h \
-    src/machine/ce515p.h \
-    src/machine/cx07.h \
-    src/machine/cx710.h \
     src/machine/casio/pb1000.h \
     src/machine/casio/pb2000.h \
     src/machine/casio/md100.h \
@@ -299,6 +293,7 @@ HEADERS += \
     src/machine/casio/z1.h \
     src/machine/casio/fx8000g.h \
     src/machine/casio/fa80.h \
+    src/machine/casio/fp40.h \
     src/machine/panasonic/buspanasonic.h \
     src/machine/panasonic/rlp3001.h \
     src/machine/panasonic/rlext.h \
@@ -310,6 +305,7 @@ HEADERS += \
     src/machine/panasonic/rlp6001.h \
     src/machine/panasonic/rlp9001.h \
     src/machine/panasonic/rlp1004a.h \
+    src/machine/ti/ti57.h \
     src/machine/ti/cc40.h \
     src/machine/ti/ti74.h \
     src/machine/cx07char.h \
@@ -317,13 +313,11 @@ HEADERS += \
     src/machine/pc2001.h \
     src/machine/pc2021.h \
     src/machine/printerctronics.h \
-    src/machine/casio/fp40.h \
     src/machine/general/lbc1100.h \
     src/machine/general/cl1000.h \
     src/machine/cesimu.h \
     src/machine/tpc8300.h \
     src/machine/tp83.h \
-    src/machine/ti/ti57.h \
     src/machine/postit.h \
     src/machine/hp/hp41.h \
     src/machine/hp/hp41Cpu.h \
@@ -331,6 +325,12 @@ HEADERS += \
     src/machine/hp/hp82143A.h \
     src/machine/paperwidget.h \
     src/machine/cprinter.h \
+    src/machine/sio.h \
+    src/machine/potar.h \
+    src/machine/cmotor.h \
+    src/machine/ce515p.h \
+    src/machine/cx07.h \
+    src/machine/cx710.h \
 
 HEADERS += \
     src/lcd/Lcdc.h \
@@ -507,7 +507,6 @@ SOURCES +=  \
     pictureflow/fluidlauncher.cpp \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
-    src/machine/sharp/pc1253.cpp
 
 
 SOURCES +=  \
@@ -520,6 +519,7 @@ SOURCES +=  \
     src/machine/sharp/pc1245.cpp \
     src/machine/sharp/pc1250.cpp \
     src/machine/sharp/pc1251.cpp \
+    src/machine/sharp/pc1253.cpp \
     src/machine/sharp/pc1255.cpp \
     src/machine/sharp/pc1260.cpp \
     src/machine/sharp/pc1280.cpp \

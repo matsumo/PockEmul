@@ -78,6 +78,7 @@ bool Cpc1280::init(void) {
     WatchPoint.remove(&pSIOCONNECTOR_value);
 //    delete pSIOCONNECTOR;
 
+    closed = false;
     return true;
 }
 

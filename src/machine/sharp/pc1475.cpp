@@ -24,13 +24,10 @@ Cpc1475::Cpc1475(CPObject *parent)	: Cpc1360(parent)
     Initial_Session_Fname ="pc1475.pkm";
 
     BackGroundFname	= P_RES(":/pc1475/pc1475.png");
-//    LcdFname		= P_RES(":/pc1475/1475lcd.png");
-//    SymbFname		= P_RES(":/pc1475/1475symb.png");
     memsize			= 0x40000;
-//    InitMemValue    = 0x00;
 
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1475/cpu-1475.rom")	, "m" ,CSlot::ROM , "CPU ROM"));
+    SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1475/cpu-1475.rom")	, "" ,CSlot::ROM , "CPU ROM"));
     SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::RAM , "SYSTEM RAM"));
     SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1475/b0-1475.rom")	, "" , CSlot::ROM , "ROM"));
     SlotList.append(CSlot(32, 0x8000 ,	""								, "" , CSlot::RAM , "RAM"));

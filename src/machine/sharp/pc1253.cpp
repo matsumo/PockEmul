@@ -39,8 +39,8 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
 
 bool Cpc1253::Chk_Adr(UINT32 *d,UINT32 data)
 {
-//	Cpc1250::Mem_Mirror(d);
-if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
+
+    if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
 
     if ( (*d>=0xB000) && (*d<=0xC7FF) )	{
         if (RomBank>0) {
@@ -70,7 +70,6 @@ bool Cpc1253::Chk_Adr_R(UINT32 *d,UINT32 *data)
 BYTE	Cpc1253::Get_PortA(void)
 {
     int data = 0;
-
 
     if (IO_B & 0x1) {
         if (KEY('R'))			data|=0x01;
