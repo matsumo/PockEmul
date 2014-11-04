@@ -193,6 +193,7 @@ HEADERS += \
     src/core/breakpoint.h \
     src/core/watchpoint.h \
     src/core/launchbuttonwidget.h \
+    src/machine/sharp/pc1253.h
 
 
 HEADERS += \
@@ -506,6 +507,7 @@ SOURCES +=  \
     pictureflow/fluidlauncher.cpp \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
+    src/machine/sharp/pc1253.cpp
 
 
 SOURCES +=  \

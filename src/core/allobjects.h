@@ -5,6 +5,7 @@
 #include "sharp/pc1245.h"
 #include "sharp/pc1250.h"
 #include "sharp/pc1251.h"
+#include "sharp/pc1253.h"
 #include "sharp/pc1255.h"
 #include "sharp/pc1260.h"
 #include "sharp/pc1280.h"
