@@ -41,7 +41,7 @@ bool Csio::SIO_GET_PIN(SIGNAME signal) {
 }
 
 
-Csio::Csio(CPObject *parent)	: CPObject(this)
+Csio::Csio(CPObject *parent)	: CPObject(parent)
 {							//[constructor]
     si=so=0;			//si,so port access?(0:none, 1:access)
     plink=0;			//aplinks using?(0:none, 1:using)

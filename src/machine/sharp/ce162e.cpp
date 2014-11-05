@@ -7,7 +7,7 @@
 #include "buspc1500.h"
 #include "cpu.h"
 
-Cce162e::Cce162e(CPObject *parent):CPObject(this)
+Cce162e::Cce162e(CPObject *parent):CPObject(parent)
 {
     Q_UNUSED(parent)
 

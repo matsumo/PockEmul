@@ -29,7 +29,7 @@ TransMap KeyMaprlp1004a[]={
 };
 int KeyMaprlp1004aLenght = 3;
 
-Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(this)
+Crlp1004a::Crlp1004a(CPObject *parent):Cprinter(parent)
 { //[constructor]
     Q_UNUSED(parent)
 

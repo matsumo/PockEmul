@@ -37,7 +37,7 @@
 
 
 
-Cuart::Cuart(CPObject *parent)	: CPObject(this)
+Cuart::Cuart(CPObject *parent)	: CPObject(parent)
 {							//[constructor]
 
     currentBit=Bit_0;

@@ -8,7 +8,7 @@
 
 #include "potar.h"
 
-Cpotar::Cpotar(CPObject *parent )	: CPObject(this)
+Cpotar::Cpotar(CPObject *parent )	: CPObject(parent)
 {							//[constructor]
     Q_UNUSED(parent)
 

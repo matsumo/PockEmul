@@ -722,7 +722,6 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         case K_CLOSE: Vibrate();TurnCLOSE();break;
         }
 
-        grabGesture(Qt::TapAndHoldGesture);
 
         if (pKEYB->LastKey != 0)
         {
@@ -730,6 +729,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
             Vibrate();
         }
 
+        grabGesture(Qt::TapAndHoldGesture);
         if (pKEYB->LastKey != 0) {
             event->accept();
             return;

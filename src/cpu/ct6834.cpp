@@ -16,7 +16,7 @@
 #include "Keyb.h"
 
 
-CT6834::CT6834(CPObject *parent)	: CPObject(this)
+CT6834::CT6834(CPObject *parent)	: CPObject(parent)
 {
     pPC = (Cx07*)parent;
     Locate_OnOff = 0;

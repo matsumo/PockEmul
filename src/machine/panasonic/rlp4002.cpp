@@ -21,7 +21,7 @@
 #define UP              1
 
 
-Crlp4002::Crlp4002(CPObject *parent):CPObject(this)
+Crlp4002::Crlp4002(CPObject *parent):CPObject(parent)
 { //[constructor]
     Q_UNUSED(parent)
 

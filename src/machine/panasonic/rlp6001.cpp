@@ -15,7 +15,7 @@
 
 #define NB_SLOTS 6
 
-Crlp6001::Crlp6001(CPObject *parent )   : CPObject(this)
+Crlp6001::Crlp6001(CPObject *parent )   : CPObject(parent)
 {                                                       //[constructor]
     Q_UNUSED(parent)
 

@@ -18,7 +18,7 @@
 #define DOWN    0
 #define UP              1
 
-CrlExt::CrlExt(CPObject *parent):CPObject(this)
+CrlExt::CrlExt(CPObject *parent):CPObject(parent)
 { //[constructor]
     Q_UNUSED(parent)
 

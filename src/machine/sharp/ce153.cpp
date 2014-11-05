@@ -14,7 +14,7 @@
 #include "mainwindowpockemul.h"
 extern MainWindowPockemul *mainwindow;
 
-Cce153::Cce153(CPObject *parent):CPObject(this)
+Cce153::Cce153(CPObject *parent):CPObject(parent)
 {
     Q_UNUSED(parent)
 

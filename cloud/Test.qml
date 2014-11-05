@@ -116,7 +116,7 @@ Rectangle {
                     prevY = mouseY;
                 }
             }
-        }
+        }   // end MouseArea
     }
 
     ListModel {
@@ -174,7 +174,7 @@ Rectangle {
 
                     id: dragArea
                     hoverEnabled: false;
-//                    preventStealing:true
+                    preventStealing:true
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     anchors.fill: parent
                     propagateComposedEvents: false

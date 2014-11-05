@@ -12,7 +12,7 @@
 
 //FIXME: on Android, background color issue
 
-Cpostit::Cpostit(CPObject *parent )   : CPObject(this)
+Cpostit::Cpostit(CPObject *parent )   : CPObject(parent)
 {
     Q_UNUSED(parent)
 

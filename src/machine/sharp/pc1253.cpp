@@ -12,7 +12,7 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
     SessionHeader	= "PC1253PKM";
     Initial_Session_Fname ="pc1253.pkm";
 
-    BackGroundFname	= P_RES(":/pc1251/pc1253.png");
+    BackGroundFname	= P_RES(":/pc1251/pc1253prom.png");
 
     memsize			= 0x30000;
     SlotList.clear();
@@ -39,31 +39,54 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
 
 bool Cpc1253::Chk_Adr(UINT32 *d,UINT32 data)
 {
-
-    if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
-
-    if ( (*d>=0xB000) && (*d<=0xC7FF) )	{
-        if (RomBank>0) {
-            *d -= 0xB000;
-            *d += 0x10000 + RomBank * 0x2000;
+    if ( (*d>=0x8000) && (*d<=0x9FFF) )	{
+        if ((RomBank>0)&&(RomBank<16)) {
+            *d &= 0x1FFF;
+            *d |= 0x10000 + RomBank * 0x2000;
         }
         return(1);			// RAM area(C800-C7ff)
     }
+
+    if (*d==0xC5C6) {
+        // Bank Switch
+        switch(data) {
+        case 0x40:
+        case 0x41:
+        case 0x42:
+        case 0x43:
+        case 0x44:
+        case 0x45:
+        case 0x46:
+        case 0x47:
+        case 0x48:
+        case 0x49: RomBank = data - 0x40; break;
+        case 0x5a:
+        case 0x5b:
+        case 0x5c:
+        case 0x5d:
+        case 0x5e:
+        case 0x5f: RomBank = data - 0x50; break;
+        default : RomBank = 0; break;
+        }
+
+    }
+    if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
 
     return (Cpc1250::Chk_Adr(d,data));
 }
 
 bool Cpc1253::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
-    if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
-
-    if ( (*d>=0xB000) && (*d<=0xC7FF) )	{
-        if (RomBank>0) {
-            *d -= 0xB800;
-            *d += 0x10000 + RomBank * 0x2000;
+    if ( (*d>=0x8000) && (*d<=0x9FFF) )	{
+        if ((RomBank>0)&&(RomBank<16)) {
+            *d &= 0x1FFF;
+            *d |= 0x10000 + RomBank * 0x2000;
         }
         return true;
     }
+
+    if ( (*d>=0x8000) && (*d<=0xC7FF) )	return(1);
+
     return(Cpc1250::Chk_Adr_R(d,data));
 }
 
@@ -73,7 +96,7 @@ BYTE	Cpc1253::Get_PortA(void)
 
     if (IO_B & 0x1) {
         if (KEY('R'))			data|=0x01;
-        if (KEY(K_IN))			data|=0x02;
+//        if (KEY(K_IN))			data|=0x02;
         if (KEY('J'))			data|=0x04;   // FUNC
         if (KEY('A'))			data|=0x08; // FUNC
         if (KEY(K_CM))			data|=0x10;
@@ -86,7 +109,7 @@ BYTE	Cpc1253::Get_PortA(void)
         if (KEY('7'))			data|=0x08;
     }
     if (IO_A & 1) {
-        if (KEY(K_OUT))			data|=0x02;
+//        if (KEY(K_OUT))			data|=0x02;
         if (KEY('K'))			data|=0x04; // FUNC
         if (KEY('B'))			data|=0x08; // FUNC
         if (KEY(K_CLR))			data|=0x10;
@@ -135,4 +158,6 @@ BYTE	Cpc1253::Get_PortA(void)
 bool Cpc1253::UpdateFinalImage(void)
 {
     Cpc1251::UpdateFinalImage();
+
+    return true;
 }

@@ -10,7 +10,7 @@
 #include "rlp9001.h"
 #include "buspanasonic.h"
 
-Crlp9001::Crlp9001(CPObject *parent ,Models mod)   : CPObject(this)
+Crlp9001::Crlp9001(CPObject *parent ,Models mod)   : CPObject(parent)
 {                                                       //[constructor]
     Q_UNUSED(parent)
 

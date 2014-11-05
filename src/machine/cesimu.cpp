@@ -12,7 +12,7 @@
 #define DOWN	0
 #define UP		1
 
-Ccesimu::Ccesimu(CPObject *parent): CPObject(this)
+Ccesimu::Ccesimu(CPObject *parent): CPObject(parent)
 {							//[constructor]
     Q_UNUSED(parent)
 

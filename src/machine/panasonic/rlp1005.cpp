@@ -25,7 +25,7 @@
 #define UP              1
 
 
-Crlp1005::Crlp1005(CPObject *parent):Cprinter(this)
+Crlp1005::Crlp1005(CPObject *parent):Cprinter(parent)
 { //[constructor]
     Q_UNUSED(parent)
 

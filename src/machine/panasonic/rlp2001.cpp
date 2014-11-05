@@ -14,7 +14,7 @@
 
 // TODO: performance issue with this module
 
-Crlp2001::Crlp2001(CPObject *parent)   : CPObject(this)
+Crlp2001::Crlp2001(CPObject *parent)   : CPObject(parent)
 {                                                       //[constructor]
     Q_UNUSED(parent)
 
