@@ -117,14 +117,23 @@ win32 {
 }
 
 
-PROJECT_PACKAGE += \
+PROJECT_PACKAGE *= \
+    PC1245 \
     PC1250 \
     PC1251 \
     PC1253 \
     PC1255 \
+    PC1260 \
+    PC1280 \
+    PC1350 \
+    PC1360 \
     E500 \
 
-
+# PC1260 PC1261 PC1262
+contains(PROJECT_PACKAGE,PC1260) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1250
+}
 # PC1255
 contains(PROJECT_PACKAGE,PC1255) {
 PROJECT_PACKAGE *= SC61860
@@ -140,9 +149,28 @@ contains(PROJECT_PACKAGE,PC1251) {
 PROJECT_PACKAGE *= SC61860
 PROJECT_PACKAGE *= PC1250
 }
+# PC1245
+contains(PROJECT_PACKAGE,PC1245) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1250
+}
 # PC1250
 contains(PROJECT_PACKAGE,PC1250) {
 PROJECT_PACKAGE *= SC61860
+}
+# PC1280
+contains(PROJECT_PACKAGE,PC1280) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1360
+}
+# PC1360
+contains(PROJECT_PACKAGE,PC1360) {
+PROJECT_PACKAGE *= PC1350
+PROJECT_PACKAGE *= SC61860
+# PC1350
+contains(PROJECT_PACKAGE,PC1350) {
+PROJECT_PACKAGE *= SC61860
+}
 }
 # E500 E550 E500S
 contains(PROJECT_PACKAGE,E500) {
@@ -152,56 +180,100 @@ PROJECT_PACKAGE *= SC62015
 
 # E500
 contains(PROJECT_PACKAGE,E500) {
-DEFINES += P_E500
-HEADERS += src/machine/sharp/e500.h \
+DEFINES *= P_E500
+HEADERS *= src/machine/sharp/e500.h \
            src/lcd/Lcdc_e500.h
-SOURCES += src/machine/sharp/e500.cpp \
+SOURCES *= src/machine/sharp/e500.cpp \
            src/lcd/Lcdc_e500.cpp
-RESOURCES += resources/e500.qrc
+RESOURCES *= resources/e500.qrc
+}
+# PC1245
+contains(PROJECT_PACKAGE,PC1245) {
+DEFINES *= P_PC1245
+HEADERS *= src/machine/sharp/pc1245.h
+SOURCES *= src/machine/sharp/pc1245.cpp
+RESOURCES *= resources/pc1245.qrc
 }
 # PC1250
 contains(PROJECT_PACKAGE,PC1250) {
-DEFINES += P_PC1250
-HEADERS += src/machine/sharp/pc1250.h \
+DEFINES *= P_PC1250
+HEADERS *= src/machine/sharp/pc1250.h \
            src/lcd/Lcdc_pc1250.h
-SOURCES += src/machine/sharp/pc1250.cpp \
+SOURCES *= src/machine/sharp/pc1250.cpp \
            src/lcd/Lcdc_pc1250.cpp
-RESOURCES += resources/pc1250.qrc
+RESOURCES *= resources/pc1250.qrc
 }
 # PC1251
 contains(PROJECT_PACKAGE,PC1251) {
-DEFINES += P_PC1251
-HEADERS += src/machine/sharp/pc1251.h
-SOURCES += src/machine/sharp/pc1251.cpp
-RESOURCES += resources/pc1251.qrc
+DEFINES *= P_PC1251
+HEADERS *= src/machine/sharp/pc1251.h
+SOURCES *= src/machine/sharp/pc1251.cpp
+RESOURCES *= resources/pc1251.qrc
 }
 # PC1253
 contains(PROJECT_PACKAGE,PC1251) {
-DEFINES += P_PC1253
-HEADERS += src/machine/sharp/pc1253.h
-SOURCES += src/machine/sharp/pc1253.cpp
-RESOURCES +=
+DEFINES *= P_PC1253
+HEADERS *= src/machine/sharp/pc1253.h
+SOURCES *= src/machine/sharp/pc1253.cpp
+RESOURCES *=
 }
 # PC1255
 contains(PROJECT_PACKAGE,PC1255) {
-DEFINES += P_PC1255
-HEADERS += src/machine/sharp/pc1255.h
-SOURCES += src/machine/sharp/pc1255.cpp
-RESOURCES += resources/pc1255.qrc
+DEFINES *= P_PC1255
+HEADERS *= src/machine/sharp/pc1255.h
+SOURCES *= src/machine/sharp/pc1255.cpp
+RESOURCES *= resources/pc1255.qrc
+}
+# PC1260 61 62
+contains(PROJECT_PACKAGE,PC1260) {
+DEFINES *= P_PC1260
+HEADERS *= src/machine/sharp/pc1260.h \
+           src/lcd/Lcdc_pc1260.h
+SOURCES *= src/machine/sharp/pc1260.cpp \
+           src/lcd/Lcdc_pc1260.cpp
+RESOURCES *= resources/pc1260.qrc \
+             resources/pc1261.qrc \
+             resources/pc1262.qrc
+}
+# PC1280
+contains(PROJECT_PACKAGE,PC1280) {
+DEFINES *= P_PC1280
+HEADERS *= src/machine/sharp/pc1280.h \
+           src/lcd/Lcdc_pc1475.h
+SOURCES *= src/machine/sharp/pc1280.cpp \
+           src/lcd/Lcdc_pc1475.cpp
+RESOURCES *= resources/pc1280.qrc
+}
+# PC1350
+contains(PROJECT_PACKAGE,PC1350) {
+DEFINES *= P_PC1350
+HEADERS *= src/machine/sharp/pc1350.h \
+           src/lcd/Lcdc_pc1350.h
+SOURCES *= src/machine/sharp/pc1350.cpp \
+           src/lcd/Lcdc_pc1350.cpp
+RESOURCES *= resources/pc1350.qrc
+}
+# PC1360
+contains(PROJECT_PACKAGE,PC1360) {
+DEFINES *= P_PC1360
+HEADERS *= src/machine/sharp/pc1360.h
+SOURCES *= src/machine/sharp/pc1360.cpp
+RESOURCES *= resources/pc1360.qrc
 }
 # SC61860
 contains(PROJECT_PACKAGE,SC61860) {
-DEFINES += P_SC61860
-FORMS += ui/cregssc61860widget.ui
-HEADERS += src/cpu/sc61860.h
-SOURCES += src/cpu/sc61860.cpp \
+DEFINES *= P_SC61860
+FORMS *= ui/cregssc61860widget.ui
+HEADERS *= src/cpu/sc61860.h
+SOURCES *= src/cpu/sc61860.cpp \
            ui/cregssc61860widget.cpp \
 }
 # SC62015
 contains(PROJECT_PACKAGE,SC62015) {
-DEFINES += P_SC62015
-HEADERS += src/cpu/sc62015.h
-SOURCES += src/cpu/sc62015.cpp \
+DEFINES *= P_SC62015
+FORMS *= ui/cregsz80widget.ui
+HEADERS *= src/cpu/sc62015.h
+SOURCES *= src/cpu/sc62015.cpp \
 }
 
 FORMS += ui/about.ui \
@@ -333,11 +405,6 @@ HEADERS += \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
     src/machine/sharp/pc1211.h \
-    src/machine/sharp/pc1245.h \
-    src/machine/sharp/pc1260.h \
-    src/machine/sharp/pc1280.h \
-    src/machine/sharp/pc1350.h \
-    src/machine/sharp/pc1360.h \
     src/machine/sharp/pc1401.h \
     src/machine/sharp/pc1402.h \
     src/machine/sharp/pc1403.h \
@@ -432,7 +499,6 @@ HEADERS += \
     src/lcd/Lcdc_ti74.h \
     src/lcd/Lcdc_fx8000g.h \
     src/lcd/Lcdc_hp15c.h \
-    src/lcd/Lcdc_pc1350.h \
     src/lcd/Lcdc_pc1500.h \
     src/lcd/Lcdc_pc1475.h \
     src/lcd/Lcdc_pc1403.h \
@@ -493,12 +559,6 @@ RESOURCES +=  \
     resources/hp16c.qrc \
     resources/ce2xxx.qrc \
     resources/ext.qrc \
-    resources/pc1245.qrc \
-    resources/pc1260.qrc \
-    resources/pc1261.qrc \
-    resources/pc1262.qrc \
-    resources/pc1350.qrc \
-    resources/pc1360.qrc \
     resources/pc1401.qrc \
     resources/pc1402.qrc \
     resources/pc1403.qrc \
@@ -510,7 +570,6 @@ RESOURCES +=  \
     resources/pc1421.qrc \
     resources/pc1425.qrc \
     resources/pc1460.qrc \
-    resources/pc1280.qrc \
     resources/x07.qrc \
     resources/pb1000.qrc \
     resources/pb2000.qrc \
@@ -589,11 +648,6 @@ SOURCES +=  \
     src/machine/paperwidget.cpp \
     src/machine/sharp/pc1211.cpp \
     src/machine/sharp/pc1425.cpp \
-    src/machine/sharp/pc1245.cpp \
-    src/machine/sharp/pc1260.cpp \
-    src/machine/sharp/pc1280.cpp \
-    src/machine/sharp/pc1350.cpp \
-    src/machine/sharp/pc1360.cpp \
     src/machine/sharp/pc1401.cpp \
     src/machine/sharp/pc1402.cpp \
     src/machine/sharp/pc1403.cpp \
@@ -726,7 +780,6 @@ SOURCES +=  \
 SOURCES +=  \
     src/lcd/Lcdc.cpp \
     src/lcd/Lcdc_pc1211.cpp \
-    src/lcd/Lcdc_pc1350.cpp \
     src/lcd/Lcdc_pc1401.cpp \
     src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
