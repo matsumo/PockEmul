@@ -178,7 +178,7 @@ void CrenderView::setzoom(int x,int y,int z)
 }
 void CrenderView::pocketUpdated(CViewObject * pObject)
 {
-    update();
+//    update();
     QMetaObject::invokeMethod(cloud.object, "refreshPocket",
                               Q_ARG(QVariant, QString("%1").arg((long)pObject))
                               );

@@ -16,9 +16,10 @@
 
 #include "cloudwindow.h"
 #include "pobject.h"
+#include "mainwindowpockemul.h"
 
 extern QString workDir;
-
+extern MainWindowPockemul *mainwindow;
 
 CloudImageProvider::CloudImageProvider(QObject *parent) : QObject(parent),
     QQuickImageProvider(QQuickImageProvider::Image)
@@ -76,16 +77,13 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
     if (id.isEmpty()) return QImage();
     CPObject *pc = (CPObject*)_id[0].toULongLong();
 
-//    if (pc->currentView!=FRONTview)
-//    qWarning()<<"currentView="<<pc->currentView;
-
     if ( (pc->flipping | pc->closed) && pc->AnimatedImage){
+//        qWarning()<<"image prov:"<<mainwindow->rawclk;
        return *(pc->AnimatedImage);
     }
 
+//qWarning()<<"image prov:"<<mainwindow->rawclk;
     return *(pc->getViewImage(pc->currentView));
-//    return *(pc->FinalImage);
-
 }
 
 // CACHE MODULE

@@ -76,7 +76,7 @@ extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
 
-#define NBFRAMEPERSEC		20
+#define NBFRAMEPERSEC		30
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 #define TIMER_RES			1
 
@@ -497,10 +497,6 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
 //	mainwindow->resize(QSize(pPC->Pc_DX, pPC->Pc_DY+l));
 
     pPC->FinalImage = new QImage(QSize(pPC->getDX(), pPC->getDY()),QImage::Format_RGB32);
-
-#define NBFRAMEPERSEC		20
-#define FRAMERATE			(1000/NBFRAMEPERSEC)
-//#define TIMER_RES 30
 
     pPC->InitDisplay();
 
@@ -1287,10 +1283,11 @@ void MainWindowPockemul::updateFrameTimer()
                 }
 #endif
                 if ( CurrentpPC->Refresh_Display) {
-//                   qWarning()<<"Refresh Display";
+//                    qWarning()<<"main1:"<<mainwindow->rawclk;
                     CurrentpPC->UpdateFinalImage();
-                    CurrentpPC->update();
+//                    CurrentpPC->update();
                     emit CurrentpPC->updatedPObject(CurrentpPC);
+//                    qWarning()<<"main2:"<<mainwindow->rawclk;
                     CurrentpPC->Refresh_Display= false;
 //                    CurrentpPC->pLCDC->Refresh = false;
                 }

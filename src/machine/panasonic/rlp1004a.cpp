@@ -399,10 +399,14 @@ bool Crlp1004a::exit(void)
 
 
 bool Crlp1004a::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     return true;
 }
 
 bool Crlp1004a::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     return true;
 }
 

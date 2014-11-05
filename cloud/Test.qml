@@ -335,8 +335,7 @@ Rectangle {
 
     function getIndex(id) {
         for (var i=0; i<renderArea.xmlThumbModel.count;i++) {
-            var item = renderArea.xmlThumbModel.get(i);
-            if (item.idpocket === id) {
+            if (renderArea.xmlThumbModel.get(i).idpocket === id) {
                 return i;
             }
         }
