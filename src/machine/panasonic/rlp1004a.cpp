@@ -141,7 +141,7 @@ bool Crlp1004a::run(void)
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
-        if (pPC->pTIMER->pPC->fp_log) fprintf(pPC->pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
+        if (pTIMER->pPC->fp_log) fprintf(pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
         return true;
     }
 
@@ -390,7 +390,7 @@ bool Crlp1004a::exit(void)
 
 
 
-#define         WAIT ( pPC->frequency / 10000*6)
+//#define         WAIT ( pPC->frequency / 10000*6)
 
 #define RECEIVE_MODE    1
 #define SEND_MODE               2
