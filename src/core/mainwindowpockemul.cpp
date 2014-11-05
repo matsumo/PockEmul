@@ -218,9 +218,11 @@ void MainWindowPockemul::initObjectTable() {
 #endif
 #ifdef P_PC1250
     objtable["PC-1250"]=PC1250;
+    objtable["Tandy PC-3"]=TandyPC3;
 #endif
 #ifdef P_PC1251
     objtable["PC-1251"]=PC1251;
+    objtable["Tandy PC-3 (4Ko)"]=TandyPC3EXT;
 #endif
 #ifdef P_PC1253
     objtable["PC-1253"]=PC1253;
@@ -229,20 +231,32 @@ void MainWindowPockemul::initObjectTable() {
     objtable["PC-1255"]=PC1255;
     objtable["PC-1251H"]=PC1251H;
 #endif
-    objtable["Tandy PC-3"]=TandyPC3;
-    objtable["Tandy PC-3 (4Ko)"]=TandyPC3EXT;
 
+#ifdef P_PC1260
     objtable["PC-1260"]=PC1260;
     objtable["PC-1261"]=PC1261;
     objtable["PC-1262"]=PC1262;
+#endif
+#ifdef P_PC1280
     objtable["PC-1280"]=PC1280;
+#endif
 
+#ifdef P_PC1350
     objtable["PC-1350"]=PC1350;
+#endif
+#ifdef P_PC1360
     objtable["PC-1360"]=PC1360;
+#endif
+#ifdef P_PC1401
     objtable["PC-1401"]=PC1401;
+#endif
+#ifdef P_PC1402
     objtable["PC-1402"]=PC1402;
+#endif
+#ifdef P_PC1403
     objtable["PC-1403"]=PC1403;
     objtable["PC-1403H"]=PC1403H;
+#endif
     objtable["PC-1421"]=PC1421;
     objtable["PC-1450"]=PC1450;
     objtable["PC-1475"]=PC1475;
@@ -392,10 +406,16 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case PC1360	: pPC = new Cpc1360;	pPC->setName("PC-1360");break;
 #endif
 
+#ifdef P_PC1401
     case PC1401	: pPC = new Cpc1401;	pPC->setName("PC-1401");break;
+#endif
+#ifdef P_PC1402
     case PC1402	: pPC = new Cpc1402;	pPC->setName("PC-1402");break;
+#endif
+#ifdef P_PC1403
     case PC1403	: pPC = new Cpc1403;	pPC->setName("PC-1403");break;
     case PC1403H: pPC = new Cpc1403H;	pPC->setName("PC-1403H");break;
+#endif
     case PC1421	: pPC = new Cpc1421;	pPC->setName("PC-1421");break;
     case PC1450	: pPC = new Cpc1450;	pPC->setName("PC-1450");break;
     case PC1475	: pPC = new Cpc1475;	pPC->setName("PC-1475");break;

@@ -127,6 +127,9 @@ SHARP_PACKAGE *= \
     PC1280 \
     PC1350 \
     PC1360 \
+    PC1401 \
+    PC1402 \
+    PC1403 \
     E500 \
 
 CASIO_PACKAGE *= \
@@ -181,10 +184,24 @@ PROJECT_PACKAGE *= PC1360
 contains(PROJECT_PACKAGE,PC1360) {
 PROJECT_PACKAGE *= PC1350
 PROJECT_PACKAGE *= SC61860
+}
 # PC1350
 contains(PROJECT_PACKAGE,PC1350) {
 PROJECT_PACKAGE *= SC61860
 }
+# PC1403
+contains(PROJECT_PACKAGE,PC1403) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1401
+}
+# PC1402
+contains(PROJECT_PACKAGE,PC1402) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1401
+}
+# PC1401
+contains(PROJECT_PACKAGE,PC1401) {
+PROJECT_PACKAGE *= SC61860
 }
 # E500 E550 E500S
 contains(PROJECT_PACKAGE,E500) {
@@ -272,6 +289,33 @@ HEADERS *= src/machine/sharp/pc1360.h
 SOURCES *= src/machine/sharp/pc1360.cpp
 RESOURCES *= resources/pc1360.qrc
 }
+
+# PC1401
+contains(PROJECT_PACKAGE,PC1401) {
+DEFINES *= P_PC1401
+HEADERS *= src/machine/sharp/pc1401.h \
+           src/lcd/Lcdc_pc1401.h
+SOURCES *= src/machine/sharp/pc1401.cpp \
+           src/lcd/Lcdc_pc1401.cpp
+RESOURCES *= resources/pc1401.qrc
+}
+# PC1402
+contains(PROJECT_PACKAGE,PC1402) {
+DEFINES *= P_PC1402
+HEADERS *= src/machine/sharp/pc1402.h
+SOURCES *= src/machine/sharp/pc1402.cpp
+RESOURCES *= resources/pc1402.qrc
+}
+# PC1403
+contains(PROJECT_PACKAGE,PC1403) {
+DEFINES *= P_PC1403
+HEADERS *= src/machine/sharp/pc1403.h \
+           src/lcd/Lcdc_pc1403.h
+SOURCES *= src/machine/sharp/pc1403.cpp \
+           src/lcd/Lcdc_pc1403.cpp
+RESOURCES *= resources/pc1403.qrc
+}
+
 # SC61860
 contains(PROJECT_PACKAGE,SC61860) {
 DEFINES *= P_SC61860
@@ -417,9 +461,6 @@ HEADERS *= \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
     src/machine/sharp/pc1211.h \
-    src/machine/sharp/pc1401.h \
-    src/machine/sharp/pc1402.h \
-    src/machine/sharp/pc1403.h \
     src/machine/sharp/pc1421.h \
     src/machine/sharp/pc1425.h \
     src/machine/sharp/pc1450.h \
@@ -515,7 +556,6 @@ HEADERS *= \
     src/lcd/Lcdc_pc1475.h \
     src/lcd/Lcdc_pc1403.h \
     src/lcd/Lcdc_pc1450.h \
-    src/lcd/Lcdc_pc1401.h \
     src/lcd/Lcdc_symb2x.h \
 
 
@@ -571,9 +611,6 @@ RESOURCES +=  \
     resources/hp16c.qrc \
     resources/ce2xxx.qrc \
     resources/ext.qrc \
-    resources/pc1401.qrc \
-    resources/pc1402.qrc \
-    resources/pc1403.qrc \
     resources/pc1450.qrc \
     resources/pc1475.qrc \
     resources/pc1500.qrc \
@@ -660,9 +697,6 @@ SOURCES *=  \
     src/machine/paperwidget.cpp \
     src/machine/sharp/pc1211.cpp \
     src/machine/sharp/pc1425.cpp \
-    src/machine/sharp/pc1401.cpp \
-    src/machine/sharp/pc1402.cpp \
-    src/machine/sharp/pc1403.cpp \
     src/machine/sharp/pc1421.cpp \
     src/machine/sharp/pc1450.cpp \
     src/machine/sharp/pc1475.cpp \
@@ -792,7 +826,6 @@ SOURCES *=  \
 SOURCES *=  \
     src/lcd/Lcdc.cpp \
     src/lcd/Lcdc_pc1211.cpp \
-    src/lcd/Lcdc_pc1401.cpp \
     src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
     src/lcd/Lcdc_pc1475.cpp \
