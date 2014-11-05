@@ -212,13 +212,23 @@ void MainWindowPockemul::setZoom(int z)
 
 void MainWindowPockemul::initObjectTable() {
     objtable["PC-1211"]=PC1211;
+#ifdef P_PC1245
     objtable["PC-1245"]=PC1245;
     objtable["MC-2200"]=MC2200;
+#endif
+#ifdef P_PC1250
     objtable["PC-1250"]=PC1250;
+#endif
+#ifdef P_PC1251
     objtable["PC-1251"]=PC1251;
-    objtable["PC-1251H"]=PC1251H;
+#endif
+#ifdef P_PC1253
     objtable["PC-1253"]=PC1253;
+#endif
+#ifdef P_PC1255
     objtable["PC-1255"]=PC1255;
+    objtable["PC-1251H"]=PC1251H;
+#endif
     objtable["Tandy PC-3"]=TandyPC3;
     objtable["Tandy PC-3 (4Ko)"]=TandyPC3EXT;
 
@@ -336,7 +346,6 @@ void MainWindowPockemul::initObjectTable() {
 }
 
 
-
 CPObject * MainWindowPockemul::InitApp(int idPC )
 {
     CPObject *pPC=0;
@@ -345,28 +354,44 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     {
     case EMPTY	: return 0;
 
-#ifdef P_PC1253
-    case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
-#else
+
     case PC1211	: pPC = new Cpc1211;	pPC->setName("PC-1211");break;
+#ifdef P_PC1245
     case PC1245	: pPC = new Cpc1245;	pPC->setName("PC-1245");break;
     case MC2200	: pPC = new Cmc2200;	pPC->setName("MC-2200");break;
+#endif
+#ifdef P_PC1250
     case PC1250	: pPC = new Cpc1250;	pPC->setName("PC-1250");break;
-
-    case PC1251	: pPC = new Cpc1251;	pPC->setName("PC-1251");break;
-    case PC1251H: pPC = new Cpc1251H;	pPC->setName("PC-1251H");break;
-    case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
-    case PC1255	: pPC = new Cpc1255;	pPC->setName("PC-1255");break;
     case TandyPC3:pPC = new Ctrspc3;	pPC->setName("Tandy PC-3");break;
+#endif
+#ifdef P_PC1251
+    case PC1251	: pPC = new Cpc1251;	pPC->setName("PC-1251");break;
     case TandyPC3EXT:pPC = new Ctrspc3Ext;	pPC->setName("Tandy PC-3 (4Ko)");break;
+#endif
+#ifdef P_PC1253
+    case PC1253 : pPC = new Cpc1253;	pPC->setName("PC-1253");break;
+#endif
+#ifdef P_PC1255
+    case PC1255	: pPC = new Cpc1255;	pPC->setName("PC-1255");break;
+    case PC1251H: pPC = new Cpc1251H;	pPC->setName("PC-1251H");break;
+#endif
 
+#ifdef P_PC1260
     case PC1260	: pPC = new Cpc1260;	pPC->setName("PC-1260");break;
     case PC1261	: pPC = new Cpc1261;	pPC->setName("PC-1261");break;
     case PC1262	: pPC = new Cpc1262;	pPC->setName("PC-1262");break;
+#endif
+#ifdef P_PC1280
     case PC1280	: pPC = new Cpc1280;	pPC->setName("PC-1280");break;
+#endif
 
+#ifdef P_PC1350
     case PC1350	: pPC = new Cpc1350;	pPC->setName("PC-1350");break;
+#endif
+#ifdef P_PC1360
     case PC1360	: pPC = new Cpc1360;	pPC->setName("PC-1360");break;
+#endif
+
     case PC1401	: pPC = new Cpc1401;	pPC->setName("PC-1401");break;
     case PC1402	: pPC = new Cpc1402;	pPC->setName("PC-1402");break;
     case PC1403	: pPC = new Cpc1403;	pPC->setName("PC-1403");break;
@@ -477,7 +502,6 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
     case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;
 
-#endif
 
         default			: return 0;
     }

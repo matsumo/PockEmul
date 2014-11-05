@@ -117,7 +117,7 @@ win32 {
 }
 
 
-PROJECT_PACKAGE *= \
+SHARP_PACKAGE *= \
     PC1245 \
     PC1250 \
     PC1251 \
@@ -128,6 +128,20 @@ PROJECT_PACKAGE *= \
     PC1350 \
     PC1360 \
     E500 \
+
+CASIO_PACKAGE *= \
+
+TI_PACKAGE *= \
+
+HP_PACKAGE *= \
+
+
+PROJECT_PACKAGE *= \
+    $$SHARP_PACKAGE \
+    $$CASIO_PACKAGE \
+    $$TI_PACKAGE \
+    $$HP_PACKAGE \
+
 
 # PC1260 PC1261 PC1262
 contains(PROJECT_PACKAGE,PC1260) {
@@ -227,10 +241,8 @@ RESOURCES *= resources/pc1255.qrc
 # PC1260 61 62
 contains(PROJECT_PACKAGE,PC1260) {
 DEFINES *= P_PC1260
-HEADERS *= src/machine/sharp/pc1260.h \
-           src/lcd/Lcdc_pc1260.h
-SOURCES *= src/machine/sharp/pc1260.cpp \
-           src/lcd/Lcdc_pc1260.cpp
+HEADERS *= src/machine/sharp/pc1260.h
+SOURCES *= src/machine/sharp/pc1260.cpp
 RESOURCES *= resources/pc1260.qrc \
              resources/pc1261.qrc \
              resources/pc1262.qrc
@@ -276,7 +288,7 @@ HEADERS *= src/cpu/sc62015.h
 SOURCES *= src/cpu/sc62015.cpp \
 }
 
-FORMS += ui/about.ui \
+FORMS *= ui/about.ui \
     ui/dialoganalog.ui \
     ui/dialogconnectorlink.ui \
     ui/dialogdump.ui \
@@ -295,7 +307,7 @@ FORMS += ui/about.ui \
     ui/dialogvkeyboard.ui \
 
 
-HEADERS += \
+HEADERS *= \
     src/core/Connect.h \
     src/core/Dasm.h \
     src/core/Debug.h \
@@ -353,7 +365,7 @@ HEADERS += \
     src/core/launchbuttonwidget.h \
 
 
-HEADERS += \
+HEADERS *= \
     src/cpu/cpu.h \
     src/cpu/lh5801.h \
     src/cpu/lh5810.h \
@@ -401,7 +413,7 @@ HEADERS += \
     src/cpu/hpnut.h \
     src/cpu/hpnutd.h \
 
-HEADERS += \
+HEADERS *= \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
     src/machine/sharp/pc1211.h \
@@ -478,7 +490,7 @@ HEADERS += \
     src/machine/cx07.h \
     src/machine/cx710.h \
 
-HEADERS += \
+HEADERS *= \
     src/lcd/Lcdc.h \
     src/lcd/Lcdc_x07.h \
     src/lcd/Lcdc_symb.h \
@@ -507,7 +519,7 @@ HEADERS += \
     src/lcd/Lcdc_symb2x.h \
 
 
-HEADERS += \
+HEADERS *= \
     qcodemodel2/qcodenode.h \
     ui/dialogdasm.h \
     ui/cregssc61860widget.h \
@@ -594,7 +606,7 @@ DEFINES += LOCRES
 RESOURCES +=  \
 
 
-SOURCES +=  \
+SOURCES *=  \
     src/core/viewobject.cpp \
     src/core/pobject.cpp \
     src/core/pockemul.cpp \
@@ -641,7 +653,7 @@ SOURCES +=  \
     pictureflow/slideshow.cpp \
 
 
-SOURCES +=  \
+SOURCES *=  \
     src/machine/pcxxxx.cpp \
     src/machine/bus.cpp \
     src/machine/cprinter.cpp \
@@ -725,7 +737,7 @@ SOURCES +=  \
     qcodemodel2/qcodenode.cpp \
 
 
-SOURCES +=  \
+SOURCES *=  \
     ui/dialogdasm.cpp \
     ui/cregcpu.cpp \
     ui/cregslh5801widget.cpp \
@@ -777,7 +789,7 @@ SOURCES +=  \
     src/cpu/sed1560.cpp \
 
 
-SOURCES +=  \
+SOURCES *=  \
     src/lcd/Lcdc.cpp \
     src/lcd/Lcdc_pc1211.cpp \
     src/lcd/Lcdc_pc1401.cpp \
