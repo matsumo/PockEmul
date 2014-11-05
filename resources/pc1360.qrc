@@ -9,8 +9,7 @@
         <file>pc1360/B6-1360.rom</file>
         <file>pc1360/B7-1360.rom</file>
         <file>pc1360/cpu-1360.rom</file>
-        <file>pc1360/1360lcd.png</file>
-        <file>pc1360/1360symb.png</file>
+        <file>pc1360/pc1360Back.png</file>
         <file>pc1360/pc1360.png</file>
     </qresource>
 </RCC>
