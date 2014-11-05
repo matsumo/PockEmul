@@ -61,14 +61,14 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     memsize			= 0x20000;
 
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1403/cpu-1403.rom")	, "pc-1403/cpu-1403.rom" , CSlot::ROM , "CPU ROM"));
-    SlotList.append(CSlot(8 , 0x2000 ,	""								, "pc-1403/R1-1403.ram" , CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1403/ba1-1403.rom")	, "pc-1403/ba1-1403.rom" , CSlot::ROM , "BANK 1"));
-    SlotList.append(CSlot(32, 0x8000 ,	""								, "pc-1403/R2-1403.ram" , CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(16, 0x10000 ,	P_RES(":/pc1403/ba1-1403.rom")	, "pc-1403/ba1-1403.rom" , CSlot::ROM , "BANK 1"));
-    SlotList.append(CSlot(16, 0x14000 ,	P_RES(":/pc1403/ba2-1403.rom")	, "pc-1403/ba2-1403.rom" , CSlot::ROM , "BANK 2"));
-    SlotList.append(CSlot(16, 0x18000 ,	P_RES(":/pc1403/ba3-1403.rom")	, "pc-1403/ba3-1403.rom" , CSlot::ROM , "BANK 3"));
-    SlotList.append(CSlot(16, 0x1C000 ,	P_RES(":/pc1403/ba4-1403.rom")	, "pc-1403/ba4-1403.rom" , CSlot::ROM , "BANK 4"));
+    SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1403/cpu-1403.rom")	, "" , CSlot::ROM , "CPU ROM"));
+    SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1403/ba1-1403.rom")	, "" , CSlot::ROM , "BANK 1"));
+    SlotList.append(CSlot(32, 0x8000 ,	""								, "" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(16, 0x10000 ,	P_RES(":/pc1403/ba1-1403.rom")	, "" , CSlot::ROM , "BANK 1"));
+    SlotList.append(CSlot(16, 0x14000 ,	P_RES(":/pc1403/ba2-1403.rom")	, "" , CSlot::ROM , "BANK 2"));
+    SlotList.append(CSlot(16, 0x18000 ,	P_RES(":/pc1403/ba3-1403.rom")	, "" , CSlot::ROM , "BANK 3"));
+    SlotList.append(CSlot(16, 0x1C000 ,	P_RES(":/pc1403/ba4-1403.rom")	, "" , CSlot::ROM , "BANK 4"));
 
     RomBank = 0;
 
@@ -174,7 +174,7 @@ bool Cpc1403::Chk_Adr_R(UINT32 *d,UINT32 *data)
         *d += memOffset;
         return(1);
     }
-    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ (*d = *d & 0x1FFF) | 0xE000; return(1); }
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d = (*d & 0x1FFF) | 0xE000; return(1); }
 	return(1);	
 }
 
