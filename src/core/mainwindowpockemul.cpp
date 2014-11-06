@@ -1559,7 +1559,11 @@ void MainWindowPockemul::switchFound(const QString & name)
 void MainWindowPockemul::optionFound(const QString & name, const QVariant & value)
 {
   qDebug() << "Option:" << name << value;
-  if (name == "load") { opensession(value.toString()); }
+  if (name == "load") {
+      QString _fn = value.toString();
+      if (!_fn.contains(".")) _fn.append(".pml");
+      opensession(_fn);
+  }
   if (name == "run") {
       CPObject * pPC =LoadPocket(value.toString());
 #ifdef Q_OS_ANDROID

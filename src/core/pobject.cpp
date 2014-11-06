@@ -436,7 +436,7 @@ int CPObject::initsound()
     m_audioOutput = new QAudioOutput(m_device, m_format, this);
     //connect(m_audioOutput, SIGNAL(notify()), SLOT(notified()));
     connect(m_audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(audioStateChanged(QAudio::State)));
-    m_audioOutput->setBufferSize(4000);
+    m_audioOutput->setBufferSize(1000);
 
     m_output = m_audioOutput->start();
 //    int p = m_audioOutput->periodSize();
@@ -466,9 +466,9 @@ void CPObject::fillSoundBuffer(BYTE val)
     }
 
     if (getfrequency()==0) {
-        mainwindow->audioMutex.lock();
+//        mainwindow->audioMutex.lock();
         audioBuff.append(val);
-        mainwindow->audioMutex.unlock();
+//        mainwindow->audioMutex.unlock();
         return;
     }
 
@@ -482,7 +482,7 @@ void CPObject::fillSoundBuffer(BYTE val)
     if (delta_state >= wait)
     {
         //AddLog(LOG_TEMP,tr("delta:%1   wait:%2").arg(delta_state).arg(wait));
-        mainwindow->audioMutex.lock();
+//        mainwindow->audioMutex.lock();
         while ((pTIMER->state - fillSoundBuffer_old_state) >= wait)
         {
             audioBuff.append(val);
@@ -510,7 +510,7 @@ void CPObject::fillSoundBuffer(BYTE val)
             }
 #endif
         }
-        mainwindow->audioMutex.unlock();
+//        mainwindow->audioMutex.unlock();
     }
 #endif
 }
