@@ -10,7 +10,6 @@
 #include "ti57cpu.h"
 #include "ti57cpu_dasm.h"
 #include "Lcdc.h"
-//#include "pcxxxx.h"
 #include "ui/cregsz80widget.h"
 
 
@@ -27,7 +26,7 @@ Cti57cpu::Cti57cpu(CPObject *parent) : CCPU(parent)
 {
     fn_log="ti57cpu.log";
     r = new TI57regs;
-    pDEBUG = new Cdebug_ti57cpu(pPC);
+    pDEBUG = new Cdebug_ti57cpu(this);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
 }
 

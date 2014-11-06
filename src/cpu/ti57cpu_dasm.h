@@ -11,9 +11,7 @@ class Cdebug_ti57cpu:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_ti57cpu(CPObject *parent)	: Cdebug(parent)
-        {
-        }
+        Cdebug_ti57cpu(CCPU *parent);
         virtual ~Cdebug_ti57cpu(){}
 
 

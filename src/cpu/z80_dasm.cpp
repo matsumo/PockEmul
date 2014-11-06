@@ -5,9 +5,7 @@
 //#include <stdio.h>
 //#include <string.h>
 
-#include "common.h"
-#include "Debug.h"
-#include "pcxxxx.h"
+#include "z80_dasm.h"
 #include "z80.h"
 
 #define XX	0
@@ -2574,9 +2572,9 @@ UINT32 Cdebug_z80::DisAsm_1(UINT32 oldpc)
     oldpc &= 0xffff;
     DasmAdr = oldpc;
     UINT32 pc=oldpc;
-    int oper1=pPC->Get_8(pc);
-    int oper2=pPC->Get_8(pc+1);
-    int oper3=pPC->Get_8(pc+2);
+    int oper1=pCPU->get_mem(pc,8);
+    int oper2=pCPU->get_mem(pc+1,8);
+    int oper3=pCPU->get_mem(pc+2,8);
 
     //if ((oper1 != 0xd3) && (oper1 != 0xdb)) return 0;
     char format[64];
@@ -2594,12 +2592,12 @@ UINT32 Cdebug_z80::DisAsm_1(UINT32 oldpc)
     }
 
     //p = &mem[offOp[x]];
-    uint8 p = pPC->pCPU->get_mem(pc+offOp[x],SIZE_8);
-    uint8 p1 = pPC->pCPU->get_mem(pc+offOp[x]+1,SIZE_8);
-    uint8 p2 = pPC->pCPU->get_mem(pc+offOp[x]+2,SIZE_8);
+    uint8 p = pCPU->get_mem(pc+offOp[x],SIZE_8);
+    uint8 p1 = pCPU->get_mem(pc+offOp[x]+1,SIZE_8);
+    uint8 p2 = pCPU->get_mem(pc+offOp[x]+2,SIZE_8);
 
     //q = &nim[x][mem[offNim[x]]];
-    q = &nim[x][pPC->pCPU->get_mem(pc+offNim[x],SIZE_8)];
+    q = &nim[x][pCPU->get_mem(pc+offNim[x],SIZE_8)];
 
     sprintf(format, "%s %s%s", txtNim[*q & MASK_NIM], txtLop[((*q & MASK_LOP) >> SHIFT_LOP)], txtRop[(*q & MASK_ROP) >> SHIFT_ROP]);
 
@@ -2740,3 +2738,8 @@ char *z80regs(char *str, const Z80stat *r)
 
 /* eof */
 
+
+
+Cdebug_z80::Cdebug_z80(CCPU *parent)	: Cdebug(parent)
+{
+}

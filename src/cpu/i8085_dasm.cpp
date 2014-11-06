@@ -119,7 +119,7 @@ UINT32 Cdebug_i8085::DisAsm_1(UINT32 oldpc)
     oldpc &= 0xffff;
     DasmAdr = oldpc;
     UINT32 pc=oldpc;
-    quint8 op = pPC->Get_8(pc);
+    quint8 op =pCPU->get_mem(pc,8);
 
     Buffer[0] = '\0';
     char LocBuffer[200];
@@ -137,7 +137,7 @@ UINT32 Cdebug_i8085::DisAsm_1(UINT32 oldpc)
     }
            if ( Op_Code_Size[ op ]  ==  2 )
               {
-               quint8 i = pPC->Get_8(pc+1);
+               quint8 i =pCPU->get_mem(pc+1,8);
                sprintf(Buffer,"%s %02X   ",Buffer,i);
                if( i < 0xA0 )
                    sprintf( LocBuffer, "%s%02Xh", LocBuffer,i );
@@ -149,8 +149,8 @@ UINT32 Cdebug_i8085::DisAsm_1(UINT32 oldpc)
    */
            if ( Op_Code_Size[ op ]  ==  3 )
               {
-               quint8 i = pPC->Get_8(pc+1);
-               quint8 j = pPC->Get_8(pc+2);
+               quint8 i =pCPU->get_mem(pc+1,8);
+               quint8 j =pCPU->get_mem(pc+2,8);
                sprintf(Buffer,"%s %02X %02X",Buffer,i,j);
                sprintf( LocBuffer, "%s%02X%02X",LocBuffer, j,i );
                len++;
@@ -164,6 +164,11 @@ sprintf(Buffer,"%s\t%s",Buffer,LocBuffer);
     NextDasmAdr = oldpc+len;
     debugged = true;
     return NextDasmAdr;
+}
+
+Cdebug_i8085::Cdebug_i8085(CCPU *parent)	: Cdebug(parent)
+{
+    i8085 = (Ci8085*)(parent);
 }
 
 

@@ -1,6 +1,7 @@
 #include <QDebug>
 
 #include "ti57cpu_dasm.h"
+#include "ti57cpu.h"
 
 
 QString Cdebug_ti57cpu::IntToHex(int val,int nb) {
@@ -232,8 +233,8 @@ void Cdebug_ti57cpu::Analyze(TI57regs *r) {
 
   memset(a,0,sizeof(a));
   for (int i=0; i<= MAXROM;i++)
-      if ( (i>=0x400) && (pPC->Get_PC(i)>=0x1800)) a[8192+pPC->Get_PC(i)]++;
-      else a[pPC->Get_PC(i)]++;
+      if ( (i>=0x400) && (pCPU->pPC->Get_PC(i)>=0x1800)) a[8192+pCPU->pPC->Get_PC(i)]++;
+      else a[pCPU->pPC->Get_PC(i)]++;
 //  AssignFile(f,'D:\Temp\OP.A'); Rewrite(f);
   QFile file("OP.trc");
   file.open(QIODevice::WriteOnly);
@@ -257,7 +258,7 @@ void Cdebug_ti57cpu::Disassemble(TI57regs *r) {
     file.open(QIODevice::WriteOnly);
     r->PC=0;
     do {
-        r->OP=pPC->Get_PC(r->PC);
+        r->OP=pCPU->pPC->Get_PC(r->PC);
         file.write(Decode(r).append("\n").toLatin1());
         r->PC++;
     } while (r->PC<MAXROM);
@@ -286,7 +287,7 @@ void Cdebug_ti57cpu::Disassemble(TI57regs *r) {
       QString  s,ss;
       s=Decode(r).append(" ");
 
-      ss = QString("%1").arg(pPC->Get_16(r->PC<<1),4,16,QChar('0'));
+      ss = QString("%1").arg(pCPU->pPC->Get_16(r->PC<<1),4,16,QChar('0'));
 
 //      s.append(QString("  A=%1 B=%2 C=%3 D=%4 ").arg(Reg(r->RA)).arg(Reg(r->RB)).arg(Reg(r->RC)).arg(Reg(r->RD)));
 //      s.append(QString("  COND=%1 BASE=%2 R5=%3 RAB=%4 ST=%5 %6 %7 ").
@@ -308,7 +309,7 @@ UINT32 Cdebug_ti57cpu::DisAsm_1(UINT32 oldpc)
     oldpc &= 0xffff;
     DasmAdr = oldpc;
     UINT32 pc=oldpc;
-    quint8 op = pPC->Get_8(pc);
+    quint8 op = pCPU->pPC->Get_8(pc);
 
     Buffer[0] = '\0';
     char LocBuffer[200];
@@ -317,7 +318,7 @@ UINT32 Cdebug_ti57cpu::DisAsm_1(UINT32 oldpc)
 
     TI57regs r;
     r.PC = pc;
-    r.OP = pPC->Get_16(r.PC<<1);
+    r.OP = pCPU->pPC->Get_16(r.PC<<1);
 
 //    sprintf(Buffer," %06X:%02X",pc,op);
     QString t = Tracing(&r);
@@ -329,4 +330,8 @@ UINT32 Cdebug_ti57cpu::DisAsm_1(UINT32 oldpc)
     NextDasmAdr = oldpc+len;
     debugged = true;
     return NextDasmAdr;
+}
+
+Cdebug_ti57cpu::Cdebug_ti57cpu(CCPU *parent)	: Cdebug(parent)
+{
 }

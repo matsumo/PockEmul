@@ -74,7 +74,7 @@ CHPNUT::CHPNUT(CPObject *parent,int ram_size):CCPU(parent)
 {
     reg = nut_new_processor(ram_size);
 
-    pDEBUG = new Cdebug_hpnut(pPC);
+    pDEBUG = new Cdebug_hpnut(this);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
 
 }

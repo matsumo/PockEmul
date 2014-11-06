@@ -1,10 +1,8 @@
 #include <QDebug>
 
-#include "upd1007.h"
-#include "upd1007d.h"
 
-#include "Debug.h"
-#include "pcxxxx.h"
+#include "upd1007d.h"
+#include "upd1007.h"
 
 #define BIT(x,n) (((x)>>(n))&1)
 
@@ -539,7 +537,7 @@ const QString Cdebug_upd1007::st_tab[8] = {
   "ko", "if", "as", "ie",		/* immediate value */
   "ko", "f", "as", "ie" };	/* register */
 
-Cdebug_upd1007::Cdebug_upd1007(CPObject *parent)	: Cdebug(parent)
+Cdebug_upd1007::Cdebug_upd1007(CCPU *parent)	: Cdebug(parent)
 {
 
 }
@@ -829,7 +827,7 @@ QString Cdebug_upd1007::Arguments (UINT16 kod) {
 
 UINT32 Cdebug_upd1007::DisAsm_1(UINT32 adr)
 {
-    pupd1007 = (CUPD1007 *)(pPC->pCPU);
+    pupd1007 = (CUPD1007 *)(pCPU);
     DasmAdr = adr;
 
     pupd1007->reginfo.savepc = pupd1007->reginfo.pc;

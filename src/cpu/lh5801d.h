@@ -12,7 +12,7 @@ public:
     virtual void loadSymbolMap();
 
     virtual void injectReg(Parser *p);
-    Cdebug_lh5801(CPObject *parent);
+    Cdebug_lh5801(CCPU *parent);
 
 
 };

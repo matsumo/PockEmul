@@ -10,10 +10,6 @@ typedef	struct{
     const char	*descr;
 }	DisAsmTbl;
 
-extern 	DisAsmTbl	AsmTbl_sc61860[];
-extern 	DisAsmTbl	AsmTbl_lh5801[];
-
-
 class Csymbol {
 public:
     Csymbol(QString name) {
@@ -27,7 +23,7 @@ public:
 
 class Parser;
 
-class Cdebug:public CPObject
+class Cdebug:public QObject
 {
     Q_OBJECT
 public:
@@ -43,18 +39,11 @@ public:
 	virtual	UINT32	DisAsm_1(UINT32 adr) = 0;			//disasm 1 line to Buffer
 
 	DisAsmTbl	*AsmTbl;
+    CCPU *pCPU;
 
     virtual void injectReg(Parser *p) { Q_UNUSED(p) }
 
-	Cdebug(CPObject *parent)	: CPObject(parent)
-	{							//[constructor]
-		breakf		= 0;
-		breakadr	= 0;
-		debugged	= 0;	//break point(0:disable, 1:enable)
-		isdebug		= 0;			//debug?(0:none, 1:debugging)
-
-        loadSymbolMap();
-    }
+    Cdebug(CCPU *parent);
 	
 	virtual ~Cdebug()
 	{
@@ -67,82 +56,6 @@ public:
 private:
     char tmpSymbolLabel[80];
 };
-
-class Cdebug_sc61860:public Cdebug{
-    Q_OBJECT
-public:
-	UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
-    virtual void injectReg(Parser *p);
-
-		Cdebug_sc61860(CPObject *parent)	: Cdebug(parent)
-		{
-			AsmTbl = AsmTbl_sc61860;
-		}
-		virtual ~Cdebug_sc61860(){}
-
-};
-
-class Cdebug_sc62015:public Cdebug{
-    Q_OBJECT
-public:
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
-    virtual void injectReg(Parser *p);
-
-        Cdebug_sc62015(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-        }
-        virtual ~Cdebug_sc62015(){}
-
-};
-
-
-
-class Cdebug_upd7810:public Cdebug{
-    Q_OBJECT
-public:
-    struct dasm_s {
-        UINT8 token;
-        const void *args;
-    };
-
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
-
-        Cdebug_upd7810(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-        }
-
-        quint16 Dasm_upd7810(char *buffer, quint16 pc, const dasm_s *dasmXX, const UINT8 *oprom, const UINT8 *opram, int is_7810);
-};
-
-class Cdebug_tms7000:public Cdebug{
-    Q_OBJECT
-public:
-
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
-
-    Cdebug_tms7000(CPObject *parent)	: Cdebug(parent)
-    {
-    }
-
-    quint16 Dasm_tms7000(char *buffer, quint16 pc, const UINT8 *oprom, const UINT8 *opram);
-
-};
-
-class Cdebug_z80:public Cdebug{
-    Q_OBJECT
-public:
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
-
-        Cdebug_z80(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-        }
-
-};
-
-
 
 
 #endif

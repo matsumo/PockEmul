@@ -1,5 +1,6 @@
 
 #include "hd61700d.h"
+#include "hd61700.h"
 
 #define EXT_ROM		(pc > 0x0c00)
 #define INC_POS		pos++;//pos += (type+1)
@@ -390,7 +391,7 @@ UINT32 Cdebug_hd61700::get_dasmflags(UINT8 op)
 
 UINT8 Cdebug_hd61700::getMem(int adr) {
 
-    return pPC->Get_8(adr);
+    return pCPU->get_mem(adr,8);
 }
 
 UINT32 Cdebug_hd61700::DisAsm_1(UINT32 adr)
@@ -449,6 +450,10 @@ UINT32 Cdebug_hd61700::DisAsm_1(UINT32 adr)
     return(pos>>1);
 
 //    return (pos>>1) | dasmflags | DASMFLAG_SUPPORTED;
+}
+
+Cdebug_hd61700::Cdebug_hd61700(CCPU *parent)	: Cdebug(parent)
+{
 }
 
 

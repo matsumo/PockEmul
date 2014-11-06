@@ -448,7 +448,12 @@ HEADERS *= \
     src/cpu/lh5801d.h \
     src/cpu/hd61700d.h \
     src/cpu/ti57cpu_dasm.h \
-    src/cpu/m6502/m6502_dasm.h
+    src/cpu/m6502/m6502_dasm.h \
+    src/cpu/sc61860d.h \
+    src/cpu/sc62015d.h \
+    src/cpu/upd7907/upd7907d.h \
+    src/cpu/tms7000/tms7000d.h \
+    src/cpu/z80_dasm.h
 
 
 HEADERS *= \
@@ -721,7 +726,9 @@ SOURCES *=  \
     pictureflow/fluidlauncher.cpp \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
-    src/cpu/lh5801d.cpp
+    src/cpu/lh5801d.cpp \
+    src/cpu/sc61860d.cpp \
+    src/cpu/sc62015d.cpp
 
 
 SOURCES *=  \

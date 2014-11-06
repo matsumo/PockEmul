@@ -123,7 +123,7 @@ CHD61700::CHD61700(CPObject *parent):CCPU(parent) {
 
     pulseInterval = 4;
 
-    pDEBUG	= new Cdebug_hd61700(parent);
+    pDEBUG	= new Cdebug_hd61700(this);
     regwidget = (CregCPU*) new Cregshd61700Widget(0,this);
 }
 

@@ -1,6 +1,4 @@
-#include "common.h"
-#include "Debug.h"
-#include "pcxxxx.h"
+#include "tms7000d.h"
 #include "tms7000.h"
 
 #define DASMFLAG_STEP_OVER 0
@@ -373,7 +371,7 @@ quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
     int pos = 0;
     char tmpbuf[32];
 
-    opcode = pPC->Get_8(pc+pos);pos++;//oprom[pos++];
+    opcode = pCPU->get_mem(pc+pos,8);pos++;//oprom[pos++];
 
     for( i=0; i<sizeof(opcodes) / sizeof(opcodeinfo); i++ )
     {
@@ -401,39 +399,39 @@ quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
                         buffer += sprintf (buffer, "%s", of[j].opstr[k]);
                         break;
                     case UI8:
-                        a = pPC->Get_8(pc+pos);pos++;//(UINT8)opram[pos++];
+                        a = pCPU->get_mem(pc+pos,8);pos++;//(UINT8)opram[pos++];
                         buffer += sprintf(buffer, of[j].opstr[k], (unsigned int)a);
                         //size += 1;
                         break;
                     case I8:
-                        b = pPC->Get_8(pc+pos);pos++;//(qint8)opram[pos++];
+                        b = pCPU->get_mem(pc+pos,8);pos++;//(qint8)opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (qint8)b);
                         //size += 1;
                         break;
                     case UI16:
-                        c = pPC->Get_16(pc+pos);pos++;//(UINT16)opram[pos++];
+                        c = pCPU->pPC->Get_16(pc+pos);pos++;//(UINT16)opram[pos++];
                         c <<= 8;
-                        c += pPC->Get_8(pc+pos);pos++;//opram[pos++];
+                        c += pCPU->get_mem(pc+pos,8);pos++;//opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (unsigned int)c);
                         //size += 2;
                         break;
                     case I16:
-                        d = pPC->Get_16(pc+pos);pos++;//(qint16)opram[pos++];
+                        d = pCPU->pPC->Get_16(pc+pos);pos++;//(qint16)opram[pos++];
                         d <<= 8;
-                        d += pPC->Get_8(pc+pos);pos++;//opram[pos++];
+                        d += pCPU->get_mem(pc+pos,8);pos++;//opram[pos++];
                         buffer += sprintf (buffer, of[j].opstr[k], (signed int)d);
                         //size += 2;
                         break;
                     case PCREL:
-                        b = pPC->Get_8(pc+pos);pos++;//(qint8)opram[pos++];
+                        b = pCPU->get_mem(pc+pos,8);pos++;//(qint8)opram[pos++];
                         sprintf(tmpbuf, "$%04X", pc+2+k+b);
                         buffer += sprintf (buffer, of[j].opstr[k], tmpbuf);
                         //size += 1;
                         break;
                     case PCABS:
-                        c = (UINT16)pPC->Get_16(pc+pos);pos++;//opram[pos++];
+                        c = (UINT16)pCPU->pPC->Get_16(pc+pos);pos++;//opram[pos++];
                         c <<= 8;
-                        c += pPC->Get_8(pc+pos);pos++;//opram[pos++];
+                        c += pCPU->get_mem(pc+pos,8);pos++;//opram[pos++];
                         sprintf(tmpbuf, "$%04X", c);
                         buffer += sprintf (buffer, of[j].opstr[k], tmpbuf);
                         //size += 2;
@@ -462,13 +460,13 @@ UINT32 Cdebug_tms7000::DisAsm_1(UINT32 oldpc)
     Buffer[0] = '\0';
     char *str = Buffer;
     DasmAdr = oldpc;
-    int nb = Dasm_tms7000( Buffer, oldpc, (quint8*)(&pPC->mem[oldpc]),(quint8*) (&pPC->mem[oldpc]) );
+    int nb = Dasm_tms7000( Buffer, oldpc, (quint8*)(&pCPU->pPC->mem[oldpc]),(quint8*) (&pCPU->pPC->mem[oldpc]) );
     NextDasmAdr = oldpc + nb;
     char prefix[55];
     sprintf(prefix,"%05X:",(uint)oldpc);
     if (nb<5)
         for(int i=0;i<nb;i++)
-            sprintf(prefix,"%s%02X",prefix,(quint8)pPC->Get_8(oldpc+i));
+            sprintf(prefix,"%s%02X",prefix,(quint8)pCPU->get_mem(oldpc+i,8));
     int decal;
     if (nb<5) decal = nb;
     else	decal = 0;
@@ -477,4 +475,9 @@ UINT32 Cdebug_tms7000::DisAsm_1(UINT32 oldpc)
 
     debugged = true;
     return NextDasmAdr;
+}
+
+
+Cdebug_tms7000::Cdebug_tms7000(CCPU *parent)	: Cdebug(parent)
+{
 }

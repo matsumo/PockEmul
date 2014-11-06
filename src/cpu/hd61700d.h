@@ -17,10 +17,7 @@ class Cdebug_hd61700:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_hd61700(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-        }
+        Cdebug_hd61700(CCPU *parent);
         virtual ~Cdebug_hd61700(){}
 
         UINT8 getMem(int);

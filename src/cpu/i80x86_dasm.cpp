@@ -490,7 +490,7 @@ UINT32 Cdebug_i80x86::DisAsm_1(UINT32 oldpc)
     int len = i86disasm(&LocBuffer[0], &i80x86->i86stat, seg,offset);
     sprintf(Buffer,"%04x:%04x ",i80x86->i86stat.r16.cs, i80x86->i86stat.r16.ip);
     for(int i=0;i<len;i++)
-        sprintf(Buffer,"%s%02x",Buffer,(uint)pPC->Get_8(adr+i));
+        sprintf(Buffer,"%s%02x",Buffer,(uint)pCPU->get_mem(adr+i,8));
     sprintf(Buffer,"%s%*s%s",Buffer,13-(len<<1)," ",LocBuffer);
 
 //    int len = i86disasm(str, &(i80x86->i86), i80x86->i86.r16.cs,i80x86->i86.r16.ip);
@@ -504,6 +504,11 @@ UINT32 Cdebug_i80x86::DisAsm_1(UINT32 oldpc)
     NextDasmAdr = oldpc+len;
     debugged = true;
     return NextDasmAdr;
+}
+
+Cdebug_i80x86::Cdebug_i80x86(CCPU *parent)	: Cdebug(parent)
+{
+    i80x86 = (Ci80x86*)(parent);
 }
 
 int Cdebug_i80x86::i86disasm(char *buf, const I86stat *i86, uint16 seg, uint16 off)

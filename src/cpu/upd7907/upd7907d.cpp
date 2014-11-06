@@ -8,8 +8,8 @@
  *****************************************************************************/
 
 #include "common.h"
-#include "Debug.h"
-#include "pcxxxx.h"
+#include "upd7907d.h"
+#include "upd7907.h"
 
 #undef IN
 #undef OUT
@@ -6163,13 +6163,13 @@ UINT32 Cdebug_upd7810::DisAsm_1(UINT32 oldpc)
     Buffer[0] = '\0';
     char *str = Buffer;
     DasmAdr = oldpc;
-    int nb = Dasm_upd7810( Buffer, oldpc,dasmXX_7907, (quint8*)(&pPC->mem[oldpc]),(quint8*) (&pPC->mem[oldpc]), 0 );
+    int nb = Dasm_upd7810( Buffer, oldpc,dasmXX_7907, (quint8*)(&pCPU->pPC->mem[oldpc]),(quint8*) (&pCPU->pPC->mem[oldpc]), 0 );
     NextDasmAdr = oldpc + nb;
     char prefix[55];
     sprintf(prefix,"%05X:",(uint)oldpc);
     if (nb<5)
         for(int i=0;i<nb;i++)
-            sprintf(prefix,"%s%02X",prefix,(quint8)pPC->Get_8(oldpc+i));
+            sprintf(prefix,"%s%02X",prefix,(quint8)pCPU->get_mem(oldpc+i,8));
     int decal;
     if (nb<5) decal = nb;
     else	decal = 0;
@@ -6178,4 +6178,10 @@ UINT32 Cdebug_upd7810::DisAsm_1(UINT32 oldpc)
 
     debugged = true;
     return NextDasmAdr;
+}
+
+
+Cdebug_upd7810::Cdebug_upd7810(CCPU *parent)	: Cdebug(parent)
+{
+
 }

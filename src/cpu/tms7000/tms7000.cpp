@@ -30,11 +30,10 @@
 #include <QDebug>
 
 #include "tms7000.h"
-#include "pcxxxx.h"
+#include "tms7000d.h"
 #include "Log.h"
 #include "Inter.h"
 #include "Keyb.h"
-#include "Debug.h"
 #include "ui/cregsz80widget.h"
 
 #define VERBOSE 0
@@ -126,7 +125,7 @@ Ctms7000::Ctms7000(CPObject *parent, TMS7000_Models mod)
     : CCPU(parent)
 {
 
-    pDEBUG = new Cdebug_tms7000(parent);
+    pDEBUG = new Cdebug_tms7000(this);
     fn_log="tms7000.log";
 
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);

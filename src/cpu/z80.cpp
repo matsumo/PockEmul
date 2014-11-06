@@ -6,16 +6,12 @@
 #include <stdlib.h>
 #include <limits.h>
 
-#include "common.h"
-#include "Log.h"
-#include "pcxxxx.h"
 #include "z80.h"
+#include "z80_dasm.h"
+#include "Log.h"
 #include "Dasm.h"
 #include "Inter.h"
-#include "Debug.h"
 #include "Keyb.h"
-//#include "Ce126.h"
-//#include "dialoganalog.h"
 #include "dialoglog.h"
 #include "ui/cregsz80widget.h"
 
@@ -1130,7 +1126,7 @@ const uint8 CZ80::parity[] = {
 CZ80::CZ80(CPObject *parent)	: CCPU(parent)
 {				//[constructor]
 
-    pDEBUG = new Cdebug_z80(parent);
+    pDEBUG = new Cdebug_z80(this);
     fn_log="z80.log";
 
     Is_Timer_Reached=false;

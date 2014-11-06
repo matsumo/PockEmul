@@ -16,6 +16,7 @@
 
 
 #include "m6502_dasm.h"
+#include "m6502.h"
 
 enum { Ac=0,Il,Im,Ab,Zp,Zx,Zy,Ax,Ay,Rl,Ix,Iy,In,No };
     /* These are the addressation methods used by 6502 CPU.   */
@@ -81,7 +82,7 @@ UINT32 Cdebug_m6502::DisAsm_1(UINT32 pc) {
 
 
         for (j = 0; j < 16;j++)
-            data[j] = pPC->Get_8(pc + j);
+            data[j] = pCPU->get_mem(pc + j,8);
         old_pc = pc;
         pc += DasmOpe(str, (unsigned char*)data,pc);
         sprintf(Buffer,"%06X: %s", old_pc, str);
@@ -95,10 +96,14 @@ UINT32 Cdebug_m6502::DisAsm_1(UINT32 pc) {
 
 }
 
+Cdebug_m6502::Cdebug_m6502(CCPU *parent)	: Cdebug(parent)
+{
+}
+
 int Cdebug_m6502::DasmOpe(char *S,BYTE *A,unsigned long PC)
 {
-  BYTE *B,J;
-  int OP;
+    BYTE *B,J;
+    int OP;
 
   B=A;OP=(*B++)*2;
 

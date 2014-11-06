@@ -55,7 +55,7 @@ void CUPD1007::WM(upd1007_config *info, UINT16 addr, UINT8 value)
 CUPD1007::CUPD1007(CPObject *parent,QString rom0fn):CCPU(parent) {
 
 
-    pDEBUG	= new Cdebug_upd1007(parent);
+    pDEBUG	= new Cdebug_upd1007(this);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
     fn_log="upd1007.log";
 

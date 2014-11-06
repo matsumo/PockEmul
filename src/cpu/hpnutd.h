@@ -10,7 +10,7 @@ class Cdebug_hpnut:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_hpnut(CPObject *parent);
+        Cdebug_hpnut(CCPU *parent);
         virtual ~Cdebug_hpnut(){}
 
         Chpnut *phpnut;

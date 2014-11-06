@@ -50,7 +50,7 @@ class Cdebug_upd1007:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_upd1007(CPObject *parent);
+        Cdebug_upd1007(CCPU *parent);
         virtual ~Cdebug_upd1007(){}
 
         CUPD1007 *pupd1007;

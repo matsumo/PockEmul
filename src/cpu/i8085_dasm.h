@@ -9,11 +9,7 @@ class Cdebug_i8085:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_i8085(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-            i8085 = (Ci8085*)(pPC->pCPU);
-        }
+        Cdebug_i8085(CCPU *parent);
         Ci8085 *i8085;
 
         char *i85regs(char *buf, const I85stat *i85);

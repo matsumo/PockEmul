@@ -348,7 +348,7 @@ void Cm6502::Reset(void)
 Cm6502::Cm6502(CPObject *parent)	: CCPU(parent)
 {				//[constructor]
 
-    pDEBUG = new Cdebug_m6502(parent);
+    pDEBUG = new Cdebug_m6502(this);
 
     fn_log="m6502.log";
 

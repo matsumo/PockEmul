@@ -2588,7 +2588,7 @@ Ci80x86::~Ci80x86()
 bool Ci80x86::init()
 {
     Check_Log();
-    pDEBUG = new Cdebug_i80x86(pPC);
+    pDEBUG = new Cdebug_i80x86(this);
     Reset();
     return true;
 }

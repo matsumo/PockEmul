@@ -80,7 +80,7 @@ bool Ci8085::init()
 {
     init_tables(1);
     Check_Log();
-    pDEBUG = new Cdebug_i8085(pPC);
+    pDEBUG = new Cdebug_i8085(this);
     Reset();
     return true;
 }

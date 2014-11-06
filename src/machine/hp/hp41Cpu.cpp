@@ -60,7 +60,7 @@ Chp41cpu::Chp41cpu(CPObject *parent):CCPU(parent)
     fBreakPtsEnable=false;
     fBreak=false;
     nBreakPts=0;
-    pDEBUG = new Cdebug_hpnut(pPC);
+    pDEBUG = new Cdebug_hpnut(this);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
 }
 

@@ -406,10 +406,10 @@ STOP            01001000  10111011          12  stop
 
 
 #include "upd7907.h"
-#include "pcxxxx.h"
+#include "upd7907d.h"
+//#include "pcxxxx.h"
 #include "Log.h"
 #include "Inter.h"
-#include "Debug.h"
 #include "ui/cregsz80widget.h"
 
 
@@ -11901,7 +11901,7 @@ void Cupd7907::step()
 Cupd7907::Cupd7907(CPObject *parent):CCPU(parent)
 {
 
-    pDEBUG = new Cdebug_upd7810(parent);
+    pDEBUG = new Cdebug_upd7810(this);
     fn_log="upd7907.log";
 
 

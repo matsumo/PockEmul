@@ -22,7 +22,7 @@ MA 02111, USA.
 #include <QDebug>
 
 #include "hpnutd.h"
-
+#include "hpnut.h"
 
 int Cdebug_hpnut::nut_disassemble_short_branch (int addr, int op1,
                      char *buf, int len)
@@ -296,8 +296,8 @@ UINT32 Cdebug_hpnut::DisAsm_1(UINT32 adr)
     char *buffer = (char *)malloc(200);
     buffer[0] = '\0';
 
-    op1 = pPC->Get_16r(adr<<1);
-    op2 = pPC->Get_16r((adr+1)<<1);
+    op1 = pCPU->pPC->Get_16r(adr<<1);
+    op2 = pCPU->pPC->Get_16r((adr+1)<<1);
 //    qWarning()<<op1<<op2;
 
     int len = nut_disassemble_inst(adr,op1,op2,Buffer,100);
@@ -309,7 +309,7 @@ UINT32 Cdebug_hpnut::DisAsm_1(UINT32 adr)
 
 }
 
-Cdebug_hpnut::Cdebug_hpnut(CPObject *parent) : Cdebug(parent)
+Cdebug_hpnut::Cdebug_hpnut(CCPU *parent) : Cdebug(parent)
 {
 
 }

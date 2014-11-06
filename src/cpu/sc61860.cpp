@@ -6,12 +6,11 @@
 
 #include "common.h"
 #include "Log.h"
-#include "pcxxxx.h"
 #include "Lcdc.h"
 #include "sc61860.h"
+#include "sc61860d.h"
 #include "Dasm.h"
 #include "Inter.h"
-#include "Debug.h"
 #include "Keyb.h"
 #include "dialoganalog.h"
 #include "dialoglog.h"
@@ -46,7 +45,7 @@ CSC61860::CSC61860(CPObject *parent)	: CCPU(parent)
     ticksReset = 0;
     DASMLOG=0;
     first_pass = true;
-    pDEBUG	= new Cdebug_sc61860(parent);
+    pDEBUG	= new Cdebug_sc61860(this);
     imemsize = 0x60;
 #ifndef EMSCRIPTEN
     regwidget = (CregCPU*) new Cregssc61860Widget(parent,this);

@@ -9,11 +9,7 @@ class Cdebug_i80x86:public Cdebug{
 public:
     UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
 
-        Cdebug_i80x86(CPObject *parent)	: Cdebug(parent)
-        {
-            AsmTbl = AsmTbl_sc61860;
-            i80x86 = (Ci80x86*)(pPC->pCPU);
-        }
+        Cdebug_i80x86(CCPU *parent);
         Ci80x86 *i80x86;
 
         int i86disasm(char *buf, const I86stat *i86, uint16 seg, uint16 off);
