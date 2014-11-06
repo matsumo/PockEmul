@@ -3,7 +3,7 @@
 
 #include "Debug.h"
 
-class TI57regs;
+#include "ti57cpu.h"
 
 
 class Cdebug_ti57cpu:public Cdebug{

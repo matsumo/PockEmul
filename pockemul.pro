@@ -447,7 +447,8 @@ HEADERS *= \
     src/core/launchbuttonwidget.h \
     src/cpu/lh5801d.h \
     src/cpu/hd61700d.h \
-    src/cpu/ti57cpu_dasm.h
+    src/cpu/ti57cpu_dasm.h \
+    src/cpu/m6502/m6502_dasm.h
 
 
 HEADERS *= \

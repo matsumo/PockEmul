@@ -11,10 +11,10 @@
 #include <QDebug>
 
 #include "m6502.h"
-#include "pcxxxx.h"
+#include "m6502_dasm.h"
 #include "Inter.h"
 #include "ui/cregsz80widget.h"
-#include "Debug.h"
+
 #include "Log.h"
 
 #include "ops02.h"

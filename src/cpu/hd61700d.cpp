@@ -1,8 +1,5 @@
 
 #include "hd61700d.h"
-#include "Debug.h"
-#include "pcxxxx.h"
-
 
 #define EXT_ROM		(pc > 0x0c00)
 #define INC_POS		pos++;//pos += (type+1)

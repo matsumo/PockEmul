@@ -1,7 +1,7 @@
 #include <QDebug>
 
 #include "ti57cpu_dasm.h"
-#include "ti57cpu.h"
+
 
 QString Cdebug_ti57cpu::IntToHex(int val,int nb) {
     return QString("%1").arg(val,nb,16,QChar('0'));

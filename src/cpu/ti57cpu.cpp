@@ -8,9 +8,9 @@
 #include <QDebug>
 
 #include "ti57cpu.h"
+#include "ti57cpu_dasm.h"
 #include "Lcdc.h"
-#include "pcxxxx.h"
-#include "Debug.h"
+//#include "pcxxxx.h"
 #include "ui/cregsz80widget.h"
 
 

@@ -15,8 +15,7 @@
 /**************************************************************/
 
 
-#include "Debug.h"
-#include "pcxxxx.h"
+#include "m6502_dasm.h"
 
 enum { Ac=0,Il,Im,Ab,Zp,Zx,Zy,Ax,Ay,Rl,Ix,Iy,In,No };
     /* These are the addressation methods used by 6502 CPU.   */
