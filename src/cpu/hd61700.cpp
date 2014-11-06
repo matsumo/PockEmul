@@ -22,17 +22,14 @@
 
 #include <QDebug>
 
-
-//#include "emu.h"
-//#include "debugger.h"
 #include "hd61700.h"
+#include "hd61700d.h"
 #include "hd44352.h"
 #include "casio/pb1000.h"
 #include "Log.h"
 #include "pcxxxx.h"
 #include "Inter.h"
 #include "ui/cregshd61700widget.h"
-#include "Debug.h"
 
 
 #define SEC_TIMER   0

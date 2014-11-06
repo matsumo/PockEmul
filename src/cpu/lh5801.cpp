@@ -7,6 +7,7 @@
 #include "common.h"
 #include "pcxxxx.h"
 #include "lh5801.h"
+#include "lh5801d.h"
 #include "Keyb.h"
 #include "Connect.h"
 #include "Inter.h"

@@ -445,6 +445,9 @@ HEADERS *= \
     src/core/breakpoint.h \
     src/core/watchpoint.h \
     src/core/launchbuttonwidget.h \
+    src/cpu/lh5801d.h \
+    src/cpu/hd61700d.h \
+    src/cpu/ti57cpu_dasm.h
 
 
 HEADERS *= \
@@ -717,6 +720,7 @@ SOURCES *=  \
     pictureflow/fluidlauncher.cpp \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
+    src/cpu/lh5801d.cpp
 
 
 SOURCES *=  \
