@@ -27,8 +27,6 @@ Ccable::Ccable(CPObject *parent)	: CPObject(parent)
 }
 
 Ccable::~Ccable(){
-//    delete(pCONNECTOR_A);
-//    delete(pCONNECTOR_B);
 }
 
 
@@ -59,8 +57,6 @@ bool Ccable::init(void) {
 //********************************************************/
 bool Ccable::run(void)
 {
-    // access both timer by connectors
-    // the run function is fired by the fastest one
 
     if (standard) {
         qint64 a = pCONNECTOR_A->Get_values();
@@ -174,7 +170,6 @@ bool Ccable::UpdateFinalImage(void) {
 
     painter.end();
 
-    Refresh_Display = true;
 
     return true;
 }

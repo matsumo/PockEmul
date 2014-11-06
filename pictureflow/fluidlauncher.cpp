@@ -47,7 +47,6 @@
 #endif
 
 #include "fluidlauncher.h"
-#include "init.h"
 #include "mainwindowpockemul.h"
 
 extern MainWindowPockemul *mainwindow;
@@ -155,8 +154,8 @@ qWarning()<<"After PopulatePictureFlow";
 
  bool FluidLauncher::loadConfig(QStringList config)
  {
+     //     qWarning("loadConfig \n");
      QString configPath = config.at(0);
-//     qWarning("loadConfig \n");
      QFile xmlFile(configPath);
 
      if (!xmlFile.exists() || (xmlFile.error() != QFile::NoError)) {
@@ -208,6 +207,8 @@ qWarning()<<"After PopulatePictureFlow";
                  QStringRef _connectortype = attrs.value("connectortype");
                  QStringRef _conngender = attrs.value("conngender");
 
+                 // filter for existing idPockets
+                 if (!mainwindow->objtable.contains(idpocket.toString())) continue;
                  // filter on brand, connectors type and gender
 
                  if (!connType.isEmpty() && (_connectortype.indexOf(connType)==-1)) continue;

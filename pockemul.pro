@@ -118,6 +118,7 @@ win32 {
 
 
 SHARP_PACKAGE *= \
+    PC1211 \
     PC1245 \
     PC1250 \
     PC1251 \
@@ -130,6 +131,8 @@ SHARP_PACKAGE *= \
     PC1401 \
     PC1402 \
     PC1403 \
+    PC1421 \
+    PC1425 \
     E500 \
 
 CASIO_PACKAGE *= \
@@ -189,6 +192,16 @@ PROJECT_PACKAGE *= SC61860
 contains(PROJECT_PACKAGE,PC1350) {
 PROJECT_PACKAGE *= SC61860
 }
+# PC1425
+contains(PROJECT_PACKAGE,PC1425) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1403
+}
+# PC1421
+contains(PROJECT_PACKAGE,PC1421) {
+PROJECT_PACKAGE *= SC61860
+PROJECT_PACKAGE *= PC1401
+}
 # PC1403
 contains(PROJECT_PACKAGE,PC1403) {
 PROJECT_PACKAGE *= SC61860
@@ -217,6 +230,17 @@ HEADERS *= src/machine/sharp/e500.h \
 SOURCES *= src/machine/sharp/e500.cpp \
            src/lcd/Lcdc_e500.cpp
 RESOURCES *= resources/e500.qrc
+}
+# PC1211
+contains(PROJECT_PACKAGE,PC1211) {
+DEFINES *= P_PC1211
+HEADERS *= src/machine/sharp/pc1211.h \
+           src/lcd/Lcdc_pc1211.h \
+           tinybasic/tinybasic.h
+SOURCES *= src/machine/sharp/pc1211.cpp \
+           src/lcd/Lcdc_pc1211.cpp \
+           tinybasic/tinybasic.cpp
+RESOURCES *= resources/pc1211.qrc
 }
 # PC1245
 contains(PROJECT_PACKAGE,PC1245) {
@@ -314,6 +338,20 @@ HEADERS *= src/machine/sharp/pc1403.h \
 SOURCES *= src/machine/sharp/pc1403.cpp \
            src/lcd/Lcdc_pc1403.cpp
 RESOURCES *= resources/pc1403.qrc
+}
+# PC1421
+contains(PROJECT_PACKAGE,PC1421) {
+DEFINES *= P_PC1421
+HEADERS *= src/machine/sharp/pc1421.h
+SOURCES *= src/machine/sharp/pc1421.cpp
+RESOURCES *= resources/pc1421.qrc
+}
+# PC1425
+contains(PROJECT_PACKAGE,PC1425) {
+DEFINES *= P_PC1425
+HEADERS *= src/machine/sharp/pc1425.h
+SOURCES *= src/machine/sharp/pc1425.cpp
+RESOURCES *= resources/pc1425.qrc
 }
 
 # SC61860
@@ -414,7 +452,6 @@ HEADERS *= \
     src/cpu/lh5801.h \
     src/cpu/lh5810.h \
     src/cpu/pd1990ac.h \
-    src/machine/ccable.h \
     src/cpu/z80.h \
     src/cpu/z80memory.h \
     src/cpu/lh5803.h \
@@ -442,7 +479,6 @@ HEADERS *= \
     src/cpu/m6502/m6502.h \
     src/cpu/m6502/opsc02.h \
     src/cpu/m6502/ops02.h \
-    tinybasic/tinybasic.h \
     src/cpu/ti57cpu.h \
     src/cpu/s6b0108.h \
     src/cpu/mc6847.h \
@@ -460,9 +496,6 @@ HEADERS *= \
 HEADERS *= \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
-    src/machine/sharp/pc1211.h \
-    src/machine/sharp/pc1421.h \
-    src/machine/sharp/pc1425.h \
     src/machine/sharp/pc1450.h \
     src/machine/sharp/pc1475.h \
     src/machine/sharp/buspc1500.h \
@@ -530,6 +563,7 @@ HEADERS *= \
     src/machine/ce515p.h \
     src/machine/cx07.h \
     src/machine/cx710.h \
+    src/machine/ccable.h \
 
 HEADERS *= \
     src/lcd/Lcdc.h \
@@ -538,7 +572,6 @@ HEADERS *= \
     src/lcd/Lcdc_pc1600.h \
     src/lcd/Lcdc_pb1000.h \
     src/lcd/Lcdc_fp200.h \
-    src/lcd/Lcdc_pc1211.h \
     src/lcd/Lcdc_g850.h \
     src/lcd/Lcdc_z1.h \
     src/lcd/Lcdc_lbc1100.h \
@@ -554,7 +587,6 @@ HEADERS *= \
     src/lcd/Lcdc_hp15c.h \
     src/lcd/Lcdc_pc1500.h \
     src/lcd/Lcdc_pc1475.h \
-    src/lcd/Lcdc_pc1403.h \
     src/lcd/Lcdc_pc1450.h \
     src/lcd/Lcdc_symb2x.h \
 
@@ -616,23 +648,20 @@ RESOURCES +=  \
     resources/pc1500.qrc \
     resources/pc1600.qrc \
     resources/pc2500.qrc \
-    resources/pc1421.qrc \
-    resources/pc1425.qrc \
     resources/pc1460.qrc \
-    resources/x07.qrc \
     resources/pb1000.qrc \
     resources/pb2000.qrc \
     resources/g850v.qrc \
     resources/ext2.qrc \
     resources/z1.qrc \
     resources/fp200.qrc \
-    resources/pc1211.qrc \
     resources/pc2001.qrc \
     resources/lbc1100.qrc \
     resources/tpc8300.qrc \
     resources/rlh1000.qrc \
     resources/ti57.qrc \
     resources/hp41.qrc \
+    resources/x07.qrc \
 
 
 }
@@ -695,9 +724,6 @@ SOURCES *=  \
     src/machine/bus.cpp \
     src/machine/cprinter.cpp \
     src/machine/paperwidget.cpp \
-    src/machine/sharp/pc1211.cpp \
-    src/machine/sharp/pc1425.cpp \
-    src/machine/sharp/pc1421.cpp \
     src/machine/sharp/pc1450.cpp \
     src/machine/sharp/pc1475.cpp \
     src/machine/sharp/pc1500.cpp \
@@ -778,7 +804,6 @@ SOURCES *=  \
     ui/cregsz80widget.cpp \
     ui/cregshd61700widget.cpp \
     src/cpu/cpu.cpp \
-    tinybasic/tinybasic.cpp \
     src/cpu/lh5801.cpp \
     src/cpu/lh5803.cpp \
     src/cpu/z80.cpp \
@@ -825,8 +850,6 @@ SOURCES *=  \
 
 SOURCES *=  \
     src/lcd/Lcdc.cpp \
-    src/lcd/Lcdc_pc1211.cpp \
-    src/lcd/Lcdc_pc1403.cpp \
     src/lcd/Lcdc_pc1450.cpp \
     src/lcd/Lcdc_pc1475.cpp \
     src/lcd/Lcdc_pc1500.cpp \

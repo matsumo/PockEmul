@@ -211,53 +211,75 @@ void MainWindowPockemul::setZoom(int z)
 }
 
 void MainWindowPockemul::initObjectTable() {
+#ifdef P_PC1211
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1211"]=PC1211;
+#endif
 #ifdef P_PC1245
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1245"]=PC1245;
     objtable["MC-2200"]=MC2200;
 #endif
 #ifdef P_PC1250
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1250"]=PC1250;
     objtable["Tandy PC-3"]=TandyPC3;
 #endif
 #ifdef P_PC1251
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1251"]=PC1251;
     objtable["Tandy PC-3 (4Ko)"]=TandyPC3EXT;
 #endif
 #ifdef P_PC1253
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1253"]=PC1253;
 #endif
 #ifdef P_PC1255
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1255"]=PC1255;
     objtable["PC-1251H"]=PC1251H;
 #endif
 
 #ifdef P_PC1260
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1260"]=PC1260;
     objtable["PC-1261"]=PC1261;
     objtable["PC-1262"]=PC1262;
 #endif
 #ifdef P_PC1280
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1280"]=PC1280;
 #endif
 
 #ifdef P_PC1350
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1350"]=PC1350;
 #endif
 #ifdef P_PC1360
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1360"]=PC1360;
 #endif
 #ifdef P_PC1401
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1401"]=PC1401;
 #endif
 #ifdef P_PC1402
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1402"]=PC1402;
 #endif
 #ifdef P_PC1403
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1403"]=PC1403;
     objtable["PC-1403H"]=PC1403H;
 #endif
+#ifdef P_PC1421
+    objtable["#BRAND#SHARP"]=0;
     objtable["PC-1421"]=PC1421;
+#endif
+#ifdef P_PC1425
+    objtable["#BRAND#SHARP"]=0;
+    objtable["PC-1425"]=PC1425;
+#endif
     objtable["PC-1450"]=PC1450;
     objtable["PC-1475"]=PC1475;
     objtable["PC-1425"]=PC1425;
@@ -357,6 +379,20 @@ void MainWindowPockemul::initObjectTable() {
     objtable["CC-40"]= CC40;
     objtable["TI-74"]= TI74;
     objtable["TI-95"]= TI95;
+
+
+    objtable["#BRAND#HEWLETT-PACKARD"]=0;
+    objtable["#BRAND#CASIO"]=0;
+    objtable["#BRAND#SHARP"]=0;
+    objtable["#BRAND#TANDY"]=0;
+    objtable["#BRAND#TEXAS INSTRUMENTS"]=0;
+    objtable["#BRAND#OTHER"]=0;
+    objtable["#BRAND#SHARP_PC12XX"]=0;
+    objtable["#BRAND#SHARP_PC13XX"]=0;
+    objtable["#BRAND#SHARP_PC14XX"]=0;
+    objtable["#BRAND#SHARP_PC15XX"]=0;
+    objtable["#BRAND#SHARP_NEWGEN"]=0;
+
 }
 
 
@@ -369,7 +405,9 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case EMPTY	: return 0;
 
 
+#ifdef P_PC1211
     case PC1211	: pPC = new Cpc1211;	pPC->setName("PC-1211");break;
+#endif
 #ifdef P_PC1245
     case PC1245	: pPC = new Cpc1245;	pPC->setName("PC-1245");break;
     case MC2200	: pPC = new Cmc2200;	pPC->setName("MC-2200");break;
@@ -416,10 +454,14 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case PC1403	: pPC = new Cpc1403;	pPC->setName("PC-1403");break;
     case PC1403H: pPC = new Cpc1403H;	pPC->setName("PC-1403H");break;
 #endif
+#ifdef P_PC1421
     case PC1421	: pPC = new Cpc1421;	pPC->setName("PC-1421");break;
+#endif
+#ifdef P_PC1425
+    case PC1425	: pPC = new Cpc1425;	pPC->setName("PC-1425");break;
+#endif
     case PC1450	: pPC = new Cpc1450;	pPC->setName("PC-1450");break;
     case PC1475	: pPC = new Cpc1475;	pPC->setName("PC-1475");break;
-    case PC1425	: pPC = new Cpc1425;	pPC->setName("PC-1425");break;
 
     case PC1500	: pPC = new Cpc1500;	pPC->setName("PC-1500");break;
     case PC1500A: pPC = new Cpc1500A;	pPC->setName("PC-1500A");break;
