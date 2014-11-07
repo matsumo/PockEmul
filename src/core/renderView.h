@@ -27,6 +27,7 @@ public slots:
     Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);
     Q_INVOKABLE void keyreleased(QString Id, int k, int m, int scan);
     Q_INVOKABLE void contextMenu(QString Id, int x, int y);
+    Q_INVOKABLE void rotpocket(QString Id, int x);
     Q_INVOKABLE void click(QString Id, int x, int y);
     Q_INVOKABLE void unclick(QString Id, int x, int y);
     Q_INVOKABLE void dblclick(QString Id, int x, int y);

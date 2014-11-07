@@ -1,4 +1,5 @@
 // TODO: multithreading for cpu emulation. see MONOTHREAD
+// if MONOTHREAD issue on pocket close
 
 
 #include <qglobal.h>

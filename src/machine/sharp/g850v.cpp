@@ -17,7 +17,7 @@
 #define PIN11IF_8PIO	1	/* 8bits PIO    */
 #define PIN11IF_UART	2	// UART
 
-Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(this)
+Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(parent)
 {
     Q_UNUSED(parent)
 

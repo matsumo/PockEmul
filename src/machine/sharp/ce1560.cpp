@@ -13,7 +13,7 @@
 #include "clink.h"
 #include "watchpoint.h"
 
-Cce1560::Cce1560(CPObject *parent):CpcXXXX(this)
+Cce1560::Cce1560(CPObject *parent):CpcXXXX(parent)
 {
     Q_UNUSED(parent)
 

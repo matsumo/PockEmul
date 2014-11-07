@@ -57,7 +57,6 @@ Rectangle {
     signal sendMovePocket(string id,int x,int y)
     signal sendMoveAllPocket(int x,int y)
     signal setZoom(int x,int y,int z)
-    signal sendRotPocket(string id,int rotation)
 
     signal sendNewPocket();
     signal sendNewExt();
@@ -141,8 +140,7 @@ Rectangle {
             z: _zorder
             width: _width
             height: _height
-            rotation: _rotation
-            onRotationChanged: sendRotPocket(idpocket,rotation)
+
             Keys.onPressed: {
                 sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;
@@ -170,7 +168,6 @@ Rectangle {
                 pinch.maximumScale: 10
                 onPinchUpdated: {
                     setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
-//                    photoFrame.rotation = pinch.rotation
                 }
                 MouseArea {
                     property bool isdrag: false;
@@ -196,10 +193,6 @@ Rectangle {
                         photoFrame.focus = true;
                         if (mouse.button == Qt.RightButton) {
 //                            console.log("drag active:"+drag.active);
-//                            drag.maximumX = photoFrame.x;
-//                            drag.minimumX = photoFrame.x;
-//                            drag.maximumY = photoFrame.y;
-//                            drag.minimumY = photoFrame.y;
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                             isdrag=false;
                         }
@@ -211,8 +204,8 @@ Rectangle {
                         mouse.accepted=true;
                     }
                     onReleased: {
+                        if (isdrag) sendUnClick(idpocket,mouseX,mouseY);
                         isdrag=false;
-                        sendUnClick(idpocket,mouseX,mouseY);
                     }
                     onDoubleClicked: sendDblClick(idpocket,mouseX,mouseY);
                     onPositionChanged: {
@@ -277,14 +270,13 @@ Rectangle {
         scene.visible = false;
         menu.visible = false;
     }
-    function addPocket(_name,_url,_pocketId,_left,_top,_width,_height,_rotation) {
+    function addPocket(_name,_url,_pocketId,_left,_top,_width,_height) {
         renderArea.xmlThumbModel.append(   {name:_name,
                                  imageFileName:_url,
                                  _left:_left,
                                  _top:_top,
                                  _width:_width,
                                  _height:_height,
-                                 _rotation:_rotation,
                                  idpocket:_pocketId,
                                       dummy:0,
                                       _zorder:0});

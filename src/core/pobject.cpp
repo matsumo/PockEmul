@@ -332,8 +332,16 @@ quint64 CPObject::runRange(quint64 step) {
         while (/*!off &&*/ ((pTIMER->state - t) < step)) {
             run();
 
+//            if (pLCDC) {
+//                pLCDC->disp();
+//                if (pLCDC->Refresh) {
+//                    Refresh_Display = true;
+//                }
+//            }
+
 #if 0
             // refresh display when disp_on switch to 1
+
             if (pLCDC)
             {
                 if (dynamic_cast<CpcXXXX *>(this) )
@@ -431,7 +439,7 @@ int CPObject::initsound()
         qWarning() << "Default format not supported - trying to use nearest";
         m_format = info.nearestFormat(m_format);
     }
-    //delete m_audioOutput;
+
     m_audioOutput = 0;
     m_audioOutput = new QAudioOutput(m_device, m_format, this);
     //connect(m_audioOutput, SIGNAL(notify()), SLOT(notified()));
@@ -494,15 +502,15 @@ void CPObject::fillSoundBuffer(BYTE val)
         int ps = m_audioOutput->periodSize();
         //AddLog(LOG_TEMP,tr("buff:%1   ps:%2").arg(audioBuff.size()).arg(ps));
 
-        if (audioBuff.size() >= (2*ps)) {
-            m_output->write(audioBuff.constData(),ps);
+        if (audioBuff.size() >= (ps)) {
+            qint64 _bytescount = m_output->write(audioBuff.constData(),ps);
 //            AddLog(LOG_TEMP,tr("audiobuffsize:%1  outbuffer:%2").arg(audioBuff.size()).arg(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()));
             //audioBuff.clear();
-            audioBuff.remove(0,ps);
+            audioBuff.remove(0,_bytescount);
         }
         else {
             //FIXME: buffer underrun
-#if 0
+#if 1
             if((m_audioOutput->bufferSize()-m_audioOutput->bytesFree()) < ps) {
                 AddLog(LOG_TEMP,tr("sound1 size:%1    free:%2   diff:%3   ps:%4").arg(m_audioOutput->bufferSize()).arg(m_audioOutput->bytesFree()).arg(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()).arg(ps));
                 QByteArray fill(ps-(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()),0);

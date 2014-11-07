@@ -49,5 +49,6 @@
         <file>TabbedQuickApp/pics/tab2.png</file>
         <file>Test.qml</file>
         <file>Launchmenu.qml</file>
+        <file>TesBak.qml</file>
     </qresource>
 </RCC>

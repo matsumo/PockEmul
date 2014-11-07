@@ -40,6 +40,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
     QObject::connect(cloud.object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendRotPocket(QString,int)), this, SLOT(rotpocket(QString,int)));
 
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
     QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
@@ -131,6 +132,12 @@ void CrenderView::contextMenu(QString Id, int x, int y)
 
 }
 
+void CrenderView::rotpocket(QString Id, int x)
+{
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    pc->setRotation(x);
+}
+
 void CrenderView::click(QString Id, int x, int y)
 {
 //    qWarning()<<"click:"<<Id<<x<<y;
@@ -202,7 +209,8 @@ void CrenderView::newPObject(CPObject *pObject) {
                               Q_ARG(QVariant, pObject->pos().x()),
                               Q_ARG(QVariant, pObject->pos().y()),
                               Q_ARG(QVariant, pObject->width()),
-                              Q_ARG(QVariant, pObject->height())
+                              Q_ARG(QVariant, pObject->height()),
+                              Q_ARG(QVariant, pObject->getRotation())
                               );
 }
 

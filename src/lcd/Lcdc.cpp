@@ -163,7 +163,7 @@ void	Clcdc::TurnON(void) {
 
 void	Clcdc::TurnOFF(void){
     On = false;
-    qWarning()<<"LCD:TurnOFF";
+//    qWarning()<<"LCD:TurnOFF";
 }
 
 void Clcdc::forceRedraw(){
