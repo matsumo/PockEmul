@@ -1313,73 +1313,73 @@ void MainWindowPockemul::updateFrameTimer()
 
     for (int i = 0;i < listpPObject.size(); i++)
     {
-            CPObject* CurrentpPC = listpPObject.at(i);
+        CPObject* CurrentpPC = listpPObject.at(i);
 
-            if (CurrentpPC && CurrentpPC->pTIMER) {
-                Current_State = CurrentpPC->pTIMER->state;
+        if (CurrentpPC && CurrentpPC->pTIMER) {
+            Current_State = CurrentpPC->pTIMER->state;
 
-                CurrentpPC->pTIMER->nb_state += (Current_State - CurrentpPC->pTIMER->last_state);
-                CurrentpPC->pTIMER->last_state = Current_State;
+            CurrentpPC->pTIMER->nb_state += (Current_State - CurrentpPC->pTIMER->last_state);
+            CurrentpPC->pTIMER->last_state = Current_State;
 
-                // Update ToolTip only one time per second
-                if ( deltaTime >= 1000)
-                {
-                    // later
+            // Update ToolTip only one time per second
+            if ( deltaTime >= 1000)
+            {
+                // later
 
-                    QString str;
-                    if (CurrentpPC->getfrequency()) {
-                        //	AddLog(LOG_TIME,tr("Time Frame elapsed : %1 ms  nb=%2 cur=%3 last=%4").arg(deltaTime).arg(CurrentpPC->pTIMER->nb_state).arg(Current_State).arg(CurrentpPC->pTIMER->last_state));
-                        statepersec = (int) ( CurrentpPC->getfrequency());
-                        rate = (int) ((100L*CurrentpPC->pTIMER->nb_state)/((statepersec/1000L)*deltaTime));
-                        CurrentpPC->pTIMER->nb_state=0;
+                QString str;
+                if (CurrentpPC->getfrequency()) {
+                    //	AddLog(LOG_TIME,tr("Time Frame elapsed : %1 ms  nb=%2 cur=%3 last=%4").arg(deltaTime).arg(CurrentpPC->pTIMER->nb_state).arg(Current_State).arg(CurrentpPC->pTIMER->last_state));
+                    statepersec = (int) ( CurrentpPC->getfrequency());
+                    rate = (int) ((100L*CurrentpPC->pTIMER->nb_state)/((statepersec/1000L)*deltaTime));
+                    CurrentpPC->pTIMER->nb_state=0;
 #ifndef Q_OS_ANDROID
-                        CurrentpPC->rate = rate;
+                    CurrentpPC->rate = rate;
 #else
-                        CurrentpPC->rate = nbframe;
+                    CurrentpPC->rate = nbframe;
 #endif
 
 
-                        if (CurrentpPC->isActiveWindow())
-                            mainwindow->setWindowTitle(QString("Pockemul :%1").arg(rate)+"%");
-                        nbframe = 0;
-                        str.setNum((int)rate);
-                        str = ": "+str+tr("% original speed");
-                    }
+                    if (CurrentpPC->isActiveWindow())
+                        mainwindow->setWindowTitle(QString("Pockemul :%1").arg(rate)+"%");
+                    nbframe = 0;
+                    str.setNum((int)rate);
+                    str = ": "+str+tr("% original speed");
+                }
 #ifndef Q_OS_ANDROID
-                    CurrentpPC->setToolTip(CurrentpPC->getName()+str);
+                CurrentpPC->setToolTip(CurrentpPC->getName()+str);
 #endif
 
-                }
+            }
 
-//                bool disp_on = true;
+        }
+        //                bool disp_on = true;
 #if 1
-                if (CurrentpPC->pLCDC)
+        if (CurrentpPC->pLCDC)
+        {
+            if (dynamic_cast<CpcXXXX *>(CurrentpPC) )
+            {
+                //                        CpcXXXX *tmpPC = (CpcXXXX*)CurrentpPC;
+                if (CurrentpPC->pLCDC->On)
                 {
-                    if (dynamic_cast<CpcXXXX *>(CurrentpPC) )
-                    {
-//                        CpcXXXX *tmpPC = (CpcXXXX*)CurrentpPC;
-                        if (CurrentpPC->pLCDC->On)
-                        {
-                            nbframe++;
-                            CurrentpPC->pLCDC->disp();
-                            if (CurrentpPC->pLCDC->Refresh) {
-                                CurrentpPC->Refresh_Display = true;
-                            }
-                        }
+                    nbframe++;
+                    CurrentpPC->pLCDC->disp();
+                    if (CurrentpPC->pLCDC->Refresh) {
+                        CurrentpPC->Refresh_Display = true;
                     }
-                }
-#endif
-                if ( CurrentpPC->Refresh_Display) {
-//                    qWarning()<<"main1:"<<mainwindow->rawclk;
-                    CurrentpPC->UpdateFinalImage();
-//                    CurrentpPC->update();
-                    emit CurrentpPC->updatedPObject(CurrentpPC);
-//                    qWarning()<<"main2:"<<mainwindow->rawclk;
-                    CurrentpPC->Refresh_Display= false;
-//                    CurrentpPC->pLCDC->Refresh = false;
                 }
             }
         }
+#endif
+        if ( CurrentpPC->Refresh_Display) {
+            //                    qWarning()<<"main1:"<<mainwindow->rawclk;
+            CurrentpPC->UpdateFinalImage();
+            //                    CurrentpPC->update();
+            emit CurrentpPC->updatedPObject(CurrentpPC);
+            //                    qWarning()<<"main2:"<<mainwindow->rawclk;
+            CurrentpPC->Refresh_Display= false;
+            //                    CurrentpPC->pLCDC->Refresh = false;
+        }
+    }
 
     if (OneSecTimer >= 1000) OneSecTimer=0;
 }

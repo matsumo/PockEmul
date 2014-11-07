@@ -437,8 +437,6 @@ void Cce1600p::Print(void)
 {
     QPainter painter;
 
-    pPC->Refresh_Display = true;
-
     ce150buf = checkPaper(ce150buf,Pen_Y);
 
     if (Pen_Status==PEN_DOWN)
@@ -454,9 +452,9 @@ void Cce1600p::Print(void)
         painter.drawPoint( Pen_X, Pen_Y );
         painter.end();
     }
-
-    pPC->Refresh_Display = true;
     paperWidget->setOffset(QPoint(0,Pen_Y));
+
+    Refresh_Display = true;
 }
 
 

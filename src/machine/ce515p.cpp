@@ -345,7 +345,7 @@ void Cce515p::Print(CMove point)
             old_penDown = point.penDown;
         }
         paperWidget->setOffset(QPoint(0,point.Y));
-        pPC->Refresh_Display = true;
+        Refresh_Display = true;
     }
 
 
