@@ -2,7 +2,7 @@
 #include "sc62015.h"
 #include "lcc/parser/parser.h"
 
-UINT32 Cdebug_sc62015::DisAsm_1(UINT32 adr)
+quint32 Cdebug_sc62015::DisAsm_1(quint32 adr)
 {
     typedef	struct{
         char	len;
@@ -272,69 +272,69 @@ UINT32 Cdebug_sc62015::DisAsm_1(UINT32 adr)
 
     DasmAdr=adr;
 
-    l=abs(d[pCPU->pPC->get_mem(adr,SIZE_8)].len);
-    switch(d[pCPU->pPC->get_mem(adr,SIZE_8)].len){
-    case  1:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim); break;
-    case  2:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8)); break;
-    case  3:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8)); break;
-    case  4:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+3,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8)); break;
-    case  5:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+3,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+4,SIZE_8)); break;
-    case -3:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+1,SIZE_8)); break;
-    case -4:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+3,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+1,SIZE_8)); break;
-    case -5:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+4,SIZE_8),pCPU->pPC->get_mem(adr+3,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8)); break;
-    case 10:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7]); l=2;break;
-    case 11:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,reg[(pCPU->pPC->get_mem(adr+1,SIZE_8)>>4)&7],reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7]); l=2;break;
-    case 12:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+3,SIZE_8)); l=4;break;
-    case 13:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+3,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8)); l=4;break;
+    l=abs(d[pCPU->get_mem(adr,SIZE_8)].len);
+    switch(d[pCPU->get_mem(adr,SIZE_8)].len){
+    case  1:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim); break;
+    case  2:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8)); break;
+    case  3:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+2,SIZE_8)); break;
+    case  4:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+3,SIZE_8),pCPU->get_mem(adr+2,SIZE_8)); break;
+    case  5:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+3,SIZE_8),pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+4,SIZE_8)); break;
+    case -3:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+1,SIZE_8)); break;
+    case -4:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+3,SIZE_8),pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+1,SIZE_8)); break;
+    case -5:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+4,SIZE_8),pCPU->get_mem(adr+3,SIZE_8),pCPU->get_mem(adr+2,SIZE_8)); break;
+    case 10:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,reg[pCPU->get_mem(adr+1,SIZE_8)&7]); l=2;break;
+    case 11:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,reg[(pCPU->get_mem(adr+1,SIZE_8)>>4)&7],reg[pCPU->get_mem(adr+1,SIZE_8)&7]); l=2;break;
+    case 12:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+3,SIZE_8)); l=4;break;
+    case 13:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+3,SIZE_8),pCPU->get_mem(adr+2,SIZE_8)); l=4;break;
     case 14:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){
-            sprintf(b,"%s%s%s",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");l=2;
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){
+            sprintf(b,"%s%s%s",(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");l=2;
         }else{
-            sprintf(b,"%s%s%02X",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+2,SIZE_8));l=3;
+            sprintf(b,"%s%s%02X",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+2,SIZE_8));l=3;
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,b); break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,b); break;
     case 15:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=3;
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=3;
         }else{
-            sprintf(b,"%s%02X",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+3,SIZE_8));l=4;
+            sprintf(b,"%s%02X",(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+3,SIZE_8));l=4;
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),b);break;
-    case 16:sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7]); l=3;break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),b);break;
+    case 16:sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),reg[pCPU->get_mem(adr+1,SIZE_8)&7]); l=3;break;
     case 17:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){
-            sprintf(b,"%s%s%s",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");
-            l=3;t=pCPU->pPC->get_mem(adr+2,SIZE_8);
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){
+            sprintf(b,"%s%s%s",(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");
+            l=3;t=pCPU->get_mem(adr+2,SIZE_8);
         }else{
-            sprintf(b,"%s%s%02X",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+3,SIZE_8));
-            l=4;t=pCPU->pPC->get_mem(adr+2,SIZE_8);
+            sprintf(b,"%s%s%02X",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+3,SIZE_8));
+            l=4;t=pCPU->get_mem(adr+2,SIZE_8);
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,t,b); break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,t,b); break;
     case 18:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){
-            sprintf(b,"%s%s%s",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");
-            l=3;t=pCPU->pPC->get_mem(adr+2,SIZE_8);
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){
+            sprintf(b,"%s%s%s",(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x30?"":"--",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x30)!=0x20?"":"++");
+            l=3;t=pCPU->get_mem(adr+2,SIZE_8);
         }else{
-            sprintf(b,"%s%s%02X",reg[pCPU->pPC->get_mem(adr+1,SIZE_8)&7],(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+3,SIZE_8));
-            l=4;t=pCPU->pPC->get_mem(adr+2,SIZE_8);
+            sprintf(b,"%s%s%02X",reg[pCPU->get_mem(adr+1,SIZE_8)&7],(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+3,SIZE_8));
+            l=4;t=pCPU->get_mem(adr+2,SIZE_8);
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,b,t); break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,b,t); break;
     case 19:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=4;
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=4;
         }else{
-            sprintf(b,"%s%02X",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+4,SIZE_8));l=5;
+            sprintf(b,"%s%02X",(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+4,SIZE_8));l=5;
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+3,SIZE_8),b);break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+3,SIZE_8),b);break;
     case 20:
-        if((pCPU->pPC->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=4;
+        if((pCPU->get_mem(adr+1,SIZE_8)&0x80)==0){ b[0]=0;l=4;
         }else{
-            sprintf(b,"%s%02X",(pCPU->pPC->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->pPC->get_mem(adr+4,SIZE_8));l=5;
+            sprintf(b,"%s%02X",(pCPU->get_mem(adr+1,SIZE_8)&0x40)==0?"+":"-",pCPU->get_mem(adr+4,SIZE_8));l=5;
         }
-        sprintf(s,d[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+2,SIZE_8),b,pCPU->pPC->get_mem(adr+3,SIZE_8));break;
+        sprintf(s,d[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+2,SIZE_8),b,pCPU->get_mem(adr+3,SIZE_8));break;
     }
     sprintf(Buffer,"%05X:",adr);
-    for(i=0;i<l;i++) sprintf(Buffer,"%s%02X",Buffer,pCPU->pPC->get_mem(adr+i,SIZE_8));
+    for(i=0;i<l;i++) sprintf(Buffer,"%s%02X",Buffer,pCPU->get_mem(adr+i,SIZE_8));
     sprintf(Buffer,"%s%*s%s ",Buffer,16-(l<<1)," ",s);
-    if((pCPU->pPC->get_mem(adr,SIZE_8)>0x20 && pCPU->pPC->get_mem(adr,SIZE_8)<0x28)||(pCPU->pPC->get_mem(adr,SIZE_8)>0x2f && pCPU->pPC->get_mem(adr,SIZE_8)<0x38)){
+    if((pCPU->get_mem(adr,SIZE_8)>0x20 && pCPU->get_mem(adr,SIZE_8)<0x28)||(pCPU->get_mem(adr,SIZE_8)>0x2f && pCPU->get_mem(adr,SIZE_8)<0x38)){
         adr=DisAsm_1((adr+l)&MASK_20); l=0;
     }
 

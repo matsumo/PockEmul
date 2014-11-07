@@ -24,7 +24,7 @@ TransMap KeyMapce140p[]={
  int KeyMapce140pLenght = 3;
 */
 
-Ccl1000::Ccl1000(CPObject *parent):Cce515p(this) {
+Ccl1000::Ccl1000(CPObject *parent):Cce515p(parent) {
     setfrequency( 0);
     ioFreq = 0;
     setcfgfname(QString("cl1000"));

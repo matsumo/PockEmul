@@ -1,4 +1,6 @@
 
+// TODO: File not used anymore
+
 BYTE scandef_pc1500[] = {
 //+0		+1			+2			+3			+4			+5			+6			+7
 ')',		':',		';',		',',		K_SML,		K_CTRL,		K_SHT,		NUL,

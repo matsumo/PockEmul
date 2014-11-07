@@ -7,24 +7,24 @@ typedef quint32 UINT32;
 typedef struct
 {
     const char *str;
-    UINT8		arg1;
-    UINT8		arg2;
+    quint8		arg1;
+    quint8		arg2;
     bool		optjr;
 } hd61700_dasm;
 
 class Cdebug_hd61700:public Cdebug{
     Q_OBJECT
 public:
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
+    quint32 DisAsm_1(quint32 adr);			//disasm 1 line to Buffer
 
         Cdebug_hd61700(CCPU *parent);
         virtual ~Cdebug_hd61700(){}
 
-        UINT8 getMem(int);
-        UINT32 get_dasmflags(UINT8 op);
-        int dasm_arg(char *buffer, UINT8 op, UINT16 pc, int arg, const UINT8 *oprom, int &pos);
-        int dasm_im8(char *buffer, UINT16 pc, int arg, int arg1, const UINT8 *oprom, int &pos);
-        int dasm_im8(char *buffer, UINT16 pc, int arg, const UINT8 *oprom, int &pos, int type);
+        quint8 getMem(int);
+        UINT32 get_dasmflags(quint8 op);
+        int dasm_arg(char *buffer, quint8 op, quint16 pc, int arg, const quint8 *oprom, int &pos);
+        int dasm_im8(char *buffer, quint16 pc, int arg, int arg1, const quint8 *oprom, int &pos);
+        int dasm_im8(char *buffer, quint16 pc, int arg, const quint8 *oprom, int &pos, int type);
 
         static const hd61700_dasm hd61700_ops[256];
         static const char *const reg_5b[4];

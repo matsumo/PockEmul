@@ -16,7 +16,7 @@
 
 #define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 
-Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(this)
+Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
 {								//[constructor]
     Q_UNUSED(parent)
 

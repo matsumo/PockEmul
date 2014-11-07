@@ -10,6 +10,7 @@
 #include "common.h"
 #include "upd7907d.h"
 #include "upd7907.h"
+#include "pcxxxx.h"
 
 #undef IN
 #undef OUT
@@ -6155,7 +6156,7 @@ quint16  Cdebug_upd7810::Dasm_upd7810( char *buffer,
 //    return Dasm( buffer, pc, dasmXX_78c05, oprom, opram, 0 );
 //}
 
-UINT32 Cdebug_upd7810::DisAsm_1(UINT32 oldpc)
+quint32 Cdebug_upd7810::DisAsm_1(quint32 oldpc)
 {
 
 

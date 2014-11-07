@@ -149,7 +149,7 @@ quint8 hp82143a_chargen [128][5]= {
 };
 
 
-Chp82143A::Chp82143A(CPObject *parent):Cprinter(this) {
+Chp82143A::Chp82143A(CPObject *parent):Cprinter(parent) {
 
     setcfgfname(QString("hp82143a"));
     BackGroundFname	= P_RES(":/hp41/hp82143a.png");

@@ -28,7 +28,7 @@ TransMap KeyMappc2021[]={
 };
 int KeyMappc2021Lenght = 3;
 
-Cpc2021::Cpc2021(CPObject *parent):Cprinter(this)
+Cpc2021::Cpc2021(CPObject *parent):Cprinter(parent)
 {								//[constructor]
     setfrequency( 0);
     pc2021buf	= 0;

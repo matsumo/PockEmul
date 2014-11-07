@@ -74,7 +74,7 @@ static BYTE AD[512] =
 /** return the number of bytes disassembled.                 **/
 /**************************************************************/
 
-UINT32 Cdebug_m6502::DisAsm_1(UINT32 pc) {
+quint32 Cdebug_m6502::DisAsm_1(quint32 pc) {
     unsigned short old_pc;
     int i, j;
     char data[1024];
@@ -100,7 +100,7 @@ Cdebug_m6502::Cdebug_m6502(CCPU *parent)	: Cdebug(parent)
 {
 }
 
-int Cdebug_m6502::DasmOpe(char *S,BYTE *A,unsigned long PC)
+int Cdebug_m6502::DasmOpe(char *S, quint8 *A, unsigned long PC)
 {
     BYTE *B,J;
     int OP;

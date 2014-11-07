@@ -30,7 +30,7 @@
 //#define MACRO_ADD_LOG	AddLog(LOG_PRINTER,tr("X=%1 Y=%2 Rot=%3 Color=%4,   IF=%5").arg(Pen_X,Pen_Y,Rot,Pen_Color,pLH5810->lh5810.r_if))
 #define MACRO_ADD_LOG	if (pTIMER->pPC->fp_log) fprintf(pTIMER->pPC->fp_log,"X=%d Y=%d Z=%d Rot=%d Color=%d\n",Pen_X,Pen_Y,Pen_Z,Rot,Pen_Color)
 
-Cce1600p::Cce1600p(CPObject *parent) : Cce150(this)
+Cce1600p::Cce1600p(CPObject *parent) : Cce150(parent)
 {
     //[constructor]
     BackGroundFname	= P_RES(":/ext/ce-1600p.png");

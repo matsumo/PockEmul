@@ -30,7 +30,7 @@ CCPU::CCPU(CPObject *parent)
 
 CCPU::~CCPU() {
 //    delete regwidget;
-    delete pDEBUG;
+//    delete pDEBUG;
 }
 
  

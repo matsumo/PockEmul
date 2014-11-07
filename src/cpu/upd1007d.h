@@ -1,6 +1,6 @@
 #ifndef UPD1007D_H
 #define UPD1007D_H
-
+#include "common.h"
 #include "debug.h"
 
 enum t_kind {

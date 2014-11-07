@@ -23,6 +23,7 @@ MA 02111, USA.
 
 #include "hpnutd.h"
 #include "hpnut.h"
+#include "pcxxxx.h"
 
 int Cdebug_hpnut::nut_disassemble_short_branch (int addr, int op1,
                      char *buf, int len)
@@ -287,7 +288,7 @@ int Cdebug_hpnut::nut_disassemble_inst (int addr, int op1, int op2,
   return (0);  // can't happen, but avoid compiler warning
 }
 
-UINT32 Cdebug_hpnut::DisAsm_1(UINT32 adr)
+quint32 Cdebug_hpnut::DisAsm_1(quint32 adr)
 {
     DasmAdr = adr;
 

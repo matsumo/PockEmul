@@ -15,7 +15,7 @@
 #define UP		1
 
 
-Cfp100::Cfp100(CPObject *parent):Cce515p(this) {
+Cfp100::Cfp100(CPObject *parent):Cce515p(parent) {
     Q_UNUSED(parent)
 
     setfrequency( 4000);

@@ -452,7 +452,7 @@ quint16  Cdebug_tms7000::Dasm_tms7000( char *buffer,
 }
 
 
-UINT32 Cdebug_tms7000::DisAsm_1(UINT32 oldpc)
+quint32 Cdebug_tms7000::DisAsm_1(quint32 oldpc)
 {
 
 

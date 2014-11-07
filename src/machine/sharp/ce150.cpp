@@ -58,7 +58,7 @@
 
 #define MACRO_ADD_LOG	AddLog(LOG_PRINTER,tr("X=%1 Y=%2 Rot=%3 Color=%4,   IF=%5").arg(Pen_X,Pen_Y,Rot,Pen_Color,pLH5810->lh5810.r_if))
 
-Cce150::Cce150(CPObject *parent):Cprinter(this)
+Cce150::Cce150(CPObject *parent):Cprinter(parent)
 {
     Q_UNUSED(parent)
 

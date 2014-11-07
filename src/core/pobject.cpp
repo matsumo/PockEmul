@@ -491,15 +491,21 @@ void CPObject::fillSoundBuffer(BYTE val)
     {
         //AddLog(LOG_TEMP,tr("delta:%1   wait:%2").arg(delta_state).arg(wait));
 //        mainwindow->audioMutex.lock();
-        while ((pTIMER->state - fillSoundBuffer_old_state) >= wait)
-        {
-            audioBuff.append(val);
-
-            fillSoundBuffer_old_state += wait;
-            //delta_state -= wait;
-        }
 
         int ps = m_audioOutput->periodSize();
+        if (audioBuff.size() <= (2*ps)) {
+            while ((pTIMER->state - fillSoundBuffer_old_state) >= wait)
+            {
+                audioBuff.append(val);
+
+                fillSoundBuffer_old_state += wait;
+                //delta_state -= wait;
+            }
+        }
+        else {
+            fillSoundBuffer_old_state = pTIMER->state;
+        }
+
         //AddLog(LOG_TEMP,tr("buff:%1   ps:%2").arg(audioBuff.size()).arg(ps));
 
         if (audioBuff.size() >= (ps)) {

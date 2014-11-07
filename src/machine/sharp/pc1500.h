@@ -95,7 +95,7 @@ class Cpc1500:public Cpc15XX{						//PC1500 emulator main class
 public:
     const char*	GetClassName(){ return("Cpc1500");}
 
-	Cpc1500(CPObject *parent = 0)	: Cpc15XX(this)
+    Cpc1500(CPObject *parent = 0)	: Cpc15XX(parent)
 	{								//[constructor]
         Q_UNUSED(parent)
 

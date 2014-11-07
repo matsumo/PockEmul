@@ -269,7 +269,7 @@ DisAsmTbl	AsmTbl_sc61860[]={
 };
 
 
-UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
+quint32 Cdebug_sc61860::DisAsm_1(quint32 adr)
 {
 
     //const char	*reg[]={"A","IL","BA","I","X","Y","U","S"};
@@ -284,28 +284,28 @@ UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
     if(adr==20076) {
         adr=20076;
     }
-    int a = pCPU->pPC->get_mem(adr,SIZE_8);
+    int a = pCPU->get_mem(adr,SIZE_8);
     l=abs(AsmTbl[a].len);
-    switch(AsmTbl[pCPU->pPC->Get_PC(adr)].len)
+    switch(AsmTbl[pCPU->get_mem(adr,SIZE_8)].len)
     {
-    case  1:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim);
+    case  1:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim);
             break;
-    case  2:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8));
+    case  2:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8));
             break;
-    case  3:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8));
+    case  3:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+2,SIZE_8));
             break;
-    case  4:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+3,SIZE_8));
+    case  4:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+3,SIZE_8));
             break;
 
-    case -1:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,(pCPU->pPC->get_mem(adr,SIZE_8)&0x3F));
+    case -1:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,(pCPU->get_mem(adr,SIZE_8)&0x3F));
             break;
-    case -2:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,(pCPU->pPC->get_mem(adr,SIZE_8)&0x1F),pCPU->pPC->get_mem(adr+1,SIZE_8));
+    case -2:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,(pCPU->get_mem(adr,SIZE_8)&0x1F),pCPU->get_mem(adr+1,SIZE_8));
             break;
-    case -4:sprintf(s,AsmTbl[pCPU->pPC->get_mem(adr,SIZE_8)].nim,pCPU->pPC->get_mem(adr+1,SIZE_8),pCPU->pPC->get_mem(adr+2,SIZE_8),pCPU->pPC->get_mem(adr+3,SIZE_8));
+    case -4:sprintf(s,AsmTbl[pCPU->get_mem(adr,SIZE_8)].nim,pCPU->get_mem(adr+1,SIZE_8),pCPU->get_mem(adr+2,SIZE_8),pCPU->get_mem(adr+3,SIZE_8));
 
             sprintf(Buffer,"%05X:",(uint)adr);
             for(i=0;i<l;i++)
-                sprintf(Buffer,"%s%02X",Buffer,(uint)pCPU->pPC->get_mem(adr+i,SIZE_8));
+                sprintf(Buffer,"%s%02X",Buffer,(uint)pCPU->get_mem(adr+i,SIZE_8));
             sprintf(Buffer,"%s%*s%s\n",Buffer,16-(l<<1)," ",s);
 
             {
@@ -313,9 +313,9 @@ UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
 
             pc = adr;
 
-            pc++; nb = pCPU->pPC->get_mem(pc,SIZE_8);
-            pc++; rh = pCPU->pPC->get_mem(pc,SIZE_8);
-            pc++; rl = pCPU->pPC->get_mem(pc,SIZE_8);
+            pc++; nb = pCPU->get_mem(pc,SIZE_8);
+            pc++; rh = pCPU->get_mem(pc,SIZE_8);
+            pc++; rl = pCPU->get_mem(pc,SIZE_8);
             pc++; // CASE 2
             sprintf(s,"CASE 2 ");
 
@@ -324,9 +324,9 @@ UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
             {
                 sprintf(s,"%s,%02X:%02X%02X",
                     s,
-                    (uint)pCPU->pPC->get_mem(pc,SIZE_8),
-                    (uint)pCPU->pPC->get_mem(pc+1,SIZE_8),
-                    (uint)pCPU->pPC->get_mem(pc+2,SIZE_8));
+                    (uint)pCPU->get_mem(pc,SIZE_8),
+                    (uint)pCPU->get_mem(pc+1,SIZE_8),
+                    (uint)pCPU->get_mem(pc+2,SIZE_8));
                 pc+=3;
             }
             adr +=4;
@@ -341,7 +341,7 @@ UINT32 Cdebug_sc61860::DisAsm_1(UINT32 adr)
     sprintf(Buffer,"%s%05X:",Buffer,(uint)adr);
     if (l<5)
         for(i=0;i<l;i++)
-            sprintf(Buffer,"%s%02X",Buffer,(uint)pCPU->pPC->get_mem(adr+i,SIZE_8));
+            sprintf(Buffer,"%s%02X",Buffer,(uint)pCPU->get_mem(adr+i,SIZE_8));
     int decal;
     if (l<5) decal = l;
     else	decal = 0;

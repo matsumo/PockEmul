@@ -2,6 +2,7 @@
 
 #include "ti57cpu_dasm.h"
 #include "ti57cpu.h"
+#include "pcxxxx.h"
 
 
 QString Cdebug_ti57cpu::IntToHex(int val,int nb) {

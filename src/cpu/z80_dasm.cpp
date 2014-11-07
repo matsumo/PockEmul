@@ -2515,7 +2515,7 @@ const int offOp[] = {
     2	/* fd cb xx yy */
 };
 
-/* ƒj[ƒ‚ƒjƒbƒN•¶š—ñ */
+/* ï¿½jï¿½[ï¿½ï¿½ï¿½jï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 const static char *txtNim[] = {
     "adc"   , "add"   , "and"   , "bit 0," , "bit 1," , "bit 2," , "bit 3," , "bit 4," ,
     "bit 5," , "bit 6," , "bit 7," , "call"  , "ccf"   , "cp"    , "cpd"   , "cpdr"  ,
@@ -2532,7 +2532,7 @@ const static char *txtNim[] = {
     "sub"   , "xor"   , "?"
 };
 
-/* ¶ƒIƒyƒ‰ƒ“ƒh•¶š—ñ */
+/* ï¿½ï¿½ï¿½Iï¿½yï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 const static char *txtLop[] = {
     ""       , "B"      , "C"    , "D"      , "E"   , "H"      , "L"   , "A"   ,
     "F"      , "IXh"    , "IXl"  , "IYh"    , "IYl" , "BC"     , "DE"  , "HL"  ,
@@ -2543,7 +2543,7 @@ const static char *txtLop[] = {
     "M"
 };
 
-/* ‰EƒIƒyƒ‰ƒ“ƒh•¶š—ñ */
+/* ï¿½Eï¿½Iï¿½yï¿½ï¿½ï¿½ï¿½ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
 const static char *txtRop[] = {
     ""         , ", B"      , ", C"    , ", D"      , ", E"   , ", H"      , ", L"   , ", A"   ,
     ", F"      , ", IXh"    , ", IXl"  , ", IYh"    , ", IYl" , ", BC"     , ", DE"  , ", HL"  ,
@@ -2554,12 +2554,12 @@ const static char *txtRop[] = {
 };
 
 /*
-    1–½—ß‹tƒAƒZƒ“ƒuƒ‹‚·‚é
+    1ï¿½ï¿½ï¿½ß‹tï¿½Aï¿½Zï¿½ï¿½ï¿½uï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 */
 
 
 
-UINT32 Cdebug_z80::DisAsm_1(UINT32 oldpc)
+quint32 Cdebug_z80::DisAsm_1(quint32 oldpc)
 //void *z80disasm(char *str, uint8 *mem)
 {
 
@@ -2665,7 +2665,7 @@ UINT32 Cdebug_z80::DisAsm_1(UINT32 oldpc)
 }
 
 /*
-    CPU‚Ìó‘Ô‚ğ•¶š—ñ‚Æ‚µ‚Äo—Í‚·‚é
+    CPUï¿½Ìï¿½ï¿½Ô‚ğ•¶ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½Äoï¿½Í‚ï¿½ï¿½ï¿½
 */
 char *z80regs(char *str, const Z80stat *r)
 {

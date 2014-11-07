@@ -21,7 +21,7 @@ TransMap KeyMapce140p[]={
 int KeyMapce140pLenght = 3;
 
 
-Cce140p::Cce140p(CPObject *parent):Cce515p(this) {
+Cce140p::Cce140p(CPObject *parent):Cce515p(parent) {
     //setfrequency( 0);
     setcfgfname(QString("ce140p"));
     BackGroundFname	= P_RES(":/ext/ce-140p.png");

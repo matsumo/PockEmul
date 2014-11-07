@@ -17,7 +17,7 @@
 #define UP		1
 
 
-Cfp40::Cfp40(CPObject *parent):CprinterCtronics(this) {
+Cfp40::Cfp40(CPObject *parent):CprinterCtronics(parent) {
     Q_UNUSED(parent)
 
     setcfgfname(QString("fp40"));

@@ -5,7 +5,7 @@
 
 
 
-Cce120p::Cce120p(CPObject *parent):Cce126(this)
+Cce120p::Cce120p(CPObject *parent):Cce126(parent)
 {								//[constructor]
     BackGroundFname	= P_RES(":/ext/ce-120p.png");
     setcfgfname("ce120p");

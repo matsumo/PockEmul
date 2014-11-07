@@ -1,8 +1,4 @@
-/*** POCKEMUL [PC1600.CPP] ********************************/
-/* PC1600 emulator main class                             */
-/**********************************************************/
-//#include	<string.h>
-//#include	<stdlib.h>
+
 
 #include <qglobal.h>
 #if QT_VERSION >= 0x050000
@@ -15,18 +11,17 @@
 #endif
 
 #include	"common.h"
-#include "fluidlauncher.h"
+#include    "fluidlauncher.h"
 #include	"pc1600.h"
 #include    "z80.h"
 #include    "Lcdc_pc1600.h"
 #include	"Inter.h"
-#include	"Debug.h"
 #include	"Keyb.h"
 #include    "Keyb1600.h"
 #include	"ce152.h"
 #include	"dialoganalog.h"
 #include    "buspc1500.h"
-#include "watchpoint.h"
+#include    "watchpoint.h"
 
 
 Cpc1600::Cpc1600(CPObject *parent)	: CpcXXXX(parent)
@@ -1287,7 +1282,6 @@ void Cpc1600::setPUPVPT(CbusPc1500 *bus, UINT32 adr) {
 
 bool Cpc1600::Set_Connector(Cbus *_bus)
 {
-//    pCONNECTOR->Set_pin(1	,0);
 
     // MANAGE SERIAL CONNECTOR
     // TO DO
@@ -1301,8 +1295,6 @@ bool Cpc1600::Set_Connector(Cbus *_bus)
 
 bool Cpc1600::Get_Connector(Cbus *_bus)
 {
-//    ce1600_connected = pCONNECTOR->Get_pin(1);
-
     bus->fromUInt64(pCONNECTOR->Get_values());
     bus->setEnable(false);
 

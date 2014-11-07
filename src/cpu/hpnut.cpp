@@ -23,15 +23,13 @@
 
 #include <QFile>
 #include <QDebug>
+#include <QXmlStreamReader>
 
 #include "hpnut.h"
 #include "hpnutd.h"
 #include "ui/cregsz80widget.h"
+#include "pcxxxx.h"
 
-//#include "digit_ops.h"
-//#include "utils.h"
-//#include "voyager_lcd.h"
-//#include "proc_nut.h"
 
 #define BIT_SET(val,bit_num)    ((val) |= (1 << (bit_num)))
 #define BIT_CLEAR(val,bit_num)  ((val) &= ~(1 << (bit_num)))

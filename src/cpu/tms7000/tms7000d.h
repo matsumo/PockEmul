@@ -9,11 +9,11 @@ class Cdebug_tms7000:public Cdebug{
     Q_OBJECT
 public:
 
-    UINT32 DisAsm_1(UINT32 adr);			//disasm 1 line to Buffer
+    quint32 DisAsm_1(quint32 adr);			//disasm 1 line to Buffer
 
     Cdebug_tms7000(CCPU *parent);
 
-    quint16 Dasm_tms7000(char *buffer, quint16 pc, const UINT8 *oprom, const UINT8 *opram);
+    quint16 Dasm_tms7000(char *buffer, quint16 pc, const quint8 *oprom, const quint8 *opram);
 
 };
 

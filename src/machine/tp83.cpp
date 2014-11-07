@@ -15,7 +15,7 @@
 #define DOWN	0
 #define UP		1
 
-Ctp83::Ctp83(CPObject *parent):Cce515p(this) {
+Ctp83::Ctp83(CPObject *parent):Cce515p(parent) {
     setfrequency( 0);
     ioFreq = 0;
     setcfgfname(QString("tp83"));

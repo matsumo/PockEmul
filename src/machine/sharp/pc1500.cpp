@@ -16,9 +16,7 @@
 #include    "cextension.h"
 #include    "Lcdc_pc1500.h"
 #include	"Inter.h"
-#include	"Debug.h"
 #include	"Keyb.h"
-#include    "Keyb1500.h"
 #include	"dialoganalog.h"
 #include    "buspc1500.h"
 #include    "Connect.h"
@@ -48,9 +46,6 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
 
 	SlotList.clear();
 
-	KeyMap		= KeyMap1500;
-	KeyMapLenght= KeyMap1500Lenght;
-
     setDXmm(195);
     setDYmm(86);
     setDZmm(25);
@@ -66,7 +61,7 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new CLH5801(this); pCPU->logsw=false;
 	pLH5810		= new CLH5810_PC1500(this);
 	pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc1500.map",scandef_pc1500);
+    pKEYB		= new Ckeyb(this,"pc1500.map");
 	
     bus = new CbusPc1500();
 	
@@ -241,11 +236,8 @@ bool Cpc15XX::run(void)
     if (dialogdasm)
         dialogdasm->imem=false;
 
-
-//	UINT32 previous_pc;
 	UINT32 Current_PC;	
 
-//	previous_pc = pCPU->get_PC();
 
 // ---------------------------------------------------------	
     CpcXXXX::run();
@@ -609,6 +601,8 @@ void Cpc15XX::Regs_Info(UINT8 Type)
 
 bool Cpc15XX::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     // transfert busValue to Connector
 
     ((CbusPc1500*)bus)->setPU(((CLH5801 *)pCPU)->lh5801.pu);
@@ -620,6 +614,8 @@ bool Cpc15XX::Set_Connector(Cbus *_bus)
 }
 bool Cpc15XX::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     bus->fromUInt64(pCONNECTOR->Get_values());
     bus->setEnable(false);
 

@@ -22,7 +22,7 @@ private:
 class Ctrspc3Ext:public Cpc1251{						//PC1250 emulator main class
 public:
 
-    Ctrspc3Ext(CPObject *parent = 0)	: Cpc1251(this)
+    Ctrspc3Ext(CPObject *parent = 0)	: Cpc1251(parent)
     {								//[constructor]
         Q_UNUSED(parent)
 

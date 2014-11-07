@@ -6,9 +6,11 @@
 
 
 #include <QDebug>
+#include <QXmlStreamReader>
 
 #include "ti57cpu.h"
 #include "ti57cpu_dasm.h"
+#include "pcxxxx.h"
 #include "Lcdc.h"
 #include "ui/cregsz80widget.h"
 

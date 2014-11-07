@@ -630,7 +630,7 @@ Cdebug_lh5801::Cdebug_lh5801(CCPU *parent)	: Cdebug(parent)
 
 }
 
-UINT32 Cdebug_lh5801::DisAsm_1(UINT32 oldpc)
+quint32 Cdebug_lh5801::DisAsm_1(quint32 oldpc)
 {
 //    qWarning()<<"DisAsm:"<<QString("%1").arg(oldpc,4,16,QChar('0'));
     int pc;
@@ -643,7 +643,7 @@ UINT32 Cdebug_lh5801::DisAsm_1(UINT32 oldpc)
     oldpc &= 0xffff;
     DasmAdr = oldpc;
     pc = oldpc;
-    oper = pCPU->pPC->Get_8(pc++);
+    oper = pCPU->get_mem(pc++,8);
 //    qWarning()<<"Oper ="<<QString("%1").arg(oper,2,16,QChar('0'));
 
     entry = table+oper;
@@ -651,7 +651,7 @@ UINT32 Cdebug_lh5801::DisAsm_1(UINT32 oldpc)
     if (table[oper].ins==PREFD) {
 //        qWarning()<<"FD found";
 //        qWarning()<<"DisAsm:"<<QString("%1").arg(pc,4,16,QChar('0'));
-        oper=pCPU->pPC->Get_8(pc++);
+        oper=pCPU->get_mem(pc++,8);
         entry=table_fd+oper;
 //        qWarning()<<"Oper ="<<QString("%1").arg(oper,2,16,QChar('0'));
 
@@ -669,57 +669,57 @@ UINT32 Cdebug_lh5801::DisAsm_1(UINT32 oldpc)
             sprintf(LocBuffer,"%s %s", InsNames[entry->ins],RegNames[entry->reg]);break;
         case RegImm:
             sprintf(LocBuffer,"%s %s,%.2x", InsNames[entry->ins],
-                    RegNames[entry->reg], pCPU->pPC->Get_8(pc++));
+                    RegNames[entry->reg], pCPU->get_mem(pc++,8));
             break;
         case RegImm16:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s %s,%s", InsNames[entry->ins],RegNames[entry->reg],toSymbol(absolut) );
             break;
         case Vec:
-            sprintf(LocBuffer,"%s (ff%.2x)", InsNames[entry->ins],pCPU->pPC->Get_8(pc++));break;
+            sprintf(LocBuffer,"%s (ff%.2x)", InsNames[entry->ins],pCPU->get_mem(pc++,8));break;
         case Vej:
             sprintf(LocBuffer,"%s (ff%.2x)", InsNames[entry->ins], oper);break;
         case Imm:
-            sprintf(LocBuffer,"%s %.2x", InsNames[entry->ins],pCPU->pPC->Get_8(pc++));break;
+            sprintf(LocBuffer,"%s %.2x", InsNames[entry->ins],pCPU->get_mem(pc++,8));break;
         case Imm16:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s %s", InsNames[entry->ins],toSymbol(absolut) );
             break;
         case RelP:
-            temp=pCPU->pPC->Get_8(pc++);
+            temp=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s %s", InsNames[entry->ins],toSymbol(pc+temp) );break;
         case RelM:
-            temp=pCPU->pPC->Get_8(pc++);
+            temp=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s %s", InsNames[entry->ins],toSymbol(pc-temp) );break;
         case Abs:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s (%s)", InsNames[entry->ins],toSymbol(absolut) );break;
         case ME1Abs:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s #(%s)", InsNames[entry->ins],toSymbol(absolut) );break;
         case AbsImm:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s (%s),%.2x", InsNames[entry->ins],toSymbol(absolut),
-                    pCPU->pPC->Get_8(pc++));break;
+                    pCPU->get_mem(pc++,8));break;
         case ME1AbsImm:
-            absolut=pCPU->pPC->Get_8(pc++)<<8;
-            absolut|=pCPU->pPC->Get_8(pc++);
+            absolut=pCPU->get_mem(pc++,8)<<8;
+            absolut|=pCPU->get_mem(pc++,8);
             sprintf(LocBuffer,"%s #(%s),%.2x", InsNames[entry->ins],toSymbol(absolut),
-                    pCPU->pPC->Get_8(pc++));break;
+                    pCPU->get_mem(pc++,8));break;
         case ME0:
             sprintf(LocBuffer,"%s (%s)", InsNames[entry->ins],RegNames[entry->reg] );break;
         case ME0Imm:
-            sprintf(LocBuffer,"%s (%s),%.2x", InsNames[entry->ins],RegNames[entry->reg],pCPU->pPC->Get_8(pc++) );
+            sprintf(LocBuffer,"%s (%s),%.2x", InsNames[entry->ins],RegNames[entry->reg],pCPU->get_mem(pc++,8) );
             break;
         case ME1:
             sprintf(LocBuffer,"%s #(%s)", InsNames[entry->ins],RegNames[entry->reg] );break;
         case ME1Imm:
-            sprintf(LocBuffer,"%s #(%s),%.2x", InsNames[entry->ins],RegNames[entry->reg],pCPU->pPC->Get_8(pc++) );
+            sprintf(LocBuffer,"%s #(%s),%.2x", InsNames[entry->ins],RegNames[entry->reg],pCPU->get_mem(pc++,8) );
             break;
         }
     }
