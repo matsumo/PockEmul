@@ -176,7 +176,7 @@ Rectangle {
                     property bool isdrag: false;
 
                     id: dragArea
-                    hoverEnabled: false;
+                    hoverEnabled: true;
                     preventStealing:true
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     anchors.fill: parent
@@ -216,6 +216,7 @@ Rectangle {
                     }
                     onDoubleClicked: sendDblClick(idpocket,mouseX,mouseY);
                     onPositionChanged: {
+
 //                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
                         if (isdrag) {
                             sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
@@ -227,6 +228,12 @@ Rectangle {
                             drag.minimumX = photoFrame.x;
                             drag.maximumY = photoFrame.y;
                             drag.minimumY = photoFrame.y;
+                            if (main.keyAt(idpocket,mouse.x,mouse.y)) {
+                                cursorShape = Qt.PointingHandCursor;
+                            }
+                            else {
+                                cursorShape = Qt.ArrowCursor;
+                            }
                         }
 
                     }

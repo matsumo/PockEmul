@@ -775,7 +775,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
     {
 //        if (!fullscreenMode)
         {
-            setCursor(Qt::ClosedHandCursor);	// Change mouse pointer
+//            setCursor(Qt::ClosedHandCursor);	// Change mouse pointer
             startPosDrag = true;
             PosDrag = event->globalPos();
         }

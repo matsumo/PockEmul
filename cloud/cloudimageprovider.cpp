@@ -82,8 +82,17 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
        return *(pc->AnimatedImage);
     }
 
+    View _v = pc->currentView;
+
+    if (_id[1]=="LEFT")     _v = LEFTview;
+    if (_id[1]=="RIGHT")    _v = RIGHTview;
+    if (_id[1]=="TOP")      _v = TOPview;
+    if (_id[1]=="BOTTOM")   _v = BOTTOMview;
+    if (_id[1]=="BACK")     _v = BACKview;
+    if (_id[1]=="FRONT")    _v = FRONTview;
+
 //qWarning()<<"image prov:"<<mainwindow->rawclk;
-    return *(pc->getViewImage(pc->currentView));
+    return *(pc->getViewImage(_v));
 }
 
 // CACHE MODULE

@@ -18,6 +18,8 @@ public:
     QWidget * parent;
     Cloud cloud;
 
+
+    Q_INVOKABLE bool keyAt(QString Id, int x, int y);
 public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();

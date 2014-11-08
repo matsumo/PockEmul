@@ -25,6 +25,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 
     rootContext()->setContextProperty("cloud", &cloud);
+    rootContext()->setContextProperty("main", this);
     setSource(QUrl("qrc:/Test.qml"));
     setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
 //    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
@@ -153,6 +154,16 @@ void CrenderView::click(QString Id, int x, int y)
         return;
     }
 }
+
+bool CrenderView::keyAt(QString Id, int x, int y)
+{
+//    qWarning()<<"click:"<<Id<<x<<y;
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    QPoint pts(x , y);
+
+    return pc->pKEYB->KeyClick(pts);
+}
+
 void CrenderView::unclick(QString Id, int x, int y)
 {
 //    qWarning()<<"unclick:"<<Id<<x<<y;

@@ -354,7 +354,7 @@ bool Cce1600p::run(void)
     //---------------------------------------------------
     // Draw printer
     //---------------------------------------------------
-    if ((has_moved_Y || has_moved_X) && (Pen_Status==PEN_DOWN)) Print();
+    if (has_moved_Y || has_moved_X) Print();
 
     if (bus->isEnable() &&
         !bus->isME1() &&
