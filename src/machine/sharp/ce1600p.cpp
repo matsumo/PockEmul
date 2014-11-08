@@ -1,3 +1,5 @@
+//FIXME: The init seems to be wrong. Until TEST is executed, pen Up/Down is broken.
+
 #include <QPainter>
 #include <QResource>
 
@@ -185,7 +187,7 @@ bool Cce1600p::run(void)
         BYTE _data = bus->getData();
         switch (addr) {
         case 0x80:
-            qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+//            qWarning()<<QString("write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
 
             ccKeyInt = _data & 0x01;
             pfKeyInt = _data & 0x02;
@@ -235,13 +237,13 @@ bool Cce1600p::run(void)
 
     switch (Direction)
     {
-        case RI_MOVE:   Pen_X++;
-        case RI_MOVE_MID:	Pen_X++;
+    case RI_MOVE:       Pen_X++;
+    case RI_MOVE_MID:	Pen_X++;
                         has_moved_X=true;
                         MACRO_ADD_LOG;
                         break;
-        case LE_MOVE:   Pen_X--;
-        case LE_MOVE_MID:   Pen_X--;
+    case LE_MOVE:       Pen_X--;
+    case LE_MOVE_MID:   Pen_X--;
                         has_moved_X=true;
                         MACRO_ADD_LOG;
                         break;
@@ -281,6 +283,7 @@ bool Cce1600p::run(void)
 
     if (has_moved_Z)
     {
+//        qWarning()<<"Pen_Z:"<<Pen_Z;
         if (Pen_Z < 0) Pen_Z = 0;
         if (Pen_Z >50) Pen_Z = 50;
         if (Pen_Z == 6) // Pen up
@@ -303,6 +306,7 @@ bool Cce1600p::run(void)
 #endif
 
             Pen_Status = PEN_UP;
+//            qWarning()<<"PEN UP:"<<Pen_Color;
             AddLog(LOG_PRINTER,"PEN UP");
         }
         if (Pen_Z == 0) {   // Pen down
@@ -328,6 +332,7 @@ bool Cce1600p::run(void)
             }
 #endif
             Pen_Status = PEN_DOWN;
+//            qWarning()<<"PEN DOWN:"<<Pen_Color;
             AddLog(LOG_PRINTER,"PEN DOWN");
         }
 
@@ -349,7 +354,7 @@ bool Cce1600p::run(void)
     //---------------------------------------------------
     // Draw printer
     //---------------------------------------------------
-    if (has_moved_Y || (has_moved_X && (Pen_Status==PEN_DOWN))) Print();
+    if ((has_moved_Y || has_moved_X) && (Pen_Status==PEN_DOWN)) Print();
 
     if (bus->isEnable() &&
         !bus->isME1() &&
