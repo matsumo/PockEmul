@@ -3,6 +3,8 @@
 //TODO: Check all instructions
 //TODO: Speed management
 
+//FIXME: DMS & DEG missing
+//FIXME: 4^2^3 produce (4^3)^2 instead of 4^(3^2)
 
 #include <QDebug>
 #include <errno.h>
@@ -1037,7 +1039,7 @@ void CTinyBasic::printline(DEVICE output)
 /***************************************************************************/
 VAR_TYPE CTinyBasic::expr5(ExpTYP type)
 {
-    qWarning()<<"Exp4";
+    qWarning()<<"Exp5";
     // fix provided by J?rg Wullschleger wullschleger@gmail.com
     // fixes whitespace and unary operations
     ignore_blanks();
@@ -1249,7 +1251,7 @@ double CTinyBasic::convertToRad(double angle) {
     switch (angleMode) {
     case DEGREE: return (angle *M_PI/180.0);
     case RADIAN: return angle;
-    case GRAD:   return (angle *M_PI/100.0);
+    case GRAD:   return (angle *M_PI/200.0);
     default: return angle;
     }
 
@@ -1260,7 +1262,7 @@ double CTinyBasic::convertFromRad(double angle) {
     switch (angleMode) {
     case DEGREE: return (angle *180 /M_PI);
     case RADIAN: return angle;
-    case GRAD:   return (angle *100 /M_PI);
+    case GRAD:   return (angle *200 /M_PI);
     default: return angle;
     }
 
@@ -1271,7 +1273,7 @@ double CTinyBasic::convertFromRad(double angle) {
 VAR_TYPE CTinyBasic::expr4(ExpTYP type)
 {
     VAR_TYPE a,b;
-
+qWarning()<<"Exp4";
     a = expr5(type);
 
     ignore_blanks(); // fix for eg:  100 a = a + 1
@@ -1295,7 +1297,7 @@ VAR_TYPE CTinyBasic::expr4(ExpTYP type)
 VAR_TYPE CTinyBasic::expr3(ExpTYP type)
 {
     VAR_TYPE a,b;
-
+qWarning()<<"Exp3";
     a = expr4(type);
 
     ignore_blanks(); // fix for eg:  100 a = a + 1
@@ -1328,7 +1330,7 @@ VAR_TYPE CTinyBasic::expr3(ExpTYP type)
 VAR_TYPE CTinyBasic::expr2(ExpTYP type)
 {
     VAR_TYPE a,b;
-
+qWarning()<<"Exp2";
     if(*txtpos == '-' || *txtpos == '+')
         a = 0;
     else
@@ -1366,6 +1368,7 @@ VAR_TYPE CTinyBasic::expression(ExpTYP type)
     // Check if we have an error
     if(expression_error)	return a;
 
+    //FIXME: scantable seems not working for OPE
     scantable(relop_tab,OPE);
     ignore_blanks();
     if(table_index == RELOP_UNKNOWN)
