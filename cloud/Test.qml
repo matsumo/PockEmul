@@ -196,10 +196,10 @@ Rectangle {
                         photoFrame.focus = true;
                         if (mouse.button == Qt.RightButton) {
 //                            console.log("drag active:"+drag.active);
-//                            drag.maximumX = photoFrame.x;
-//                            drag.minimumX = photoFrame.x;
-//                            drag.maximumY = photoFrame.y;
-//                            drag.minimumY = photoFrame.y;
+                            drag.maximumX = photoFrame.x;
+                            drag.minimumX = photoFrame.x;
+                            drag.maximumY = photoFrame.y;
+                            drag.minimumY = photoFrame.y;
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                             isdrag=false;
                         }

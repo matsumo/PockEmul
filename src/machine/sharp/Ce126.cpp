@@ -596,7 +596,6 @@ Cce123::Cce123()
     setDXmm(196);
     setDYmm(155);
     setDZmm(33);
-    SnapPts = QPoint(215,307);
     setPaperPos(QRect(89,185-149,207,149));
 
     delete pKEYB; pKEYB=new Ckeyb(this,"ce123.map");
@@ -618,8 +617,6 @@ Cce129::Cce129()
     setDYmm(155);
     setDZmm(33);
 
-    SnapPts = QPoint(88,288);
-
     setPaperPos(QRect(89,185-149,207,149));
     delete pKEYB; pKEYB=new Ckeyb(this,"ce129.map");
 
@@ -635,7 +632,7 @@ C263591::C263591()
     setcfgfname("263591");
     setDX(854);
     setDY(349);
-    SnapPts = QPoint(373,0);
+
     setDXmm(236);
     setDYmm(96);
     setDZmm(33);

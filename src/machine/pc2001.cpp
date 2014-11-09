@@ -66,10 +66,6 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(16, 0x2000 ,	P_RES(":/pc2001/rom-2000-5FFF.bin"), ""	, CSlot::ROM , "ROM"));
     SlotList.append(CSlot(40 ,0x6000 ,	""	, ""	, CSlot::RAM , "RAM"));
 
-
-    KeyMap		= KeyMap1250;
-    KeyMapLenght= KeyMap1250Lenght;
-
     PowerSwitch	= 0;
 
     setDXmm(225);

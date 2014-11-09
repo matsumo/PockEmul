@@ -1391,7 +1391,7 @@ void MainWindowPockemul::mousePressEvent	( QMouseEvent *event){
 //        qWarning()<<"ignore event";
         return;
     }
-    setCursor(Qt::ClosedHandCursor);	// Change mouse pointer
+//    setCursor(Qt::ClosedHandCursor);	// Change mouse pointer
     startPosDrag = true;
     PosDrag = event->globalPos();
     event->accept();

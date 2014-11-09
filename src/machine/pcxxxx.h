@@ -102,7 +102,7 @@ enum PORTS{
 
 #define GET_PORT_BIT(Port,Bit) ((Get_Port(Port) & (1<<((Bit)-1))) ? 1:0)
 
-extern TransMap KeyMap1250[]; extern int KeyMap1250Lenght; 
+//extern TransMap KeyMap1250[]; extern int KeyMap1250Lenght;
 extern TransMap KeyMap1280[]; extern int KeyMap1280Lenght;
 extern TransMap KeyMap1350[]; extern int KeyMap1350Lenght;
 extern TransMap KeyMap1360[]; extern int KeyMap1360Lenght;

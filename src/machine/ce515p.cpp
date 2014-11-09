@@ -46,7 +46,6 @@ Cce515p::Cce515p(CPObject *parent):Cprinter(parent)
     //PaperWidgetRect = QRect(80,46,167,170);
     setDX(960);
     setDY(320);
-    SnapPts = QPoint(388,0);
     //pCONNECTOR	= new Cconnector(this,5,"Internal connector 5 pins",true);	publish(pCONNECTOR);
     pTIMER		= new Ctimer(this);
     KeyMap		= KeyMapce150;

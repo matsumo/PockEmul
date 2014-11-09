@@ -76,8 +76,6 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     memsize			= 0;
     InitMemValue	= 0x00;
 
-    SnapPts = QPoint(0,0);
-
     Front = true;
     fullscreenMode = false;
     fillSoundBuffer_old_state = 0;
@@ -1008,13 +1006,6 @@ bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut)
 bool CPObject::LoadSession_File(QXmlStreamReader *)
 {
     return true;
-}
-
-			
-qreal CPObject::RangeFrom(CPObject * target)
-{
-	qreal range = QLineF(pos() + SnapPts,target->pos() + target->SnapPts).length();
-    return range;
 }
 
 

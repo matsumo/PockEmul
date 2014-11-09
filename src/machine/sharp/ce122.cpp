@@ -17,7 +17,7 @@ Cce122::Cce122(CPObject *parent):Cce126(parent)
     setDY(330);//Pc_DY	= 95;
     setDXmm(282);
     setDYmm(95);
-    SnapPts = QPoint(372,107);
+
     setPaperPos(QRect(90,0,158,151));
 
     delete pKEYB; pKEYB=new Ckeyb(this,"ce122.map");

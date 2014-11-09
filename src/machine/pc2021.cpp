@@ -53,7 +53,6 @@ Cpc2021::Cpc2021(CPObject *parent):Cprinter(parent)
 
     setDX(386);
     setDY(464);
-    SnapPts = QPoint(594,145);
 
     setPaperPos(QRect(70,-3,275,149));
 

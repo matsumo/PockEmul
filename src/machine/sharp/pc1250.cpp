@@ -6,11 +6,11 @@
 #include "common.h"
 #include "pc1250.h"
 #include "Lcdc_pc1250.h"
+#include "sc61860.h"
  
 #include "Inter.h"
 #include "Keyb.h"
-#include "Keyb1250.h"
-#include "sc61860.h"
+//#include "Keyb1250.h"
 #include "Keyb.h"
 #include "Connect.h"
 #include "fluidlauncher.h"
@@ -33,13 +33,9 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 	memsize		= 0x10000;
 
 	SlotList.clear();
-    SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1250/cpu-1250.rom")	, "pc1250/cpu-1250.rom"	, CSlot::ROM , "CPU ROM"));
-//	SlotList.append(CSlot(8 , 0x2000 ,	""								, "pc1250/R1-1250.ram"	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1250/bas-1250.rom"	), "pc1250/bas-1250.rom"	, CSlot::ROM , "BASIC ROM"));
-	SlotList.append(CSlot(32, 0x8000 ,	""								, "pc1250/R2-1250.ram" 	, CSlot::RAM , "RAM"));
-
-	KeyMap		= KeyMap1250;
-	KeyMapLenght= KeyMap1250Lenght;
+    SlotList.append(CSlot(8	, 0x0000 ,	P_RES(":/pc1250/cpu-1250.rom")	, ""	, CSlot::ROM , "CPU ROM"));
+    SlotList.append(CSlot(16, 0x4000 ,	P_RES(":/pc1250/bas-1250.rom")  , ""	, CSlot::ROM , "BASIC ROM"));
+    SlotList.append(CSlot(32, 0x8000 ,	""								, "" 	, CSlot::RAM , "RAM"));
 
     PowerSwitch	= 0;
 
@@ -60,7 +56,7 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 
 	pCPU		= new CSC61860(this);
 	pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc1250.map",scandef_pc1250);
+    pKEYB		= new Ckeyb(this,"pc1250.map");
 
 }
 

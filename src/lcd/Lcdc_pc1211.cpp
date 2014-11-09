@@ -249,8 +249,6 @@ void Clcdc_pc1211::DrawChar(quint8 c, int x)
         for (int b=0; b<7;b++)
         {
             Refresh = true;
-//            painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//            painter.drawPoint( off, b);
             drawPixel(&painter,off, b,((data>>b)&0x01) ? Color_On : Color_Off);
         }
     }

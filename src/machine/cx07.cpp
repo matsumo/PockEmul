@@ -99,9 +99,6 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(4 , 0xA000 ,	""                  , ""	, CSlot::ROM , "ROM TV"));
     SlotList.append(CSlot(20, 0xB000 ,	P_RES(":/x07/rom_xo7.bin") , "x07/rom_xo7.bin" 	, CSlot::ROM , "BASIC ROM"));
 
-    KeyMap		= KeyMap1250;
-    KeyMapLenght= KeyMap1250Lenght;
-
     PowerSwitch	= 0;
 
     setDXmm(200);

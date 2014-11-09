@@ -1648,7 +1648,7 @@ qsorry:
     goto warmstart;
 
 run_next_statement:
-    while(*txtpos == ':') txtpos++;
+    while ( (*txtpos == ':') || (*txtpos == ',') ) txtpos++;
     ignore_blanks();
     if(*txtpos == NL) {
         nextStep = EXECNEXTLINE;
@@ -1807,7 +1807,7 @@ execline:
         while (*txtpos!='"') txtpos++;
         txtpos++;
     }
-    while(*txtpos == ':') txtpos++;
+    while( (*txtpos == ':')  ) txtpos++;
 
     nextStep = INTERPERATEATTXTPOS;
     return;
@@ -2436,7 +2436,11 @@ void CTinyBasic::go_USING() {
     ignore_blanks();        // Shouldn't be necessary because all lines are tokenized
 
 
-    if ( (*txtpos != '"') && (*txtpos != NL) && (*txtpos != ';') && (*txtpos != ',') && (*txtpos != ':')) {
+    if ( (*txtpos != '"') &&
+         (*txtpos != NL) &&
+         (*txtpos != ';') &&
+         (*txtpos != ',') &&
+         (*txtpos != ':')) {
         nextStep = QWHAT;
         return;
     }
@@ -2491,7 +2495,7 @@ void CTinyBasic::go_PRINT() {
     leftPosition=false;
 
     // If we have an empty list then just put out a NL
-    if(*txtpos == ':' )
+    if( (*txtpos == ':') || (*txtpos == ',') )
     {
         line_terminator(output);
         txtpos++;
@@ -2650,7 +2654,7 @@ void CTinyBasic::go_NEXT() {
     }
     txtpos++;
     ignore_blanks();
-    if(*txtpos != ':' && *txtpos != NL) {
+    if(*txtpos != ':' && *txtpos != ',' && *txtpos != NL) {
         nextStep = QWHAT;
         return;
     }
@@ -2812,7 +2816,11 @@ void CTinyBasic::go_FORLOOP() {
     else
         step_for = 1;
     ignore_blanks();
-    if(*txtpos != NL && *txtpos != ':') {qWarning("sept");nextStep=QWHAT; return;}
+    if(*txtpos != NL && *txtpos != ':' && *txtpos != ',') {
+        qWarning("sept");
+        nextStep=QWHAT;
+        return;
+    }
 
 
     if(!expression_error && *txtpos == NL)
@@ -2960,8 +2968,9 @@ void CTinyBasic::go_ASSIGNMENT() {
     ignore_blanks();
 
     if (*txtpos != '=') {
-        txtpos=savepos;go_PRINT();return;
-        nextStep=QWHAT; return;
+        txtpos=savepos;
+        go_PRINT();
+        return;
     }
     txtpos++;
     ignore_blanks();
@@ -2974,11 +2983,16 @@ void CTinyBasic::go_ASSIGNMENT() {
         return;
     }
     // Check that we are at the end of the statement
-    if(*txtpos != NL && *txtpos != ':') { nextStep=QWHAT; return; }
+    if(*txtpos != NL && *txtpos != ':'&& *txtpos != ',') {
+        nextStep=QWHAT;
+        return;
+    }
 
     *var = value;
     // Print the assigned value
-    if (!running) printVar(value);
+    if (!running ) { //&& ( *txtpos != ',')) {
+        printVar(value);
+    }
 
     if (!leftPosition) {
         outputBuffer = outputBuffer.rightJustified(24,' ');

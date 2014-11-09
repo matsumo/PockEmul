@@ -161,7 +161,9 @@ bool CrenderView::keyAt(QString Id, int x, int y)
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 
-    return pc->pKEYB->KeyClick(pts);
+    if (pc->pKEYB) return pc->pKEYB->KeyClick(pts);
+
+    return false;
 }
 
 void CrenderView::unclick(QString Id, int x, int y)

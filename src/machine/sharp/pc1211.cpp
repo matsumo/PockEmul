@@ -21,9 +21,6 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
 
     memsize		= 0x10000;
 
-    KeyMap		= KeyMap1250;
-    KeyMapLenght= KeyMap1250Lenght;
-
     PowerSwitch	= 0;
 
     setDXmm(175);
@@ -33,30 +30,15 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
     setDX(626);
     setDY(252);
 
-//    Lcd_X		= 46;
-//    Lcd_Y		= 50;
-//    Lcd_DX		= 144;//168;//144 ;
-//    Lcd_DY		= 8;
-//    Lcd_ratio_X	= 2 * 1.375;
-//    Lcd_ratio_Y	= 2 * 1.375;
-
-//    Lcd_Symb_X	= 55;//(int) (45 * 1.18);
-//    Lcd_Symb_Y	= 41;//(int) (35 * 1.18);
-//    Lcd_Symb_DX	= 380;
-//    Lcd_Symb_DY	= 5;
-//    Lcd_Symb_ratio_X	= 1;//1.18;
-
-    pLCDC		= new Clcdc_pc1211(this,
-                                   QRect(46,50,144*2*1.375,8*2*1.375),
-                                   QRect(55,41,380,5));
-    pKEYB		= new Ckeyb(this,"pc1211.map");
-    pCPU = new CTinyBasic(this);
-    pTIMER		= new Ctimer(this);
-    pBASIC = (CTinyBasic *)pCPU;
+    pLCDC   = new Clcdc_pc1211(this,
+                               QRect(46,50,144*2*1.375,8*2*1.375),
+                               QRect(55,41,380,5));
+    pKEYB   = new Ckeyb(this,"pc1211.map");
+    pCPU    = new CTinyBasic(this);
+    pTIMER  = new Ctimer(this);
+    pBASIC  = (CTinyBasic *)pCPU;
     DisplayWaitForRTN = false;
     pLCDC1211 = (Clcdc_pc1211*)pLCDC;
-
-
 
     cursorPos =0;
     lastBreakPress=0;
@@ -402,6 +384,7 @@ void Cpc1211::sendToPrinter()
 
 
 void Cpc1211::afficheChar(quint8 c) {
+    Q_UNUSED(c)
 
 }
 
@@ -414,6 +397,8 @@ bool Cpc1211::exit()
 
 bool Cpc1211::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     sendToPrinter();
     return true;
 }

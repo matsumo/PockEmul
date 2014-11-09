@@ -75,8 +75,7 @@ public:
 
     QList<CSlot> SlotList;
 
-	QPoint		SnapPts;
-	qreal		RangeFrom(CPObject * target);
+
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 	CPObject	*Parent;
 	CpcXXXX		*pPC;

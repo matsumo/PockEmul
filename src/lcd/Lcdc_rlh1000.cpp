@@ -49,8 +49,6 @@ Clcdc_rlh1000::Clcdc_rlh1000(CPObject *parent, QRect _lcdRect, QRect _symbRect, 
     memset((void *)mem,0,sizeof(mem));
 }
 
-
-
 void Clcdc_rlh1000::disp(void)
 {
 
@@ -58,6 +56,7 @@ void Clcdc_rlh1000::disp(void)
     int ind;
 
     Refresh = false;
+    if (!On) return;
 
     //	disp_symb();
 
@@ -71,26 +70,15 @@ void Clcdc_rlh1000::disp(void)
         {
 
             Refresh = true;
-            if (On)
-            {
-                data = mem[ind];
-                DirtyBuf[ind] = 0;
-            }
-            else
-            {
-                data = 0;
-                DirtyBuf[ind] = 0;
-            }
+            data = On ? mem[ind] : 0;
+            DirtyBuf[ind] = 0;
 
             for (b=0; b<8;b++)
             {
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( ind, b);
                 drawPixel(&painter,ind, b,((data>>b)&0x01) ? Color_On : Color_Off );
             }
         }
     }
-
 
     painter.end();
 }

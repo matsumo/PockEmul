@@ -453,7 +453,8 @@ HEADERS *= \
     src/cpu/sc62015d.h \
     src/cpu/upd7907/upd7907d.h \
     src/cpu/tms7000/tms7000d.h \
-    src/cpu/z80_dasm.h
+    src/cpu/z80_dasm.h \
+    src/core/pobjectInterface.h
 
 
 HEADERS *= \
