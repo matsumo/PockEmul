@@ -601,7 +601,7 @@ void CTinyBasic::scantable(unsigned char *table,KEYWORD_TYPE type)
     case FOR_TO:    offset_begin = KW_TO; offset_end = KW_TO; break;
     case FOR_STEP:  offset_begin = KW_STEP; offset_end = KW_STEP; break;
     case FUNC:      offset_begin = KF_SIN; offset_end = KW_DEFAULT; break;
-    case OPE:       break;
+    case OPE:       offset_begin = 0; offset_end = RELOP_UNKNOWN; break;
     }
     if ( (txtpos[0]>=0x80+offset_begin) && (txtpos[0]<=0x80+offset_end)) {
         table_index = txtpos[0]-0x80;
@@ -1229,6 +1229,7 @@ VAR_TYPE CTinyBasic::expr5(ExpTYP type)
 
     if(*txtpos == '(')
     {
+        qWarning()<<"found (";
         VAR_TYPE a;
         txtpos++;
         a = expression();
@@ -2953,7 +2954,7 @@ void CTinyBasic::go_ASSIGNMENT() {
     qWarning("ASSIGNMENT");
     bool alpha = false;
     VAR_TYPE value;
-    VAR_TYPE *var;
+    VAR_TYPE *a;
 
     unsigned char* savepos = txtpos;
     if(*txtpos < 'A' || *txtpos > 'Z') {
@@ -2961,13 +2962,41 @@ void CTinyBasic::go_ASSIGNMENT() {
         return;
     }
 
-    var = (VAR_TYPE *)variables_begin + *txtpos - 'A';
+    //FIXME: A DIM Assignment
+    unsigned char var = *txtpos;
+//    var = (VAR_TYPE *)variables_begin + *txtpos - 'A';
     txtpos++;
 
     if (*txtpos=='$') {
         alpha = true;
         txtpos++;
     }
+
+
+    if  ( (var=='A') && (*txtpos=='(')) {       // A Array. the index can be an expression
+        expression_error = 0;
+        int ind = expr2();
+        qWarning()<<"indice="<<ind;
+        if (expression_error) {
+            errorNumber = 1;
+            nextStep=QWHAT;
+            return;
+        }
+        var +=ind - 1;
+    }
+    a = (VAR_TYPE *)variables_begin + var - 'A';
+    // Check variable type
+    if (expAlpha && (checkType(a)==NUMERIC) && (*a!=0)) {
+        errorNumber = 1;
+        nextStep=QWHAT;
+        return;
+    }
+    if (!expAlpha && checkType(a)==STRING) {
+        errorNumber = 1;
+        nextStep=QWHAT;
+        return;
+    }
+
     ignore_blanks();
 
     if (*txtpos != '=') {
@@ -2991,16 +3020,16 @@ void CTinyBasic::go_ASSIGNMENT() {
         return;
     }
 
-    *var = value;
+    *a = value;
     // Print the assigned value
-    if (!running ) { //&& ( *txtpos != ',')) {
+    if (!running && ( *txtpos != ',')) {
         printVar(value);
+        if (!leftPosition) {
+            outputBuffer = outputBuffer.rightJustified(24,' ');
+        }
+        line_terminator();	// The end of the print statement
     }
 
-    if (!leftPosition) {
-        outputBuffer = outputBuffer.rightJustified(24,' ');
-    }
-    line_terminator();	// The end of the print statement
     nextStep = RUN_NEXT_STATEMENT;
 
 }
