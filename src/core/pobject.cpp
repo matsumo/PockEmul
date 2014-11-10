@@ -461,6 +461,7 @@ int CPObject::exitsound()
 void CPObject::fillSoundBuffer(BYTE val)
 {
     if (!soundEnabled) return;
+    if (!m_output) return;
 
 #ifndef NO_SOUND
 //    quint64 new_state;
