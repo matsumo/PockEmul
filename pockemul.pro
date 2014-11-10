@@ -1113,7 +1113,8 @@ OTHER_FILES += \
     cloud/PmlView2.qml \
     cloud/Test.qml \
     cloud/Main.qml \
-    cloud/Launchmenu.qml
+    cloud/Launchmenu.qml \
+    resources/keymap/pc1475.map
 
 
 contains(PROJECT_MODULE,M_IDE) {

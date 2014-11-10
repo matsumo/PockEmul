@@ -1,5 +1,5 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
-<model>pc1475</model>
+<model>pc1450</model>
 <Keyboard>
     <KEY description="-" height="22" left="540" scancode="0x2d" top="178" width="32"/>
     <KEY description="(" height="16" left="554" scancode="0x28" top="74" width="25"/>

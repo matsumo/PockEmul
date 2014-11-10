@@ -48,7 +48,7 @@ Cpc1475::Cpc1475(CPObject *parent)	: Cpc1360(parent)
     delete pLCDC;		pLCDC		= new Clcdc_pc1475(this,
                                                        QRect(111,48,264*.9,30),
                                                        QRect(111,38,264*.9,45));
-    delete pKEYB;		pKEYB		= new Ckeyb(this,"pc1450.map",scandef_pc1450);
+    delete pKEYB;		pKEYB		= new Ckeyb(this,"pc1475.map",scandef_pc1450);
 
 }
 
@@ -70,30 +70,33 @@ bool Cpc1475::Chk_Adr(UINT32 *d,UINT32 data)
         return(1);
     }
     if ( (*d>=0x3E00) && (*d<=0x3FFF) )
-	{
-		int K=0;
-		switch (data & 0x0F)
+    {
+        BYTE KStrobe=0;
+
+        switch (data & 0x0F)
         {
-			case 0x00: K=0x00;	break;
-			case 0x01: K=0x01;	break;
-			case 0x02: K=0x02;	break;
-			case 0x03: K=0x04;	break;
-			case 0x04: K=0x08;	break;
-			case 0x05: K=0x10;	break;
-			case 0x06: K=0x20;	break;
-			case 0x07: K=0x40;	break;
-			case 0x08: K=0x80;	break;
-			case 0x09: K=0x00;	break;
-			case 0x0A: K=0x00;	break;
-			case 0x0B: K=0x00;	break;
-			case 0x0C: K=0x00;	break;
-			case 0x0D: K=0x00;	break;
-			case 0x0E: K=0x00;	break;
-			case 0x0F: K=0x7F;	break;
-		}
-		pKEYB->Set_KS( K );
-		return(1);
-	}
+            case 0x00: KStrobe=0x00;	break;
+            case 0x01: KStrobe=0x01;	break;
+            case 0x02: KStrobe=0x02;	break;
+            case 0x03: KStrobe=0x04;	break;
+            case 0x04: KStrobe=0x08;	break;
+            case 0x05: KStrobe=0x10;	break;
+            case 0x06: KStrobe=0x20;	break;
+            case 0x07: KStrobe=0x40;	break;
+            case 0x08: KStrobe=0x80;	break;
+            case 0x09: KStrobe=0x00;	break;
+            case 0x0A: KStrobe=0x00;	break;
+            case 0x0B: KStrobe=0x00;	break;
+            case 0x0C: KStrobe=0x00;	break;
+            case 0x0D: KStrobe=0x00;	break;
+            case 0x0E: KStrobe=0x00;	break;
+            case 0x0F: KStrobe=0x7F;	break;
+        }
+
+        pKEYB->Set_KS( KStrobe );
+
+        return(1);
+    }
 
     if ( (*d>=0x2800) && (*d<=0x3FFF) )	return(1);
 
@@ -101,21 +104,10 @@ bool Cpc1475::Chk_Adr(UINT32 *d,UINT32 data)
 
 
 	if ( (*d>=0x8000) && (*d<=0xFFFF) )
-	{
-        *d += 0x28000 + (RamBank * 0x8000);
-//        qWarning()<<"adr:"<<QString("%1").arg(*d,5,16,QChar('0'))<<" - "<<S1_EXTENSION_CE2H32M_CHECK<<" ="<<data<<"  ROMBank:"<<RomBank;
-        if ( (*d>=0x30000) && (*d<=0x33FFF) )	return(S1_EXTENSION_CE2H32M_CHECK);
-		if ( (*d>=0x34000) && (*d<=0x35FFF) )	return(S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK);
-		if ( (*d>=0x36000) && (*d<=0x36FFF) )	return(S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK | S1_EXTENSION_CE212M_CHECK);
-		if ( (*d>=0x37000) && (*d<=0x377FF) )	return(S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK | S1_EXTENSION_CE212M_CHECK | S1_EXTENSION_CE211M_CHECK);
-		if ( (*d>=0x37800) && (*d<=0x37FFF) )	return(S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK | S1_EXTENSION_CE212M_CHECK | S1_EXTENSION_CE211M_CHECK | S1_EXTENSION_CE210M_CHECK);
-
-		if ( (*d>=0x38000) && (*d<=0x3BFFF) )	return(S2_EXTENSION_CE2H32M_CHECK);
-		if ( (*d>=0x3C000) && (*d<=0x3DFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK);
-		if ( (*d>=0x3E000) && (*d<=0x3EFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK);
-		if ( (*d>=0x3F000) && (*d<=0x3F7FF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK | S2_EXTENSION_CE211M_CHECK);
-		if ( (*d>=0x3F800) && (*d<=0x3FFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK | S2_EXTENSION_CE211M_CHECK | S2_EXTENSION_CE210M_CHECK);
-		
+    {
+        UINT32 _addr = *d &0x7FFF;
+        //        qWarning()<<(RamBank ? "S2:" : "S1:");
+        writeBus(RamBank ? busS2 : busS1 ,&_addr,data);
 	}
 
     return(0);
@@ -126,8 +118,12 @@ bool Cpc1475::Chk_Adr_R(UINT32 *d,UINT32 *data)
     Q_UNUSED(data)
 
     if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d += 0xC000 + ( RomBank * 0x4000 ); return(1);}	// Manage ROM Bank
-    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d += 0x28000 + ( RamBank * 0x8000 ); return(1);}	// Manage ram bank
-
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{
+        UINT32 _addr = *d &0x7FFF;
+//        qWarning()<<(RamBank ? "S2:" : "S1:");
+        readBus(RamBank ? busS2 : busS1 ,&_addr,data);
+        return false;
+    }
 	return(1); 
 }
 
