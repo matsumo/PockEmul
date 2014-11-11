@@ -346,8 +346,8 @@ enum {
     KW_NEW,
     KW_PRINT,
     KW_PAUSE,
-    KW_POKE,      // 0x10
-    KW_RUN,
+    KW_POKE,
+    KW_RUN,      // 0x10
     KW_RETURN,
     KW_REM,
     KW_STOP,
@@ -363,13 +363,13 @@ enum {
     KW_RSEED,
     KW_CHAIN,
     KW_RADIAN,
-    KW_DEGREE,
+    KW_DEGREE,      // 0x20
     KW_GRAD,
 
-    KW_TO,            // 0x21
-    KW_STEP,        // 0x22
+    KW_TO,            // 0x22
+    KW_STEP,        // 0x23
 
-    KF_SIN,          // 0x23
+    KF_SIN,          // 0x24
     KF_COS,
     KF_TAN,
     KF_ASN,
@@ -875,7 +875,7 @@ void CTinyBasic::getln(char prompt)
             txtpos[0] = c;
             txtpos++;
 //            outchar(c);
-            qWarning()<<"Char:"<<c;
+            qWarning()<<"Char:"<<QChar(c);
         }
     }
 }
@@ -1113,11 +1113,11 @@ VAR_TYPE CTinyBasic::expr5(ExpTYP type)
 
     // Is it a function or variable reference?
     if ((txtpos[0] >= 'A' && txtpos[0] <= 'Z') ||
-            (txtpos[0]==0x18))// Hack for SQR Function.
+            (txtpos[0]==(KF_SQR+0x80)))// Hack for SQR Function.
     {
         VAR_TYPE a;
         // Is it a variable reference (single alpha)
-        if (  (txtpos[0]!=0x18)&&(txtpos[1] < 'A' || txtpos[1] > 'Z'))
+        if (  (txtpos[0]!=(KF_SQR+0x80))&&(txtpos[1] < 'A' || txtpos[1] > 'Z'))
         {
             unsigned char var = *txtpos;
             expAlpha = false;
@@ -1231,15 +1231,16 @@ VAR_TYPE CTinyBasic::expr5(ExpTYP type)
         }
         case KF_SQR:
             double r= sqrt(a);
+            qWarning()<<"SQRT";
             if (errno==EDOM) goto expr4_error;
             return r;
-            //        case FUNC_AREAD:
-            //            return analogRead( a );
-            //        case FUNC_DREAD:
-            //            return digitalRead( a );
+//        case FUNC_AREAD:
+//            return analogRead( a );
+//        case FUNC_DREAD:
+//            return digitalRead( a );
 
-            //        case FUNC_RND:
-            //            return( random( a ));
+//        case FUNC_RND:
+//            return( random( a ));
         }
     }
 
@@ -1468,6 +1469,7 @@ void CTinyBasic::loop()
         case BEEP: go_BEEP(false); return; break;
         case RUN_NEXT_STATEMENT: goto run_next_statement;
         case INPUT_CR: go_INPUT(); return; break;
+        case INPUT_NEXT: go_INPUT(); return; break;
         default: break;
         }
 
@@ -1488,11 +1490,17 @@ prompt:
           return;
           goto execline;
         }
-        outchar('>');
+        if (processingInput) {
+            outchar('?');
+        }
+        else {
+            outchar('>');
+        }
         txtpos = program_end+sizeof(LINENUM);
 getln:
-    getln('>');
-    return;
+        getln('>');
+        return;
+
 getln_end:
 //    inputMode = false;
     outputBuffer.clear();
@@ -1757,7 +1765,7 @@ interperateAtTxtpos:
     case KW_REM:
     case KW_QUOTE: nextStep = EXECNEXTLINE; return;     // Ignore line completely
     case KW_FOR: go_FORLOOP(); return;
-    case KW_INPUT: go_INPUT(); return;
+    case KW_INPUT: nextStep = INPUT_NEXT;go_INPUT(); return;
     case KW_PAUSE: go_PAUSE(); return;
     case KW_PRINT:
     case KW_QMARK: go_PRINT(); return;
@@ -2895,33 +2903,43 @@ void CTinyBasic::go_INPUT() {
 
     if (!CheckRunnig()) return;
 
-    unsigned char var = 'A';
-    if (nextStep!=INPUT_CR) {
-        qWarning()<<"INPUT";
+    static unsigned char var = 'A';
+    if (nextStep==INPUT_NEXT) {
         ignore_blanks();
         if(*txtpos < 'A' || *txtpos > 'Z'){
             nextStep = QWHAT; return;
         }
         var = *txtpos;
+        qWarning()<<"INPUT:"<<QChar(var);
+
         txtpos++;
         ignore_blanks();
-        if(*txtpos != NL && *txtpos != ':') {
+        if(*txtpos != NL && *txtpos != ':' && *txtpos != ',') {
             nextStep = QWHAT; return;
         }
+        qWarning()<<"INPUT:"<<QChar(*txtpos);
         programcounter = txtpos;
         processingInput=true;
         inputMode = true;
+        pPC1211->ClearInputBuffer();
         nextStep=PROMPT;
         return;
     }
-    qWarning()<<"INPUT_CR";
     commandBuffer.clear();
-    inputMode = false;
-    processingInput = false;
     double e= expression();
     ((VAR_TYPE *)variables_begin)[var-'A'] = e;
     txtpos = programcounter;
-    nextStep = RUN_NEXT_STATEMENT;
+    qWarning()<<"INPUT_CR:"<<e<<QChar(*txtpos);
+    if (*txtpos==',') {
+        txtpos++;
+        nextStep = INPUT_NEXT;
+        qWarning()<<"INPUT ',' found:";
+    }
+    else {
+        inputMode = false;
+        processingInput = false;
+        nextStep = RUN_NEXT_STATEMENT;
+    }
 
     /*
     //////////////////////////////////////////////////////

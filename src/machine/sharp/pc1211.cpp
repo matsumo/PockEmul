@@ -388,6 +388,12 @@ void Cpc1211::afficheChar(quint8 c) {
 
 }
 
+void Cpc1211::ClearInputBuffer()
+{
+    inputBuffer.clear();
+    cursorPos = 0;
+}
+
 bool Cpc1211::exit()
 {
     CpcXXXX::exit();

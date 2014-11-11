@@ -30,6 +30,9 @@ public:
     QByteArray inputBuffer;
     QByteArray printerBuffer;
 
+
+    void ClearInputBuffer();
+
     CTinyBasic *pBASIC;
     bool DisplayWaitForRTN;
     void Editor();
