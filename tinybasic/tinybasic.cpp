@@ -3,7 +3,6 @@
 //TODO: Check all instructions
 //TODO: Speed management
 
-//FIXME: 4^2^3 produce (4^3)^2 instead of 4^(3^2)
 
 #include <QDebug>
 #include <errno.h>
@@ -32,10 +31,8 @@ bool CTinyBasic::exit()
 
 void CTinyBasic::step()
 {
-//    qWarning("step");
     loop();
     pPC->pTIMER->state+=10;
-
 }
 
 void CTinyBasic::Load_Internal(QXmlStreamReader *xmlIn)
@@ -67,11 +64,8 @@ void CTinyBasic::clearOutput() {
 
 void CTinyBasic::outputChar(QByteArray ba) {
     outputBuffer.append(ba);
-    qWarning()<<ba;
+//    qWarning()<<ba;
 }
-
-
-
 
 void CTinyBasic::Reset()
 {
@@ -2906,6 +2900,28 @@ void CTinyBasic::go_INPUT() {
 
     if (nextStep==INPUT_NEXT) {
         ignore_blanks();
+
+        if(*txtpos == '"') {
+            if(print_quoted_string(DISPLAY))
+            {
+//                leftPosition = true;
+            }
+            if (*txtpos==',') {
+                txtpos++;
+                nextStep = INPUT_NEXT;
+                waitForRTN = true;
+                qWarning()<<"INPUT ',' found:";
+                return;
+            }
+            else {
+                inputMode = false;
+                processingInput = false;
+                nextStep = QWHAT;
+                return;
+            }
+        }
+
+
         if(*txtpos < 'A' || *txtpos > 'Z'){
             nextStep = QWHAT; return;
         }
