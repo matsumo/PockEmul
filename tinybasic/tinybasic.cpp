@@ -3,7 +3,6 @@
 //TODO: Check all instructions
 //TODO: Speed management
 
-//FIXME: DMS & DEG missing
 //FIXME: 4^2^3 produce (4^3)^2 instead of 4^(3^2)
 
 #include <QDebug>
@@ -825,6 +824,8 @@ void CTinyBasic::printmsg(const unsigned char *msg)
 /***************************************************************************/
 void CTinyBasic::getln(char prompt)
 {
+    Q_UNUSED(prompt
+             )
 //    if (prompt>0) outchar(prompt);
 //    txtpos = program_end+sizeof(LINENUM);
     nextStep = GETLN;
@@ -1087,13 +1088,13 @@ VAR_TYPE CTinyBasic::expr5(ExpTYP type)
         case 8: {
             a = atof((const char*)txtpos);
             qWarning()<<"read float:"<<a;
-            bool exp = false;
+//            bool exp = false;
             do {
                 txtpos++;
                 if (*txtpos=='E') {
                     txtpos++;
                     if (*txtpos=='+' || *txtpos=='-') txtpos++;
-                    exp = true;
+//                    exp = true;
                 }
             } while ( (*txtpos >= '0' && *txtpos <= '9')||
                       *txtpos=='.' ||
@@ -1213,6 +1214,21 @@ VAR_TYPE CTinyBasic::expr5(ExpTYP type)
             return 0;
         case KF_INT:
             return floor(a);
+        case KF_DMS: {
+            int s = (int)round(a * 3600);
+            int d = s / 3600;
+            s = abs(s % 3600);
+            int m = s / 60;
+            s %= 60;
+
+            return d+m/100.0+s/10000.0;
+        }
+        case KF_DEG: {
+            int d = a;
+            int m = (a - d) * 100;
+            int s = (a*100 - int(a*100))*100;
+            return d + m/60.0 + s/3600.0;
+        }
         case KF_SQR:
             double r= sqrt(a);
             if (errno==EDOM) goto expr4_error;
@@ -1285,8 +1301,14 @@ qWarning()<<"Exp4";
     {
         if(*txtpos == '^')
         {
+            // Power of a negative number produce an error
+            if (a<0) {
+                errorNumber = 1;
+                expression_error = 1;
+                return 0;
+            }
             txtpos++;
-            b = expr5();
+            b = expr4();
             a = pow(a,b);
         }
         else
@@ -2952,7 +2974,7 @@ void CTinyBasic::go_ASSIGNMENT() {
     if (!(CheckMode(RUN)||CheckMode(DEF))) return;
 
     qWarning("ASSIGNMENT");
-    bool alpha = false;
+//    bool alpha = false;
     VAR_TYPE value;
     VAR_TYPE *a;
 
@@ -2968,7 +2990,7 @@ void CTinyBasic::go_ASSIGNMENT() {
     txtpos++;
 
     if (*txtpos=='$') {
-        alpha = true;
+//        alpha = true;
         txtpos++;
     }
 
