@@ -2165,7 +2165,7 @@ void CTinyBasic::outchar(unsigned char c,DEVICE output)
       if (c=='\n') {
           //        waitForRTN = true;
       }
-      putchar(c);
+//      putchar(c);
   }
   if (output==PRINTER) {
 //      qWarning()<<"PRINTER"<<c;
@@ -2900,10 +2900,10 @@ void CTinyBasic::go_IF() {
 void CTinyBasic::go_INPUT() {
 
     static unsigned char* programcounter;
+    static unsigned char var = 'A';
 
     if (!CheckRunnig()) return;
 
-    static unsigned char var = 'A';
     if (nextStep==INPUT_NEXT) {
         ignore_blanks();
         if(*txtpos < 'A' || *txtpos > 'Z'){
