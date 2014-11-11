@@ -173,6 +173,10 @@ void Clcdc_pc1211::disp()
         buf = &pPC1211->pBASIC->outputBuffer;
 //        qWarning()<< "DISP:"<<pPC1211->pBASIC->inputMode<<"**";
 
+//    QByteArray _ba = pPC1211->pBASIC->outputBuffer.left(pPC1211->pBASIC->outputBuffer.indexOf('\n'))
+//                     .append(pPC1211->inputBuffer);
+//    buf = &_ba;
+    //qWarning()<<"ba:"<<_ba;
     if (!buf->isEmpty() && buf->at(0)!='\n') {
         int _CRpos = buf->indexOf('\n');
         line.prepend(buf->mid(0,_CRpos));
@@ -197,12 +201,11 @@ void Clcdc_pc1211::disp()
         }
 //        pPC1211->DisplayWaitForRTN = true;//buf->contains('\n');
     }
-    if (pPC1211->pBASIC->inputMode &&
-            line.count((char)0)==line.count()) {
-     if (pPC1211->pBASIC->processingInput)
-         line.prepend("?");
-     else
-         line.prepend(">");
+    if (pPC1211->pBASIC->inputMode && line.count((char)0)==line.count()) {
+        if (pPC1211->pBASIC->processingInput)
+            line.prepend("?");
+        else
+            line.prepend(">");
     }
 
 //    qWarning()<<line.toHex();

@@ -2,7 +2,7 @@
 //TODO: Manage Editor
 //TODO: Check all instructions
 //TODO: Speed management
-
+//TODO: INPUT "text";A     INPUT "TEXT",A is done
 
 #include <QDebug>
 #include <errno.h>
@@ -2911,6 +2911,12 @@ void CTinyBasic::go_INPUT() {
                 nextStep = INPUT_NEXT;
                 waitForRTN = true;
                 qWarning()<<"INPUT ',' found:";
+                return;
+            }
+            else if (*txtpos==';') {
+                txtpos++;
+                nextStep = INPUT_NEXT;
+                qWarning()<<"INPUT ';' found:";
                 return;
             }
             else {
