@@ -202,10 +202,13 @@ void Clcdc_pc1260::disp(void)
     int ind;
     WORD adr;
 
-    Refresh = false;
+
     if (!updated) return;
+    //    if (!On) return;
+
+    lock.lock();
+    Refresh = false;
     updated = false;
-    if (!On) return;
 
     disp_symb();
 
@@ -225,7 +228,8 @@ void Clcdc_pc1260::disp(void)
         }
 
         for (ind=0; ind<0x3c; ind++)
-        {	adr = memOffset + baseAdr + ind;
+        {
+            adr = memOffset + baseAdr + ind;
             if (DirtyBuf[adr-baseAdr])
             {
                 Refresh = true;
@@ -244,6 +248,7 @@ void Clcdc_pc1260::disp(void)
 
     painter.end();
 
+    lock.unlock();
 }
 
 

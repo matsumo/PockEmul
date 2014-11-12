@@ -7,6 +7,7 @@
 #define LCDC_H
 
 #include <QColor>
+#include <QMutex>
 
 #include "common.h"
 
@@ -79,6 +80,8 @@ public:
     float	Lcd_Symb_ratio_Y;
     QString	LcdFname;
     QString	SymbFname;
+
+    QMutex lock;
 
     void drawPixel(QPainter *painter, float x, float y, QColor color);
 protected:

@@ -81,6 +81,8 @@ public:
     int getRotation() { return rotation; }
 
     virtual bool InitDisplay(void);
+    virtual void PreFlip(Direction dir,View targetView);
+    virtual void PostFlip();
     void mousePressEvent(QMouseEvent *event);
     void paintEvent(QPaintEvent *event);
     void flip(Direction dir);

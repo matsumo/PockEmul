@@ -131,6 +131,9 @@ public:
     virtual ~Cconnector(){}
 
     QPointF pos();
+    bool isLinked();
+    Cconnector *LinkedTo();
+    CPObject *LinkedToObject();
 private:
 	bool	gender;		// Male = true   Female = false  :-)
     ConnectorType Type;

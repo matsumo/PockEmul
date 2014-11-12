@@ -324,6 +324,7 @@ if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
          ( (*d>=0x7600) && (*d<=0x767C) ) ||
          ( (*d>=0x7800) && (*d<=0x787C) ))	{
         if (mem[*d] != data) {
+            pLCDC->updated = true;
             pLCDC->SetDirtyBuf(*d-0x7000);
         }
         return(1);

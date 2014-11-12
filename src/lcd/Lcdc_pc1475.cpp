@@ -90,6 +90,9 @@ void Clcdc_pc1475::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+
+    lock.lock();
+
     redraw = false;
     updated = false;
 
@@ -176,6 +179,8 @@ void Clcdc_pc1475::disp(void)
 #endif
     updated = 0;
     painter.end();
+
+    lock.unlock();
 }
 
 

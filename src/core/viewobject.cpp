@@ -167,6 +167,16 @@ bool CViewObject::InitDisplay(void)
     return(1);
 }
 
+void CViewObject::PreFlip(Direction dir, View targetView)
+{
+
+}
+
+void CViewObject::PostFlip()
+{
+
+}
+
 void CViewObject::InitView(View v) {
     switch (v) {
     case TOPview:   if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname); break;
@@ -252,7 +262,7 @@ void CViewObject::flip(Direction dir) {
 //    if (!ConList.isEmpty()) return;
     // Animate close
 
-
+    PreFlip(dir,targetView);
     targetSize = viewRect(targetView);
     currentFlipDir = dir;
 
@@ -418,7 +428,7 @@ void CViewObject::endAnimation(){
 
 //    qWarning()<<"endAnimation";
     changeGeometry(this->posx(),this->posy(),viewRect(currentView).width()*mainwindow->zoom/100.0,viewRect(currentView).height()*mainwindow->zoom/100.0);
-
+    PostFlip();
     Refresh_Display = true;
 }
 

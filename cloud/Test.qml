@@ -141,6 +141,7 @@ Rectangle {
             z: _zorder
             width: _width
             height: _height
+            visible: _visible
             rotation: _rotation
             onRotationChanged: sendRotPocket(idpocket,rotation)
             Keys.onPressed: {
@@ -293,8 +294,9 @@ Rectangle {
                                  _height:_height,
                                  _rotation:_rotation,
                                  idpocket:_pocketId,
-                                      dummy:0,
-                                      _zorder:0});
+                                 _visible:true,
+                                 dummy:0,
+                                 _zorder:0});
 
     }
 
@@ -336,7 +338,28 @@ Rectangle {
     //        console.log("object sized to ("+_width+","+_height+")");
         }
     }
+    function showPocket(_pocketId) {
 
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._visible = true;
+    //        console.log("object sized to ("+_width+","+_height+")");
+        }
+    }
+    function hidePocket(_pocketId) {
+
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._visible = false;
+    //        console.log("object sized to ("+_width+","+_height+")");
+        }
+    }
     function orderPocket(_pocketId,_zorder) {
 
         var index = getIndex(_pocketId);

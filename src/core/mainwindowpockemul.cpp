@@ -77,7 +77,7 @@ extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
 
-#define NBFRAMEPERSEC		20
+#define NBFRAMEPERSEC		30
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 #define TIMER_RES			1
 
@@ -1340,7 +1340,7 @@ void MainWindowPockemul::updateFrameTimer()
 
 
                     if (CurrentpPC->isActiveWindow())
-                        mainwindow->setWindowTitle(QString("Pockemul :%1").arg(rate)+"%");
+                        mainwindow->setWindowTitle(QString("Pockemul :%1%  - %2 fps").arg(rate).arg(nbframe*1000.0/deltaTime));
                     nbframe = 0;
                     str.setNum((int)rate);
                     str = ": "+str+tr("% original speed");
@@ -1358,10 +1358,10 @@ void MainWindowPockemul::updateFrameTimer()
         {
             if (dynamic_cast<CpcXXXX *>(CurrentpPC) )
             {
+                nbframe++;
                 //                        CpcXXXX *tmpPC = (CpcXXXX*)CurrentpPC;
                 if (CurrentpPC->pLCDC->On)
                 {
-                    nbframe++;
                     CurrentpPC->pLCDC->disp();
                     if (CurrentpPC->pLCDC->Refresh) {
                         CurrentpPC->Refresh_Display = true;

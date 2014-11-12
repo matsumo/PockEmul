@@ -30,6 +30,9 @@ public:
     virtual bool	init(void);
     virtual bool	run(void);
 
+    virtual void PreFlip(Direction dir,View targetView);
+    virtual void PostFlip();
+
     Cconnector	*pS2CONNECTOR;		qint64 pS2CONNECTOR_value;
     Cbus *busS2;
 
@@ -37,7 +40,9 @@ public:
     virtual ~Cpc1360();
 
     virtual void ComputeKey(KEYEVENT ke, int scancode);
+public slots:
+    void linkObject(QString item, CPObject *pPC);
 private:
-
+    int currentSlot;
 };
 #endif

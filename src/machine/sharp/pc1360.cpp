@@ -12,6 +12,8 @@
 #include "Log.h"
 #include "bus.h"
 #include "fluidlauncher.h"
+#include "renderView.h"
+#include "clink.h"
 
 Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 {								//[constructor]
@@ -84,6 +86,34 @@ bool Cpc1360::run(void)
     CpcXXXX::run();
 
     return true;
+}
+extern CrenderView* view;
+void Cpc1360::PreFlip(Direction dir, View targetView)
+{
+    // hide memory cards
+    Cconnector * S1 = mainwindow->pdirectLink->Linked(pS1CONNECTOR);
+    if (S1) {
+        CPObject * S1PC = (CPObject *) (S1->Parent);
+        view->hidePObject(S1PC);
+    }
+    Cconnector * S2 = mainwindow->pdirectLink->Linked(pS2CONNECTOR);
+    if (S2) {
+        CPObject * S2PC = (CPObject *) (S2->Parent);
+        view->hidePObject(S2PC);
+    }
+}
+
+void Cpc1360::PostFlip()
+{
+    if (currentView == BACKview) {
+        // show memory cards
+        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+        if (S1PC)
+            view->showPObject(S1PC);
+        CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+        if (S2PC)
+            view->showPObject(S2PC);
+    }
 }
 
 // PIN_MT_OUT2	1
@@ -208,6 +238,7 @@ bool Cpc1360::Chk_Adr(UINT32 *d,UINT32 data)
          ( (*d>=0x2E00) && (*d<=0x2E7C) ) ||
          ( (*d>=0x3000) && (*d<=0x307C) ))	{
         if (mem[*d] != data) {
+            pLCDC->updated = true;
             pLCDC->SetDirtyBuf(*d-0x2800);
         }
         return(1);
@@ -286,6 +317,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke,int scancode)
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
 
+    // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
@@ -294,21 +326,36 @@ void Cpc1360::ComputeKey(KEYEVENT ke,int scancode)
         launcher->show();
     }
 
-    // Manage left connector click
-    if (KEY(0x241) && (currentView==BACKview)) {
+    if (KEY(0x241) &&
+            (currentView==BACKview) &&
+            !pS1CONNECTOR->isLinked()) {
         pKEYB->keyPressedList.removeAll(0x241);
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
                                      "Sharp_35");
+        connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+        currentSlot = 1;
         launcher->show();
     }
-    if (KEY(0x242) && (currentView==BACKview)) {
+    if (KEY(0x242) &&
+            (currentView==BACKview) &&
+            !pS2CONNECTOR->isLinked()) {
         pKEYB->keyPressedList.removeAll(0x242);
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
                                      "Sharp_35");
+        connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+        currentSlot = 2;
         launcher->show();
     }
+}
+
+void Cpc1360::linkObject(QString item,CPObject *pPC)
+{
+    Cconnector *_conn = (currentSlot==1) ? pS1CONNECTOR : pS2CONNECTOR;
+    mainwindow->pdirectLink->addLink(_conn,pPC->ConnList.at(0),true);
+    pPC->setPosX(this->posx()+this->width()+15);
+    pPC->setPosY(this->posy());
 }

@@ -33,7 +33,12 @@ void Clcdc_pc1350::disp(void)
     BYTE co,li,ind,b,data,x,y;
     WORD adr;
 
+    if (!updated) return;
+    //    if (!On) return;
+
+    lock.lock();
     Refresh = false;
+    updated = false;
 
     disp_symb();
 
@@ -58,22 +63,12 @@ void Clcdc_pc1350::disp(void)
                     x = ind + (co * 30);
                     y = 8 * li;
 
-                    data = ( On ? (BYTE) pPC->Get_8(adr) : 0 );
+//                    data = ( On ? (BYTE) pPC->Get_8(adr) : 0 );
+                    data = (BYTE) pPC->Get_8(adr);
 
                     for (b=0; b<8;b++)
                     {
                         drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off);
-//                        painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                        if (pixelSize > 1) {
-//                            painter.setBrush(((data>>b)&0x01) ? Color_On : Color_Off);
-//                            painter.drawRect(x*(pixelSize+pixelGap),
-//                                             (y+b)*(pixelSize+pixelGap),
-//                                             pixelSize-1,
-//                                             pixelSize-1);
-//                        }
-//                        else {
-//                            painter.drawPoint( x, y+b);
-//                        }
                     }
                     DirtyBuf[adr-baseAdr]=0;
                 }
@@ -82,6 +77,8 @@ void Clcdc_pc1350::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 ///////////////////////////////////////////////////////////////////////
 //

@@ -6,6 +6,7 @@
 #include "common.h"
 #include "Connect.h"
 #include "mainwindowpockemul.h"
+#include "clink.h"
 #include "pobject.h"
 
 #ifdef P_AVOID
@@ -102,4 +103,20 @@ void Cconnector::setType(Cconnector::ConnectorType type)
 
 QPointF Cconnector::pos() {
     return Parent->pos() + snap*mainwindow->zoom/100;
+}
+
+bool Cconnector::isLinked() {
+    return mainwindow->pdirectLink->isLinked(this);
+}
+
+Cconnector *Cconnector::LinkedTo() {
+    return mainwindow->pdirectLink->Linked(this);
+}
+
+CPObject *Cconnector::LinkedToObject() {
+    Cconnector *_conn = mainwindow->pdirectLink->Linked(this);
+    if (_conn)
+        return _conn->Parent;
+
+    return 0;
 }

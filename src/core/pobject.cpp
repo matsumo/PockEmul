@@ -1560,9 +1560,11 @@ void CPObject::setDisp_on(bool v)
 
 
     pLCDC->On = v;
-    if (v) {
+    if (!v) {
         pLCDC->disp();
-        Refresh_Display=true;
+        if (pLCDC->Refresh) {
+            Refresh_Display = true;
+        }
     }
 
     if (v && !disp_on) disp_onRaised=true;

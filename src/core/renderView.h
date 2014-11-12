@@ -41,6 +41,8 @@ public slots:
     void delPObject(CPObject *pObject);
     void movePObject(CViewObject*pObject, QPointF pos);
     void sizePObject(CViewObject*pObject, QSizeF size);
+    void showPObject(CViewObject *pObject);
+    void hidePObject(CViewObject *pObject);
     void stackPosChanged();
     void cloudClose();
 

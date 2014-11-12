@@ -253,7 +253,20 @@ void CrenderView::sizePObject(CViewObject *pObject, QSizeF size)
                               Q_ARG(QVariant, size.height())
                               );
 }
-
+void CrenderView::hidePObject(CViewObject *pObject)
+{
+//    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(cloud.object, "hidePocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              );
+}
+void CrenderView::showPObject(CViewObject *pObject)
+{
+//    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(cloud.object, "showPocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              );
+}
 void CrenderView::cloudClose()
 {
 //    qWarning()<<"sizePObject:"<<size;
