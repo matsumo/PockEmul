@@ -77,7 +77,7 @@ extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
 
-#define NBFRAMEPERSEC		30
+#define NBFRAMEPERSEC		20
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 #define TIMER_RES			1
 

@@ -1418,10 +1418,14 @@ bool CPObject::UpdateFinalImage(void)
 	QPainter painter;
 	if ( (BackgroundImage) )
 	{
+#if 0
         painter.begin(FinalImage);
         painter.drawImage(QPoint(0,0),*BackgroundImage);
         painter.end();
-
+#else
+        delete FinalImage;
+        FinalImage = new QImage(*BackgroundImage);
+#endif
         if (dialogkeylist)
         {
             InitView(currentView);
@@ -1553,7 +1557,13 @@ bool CPObject::getdisp_onRaised()
 
 void CPObject::setDisp_on(bool v)
 {
+
+
     pLCDC->On = v;
+    if (v) {
+        pLCDC->disp();
+        Refresh_Display=true;
+    }
 
     if (v && !disp_on) disp_onRaised=true;
     else disp_onRaised = false;

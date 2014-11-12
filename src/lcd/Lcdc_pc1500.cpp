@@ -96,6 +96,7 @@ void Clcdc_pc1500::disp(void)
     WORD adr;
 
     Refresh = false;
+    if (!On) return;
 
     disp_symb();
 
@@ -108,42 +109,18 @@ void Clcdc_pc1500::disp(void)
         {
             Refresh = true;
             DirtyBuf[adr-0x7600] = 0;
-            if (On)
-            {
-                data = (BYTE) ( LOW(pPC->Get_8(adr)) | ( LOW(pPC->Get_8(adr+1)) << 4) );
-            }
-            else
-            {
-                data = 0;
-            }
 
+            data = (BYTE) ( LOW(pPC->Get_8(adr)) | ( LOW(pPC->Get_8(adr+1)) << 4) );
             x = ind >> 1;
-
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, b);
             }
 
-            if (On)
-            {
-                data = (BYTE) ( HIGHT(pPC->Get_8(adr)) | ( HIGHT(pPC->Get_8(adr+1)) << 4) );
-            }
-            else
-            {
-                data = 0;
-            }
-
+            data = (BYTE) ( HIGHT(pPC->Get_8(adr)) | ( HIGHT(pPC->Get_8(adr+1)) << 4) );
             x += 78;
-
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, b);
             }
-
         }
     }
 
@@ -153,41 +130,17 @@ void Clcdc_pc1500::disp(void)
         {
             Refresh = true;
             DirtyBuf[adr-0x7600] = 0;
-            if (On)
-            {
-                data = (BYTE) ( LOW(pPC->Get_8(adr)) | ( LOW(pPC->Get_8(adr+1)) << 4) );
-            }
-            else
-            {
-                data = 0;
-            }
-
+            data = (BYTE) ( LOW(pPC->Get_8(adr)) | ( LOW(pPC->Get_8(adr+1)) << 4) );
             x = (ind >> 1) + 39;
-
-            for (b=0; b<7;b++)
-                {
-                    drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                    painter.drawPoint( x, b);
-                }
-
-            if (On)
-            {
-                data = (BYTE) ( HIGHT(pPC->Get_8(adr)) | ( HIGHT(pPC->Get_8(adr+1)) << 4) );
-            }
-            else
-            {
-                data = 0;
-            }
-
-            x += 78;
-
             for (b=0; b<7;b++) {
                 drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x, b);
             }
 
+            data = (BYTE) ( HIGHT(pPC->Get_8(adr)) | ( HIGHT(pPC->Get_8(adr+1)) << 4) );
+            x += 78;
+            for (b=0; b<7;b++) {
+                drawPixel(&painter,x,b,((data>>b)&0x01) ? Color_On : Color_Off );
+            }
         }
     }
 

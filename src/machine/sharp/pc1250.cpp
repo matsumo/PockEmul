@@ -206,7 +206,7 @@ bool Cpc1250::Chk_Adr(UINT32 *d,UINT32 data)
 //	Mem_Mirror(d);
 
 	if ( (*d>=0xC000) && (*d<=0xC7FF) )	return(true);		// RAM area(c000-c800)
-	if ( (*d>=0xF800) && (*d<=0xF87B) )	{ pLCDC->SetDirtyBuf(*d-0xF800); return(true);	}
+    if ( (*d>=0xF800) && (*d<=0xF87B) )	{ pLCDC->SetDirtyBuf(*d-0xF800); pLCDC->updated = true; return(true);	}
 	if ( (*d>=0xF800) && (*d<=0xF8FF) )	return(true);		// VRAM area(f800-f8ff)
 
 	return(false);

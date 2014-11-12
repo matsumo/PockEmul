@@ -138,7 +138,7 @@ void	Cpc15XX::initExtension(void)
 	ext_MemSlot1->setAvailable(ID_CE151,true);		ext_MemSlot1->setChecked(ID_CE151,false);
 	ext_MemSlot1->setAvailable(ID_CE155,true);		ext_MemSlot1->setChecked(ID_CE155,true);
 	ext_MemSlot1->setAvailable(ID_CE159,true);		ext_MemSlot1->setChecked(ID_CE159,false);
-	ext_MemSlot1->setAvailable(ID_CE160,true);		ext_MemSlot1->setChecked(ID_CE160,false);
+//	ext_MemSlot1->setAvailable(ID_CE160,true);		ext_MemSlot1->setChecked(ID_CE160,false);
 	ext_MemSlot1->setAvailable(ID_CE161,true);		ext_MemSlot1->setChecked(ID_CE161,false);
 
 	addExtMenu(ext_MemSlot1);

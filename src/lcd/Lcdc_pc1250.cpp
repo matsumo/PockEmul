@@ -203,6 +203,8 @@ void Clcdc_pc1260::disp(void)
     WORD adr;
 
     Refresh = false;
+    if (!updated) return;
+    updated = false;
     if (!On) return;
 
     disp_symb();

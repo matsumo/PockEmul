@@ -32,7 +32,7 @@ bool CTinyBasic::exit()
 void CTinyBasic::step()
 {
     loop();
-    pPC->pTIMER->state+=10;
+    pPC->pTIMER->state+=100;
 }
 
 void CTinyBasic::Load_Internal(QXmlStreamReader *xmlIn)
