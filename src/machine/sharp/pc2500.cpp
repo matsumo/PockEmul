@@ -220,6 +220,7 @@ bool Cpc2500::Chk_Adr(UINT32 *d,UINT32 data)
          ( (*d>=0x7800) && (*d<=0x787C) ))	{
         if (mem[*d] != data) {
             pLCDC->SetDirtyBuf(*d-0x7000);
+            pLCDC->updated = true;
         }
         return(1);
     }
