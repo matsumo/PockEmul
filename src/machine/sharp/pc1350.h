@@ -32,6 +32,9 @@ public:
 
     Cbus *busS1;
 
+    bool backdoorS1Open;
+    bool backdoorFlipping;
+
     Cpc13XX(CPObject *parent = 0);
 
     virtual ~Cpc13XX();

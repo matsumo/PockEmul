@@ -26,6 +26,7 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 
     BackFname   = P_RES(":/pc1360/pc1360Back.png");
 
+
     memsize			= 0x40000;
 //    InitMemValue    = 0xff;
 
@@ -56,6 +57,11 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     pTIMER		= new Ctimer(this);
 
     busS2 = new Cbus("RAM Bus S2");
+    backdoorS2Open = false;
+    backdoorS1Open = false;
+    backdoorFlipping = false;
+    m_backdoorS1Angle = 0;
+    m_backdoorS2Angle = 0;
 }
 
 Cpc1360::~Cpc1360()
@@ -67,7 +73,9 @@ bool Cpc1360::init()
 {
     Cpc13XX::init();
 
-    pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 2",true,QPoint(0,90));	publish(pS2CONNECTOR);
+    pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 2",true,QPoint(0,90));
+    publish(pS2CONNECTOR);
+
 
     return true;
 }
@@ -91,28 +99,37 @@ extern CrenderView* view;
 void Cpc1360::PreFlip(Direction dir, View targetView)
 {
     // hide memory cards
-    Cconnector * S1 = mainwindow->pdirectLink->Linked(pS1CONNECTOR);
-    if (S1) {
-        CPObject * S1PC = (CPObject *) (S1->Parent);
-        view->hidePObject(S1PC);
-    }
-    Cconnector * S2 = mainwindow->pdirectLink->Linked(pS2CONNECTOR);
-    if (S2) {
-        CPObject * S2PC = (CPObject *) (S2->Parent);
-        view->hidePObject(S2PC);
-    }
+    animateBackDoorS1(false);
+    animateBackDoorS2(false);
+    manageCardVisibility();
 }
 
 void Cpc1360::PostFlip()
 {
+    manageCardVisibility();
+}
+
+void Cpc1360::manageCardVisibility() {
     if (currentView == BACKview) {
         // show memory cards
         CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
-        if (S1PC)
-            view->showPObject(S1PC);
+        if (S1PC){
+            if (backdoorS1Open) {
+                view->showPObject(S1PC);
+            }
+            else {
+                view->hidePObject(S1PC);
+            }
+        }
         CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
-        if (S2PC)
-            view->showPObject(S2PC);
+        if (S2PC) {
+            if (backdoorS2Open) {
+                view->showPObject(S2PC);
+            }
+            else {
+                view->hidePObject(S2PC);
+            }
+        }
     }
 }
 
@@ -318,7 +335,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke,int scancode)
     Q_UNUSED(scancode)
 
     // Manage left connector click
-    if (KEY(0x240) && (currentView==LEFTview)) {
+    if ((currentView==LEFTview) && KEY(0x240) ) {
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
@@ -326,36 +343,218 @@ void Cpc1360::ComputeKey(KEYEVENT ke,int scancode)
         launcher->show();
     }
 
-    if (KEY(0x241) &&
-            (currentView==BACKview) &&
-            !pS1CONNECTOR->isLinked()) {
-        pKEYB->keyPressedList.removeAll(0x241);
-        FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,QString(),
-                                     "Sharp_35");
-        connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
-        currentSlot = 1;
-        launcher->show();
+    if ((currentView==BACKview) &&
+            KEY(0x241) &&
+            backdoorS1Open) {
+        if (!pS1CONNECTOR->isLinked()) {
+            pKEYB->keyPressedList.removeAll(0x241);
+            FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                        QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                        FluidLauncher::PictureFlowType,QString(),
+                                                        "Sharp_35");
+            connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+            currentSlot = 1;
+            launcher->show();
+        }
+        else {
+            // unlink card
+        }
     }
-    if (KEY(0x242) &&
-            (currentView==BACKview) &&
-            !pS2CONNECTOR->isLinked()) {
-        pKEYB->keyPressedList.removeAll(0x242);
-        FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,QString(),
-                                     "Sharp_35");
-        connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
-        currentSlot = 2;
-        launcher->show();
+    if ((currentView==BACKview) &&
+            KEY(0x242) &&
+            backdoorS2Open) {
+        if (!pS2CONNECTOR->isLinked()) {
+            pKEYB->keyPressedList.removeAll(0x242);
+            FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                        QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                        FluidLauncher::PictureFlowType,QString(),
+                                                        "Sharp_35");
+            connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+            currentSlot = 2;
+            launcher->show();
+        }
+        else {
+            // unlink card
+        }
     }
+    if ((currentView==BACKview) &&
+            KEY(0x243)) {
+        // open S1 & close S2
+        pKEYB->keyPressedList.removeAll(0x243);
+
+        animateBackDoorS1(true);
+        animateBackDoorS2(false);
+
+    }
+    if ((currentView==BACKview) &&
+            KEY(0x244)) {
+        // close S1 & close S2
+        pKEYB->keyPressedList.removeAll(0x244);
+
+        animateBackDoorS1(false);
+        animateBackDoorS2(false);
+
+    }
+    if ((currentView==BACKview) &&
+            KEY(0x245)) {
+        // close S1 & open S2
+        pKEYB->keyPressedList.removeAll(0x245);
+
+        animateBackDoorS1(false);
+        animateBackDoorS2(true);
+
+    }
+
 }
 
 void Cpc1360::linkObject(QString item,CPObject *pPC)
 {
-    Cconnector *_conn = (currentSlot==1) ? pS1CONNECTOR : pS2CONNECTOR;
+    qWarning()<<"currentslot:"<<currentSlot;
+    Cconnector *_conn = 0;
+    QRect _rect;
+    if (currentSlot==1) {
+        _conn = pS1CONNECTOR;
+        _rect = pKEYB->getKey(0x241).Rect;
+    }
+    else {
+        _conn = pS2CONNECTOR;
+        _rect = pKEYB->getKey(0x242).Rect;
+    }
     mainwindow->pdirectLink->addLink(_conn,pPC->ConnList.at(0),true);
-    pPC->setPosX(this->posx()+this->width()+15);
-    pPC->setPosY(this->posy());
+    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom/100);
+    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom/100);
+    pPC->raise();
+    if (currentSlot==1) {
+        pPC->setRotation(180);
+    }
+    emit stackPosChanged();
+}
+
+bool Cpc1360::UpdateFinalImage(void) {
+//    qWarning()<<"UpdateFinalImage";
+    // Draw backdoor when not in frontview
+    if (!flipping && (currentView != FRONTview) ) {
+//        InitView(BACKview);
+        delete BackImage;
+        BackImage = new QImage(BackImageBackup);
+    }
+
+    Cpc13XX::UpdateFinalImage();
+
+    if ((currentView != FRONTview) ) {
+        QPainter painter;
+        painter.begin(BackImage);
+        painter.translate(19*internalImageRatio,30*internalImageRatio+backDoorImage->height()/2);
+        QTransform matrix2;
+        matrix2.rotate(m_backdoorS1Angle, Qt::YAxis);
+        float sx = 0.55;
+        if (m_backdoorS1Angle<45)
+            sx = 1 - (float)m_backdoorS1Angle/100;
+        else
+            sx = .55 - (float)(m_backdoorS1Angle-45)/300;
+
+        matrix2.scale(sx,1);
+        painter.setTransform(matrix2,true);
+        painter.drawImage(0,-backDoorImage->height()/2,*backDoorImage);
+        painter.end();
+    }
+
+    if ((currentView != FRONTview) ) {
+        QPainter painter;
+        painter.begin(BackImage);
+        painter.translate(284*internalImageRatio,30*internalImageRatio);
+        QTransform matrix2;
+        matrix2.rotate(m_backdoorS2Angle, Qt::YAxis);
+        float sx = 0.55;
+        if (m_backdoorS2Angle<45)
+            sx = 1 - (float)m_backdoorS2Angle/100;
+        else
+            sx = .55 - (float)(m_backdoorS2Angle-45)/300;
+
+        matrix2.scale(sx,1);
+        painter.setTransform(matrix2,true);
+        painter.drawImage(0,0,backDoorImage->mirrored(true));
+        painter.end();
+    }
+    return true;
+}
+
+bool Cpc1360::InitDisplay()
+{
+    Cpc13XX::InitDisplay();
+    backDoorImage = new QImage(QImage(QString(P_RES(":/pc1360/backdoor.png"))).scaled(227*internalImageRatio,192*internalImageRatio));
+
+    BackImageBackup = BackImage->copy();
+    return true;
+}
+
+void Cpc1360::animateBackDoorS1(bool _open) {
+    qWarning()<<"ANIMATE S1";
+    if (backdoorS1Open == _open) return;
+
+    backdoorS1Open = _open;
+
+
+    QPropertyAnimation *animation1 = new QPropertyAnimation(this, "backdoorS1angle");
+     animation1->setDuration(1500);
+     if (backdoorS1Open) {
+         animation1->setStartValue(m_backdoorS1Angle);
+         animation1->setEndValue(70);
+     }
+     else {
+         manageCardVisibility();
+         animation1->setStartValue(m_backdoorS1Angle);
+         animation1->setEndValue(0);
+     }
+
+     QParallelAnimationGroup *group = new QParallelAnimationGroup;
+     group->addAnimation(animation1);
+
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(RefreshDisplay()));
+     connect(animation1,SIGNAL(finished()),this,SLOT(endbackdoorAnimation()));
+     backdoorFlipping = true;
+     group->start();
+
+}
+void Cpc1360::animateBackDoorS2(bool _open) {
+    qWarning()<<"ANIMATE S2";
+    if (backdoorS2Open == _open) return;
+
+    backdoorS2Open = _open;
+
+
+    QPropertyAnimation *animation1 = new QPropertyAnimation(this, "backdoorS2angle");
+     animation1->setDuration(1500);
+     if (backdoorS2Open) {
+         animation1->setStartValue(m_backdoorS2Angle);
+         animation1->setEndValue(70);
+     }
+     else {
+         manageCardVisibility();
+         animation1->setStartValue(m_backdoorS2Angle);
+         animation1->setEndValue(0);
+     }
+
+     QParallelAnimationGroup *group = new QParallelAnimationGroup;
+     group->addAnimation(animation1);
+
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(RefreshDisplay()));
+     connect(animation1,SIGNAL(finished()),this,SLOT(endbackdoorAnimation()));
+     backdoorFlipping = true;
+     group->start();
+
+}
+
+void Cpc1360::setbackdoorS1Angle(int value) {
+    this->m_backdoorS1Angle = value;
+}
+
+void Cpc1360::setbackdoorS2Angle(int value) {
+    this->m_backdoorS2Angle = value;
+}
+
+void Cpc1360::endbackdoorAnimation()
+{
+    backdoorFlipping = false;
+    manageCardVisibility();
 }

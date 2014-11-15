@@ -45,6 +45,7 @@ public slots:
     void hidePObject(CViewObject *pObject);
     void stackPosChanged();
     void cloudClose();
+    void rotPObject(CViewObject *pObject,int angle);
 
 
 };

@@ -264,6 +264,7 @@ public slots:
     void Dasm();
     void Postit();
     void VirtualKeyboard();
+    void RefreshDisplay();
 
 
     void createShortcut();

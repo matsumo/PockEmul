@@ -2,8 +2,11 @@
 <model>pc1360</model>
 <Keyboard>
     <KEY description="Left Connector" height="125" left="5" masterscancode="0x00" modifier="" scancode="0x240" top="90" width="15" view="LEFT"/>
-    <KEY description="S1" height="190" left="21" masterscancode="0x00" modifier="" scancode="0x241" top="31" width="220" view="BACK"/>
-    <KEY description="S2" height="190" left="287" masterscancode="0x00" modifier="" scancode="0x241" top="31" width="220" view="BACK"/>
+    <KEY description="S1" height="190" left="68" masterscancode="0x00" modifier="" scancode="0x241" top="31" view="BACK" width="140"/>
+    <KEY description="S2" height="190" left="322" masterscancode="0x00" modifier="" scancode="0x242" top="31" view="BACK" width="140"/>
+    <KEY description="Open S1" height="30" left="252" masterscancode="0x00" modifier="" scancode="0x243" top="108" view="BACK" width="25"/>
+    <KEY description="Lock S1-S2" height="50" left="251" masterscancode="0x00" modifier="" scancode="0x244" top="139" view="BACK" width="25"/>
+    <KEY description="Open S2" height="30" left="252" masterscancode="0x00" modifier="" scancode="0x245" top="189" view="BACK" width="25"/>
     <KEY description="-" height="22" left="542" masterscancode="0x00" modifier="" scancode="0x2d" top="218" width="32"/>
     <KEY description="(" height="22" left="542" masterscancode="0x00" modifier="" scancode="0x28" top="107" width="32"/>
     <KEY description=")" height="22" left="584" masterscancode="0x00" modifier="" scancode="0x29" top="107" width="32"/>

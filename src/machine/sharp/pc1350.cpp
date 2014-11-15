@@ -41,6 +41,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     cnt=0;
 
     busS1 = new Cbus("RAM Bus S1");
+    backdoorS1Open = false;
 }
 
 Cpc13XX::~Cpc13XX()

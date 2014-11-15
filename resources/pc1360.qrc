@@ -11,5 +11,6 @@
         <file>pc1360/cpu-1360.rom</file>
         <file>pc1360/pc1360Back.png</file>
         <file>pc1360/pc1360.png</file>
+        <file>pc1360/backdoor.png</file>
     </qresource>
 </RCC>

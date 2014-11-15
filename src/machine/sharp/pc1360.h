@@ -13,6 +13,8 @@
 
 class Cpc1360:public Cpc13XX{						//PC1360 emulator main class
 Q_OBJECT
+    Q_PROPERTY(int backdoorS1angle READ backdoorS1Angle WRITE setbackdoorS1Angle)
+    Q_PROPERTY(int backdoorS2angle READ backdoorS2Angle WRITE setbackdoorS2Angle)
 public:
     const char*	GetClassName(){ return("Cpc1360");}
 
@@ -39,10 +41,29 @@ public:
     Cpc1360(CPObject *parent = 0);
     virtual ~Cpc1360();
 
+    bool backdoorS2Open;
+
+
     virtual void ComputeKey(KEYEVENT ke, int scancode);
+    virtual bool UpdateFinalImage();
+    virtual bool InitDisplay(void);
+    void manageCardVisibility();
 public slots:
     void linkObject(QString item, CPObject *pPC);
+    void endbackdoorAnimation(void);
 private:
     int currentSlot;
+    QImage *backDoorImage;
+    QImage BackImageBackup;
+    void setbackdoorS1Angle(int value);
+    int backdoorS1Angle() const { return m_backdoorS1Angle; }
+    void setbackdoorS2Angle(int value);
+    int backdoorS2Angle() const { return m_backdoorS2Angle; }
+    int m_backdoorS1Angle;
+    int m_backdoorS2Angle;
+
+
+    void animateBackDoorS1(bool _open);
+    void animateBackDoorS2(bool _open);
 };
 #endif

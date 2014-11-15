@@ -119,6 +119,11 @@ void CViewObject::setDYmm(int v) {Pc_DY_mm = v;}
 
 void CViewObject::setDZmm(int v) {Pc_DZ_mm = v;}
 
+void CViewObject::setRotation(int v) {
+    rotation = v;
+    emit rotPObject(this,v);
+}
+
 QRectF CViewObject::rect()
 {
     return QRectF(PosX,PosY,Pc_DX,Pc_DY);
@@ -183,7 +188,11 @@ void CViewObject::InitView(View v) {
     case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
     case RIGHTview: if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname); break;
     case BOTTOMview:if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname); break;
-    case BACKview:  if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname); break;
+    case BACKview:  if (!BackFname.isEmpty()) {
+            delete BackImage;
+            BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
+        }
+        break;
     }
 }
 

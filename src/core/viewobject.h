@@ -77,7 +77,7 @@ public:
     void    setDYmm(int v);
     void    setDZmm(int v);
 
-    void setRotation(int v) { rotation = v; }
+    void setRotation(int v);
     int getRotation() { return rotation; }
 
     virtual bool InitDisplay(void);
@@ -99,6 +99,7 @@ signals:
     void movePObject(CViewObject*,QPointF);
     void sizePObject(CViewObject*,QSizeF);
     void updatedPObject(CViewObject *);
+    void rotPObject(CViewObject*,int angle);
 
 public slots:
     void endAnimation();   

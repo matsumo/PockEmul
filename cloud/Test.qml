@@ -360,6 +360,17 @@ Rectangle {
     //        console.log("object sized to ("+_width+","+_height+")");
         }
     }
+    function setRotPocket(_pocketId,angle) {
+
+        var index = getIndex(_pocketId);
+
+    //    console.log("found index:"+index);
+        if (index !== -1) {
+
+            renderArea.xmlThumbModel.get(index)._rotation = angle;
+    //        console.log("object sized to ("+_width+","+_height+")");
+        }
+    }
     function orderPocket(_pocketId,_zorder) {
 
         var index = getIndex(_pocketId);

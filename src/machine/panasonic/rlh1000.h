@@ -47,7 +47,6 @@ public:
 public slots:
     void endbackdoorAnimation(void);
     void addModule(QString item, CPObject *pPC);
-    void RefreshDisplay();
 
 private:
     CbusPanasonic *bus;

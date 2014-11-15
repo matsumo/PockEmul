@@ -1026,6 +1026,12 @@ void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode)
     }
 }
 
+void CPObject::RefreshDisplay()
+{
+    Refresh_Display = true;
+    update();
+}
+
 void CPObject::paintEvent(QPaintEvent *event)
 {
 #ifdef Q_OS_ANDROID

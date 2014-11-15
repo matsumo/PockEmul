@@ -130,7 +130,8 @@ bool CDirectLink::isLinked(CPObject * search)
 
 bool CDirectLink::isLinked(Cconnector * search)
 {
-     return ((AConnList.indexOf(search)>=0) || (BConnList.indexOf(search)>=0)) ;
+     return (AConnList.contains(search) ||
+             BConnList.contains(search)) ;
 }
 
 Cconnector * CDirectLink::Linked(Cconnector * search)

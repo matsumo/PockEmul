@@ -214,6 +214,7 @@ void CrenderView::newPObject(CPObject *pObject) {
     connect (pObject,SIGNAL(sizePObject(CViewObject*,QSizeF)),this,SLOT(sizePObject(CViewObject*,QSizeF)));
     connect (pObject,SIGNAL(stackPosChanged()),this,SLOT(stackPosChanged()));
     connect( pObject,SIGNAL(updatedPObject(CViewObject*)),this,SLOT(pocketUpdated(CViewObject*)));
+    connect( pObject,SIGNAL(rotPObject(CViewObject*,int)),this,SLOT(rotPObject(CViewObject*,int)));
 
     QMetaObject::invokeMethod(cloud.object, "addPocket",
                               Q_ARG(QVariant, QString("name")),
@@ -271,6 +272,14 @@ void CrenderView::cloudClose()
 {
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "cloudHide");
+}
+
+void CrenderView::rotPObject(CViewObject *pObject,int angle)
+{
+    QMetaObject::invokeMethod(cloud.object, "setRotPocket",
+                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant,angle)
+                              );
 }
 
 void CrenderView::stackPosChanged()

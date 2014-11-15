@@ -776,12 +776,6 @@ void Crlh1000::addModule(QString item,CPObject *pPC)
     currentAdr=0;
 }
 
-void Crlh1000::RefreshDisplay()
-{
-    Refresh_Display = true;
-    update();
-}
-
 UINT8 Crlh1000::getKey(quint8 row )
 {
     quint8 data = 0;
