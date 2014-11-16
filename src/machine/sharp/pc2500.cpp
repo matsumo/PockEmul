@@ -99,7 +99,6 @@ bool Cpc2500::UpdateFinalImage(void) {
     CpcXXXX::UpdateFinalImage();
     QPainter painter;
 
-    // PRINTER SWITCH
     painter.begin(FinalImage);
 
     float ratio = ( (float) pce515p->paperWidget->width() ) / ( pce515p->paperWidget->bufferImage->width() - pce515p->paperWidget->getOffset().x() );
@@ -114,9 +113,10 @@ bool Cpc2500::UpdateFinalImage(void) {
                       pce515p->paperWidget->bufferImage->copy(source).scaled(pce515p->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
 
+    // PRINTER SWITCH
     painter.drawImage(580*internalImageRatio,239*internalImageRatio,
                       BackgroundImageBackup->copy(580*internalImageRatio,239*internalImageRatio,
-                                                  59*internalImageRatio,15*internalImageRatio).mirrored(!printMode,false));
+                                                  59*internalImageRatio,15*internalImageRatio).mirrored(printMode,false));
 
 
     // CAPS LOCK
@@ -159,7 +159,7 @@ void	Cpc2500::Set_PortF(BYTE data)
 
     ProtectMemory = GET_PORT_BIT(PORT_F,1);
     romExt = GET_PORT_BIT(PORT_F,1) ? 0 : 1;
-    qWarning()<<"romExt:"<<romExt;
+//    qWarning()<<"romExt:"<<romExt;
 
 //    if (ProtectMemory == GET_PORT_BIT(PORT_F,1)) {
 //        ProtectMemory = GET_PORT_BIT(PORT_F,1) ? 0 : 1;
@@ -205,7 +205,7 @@ bool Cpc2500::Chk_Adr(UINT32 *d,UINT32 data)
     }
     if ( (*d>=0x7100) && (*d<=0x71FF) )	{
         RomBank = data;
-        qWarning()<<"RomBank: "<<RomBank;
+//        qWarning()<<"RomBank: "<<RomBank;
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"ROMBANK [%04x]=%02x\n",(uint)*d,(BYTE)data);
         return(1);
     }
@@ -291,6 +291,10 @@ bool Cpc2500::run(void)
     pce515p->set_SD(Get_Port_bit(PORT_F,3));
     pce515p->run();
 
+    if (pce515p->Refresh_Display) {
+        Refresh_Display = true;
+        pce515p->Refresh_Display = false;
+    }
     return true;
 }
 
