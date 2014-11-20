@@ -143,12 +143,12 @@ mainwindow = new MainWindowPockemul();
     mainwindow->centralwidget = view;
 #endif
 
-
+#ifdef GL
     QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
     view = new CrenderView(mainwindow->centralwidget);
     windowLayout->addWidget(view);
     windowLayout->setMargin(0);
-
+#endif
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
@@ -181,7 +181,9 @@ mainwindow = new MainWindowPockemul();
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
                                                 ":/core/pocket.png","BRAND");
     launch1->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     launch1->hide();
+#endif
     v_pos += v_inter;
     launch1->setToolTip("Start a new Pocket Emulation.");
     qWarning()<<"launch1="<<launch1;
@@ -192,7 +194,9 @@ mainwindow = new MainWindowPockemul();
                                                  QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                  ":/core/ext.png");
     launch2->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     launch2->hide();
+#endif
     v_pos += v_inter;
     launch2->setToolTip("Start a new Extension Emulation.");
 #endif
@@ -204,7 +208,9 @@ mainwindow = new MainWindowPockemul();
                                                      ":/core/dev.png");
     mainwindow->connect(dev,SIGNAL(clicked()),mainwindow,SLOT(IDE()));
     dev->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     dev->hide();
+#endif
     v_pos += v_inter;
     dev->setToolTip("Start the Integrated development Environment.");
 #endif
@@ -215,7 +221,9 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/save.png");
     mainwindow->connect(save,SIGNAL(clicked()),mainwindow,SLOT(saveassession()));
     save->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     save->hide();
+#endif
     v_pos += v_inter;
     save->setToolTip("Save the current session.");
 
@@ -225,7 +233,9 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/load.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     load->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     load->hide();
+#endif
     v_pos += v_inter;
     load->setToolTip("Load an existing session.");
 
@@ -236,11 +246,13 @@ mainwindow = new MainWindowPockemul();
 #ifdef Q_OS_ANDROID
                                                      ":/core/cloud-white.png");
 #else
-                                                      ":/core/cloud.png");
+                                                       ":/core/cloud.png");
 #endif
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
     cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     cloudButton->hide();
+#endif
     v_pos += v_inter;
     cloudButton->setToolTip("Go to the Cloud.");
 #endif
@@ -251,7 +263,9 @@ mainwindow = new MainWindowPockemul();
                                                       ":/core/bookcase.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     bookcase->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     bookcase->hide();
+#endif
     v_pos += v_inter;
     bookcase->setToolTip("Browse the bookcase.");
 
@@ -262,7 +276,9 @@ mainwindow = new MainWindowPockemul();
     mainwindow->connect(exit,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
 
     exit->setGeometry(0,v_pos,iconSize,iconSize);
+#ifdef GL
     exit->hide();
+#endif
     v_pos += v_inter;
 
     exit->setToolTip("Exit PockEmul.");

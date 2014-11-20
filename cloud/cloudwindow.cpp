@@ -69,15 +69,18 @@ CloudWindow::CloudWindow(QWidget *parent)
     cloudView->rootContext()->setContextProperty("cloud", &cloud);
     cloudView->setSource(QUrl("qrc:/Main.qml"));
     cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
-    connect(cloudView->engine(), SIGNAL(quit()), this,SLOT(closeQuick()));
 
     cloud.object = (QObject*) cloudView->rootObject();
+
+//    connect(cloudView->engine(), SIGNAL(quit()), this,SLOT(closeQuick()));
+    connect(cloud.object, SIGNAL(close()), this,SLOT(closeQuick()));
+
 
     QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), &cloud, SLOT(warning(QString)));
 
 
-    connect(cloud.m_fileDialog, SIGNAL(fileSelected(QString)),
-            this, SLOT(sendPML(QString)));
+//    connect(cloud.m_fileDialog, SIGNAL(fileSelected(QString)),
+//            this, SLOT(sendPML(QString)));
 
     QVBoxLayout *windowLayout = new QVBoxLayout(this);
 //    QWidget *container = QWidget::createWindowContainer(view,this);
@@ -365,7 +368,8 @@ void Cloud::warning(QString msg) {
 
 void CloudWindow::closeQuick()
 {
-    cloudView->hide();
+    this->hide();
+//    cloudView->hide();
 //    mainwindow->centralwidget->show();
 }
 

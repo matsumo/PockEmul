@@ -590,9 +590,9 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
 
-//#ifdef Q_OS_ANDROID
-//    pPC->show();
-//#endif
+#ifndef GL
+    pPC->show();
+#endif
 
 qWarning()<<"init ok4";
     return pPC;
@@ -1373,7 +1373,7 @@ void MainWindowPockemul::updateFrameTimer()
         if ( CurrentpPC->Refresh_Display) {
             //                    qWarning()<<"main1:"<<mainwindow->rawclk;
             CurrentpPC->UpdateFinalImage();
-            //                    CurrentpPC->update();
+            CurrentpPC->update();
             emit CurrentpPC->updatedPObject(CurrentpPC);
             //                    qWarning()<<"main2:"<<mainwindow->rawclk;
             CurrentpPC->Refresh_Display= false;
