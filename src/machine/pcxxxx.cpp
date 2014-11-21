@@ -95,8 +95,8 @@ bool CpcXXXX::UpdateFinalImage(void)
 #ifdef Q_OS_ANDROID
 #define TRANSFORM Qt::FastTransformation
 #else
-//#define TRANSFORM Qt::SmoothTransformation
-#define TRANSFORM Qt::FastTransformation
+#define TRANSFORM Qt::SmoothTransformation
+//#define TRANSFORM Qt::FastTransformation
 #endif
 
     //    qWarning()<<"UpdateFinalImage";
