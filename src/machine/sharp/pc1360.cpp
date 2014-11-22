@@ -462,7 +462,7 @@ bool Cpc1360::UpdateFinalImage(void) {
     if ((currentView != FRONTview) ) {
         QPainter painter;
         painter.begin(BackImage);
-        painter.translate(284*internalImageRatio,30*internalImageRatio);
+        painter.translate(284*internalImageRatio,30*internalImageRatio+backDoorImage->height()/2);
         QTransform matrix2;
         matrix2.rotate(m_backdoorS2Angle, Qt::YAxis);
         float sx = 0.55;
@@ -473,7 +473,7 @@ bool Cpc1360::UpdateFinalImage(void) {
 
         matrix2.scale(sx,1);
         painter.setTransform(matrix2,true);
-        painter.drawImage(0,0,backDoorImage->mirrored(true));
+        painter.drawImage(0,-backDoorImage->height()/2,backDoorImage->mirrored(true));
         painter.end();
     }
     return true;
