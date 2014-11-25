@@ -6,6 +6,8 @@
 #include "Lcdc_ce1560.h"
 #include "Lcdc_symb.h"
 
+//TODO: A way to improve performance is to keep a memory image of pixels to redraw only modified pixels.
+
 Clcdc_ce1560::Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
@@ -19,6 +21,8 @@ bool	Clcdc_ce1560::init(void)
 {
     Clcdc::init();
     TurnON();
+
+    memset(pixels,-1,sizeof(pixels));
 
     return true;
 }
@@ -81,8 +85,15 @@ void Clcdc_ce1560::disp(void)
                     for (b=0; b<8;b++)
                     {
                         int y = computeSL(((Cce1560 *)pPC)->ps6b0108[_m],j*8+b);
-                        if ((y>=0)&&(y < 64))
-                            drawPixel(&painter,_m*64+i, y,((data>>b)&0x01) ? Color_On : Color_Off );
+                        if ((y>=0)&&(y < 64)) {
+                            int _x = _m*64+i;
+                            int _col = ((data>>b)&0x01);
+                            if (pixels[_x][y] != _col)
+                            {
+                                drawPixel(&painter,_x, y,_col ? Color_On : Color_Off );
+                                pixels[_x][y] = _col;
+                            }
+                        }
                     }
                 }
             }
@@ -90,8 +101,13 @@ void Clcdc_ce1560::disp(void)
         else {
             // Turn off screen
             for (int i=0;i<64;i++)
-                for (int j=0;j<64;j++)
-                    drawPixel(&painter,_m*64+i,j,Color_Off);
+                for (int j=0;j<64;j++) {
+                    int _x = _m*64+i;
+                    if (pixels[_x][j]!=0) {
+                        drawPixel(&painter,_x, j,Color_Off );
+                        pixels[_x][j] = 0;
+                    }
+                }
         }
     }
 

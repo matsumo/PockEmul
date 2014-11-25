@@ -24,6 +24,7 @@ public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();
     Q_INVOKABLE void loadSlot();
+    Q_INVOKABLE void bookcaseSlot();
 
     Q_INVOKABLE void warning(QString msg);
     Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);
@@ -46,6 +47,7 @@ public slots:
     void stackPosChanged();
     void cloudClose();
     void rotPObject(CViewObject *pObject,int angle);
+
 
 
 };

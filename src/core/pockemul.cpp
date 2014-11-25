@@ -45,6 +45,7 @@ CWatchPoint WatchPoint;
 LaunchButtonWidget* launch1;
 LaunchButtonWidget* launch2;
 LaunchButtonWidget* load;
+LaunchButtonWidget* bookcase;
 
 bool soundEnabled=true;
 bool hiRes=true;
@@ -257,7 +258,7 @@ mainwindow = new MainWindowPockemul();
     cloudButton->setToolTip("Go to the Cloud.");
 #endif
 
-    LaunchButtonWidget* bookcase = new LaunchButtonWidget(mainwindow->centralwidget,
+    bookcase = new LaunchButtonWidget(mainwindow->centralwidget,
                                                       LaunchButtonWidget::FileBrowser,
                                                           QStringList()<< (downloadManager->targetDir)<<"*.pdf",
                                                       ":/core/bookcase.png");

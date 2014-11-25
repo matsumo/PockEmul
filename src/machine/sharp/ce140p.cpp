@@ -1,7 +1,6 @@
-//TODO:  Paper positionning
-//FIXME: Gérer correctement le commutateur SIO/PRN. Si sur SIO, l'imprimante intercepte les commande PRN
-//FIXME: Lorsque les PRQ et PAK sont gérés, plus rien ne marche
-
+ï»¿//TODO:  Paper positionning
+//FIXME: GÃ©rer correctement le commutateur SIO/PRN. Si sur SIO, l'imprimante intercepte les commande PRN
+//FIXME: Lorsque les PRQ et PAK sont gÃ©rÃ©s, plus rien ne marche
 
 #include <QPainter>
 
@@ -168,7 +167,7 @@ void Cce140p::ComputeKey(KEYEVENT ke,int scancode)
 bool Cce140p::UpdateFinalImage(void) {
     Cce515p::UpdateFinalImage();
 
-    // Draw switch by 180° rotation
+    // Draw switch by 180  rotation
     QPainter painter;
 
     // PRINTER SWITCH

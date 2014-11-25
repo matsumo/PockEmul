@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>600</height>
+    <height>972</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -50,7 +50,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -343,6 +343,9 @@
         <string>New Builder</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_6">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <property name="leftMargin">
          <number>2</number>
         </property>
@@ -564,6 +567,9 @@
         <string>Defined builders</string>
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_7">
+        <property name="spacing">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QListWidget" name="lwBuilders"/>
         </item>
@@ -761,10 +767,10 @@
   </action>
  </widget>
  <resources>
-  <include location="../resources/pc1500.qrc"/>
   <include location="../resources/pc1250.qrc"/>
   <include location="../resources/pc1251.qrc"/>
   <include location="../resources/pc1350.qrc"/>
+  <include location="../resources/pc1500.qrc"/>
  </resources>
  <connections/>
 </ui>

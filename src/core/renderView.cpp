@@ -48,6 +48,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
     QObject::connect(cloud.object, SIGNAL(sendSave()), mainwindow,SLOT(saveassession()));
     QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(loadSlot()));
+    QObject::connect(cloud.object, SIGNAL(sendBook()), this, SLOT(bookcaseSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
 
     QObject::connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(cloudClose()));
@@ -74,6 +75,12 @@ extern LaunchButtonWidget* load;
 void CrenderView::loadSlot()
 {
     load->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
+}
+
+extern LaunchButtonWidget* bookcase;
+void CrenderView::bookcaseSlot()
+{
+    bookcase->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
 }
 
 void CrenderView::warning(QString msg) {

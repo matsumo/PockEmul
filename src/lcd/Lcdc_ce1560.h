@@ -15,6 +15,7 @@ public:
     int computeSL(CHD61102* pCtrl,int ord);
     int symbSL(int x);
     int x2a[100];
+    int pixels[192][64];
 
 
     Clcdc_ce1560(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());

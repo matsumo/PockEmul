@@ -123,7 +123,7 @@ Rectangle {
 
         console.log('before POST:');
         xhr.open('POST', url,true);
-        console.log('before SEND:');
+        console.log('before SEND*:'+data+'*');
         xhr.send(data);
         console.log('after SEND:');
 
