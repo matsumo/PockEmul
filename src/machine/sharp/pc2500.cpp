@@ -26,6 +26,10 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
     Initial_Session_Fname ="pc2500.pkm";
 
     BackGroundFname	= P_RES(":/pc2500/pc2500.png");
+    RightFname = "";
+    LeftFname  = "";
+    TopFname   = "";
+    BottomFname= "";
 
     memsize			= 0x18000;
 
@@ -42,11 +46,9 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
     pLCDC		= new Clcdc_pc2500(this,
                                    QRect(560,70,300,64),
                                    QRect(560,60,300,5));
+    delete pKEYB;
     pKEYB		= new Ckeyb(this,"pc2500.map",scandef_pc2500);
-    pCPU		= new CSC61860(this);
 
-
-    pTIMER		= new Ctimer(this);
     pce515p     = new Cce515p(this);
     pce515p->pTIMER = pTIMER;
 

@@ -22,7 +22,6 @@ public:
 
 private:
     Models model;
-    bool rotate;
 };
 
 #endif // CE2XXX_H

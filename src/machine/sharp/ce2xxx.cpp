@@ -100,7 +100,6 @@ Cce2xxx::Cce2xxx(CPObject *parent ,Models mod):CPObject(parent)
     }
 
     bus = new Cbus();
-    rotate = false;
 }
 
 Cce2xxx::~Cce2xxx()
@@ -123,7 +122,7 @@ bool Cce2xxx::init()
 
 bool Cce2xxx::exit()
 {
-
+    return true;
 }
 
 bool Cce2xxx::run()
@@ -137,16 +136,13 @@ bool Cce2xxx::run()
 
     quint16 addr = bus->getAddr() & (memsize - 1);
 
-    if ( bus->isEnable())
-    {
-        if (bus->isWrite()) {
-//            qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
-            mem[addr] = bus->getData();
-        }
-        else {
-            bus->setData(mem[addr]);
-//            qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
-        }
+    if (bus->isWrite()) {
+//        qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+        mem[addr] = bus->getData();
+    }
+    else {
+        bus->setData(mem[addr]);
+//        qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
     }
 
     bus->setEnable(false);
@@ -159,7 +155,6 @@ bool Cce2xxx::SaveSession_File(QXmlStreamWriter *xmlOut)
 {
     xmlOut->writeStartElement("session");
         xmlOut->writeAttribute("version", "2.0");
-        xmlOut->writeAttribute("rotate",QString("%1").arg(rotate));
         xmlOut->writeStartElement("memory");
             for (int s=0; s<SlotList.size(); s++)                               // Save Memory
             {
@@ -177,7 +172,6 @@ bool Cce2xxx::SaveSession_File(QXmlStreamWriter *xmlOut)
 bool Cce2xxx::LoadSession_File(QXmlStreamReader *xmlIn)
 {
     if (xmlIn->name()=="session") {
-        bool rot = xmlIn->attributes().value("rotate").toString().toInt(0,16);
 
         if (xmlIn->readNextStartElement() && xmlIn->name() == "memory" ) {
             AddLog(LOG_MASTER,"Load Memory");
