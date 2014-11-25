@@ -874,7 +874,7 @@ void Cx07::LoadNewK7()
     QFileInfo fi( fn );
             if (fi.suffix().isEmpty())
             {
-                    // no suffix, adding .pml  - BUG For Android
+                    // no suffix, adding .cas  - BUG For Android
                 fn.append(".cas");
             }
 

@@ -7,7 +7,7 @@ BYTE scandef_pc2500[] = {
 K_SML,		K_6,		' ',		'z',		'a',		'q',		'1',		NUL,
 K_F1,		K_3,		'*',		'x',		's',		'w',		'2',		NUL,
 K_RET,		K_MIN,		'+',		'c',		'd',		'e',		'3',		NUL,
-K_F2,		K_PT,		K_0,		'v',		'f',		0x72,		'4',		NUL,
+K_F2,		K_PT,		K_0,		'v',		'f',		'r',		'4',		NUL,
 K_F3,		K_2,		K_1,		'b',		'g',		't',		'5',		NUL,
 K_DEL,		K_5,		K_4,		'n',		'h',		'y',		'6',		NUL,
 K_INS,		K_8,		K_7,		'm',		'j',		'u',		'7',		NUL,
