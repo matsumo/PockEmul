@@ -924,12 +924,14 @@ bool CpcXXXX::LoadExt(QXmlStreamReader *xmlIn)
                 if ( xmlIn->name() == "ext" ) {
 
                     int i = xmlIn->attributes().value("idarray").toString().toInt(0,10);
-                    QString Id = xmlIn->attributes().value("idext").toString();
-                    AddLog(LOG_MASTER,"Found : "+Id);
-                    for (int j = 0;j<NB_EXT;j++) {
-                        if (extensionArray[i]->ExtArray[j]->Id == Id) {
-                            extensionArray[i]->ExtArray[j]->IsChecked = true;
-                            AddLog(LOG_MASTER,tr("Found : %1").arg(j));
+                    if (extensionArray[i]) {
+                        QString Id = xmlIn->attributes().value("idext").toString();
+                        AddLog(LOG_MASTER,"Found : "+Id);
+                        for (int j = 0;j<NB_EXT;j++) {
+                            if (extensionArray[i]->ExtArray[j]->Id == Id) {
+                                extensionArray[i]->ExtArray[j]->IsChecked = true;
+                                AddLog(LOG_MASTER,tr("Found : %1").arg(j));
+                            }
                         }
                     }
                 }

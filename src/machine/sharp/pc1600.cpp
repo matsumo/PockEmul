@@ -45,16 +45,12 @@ if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
     TopFname    = P_RES(":/pc1600/pc1600Top.png");
     BottomFname = P_RES(":/pc1600/pc1600Bottom.png");
 
-    KeyMap		= KeyMap1600;
-    KeyMapLenght= KeyMap1600Lenght;
-
     setDXmm(195);
     setDYmm(86);
     setDZmm(25);
 
     setDX(679);
     setDY(299);
-
 
     SoundOn			= false;
     lh5810_Access	= false;
@@ -80,8 +76,6 @@ if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
     pTC8576P    = new CTC8576P(this,1288800);
 
     bus = new CbusPc1500();
-
-    ce1600_connected = false;
 
     Tape_Base_Freq=2500;
 

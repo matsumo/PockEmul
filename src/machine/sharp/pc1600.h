@@ -25,9 +25,6 @@
 #include "lu57813p.h"
 #include "tc8576p.h"
 
-extern TransMap KeyMap1600[];
-extern int KeyMap1600Lenght;
-
 class CZ80;
 class CbusPc1500;
 
@@ -113,7 +110,6 @@ public:
 
     bool		lh5810_Access;
     bool        ce150_connected;
-    bool		ce1600_connected;
     bool		ce150_Access;
 
     UINT8 bank1,bank2,bank3,bank4;

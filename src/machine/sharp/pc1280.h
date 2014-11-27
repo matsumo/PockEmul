@@ -27,6 +27,8 @@ public:
     virtual void    TurnON(void);
     virtual void    TurnOFF(void);
 
+    virtual bool InitDisplay(void);
+
     void paintEvent(QPaintEvent *event);
     virtual void TurnCLOSE(void);
     void setAngle(int value);

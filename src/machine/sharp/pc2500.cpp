@@ -1,6 +1,7 @@
 //BUG:  the RUN statement is not working. DEF"a" or RUN 10 are working
 //BUG:   c'est un probleme de bankswitch
 //FIXME: DEF key is not working
+
 #include <QtGui>
 #include "pc2500.h"
 #include "sc61860.h"
@@ -79,7 +80,7 @@ bool Cpc2500::init(void) {
 
     remove(pCONNECTOR); // delete pCONNECTOR;
 
-    WatchPoint.remove(&pCONNECTOR_value);    // Remove the pc130 11pins connector from the analogic monitor
+    WatchPoint.remove(&pCONNECTOR_value);    // Remove the pc1350 11pins connector from the analogic monitor
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     return true;
 }
@@ -159,8 +160,12 @@ void	Cpc2500::Set_PortF(BYTE data)
     if (pCPU->fp_log) fprintf(pCPU->fp_log,"WRITE PORT F = %i\n",data);
     IO_F = data;
 
-    ProtectMemory = GET_PORT_BIT(PORT_F,1);
+//    if (!(RomBank&0x02))
+        ProtectMemory = GET_PORT_BIT(PORT_F,1);
+
     romExt = GET_PORT_BIT(PORT_F,1) ? 0 : 1;
+    qWarning()<<"F:"<<IO_F<<"   protect:"<<ProtectMemory;
+
 //    qWarning()<<"romExt:"<<romExt;
 
 //    if (ProtectMemory == GET_PORT_BIT(PORT_F,1)) {
@@ -207,7 +212,7 @@ bool Cpc2500::Chk_Adr(UINT32 *d,UINT32 data)
     }
     if ( (*d>=0x7100) && (*d<=0x71FF) )	{
         RomBank = data;
-//        qWarning()<<"RomBank: "<<RomBank;
+        qWarning()<<"RomBank: "<<RomBank<<"    RomExt: "<<romExt<<"   protect:"<<ProtectMemory;
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"ROMBANK [%04x]=%02x\n",(uint)*d,(BYTE)data);
         return(1);
     }

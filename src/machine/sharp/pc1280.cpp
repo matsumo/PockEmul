@@ -82,6 +82,13 @@ bool Cpc1280::init(void) {
     return true;
 }
 
+bool Cpc1280::InitDisplay()
+{
+    Cpc13XX::InitDisplay();
+
+    return true;
+}
+
 void Cpc1280::initExtension(void)
 {
 
