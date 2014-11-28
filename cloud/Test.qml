@@ -71,7 +71,7 @@ Rectangle {
 
     visible: true
     width: 1024; height: 600
-    color: "transparent"
+    color: "black" //transparent"
 
     property int highestZ: 0
     property real defaultSize: 200

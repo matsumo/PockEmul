@@ -63,17 +63,13 @@ Rectangle {
     }
     Image {
         id: cloudImag
-        source: "qrc:/core/cloud.png"
+        source: "qrc:/core/cloud-white.png"
         width:parent.iconsize
         height:parent.iconsize
         anchors.top: load.bottom
         MouseArea {
             anchors.fill: parent
-            onClicked: { cloudShow();
-//                thecloud.visible = true;
-//                scene.visible = false;
-//                menu.visible = false;
-            }
+            onClicked: cloudShow();
         }
     }
     Image {
