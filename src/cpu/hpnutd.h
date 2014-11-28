@@ -1,7 +1,7 @@
 #ifndef HPNUTD_H
 #define HPNUTD_H
 
-#include "debug.h"
+#include "Debug.h"
 
 class Chpnut;
 
