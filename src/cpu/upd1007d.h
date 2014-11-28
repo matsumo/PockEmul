@@ -1,7 +1,7 @@
 #ifndef UPD1007D_H
 #define UPD1007D_H
 #include "common.h"
-#include "debug.h"
+#include "Debug.h"
 
 enum t_kind {
     NONE,	/* no arguments */
