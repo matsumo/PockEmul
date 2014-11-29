@@ -68,9 +68,9 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     busMem = new CbusPc1500();
 	
 	Tape_Base_Freq=2500;
-	initExtension();
-	extensionArray[0] = ext_60pins;
-	extensionArray[1] = ext_MemSlot1;
+//	initExtension();
+//	extensionArray[0] = ext_60pins;
+//	extensionArray[1] = ext_MemSlot1;
 }
 
 Cpc15XX::~Cpc15XX()
@@ -150,6 +150,7 @@ void Cpc15XX::TurnON(void)
 
 void	Cpc15XX::initExtension(void)
 {
+#if 0
 	// initialise ext_MemSlot1
 	ext_MemSlot1 = new CExtensionArray("Memory Slot","Add memory module");
 	ext_MemSlot1->setAvailable(ID_CE151,true);		ext_MemSlot1->setChecked(ID_CE151,false);
@@ -159,6 +160,7 @@ void	Cpc15XX::initExtension(void)
 	ext_MemSlot1->setAvailable(ID_CE161,true);		ext_MemSlot1->setChecked(ID_CE161,false);
 
 	addExtMenu(ext_MemSlot1);
+#endif
 }
 
 bool Cpc15XX::CompleteDisplay(void)

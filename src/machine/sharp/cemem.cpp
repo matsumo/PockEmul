@@ -139,6 +139,15 @@ bool Ccemem::run()
         }
     }
 
+    if ( (model == CE160) &&
+         (addr <=0x3FFF) ) {
+        if (bus1500->isWrite()) {
+            mem[addr] = bus1500->getData();
+        }
+        else {
+            bus1500->setData(mem[addr]);
+        }
+    }
     bus1500->setEnable(false);
     pCONNECTOR->Set_values(bus1500->toUInt64());
 
