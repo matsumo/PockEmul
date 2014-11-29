@@ -462,18 +462,18 @@ bool Cpc1360::UpdateFinalImage(void) {
     if ((currentView != FRONTview) ) {
         QPainter painter;
         painter.begin(BackImage);
-        painter.translate(284*internalImageRatio,30*internalImageRatio+backDoorImage->height()/2);
+        painter.translate(284*internalImageRatio+backDoorImage->width(),30*internalImageRatio+backDoorImage->height()/2);
         QTransform matrix2;
         matrix2.rotate(m_backdoorS2Angle, Qt::YAxis);
         float sx = 0.55;
-        if (m_backdoorS2Angle<45)
-            sx = 1 - (float)m_backdoorS2Angle/100;
+        if (m_backdoorS2Angle>-45)
+            sx = 1 + (float)m_backdoorS2Angle/100;
         else
-            sx = .55 - (float)(m_backdoorS2Angle-45)/300;
+            sx = .55 + (float)(m_backdoorS2Angle+45)/300;
 
         matrix2.scale(sx,1);
         painter.setTransform(matrix2,true);
-        painter.drawImage(0,-backDoorImage->height()/2,backDoorImage->mirrored(true));
+        painter.drawImage(-backDoorImage->width(),-backDoorImage->height()/2,backDoorImage->mirrored(true));
         painter.end();
     }
     return true;
@@ -527,7 +527,7 @@ void Cpc1360::animateBackDoorS2(bool _open) {
      animation1->setDuration(1500);
      if (backdoorS2Open) {
          animation1->setStartValue(m_backdoorS2Angle);
-         animation1->setEndValue(70);
+         animation1->setEndValue(-70);
      }
      else {
          manageCardVisibility();
