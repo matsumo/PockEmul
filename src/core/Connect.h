@@ -32,6 +32,7 @@ public:
         Sharp_15,
         Sharp_11,
         Sharp_35,
+        Sharp_40,
         Sharp_50,
         Sharp_60,
         Jack,

@@ -58,6 +58,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     pTIMER	= 0;
     pLCDC	= 0;
     bus     = 0;
+    busMem  = 0;
     BackgroundImage = 0;
 
 
@@ -114,6 +115,7 @@ CPObject::~CPObject()
     //delete pTIMER;
     if (pLCDC) delete pLCDC;
     if (bus) delete bus;
+    if (busMem) delete busMem;
 	
 
     delete BackgroundImage;

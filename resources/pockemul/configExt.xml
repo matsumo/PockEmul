@@ -30,6 +30,11 @@
      <example brand="SHARP" idpocket="CE-2H32M" filename="./" name="Sharp ce-2h32m" image=":/ce2xxx/ce2h32m.png" connectortype="Sharp_35" conngender="female"/>
      <example brand="SHARP" idpocket="CE-2H64M" filename="./" name="Sharp ce-2h64m" image=":/ce2xxx/ce2h64m.png" connectortype="Sharp_35" conngender="female"/>
 
+     <example brand="SHARP" idpocket="CE-151" filename="./" name="Sharp ce-151" image=":/cemem/ce151.png" connectortype="Sharp_40" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-155" filename="./" name="Sharp ce-155" image=":/cemem/ce155.png" connectortype="Sharp_40" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-160" filename="./" name="Sharp ce-160" image=":/cemem/ce160.png" connectortype="Sharp_40" conngender="female"/>
+     <example brand="SHARP" idpocket="CE-163" filename="./" name="Sharp ce-163" image=":/cemem/ce163.png" connectortype="Sharp_40" conngender="female"/>
+
      <example brand="CANON" idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
      <example idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_1" conngender="male"/>
      <example idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>

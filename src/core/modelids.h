@@ -116,7 +116,13 @@ enum Models {
     CE212M,
     CE2H16M,
     CE2H32M,
-    CE2H64M
+    CE2H64M,
+    CE151,
+    CE155,
+    CE159,
+    CE160,
+    CE161,
+    CE163
 };
 
 #endif // MODELIDS_H

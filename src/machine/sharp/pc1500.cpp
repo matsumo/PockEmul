@@ -79,6 +79,21 @@ Cpc15XX::~Cpc15XX()
     delete busMem;
 }
 
+Cpc1500::Cpc1500(CPObject *parent)	: Cpc15XX(parent)
+{								//[constructor]
+    Q_UNUSED(parent)
+
+    setcfgfname(QString("pc1500"));
+
+    SlotList.clear();
+    SlotList.append(CSlot(8 , 0x0000 ,	""								, "" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(16, 0x4000 ,	""								, "" , CSlot::RAM , "RAM"));
+    SlotList.append(CSlot(8 , 0x8000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
+    SlotList.append(CSlot(8 , 0xA000 ,	""								, "" , CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(16, 0xC000 ,	P_RES(":/pc1500/SYS1500.ROM")	, "" , CSlot::ROM , "SYSTEM ROM"));
+}
+
 Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(parent)
 {								//[constructor]
     Q_UNUSED(parent)
@@ -200,6 +215,9 @@ bool Cpc15XX::init(void)				// initialize
                                  QPoint(0,72),
                                  Cconnector::WEST);
     publish(pCONNECTOR);
+
+    pMEMCONNECTOR = new Cconnector(this,40,1,Cconnector::Sharp_40,"Memory SLOT",true,QPoint(0,90));
+    publish(pMEMCONNECTOR);
 
 	WatchPoint.remove(this);
 	
@@ -378,7 +396,7 @@ bool Cpc15XX::Mem_Mirror(UINT32 *d)
 //	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
 //	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
 //	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
-    if ( (*d>=0x7000) && (*d<=0x77FF) ) {
+    if ( (*d>=0x7000) && (*d<=0x75FF) ) {
         *d &= 0x1ff;
         *d |= 0x7600;
         return(1);
@@ -397,7 +415,7 @@ inline bool Cpc1500A::Mem_Mirror(UINT32 *d)
 //	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
 //	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
 //	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
-    if ( (*d>=0x7000) && (*d<=0x77FF) ) {
+    if ( (*d>=0x7000) && (*d<=0x75FF) ) {
         *d &= 0x1ff;
         *d |= 0x7600;
         return(1);
@@ -412,13 +430,22 @@ bool Cpc15XX::Chk_Adr(UINT32 *d,UINT32 data)
 
 	Mem_Mirror(d);
 
+    if ( (*d>=0x4000) && (*d<=0x47FF) )	{ return(1); }
+
+#if 0
+    if (                 (*d<=0x5FFF) )	{
+        writeBus(busMem,d,data);
+        return 0;
+    }
+#else
     if (                 (*d<=0x1FFF) )	{ return(EXTENSION_CE161_CHECK); }						// ROM area(0000-3FFF) 16K
 	if ( (*d>=0x2000) && (*d<=0x37FF) )	{ return(EXTENSION_CE161_CHECK | EXTENSION_CE159_CHECK); }	// ROM area(0000-3FFF) 16K
 	if ( (*d>=0x3800) && (*d<=0x3FFF) )	{ return(EXTENSION_CE161_CHECK | EXTENSION_CE159_CHECK| EXTENSION_CE155_CHECK); }		// ROM area(0000-3FFF) 16K
-	if ( (*d>=0x4000) && (*d<=0x47FF) )	{ return(1); }										// RAM area(0000-3FFF) 16K
 	if ( (*d>=0x4800) && (*d<=0x57FF) )	{ return(EXTENSION_CE155_CHECK | EXTENSION_CE151_CHECK); }	// RAM area(0000-3FFF) 16K
 	if ( (*d>=0x5800) && (*d<=0x5FFF) )	{ return(EXTENSION_CE155_CHECK); }						// RAM area(0000-3FFF) 16K
-	if ( (*d>=0x6000) && (*d<=0x6FFF) )	{ return(0); }										// ROM area(0000-3FFF) 16K
+#endif
+
+    if ( (*d>=0x6000) && (*d<=0x6FFF) )	{ return(0); }										// ROM area(0000-3FFF) 16K
 	if ( (*d>=0x7000) && (*d<=0x75FF) ) { return(0); }										// INHIBITED MIRRORING
 	if ( (*d>=0x7600) && (*d<=0x77FF) ) { pLCDC->SetDirtyBuf(*d-0x7600);return(1);}
 	if ( (*d>=0x7800) && (*d<=0x7BFF) ) { return(1); }										// RAM area(7800-7BFF)
@@ -616,6 +643,11 @@ bool Cpc15XX::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
+    if (_bus == busMem) {
+        pMEMCONNECTOR->Set_values(busMem->toUInt64());
+        return true;
+    }
+
     // transfert busValue to Connector
 
     ((CbusPc1500*)bus)->setPU(((CLH5801 *)pCPU)->lh5801.pu);
@@ -628,6 +660,12 @@ bool Cpc15XX::Set_Connector(Cbus *_bus)
 bool Cpc15XX::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+    if (_bus == busMem) {
+        busMem->fromUInt64(pMEMCONNECTOR->Get_values());
+        busMem->setEnable(false);
+        return true;
+    }
 
     bus->fromUInt64(pCONNECTOR->Get_values());
     bus->setEnable(false);
@@ -728,3 +766,5 @@ void Cpc15XX::ComputeKey(KEYEVENT ke,int scancode)
         launcher->show();
     }
 }
+
+

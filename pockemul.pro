@@ -455,7 +455,8 @@ HEADERS *= \
     src/cpu/upd7907/upd7907d.h \
     src/cpu/tms7000/tms7000d.h \
     src/cpu/z80_dasm.h \
-    src/core/pobjectInterface.h
+    src/core/pobjectInterface.h \
+    src/machine/sharp/cemem.h
 
 
 HEADERS *= \
@@ -681,6 +682,7 @@ DEFINES += LOCRES
 }
 
 RESOURCES +=  \
+    resources/cemem.qrc
 
 
 SOURCES *=  \
@@ -730,7 +732,8 @@ SOURCES *=  \
     pictureflow/slideshow.cpp \
     src/cpu/lh5801d.cpp \
     src/cpu/sc61860d.cpp \
-    src/cpu/sc62015d.cpp
+    src/cpu/sc62015d.cpp \
+    src/machine/sharp/cemem.cpp
 
 
 SOURCES *=  \

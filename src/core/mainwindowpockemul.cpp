@@ -324,6 +324,11 @@ void MainWindowPockemul::initObjectTable() {
     objtable["CE-2H32M"]=CE2H32M;
     objtable["CE-2H64M"]=CE2H64M;
 
+    objtable["CE-151"]=CE151;
+    objtable["CE-155"]=CE155;
+    objtable["CE-160"]=CE160;
+    objtable["CE-163"]=CE163;
+
     objtable["CE-1600P"]=CE1600P;
     objtable["CE-1600F"]=CE1600F;
     objtable["Canon X-07"]=X07;
@@ -498,6 +503,11 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
     case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
     case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
+
+    case CE151 : pPC = new Ccemem(0,CE151); pPC->setName("CE-151");break;
+    case CE155 : pPC = new Ccemem(0,CE155); pPC->setName("CE-155");break;
+    case CE160 : pPC = new Ccemem(0,CE160); pPC->setName("CE-160");break;
+    case CE163 : pPC = new Ccemem(0,CE163); pPC->setName("CE-163");break;
 
     case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
     case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;

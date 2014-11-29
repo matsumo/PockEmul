@@ -27,6 +27,7 @@ public:
     const char*	GetClassName(){ return("CLH5810_PC1500");}
 	CPD1990AC	*pPD1990AC;
 
+
 	CLH5810_PC1500(CPObject *parent)	: CLH5810(parent)
 	{
 		pPD1990AC	= new CPD1990AC(parent);
@@ -53,34 +54,32 @@ public:
 	bool	InitDisplay(void);
 	bool	CompleteDisplay(void);
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
-
-    virtual bool	run(void);				// emulator main
-	void	Set_Port(PORTS Port,BYTE data);
+    virtual bool init(void);
+    virtual bool run(void);				// emulator main
+    virtual bool Chk_Adr(UINT32 *d,UINT32 data);
+    virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
+    virtual bool Mem_Mirror(UINT32 *d);
+    virtual void TurnON(void);
+    void	Set_Port(PORTS Port,BYTE data);
 	BYTE	Get_Port(PORTS Port);
 
-	virtual bool	Mem_Mirror(UINT32 *d); 
-    virtual void	TurnON(void);
+    void Regs_Info(UINT8 Type);
 
-	void	Regs_Info(UINT8 Type);
-
-    bool		lh5810_write(UINT32 d, UINT32 data);
-    quint8		lh5810_read(UINT32 d);
-
-	virtual bool		Chk_Adr(UINT32 *d,UINT32 data);
-    virtual bool		Chk_Adr_R(UINT32 *d, UINT32 *data);
-    UINT8		in(UINT8 address);
+    bool lh5810_write(UINT32 d, UINT32 data);
+    quint8 lh5810_read(UINT32 d);
+    UINT8 in(UINT8 address);
     UINT8 out(UINT8 ,UINT8 ){return(1);}
     virtual bool Set_Connector(Cbus *_bus = 0);
     virtual bool Get_Connector(Cbus *_bus = 0);
 
     CLH5810_PC1500	*pLH5810;
 	
-    bool		lh5810_Access;
-
-	void		InitCE150(void);
+    bool lh5810_Access;
 	
-	void		initExtension(void);
-	bool	init(void);				// initialize
+    void initExtension(void);				// initialize
+
+
+    Cconnector	*pMEMCONNECTOR;		qint64 pMEMCONNECTOR_value;
 	
 	Cpc15XX(CPObject *parent = 0);
 
@@ -95,24 +94,7 @@ class Cpc1500:public Cpc15XX{						//PC1500 emulator main class
 public:
     const char*	GetClassName(){ return("Cpc1500");}
 
-    Cpc1500(CPObject *parent = 0)	: Cpc15XX(parent)
-	{								//[constructor]
-        Q_UNUSED(parent)
-
-        setcfgfname(QString("pc1500"));
-
-		SlotList.clear();
-		SlotList.append(CSlot(8 , 0x0000 ,	""								, "" , CSlot::RAM , "RAM"));
-		SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::ROM , "ROM"));
-		SlotList.append(CSlot(16, 0x4000 ,	""								, "" , CSlot::RAM , "RAM"));
-        SlotList.append(CSlot(8 , 0x8000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
-		SlotList.append(CSlot(8 , 0xA000 ,	""								, "" , CSlot::ROM , "ROM"));
-        SlotList.append(CSlot(16, 0xC000 ,	P_RES(":/pc1500/SYS1500.ROM")	, "" , CSlot::ROM , "SYSTEM ROM"));
-//		SlotList.append(CSlot(64, 0x10000 ,	""								, "" , CSlot::RAM , "RAM"));
-//		SlotList.append(CSlot(8 , 0x20000 ,	""								, "" , CSlot::ROM , "ROM"));
-//		SlotList.append(CSlot(8 , 0x22000 ,	""								, "" , CSlot::ROM , "ROM"));
-//        SlotList.append(CSlot(8 , 0x24000 ,	P_RES(":/pc1500/CE-150.ROM"), "" , CSlot::ROM , "CE-150 ROM"));
-	}
+    Cpc1500(CPObject *parent = 0);
 
 	~Cpc1500()
 	{								//[constructor]
