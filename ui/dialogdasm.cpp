@@ -72,7 +72,7 @@ DialogDasm::DialogDasm(QWidget *parent) :
         regwidget->setParent(ui->regframe);
 
     }
-    this->show();
+//    this->show();
     this->resize(545,490);
     regwidget->show();
 
