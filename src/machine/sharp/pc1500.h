@@ -63,6 +63,10 @@ public:
     void	Set_Port(PORTS Port,BYTE data);
 	BYTE	Get_Port(PORTS Port);
 
+    virtual void PreFlip(Direction dir,View targetView);
+    virtual void PostFlip();
+    void manageCardVisibility();
+
     void Regs_Info(UINT8 Type);
 
     bool lh5810_write(UINT32 d, UINT32 data);
@@ -88,6 +92,7 @@ public:
 
 protected slots:
 	void contextMenuEvent ( QContextMenuEvent * event );
+    void linkObject(QString item, CPObject *pPC);
 };
 
 class Cpc1500:public Cpc15XX{						//PC1500 emulator main class

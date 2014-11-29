@@ -5,7 +5,7 @@
 #include "cemem.h"
 #include "Connect.h"
 #include "Keyb.h"
-#include "bus.h"
+#include "buspc1500.h"
 #include "Inter.h"
 #include "Log.h"
 
@@ -71,7 +71,7 @@ Ccemem::Ccemem(CPObject *parent ,Models mod):CPObject(parent)
     default: break;
     }
 
-    bus = new Cbus();
+    bus1500 = new CbusPc1500();
 }
 
 Ccemem::~Ccemem()
@@ -100,25 +100,47 @@ bool Ccemem::exit()
 bool Ccemem::run()
 {
 
-    bus->fromUInt64(pCONNECTOR->Get_values());
+    bus1500->fromUInt64(pCONNECTOR->Get_values());
 
-    if (!bus->isEnable()) {
+    if (!bus1500->isEnable()) {
         return true;
     }
 
-    quint16 addr = bus->getAddr() & (memsize - 1);
+    quint16 addr = bus1500->getAddr();
 
-    if (bus->isWrite()) {
-//        qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
-        mem[addr] = bus->getData();
-    }
-    else {
-        bus->setData(mem[addr]);
-//        qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+    if ( (model == CE151) &&
+         (addr >=0x4800) && (addr <=0x57FF) ) {
+        if (bus1500->isWrite()) {
+            //        qWarning()<<QString("Write [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+            mem[addr - 0x4800] = bus1500->getData();
+        }
+        else {
+            bus1500->setData(mem[addr - 0x4800]);
+            //        qWarning()<<QString("Read [%1]=%2").arg(addr,4,16,QChar('0')).arg(bus->getData(),2,16,QChar('0'));
+        }
     }
 
-    bus->setEnable(false);
-    pCONNECTOR->Set_values(bus->toUInt64());
+    if (model == CE155) {
+        if ((addr >=0x3800) && (addr <=0x4FFF) ) {
+            if (bus1500->isWrite()) {
+                mem[addr - 0x3800] = bus1500->getData();
+            }
+            else {
+                bus1500->setData(mem[addr - 0x3800]);
+            }
+        }
+        if ((addr >=0x4800) && (addr <=0x5FFF) ) {
+            if (bus1500->isWrite()) {
+                mem[addr - 0x4800 + 0x800] = bus1500->getData();
+            }
+            else {
+                bus1500->setData(mem[addr - 0x4800 + 0x800]);
+            }
+        }
+    }
+
+    bus1500->setEnable(false);
+    pCONNECTOR->Set_values(bus1500->toUInt64());
 
     return true;
 }

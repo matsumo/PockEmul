@@ -1,31 +1,31 @@
 /*** POCKEMUL [PC1500.CPP] ********************************/
 /* PC1500 emulator main class                             */
 /**********************************************************/
-//#include	<string.h>
-//#include	<stdlib.h>
 
 #define TEST_BUS
 
 #include <QtGui> 
 
-#include	"common.h"
+#include "common.h"
 #include "fluidlauncher.h"
 #include "ui/dialogdasm.h"
 
-#include	"pc1500.h"
-#include    "cextension.h"
-#include    "Lcdc_pc1500.h"
-#include	"Inter.h"
-#include	"Keyb.h"
-#include	"dialoganalog.h"
-#include    "buspc1500.h"
-#include    "Connect.h"
+#include "pc1500.h"
+#include "cextension.h"
+#include "Lcdc_pc1500.h"
+#include "Inter.h"
+#include "Keyb.h"
+#include "dialoganalog.h"
+#include "buspc1500.h"
+#include "Connect.h"
+#include "clink.h"
 
 #include "breakpoint.h"
 #include "watchpoint.h"
 
+#include "renderView.h"
 
-extern int	g_DasmStep;
+
 extern bool	UpdateDisplayRunning;
  
 
@@ -43,6 +43,7 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
 	InitMemValue	= 0xFF;
 
     LeftFname   = P_RES(":/pc1600/pc1600Left.png");
+    BackFname   = P_RES(":/pc1500/pc1500Back.png");
 
 	SlotList.clear();
 
@@ -75,8 +76,6 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
 Cpc15XX::~Cpc15XX()
 {
     delete pLH5810;
-    delete bus;
-    delete busMem;
 }
 
 Cpc1500::Cpc1500(CPObject *parent)	: Cpc15XX(parent)
@@ -86,11 +85,11 @@ Cpc1500::Cpc1500(CPObject *parent)	: Cpc15XX(parent)
     setcfgfname(QString("pc1500"));
 
     SlotList.clear();
-    SlotList.append(CSlot(8 , 0x0000 ,	""								, "" , CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::ROM , "ROM"));
+//    SlotList.append(CSlot(8 , 0x0000 ,	""								, "" , CSlot::RAM , "RAM"));
+//    SlotList.append(CSlot(8 , 0x2000 ,	""								, "" , CSlot::ROM , "ROM"));
     SlotList.append(CSlot(16, 0x4000 ,	""								, "" , CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8 , 0x8000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
-    SlotList.append(CSlot(8 , 0xA000 ,	""								, "" , CSlot::ROM , "ROM"));
+//    SlotList.append(CSlot(8 , 0x8000 ,	""								, "" , CSlot::NOT_USED , "NOT USED"));
+//    SlotList.append(CSlot(8 , 0xA000 ,	""								, "" , CSlot::ROM , "ROM"));
     SlotList.append(CSlot(16, 0xC000 ,	P_RES(":/pc1500/SYS1500.ROM")	, "" , CSlot::ROM , "SYSTEM ROM"));
 }
 
@@ -401,11 +400,9 @@ bool Cpc15XX::Mem_Mirror(UINT32 *d)
         *d |= 0x7600;
         return(1);
     }
-#else
-	if ( (*d>=0x7000) && (*d<=0x75FF) )	{ *d+=0x600; return(1); }
 #endif
-	if ( (*d>=0x7C00) && (*d<=0x7FFF) ) { *d-=0x400; return(1); }
 
+	if ( (*d>=0x7C00) && (*d<=0x7FFF) ) { *d-=0x400; return(1); }
 	
 	return(1);
 } 
@@ -432,7 +429,7 @@ bool Cpc15XX::Chk_Adr(UINT32 *d,UINT32 data)
 
     if ( (*d>=0x4000) && (*d<=0x47FF) )	{ return(1); }
 
-#if 0
+#if 1
     if (                 (*d<=0x5FFF) )	{
         writeBus(busMem,d,data);
         return 0;
@@ -489,6 +486,13 @@ bool Cpc15XX::Chk_Adr_R(UINT32 *d,UINT32 *data)
     Q_UNUSED(data)
 
     Mem_Mirror(d);
+
+    if ( (*d>=0x4000) && (*d<=0x47FF) )	{ return(1); }  // INTERNAL 2KB RAM
+
+    if (                 (*d<=0x5FFF) )	{
+        readBus(busMem ,d,data);
+        return false;
+    }
 
     if ( (*d>=0x8000) && (*d<=0xBFFF) )
     {
@@ -765,6 +769,56 @@ void Cpc15XX::ComputeKey(KEYEVENT ke,int scancode)
                                      "Sharp_60");
         launcher->show();
     }
+    if ((currentView==BACKview) &&
+            KEY(0x241)) {
+        if (!pMEMCONNECTOR->isLinked()) {
+            pKEYB->keyPressedList.removeAll(0x241);
+            FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                        QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                        FluidLauncher::PictureFlowType,QString(),
+                                                        "Sharp_40");
+            connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+            launcher->show();
+        }
+        else {
+            // unlink module
+        }
+    }
 }
 
+void Cpc15XX::linkObject(QString item,CPObject *pPC)
+{
+    QRect _rect = pKEYB->getKey(0x241).Rect;
 
+    mainwindow->pdirectLink->addLink(pMEMCONNECTOR,pPC->ConnList.at(0),true);
+    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom/100);
+    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom/100);
+    pPC->raise();
+
+    pPC->setRotation(180);
+
+    emit stackPosChanged();
+}
+
+extern CrenderView* view;
+void Cpc15XX::PreFlip(Direction dir, View targetView)
+{
+    manageCardVisibility();
+}
+
+void Cpc15XX::PostFlip()
+{
+    manageCardVisibility();
+}
+
+void Cpc15XX::manageCardVisibility() {
+    if (currentView == BACKview) {
+        // show memory cards
+        CPObject * S1PC = pMEMCONNECTOR->LinkedToObject();
+        if (S1PC) view->showPObject(S1PC);
+    }
+    else {
+        CPObject * S1PC = pMEMCONNECTOR->LinkedToObject();
+        if (S1PC) view->hidePObject(S1PC);
+    }
+}

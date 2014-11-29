@@ -19,5 +19,6 @@
         <file>pc1500/ce153.png</file>
         <file>pc1500/ce1560_1.png</file>
         <file>pc1500/ce1560_cover.png</file>
+        <file>pc1500/pc1500Back.png</file>
     </qresource>
 </RCC>
