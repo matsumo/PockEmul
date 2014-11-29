@@ -1,4 +1,4 @@
-/*!
+ï»¿/*!
     \file windowide.cpp
     \brief Implementation of the WindowIDE class
 */
@@ -246,7 +246,7 @@ QStringList WindowIDE::getProc(QString s) {
 }
 
 /*!
- \brief lance le processus de compilation adéquate en fonction de l'extension du fichier
+ \brief lance le processus de compilation adÃ©quate en fonction de l'extension du fichier
 
 */
 void WindowIDE::compileINTERNAL() {
@@ -491,11 +491,11 @@ void WindowIDE::removetargetCB(CPObject *pc) {
 }
 
 /*!
- \brief Charge le binaire data dans la mémoire du Pocket émulé.
+ \brief Charge le binaire data dans la memoire du Pocket emule.
 
  \param pc      Le pocket cible.
- \param adr     Adresse de chargement des données.
- \param data    Données binaires à charger.
+ \param adr     Adresse de chargement des donnees.
+ \param data    Donnees binaires a charger.
 */
 void WindowIDE::installTo(CpcXXXX * pc,qint32 adr, QByteArray data ) {
 qint32 targetAdr = adr;

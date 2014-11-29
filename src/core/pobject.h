@@ -85,7 +85,7 @@ public:
 
 
 
-    Cbus   *bus;
+    Cbus   *bus,*busMem;
     QMutex       busMutex;
 
 

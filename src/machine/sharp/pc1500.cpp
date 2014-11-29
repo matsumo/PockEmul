@@ -64,6 +64,7 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     pKEYB		= new Ckeyb(this,"pc1500.map");
 	
     bus = new CbusPc1500();
+    busMem = new CbusPc1500();
 	
 	Tape_Base_Freq=2500;
 	initExtension();
@@ -74,6 +75,8 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
 Cpc15XX::~Cpc15XX()
 {
     delete pLH5810;
+    delete bus;
+    delete busMem;
 }
 
 Cpc1500A::Cpc1500A(CPObject *parent)	: Cpc15XX(parent)
@@ -372,23 +375,33 @@ INLINE quint8 Cpc15XX::lh5810_read(UINT32 d)
 bool Cpc15XX::Mem_Mirror(UINT32 *d) 
 {
 #if 1
-	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
-	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
-	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
+//	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
+//	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
+//	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
+    if ( (*d>=0x7000) && (*d<=0x77FF) ) {
+        *d &= 0x1ff;
+        *d |= 0x7600;
+        return(1);
+    }
 #else
 	if ( (*d>=0x7000) && (*d<=0x75FF) )	{ *d+=0x600; return(1); }
 #endif
 	if ( (*d>=0x7C00) && (*d<=0x7FFF) ) { *d-=0x400; return(1); }
+
 	
 	return(1);
 } 
 
 inline bool Cpc1500A::Mem_Mirror(UINT32 *d)
 {
-	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
-	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
-	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
-	
+//	if ( (*d>=0x7000) && (*d<=0x71FF) )	{ *d+=0x600; return(1); }
+//	if ( (*d>=0x7200) && (*d<=0x73FF) )	{ *d+=0x400; return(1); }
+//	if ( (*d>=0x7400) && (*d<=0x75FF) )	{ *d+=0x200; return(1); }
+    if ( (*d>=0x7000) && (*d<=0x77FF) ) {
+        *d &= 0x1ff;
+        *d |= 0x7600;
+        return(1);
+    }
 	return(1);
 }
 
