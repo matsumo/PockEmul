@@ -93,6 +93,7 @@ public:
 protected slots:
 	void contextMenuEvent ( QContextMenuEvent * event );
     void linkObject(QString item, CPObject *pPC);
+    void memLinked();
 };
 
 class Cpc1500:public Cpc15XX{						//PC1500 emulator main class

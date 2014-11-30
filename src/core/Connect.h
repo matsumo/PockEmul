@@ -135,6 +135,10 @@ public:
     bool isLinked();
     Cconnector *LinkedTo();
     CPObject *LinkedToObject();
+signals:
+    void linked();
+    void unlinked();
+
 private:
 	bool	gender;		// Male = true   Female = false  :-)
     ConnectorType Type;

@@ -47,15 +47,23 @@ void CDirectLink::addLink(Cconnector *A, Cconnector *B, bool close)
 #endif
     }
     addlinkMutex.unlock();
+    emit A->linked();
+    emit B->linked();
 }
 
 void CDirectLink::removeLink(int ind)
 {
+    Cconnector *A, *B;
+
     addlinkMutex.lock();
+    A = AConnList.at(ind);
     AConnList.removeAt(ind);
+    B = BConnList.at(ind);
     BConnList.removeAt(ind);
     closeList.removeAt(ind);
     addlinkMutex.unlock();
+    emit A->unlinked();
+    emit B->unlinked();
 }
 
 // Return the first connected object found

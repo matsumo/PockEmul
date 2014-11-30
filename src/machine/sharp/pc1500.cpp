@@ -220,6 +220,8 @@ bool Cpc15XX::init(void)				// initialize
     pMEMCONNECTOR = new Cconnector(this,40,1,Cconnector::Sharp_40,"Memory SLOT",true,QPoint(0,90));
     publish(pMEMCONNECTOR);
 
+    connect(pMEMCONNECTOR,SIGNAL(linked()),this,SLOT(memLinked()));
+
 	WatchPoint.remove(this);
 	
 	WatchPoint.add(&pCONNECTOR_value,64,60,this,"Standard 60pins connector");
@@ -819,6 +821,11 @@ void Cpc15XX::linkObject(QString item,CPObject *pPC)
 
     pPC->raise();
     emit stackPosChanged();
+}
+
+void Cpc15XX::memLinked()
+{
+    manageCardVisibility();
 }
 
 extern CrenderView* view;

@@ -114,23 +114,26 @@ int main(int argc, char *argv[])
 //    QApplication::setStyle(s);//new QAndroidStyle());
 
 #endif
-mainwindow = new MainWindowPockemul();
+
+    QSplashScreen splash;
+    splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")));//.scaled(mainwindow->geometry().size()));
+    splash.show();
+    splash.showMessage("Loading modules...",Qt::AlignLeft,Qt::white);
+    app->processEvents();
+
+    mainwindow = new MainWindowPockemul();
 
     appDir = app->applicationDirPath();
     qWarning()<<appDir;
 
-#ifdef Q_OS_ANDROID
-//    QSplashScreen splash;
-//    splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")).scaled(mainwindow->geometry().size()));
-//    splash.show();
-//    splash.showMessage("Loading modules...",Qt::AlignLeft,Qt::white);
-//    app->processEvents();
-//    splash.finish(mainwindow);
+//#ifdef Q_OS_ANDROID
+
+
 
 //    mainwindow->menuBar()->setVisible(false);//->menuAction()->setVisible( false );
     // search for ShowMyModalDialog method
 
-#endif
+//#endif
 
 #if 1
     QWidget *cw= new QWidget();
@@ -309,6 +312,8 @@ mainwindow = new MainWindowPockemul();
     app->exec();
     return 0;
 #endif
+
+    splash.close();
 
     return app->exec();
 

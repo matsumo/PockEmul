@@ -1276,6 +1276,7 @@ void Cpc1600::setPUPVPT(CbusPc1500 *bus, UINT32 adr) {
 
 bool Cpc1600::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
 
     // MANAGE SERIAL CONNECTOR
     // TO DO
@@ -1289,6 +1290,8 @@ bool Cpc1600::Set_Connector(Cbus *_bus)
 
 bool Cpc1600::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     bus->fromUInt64(pCONNECTOR->Get_values());
     bus->setEnable(false);
 
