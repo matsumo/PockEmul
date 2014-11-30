@@ -27,8 +27,8 @@ Ccemem::Ccemem(CPObject *parent ,Models mod):CPObject(parent)
     setDYmm(40);
     setDZmm(7);
 
-    setDX(303);
-    setDY(192);
+    setDX(115);
+    setDY(139);
 
     model = mod;
     switch(model) {
@@ -49,8 +49,8 @@ Ccemem::Ccemem(CPObject *parent ,Models mod):CPObject(parent)
         setDYmm(48);
         setDZmm(9);
 
-        setDX(303);
-        setDY(192);
+        setDX(143);
+        setDY(167);
         BackGroundFname	= P_RES(":/cemem/ce160.png");
         setcfgfname(QString("ce160"));
         memsize      = 0x4000;
@@ -61,8 +61,8 @@ Ccemem::Ccemem(CPObject *parent ,Models mod):CPObject(parent)
         setDYmm(48);
         setDZmm(9);
 
-        setDX(303);
-        setDY(192);
+        setDX(143);
+        setDY(167);
         BackGroundFname	= P_RES(":/cemem/ce163.png");
         setcfgfname(QString("ce163"));
         memsize      = 0x8000;

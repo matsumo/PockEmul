@@ -669,11 +669,6 @@ bool Cpc15XX::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-    if (_bus == busMem) {
-        pMEMCONNECTOR->Set_values(busMem->toUInt64());
-        return true;
-    }
-
     pMEMCONNECTOR->Set_values(busMem->toUInt64());
 
     // transfert busValue to Connector
@@ -688,12 +683,6 @@ bool Cpc15XX::Set_Connector(Cbus *_bus)
 bool Cpc15XX::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
-
-    if (_bus == busMem) {
-        busMem->fromUInt64(pMEMCONNECTOR->Get_values());
-        busMem->setEnable(false);
-        return true;
-    }
 
     busMem->fromUInt64(pMEMCONNECTOR->Get_values());
     busMem->setEnable(false);
@@ -815,15 +804,20 @@ void Cpc15XX::ComputeKey(KEYEVENT ke,int scancode)
 
 void Cpc15XX::linkObject(QString item,CPObject *pPC)
 {
+    Q_UNUSED(item)
+
     QRect _rect = pKEYB->getKey(0x241).Rect;
 
     mainwindow->pdirectLink->addLink(pMEMCONNECTOR,pPC->ConnList.at(0),true);
-    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom/100);
-    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom/100);
+    float _x = posx()+_rect.left()*mainwindow->zoom/100;
+    float _y = posy()+_rect.top()*mainwindow->zoom/100;
+
+    pPC->setRotation(90);
+    float _w = pPC->getDY();
+    float _h = pPC->getDX();
+    pPC->changeGeometrySize(_x,_y,_w,_h);
+
     pPC->raise();
-
-    pPC->setRotation(180);
-
     emit stackPosChanged();
 }
 
