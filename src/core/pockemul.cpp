@@ -68,7 +68,7 @@ int main(int argc, char *argv[])
 #else
      app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
 #endif
-     test();
+//     test();
 #else
 
 #endif
@@ -79,9 +79,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationVersion(POCKEMUL_VERSION);
 
 
-    int loadedFontID = QFontDatabase::addApplicationFont(":/hp41/41chrset.ttf");
-  QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(loadedFontID);
-//  qWarning()<<loadedFontFamilies;
+
 
 #ifdef Q_OS_MAC
     QDir dir(QApplication::applicationDirPath());
@@ -284,11 +282,8 @@ int main(int argc, char *argv[])
     exit->hide();
 #endif
     v_pos += v_inter;
-
     exit->setToolTip("Exit PockEmul.");
 
-//    CTinyBasic tb;
-//    tb.test();
 
 #ifdef EMSCRIPTEN
     mainwindow->zoomSlider = new QSlider(mainwindow->centralwidget);
@@ -297,6 +292,8 @@ int main(int argc, char *argv[])
     mainwindow->zoomSlider->setTickInterval(10);
     mainwindow->zoomSlider->setValue(100);
 #endif
+
+    splash.close();
 
 #ifdef Q_OS_ANDROID
     mainwindow->showFullScreen();
@@ -313,7 +310,6 @@ int main(int argc, char *argv[])
     return 0;
 #endif
 
-    splash.close();
 
     return app->exec();
 

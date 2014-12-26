@@ -1191,7 +1191,6 @@ void CPObject::focusOutEvent (QFocusEvent *)
 }
 
 
-
 void CPObject::contextMenuEvent ( QContextMenuEvent * event )
 {
 //    qWarning()<<"contextMenuEvent";

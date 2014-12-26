@@ -127,8 +127,6 @@ class Chp41:public CpcXXXX{
 
 Q_OBJECT
 
-
-
 public slots:
     void addModule(QString item, CPObject *pPC);
 
@@ -155,7 +153,7 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
-
+    static int loadedFontID;
 
 
   enum {eAwake=0,eLightSleep=1,eDeepSleep=2};       // sleep modes

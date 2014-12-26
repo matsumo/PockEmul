@@ -316,7 +316,7 @@ UINT16 Cpc2001::getKey()
             if (KEY('X'))			data|=0x04;
             if (KEY(K_1))			data|=0x08;
             if (KEY('2'))			data|=0x10;
-//            if (KEY(K_F1))			data|=0x20; // F1
+            if (KEY(K_F1))			data|=0x20; // F1
         }
 
         if (ks&0x08) {
@@ -325,7 +325,7 @@ UINT16 Cpc2001::getKey()
             if (KEY('C'))			data|=0x04;
             if (KEY(K_2))			data|=0x08;
             if (KEY('3'))			data|=0x10;
-//            if (KEY(K_F2))			data|=0x20;     //F2
+            if (KEY(K_F2))			data|=0x20;     //F2
         }
 
         if (ks&0x10) {
@@ -334,7 +334,7 @@ UINT16 Cpc2001::getKey()
             if (KEY('V'))			data|=0x04;
             if (KEY(K_3))			data|=0x08;
             if (KEY('4'))			data|=0x10;
-//            if (KEY(K_F3))			data|=0x20;     //F3
+            if (KEY(K_F3))			data|=0x20;     //F3
         }
         if (ks&0x20) {
             if (KEY('T'))			data|=0x01;
@@ -342,7 +342,7 @@ UINT16 Cpc2001::getKey()
             if (KEY('B'))			data|=0x04;
             if (KEY(K_4))			data|=0x08;
             if (KEY('5'))			data|=0x10;
-//            if (KEY(K_F4))			data|=0x20;     //F4
+            if (KEY(K_F4))			data|=0x20;     //F4
         }
         if (ks&0x40) {
             if (KEY('Y'))			data|=0x01;

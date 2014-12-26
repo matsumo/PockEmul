@@ -42,7 +42,7 @@
 #include "mainwindowpockemul.h"
 extern MainWindowPockemul *mainwindow;
 
-
+int Chp41::loadedFontID = -1;
 
 /****************************/
 // Constructor
@@ -154,6 +154,12 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
     TEFIndex=0;
     fTrace=false;
     memset(szTraceOut,0,sizeof(szTraceOut));
+
+    if (loadedFontID == -1) {
+        loadedFontID = QFontDatabase::addApplicationFont(":/hp41/41chrset.ttf");
+        //    QStringList loadedFontFamilies = QFontDatabase::applicationFontFamilies(loadedFontID);
+        //  qWarning()<<loadedFontFamilies;
+    }
 }
 
 
