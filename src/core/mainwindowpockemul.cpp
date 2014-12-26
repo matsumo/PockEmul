@@ -922,7 +922,6 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                         locPC->Power = (xml->attributes().value("power")=="true") ?true:false;
                         if (locPC->Power) {
                             toPowerOn.append(locPC);
-//                            locPC->TurnON();
                         }
 
                         while (xml->readNextStartElement()) {

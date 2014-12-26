@@ -251,8 +251,8 @@ void Cpc2001::TurnOFF(void) {
 
 void Cpc2001::TurnON(void){
     CpcXXXX::TurnON();
-    upd7907->Reset();
-    upd7907->upd7907stat.pc.w.l=0;
+//    upd7907->Reset();
+//    upd7907->upd7907stat.pc.w.l=0;
 qWarning()<<"LCD ON:"<<pLCDC->On;
 }
 
