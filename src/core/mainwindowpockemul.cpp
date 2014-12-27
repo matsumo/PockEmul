@@ -108,6 +108,7 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     scaleFactor = 1;
     zoom = 100;
     saveAll = ASK;
+    openGlFlag = true;
     startKeyDrag = false;
     startPosDrag = false;
 
@@ -600,9 +601,8 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
 
-#ifndef GL
-    pPC->show();
-#endif
+    if (!openGlFlag)
+        pPC->show();
 
 qWarning()<<"init ok4";
     return pPC;
@@ -1541,6 +1541,7 @@ void MainWindowPockemul::initCommandLine(void) {
 
        cmdline->addOption('l',"load","Load a .pml session file");
        cmdline->addOption('r',"run","Run a pocket");
+       cmdline->addSwitch('g',"nogl","Do not use openGl");
        cmdline->addSwitch('v', "version", "show current version");
 
 
@@ -1561,10 +1562,26 @@ void MainWindowPockemul::initCommandLine(void) {
       cmdline->parse();
 }
 
+extern LaunchButtonWidget *launch1,*launch2,*dev,*save,*load,*cloudButton,*bookcase,*exitButton;
+
 void MainWindowPockemul::switchFound(const QString & name)
 {
   qDebug() << "Switch:" << name;
+  if (name == "nogl") {
+      openGlFlag = false;
+      launch1->show();
+      launch2->show();
+      dev->show();
+      save->show();
+      load->show();
+      cloudButton->show();
+      bookcase->show();
+      exitButton->show();
+
+  }
 }
+
+
 
 void MainWindowPockemul::optionFound(const QString & name, const QVariant & value)
 {
@@ -1585,6 +1602,7 @@ void MainWindowPockemul::optionFound(const QString & name, const QVariant & valu
       Q_UNUSED(pPC)
 #endif
   }
+
 }
 
 void MainWindowPockemul::paramFound(const QString & name, const QVariant & value)

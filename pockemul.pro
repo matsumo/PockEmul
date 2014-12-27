@@ -2,7 +2,7 @@ TEMPLATE = app
 
 QMAKE_CXXFLAGS += -fsigned-char
 
-DEFINES += GL
+#DEFINES += GL
 
 CONFIG += qt \
     resources \

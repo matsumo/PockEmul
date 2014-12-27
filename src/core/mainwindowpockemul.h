@@ -81,6 +81,7 @@ public:
 
     ASKYN saveAll;
     float	zoom;
+    bool openGlFlag;
 
     QSlider *zoomSlider;
 

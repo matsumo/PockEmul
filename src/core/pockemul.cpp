@@ -44,8 +44,12 @@ CWatchPoint WatchPoint;
 
 LaunchButtonWidget* launch1;
 LaunchButtonWidget* launch2;
+LaunchButtonWidget* dev;
+LaunchButtonWidget* save;
 LaunchButtonWidget* load;
+LaunchButtonWidget* cloudButton;
 LaunchButtonWidget* bookcase;
+LaunchButtonWidget* exitButton;
 
 bool soundEnabled=true;
 bool hiRes=true;
@@ -145,12 +149,7 @@ int main(int argc, char *argv[])
     mainwindow->centralwidget = view;
 #endif
 
-#ifdef GL
-    QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
-    view = new CrenderView(mainwindow->centralwidget);
-    windowLayout->addWidget(view);
-    windowLayout->setMargin(0);
-#endif
+
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
@@ -183,9 +182,7 @@ int main(int argc, char *argv[])
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),
                                                 ":/core/pocket.png","BRAND");
     launch1->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     launch1->hide();
-#endif
     v_pos += v_inter;
     launch1->setToolTip("Start a new Pocket Emulation.");
     qWarning()<<"launch1="<<launch1;
@@ -196,36 +193,30 @@ int main(int argc, char *argv[])
                                                  QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                  ":/core/ext.png");
     launch2->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     launch2->hide();
-#endif
     v_pos += v_inter;
     launch2->setToolTip("Start a new Extension Emulation.");
 #endif
 
 #ifdef P_IDE
-    LaunchButtonWidget* dev = new LaunchButtonWidget(mainwindow->centralwidget,
+    dev = new LaunchButtonWidget(mainwindow->centralwidget,
                                                      LaunchButtonWidget::Action,
                                                      QStringList(),
                                                      ":/core/dev.png");
     mainwindow->connect(dev,SIGNAL(clicked()),mainwindow,SLOT(IDE()));
     dev->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     dev->hide();
-#endif
     v_pos += v_inter;
     dev->setToolTip("Start the Integrated development Environment.");
 #endif
 
-    LaunchButtonWidget* save = new LaunchButtonWidget(mainwindow->centralwidget,
+    save = new LaunchButtonWidget(mainwindow->centralwidget,
                                                       LaunchButtonWidget::Action,
                                                       QStringList(),
                                                       ":/core/save.png");
     mainwindow->connect(save,SIGNAL(clicked()),mainwindow,SLOT(saveassession()));
     save->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     save->hide();
-#endif
     v_pos += v_inter;
     save->setToolTip("Save the current session.");
 
@@ -235,14 +226,12 @@ int main(int argc, char *argv[])
                                                       ":/core/load.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     load->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     load->hide();
-#endif
     v_pos += v_inter;
     load->setToolTip("Load an existing session.");
 
 #ifdef P_CLOUD
-    LaunchButtonWidget* cloudButton = new LaunchButtonWidget(mainwindow->centralwidget,
+    cloudButton = new LaunchButtonWidget(mainwindow->centralwidget,
                                                      LaunchButtonWidget::Action,
                                                      QStringList(),
 #ifdef Q_OS_ANDROID
@@ -252,9 +241,7 @@ int main(int argc, char *argv[])
 #endif
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
     cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     cloudButton->hide();
-#endif
     v_pos += v_inter;
     cloudButton->setToolTip("Go to the Cloud.");
 #endif
@@ -265,24 +252,22 @@ int main(int argc, char *argv[])
                                                       ":/core/bookcase.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     bookcase->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
     bookcase->hide();
-#endif
+
     v_pos += v_inter;
     bookcase->setToolTip("Browse the bookcase.");
 
-    LaunchButtonWidget* exit = new LaunchButtonWidget(mainwindow->centralwidget,
+    exitButton = new LaunchButtonWidget(mainwindow->centralwidget,
                                                       LaunchButtonWidget::Action,
                                                       QStringList(),
                                                       ":/core/exit.png");
-    mainwindow->connect(exit,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
+    mainwindow->connect(exitButton,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
 
-    exit->setGeometry(0,v_pos,iconSize,iconSize);
-#ifdef GL
-    exit->hide();
-#endif
+    exitButton->setGeometry(0,v_pos,iconSize,iconSize);
+    exitButton->hide();
+
     v_pos += v_inter;
-    exit->setToolTip("Exit PockEmul.");
+    exitButton->setToolTip("Exit PockEmul.");
 
 
 #ifdef EMSCRIPTEN
@@ -304,6 +289,14 @@ int main(int argc, char *argv[])
 //#ifndef Q_OS_ANDROID
     mainwindow->initCommandLine();
 //#endif
+
+if (mainwindow->openGlFlag) {
+    qWarning()<<"opengl";
+    QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+    view = new CrenderView(mainwindow->centralwidget);
+    windowLayout->addWidget(view);
+    windowLayout->setMargin(0);
+}
 
 #ifdef EMSCRIPTEN
     app->exec();
