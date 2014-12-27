@@ -154,7 +154,7 @@ int main(int argc, char *argv[])
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
 
-#ifdef Q_OS_ANDROID
+#if 1 //def Q_OS_ANDROID
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
 #endif
 
@@ -234,7 +234,7 @@ int main(int argc, char *argv[])
     cloudButton = new LaunchButtonWidget(mainwindow->centralwidget,
                                                      LaunchButtonWidget::Action,
                                                      QStringList(),
-#ifdef Q_OS_ANDROID
+#if 1 //def Q_OS_ANDROID
                                                      ":/core/cloud-white.png");
 #else
                                                        ":/core/cloud.png");
@@ -290,6 +290,7 @@ int main(int argc, char *argv[])
     mainwindow->initCommandLine();
 //#endif
 
+    view = 0;
 if (mainwindow->openGlFlag) {
     qWarning()<<"opengl";
     QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);

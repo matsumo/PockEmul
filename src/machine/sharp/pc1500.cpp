@@ -843,10 +843,14 @@ void Cpc15XX::manageCardVisibility() {
     if (currentView == BACKview) {
         // show memory cards
         CPObject * S1PC = pMEMCONNECTOR->LinkedToObject();
-        if (S1PC) view->showPObject(S1PC);
+        if (S1PC)
+            if (view)
+                view->showPObject(S1PC);
     }
     else {
         CPObject * S1PC = pMEMCONNECTOR->LinkedToObject();
-        if (S1PC) view->hidePObject(S1PC);
+        if (S1PC)
+            if (view)
+                view->hidePObject(S1PC);
     }
 }

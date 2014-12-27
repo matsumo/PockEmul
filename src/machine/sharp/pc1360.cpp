@@ -115,19 +115,23 @@ void Cpc1360::manageCardVisibility() {
         CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
         if (S1PC){
             if (backdoorS1Open) {
-                view->showPObject(S1PC);
+                if (view) view->showPObject(S1PC);
+                else S1PC->show();
             }
             else {
-                view->hidePObject(S1PC);
+                if (view) view->hidePObject(S1PC);
+                else S1PC->hide();
             }
         }
         CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
         if (S2PC) {
             if (backdoorS2Open) {
-                view->showPObject(S2PC);
+                if (view) view->showPObject(S2PC);
+                else S2PC->show();
             }
             else {
-                view->hidePObject(S2PC);
+                if (view) view->hidePObject(S2PC);
+                else S2PC->hide();
             }
         }
     }
