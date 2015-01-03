@@ -24,6 +24,9 @@ LaunchButtonWidget::LaunchButtonWidget(QWidget *parent,LaunchButtonWidget::Launc
         launcher = new FluidLauncher(mainwindow,config,FluidLauncher::FileBrowserType);
         launcher->hide();
     }
+
+
+    setStyleSheet("background-color:white;color: black;selection-background-color: grey;");
 }
 
 LaunchButtonWidget::~LaunchButtonWidget() {

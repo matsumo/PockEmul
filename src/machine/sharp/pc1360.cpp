@@ -98,6 +98,9 @@ bool Cpc1360::run(void)
 extern CrenderView* view;
 void Cpc1360::PreFlip(Direction dir, View targetView)
 {
+    Q_UNUSED(dir)
+    Q_UNUSED(targetView)
+
     // hide memory cards
     animateBackDoorS1(false);
     animateBackDoorS2(false);

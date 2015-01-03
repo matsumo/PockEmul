@@ -114,7 +114,7 @@ bool Cpc1280::Chk_Adr(UINT32 *d,UINT32 data)
 {
 
 
-    if ( (*d>=0x0000) && (*d<=0x1FFF) )	return(0);	// ROM area(0000-1fff)
+    if (                 (*d<=0x1FFF) )	return(0);	// ROM area(0000-1fff)
     if ( (*d>=0x2000) && (*d<=0x27FF) )	return(0);
     if ( (*d>=0x2800) && (*d<=0x2B7B) ) { pLCDC->SetDirtyBuf(*d-0x2800); pLCDC->updated = true; return(1);	}
     if ( (*d>=0x3400) && (*d<=0x35FF) )	{ RomBank = data &0x07;	return(1); }
@@ -188,7 +188,9 @@ bool Cpc1280::Chk_Adr(UINT32 *d,UINT32 data)
 
 bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
-    if ( (*d>=0x0000) && (*d<=0x1FFF) )	return(1);	// ROM area(0000-1fff)
+    Q_UNUSED(data)
+
+    if (                 (*d<=0x1FFF) )	return(1);	// ROM area(0000-1fff)
 
     if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d += 0xC000 + ( RomBank * 0x4000 ); return(1); }	// Manage ROM Bank
     if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]\n",*d);
@@ -199,6 +201,7 @@ bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
 
 bool Cpc1280::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
 
     int port1 = Get_8(0x3800);
     int port2 = Get_8(0x3A00);
@@ -219,6 +222,8 @@ bool Cpc1280::Set_Connector(Cbus *_bus)
 
 bool Cpc1280::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     Set_Port_Bit(PORT_B,1,pCONNECTOR->Get_pin(PIN_SEL1));	// DIN	:	IB1
     Set_Port_Bit(PORT_B,2,pCONNECTOR->Get_pin(PIN_SEL2));	// DIN	:	IB2
     Set_Port_Bit(PORT_B,3,pCONNECTOR->Get_pin(PIN_D_OUT));	// DIN	:	IB2

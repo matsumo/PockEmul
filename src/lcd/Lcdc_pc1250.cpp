@@ -37,7 +37,7 @@ Clcdc_pc1250::Clcdc_pc1250(CPObject *parent, QRect _lcdRect, QRect _symbRect, QS
 
 void Clcdc_pc1250::disp(void)
 {
-    BYTE b,data,x,y;
+    BYTE b,data,x;
     int ind;
     WORD adr;
 
