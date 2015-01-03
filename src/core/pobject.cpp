@@ -102,7 +102,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 
     // ERROR MESSAGE
     connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
-
+    setStyleSheet("background-color:white;color: black;selection-background-color: grey;");
 }
 
 

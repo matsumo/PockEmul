@@ -291,13 +291,13 @@ int main(int argc, char *argv[])
 //#endif
 
     view = 0;
-if (mainwindow->openGlFlag) {
-    qWarning()<<"opengl";
-    QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
-    view = new CrenderView(mainwindow->centralwidget);
-    windowLayout->addWidget(view);
-    windowLayout->setMargin(0);
-}
+    if (mainwindow->openGlFlag) {
+        qWarning()<<"opengl";
+        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+        view = new CrenderView(mainwindow->centralwidget);
+        windowLayout->addWidget(view);
+        windowLayout->setMargin(0);
+    }
 
 #ifdef EMSCRIPTEN
     app->exec();

@@ -207,8 +207,8 @@ qWarning()<<"After PopulatePictureFlow";
                  QStringRef _connectortype = attrs.value("connectortype");
                  QStringRef _conngender = attrs.value("conngender");
 
-                 // filter for existing idPockets
-                 if (!mainwindow->objtable.contains(idpocket.toString())) continue;
+                 // filter for existing idPockets if connTpe is empty
+                 if (connType.isEmpty() && !mainwindow->objtable.contains(idpocket.toString())) continue;
                  // filter on brand, connectors type and gender
 
                  if (!connType.isEmpty() && (_connectortype.indexOf(connType)==-1)) continue;
