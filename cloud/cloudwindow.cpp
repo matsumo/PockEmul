@@ -74,7 +74,7 @@ CloudWindow::CloudWindow(QWidget *parent)
 
 //    connect(cloudView->engine(), SIGNAL(quit()), this,SLOT(closeQuick()));
     connect(cloud.object, SIGNAL(close()), this,SLOT(closeQuick()));
-
+    connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(closeQuick()));
 
     QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), &cloud, SLOT(warning(QString)));
 
@@ -368,6 +368,7 @@ void Cloud::warning(QString msg) {
 
 void CloudWindow::closeQuick()
 {
+    qWarning()<<"closeQuick";
     this->hide();
 //    cloudView->hide();
 //    mainwindow->centralwidget->show();
