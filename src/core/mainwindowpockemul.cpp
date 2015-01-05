@@ -895,7 +895,6 @@ void MainWindowPockemul::CheckUpdates()
     dialogcheckupdate->show();
 }
 
-// FIXME: TURNON POCKET after full load
 void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
     QMap<int,CPObject*> map;
     CPObject * firstPC = 0;

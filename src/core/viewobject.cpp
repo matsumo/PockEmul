@@ -9,6 +9,7 @@
 #include "mainwindowpockemul.h"
 
 #include "Keyb.h"
+#include "renderView.h"
 
 extern MainWindowPockemul* mainwindow;
 
@@ -194,6 +195,23 @@ void CViewObject::InitView(View v) {
         }
         break;
     }
+}
+
+extern CrenderView *view;
+void CViewObject::showObject()
+{
+    if (view)
+        view->showPObject(this);
+    else
+        show();
+}
+
+void CViewObject::hideObject()
+{
+    if (view)
+        view->hidePObject(this);
+    else
+        hide();
 }
 
 #define RANGEPERCENT 50

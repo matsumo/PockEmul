@@ -35,6 +35,9 @@ public:
     virtual void PreFlip(Direction dir,View targetView);
     virtual void PostFlip();
 
+
+    virtual void TurnON(void);
+
     Cconnector	*pS2CONNECTOR;		qint64 pS2CONNECTOR_value;
     Cbus *busS2;
 

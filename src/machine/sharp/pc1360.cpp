@@ -15,6 +15,11 @@
 #include "renderView.h"
 #include "clink.h"
 
+#include "modelids.h"
+#include "sharp/ce2xxx.h"
+
+extern int ask(QWidget *parent,QString msg,int nbButton);
+
 Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
 {								//[constructor]
     setcfgfname("pc1360");
@@ -80,6 +85,30 @@ bool Cpc1360::init()
     return true;
 }
 
+void Cpc1360::TurnON()
+{
+    // Check if there is a memory cartd connected to the PS1Connnector before turning ON
+    CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+    if (!S1PC){
+        // If not, ask for connecting the default 8Ko card.
+        int result = ask(this,"No memory card in SLOT 1. Do you want to add the default 8Ko RAM Card ?",2);
+        if (result == 1) {
+            // Create ram card PObject
+            CPObject *cardPC = mainwindow->LoadPocket(CE212M);
+            // link the memory card to PS1Connector
+            // and move memory card to correct coordinates
+            currentSlot = 1;
+            linkObject("",cardPC);
+
+            // Hide memory card
+            cardPC->hideObject();
+        }
+    }
+
+    Cpc13XX::TurnON();
+}
+
+
 BYTE	Cpc1360::Get_PortA(void)
 {
     BYTE data = Cpc13XX::Get_PortA();
@@ -118,23 +147,19 @@ void Cpc1360::manageCardVisibility() {
         CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
         if (S1PC){
             if (backdoorS1Open) {
-                if (view) view->showPObject(S1PC);
-                else S1PC->show();
+                S1PC->showObject();
             }
             else {
-                if (view) view->hidePObject(S1PC);
-                else S1PC->hide();
+                S1PC->hideObject();
             }
         }
         CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
         if (S2PC) {
             if (backdoorS2Open) {
-                if (view) view->showPObject(S2PC);
-                else S2PC->show();
+                S2PC->showObject();
             }
             else {
-                if (view) view->hidePObject(S2PC);
-                else S2PC->hide();
+                S2PC->hideObject();
             }
         }
     }

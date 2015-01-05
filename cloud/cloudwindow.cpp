@@ -72,7 +72,6 @@ CloudWindow::CloudWindow(QWidget *parent)
 
     cloud.object = (QObject*) cloudView->rootObject();
 
-//    connect(cloudView->engine(), SIGNAL(quit()), this,SLOT(closeQuick()));
     connect(cloud.object, SIGNAL(close()), this,SLOT(closeQuick()));
     connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(closeQuick()));
 
@@ -93,8 +92,6 @@ CloudWindow::CloudWindow(QWidget *parent)
     windowLayout->setMargin(0);
 
 
-//    connect(parent,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
-//    connect(parent,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 }
 
 void CloudWindow::resizeEvent(QResizeEvent *e) {
@@ -368,10 +365,7 @@ void Cloud::warning(QString msg) {
 
 void CloudWindow::closeQuick()
 {
-    qWarning()<<"closeQuick";
     this->hide();
-//    cloudView->hide();
-//    mainwindow->centralwidget->show();
 }
 
 void Cloud::addShortcut(QString param) {

@@ -27,7 +27,8 @@ public:
     virtual UINT8   out(UINT8 ,UINT8 ){return(1);}
     virtual bool    CheckUpdateExtension(CExtension *ext);
     virtual int     mapKey(QKeyEvent *event);
-	
+
+
     Cconnector	*pS1CONNECTOR;		qint64 pS1CONNECTOR_value;
 
     Cbus *busS1;

@@ -42,6 +42,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 
     busS1 = new Cbus("RAM Bus S1");
     backdoorS1Open = false;
+    pS1CONNECTOR = 0;
 }
 
 Cpc13XX::~Cpc13XX()
@@ -149,6 +150,7 @@ int Cpc13XX::mapKey(QKeyEvent *event)
 
     return key;
 }
+
 
 
 
