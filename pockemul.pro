@@ -456,7 +456,8 @@ HEADERS *= \
     src/cpu/tms7000/tms7000d.h \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
-    src/machine/sharp/cemem.h
+    src/machine/sharp/cemem.h \
+    src/cpu/mc6800/mc6800.h
 
 
 HEADERS *= \
@@ -733,7 +734,8 @@ SOURCES *=  \
     src/cpu/lh5801d.cpp \
     src/cpu/sc61860d.cpp \
     src/cpu/sc62015d.cpp \
-    src/machine/sharp/cemem.cpp
+    src/machine/sharp/cemem.cpp \
+    src/cpu/mc6800/mc6800.cpp
 
 
 SOURCES *=  \
