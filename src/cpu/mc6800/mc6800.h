@@ -1,6 +1,8 @@
 #ifndef MC6800_H
 #define MC6800_H
 
+#include <QQueue>
+
 /*
     Skelton for retropc emulator
 
@@ -11,6 +13,13 @@
     [ Cmc6800 ]
 */
 #define HAS_HD6301
+
+// common signal id
+#define SIG_CPU_IRQ	101
+#define SIG_CPU_FIRQ	102
+#define SIG_CPU_NMI	103
+#define SIG_CPU_BUSREQ	104
+#define SIG_CPU_DEBUG	201
 
 #include "cpu.h"
 
@@ -124,6 +133,7 @@ private:
     // serial i/o
     outputs_t outputs_sio;
 //    FIFO *recv_buffer;
+    QQueue<int> recv_buffer;
     UINT8 trcsr, rdr, tdr;
     bool trcsr_read_tdre, trcsr_read_orfe, trcsr_read_rdrf;
     UINT8 rmcr;

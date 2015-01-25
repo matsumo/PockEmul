@@ -10,6 +10,7 @@
 
 #include "mc6800.h"
 #include "pcxxxx.h"
+#include "ui/cregsz80widget.h"
 
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
 //#include "../fifo.h"
@@ -85,8 +86,8 @@ void Cmc6800::WM16(UINT32 Addr, PAIR *p)
     WM((Addr + 1) & 0xffff, p->b.l);
 }
 
-#define M_RDOP(Addr)		d_mem->read_data8(Addr)
-#define M_RDOP_ARG(Addr)	d_mem->read_data8(Addr)
+#define M_RDOP(Addr)		(((CpcXXXX *)pPC)->Get_8(Addr))
+#define M_RDOP_ARG(Addr)	(((CpcXXXX *)pPC)->Get_8(Addr))
 
 /* macros to access memory */
 #define IMMBYTE(b)	b = M_RDOP_ARG(PCD); PC++
@@ -413,15 +414,15 @@ void Cmc6800::increment_counter(int amount)
 //            write_signals(&outputs_sio, tdr);
             trcsr |= TRCSR_TDRE;
         }
-        if((trcsr & TRCSR_RE) && !recv_buffer->empty()) {
+        if((trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
             if(trcsr & TRCSR_WU) {
                 // skip 10 bits
                 trcsr &= ~TRCSR_WU;
-                recv_buffer->read();
+                recv_buffer.dequeue();
             }
             else if(!(trcsr & TRCSR_RDRF)) {
                 // note: wait reveived data is read by cpu, so overrun framing error never occurs
-                rdr = recv_buffer->read();
+                rdr = recv_buffer.dequeue();
                 trcsr |= TRCSR_RDRF;
             }
         }
@@ -622,7 +623,7 @@ static const quint8 cycles[] = {
 void Cmc6800::initialize()
 {
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
-    recv_buffer = new FIFO(0x10000);
+//    recv_buffer = new FIFO(0x10000);
 #endif
     ram_ctrl = 0xc0;
 }
@@ -630,8 +631,7 @@ void Cmc6800::initialize()
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
 void Cmc6800::release()
 {
-    recv_buffer->release();
-    delete recv_buffer;
+    recv_buffer.clear();
 }
 #endif
 
@@ -662,7 +662,7 @@ void Cmc6800::Reset()
     OCD = 0xffff;
     TOD = 0xffff;
 
-    recv_buffer->clear();
+    recv_buffer.clear();
     trcsr = TRCSR_TDRE;
     trcsr_read_tdre = trcsr_read_orfe = trcsr_read_rdrf = false;
     rmcr = 0x00;
@@ -725,7 +725,7 @@ void Cmc6800::write_signal(int id, UINT32 data, UINT32 mask)
         sc2_state = ((data & mask) != 0);
         break;
     case SIG_MC6801_SIO_RECV:
-        recv_buffer->write(data & mask);
+//        recv_buffer->write(data & mask);
         break;
 #endif
     }
@@ -1237,7 +1237,7 @@ void Cmc6800::insn(quint8 code)
 /* operate one instruction for */
 #define ONE_MORE_INSN() { \
     quint8 ireg = M_RDOP(PCD); \
-    prevpc = PC; \
+    regs.prevpc = PC; \
     PC++; \
     insn(ireg); \
     increment_counter(cycles[ireg]); \
@@ -3727,10 +3727,10 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 {
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     for(int i = 0; i < 4; i++) {
-        init_output_signals(&port[i].outputs);
+//        init_output_signals(&port[i].outputs);
         port[i].wreg = port[i].rreg = 0;//0xff;
     }
-    init_output_signals(&outputs_sio);
+//    init_output_signals(&outputs_sio);
 #endif
 
     pDEBUG = new Cdebug_mc6800(this);
