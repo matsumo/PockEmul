@@ -735,7 +735,8 @@ SOURCES *=  \
     src/cpu/sc61860d.cpp \
     src/cpu/sc62015d.cpp \
     src/machine/sharp/cemem.cpp \
-    src/cpu/mc6800/mc6800.cpp
+    src/cpu/mc6800/mc6800.cpp \
+    src/cpu/mc6800/mc6800d.cpp
 
 
 SOURCES *=  \
