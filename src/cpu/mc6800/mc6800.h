@@ -409,8 +409,8 @@ public:
     virtual	bool	exit(void);						//end
     virtual void	step(void);						//step SC61860
 
-    virtual	void	Load_Internal(QXmlStreamReader *){}
-    virtual	void	save_internal(QXmlStreamWriter *){}
+    virtual	void	Load_Internal(QXmlStreamReader *);
+    virtual	void	save_internal(QXmlStreamWriter *);
 
 //    virtual	DWORD	get_mem(DWORD adr,int size);		//get memory
 //    virtual	void	set_mem(DWORD adr,int size,DWORD data);	//set memory
@@ -421,7 +421,7 @@ public:
     virtual	void	Set_Xout(bool) {}
 
     virtual	UINT32	get_PC(void);					//get Program Counter
-    virtual void    set_PC(UINT32);
+    virtual void    set_PC(UINT32 val);
     virtual void	Regs_Info(UINT8);
 
 

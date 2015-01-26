@@ -457,7 +457,8 @@ HEADERS *= \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
     src/machine/sharp/cemem.h \
-    src/cpu/mc6800/mc6800.h
+    src/cpu/mc6800/mc6800.h \
+    src/cpu/mc6800/mc6800d.h
 
 
 HEADERS *= \

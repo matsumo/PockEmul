@@ -17,9 +17,8 @@
  *
  */
 
-#include "emu.h"
-#include "debugger.h"
-#include "m6800.h"
+#include "mc6800d.h"
+#include "mc6800.h"
 
 enum addr_mode {
     inh,	/* inherent */
@@ -158,6 +157,9 @@ static const UINT8 table[0x102][3] = {
 #define ARG2    opram[2]
 #define ARGW	(opram[1]<<8) + opram[2]
 
+
+#define DASMFLAG_SUPPORTED 0
+
 static unsigned Dasm680x (int subtype, char *buf, unsigned pc, const UINT8 *oprom, const UINT8 *opram)
 {
     UINT32 flags = 0;
@@ -192,10 +194,10 @@ static unsigned Dasm680x (int subtype, char *buf, unsigned pc, const UINT8 *opro
     args = table[code][1];
     invalid = table[code][2];
 
-    if (opcode == bsr || opcode == jsr)
-        flags = DASMFLAG_STEP_OVER;
-    else if (opcode == rti || opcode == rts)
-        flags = DASMFLAG_STEP_OUT;
+//    if (opcode == bsr || opcode == jsr)
+//        flags = DASMFLAG_STEP_OVER;
+//    else if (opcode == rti || opcode == rts)
+//        flags = DASMFLAG_STEP_OUT;
 
     if ( invalid & invalid_mask )	/* invalid for this cpu type ? */
     {
@@ -208,7 +210,7 @@ static unsigned Dasm680x (int subtype, char *buf, unsigned pc, const UINT8 *opro
     switch( args )
     {
         case rel:  /* relative */
-            sprintf (buf, "$%04X", pc + (INT8)ARG1 + 2);
+            sprintf (buf, "$%04X", pc + (qint8)ARG1 + 2);
             return 2 | flags | DASMFLAG_SUPPORTED;
         case imb:  /* immediate (byte) */
             sprintf (buf, "#$%02X", ARG1);
@@ -239,42 +241,71 @@ static unsigned Dasm680x (int subtype, char *buf, unsigned pc, const UINT8 *opro
     }
 }
 
-CPU_DISASSEMBLE( m6800 )
+//CPU_DISASSEMBLE( m6800 )
+//{
+//    return Dasm680x(6800,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( m6801 )
+//{
+//    return Dasm680x(6801,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( m6802 )
+//{
+//    return Dasm680x(6802,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( m6803 )
+//{
+//    return Dasm680x(6803,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( m6808 )
+//{
+//    return Dasm680x(6808,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( hd6301 )
+//{
+//    return Dasm680x(6301,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( hd63701 )
+//{
+//    return Dasm680x(63701,buffer,pc,oprom,opram);
+//}
+
+//CPU_DISASSEMBLE( nsc8105 )
+//{
+//    return Dasm680x(8105,buffer,pc,oprom,opram);
+//}
+
+quint32 Cdebug_mc6800::DisAsm_1(quint32 pc)
 {
-    return Dasm680x(6800,buffer,pc,oprom,opram);
+    unsigned short old_pc;
+    int i, j;
+    char data[1024];
+    char str[1024];
+
+
+        for (j = 0; j < 16;j++)
+            data[j] = pCPU->get_mem(pc + j,8);
+        old_pc = pc;
+//        pc += DasmOpe(str, (unsigned char*)data,pc);
+        pc += Dasm680x(6301,str,pc,(unsigned char*)data,(unsigned char*)data);
+        sprintf(Buffer,"%06X: %s", old_pc, str);
+
+        DasmAdr = old_pc;
+
+        NextDasmAdr = pc;
+        debugged = true;
+
+        return NextDasmAdr;
+
 }
 
-CPU_DISASSEMBLE( m6801 )
+Cdebug_mc6800::Cdebug_mc6800(CCPU *parent)	: Cdebug(parent)
 {
-    return Dasm680x(6801,buffer,pc,oprom,opram);
-}
 
-CPU_DISASSEMBLE( m6802 )
-{
-    return Dasm680x(6802,buffer,pc,oprom,opram);
-}
-
-CPU_DISASSEMBLE( m6803 )
-{
-    return Dasm680x(6803,buffer,pc,oprom,opram);
-}
-
-CPU_DISASSEMBLE( m6808 )
-{
-    return Dasm680x(6808,buffer,pc,oprom,opram);
-}
-
-CPU_DISASSEMBLE( hd6301 )
-{
-    return Dasm680x(6301,buffer,pc,oprom,opram);
-}
-
-CPU_DISASSEMBLE( hd63701 )
-{
-    return Dasm680x(63701,buffer,pc,oprom,opram);
-}
-
-CPU_DISASSEMBLE( nsc8105 )
-{
-    return Dasm680x(8105,buffer,pc,oprom,opram);
 }

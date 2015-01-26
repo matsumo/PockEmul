@@ -9,7 +9,9 @@
 */
 
 #include "mc6800.h"
+#include "mc6800d.h"
 #include "pcxxxx.h"
+#include "Inter.h"
 #include "ui/cregsz80widget.h"
 
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
@@ -388,6 +390,7 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 
 void Cmc6800::increment_counter(int amount)
 {
+    pPC->pTIMER->state += (amount);
     icount -= amount;
 
     // timer
@@ -2852,6 +2855,7 @@ void Cmc6800::cpx_ix()
     SET_FLAGS16(d, b.d, r);
 }
 
+
 /* $ad JSR indexed ----- */
 void Cmc6800::jsr_ix()
 {
@@ -3742,3 +3746,93 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 }
 
 Cmc6800::~Cmc6800() {}
+
+bool Cmc6800::init()
+{
+    Check_Log();
+    pDEBUG->init();
+
+    return true;
+}
+
+bool Cmc6800::exit()
+{
+    return true;
+}
+
+void Cmc6800::step()
+{
+    run_one_opecode();
+}
+
+void Cmc6800::Load_Internal(QXmlStreamReader *xmlIn)
+{
+    if (xmlIn->readNextStartElement()) {
+        if ( (xmlIn->name()=="cpu") &&
+             (xmlIn->attributes().value("model").toString() == "mc6800")) {
+            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+            memcpy((char *) &regs,ba_reg.data(),sizeof(MC6800info));
+
+        }
+        xmlIn->skipCurrentElement();
+    }
+}
+
+void Cmc6800::save_internal(QXmlStreamWriter *xmlOut)
+{
+
+    xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","mc6800");
+        QByteArray ba_reg((char*)&regs,sizeof(MC6800info));
+        xmlOut->writeAttribute("registers",ba_reg.toBase64());
+    xmlOut->writeEndElement();
+}
+
+UINT32 Cmc6800::get_PC()
+{
+    return (PC);
+}
+
+void Cmc6800::set_PC(UINT32 val)
+{
+    PC = val;
+}
+
+void Cmc6800::Regs_Info(UINT8)
+{
+#if 0
+    switch(Type)
+    {
+    case 0:			// Monitor Registers Dialog
+        sprintf(Regs_String,	"PC:%.4x A:%02X\nX:%02X Y:%02X\nP:%02X SPD:%04X\n%s%s%s%s%s%s%s%s",
+                            PCW,A,X,Y,P,SPD,
+                P&F_N ? "N":".",
+                P&F_V ? "V":".",
+                P&F_T ? "T":".",
+                P&F_B ? "B":".",
+                P&F_D ? "D":".",
+                P&F_I ? "I":".",
+                P&F_Z ? "Z":".",
+                P&F_C ? "C":"."
+
+
+                );
+        break;
+    case 1:			// For Log File
+        sprintf(Regs_String,	"PC:%.4x A:%02X X:%02X Y:%02X P:%02X SPD:%04X  %s%s%s%s%s%s%s%s",
+                            PCW,A,X,Y,P,SPD,
+                P&F_N ? "N":".",
+                P&F_V ? "V":".",
+                P&F_T ? "T":".",
+                P&F_B ? "B":".",
+                P&F_D ? "D":".",
+                P&F_I ? "I":".",
+                P&F_Z ? "Z":".",
+                P&F_C ? "C":"."
+
+
+                );
+        break;
+    }
+#endif
+}
