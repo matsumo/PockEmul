@@ -289,6 +289,7 @@ quint32 Cdebug_mc6800::DisAsm_1(quint32 pc)
     char str[1024];
 
 
+    memset(str,0,sizeof(str));
         for (j = 0; j < 16;j++)
             data[j] = pCPU->get_mem(pc + j,8);
         old_pc = pc;

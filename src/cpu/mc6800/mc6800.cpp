@@ -66,9 +66,11 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         mc6801_io_w(Addr, Value);
+        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
         ram[Addr & 0x7f] = Value;
+        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
     else
 #endif
@@ -3751,6 +3753,7 @@ bool Cmc6800::init()
 {
     Check_Log();
     pDEBUG->init();
+    Reset();
 
     return true;
 }

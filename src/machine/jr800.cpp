@@ -66,7 +66,7 @@ Cjr800::~Cjr800() {
 bool Cjr800::init(void)				// initialize
 {
 
-//pCPU->logsw = true;
+pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("jr800.log","wt");	// Open log file
@@ -149,7 +149,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
-    if(*d >= 0x6000) return true; /* RAM */
+    if(*d < 0x0000) return true; /* RAM */
 
     return false;
 }
