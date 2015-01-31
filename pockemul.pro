@@ -457,8 +457,7 @@ HEADERS *= \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
     src/machine/sharp/cemem.h \
-    src/cpu/mc6800/mc6800.h \
-    src/cpu/mc6800/mc6800d.h
+
 
 
 HEADERS *= \
@@ -506,6 +505,8 @@ HEADERS *= \
     src/cpu/hd61710.h \
     src/cpu/hpnut.h \
     src/cpu/hpnutd.h \
+    src/cpu/mc6800/mc6800.h \
+    src/cpu/mc6800/mc6800d.h \
 
 HEADERS *= \
     src/machine/pcxxxx.h \
@@ -578,6 +579,7 @@ HEADERS *= \
     src/machine/cx07.h \
     src/machine/cx710.h \
     src/machine/ccable.h \
+    src/machine/jr800.h \
 
 HEADERS *= \
     src/lcd/Lcdc.h \
@@ -684,7 +686,8 @@ DEFINES += LOCRES
 }
 
 RESOURCES +=  \
-    resources/cemem.qrc
+    resources/cemem.qrc \
+    resources/jr800.qrc
 
 
 SOURCES *=  \
@@ -736,8 +739,8 @@ SOURCES *=  \
     src/cpu/sc61860d.cpp \
     src/cpu/sc62015d.cpp \
     src/machine/sharp/cemem.cpp \
-    src/cpu/mc6800/mc6800.cpp \
-    src/cpu/mc6800/mc6800d.cpp
+
+
 
 
 SOURCES *=  \
@@ -815,6 +818,7 @@ SOURCES *=  \
     src/machine/tpc8300.cpp \
     src/machine/tp83.cpp \
     src/machine/ccable.cpp \
+    src/machine/jr800.cpp \
     qcodemodel2/qcodenode.cpp \
 
 
@@ -867,6 +871,8 @@ SOURCES *=  \
     src/cpu/upd1007d.cpp \
     src/cpu/hd61710.cpp \
     src/cpu/sed1560.cpp \
+    src/cpu/mc6800/mc6800.cpp \
+    src/cpu/mc6800/mc6800d.cpp \
 
 
 SOURCES *=  \

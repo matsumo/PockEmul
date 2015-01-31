@@ -122,7 +122,8 @@ enum Models {
     CE159,
     CE160,
     CE161,
-    CE163
+    CE163,
+    JR800
 };
 
 #endif // MODELIDS_H

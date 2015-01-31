@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>jr800/rom-8000-FFFF.bin</file>
+        <file>jr800/jr800.png</file>
+    </qresource>
+</RCC>

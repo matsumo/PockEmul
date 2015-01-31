@@ -387,6 +387,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["TI-74"]= TI74;
     objtable["TI-95"]= TI95;
 
+    objtable["National JR-800"]= JR800;
 
     objtable["#BRAND#HEWLETT-PACKARD"]=0;
     objtable["#BRAND#CASIO"]=0;
@@ -575,6 +576,9 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;
     case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
     case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;
+
+
+    case JR800 : pPC = new Cjr800;      pPC->setName("JR-800"); break;
 
 
         default			: return 0;

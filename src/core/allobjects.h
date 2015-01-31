@@ -91,7 +91,7 @@
 
 #include "postit.h"
 
-
+#include "jr800.h"
 
 
 #endif // ALLOBJECTS_H
