@@ -422,7 +422,7 @@ public:
 
     virtual	UINT32	get_PC(void);					//get Program Counter
     virtual void    set_PC(UINT32 val);
-    virtual void	Regs_Info(UINT8);
+    virtual void	Regs_Info(UINT8 Type);
 
 
     virtual void	Reset(void);

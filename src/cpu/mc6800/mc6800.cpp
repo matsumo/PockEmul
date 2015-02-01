@@ -51,7 +51,9 @@ UINT32 Cmc6800::RM(UINT32 Addr)
 {
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
-        return mc6801_io_r(Addr);
+        UINT32 _ret = mc6801_io_r(Addr);
+        sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        return _ret;
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
         return imem[Addr & 0x7f];
@@ -66,11 +68,11 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         mc6801_io_w(Addr, Value);
-        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
+//        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
-        ram[Addr & 0x7f] = Value;
-        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
+        imem[Addr & 0x7f] = Value;
+//        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
     else
 #endif
@@ -165,7 +167,7 @@ static const int RMCR_SS[] = { 16, 128, 1024, 4096 };
 #define TAKE_TRAP	enter_interrupt(0xffee)
 
 UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
-{
+{ 
     switch (offset) {
     case 0x00:
         // port1 data direction register
@@ -274,6 +276,7 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
 
 void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 {
+    sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,offset,data);
     switch(offset) {
     case 0x00:
         // port1 data direction register
@@ -832,6 +835,7 @@ void Cmc6800::enter_interrupt(quint16 irq_vector)
         PUSHBYTE(B);
         PUSHBYTE(CC);
         icount -= 12;
+        CallSubLevel++;
     }
     SEI;
     PCD = RM16(irq_vector);
@@ -1638,6 +1642,7 @@ void Cmc6800::pulx()
 void Cmc6800::rts()
 {
     PULLWORD(paPC);
+    CallSubLevel--;
 }
 
 /* $3a ABX inherent ----- */
@@ -1654,6 +1659,7 @@ void Cmc6800::rti()
     PULLBYTE(A);
     PULLWORD(pX);
     PULLWORD(paPC);
+    CallSubLevel;
 }
 
 /* $3c PSHX inherent ----- */
@@ -1697,6 +1703,7 @@ void Cmc6800::swi()
     PUSHBYTE(CC);
     SEI;
     PCD = RM16(0xfffa);
+    CallSubLevel++;
 }
 
 /* $40 NEGA inherent ?**** */
@@ -2511,6 +2518,7 @@ void Cmc6800::bsr()
     IMMBYTE(t);
     PUSHWORD(paPC);
     PC += SIGNED(t);
+    CallSubLevel++;
 }
 
 /* $8e LDS immediate -**0- */
@@ -2687,6 +2695,7 @@ void Cmc6800::jsr_di()
     DIRECT;
     PUSHWORD(paPC);
     PC = EA;
+    CallSubLevel++;
 }
 
 /* $9e LDS direct -**0- */
@@ -2864,6 +2873,7 @@ void Cmc6800::jsr_ix()
     INDEXED;
     PUSHWORD(paPC);
     PC = EA;
+    CallSubLevel++;
 }
 
 /* $ae LDS indexed -**0- */
@@ -3040,6 +3050,7 @@ void Cmc6800::jsr_ex()
     EXTENDED;
     PUSHWORD(paPC);
     PC = EA;
+    CallSubLevel++;
 }
 
 /* $be LDS extended -**0- */
@@ -3801,41 +3812,48 @@ void Cmc6800::set_PC(UINT32 val)
     PC = val;
 }
 
-void Cmc6800::Regs_Info(UINT8)
+void Cmc6800::Regs_Info(UINT8 Type)
 {
-#if 0
+    sprintf(Regs_String,"");
+    /*
+     * #define PC	regs.pc.w.l
+#define PCD	regs.pc.d
+#define S	regs.sp.w.l
+#define SD	regs.sp.d
+#define X	regs.ix.w.l
+#define D	regs.acc_d.w.l
+#define A	regs.acc_d.b.h
+#define B	regs.acc_d.b.l
+#define CC	regs.cc
+*/
+#if 1
     switch(Type)
     {
     case 0:			// Monitor Registers Dialog
-        sprintf(Regs_String,	"PC:%.4x A:%02X\nX:%02X Y:%02X\nP:%02X SPD:%04X\n%s%s%s%s%s%s%s%s",
-                            PCW,A,X,Y,P,SPD,
-                P&F_N ? "N":".",
-                P&F_V ? "V":".",
-                P&F_T ? "T":".",
-                P&F_B ? "B":".",
-                P&F_D ? "D":".",
-                P&F_I ? "I":".",
-                P&F_Z ? "Z":".",
-                P&F_C ? "C":"."
-
-
+        sprintf(Regs_String,	"PC:%.4x \nA:%02X B:%02X\n D:%04X X:%04X \nSP:%04X\n%s%s%s%s%s%s",
+                            PC,A,B,D,X,S,
+                CC&0x20 ? "H":".",
+                CC&0x10 ? "I":".",
+                CC&0x08 ? "N":".",
+                CC&0x04 ? "Z":".",
+                CC&0x02 ? "V":".",
+                CC&0x01 ? "C":"."
                 );
         break;
     case 1:			// For Log File
-        sprintf(Regs_String,	"PC:%.4x A:%02X X:%02X Y:%02X P:%02X SPD:%04X  %s%s%s%s%s%s%s%s",
-                            PCW,A,X,Y,P,SPD,
-                P&F_N ? "N":".",
-                P&F_V ? "V":".",
-                P&F_T ? "T":".",
-                P&F_B ? "B":".",
-                P&F_D ? "D":".",
-                P&F_I ? "I":".",
-                P&F_Z ? "Z":".",
-                P&F_C ? "C":"."
-
-
+        sprintf(Regs_String,	"PC:%.4x A:%02X B:%02X D:%04X X:%04X SP:%04X %s%s%s%s%s%s",
+                            PC,A,B,D,X,S,
+                CC&0x20 ? "H":".",
+                CC&0x10 ? "I":".",
+                CC&0x08 ? "N":".",
+                CC&0x04 ? "Z":".",
+                CC&0x02 ? "V":".",
+                CC&0x01 ? "C":"."
                 );
         break;
     }
 #endif
+//    for (int i=0;i<0x20;i++)
+//        sprintf(Regs_String,"%s%02X",Regs_String,cpustate->imem[i]);
+//    sprintf(Regs_String,"%s ",Regs_String);
 }

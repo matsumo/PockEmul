@@ -149,7 +149,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
-    if(*d < 0x0000) return true; /* RAM */
+    if(*d < 0x8000) return true; /* RAM */
 
     return false;
 }
