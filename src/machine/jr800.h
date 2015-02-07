@@ -2,9 +2,8 @@
 #define JR800_H
 
 class CPObject;
-class Cupd7907;
-class CUPD16434;
-class CPD1990AC;
+
+class CHD44102;
 class Cconnector;
 
 #include "pcxxxx.h"
@@ -40,7 +39,7 @@ public:
 
     UINT16 getKey();
 
-    CUPD16434 *upd16434[4];
+    CHD44102 *hd44102[8];
 
     Cconnector	*pTAPECONNECTOR;	qint64 pTAPECONNECTOR_value;
     Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;

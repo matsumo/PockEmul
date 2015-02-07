@@ -457,6 +457,8 @@ HEADERS *= \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
     src/machine/sharp/cemem.h \
+    src/cpu/hd44102.h \
+    src/lcd/lcdc_jr800.h
 
 
 
@@ -739,6 +741,8 @@ SOURCES *=  \
     src/cpu/sc61860d.cpp \
     src/cpu/sc62015d.cpp \
     src/machine/sharp/cemem.cpp \
+    src/cpu/hd44102.cpp \
+    src/lcd/lcdc_jr800.cpp
 
 
 

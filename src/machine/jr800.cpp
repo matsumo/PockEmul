@@ -10,14 +10,15 @@
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"
-//#include "Lcdc_jr800.h"
+#include "Lcdc_jr800.h"
 #include "Connect.h"
 #include "watchpoint.h"
+#include "hd44102.h"
 
 
 Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 3865000/8);
+    setfrequency( (int) 4915200/4);
     setcfgfname(QString("jr800"));
 
     SessionHeader	= "JR800PKM";
@@ -31,7 +32,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     BackFname = P_RES(":/jr800/jr800Back.png");
 
     memsize		= 0xFFFF;
-    InitMemValue	= 0xFF;
+    InitMemValue	= 0x00;
 
     SlotList.clear();
     SlotList.append(CSlot(32 ,0x0000 ,	""	, ""	, CSlot::RAM , "RAM"));
@@ -48,11 +49,14 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
 
     PowerSwitch = 0;
 
-//    pLCDC		= new Clcdc_jr800(this,
-//                                   QRect(93,80,240*2.15,21*2.15),
-//                                   QRect());
+    pLCDC		= new Clcdc_jr800(this,
+                                   QRect(93,80,192*2.15,64*2.15),
+                                   QRect());
     pCPU		= new Cmc6800(this);
-    for (int i=0;i<4;i++) upd16434[i]  = new CUPD16434(this);
+    for (int i=0;i<8;i++) {
+        hd44102[i]  = new CHD44102(this);
+        qWarning()<<hd44102[i];
+    }
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"jr800.map");
 
@@ -60,7 +64,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
 }
 
 Cjr800::~Cjr800() {
-    for (int i=0;i<4;i++) delete(upd16434[i]);
+
 }
 
 bool Cjr800::init(void)				// initialize
@@ -84,6 +88,10 @@ pCPU->logsw = true;
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
 
+    for (int i=0;i<8;i++) {
+        hd44102[i]->init();
+        qWarning()<<hd44102[i];
+    }
 //    portB = 0;
 
     return true;
@@ -149,6 +157,43 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
+
+    if ((*d>=0x0A00) && (*d<=0x0AFF)) {
+        int _chip = *d & 0xff;
+        int _id = 0;
+        switch (_chip) {
+            case 0x01: _id = 0; break;
+            case 0x02: _id = 1; break;
+            case 0x04: _id = 2; break;
+            case 0x08: _id = 3; break;
+            case 0x10: _id = 4; break;
+            case 0x20: _id = 5; break;
+            case 0x40: _id = 6; break;
+            case 0x80: _id = 7; break;
+        }
+
+        hd44102[_id]->cmd_write(data);
+        return false;
+    }
+    if ((*d>=0x0B00) && (*d<=0x0BFF)) {
+        int _chip = *d & 0xff;
+        int _id = 0;
+        switch (_chip) {
+            case 0x01: _id = 0; break;
+            case 0x02: _id = 1; break;
+            case 0x04: _id = 2; break;
+            case 0x08: _id = 3; break;
+            case 0x10: _id = 4; break;
+            case 0x20: _id = 5; break;
+            case 0x40: _id = 6; break;
+            case 0x80: _id = 7; break;
+        }
+
+        qWarning()<<"Write "<<data<<" to driver:"<<_id;
+        hd44102[_id]->set8(data);
+        return false;
+    }
+
     if(*d < 0x8000) return true; /* RAM */
 
     return false;
@@ -159,6 +204,44 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
     Q_UNUSED(d)
     Q_UNUSED(data)
 
+
+    if ((*d>=0x0A00) && (*d<=0x0AFF)) {
+        int _chip = *d & 0xff;
+        int _id = 0;
+        switch (_chip) {
+            case 0x01: _id = 0; break;
+            case 0x02: _id = 1; break;
+            case 0x04: _id = 2; break;
+            case 0x08: _id = 3; break;
+            case 0x10: _id = 4; break;
+            case 0x20: _id = 5; break;
+            case 0x40: _id = 6; break;
+            case 0x80: _id = 7; break;
+        }
+
+        *data = hd44102[_id]->cmd_status();
+        return false;
+    }
+
+    if ((*d>=0x0B00) && (*d<=0x0BFF)) {
+        int _chip = *d & 0xff;
+        int _id = 0;
+        switch (_chip) {
+            case 0x01: _id = 0; break;
+            case 0x02: _id = 1; break;
+            case 0x04: _id = 2; break;
+            case 0x08: _id = 3; break;
+            case 0x10: _id = 4; break;
+            case 0x20: _id = 5; break;
+            case 0x40: _id = 6; break;
+            case 0x80: _id = 7; break;
+        }
+
+        *data = hd44102[_id]->get8();
+        return false;
+    }
+
+    if ((*d>=0xC000) & (*d<=0xEFFF)) return false;
     return true;
 }
 
@@ -237,20 +320,20 @@ void Cjr800::Reset()
     CpcXXXX::Reset();
 //    upd7907->upd7907stat.pc.w.l=0;
 //    pLCDC->init();
-    for (int i=0;i<4;i++) upd16434[i]->Reset();
+    for (int i=0;i<8;i++) hd44102[i]->Reset();
 //    sendToPrinter=0;
 
 }
 
 bool Cjr800::LoadConfig(QXmlStreamReader *xmlIn)
 {
-    for (int i=0;i<4;i++) upd16434[i]->Load_Internal(xmlIn);
+    for (int i=0;i<8;i++) hd44102[i]->Load_Internal(xmlIn);
     return true;
 }
 
 bool Cjr800::SaveConfig(QXmlStreamWriter *xmlOut)
 {
-    for (int i=0;i<4;i++) upd16434[i]->save_internal(xmlOut);
+    for (int i=0;i<8;i++) hd44102[i]->save_internal(xmlOut);
     return true;
 }
 

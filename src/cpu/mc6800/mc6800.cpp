@@ -52,31 +52,40 @@ UINT32 Cmc6800::RM(UINT32 Addr)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         UINT32 _ret = mc6801_io_r(Addr);
-        sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        sprintf(pPC->Log_String,"%s Rp[%04X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
-        return imem[Addr & 0x7f];
+        UINT32 _ret = imem[Addr & 0x7f];
+        sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        return _ret;
     }
 #endif
-    return (((CpcXXXX *)pPC)->Get_8(Addr));
+    UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
+    sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
+    return _ret;
 //    return d_mem->read_data8(Addr);
 }
 
 void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 {
+
+
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         mc6801_io_w(Addr, Value);
+        sprintf(pPC->Log_String,"%s Wp[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
         imem[Addr & 0x7f] = Value;
+        sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
     else
 #endif
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
+    sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
 //    d_mem->write_data8(Addr, Value);
 }
 
@@ -92,8 +101,10 @@ void Cmc6800::WM16(UINT32 Addr, PAIR *p)
     WM((Addr + 1) & 0xffff, p->b.l);
 }
 
-#define M_RDOP(Addr)		(((CpcXXXX *)pPC)->Get_8(Addr))
-#define M_RDOP_ARG(Addr)	(((CpcXXXX *)pPC)->Get_8(Addr))
+#define M_RDOP(Addr)		RM(Addr)
+//(((CpcXXXX *)pPC)->Get_8(Addr))
+#define M_RDOP_ARG(Addr)	RM(Addr)
+//(((CpcXXXX *)pPC)->Get_8(Addr))
 
 /* macros to access memory */
 #define IMMBYTE(b)	b = M_RDOP_ARG(PCD); PC++
@@ -276,7 +287,7 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
 
 void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 {
-    sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,offset,data);
+
     switch(offset) {
     case 0x00:
         // port1 data direction register
@@ -1659,7 +1670,7 @@ void Cmc6800::rti()
     PULLBYTE(A);
     PULLWORD(pX);
     PULLWORD(paPC);
-    CallSubLevel;
+    CallSubLevel--;
 }
 
 /* $3c PSHX inherent ----- */
@@ -3750,6 +3761,7 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 //    init_output_signals(&outputs_sio);
 #endif
 
+    memset(&regs,0,sizeof(regs));
     pDEBUG = new Cdebug_mc6800(this);
 
     fn_log="mc6800.log";
