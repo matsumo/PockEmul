@@ -50,7 +50,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_jr800(this,
-                                   QRect(93,80,192*2.15,64*2.15),
+                                   QRect(93,80,192*2,64*2),
                                    QRect());
     pCPU		= new Cmc6800(this);
     for (int i=0;i<8;i++) {
@@ -70,7 +70,7 @@ Cjr800::~Cjr800() {
 bool Cjr800::init(void)				// initialize
 {
 
-pCPU->logsw = true;
+//pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("jr800.log","wt");	// Open log file
@@ -171,7 +171,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             case 0x40: _id = 6; break;
             case 0x80: _id = 7; break;
         }
-
+//qWarning()<<"Write cmd:"<<data<<" to driver:"<<_id;
         hd44102[_id]->cmd_write(data);
         return false;
     }
@@ -189,7 +189,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             case 0x80: _id = 7; break;
         }
 
-        qWarning()<<"Write "<<data<<" to driver:"<<_id;
+        qWarning()<<"Write data:"<<data<<" to driver:"<<_id;
         hd44102[_id]->set8(data);
         return false;
     }
@@ -220,6 +220,7 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         }
 
         *data = hd44102[_id]->cmd_status();
+//        qWarning()<<"Read status:"<<*data<<" from driver:"<<_id;
         return false;
     }
 
@@ -238,10 +239,17 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         }
 
         *data = hd44102[_id]->get8();
+//        qWarning()<<"Read data:"<<*data<<" from driver:"<<_id;
         return false;
     }
 
-    if ((*d>=0xC000) & (*d<=0xEFFF)) return false;
+    if (*d==0x0DFF) {
+        *data = 0x10;
+//        qWarning()<<"OK";
+        return false;
+    }
+
+//    if ((*d>=0xC000) & (*d<=0xEFFF)) return false;
     return true;
 }
 

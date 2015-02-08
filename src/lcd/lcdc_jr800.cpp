@@ -55,16 +55,24 @@ void Clcdc_jr800::disp(void)
     bool _toRefresh = false;
     for (int i = 0 ; i<8; i++)
     {
+
         if (!jr800->hd44102[i]->updated) continue;
+        qWarning()<<"Draw driver:"<<i;
         Refresh = true;
-        for (int l=0; l<4;l++)
+
+        for (int x = 0; x< 50;x++)
         {
-            for (int j = 0; j< 50;j++)
+            int z = jr800->hd44102[i]->info.m_page;
+            for (int y=0; y<4;y++)
             {
-                UINT8 data = jr800->hd44102[i]->info.imem[l][j];
+                int sy = (z + y)%4;
+                int sx = 49-x;
+                UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
+
                 for (b=0;b<8;b++)
                 {
-                    drawPixel(&painter,j + i*50, i/4*32 + l*8 + b,((data>>b)&0x01) ? Color_On : Color_Off );
+                    QColor _col = ((data>>b)&0x01) ? Color_On : Color_Off ;
+                    drawPixel(&painter,sx + (i%4)*50, (i/4)*32 + sy*8 + b,_col);
                 }
             }
         }
@@ -78,5 +86,35 @@ void Clcdc_jr800::disp(void)
 }
 
 
+//-------------------------------------------------
+//  update_screen - update screen
+//-------------------------------------------------
+#if 0
+UINT32 CHD44102::screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect)
+{
+    for (int y = 0; y < 50; y++)
+    {
+        int z = m_page << 3;
 
+        for (int x = 0; x < 32; x++)
+        {
+            UINT8 data = m_ram[z / 8][y];
+
+            int sy = m_sy + z;
+            int sx = m_sx + y;
+
+            if (cliprect.contains(sx, sy))
+            {
+                int color = (m_status & STATUS_DISPLAY_OFF) ? 0 : BIT(data, z % 8);
+
+                bitmap.pix16(sy, sx) = color;
+            }
+
+            z++;
+            z %= 32;
+        }
+    }
+    return 0;
+}
+#endif
 

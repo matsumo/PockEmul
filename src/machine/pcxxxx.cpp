@@ -644,6 +644,7 @@ bool CpcXXXX::run(void)
 
     if(!(pCPU->halt|pCPU->off) && !off)
 	{
+        sprintf(Log_String," ");
 #if 0
         if ( (pCPU->logsw) && (pCPU->fp_log) )
 #else
@@ -652,7 +653,7 @@ bool CpcXXXX::run(void)
         {
             fflush(pCPU->fp_log);
             //char	s[2000];
-            sprintf(Log_String," ");
+//            sprintf(Log_String," ");
             pCPU->pDEBUG->DisAsm_1(pCPU->get_PC());
             fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
             fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
@@ -678,7 +679,10 @@ bool CpcXXXX::run(void)
         }
         else {
 //            fprintf(_loclog,"[%lld] %05x",pTIMER->state,pCPU->get_PC());
-            if (!off) pCPU->step();
+            if (!off) {
+                pCPU->step();
+//                qWarning()<<Log_String;
+            }
 #ifndef QT_NO_DEBUG
             Regs_Info(0);
 #endif

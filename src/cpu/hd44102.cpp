@@ -122,7 +122,7 @@ void CHD44102::Reset()
 
 BYTE CHD44102::cmd_status()
 {
-    qWarning()<<"status:"<<info.m_status;
+//    qWarning()<<"status:"<<info.m_status;
     return 0;
     return info.m_status;
 }
@@ -247,6 +247,7 @@ void CHD44102::cmd_write(UINT8 data)
 //            if (LOG) logerror("HD44102 '%s' Display Start Page %u\n", tag(), x);
 
             info.m_page = x;
+            qWarning()<<"PAGE="<<x;
         }
         else if (y > 49)
         {
@@ -258,6 +259,7 @@ void CHD44102::cmd_write(UINT8 data)
 
             info.m_x = x;
             info.m_y = y;
+            qWarning()<<"m_x="<<x<<"  m_y="<<y;
         }
         }
     }
@@ -276,34 +278,4 @@ void CHD44102::cmd_write(UINT8 data)
 //}
 
 
-//-------------------------------------------------
-//  update_screen - update screen
-//-------------------------------------------------
-#if 0
-UINT32 CHD44102::screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect)
-{
-    for (int y = 0; y < 50; y++)
-    {
-        int z = m_page << 3;
 
-        for (int x = 0; x < 32; x++)
-        {
-            UINT8 data = m_ram[z / 8][y];
-
-            int sy = m_sy + z;
-            int sx = m_sx + y;
-
-            if (cliprect.contains(sx, sy))
-            {
-                int color = (m_status & STATUS_DISPLAY_OFF) ? 0 : BIT(data, z % 8);
-
-                bitmap.pix16(sy, sx) = color;
-            }
-
-            z++;
-            z %= 32;
-        }
-    }
-    return 0;
-}
-#endif
