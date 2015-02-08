@@ -644,7 +644,7 @@ bool CpcXXXX::run(void)
 
     if(!(pCPU->halt|pCPU->off) && !off)
 	{
-        sprintf(Log_String," ");
+        memset(Log_String,0,sizeof(Log_String));
 #if 0
         if ( (pCPU->logsw) && (pCPU->fp_log) )
 #else
@@ -655,7 +655,7 @@ bool CpcXXXX::run(void)
             //char	s[2000];
 //            sprintf(Log_String," ");
             pCPU->pDEBUG->DisAsm_1(pCPU->get_PC());
-            fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
+//            fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
             fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
             for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
 

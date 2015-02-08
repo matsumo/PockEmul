@@ -189,7 +189,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             case 0x80: _id = 7; break;
         }
 
-        qWarning()<<"Write data:"<<data<<" to driver:"<<_id;
+        qWarning()<<tr("Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_id;
         hd44102[_id]->set8(data);
         return false;
     }
@@ -243,11 +243,11 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         return false;
     }
 
-    if (*d==0x0DFF) {
-        *data = 0x10;
-//        qWarning()<<"OK";
-        return false;
-    }
+//    if (*d==0x0DFF) {
+//        *data = 0x10;
+////        qWarning()<<"OK";
+//        return false;
+//    }
 
 //    if ((*d>=0xC000) & (*d<=0xEFFF)) return false;
     return true;

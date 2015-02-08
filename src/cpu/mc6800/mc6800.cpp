@@ -52,17 +52,17 @@ UINT32 Cmc6800::RM(UINT32 Addr)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         UINT32 _ret = mc6801_io_r(Addr);
-        sprintf(pPC->Log_String,"%s Rp[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        if (logsw) sprintf(pPC->Log_String,"%s Rp[%04X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
         UINT32 _ret = imem[Addr & 0x7f];
-        sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        if (logsw) sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
 #endif
     UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
-    sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
+    if (logsw) sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
     return _ret;
 //    return d_mem->read_data8(Addr);
 }
@@ -74,18 +74,18 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         mc6801_io_w(Addr, Value);
-        sprintf(pPC->Log_String,"%s Wp[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(pPC->Log_String,"%s Wp[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
         imem[Addr & 0x7f] = Value;
-        sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
     else
 #endif
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
-    sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
+    if (logsw) sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
 //    d_mem->write_data8(Addr, Value);
 }
 
@@ -656,6 +656,7 @@ void Cmc6800::release()
 
 void Cmc6800::Reset()
 {
+    CallSubLevel = 0;
     CC = 0xc0;
     SEI; /* IRQ disabled */
     PCD = RM16(0xfffe);
