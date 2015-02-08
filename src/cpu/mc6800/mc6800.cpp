@@ -84,8 +84,10 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
     }
     else
 #endif
+    {
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
-    if (logsw) sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
+    }
 //    d_mem->write_data8(Addr, Value);
 }
 
@@ -3789,7 +3791,11 @@ bool Cmc6800::exit()
 
 void Cmc6800::step()
 {
+#if 0
+    run(-1);
+#else
     run_one_opecode();
+#endif
 }
 
 void Cmc6800::Load_Internal(QXmlStreamReader *xmlIn)
