@@ -299,6 +299,22 @@ int main(int argc, char *argv[])
         windowLayout->setMargin(0);
     }
 
+    if (!mainwindow->loadPML.isEmpty()) {
+        mainwindow->opensession(mainwindow->loadPML);
+    }
+    if (!mainwindow->runPocket.isEmpty()) {
+        CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);
+
+  #ifdef Q_OS_ANDROID
+  //      if (pPC->getDX()> pPC->getDY())
+  //          pPC->maximizeWidth();
+  //      else
+  //          pPC->maximizeHeight();
+  #else
+        Q_UNUSED(pPC)
+  #endif
+    }
+
 #ifdef EMSCRIPTEN
     app->exec();
     return 0;

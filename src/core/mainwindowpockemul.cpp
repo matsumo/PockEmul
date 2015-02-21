@@ -1592,18 +1592,10 @@ void MainWindowPockemul::optionFound(const QString & name, const QVariant & valu
   if (name == "load") {
       QString _fn = value.toString();
       if (!_fn.contains(".")) _fn.append(".pml");
-      opensession(_fn);
+      loadPML = _fn;
   }
   if (name == "run") {
-      CPObject * pPC =LoadPocket(value.toString());
-#ifdef Q_OS_ANDROID
-//      if (pPC->getDX()> pPC->getDY())
-//          pPC->maximizeWidth();
-//      else
-//          pPC->maximizeHeight();
-#else
-      Q_UNUSED(pPC)
-#endif
+      runPocket = value.toString();
   }
 
 }

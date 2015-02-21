@@ -83,6 +83,8 @@ public:
     float	zoom;
     bool openGlFlag;
 
+    QString loadPML,runPocket;
+
     QSlider *zoomSlider;
 
     void doZoom(QPoint point, float delta, int step=10);

@@ -212,10 +212,10 @@ void CrenderView::pocketUpdated(CViewObject * pObject)
 }
 
 void CrenderView::newPObject(CPObject *pObject) {
-//    qWarning()<<"Add Pocket"<<pObject->getName()<<
-//                pObject->pos().x()<<
-//                pObject->pos().y()<<
-//                pObject->size();
+    qWarning()<<"Add Pocket"<<pObject->getName()<<
+                pObject->pos().x()<<
+                pObject->pos().y()<<
+                pObject->size();
 
     connect (pObject,SIGNAL(movePObject(CViewObject*,QPointF)),this,SLOT(movePObject(CViewObject*,QPointF)));
     connect (pObject,SIGNAL(sizePObject(CViewObject*,QSizeF)),this,SLOT(sizePObject(CViewObject*,QSizeF)));
