@@ -40,7 +40,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendDblClick(QString,int,int)), this, SLOT(dblclick(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
-    QObject::connect(cloud.object, SIGNAL(setZoom(int,int,int)), this, SLOT(setzoom(int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(setZoom(int,int,double)), this, SLOT(setzoom(int,int,double)));
     QObject::connect(cloud.object, SIGNAL(sendRotPocket(QString,int)), this, SLOT(rotpocket(QString,int)));
 
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
@@ -199,7 +199,7 @@ void CrenderView::dblclick(QString Id, int x, int y)
     return;
 
 }
-void CrenderView::setzoom(int x,int y,int z)
+void CrenderView::setzoom(int x,int y,double z)
 {
     mainwindow->doZoom(QPoint(x,y),z);
 }

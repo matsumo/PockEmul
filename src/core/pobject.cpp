@@ -636,7 +636,7 @@ void CPObject::wheelEvent(QWheelEvent *event) {
 
     float delta = event->delta()/12;
 
-    mainwindow->doZoom(point,delta);
+    mainwindow->doZoom(point,delta>0?1.1:0.9);
     event->accept();
 
 }
@@ -659,7 +659,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
         int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);
         if (r>100) {
-            mainwindow->doZoom(pos,1,r-mainwindow->zoom);
+            mainwindow->doZoom(pos,r/mainwindow->zoom);
             //move to upper left
             // Fetch all_object and move them
             rs = RectWithLinked();
@@ -667,7 +667,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
         }
     }
     else {
-        mainwindow->doZoom(pos,-1,mainwindow->zoom-100);
+        mainwindow->doZoom(pos,100/mainwindow->zoom);
     }
 
 }

@@ -56,7 +56,7 @@ Rectangle {
     signal sendDblClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)
     signal sendMoveAllPocket(int x,int y)
-    signal setZoom(int x,int y,int z)
+    signal setZoom(int x,int y,real z)
     signal sendRotPocket(string id,int rotation)
 
     signal sendNewPocket();
@@ -88,13 +88,15 @@ Rectangle {
     PinchArea {
         id: mainpinch
         z: -9999
+        property real previousScale: 1
         anchors.fill: parent
         pinch.minimumRotation: -360
         pinch.maximumRotation: 360
         pinch.minimumScale: 0.1
         pinch.maximumScale: 10
         onPinchUpdated: {
-            setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+            setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
+            previousScale=pinch.scale;
         }
         MouseArea {
             property bool isdrag: false;
@@ -102,7 +104,7 @@ Rectangle {
             anchors.fill: parent
             onWheel: {
                 //                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
-                setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12);
+                setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12>0 ? 1.1 : .9);
             }
             onPressed: {
                 prevX = mouseX;
@@ -163,6 +165,7 @@ Rectangle {
                 antialiasing: true
             }
             PinchArea {
+                property real previousScale: 1
                 anchors.fill: parent
                 pinch.target: photoFrame
                 pinch.minimumRotation: -360
@@ -170,7 +173,8 @@ Rectangle {
                 pinch.minimumScale: 0.1
                 pinch.maximumScale: 10
                 onPinchUpdated: {
-                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale*100 - 100);
+                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
+                    previousScale=pinch.scale;
 //                    photoFrame.rotation = pinch.rotation
                 }
                 MouseArea {

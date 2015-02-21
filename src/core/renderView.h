@@ -34,7 +34,7 @@ public slots:
     Q_INVOKABLE void click(QString Id, int x, int y);
     Q_INVOKABLE void unclick(QString Id, int x, int y);
     Q_INVOKABLE void dblclick(QString Id, int x, int y);
-    Q_INVOKABLE void setzoom(int x,int y,int z);
+    Q_INVOKABLE void setzoom(int x, int y, double z);
     Q_INVOKABLE void movepocket(QString Id, int x, int y);
     Q_INVOKABLE void moveallpocket(int x, int y);
     void pocketUpdated(CViewObject *pObject);

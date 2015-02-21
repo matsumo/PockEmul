@@ -1186,7 +1186,8 @@ void MainWindowPockemul::updateTimer()
 }
 
 void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
-
+//    qWarning()<<delta;
+#if 0
     if (((zoom >= 20) && (delta<0)) ||
         ((zoom <500) && (delta >0))){
         int d = (delta>0) ? step : -step;
@@ -1195,7 +1196,11 @@ void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
 
     }
     else delta = 0;
+#else
+    zoom *= delta;
+    delta = (delta-1)*100;
 
+#endif
 
     this->setWindowTitle(QString("  Zoom=%2%").arg(zoom));
 
@@ -1223,7 +1228,7 @@ void MainWindowPockemul::wheelEvent(QWheelEvent *event) {
 
     float delta = event->delta()/12;
 
-    doZoom(point,delta);
+    doZoom(point,delta>0 ? 1.1 : .9 );
 
 }
 
@@ -1282,7 +1287,7 @@ bool MainWindowPockemul::gestureEvent(QGestureEvent *event)
          qreal value = gesture->scaleFactor();//property("scaleFactor").toReal();
          scaleFactor *= value;
          if ((scaleFactor >=1.1) || (scaleFactor <=.9)) {
-             doZoom(gesture->centerPoint().toPoint(),(scaleFactor*100.0)-100);
+             doZoom(gesture->centerPoint().toPoint(),scaleFactor);
              scaleFactor = 1;
              update();
          }
