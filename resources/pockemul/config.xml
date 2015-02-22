@@ -53,7 +53,7 @@
     <example brand="CASIO" idpocket="Casio Z-1GR" filename="./" name="Casio Z-1GR" image=":/z1/z1gr.png"/>
     <example brand="CASIO" idpocket="Casio FX-8000G" filename="./" name="Casio FX-8000G" image=":/fx8000g/fx8000g.png"/>
     <example brand="OTHER" idpocket="Nec PC-2001" filename="./" name="Nec PC-2001" image=":/pc2001/pc2001.png"/>
-    <example brand="OTHER" idpocket="National JR-800" filename="./" name="National JR-800" image=":/jr800/jr800.png"/>
+    <!--example brand="OTHER" idpocket="National JR-800" filename="./" name="National JR-800" image=":/jr800/jr800.png"/-->
     <example brand="OTHER" idpocket="General LBC-1100" filename="./" name="General LBC-1100" image=":/lbc1100/lbc-1100.png"/>
     <example brand="OTHER" idpocket="SANCO TPC-8300" filename="./" name="SANCO TPC-8300" image=":/tpc8300/tpc-8300.png"/>
    <example brand="OTHER" idpocket="Panasonic HHC RL-H1000" filename="./" name="Panasonic HHC RL-H1000" image=":/rlh1000/rlh1000.png"/>

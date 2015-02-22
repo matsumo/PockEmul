@@ -163,7 +163,7 @@ bool CViewObject::InitDisplay(void)
 
     BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
     // if high resolution active and Image size < 2 x Object size resize to 2x
-    if (hiRes & BackgroundImageBackup->width() < (2*Pc_DX)) {
+    if (hiRes & BackgroundImageBackup->width() < (2*getDX())) {
         delete BackgroundImageBackup;
         BackgroundImageBackup = CreateImage(QSize(2*getDX(),2*getDY()),BackGroundFname);
     }
