@@ -1186,39 +1186,22 @@ void MainWindowPockemul::updateTimer()
 }
 
 void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
-//    qWarning()<<delta;
-#if 0
-    if (((zoom >= 20) && (delta<0)) ||
-        ((zoom <500) && (delta >0))){
-        int d = (delta>0) ? step : -step;
-        delta = ((zoom+d)/zoom - 1)*100;
-        zoom += d;
+    Q_UNUSED(step)
 
-    }
-    else delta = 0;
-#else
     zoom *= delta;
-    delta = (delta-1)*100;
-
-#endif
-
-    this->setWindowTitle(QString("  Zoom=%2%").arg(zoom));
 
     for (int i=0;i<listpPObject.size();i++) {
         CPObject * locpc = listpPObject.at(i);
 
-
         // calculate the new origine
         QPoint pt = /*locpc->mapToGlobal*/(point);
-        float newposx = locpc->posx() + (locpc->posx()-pt.x())*(delta)/100.0;
-        float newposy = locpc->posy() + (locpc->posy()-pt.y())*(delta)/100.0;
+        float newposx = locpc->posx() + (locpc->posx()-pt.x())*(delta-1);
+        float newposy = locpc->posy() + (locpc->posy()-pt.y())*(delta-1);
 
         locpc->changeGeometry(newposx,
                               newposy,
                               locpc->currentViewRect().width()*zoom/100/(locpc->Front?1:4),
                               locpc->currentViewRect().height()*zoom/100/(locpc->Front?1:4));
-
-
     }
 }
 
@@ -1313,11 +1296,8 @@ void MainWindowPockemul::updateFrameTimer()
     static int nbframe = 0;
     quint64 Current_State;
 
-
-
 // Calculate emulation speed
 // Normally each frame equal pPC->frequency state / NBFRAMEPERSEC
-
 
     if ( listpPObject.isEmpty()) return;
 
@@ -1326,7 +1306,6 @@ void MainWindowPockemul::updateFrameTimer()
     if (deltaTime == -1) {	tf.start(); }
 
     deltaTime = tf.elapsed();
-    if (deltaTime >= 1000) tf.restart();
 
     for (int i = 0;i < listpPObject.size(); i++)
     {
@@ -1357,7 +1336,7 @@ void MainWindowPockemul::updateFrameTimer()
 
 
                     if (CurrentpPC->isActiveWindow())
-                        mainwindow->setWindowTitle(QString("Pockemul :%1%  - %2 fps").arg(rate).arg(nbframe*1000.0/deltaTime));
+                        mainwindow->setWindowTitle(QString("  Zoom=%1%  Pockemul:%2%  - %3 fps").arg(int(zoom)).arg(rate).arg(int(nbframe*1000.0/deltaTime)));
                     nbframe = 0;
                     str.setNum((int)rate);
                     str = ": "+str+tr("% original speed");
@@ -1398,6 +1377,8 @@ void MainWindowPockemul::updateFrameTimer()
         }
     }
 
+
+    if (deltaTime >= 1000) tf.restart();
     if (OneSecTimer >= 1000) OneSecTimer=0;
 }
 

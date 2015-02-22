@@ -12,6 +12,7 @@
 #include "renderView.h"
 
 extern MainWindowPockemul* mainwindow;
+extern bool hiRes;
 
 CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow->centralwidget)
 {
@@ -161,6 +162,11 @@ bool CViewObject::InitDisplay(void)
     delete BackImage;
 
     BackgroundImageBackup = CreateImage(QSize(),BackGroundFname);
+    // if high resolution active and Image size < 2 x Object size resize to 2x
+    if (hiRes & BackgroundImageBackup->width() < (2*Pc_DX)) {
+        delete BackgroundImageBackup;
+        BackgroundImageBackup = CreateImage(QSize(2*getDX(),2*getDY()),BackGroundFname);
+    }
     internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
 //    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
 
