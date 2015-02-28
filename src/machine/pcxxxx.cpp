@@ -48,6 +48,8 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     memset(Log_String,0,sizeof(Log_String));
     memset(Regs_String,0,sizeof(Regs_String));
 
+    mem = 0;
+
     SoundOn			= 1;
     IO_A = IO_B = IO_C = IO_F = 0;
     RomBank=RamBank=ProtectMemory=0;

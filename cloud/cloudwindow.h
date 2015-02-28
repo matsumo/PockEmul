@@ -84,7 +84,7 @@ private slots:
 
 
 private:
-//    QDeclarativeView *view;
+    QDeclarativeView *declarativeView;
 //    QQuickView *view;
     QQuickWidget *cloudView;
 

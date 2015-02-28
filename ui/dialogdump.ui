@@ -570,6 +570,13 @@
            </spacer>
           </item>
           <item>
+           <widget class="QPushButton" name="pbClose">
+            <property name="text">
+             <string>Close</string>
+            </property>
+           </widget>
+          </item>
+          <item>
            <widget class="QLabel" name="lbl_connected">
             <property name="text">
              <string>lbl_connected</string>
@@ -586,5 +593,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pbClose</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDump</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>558</x>
+     <y>390</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>344</x>
+     <y>217</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

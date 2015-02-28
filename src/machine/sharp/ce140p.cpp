@@ -57,6 +57,7 @@ bool Cce140p::init(void) {
 
     WatchPoint.add(&pSIOCONNECTOR_value,64,15,this,"Serial 15pins connector");
     pSIO = new Csio(this);
+    pSIO->hide();
 
     if (pSIO) pSIO->init();
     if (pSIO) pSIO->dialogconsole->hide();

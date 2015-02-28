@@ -2,6 +2,8 @@
 //BUG:   c'est un probleme de bankswitch
 //FIXME: DEF key is not working
 
+#include <assert.h>
+
 #include <QtGui>
 #include "pc2500.h"
 #include "sc61860.h"
@@ -75,6 +77,7 @@ bool Cpc2500::init(void) {
 //    pCPU->logsw = true;
     Cpc1350::init();
     pce515p->init();
+    pce515p->hide();
     pTAPECONNECTOR	= new Cconnector(this,2,2,Cconnector::Jack,"Line in / Rec",false);	publish(pTAPECONNECTOR);
     pSIOCONNECTOR->setSnap(QPoint(960,480));
 
@@ -99,6 +102,10 @@ void Cpc2500::contextMenuEvent(QContextMenuEvent *e)
 
 bool Cpc2500::UpdateFinalImage(void) {
 
+    assert(FinalImage!=0);
+    assert(pce515p != 0);
+    assert(pce515p->paperWidget != 0);
+
     CpcXXXX::UpdateFinalImage();
     QPainter painter;
 
@@ -112,7 +119,9 @@ bool Cpc2500::UpdateFinalImage(void) {
                                  pce515p->paperWidget->getOffset().y() +10)
                           );
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(pce515p->PaperPos().x()*internalImageRatio,pce515p->PaperPos().y()*internalImageRatio,
+    int _x = pce515p->PaperPos().x() * internalImageRatio;
+    int _y = pce515p->PaperPos().y() * internalImageRatio;
+    painter.drawImage(_x , _y,
                       pce515p->paperWidget->bufferImage->copy(source).scaled(pce515p->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
 

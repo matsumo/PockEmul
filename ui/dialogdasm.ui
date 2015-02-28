@@ -666,6 +666,13 @@ p, li { white-space: pre-wrap; }
           </property>
          </widget>
         </item>
+        <item>
+         <widget class="QPushButton" name="pbClose">
+          <property name="text">
+           <string>Close</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
@@ -699,5 +706,22 @@ p, li { white-space: pre-wrap; }
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>pbClose</sender>
+   <signal>clicked()</signal>
+   <receiver>DialogDasm</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>482</x>
+     <y>430</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>296</x>
+     <y>295</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
