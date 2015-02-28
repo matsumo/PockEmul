@@ -61,7 +61,9 @@ bool Cce140f::UpdateFinalImage(void) {
         QPainter painter;
         painter.begin(FinalImage);
 
-        painter.fillRect(411,390,20,7,QColor(Qt::green));
+        painter.fillRect(411*internalImageRatio,390*internalImageRatio,
+                         20*internalImageRatio,7*internalImageRatio,
+                         QColor(Qt::green));
         painter.end();
     }
 
