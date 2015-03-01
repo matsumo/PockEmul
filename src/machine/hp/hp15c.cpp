@@ -179,6 +179,16 @@ void Chp15c::BuildContextMenu(QMenu *menu)
 
 void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode)
 {
+    if (!Power && turnOnNext) {
+        qWarning()<<"Turn on next";
+        pKEYB->keyPressedList.append(K_OF);
+        pKEYB->LastKey = K_OF;
+        TurnON();
+        //turnOnNext = false;
+        // Start a 200ms timer to release the ON Key
+        pTIMER->resetTimer(1);
+    }
+
     if (ke==KEY_PRESSED) {
         if (pKEYB->keyPressedList.count()==1)
             firstkey = scancode;
@@ -213,6 +223,10 @@ bool Chp15c::run()
 //        TimerProc();
     }
 
+    if (!turnOnNext && (pTIMER->msElapsedId(1)>200) ) {
+        turnOnNext = false;
+        pKEYB->keyPressedList.removeAll(K_OF);
+    }
     CpcXXXX::run();
 
     pTIMER->state+=56;
@@ -280,6 +294,7 @@ UINT8 Chp15c::getKey()
         if (KEY('8'))			code = 0x72;    // 8
         if (KEY('9'))			code = 0x32;    // 9
         if (KEY('/'))			code = 0x12;    // /
+        if (KEY(':'))			code = 0x12;    // /
 
         if (KEY(K_SST))			code = 0x10;    // SST
         if (KEY(K_GTO))			code = 0x30;    // GTO
@@ -311,6 +326,7 @@ UINT8 Chp15c::getKey()
 //        if (KEY(K_RET))			code = 0x85;    // ENTER
         if (KEY('0'))			code = 0xC5;    // 0
         if (KEY('.'))			code = 0x75;    // .
+        if (KEY(';'))			code = 0x75;    // .
         if (KEY(K_SUM))			code = 0x35;    // sigma
         if (KEY('+'))			code = 0x15;    // +
 
@@ -349,5 +365,6 @@ bool Chp15c::SaveConfig(QXmlStreamWriter *xmlOut)
 
 void Chp15c::TurnNext()
 {
+
     turnOnNext = true;
 }

@@ -486,28 +486,28 @@ bool Chp82143A::UpdateFinalImage(void) {
 
     if (intensity == -1) {
         painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
-                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
+                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")).scaled(69* internalImageRatio,24* internalImageRatio));
     }
     if (intensity == 1) {
         painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
-                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
+                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")).scaled(69* internalImageRatio,24* internalImageRatio));
     }
     if (intensity == 0) {
         painter.drawImage(205 * internalImageRatio,338 * internalImageRatio,
-                          BackgroundImageBackup->copy(205 * internalImageRatio,338 * internalImageRatio,69,24));
+                          BackgroundImageBackup->copy(205 * internalImageRatio,338 * internalImageRatio,69* internalImageRatio,24* internalImageRatio));
     }
 
     // MODE SWITCH
 
     if (Mode == NORM_MODE)
         painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
-                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")));
+                          QImage(P_RES(":/hp41/hp82143a_mode_norm.png")).scaled(69* internalImageRatio,24* internalImageRatio));
     if (Mode == MANUAL_MODE)
         painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
-                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")));
+                          QImage(P_RES(":/hp41/hp82143a_mode_man.png")).scaled(69* internalImageRatio,24* internalImageRatio));
     if (Mode == TRACE_MODE)
         painter.drawImage(205 * internalImageRatio,385 * internalImageRatio,
-                          BackgroundImageBackup->copy(205,385,69,24));
+                          BackgroundImageBackup->copy(205* internalImageRatio,385* internalImageRatio,69* internalImageRatio,24* internalImageRatio));
 
 
 //    float ratio = ( (float) paperWidget->width() ) / ( paperWidget->bufferImage->width() - paperWidget->getOffset().x() );
