@@ -1049,9 +1049,13 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     qWarning()<<"ok1";
     qWarning()<<view;
 //    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
-
-    view->grabFramebuffer().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
-    qWarning()<<"ok2";
+    if (view) {
+        view->grabFramebuffer().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+        qWarning()<<"ok2";
+    }
+    else {
+        QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
+    }
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
 #endif

@@ -179,15 +179,15 @@ void Chp15c::BuildContextMenu(QMenu *menu)
 
 void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode)
 {
-    if (!Power && turnOnNext) {
-        qWarning()<<"Turn on next";
-        pKEYB->keyPressedList.append(K_OF);
-        pKEYB->LastKey = K_OF;
-        TurnON();
-        //turnOnNext = false;
-        // Start a 200ms timer to release the ON Key
-        pTIMER->resetTimer(1);
-    }
+//    if (!Power && turnOnNext) {
+//        qWarning()<<"Turn on next";
+//        pKEYB->keyPressedList.append(K_OF);
+//        pKEYB->LastKey = K_OF;
+//        TurnON();
+//        //turnOnNext = false;
+//        // Start a 200ms timer to release the ON Key
+//        pTIMER->resetTimer(1);
+//    }
 
     if (ke==KEY_PRESSED) {
         if (pKEYB->keyPressedList.count()==1)
@@ -223,10 +223,7 @@ bool Chp15c::run()
 //        TimerProc();
     }
 
-    if (!turnOnNext && (pTIMER->msElapsedId(1)>200) ) {
-        turnOnNext = false;
-        pKEYB->keyPressedList.removeAll(K_OF);
-    }
+
     CpcXXXX::run();
 
     pTIMER->state+=56;

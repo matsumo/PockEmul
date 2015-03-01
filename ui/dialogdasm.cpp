@@ -1,5 +1,6 @@
 ﻿//TODO Contextual menu on breakpoints
 //TODO: saveall in the destructor. try to manage changes
+//TODO: define a pointer for imem
 
 #include <QDebug>
 #include <QScrollBar>

@@ -148,7 +148,7 @@ void CHPNUT::save_internal(QXmlStreamWriter *xmlOut)
 
 UINT32 CHPNUT::get_PC()
 {
-
+    return reg->pc;
 }
 
 void CHPNUT::Regs_Info(UINT8 Type)
