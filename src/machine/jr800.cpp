@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"
-#include "Lcdc_jr800.h"
+#include "lcdc_jr800.h"
 #include "Connect.h"
 #include "watchpoint.h"
 #include "hd44102.h"
