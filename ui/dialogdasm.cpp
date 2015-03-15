@@ -603,4 +603,6 @@ void DialogDasm::load() {
             }
         }
     }
+
+    delete xml;
 }
