@@ -8,7 +8,7 @@
 #include "hd44102.h"
 
 
-#include "Lcdc_jr800.h"
+#include "lcdc_jr800.h"
 //#include "Lcdc_symb.h"
 #include "Log.h"
 

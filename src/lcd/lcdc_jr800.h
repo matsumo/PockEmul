@@ -5,7 +5,7 @@
 
 class Clcdc_jr800:public Clcdc{
 public:
-    void disp(void);				//display LCDC data to screen
+    void disp(void);
     void disp_symb(void);
     const char*	GetClassName(){ return("Clcdc_jr800");}
 

@@ -544,10 +544,10 @@ void Cce140f::process_DSKF(void) {
     AddLog(LOG_PRINTER,tr("Process DSKF(%1)").arg(data.at(1)));
     data_out.append(0x00);
 
-    data_out.append(0x01);
-    data_out.append(0x02);
-    data_out.append(0x04);
-    data_out.append(0x07);
+    data_out.append(0x02);  // number of byte
+    data_out.append(0x50);  // number of 256Bytes free sectors
+    data_out.append(0x00);
+    data_out.append(0x52);  // don't know yet. Perhaps a checksum ?
 
 //    data_out.append(0x49);
 }
