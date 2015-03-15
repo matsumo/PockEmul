@@ -99,9 +99,7 @@ public:
 
 
     Clcdc_hp15c(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());
-    virtual ~Clcdc_hp15c()
-    {						//[constructor]
-    }
+    virtual ~Clcdc_hp15c();
 
     CHPNUT *nutcpu;
 

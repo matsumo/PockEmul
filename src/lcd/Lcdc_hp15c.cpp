@@ -152,6 +152,30 @@ Clcdc_hp15c::Clcdc_hp15c(CPObject *parent, QRect _lcdRect, QRect _symbRect, QStr
     info = (voyager_display_reg_t*) malloc(sizeof(voyager_display_reg_t));
 }
 
+Clcdc_hp15c::~Clcdc_hp15c()
+{
+    free(info);
+    delete seg[0];
+    delete seg[1];
+    delete seg[2];
+   delete  seg[3];
+    delete seg[4];
+    delete seg[5];
+    delete seg[6];
+    delete seg[7];
+    delete seg[8];
+    delete minus;
+    delete ann_user;
+    delete ann_f;
+    delete ann_g;
+    delete ann_begin;
+    delete ann_ggrad;
+    delete ann_rad;
+    delete ann_dmy;
+    delete ann_c ;
+    delete ann_prgm;
+}
+
 bool Clcdc_hp15c::init()
 {
     nutcpu = (CHPNUT*)(pPC->pCPU);
