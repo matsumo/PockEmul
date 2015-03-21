@@ -63,6 +63,7 @@ public:
     BYTE ExecWriteSector(BYTE x);
     BYTE ExecWriteFile(BYTE x);
     BYTE ExecGetSize(BYTE x);
+    BYTE ExecGetFree(BYTE x);
 
     void FddOpen();
     void FddClose();
@@ -86,7 +87,7 @@ private:
 
     QDir    directory;
     typedef BYTE (Cmd100::* funcPtr)(BYTE);
-    static const funcPtr cmdtab[55];
+    static const funcPtr cmdtab[59];
 
     int count;
     int index;

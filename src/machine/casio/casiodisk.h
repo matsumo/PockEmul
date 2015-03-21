@@ -130,6 +130,8 @@ public:
     bool IsEndOfDiskFile(qint32 handle);
     void RenameDiskFile(char *oldname, char *newname);
     qint32 WriteDiskFile(qint32 handle, char *data);
+
+    qint32 GetFreeDiskSpace();
 };
 
 #endif // CASIODISK_H

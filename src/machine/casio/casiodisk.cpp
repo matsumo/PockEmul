@@ -547,3 +547,18 @@ void CcasioDOS::RenameDiskFile(char* oldname, char *newname) {
     memmove ((char*) &direntrybuf.name,newname, SIZE_FILE_NAME);
     if (! WriteDirEntry ((char*) &direntrybuf, x)) DosStatus = dsIoError;
 }
+
+// returns the number of free clusters }
+qint32 CcasioDOS::GetFreeDiskSpace() {
+
+  qint32 maxsector, x,result;
+
+  maxsector = MIN(sectors, SECTORS_FAT * SIZE_SECTOR / 2);
+  x = START_DATA;
+  result = 0;
+  while (x < maxsector) {
+    if ((ReadFatEntry (x) && FB_IN_USE) == 0) result++;
+    x += SIZE_BLOCK;
+  }
+  return result;
+}

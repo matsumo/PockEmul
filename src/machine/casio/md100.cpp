@@ -291,6 +291,8 @@ bool Cmd100::exit(void)
 }
 
 bool Cmd100::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     Get_MainConnector();
     Get_CentConnector();
     Get_SIOConnector();
@@ -298,6 +300,8 @@ bool Cmd100::Get_Connector(Cbus *_bus) {
     return true;
 }
 bool Cmd100::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     Set_SIOConnector();
     Set_CentConnecor();
     Set_MainConnector();
@@ -623,6 +627,7 @@ BYTE Cmd100::SwitchCmd(BYTE x) {
         case 0x80: index = 21; break;	// read sector }
         case 0x90: if (! fdd.FormatDisk()) opstatus = mdNoData; break;
         case 0xC0: index = 50; break;	// get file size }
+        case 0xD0: index = 55; break;	// get number of free clusters
         default:   opstatus = mdInvalidCommand;	// unknown command }
         }
       }
@@ -921,14 +926,23 @@ BYTE Cmd100::ExecWriteFile(BYTE x) {
 // expects file handle in buffer[0], returns file size in 'count' }
 BYTE Cmd100::ExecGetSize(BYTE x) {
     AddLog(LOG_PRINTER,tr("MD-100 Function: ExecGetSize(%1)").arg(x,2,16,QChar('0')));
-    index++;
+
     count = fdd.SizeOfDiskFile (buffer[0]);
     if (count == 0) opstatus = mdFileNotOpened;
     else if ( (fdd.GetDiskFileTag(buffer[0]) & 0x01) != 0) count--;
     return opstatus;
 }
 
-const Cmd100::funcPtr Cmd100::cmdtab[55] = {
+// returns the number of free clusters in 'count' }
+BYTE Cmd100::ExecGetFree(BYTE x) {
+    AddLog(LOG_PRINTER,tr("MD-100 Function: ExecGetFree(%1)").arg(x,2,16,QChar('0')));
+
+  index++;
+  count = fdd.GetFreeDiskSpace();
+  return opstatus;
+}
+
+const Cmd100::funcPtr Cmd100::cmdtab[59] = {
     // index 0: entry point }
     &Cmd100::SwitchCmd,
     // index 1: read directory entry }
@@ -992,6 +1006,11 @@ const Cmd100::funcPtr Cmd100::cmdtab[55] = {
     // index 50: get file size }
     &Cmd100::AcceptCountLo,		// get the file handle }
     &Cmd100::ExecGetSize,
+    &Cmd100::ReturnCountLo,
+    &Cmd100::ReturnCountHi,
+    &Cmd100::SwitchCmd,
+    // index 55: get number of free clusters }
+    &Cmd100::ExecGetFree,
     &Cmd100::ReturnCountLo,
     &Cmd100::ReturnCountHi,
     &Cmd100::SwitchCmd	};
