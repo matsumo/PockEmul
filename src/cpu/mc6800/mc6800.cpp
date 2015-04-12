@@ -8,6 +8,10 @@
     [ Cmc6800 ]
 */
 
+//FIXME: TAKE OCI interrupt
+
+#include <QDebug>
+
 #include "mc6800.h"
 #include "mc6800d.h"
 #include "pcxxxx.h"
@@ -52,7 +56,7 @@ UINT32 Cmc6800::RM(UINT32 Addr)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         UINT32 _ret = mc6801_io_r(Addr);
-        if (logsw) sprintf(pPC->Log_String,"%s Rp[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        if (logsw) sprintf(pPC->Log_String,"%s Rp[%02X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
@@ -417,6 +421,7 @@ void Cmc6800::increment_counter(int amount)
         if( CTD >= OCD) {
             OCH++;	// next IRQ point
             tcsr |= TCSR_OCF;
+
             pending_tcsr |= TCSR_OCF;
         }
         /* TOI */
@@ -813,12 +818,12 @@ void Cmc6800::run_one_opecode()
             TAKE_ICI;
         }
     }
-    else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
-        wai_state &= ~HD6301_SLP;
-        if(!(CC & 0x10)) {
-            TAKE_OCI;
-        }
-    }
+//    else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
+//        wai_state &= ~HD6301_SLP;
+//        if(!(CC & 0x10)) {
+//            TAKE_OCI;
+//        }
+//    }
     else if((tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {

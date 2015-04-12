@@ -55,24 +55,43 @@ void Clcdc_jr800::disp(void)
     bool _toRefresh = false;
     for (int i = 0 ; i<8; i++)
     {
-
         if (!jr800->hd44102[i]->updated) continue;
         qWarning()<<"Draw driver:"<<i;
         Refresh = true;
 
-        for (int x = 0; x< 50;x++)
-        {
-            int z = jr800->hd44102[i]->info.m_page;
-            for (int y=0; y<4;y++)
+        if ((i==0) || (i==4)) {
+            for (int x = 0; x< 46;x++)
             {
-                int sy = (z + y)%4;
-                int sx = 49-x;
-                UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
-
-                for (b=0;b<8;b++)
+                int z = jr800->hd44102[i]->info.m_page;
+                for (int y=0; y<4;y++)
                 {
-                    QColor _col = ((data>>b)&0x01) ? Color_On : Color_Off ;
-                    drawPixel(&painter,sx + (i%4)*50, (i/4)*32 + sy*8 + b,_col);
+                    int sy = (z + y)%4;
+                    int sx = 45-x;
+                    UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
+
+                    for (b=0;b<8;b++)
+                    {
+                        QColor _col = ((data>>b)&0x01) ? Color_On : Color_Off ;
+                        drawPixel(&painter,sx , (i/4)*32 + sy*8 + b,_col);
+                    }
+                }
+            }
+        }
+        else {
+            for (int x = 0; x< 50;x++)
+            {
+                int z = jr800->hd44102[i]->info.m_page;
+                for (int y=0; y<4;y++)
+                {
+                    int sy = (z + y)%4;
+                    int sx = 49-x;
+                    UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
+
+                    for (b=0;b<8;b++)
+                    {
+                        QColor _col = ((data>>b)&0x01) ? Color_On : Color_Off ;
+                        drawPixel(&painter,sx + (i%4)*50 - 4, (i/4)*32 + sy*8 + b,_col);
+                    }
                 }
             }
         }

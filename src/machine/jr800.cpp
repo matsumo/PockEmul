@@ -27,12 +27,12 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     BackGroundFname	= P_RES(":/jr800/jr800.png");
 
     RightFname = P_RES(":/jr800/jr800Right.png");
-    LeftFname = P_RES(":/jr800/jr800Left.png");
-    TopFname = P_RES(":/jr800/jr800Top.png");
-    BackFname = P_RES(":/jr800/jr800Back.png");
+//    LeftFname = P_RES(":/jr800/jr800Left.png");
+//    TopFname = P_RES(":/jr800/jr800Top.png");
+//    BackFname = P_RES(":/jr800/jr800Back.png");
 
     memsize		= 0xFFFF;
-    InitMemValue	= 0x00;
+    InitMemValue	= 0xFF;
 
     SlotList.clear();
     SlotList.append(CSlot(32 ,0x0000 ,	""	, ""	, CSlot::RAM , "RAM"));
@@ -50,7 +50,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_jr800(this,
-                                   QRect(93,80,192*2,64*2),
+                                   QRect(98,91,340,115),//192*2,64*2),
                                    QRect());
     pCPU		= new Cmc6800(this);
     for (int i=0;i<8;i++) {
@@ -170,6 +170,8 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             case 0x20: _id = 5; break;
             case 0x40: _id = 6; break;
             case 0x80: _id = 7; break;
+        default: qWarning()<<"ERR - Write cmd:"<<data<<" to driver:"<<_chip;
+            break;
         }
 //qWarning()<<"Write cmd:"<<data<<" to driver:"<<_id;
         hd44102[_id]->cmd_write(data);
@@ -187,6 +189,8 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             case 0x20: _id = 5; break;
             case 0x40: _id = 6; break;
             case 0x80: _id = 7; break;
+        default: qWarning()<<tr("ERR - Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_chip;
+            break;
         }
 
         qWarning()<<tr("Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_id;
@@ -194,8 +198,12 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
         return false;
     }
 
-    if(*d < 0x8000) return true; /* RAM */
-
+    if ((*d>=0x2000) && (*d<=0x5FFF)) {
+        return true; /* RAM */
+    }
+    if ((*d>=0x6000) && (*d<=0x7FFF)) {
+        return true; /* Extended RAM */
+    }
     return false;
 }
 
@@ -217,6 +225,8 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
             case 0x20: _id = 5; break;
             case 0x40: _id = 6; break;
             case 0x80: _id = 7; break;
+        default: qWarning()<<"ERR - Read status:"<<_chip;
+            break;
         }
 
         *data = hd44102[_id]->cmd_status();
@@ -236,6 +246,8 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
             case 0x20: _id = 5; break;
             case 0x40: _id = 6; break;
             case 0x80: _id = 7; break;
+        default: qWarning()<<"ERR - Read data:"<<*data<<" from driver:"<<_chip;
+            break;
         }
 
         *data = hd44102[_id]->get8();
@@ -249,7 +261,8 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
 //        return false;
 //    }
 
-//    if ((*d>=0xC000) & (*d<=0xEFFF)) return false;
+    if ((*d>=0xC000) & (*d<=0xEFFF)) return true;  // Extended ROM
+
     return true;
 }
 
