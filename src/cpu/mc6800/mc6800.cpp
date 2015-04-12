@@ -68,7 +68,7 @@ UINT32 Cmc6800::RM(UINT32 Addr)
     UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
     if (logsw) sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
     return _ret;
-//    return d_mem->read_data8(Addr);
+
 }
 
 void Cmc6800::WM(UINT32 Addr, UINT32 Value)
@@ -818,12 +818,14 @@ void Cmc6800::run_one_opecode()
             TAKE_ICI;
         }
     }
-//    else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
-//        wai_state &= ~HD6301_SLP;
-//        if(!(CC & 0x10)) {
-//            TAKE_OCI;
-//        }
-//    }
+    else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
+        wai_state &= ~HD6301_SLP;
+        if(!(CC & 0x10)) {
+            if (logsw) sprintf(pPC->Log_String,"%s TAKE_OCI ",pPC->Log_String);
+            tcsr &=~TCSR_OCF;
+            TAKE_OCI;
+        }
+    }
     else if((tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
@@ -3865,8 +3867,8 @@ void Cmc6800::Regs_Info(UINT8 Type)
                 );
         break;
     case 1:			// For Log File
-        sprintf(Regs_String,	"PC:%.4x A:%02X B:%02X D:%04X X:%04X SP:%04X %s%s%s%s%s%s",
-                            PC,A,B,D,X,S,
+        sprintf(Regs_String,	"PC:%.4x A:%02X B:%02X D:%04X X:%04X SP:%04X T:%02X C:%08X %s%s%s%s%s%s",
+                            PC,A,B,D,X,S,tcsr,timer_next,
                 CC&0x20 ? "H":".",
                 CC&0x10 ? "I":".",
                 CC&0x08 ? "N":".",
