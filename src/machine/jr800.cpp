@@ -99,6 +99,7 @@ bool Cjr800::init(void)				// initialize
 
 bool Cjr800::run() {
 
+    if (pKEYB->LastKey) ((Cmc6800*)pCPU)->write_signal(101,0,0);
     CpcXXXX::run();
 
 #if 0
@@ -193,7 +194,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             break;
         }
 
-        qWarning()<<tr("Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_id;
+//        qWarning()<<tr("Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_id;
         hd44102[_id]->set8(data);
         return false;
     }
@@ -376,7 +377,7 @@ UINT16 Cjr800::getKey()
     UINT16 ks = kstrobe^0xFFFF;
     UINT16 data=0;
 
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
 //        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
 

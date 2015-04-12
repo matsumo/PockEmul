@@ -247,7 +247,7 @@ void CHD44102::cmd_write(UINT8 data)
 //            if (LOG) logerror("HD44102 '%s' Display Start Page %u\n", tag(), x);
 
             info.m_page = x;
-            qWarning()<<"PAGE="<<x;
+//            qWarning()<<"PAGE="<<x;
         }
         else if (y > 49)
         {
@@ -259,7 +259,7 @@ void CHD44102::cmd_write(UINT8 data)
 
             info.m_x = x;
             info.m_y = y;
-            qWarning()<<"m_x="<<x<<"  m_y="<<y;
+//            qWarning()<<"m_x="<<x<<"  m_y="<<y;
         }
         }
     }

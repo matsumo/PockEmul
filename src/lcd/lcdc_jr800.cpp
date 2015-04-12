@@ -56,17 +56,19 @@ void Clcdc_jr800::disp(void)
     for (int i = 0 ; i<8; i++)
     {
         if (!jr800->hd44102[i]->updated) continue;
-        qWarning()<<"Draw driver:"<<i;
+//        qWarning()<<"Draw driver:"<<i;
         Refresh = true;
 
         if ((i==0) || (i==4)) {
-            for (int x = 0; x< 46;x++)
+            int deb = i<4 ? 0 :4;
+            int fin = i<4 ? 46:50;
+            for (int x = deb; x< fin;x++)
             {
                 int z = jr800->hd44102[i]->info.m_page;
                 for (int y=0; y<4;y++)
                 {
                     int sy = (z + y)%4;
-                    int sx = 45-x;
+                    int sx = i<4 ? 45-x : x-4;
                     UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
 
                     for (b=0;b<8;b++)
@@ -84,7 +86,7 @@ void Clcdc_jr800::disp(void)
                 for (int y=0; y<4;y++)
                 {
                     int sy = (z + y)%4;
-                    int sx = 49-x;
+                    int sx = i<4 ? 49-x : x;
                     UINT8 data = jr800->hd44102[i]->info.imem[sy][x];
 
                     for (b=0;b<8;b++)
