@@ -974,6 +974,7 @@ OTHER_FILES += \
     resources/keymap/rlp1002.map \
     resources/keymap/rlp1005.map \
     resources/keymap/pc1253.map \
+    resources/keymap/jr800.map \
     logitheque/serial1251.qs \
     qcodeedit/qxs/marks.qxm \
     qcodeedit/qxs/xml.qxf \
@@ -1368,6 +1369,7 @@ SOURCES+= \
 
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
 
 
 

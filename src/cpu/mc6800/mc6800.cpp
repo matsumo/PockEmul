@@ -375,6 +375,7 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
             output_compare.b.h = data;
             MODIFIED_counters;
         }
+        tcsr &=~TCSR_OCF;
         break;
     case 0x0c:
         // output compare register (lsb)
@@ -382,6 +383,7 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
             output_compare.b.l = data;
             MODIFIED_counters;
         }
+        tcsr &=~TCSR_OCF;
         break;
     case 0x0f:
         // port3 control/status register
@@ -802,12 +804,14 @@ void Cmc6800::run_one_opecode()
     if(int_state & NMI_REQ_BIT) {
         wai_state &= ~HD6301_SLP;
         int_state &= ~NMI_REQ_BIT;
+//        if (logsw) sprintf(pPC->Log_String,"%s TAKE_FFFC[%lld] ",pPC->Log_String,pPC->pTIMER->state);
         enter_interrupt(0xfffc);
     }
     else if(int_state & INT_REQ_BIT) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
             int_state &= ~INT_REQ_BIT;
+//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_FFF8[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             enter_interrupt(0xfff8);
         }
     }
@@ -815,20 +819,21 @@ void Cmc6800::run_one_opecode()
     else if((tcsr & (TCSR_EICI | TCSR_ICF)) == (TCSR_EICI | TCSR_ICF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
+//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_ICI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_ICI;
         }
     }
     else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
-            if (logsw) sprintf(pPC->Log_String,"%s TAKE_OCI ",pPC->Log_String);
-            tcsr &=~TCSR_OCF;
+//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_OCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_OCI;
         }
     }
     else if((tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
+//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_TOI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_TOI;
         }
     }
@@ -837,14 +842,19 @@ void Cmc6800::run_one_opecode()
             ((trcsr & (TRCSR_TIE | TRCSR_TDRE)) == (TRCSR_TIE | TRCSR_TDRE))) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
+//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_SCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_SCI;
         }
     }
 #endif
+
+    halt = wai_state & HD6301_SLP;
 }
 
 void Cmc6800::enter_interrupt(quint16 irq_vector)
 {
+    if (logsw) sprintf(pPC->Log_String,"%s TAKE_[%04X]-[%lld] ",pPC->Log_String,irq_vector,pPC->pTIMER->state);
+
     if(wai_state & Cmc6800_WAI) {
         icount -= 4;
         wai_state &= ~Cmc6800_WAI;

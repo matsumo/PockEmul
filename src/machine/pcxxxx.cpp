@@ -647,17 +647,14 @@ bool CpcXXXX::run(void)
     if(!(pCPU->halt|pCPU->off) && !off)
 	{
         memset(Log_String,0,sizeof(Log_String));
-#if 0
-        if ( (pCPU->logsw) && (pCPU->fp_log) )
-#else
+
         if (  pCPU->logsw && pCPU->fp_log && checkTraceRange(pCPU->get_PC()))
-#endif
         {
             fflush(pCPU->fp_log);
             //char	s[2000];
 //            sprintf(Log_String," ");
             pCPU->pDEBUG->DisAsm_1(pCPU->get_PC());
-//            fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
+            fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
             fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
             for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
 
@@ -682,8 +679,11 @@ bool CpcXXXX::run(void)
         else {
 //            fprintf(_loclog,"[%lld] %05x",pTIMER->state,pCPU->get_PC());
             if (!off) {
+
                 pCPU->step();
-//                qWarning()<<Log_String;
+
+
+
             }
 #ifndef QT_NO_DEBUG
             Regs_Info(0);
@@ -713,9 +713,35 @@ bool CpcXXXX::run(void)
 	}
     else {
         if (!off) {
+            UINT32 _prevPC = pCPU->get_PC();
+            memset(Log_String,0,sizeof(Log_String));
+
             pCPU->step();
+
+            if(!pCPU->halt && pCPU->logsw && pCPU->fp_log)
+            {
+                fflush(pCPU->fp_log);
+                pCPU->pDEBUG->DisAsm_1(_prevPC);
+                fprintf(pCPU->fp_log,"*[%lld] ",pTIMER->state);
+                fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
+                for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
+                Regs_Info(1);
+                fprintf(pCPU->fp_log,"%-40s   %s  %s\n",pCPU->pDEBUG->Buffer,pCPU->Regs_String,Log_String);
+                if (pCPU->prevCallSubLevel < pCPU->CallSubLevel) {
+                    for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
+                    fprintf(pCPU->fp_log,"{\n");
+                }
+                if (pCPU->prevCallSubLevel > pCPU->CallSubLevel) {
+                    for (int g=0;g<(pCPU->prevCallSubLevel-1);g++) fprintf(pCPU->fp_log,"\t");
+                    fprintf(pCPU->fp_log,"}\n");
+                }
+                if (pCPU->CallSubLevel <0) pCPU->CallSubLevel=0;
+                pCPU->prevCallSubLevel = pCPU->CallSubLevel;
+            }
         }
-        pTIMER->state +=20;//= pTIMER->currentState();
+        else {
+            pTIMER->state +=20;//= pTIMER->currentState();
+        }
     }
 
     Set_Connector();		//Write the connectors

@@ -3132,7 +3132,10 @@ void Csc62015::step(void)
 {
     UINT32 t;
 
-    if (halt) return;
+    if (halt) {
+        AddState(3);
+        return;
+    }
 //	if(timer.state<timer.chkspeed)
     {					//check for overrun
 /*		if(reg.x.p==0xfffe8){						//hook IOCS

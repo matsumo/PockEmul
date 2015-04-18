@@ -99,55 +99,9 @@ bool Cjr800::init(void)				// initialize
 
 bool Cjr800::run() {
 
-    if (pKEYB->LastKey) ((Cmc6800*)pCPU)->write_signal(101,0,0);
     CpcXXXX::run();
 
-#if 0
-    if (pTIMER->msElapsedId(1)>20) {
-        Cupd7907 *upd7810 = (Cupd7907 *)pCPU;
-        upd7810->upd7907stat.irr |= 0x08;
-        pTIMER->resetTimer(1);
-    }
-
-
-    if (upd7907->upd7907stat.imem[0x00] &0x40)
-    {
-        UNSET_BIT(portB,1);
-    }
-    else {
-        SET_BIT(portB,1);
-    }
-
-    quint8 data = upd7907->upd7907stat.imem[0x08];
-    if ( (data > 0) && (data != 0xff))
-    {
-
-        switch (upd7907->upd7907stat.imem[0x00]>>6) {
-        case 0x00:   // LCD transmission
-        {
-            // flip flop PB1 0-2-0
-            //        SET_BIT(portB,1);
-            pTIMER->resetTimer(2);
-            quint8 currentLCDctrl = upd7907->upd7907stat.imem[0] & 0x03;
-            quint8 cmddata = (upd7907->upd7907stat.imem[0] >> 2) & 0x01;
-            switch(cmddata) {
-            case 0x01: upd16434[currentLCDctrl]->instruction(data);
-                break;
-            case 0x00: upd16434[currentLCDctrl]->data(data);
-                break;
-            }
-            upd7907->upd7907stat.imem[0x08] = 0;
-        }
-            break;
-        case 0x01:  // PRINTER PORT
-            sendToPrinter = data;
-            upd7907->upd7907stat.imem[0x08] = 0;
-            break;
-        }
-    }
-
-    fillSoundBuffer(upd7907->upd7907stat.to ? 0xff : 0x00);
-#endif
+//    fillSoundBuffer(upd7907->upd7907stat.to ? 0xff : 0x00);
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
@@ -459,79 +413,35 @@ UINT16 Cjr800::getKey()
             if (KEY('X'))			data|=0x01;
             if (KEY('Y'))			data|=0x02;
             if (KEY('Z'))			data|=0x04;
-            if (KEY(K_F1))			data|=0x08;
-            if (KEY(K_F2))			data|=0x10;
-            if (KEY(K_F3))			data|=0x20;
+            if (KEY(K_INS))			data|=0x08;
+            if (KEY(K_RA))			data|=0x10;
+            if (KEY(K_UA))			data|=0x20;
             if (KEY(K_RET))			data|=0x40;
-            if (KEY(K_F5))			data|=0x80;
+            if (KEY(K_CLR))			data|=0x80; // HOME CLS
         }
-#if 0
+
         if (ks&0x100) {
-            if (KEY('I'))			data|=0x01;
-            if (KEY('K'))			data|=0x02;
-//            if (KEY('/'))			data|=0x04;
-            if (KEY(K_7))			data|=0x08;
-            if (KEY('8'))			data|=0x10;
-            if (KEY('/'))			data|=0x20;
-        }
-        if (ks&0x200) {
-            if (KEY('O'))			data|=0x01;
-            if (KEY('L'))			data|=0x02;
-            if (KEY('*'))			data|=0x04;
-            if (KEY(K_8))			data|=0x08;
-            if (KEY('9'))			data|=0x10;
-            if (KEY(';'))			data|=0x20;
-        }
-        if (ks&0x400) {
-            if (KEY('P'))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY('-'))			data|=0x04;     // numpad -
-            if (KEY(K_9))			data|=0x08;
-            if (KEY('0'))			data|=0x10;
-            if (KEY(':'))			data|=0x20;
-        }
-        if (ks&0x800) {
-            if (KEY('@'))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-            if (KEY('+'))			data|=0x04;
-            if (KEY('E'))			data|=0x08;
-            if (KEY('-'))			data|=0x10;
-            if (KEY(']'))			data|=0x20;
-        }
-        if (ks&0x1000) {
-            if (KEY('^'))			data|=0x01;
-            if (KEY(' '))			data|=0x02; //???
-//            if (KEY('.'))			data|=0x04; // Numpad .
-            if (KEY(K_UA))			data|=0x08;
-            if (KEY('['))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
-        }
-        if (ks&0x2000) {
-            if (KEY(K_DEL))			data|=0x01;
-            if (KEY(K_INS))			data|=0x02;
-//            if (KEY(K_UA))			data|=0x04;
-            if (KEY(K_DA))			data|=0x08;
-            if (KEY(K_LA))			data|=0x10;
-            if (KEY(K_RA))			data|=0x20;
-        }
-        if (ks&0x4000) {
-//            if (KEY(K_F1))			data|=0x01;
-            if (KEY(K_RET))			data|=0x02;
-//            if (KEY(K_F3))			data|=0x04;
-            if (KEY(K_SML))			data|=0x08;  // KANA ???
-            if (KEY(K_CLR))			data|=0x10; // CLR ???
-//            if (KEY(K_F6))			data|=0x20;
-        }
-//        if (ks&0x8000) {
 //            if (KEY(K_F1))			data|=0x01;
 //            if (KEY(K_F2))			data|=0x02;
 //            if (KEY(K_F3))			data|=0x04;
 //            if (KEY(K_F4))			data|=0x08;
 //            if (KEY(K_F5))			data|=0x10;
 //            if (KEY(K_F6))			data|=0x20;
-//        }
+//            if (KEY(K_F7))			data|=0x40;
+//            if (KEY(K_F8))			data|=0x80;
+        }
+        if (ks&0x200) {
+            if (KEY(K_F1))			data|=0x01;
+            if (KEY(K_F2))			data|=0x02;
+            if (KEY(K_F3))			data|=0x04;
+            if (KEY(K_SHT))			data|=0x08;
+            if (KEY(K_CTRL))		data|=0x10;
+            if (KEY(K_F6))			data|=0x20;
+            if (KEY(K_F7))			data|=0x40;
+            if (KEY(K_F5))			data|=0x80;
+        }
 
-#endif
+
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
     }

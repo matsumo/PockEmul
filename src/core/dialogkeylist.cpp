@@ -89,9 +89,10 @@ void DialogKeyList::slotInitSize()
 
 void DialogKeyList::moveUp()
 {
+    int _step = QGuiApplication::queryKeyboardModifiers()==Qt::ShiftModifier ? 10 : 1;
     for (int i=0;i<lwKeys->count();i++) {
         if (lwKeys->item(i)->isSelected()) {
-            pPC->pKEYB->Keys[i].Rect.adjust(0,-1,0,-1);
+            pPC->pKEYB->Keys[i].Rect.adjust(0,-_step,0,-_step);
             pPC->pKEYB->modified = true;
         }
     }
@@ -101,9 +102,10 @@ void DialogKeyList::moveUp()
 
 void DialogKeyList::moveDown()
 {
+    int _step = QGuiApplication::queryKeyboardModifiers()==Qt::ShiftModifier ? 10 : 1;
     for (int i=0;i<lwKeys->count();i++) {
         if (lwKeys->item(i)->isSelected()) {
-            pPC->pKEYB->Keys[i].Rect.adjust(0,+1,0,1);
+            pPC->pKEYB->Keys[i].Rect.adjust(0,_step,0,_step);
             pPC->pKEYB->modified = true;
         }
     }
@@ -113,9 +115,10 @@ void DialogKeyList::moveDown()
 
 void DialogKeyList::moveLeft()
 {
+    int _step = QGuiApplication::queryKeyboardModifiers()==Qt::ShiftModifier ? 10 : 1;
     for (int i=0;i<lwKeys->count();i++) {
         if (lwKeys->item(i)->isSelected()) {
-            pPC->pKEYB->Keys[i].Rect.adjust(-1,0,-1,0);
+            pPC->pKEYB->Keys[i].Rect.adjust(-_step,0,-_step,0);
             pPC->pKEYB->modified = true;
         }
     }
@@ -125,9 +128,10 @@ void DialogKeyList::moveLeft()
 
 void DialogKeyList::moveRight()
 {
+    int _step = QGuiApplication::queryKeyboardModifiers()==Qt::ShiftModifier ? 10 : 1;
     for (int i=0;i<lwKeys->count();i++) {
         if (lwKeys->item(i)->isSelected()) {
-            pPC->pKEYB->Keys[i].Rect.adjust(+1,0,1,0);
+            pPC->pKEYB->Keys[i].Rect.adjust(_step,0,_step,0);
             pPC->pKEYB->modified = true;
         }
     }
