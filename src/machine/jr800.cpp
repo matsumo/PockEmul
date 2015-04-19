@@ -27,8 +27,8 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     BackGroundFname	= P_RES(":/jr800/jr800.png");
 
     RightFname = P_RES(":/jr800/jr800Right.png");
-//    LeftFname = P_RES(":/jr800/jr800Left.png");
-//    TopFname = P_RES(":/jr800/jr800Top.png");
+    LeftFname = P_RES(":/jr800/jr800Left.png");
+    TopFname = P_RES(":/jr800/jr800Top.png");
 //    BackFname = P_RES(":/jr800/jr800Back.png");
 
     memsize		= 0xFFFF;

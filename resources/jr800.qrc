@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>jr800/rom-8000-FFFF.bin</file>
         <file>jr800/jr800.png</file>
+        <file>jr800/jr800Left.png</file>
+        <file>jr800/jr800Right.png</file>
+        <file>jr800/jr800Top.png</file>
     </qresource>
 </RCC>
