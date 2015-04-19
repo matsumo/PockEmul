@@ -45,6 +45,8 @@
 
 inline void CHD44102::count_up_or_down()
 {
+    info.m_output = info.imem[info.m_x][info.m_y];
+
     if (info.m_status & STATUS_COUNT_UP)
     {
         if (++info.m_y > 49) info.m_y = 0;
@@ -133,7 +135,7 @@ BYTE CHD44102::cmd_status()
 //-------------------------------------------------
 BYTE CHD44102::get8()
 {
-    UINT8 data = info.imem[info.m_x][info.m_y];
+    UINT8 data = info.m_output; //info.imem[info.m_x][info.m_y];
     count_up_or_down();
 
     return data;
@@ -144,6 +146,7 @@ BYTE CHD44102::get8()
 //-------------------------------------------------
 void CHD44102::set8( BYTE val)
 {
+//    qWarning()<<"write "<<val<<" to m_x="<<info.m_x<<"  m_y="<<info.m_y<<" page="<<info.m_page;
     info.imem[info.m_x][info.m_y] = val;
     count_up_or_down();
     updated = true;

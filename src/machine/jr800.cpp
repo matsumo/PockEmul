@@ -50,8 +50,8 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_jr800(this,
-                                   QRect(98,91,340,115),//192*2,64*2),
-                                   QRect());
+                                   QRect(98,94,340,115),//192*2,64*2),
+                                   QRect(86,94,364,115));
     pCPU		= new Cmc6800(this);
     for (int i=0;i<8;i++) {
         hd44102[i]  = new CHD44102(this);
@@ -148,7 +148,6 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
             break;
         }
 
-//        qWarning()<<tr("Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_id;
         hd44102[_id]->set8(data);
         return false;
     }
