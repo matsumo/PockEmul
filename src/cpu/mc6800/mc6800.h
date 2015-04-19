@@ -50,41 +50,6 @@ typedef union {
     quint32 d;
 }	PAIR;
 
-typedef struct {
-    PAIR pc;
-    UINT16 prevpc;
-    PAIR sp;
-    PAIR ix;
-    PAIR acc_d;
-    PAIR ea;
-    UINT8 cc;
-} MC6800info;
-
-class Cmc6800 :  public CCPU
-{
-    Q_OBJECT
-private:
-//    DEVICE *d_mem;
-
-    MC6800info regs;
-//    PAIR pc;
-//    UINT16 prevpc;
-//    PAIR sp;
-//    PAIR ix;
-//    PAIR acc_d;
-//    PAIR ea;
-
-//    UINT8 cc;
-    int wai_state;
-    int int_state;
-
-    int icount;
-
-    UINT32 RM(UINT32 Addr);
-    void WM(UINT32 Addr, UINT32 Value);
-    UINT32 RM16(UINT32 Addr);
-    void WM16(UINT32 Addr, PAIR *p);
-
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     // device to device
     typedef struct {
@@ -111,12 +76,17 @@ private:
         outputs_t outputs;
         bool first_write;
     } port_t;
-    port_t port[4];
 
-    UINT8 p3csr;
-    bool p3csr_is3_flag_read;
-    bool sc1_state;
-    bool sc2_state;
+#endif
+
+typedef struct {
+    PAIR pc;
+    UINT16 prevpc;
+    PAIR sp;
+    PAIR ix;
+    PAIR acc_d;
+    PAIR ea;
+    UINT8 cc;
 
     // timer
     PAIR counter;
@@ -130,10 +100,19 @@ private:
 #endif
     UINT32 timer_next;
 
+    port_t port[4];
+
+    UINT8 p3csr;
+    bool p3csr_is3_flag_read;
+    bool sc1_state;
+    bool sc2_state;
+
+
+
     // serial i/o
     outputs_t outputs_sio;
 //    FIFO *recv_buffer;
-    QQueue<int> recv_buffer;
+
     UINT8 trcsr, rdr, tdr;
     bool trcsr_read_tdre, trcsr_read_orfe, trcsr_read_rdrf;
     UINT8 rmcr;
@@ -141,7 +120,29 @@ private:
 
     // memory controller
     UINT8 ram_ctrl;
-    UINT8 ram[128];
+} MC6800info;
+
+class Cmc6800 :  public CCPU
+{
+    Q_OBJECT
+private:
+//    DEVICE *d_mem;
+
+    MC6800info regs;
+
+
+    int wai_state;
+    int int_state;
+
+    int icount;
+
+    UINT32 RM(UINT32 Addr);
+    void WM(UINT32 Addr, UINT32 Value);
+    UINT32 RM16(UINT32 Addr);
+    void WM16(UINT32 Addr, PAIR *p);
+
+#if defined(HAS_MC6801) || defined(HAS_HD6301)
+    QQueue<int> recv_buffer;
 
     UINT32 mc6801_io_r(UINT32 offset);
     void mc6801_io_w(UINT32 offset, UINT32 data);

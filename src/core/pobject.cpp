@@ -1144,9 +1144,9 @@ int CPObject::mapKey(QKeyEvent * event) {
         case Qt::Key_F5:		key = K_F5;		event->accept();	break;
         case Qt::Key_F6:		key = K_F6;		event->accept();	break;
         case Qt::Key_F7:		key = K_F7;		event->accept();	break;
-        case Qt::Key_F8:		key = K_CLR;		event->accept();	break;
-        case Qt::Key_F9:		key = K_DEF;		event->accept();	break;
-        case Qt::Key_F10:		key = K_MOD;		event->accept();	break;
+        case Qt::Key_F8:		key = K_F8;		event->accept();	break;
+        case Qt::Key_F9:		key = K_F9;		event->accept();	break;
+        case Qt::Key_F10:		key = K_F0;		event->accept();	break;
         case Qt::Key_F11:		key = K_BRK;		event->accept();	break;
     default: key = event->key() & 0x1FFFFFF; event->accept();
 //        qWarning()<<"key def:"<<key;

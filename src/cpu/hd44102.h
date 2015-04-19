@@ -52,8 +52,7 @@ public:
 
     inline void count_up_or_down();
 
-    int m_sx;
-    int m_sy;
+
 };
 
 #endif // HD44102

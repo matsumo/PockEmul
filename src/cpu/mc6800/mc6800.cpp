@@ -59,7 +59,7 @@ UINT32 Cmc6800::RM(UINT32 Addr)
         if (logsw) sprintf(pPC->Log_String,"%s Rp[%02X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
-    else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
+    else if(Addr >= 0x80 && Addr < 0x100 && (regs.ram_ctrl & 0x40)) {
         UINT32 _ret = imem[Addr & 0x7f];
         if (logsw) sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
@@ -81,7 +81,7 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
         if (logsw) sprintf(pPC->Log_String,"%s Wp[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
-    else if(Addr >= 0x80 && Addr < 0x100 && (ram_ctrl & 0x40)) {
+    else if(Addr >= 0x80 && Addr < 0x100 && (regs.ram_ctrl & 0x40)) {
         imem[Addr & 0x7f] = Value;
         if (logsw) sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
@@ -127,17 +127,17 @@ void Cmc6800::WM16(UINT32 Addr, PAIR *p)
 
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
 
-#define CT	counter.w.l
-#define CTH	counter.w.h
-#define CTD	counter.d
-#define OC	output_compare.w.l
-#define OCH	output_compare.w.h
-#define OCD	output_compare.d
-#define TOH	timer_over.w.l
-#define TOD	timer_over.d
+#define CT	regs.counter.w.l
+#define CTH	regs.counter.w.h
+#define CTD	regs.counter.d
+#define OC	regs.output_compare.w.l
+#define OCH	regs.output_compare.w.h
+#define OCD	regs.output_compare.d
+#define TOH	regs.timer_over.w.l
+#define TOD	regs.timer_over.d
 
 #define SET_TIMER_EVENT { \
-    timer_next = (OCD - CTD < TOD - CTD) ? OCD : TOD; \
+    regs.timer_next = (OCD - CTD < TOD - CTD) ? OCD : TOD; \
 }
 
 #define CLEANUP_COUNTERS() { \
@@ -188,105 +188,105 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
     switch (offset) {
     case 0x00:
         // port1 data direction register
-        return port[0].ddr;
+        return regs.port[0].ddr;
     case 0x01:
         // port2 data direction register
-        return port[1].ddr;
+        return regs.port[1].ddr;
     case 0x02:
         // port1 data register
-        return (port[0].rreg & ~port[0].ddr) | (port[0].wreg & port[0].ddr);
+        return (regs.port[0].rreg & ~regs.port[0].ddr) | (regs.port[0].wreg & regs.port[0].ddr);
     case 0x03:
         // port2 data register
-        return (port[1].rreg & ~port[1].ddr) | (port[1].wreg & port[1].ddr);
+        return (regs.port[1].rreg & ~regs.port[1].ddr) | (regs.port[1].wreg & regs.port[1].ddr);
     case 0x04:
         // port3 data direction register (write only???)
-        return port[2].ddr;
+        return regs.port[2].ddr;
     case 0x05:
         // port4 data direction register
-        return port[3].ddr;
+        return regs.port[3].ddr;
     case 0x06:
         // port3 data register
-        if(p3csr_is3_flag_read) {
-            p3csr_is3_flag_read = false;
-            p3csr &= ~P3CSR_IS3_FLAG;
+        if(regs.p3csr_is3_flag_read) {
+            regs.p3csr_is3_flag_read = false;
+            regs.p3csr &= ~P3CSR_IS3_FLAG;
         }
-        if(port[2].latched) {
-            port[2].latched = false;
-            return (port[2].latched_data & ~port[2].ddr) | (port[2].wreg & port[2].ddr);
+        if(regs.port[2].latched) {
+            regs.port[2].latched = false;
+            return (regs.port[2].latched_data & ~regs.port[2].ddr) | (regs.port[2].wreg & regs.port[2].ddr);
         }
-        return (port[2].rreg & ~port[2].ddr) | (port[2].wreg & port[2].ddr);
+        return (regs.port[2].rreg & ~regs.port[2].ddr) | (regs.port[2].wreg & regs.port[2].ddr);
     case 0x07:
         // port4 data register
-        return (port[3].rreg & ~port[3].ddr) | (port[3].wreg & port[3].ddr);
+        return (regs.port[3].rreg & ~regs.port[3].ddr) | (regs.port[3].wreg & regs.port[3].ddr);
     case 0x08:
         // timer control register
-        pending_tcsr = 0;
-        return tcsr;
+        regs.pending_tcsr = 0;
+        return regs.tcsr;
     case 0x09:
         // free running counter (msb)
-        if(!(pending_tcsr & TCSR_TOF)) {
-            tcsr &= ~TCSR_TOF;
+        if(!(regs.pending_tcsr & TCSR_TOF)) {
+            regs.tcsr &= ~TCSR_TOF;
         }
-        return counter.b.h;
+        return regs.counter.b.h;
     case 0x0a:
         // free running counter (lsb)
-        return counter.b.l;
+        return regs.counter.b.l;
     case 0x0b:
         // output compare register (msb)
-        if(!(pending_tcsr & TCSR_OCF)) {
-            tcsr &= ~TCSR_OCF;
+        if(!(regs.pending_tcsr & TCSR_OCF)) {
+            regs.tcsr &= ~TCSR_OCF;
         }
-        return output_compare.b.h;
+        return regs.output_compare.b.h;
     case 0x0c:
         // output compare register (lsb)
-        if(!(pending_tcsr & TCSR_OCF)) {
-            tcsr &= ~TCSR_OCF;
+        if(!(regs.pending_tcsr & TCSR_OCF)) {
+            regs.tcsr &= ~TCSR_OCF;
         }
-        return output_compare.b.l;
+        return regs.output_compare.b.l;
     case 0x0d:
         // input capture register (msb)
-        if(!(pending_tcsr & TCSR_ICF)) {
-            tcsr &= ~TCSR_ICF;
+        if(!(regs.pending_tcsr & TCSR_ICF)) {
+            regs.tcsr &= ~TCSR_ICF;
         }
-        return (input_capture >> 0) & 0xff;
+        return (regs.input_capture >> 0) & 0xff;
     case 0x0e:
         // input capture register (lsb)
-        return (input_capture >> 8) & 0xff;
+        return (regs.input_capture >> 8) & 0xff;
     case 0x0f:
         // port3 control/status register
-        p3csr_is3_flag_read = true;
-        return p3csr;
+        regs.p3csr_is3_flag_read = true;
+        return regs.p3csr;
     case 0x10:
         // rate and mode control register
-        return rmcr;
+        return regs.rmcr;
     case 0x11:
-        if(trcsr & TRCSR_TDRE) {
-            trcsr_read_tdre = true;
+        if(regs.trcsr & TRCSR_TDRE) {
+            regs.trcsr_read_tdre = true;
         }
-        if(trcsr & TRCSR_ORFE) {
-            trcsr_read_orfe = true;
+        if(regs.trcsr & TRCSR_ORFE) {
+            regs.trcsr_read_orfe = true;
         }
-        if(trcsr & TRCSR_RDRF) {
-            trcsr_read_rdrf = true;
+        if(regs.trcsr & TRCSR_RDRF) {
+            regs.trcsr_read_rdrf = true;
         }
-        return trcsr;
+        return regs.trcsr;
     case 0x12:
         // receive data register
-        if(trcsr_read_orfe) {
-            trcsr_read_orfe = false;
-            trcsr &= ~TRCSR_ORFE;
+        if(regs.trcsr_read_orfe) {
+            regs.trcsr_read_orfe = false;
+            regs.trcsr &= ~TRCSR_ORFE;
         }
-        if(trcsr_read_rdrf) {
-            trcsr_read_rdrf = false;
-            trcsr &= ~TRCSR_RDRF;
+        if(regs.trcsr_read_rdrf) {
+            regs.trcsr_read_rdrf = false;
+            regs.trcsr &= ~TRCSR_RDRF;
         }
-        return rdr;
+        return regs.rdr;
     case 0x13:
         // transmit data register
-        return tdr;
+        return regs.tdr;
     case 0x14:
         // ram control register
-        return (ram_ctrl & 0x40) | 0x3f;
+        return (regs.ram_ctrl & 0x40) | 0x3f;
     }
     return 0;
 }
@@ -297,65 +297,65 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
     switch(offset) {
     case 0x00:
         // port1 data direction register
-        port[0].ddr = data;
+        regs.port[0].ddr = data;
         break;
     case 0x01:
         // port2 data direction register
-        port[1].ddr = data;
+        regs.port[1].ddr = data;
         break;
     case 0x02:
         // port1 data register
-        if(port[0].wreg != data || port[0].first_write) {
+        if(regs.port[0].wreg != data || regs.port[0].first_write) {
 //            write_signals(&port[0].outputs, data);
-            port[0].wreg = data;
-            port[0].first_write = false;
+            regs.port[0].wreg = data;
+            regs.port[0].first_write = false;
         }
         break;
     case 0x03:
         // port2 data register
-        if(port[1].wreg != data || port[1].first_write) {
+        if(regs.port[1].wreg != data || regs.port[1].first_write) {
 //            write_signals(&port[1].outputs, data);
-            port[1].wreg = data;
-            port[1].first_write = false;
+            regs.port[1].wreg = data;
+            regs.port[1].first_write = false;
         }
         break;
     case 0x04:
         // port3 data direction register
-        port[2].ddr = data;
+       regs. port[2].ddr = data;
         break;
     case 0x05:
         // port4 data direction register
-        port[3].ddr = data;
+        regs.port[3].ddr = data;
         break;
     case 0x06:
         // port3 data register
-        if(p3csr_is3_flag_read) {
-            p3csr_is3_flag_read = false;
-            p3csr &= ~P3CSR_IS3_FLAG;
+        if(regs.p3csr_is3_flag_read) {
+            regs.p3csr_is3_flag_read = false;
+            regs.p3csr &= ~P3CSR_IS3_FLAG;
         }
-        if(port[2].wreg != data || port[2].first_write) {
+        if(regs.port[2].wreg != data || regs.port[2].first_write) {
 //            write_signals(&port[2].outputs, data);
-            port[2].wreg = data;
-            port[2].first_write = false;
+            regs.port[2].wreg = data;
+            regs.port[2].first_write = false;
         }
         break;
     case 0x07:
         // port4 data register
-        if(port[3].wreg != data || port[3].first_write) {
+        if(regs.port[3].wreg != data || regs.port[3].first_write) {
 //            write_signals(&port[3].outputs, data);
-            port[3].wreg = data;
-            port[3].first_write = false;
+            regs.port[3].wreg = data;
+            regs.port[3].first_write = false;
         }
         break;
     case 0x08:
         // timer control/status register
-        tcsr = data;
-        pending_tcsr &= tcsr;
+        regs.tcsr = data;
+        regs.pending_tcsr &= regs.tcsr;
         break;
     case 0x09:
         // free running counter (msb)
 #ifdef HAS_HD6301
-        latch09 = data & 0xff;
+        regs.latch09 = data & 0xff;
 #endif
         CT = 0xfff8;
         TOH = CTH;
@@ -364,50 +364,50 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 #ifdef HAS_HD6301
     case 0x0a:
         // free running counter (lsb)
-        CT = (latch09 << 8) | (data & 0xff);
+        CT = (regs.latch09 << 8) | (data & 0xff);
         TOH = CTH;
         MODIFIED_counters;
         break;
 #endif
     case 0x0b:
         // output compare register (msb)
-        if(output_compare.b.h != data) {
-            output_compare.b.h = data;
+        if(regs.output_compare.b.h != data) {
+            regs.output_compare.b.h = data;
             MODIFIED_counters;
         }
-        tcsr &=~TCSR_OCF;
+        regs.tcsr &=~TCSR_OCF;
         break;
     case 0x0c:
         // output compare register (lsb)
-        if(output_compare.b.l != data) {
-            output_compare.b.l = data;
+        if(regs.output_compare.b.l != data) {
+            regs.output_compare.b.l = data;
             MODIFIED_counters;
         }
-        tcsr &=~TCSR_OCF;
+        regs.tcsr &=~TCSR_OCF;
         break;
     case 0x0f:
         // port3 control/status register
-        p3csr = (p3csr & P3CSR_IS3_FLAG) | (data & ~P3CSR_IS3_FLAG);
+        regs.p3csr = (regs.p3csr & P3CSR_IS3_FLAG) | (data & ~P3CSR_IS3_FLAG);
         break;
     case 0x10:
         // rate and mode control register
-        rmcr = data;
+        regs.rmcr = data;
         break;
     case 0x11:
         // transmit/receive control/status register
-        trcsr = (trcsr & 0xe0) | (data & 0x1f);
+        regs.trcsr = (regs.trcsr & 0xe0) | (data & 0x1f);
         break;
     case 0x13:
         // transmit data register
-        if(trcsr_read_tdre) {
-            trcsr_read_tdre = false;
-            trcsr &= ~TRCSR_TDRE;
+        if(regs.trcsr_read_tdre) {
+            regs.trcsr_read_tdre = false;
+            regs.trcsr &= ~TRCSR_TDRE;
         }
-        tdr = data;
+        regs.tdr = data;
         break;
     case 0x14:
         // ram control register
-        ram_ctrl = data;
+        regs.ram_ctrl = data;
         break;
     }
 }
@@ -418,43 +418,43 @@ void Cmc6800::increment_counter(int amount)
     icount -= amount;
 
     // timer
-    if((CTD += amount) >= timer_next) {
+    if((CTD += amount) >= regs.timer_next) {
         /* OCI */
         if( CTD >= OCD) {
             OCH++;	// next IRQ point
-            tcsr |= TCSR_OCF;
+            regs.tcsr |= TCSR_OCF;
 
-            pending_tcsr |= TCSR_OCF;
+            regs.pending_tcsr |= TCSR_OCF;
         }
         /* TOI */
         if( CTD >= TOD) {
             TOH++;	// next IRQ point
-            tcsr |= TCSR_TOF;
-            pending_tcsr |= TCSR_TOF;
+            regs.tcsr |= TCSR_TOF;
+            regs.pending_tcsr |= TCSR_TOF;
         }
         /* set next event */
         SET_TIMER_EVENT;
     }
 
     // serial i/o
-    if((sio_counter -= amount) <= 0) {
-        if((trcsr & TRCSR_TE) && !(trcsr & TRCSR_TDRE)) {
+    if((regs.sio_counter -= amount) <= 0) {
+        if((regs.trcsr & TRCSR_TE) && !(regs.trcsr & TRCSR_TDRE)) {
 //            write_signals(&outputs_sio, tdr);
-            trcsr |= TRCSR_TDRE;
+            regs.trcsr |= TRCSR_TDRE;
         }
-        if((trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
-            if(trcsr & TRCSR_WU) {
+        if((regs.trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
+            if(regs.trcsr & TRCSR_WU) {
                 // skip 10 bits
-                trcsr &= ~TRCSR_WU;
+                regs.trcsr &= ~TRCSR_WU;
                 recv_buffer.dequeue();
             }
-            else if(!(trcsr & TRCSR_RDRF)) {
+            else if(!(regs.trcsr & TRCSR_RDRF)) {
                 // note: wait reveived data is read by cpu, so overrun framing error never occurs
-                rdr = recv_buffer.dequeue();
-                trcsr |= TRCSR_RDRF;
+                regs.rdr = recv_buffer.dequeue();
+                regs.trcsr |= TRCSR_RDRF;
             }
         }
-        sio_counter += RMCR_SS[rmcr & 3];
+        regs.sio_counter += RMCR_SS[regs.rmcr & 3];
     }
 }
 
@@ -653,7 +653,7 @@ void Cmc6800::initialize()
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
 //    recv_buffer = new FIFO(0x10000);
 #endif
-    ram_ctrl = 0xc0;
+    regs.ram_ctrl = 0xc0;
 }
 
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
@@ -678,26 +678,26 @@ void Cmc6800::Reset()
 
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     for(int i = 0; i < 4; i++) {
-        port[i].ddr = 0x00;
-        port[i].first_write = true;
-        port[i].latched = false;
+        regs.port[i].ddr = 0x00;
+        regs.port[i].first_write = true;
+        regs.port[i].latched = false;
     }
-    p3csr = 0x00;
-    p3csr_is3_flag_read = false;
-    sc1_state = sc2_state = false;
+    regs.p3csr = 0x00;
+    regs.p3csr_is3_flag_read = false;
+    regs.sc1_state = regs.sc2_state = false;
 
-    tcsr = pending_tcsr = 0x00;
+    regs.tcsr = regs.pending_tcsr = 0x00;
     CTD = 0x0000;
     OCD = 0xffff;
     TOD = 0xffff;
 
     recv_buffer.clear();
-    trcsr = TRCSR_TDRE;
-    trcsr_read_tdre = trcsr_read_orfe = trcsr_read_rdrf = false;
-    rmcr = 0x00;
-    sio_counter = RMCR_SS[rmcr & 3];
+    regs.trcsr = TRCSR_TDRE;
+    regs.trcsr_read_tdre = regs.trcsr_read_orfe = regs.trcsr_read_rdrf = false;
+    regs.rmcr = 0x00;
+    regs.sio_counter = RMCR_SS[regs.rmcr & 3];
 
-    ram_ctrl |= 0x40;
+    regs.ram_ctrl |= 0x40;
 #endif
 }
 
@@ -722,36 +722,36 @@ void Cmc6800::write_signal(int id, UINT32 data, UINT32 mask)
         break;
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     case SIG_MC6801_PORT_1:
-        port[0].rreg = (port[0].rreg & ~mask) | (data & mask);
+        regs.port[0].rreg = (regs.port[0].rreg & ~mask) | (data & mask);
         break;
     case SIG_MC6801_PORT_2:
-        if((mask & 1) && (port[1].rreg & 1) != (data & 1) && (tcsr & 2) == ((data << 1) & 2)) {
+        if((mask & 1) && (regs.port[1].rreg & 1) != (data & 1) && (regs.tcsr & 2) == ((data << 1) & 2)) {
             // active TIN edge in
-            tcsr |= TCSR_ICF;
-            pending_tcsr |= TCSR_ICF;
-            input_capture = CT;
+            regs.tcsr |= TCSR_ICF;
+            regs.pending_tcsr |= TCSR_ICF;
+            regs.input_capture = CT;
         }
-        port[1].rreg = (port[1].rreg & ~mask) | (data & mask);
+        regs.port[1].rreg = (regs.port[1].rreg & ~mask) | (data & mask);
         break;
     case SIG_MC6801_PORT_3:
-        port[2].rreg = (port[2].rreg & ~mask) | (data & mask);
+        regs.port[2].rreg = (regs.port[2].rreg & ~mask) | (data & mask);
         break;
     case SIG_MC6801_PORT_4:
-        port[3].rreg = (port[3].rreg & ~mask) | (data & mask);
+        regs.port[3].rreg = (regs.port[3].rreg & ~mask) | (data & mask);
         break;
     case SIG_MC6801_PORT_3_SC1:
-        if(sc1_state && !(data & mask)) {
+        if(regs.sc1_state && !(data & mask)) {
             // SC1: H -> L
-            if(!port[2].latched && (p3csr & P3CSR_LE)) {
-                port[2].latched_data = port[2].rreg;
-                port[2].latched = true;
-                p3csr |= P3CSR_IS3_FLAG;
+            if(!regs.port[2].latched && (regs.p3csr & P3CSR_LE)) {
+                regs.port[2].latched_data = regs.port[2].rreg;
+                regs.port[2].latched = true;
+                regs.p3csr |= P3CSR_IS3_FLAG;
             }
         }
-        sc1_state = ((data & mask) != 0);
+        regs.sc1_state = ((data & mask) != 0);
         break;
     case SIG_MC6801_PORT_3_SC2:
-        sc2_state = ((data & mask) != 0);
+        regs.sc2_state = ((data & mask) != 0);
         break;
     case SIG_MC6801_SIO_RECV:
 //        recv_buffer->write(data & mask);
@@ -816,30 +816,30 @@ void Cmc6800::run_one_opecode()
         }
     }
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
-    else if((tcsr & (TCSR_EICI | TCSR_ICF)) == (TCSR_EICI | TCSR_ICF)) {
+    else if((regs.tcsr & (TCSR_EICI | TCSR_ICF)) == (TCSR_EICI | TCSR_ICF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
 //            if (logsw) sprintf(pPC->Log_String,"%s TAKE_ICI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_ICI;
         }
     }
-    else if((tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
+    else if((regs.tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
 //            if (logsw) sprintf(pPC->Log_String,"%s TAKE_OCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_OCI;
         }
     }
-    else if((tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
+    else if((regs.tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
 //            if (logsw) sprintf(pPC->Log_String,"%s TAKE_TOI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
             TAKE_TOI;
         }
     }
-    else if(((trcsr & (TRCSR_RIE | TRCSR_RDRF)) == (TRCSR_RIE | TRCSR_RDRF)) ||
-            ((trcsr & (TRCSR_RIE | TRCSR_ORFE)) == (TRCSR_RIE | TRCSR_ORFE)) ||
-            ((trcsr & (TRCSR_TIE | TRCSR_TDRE)) == (TRCSR_TIE | TRCSR_TDRE))) {
+    else if(((regs.trcsr & (TRCSR_RIE | TRCSR_RDRF)) == (TRCSR_RIE | TRCSR_RDRF)) ||
+            ((regs.trcsr & (TRCSR_RIE | TRCSR_ORFE)) == (TRCSR_RIE | TRCSR_ORFE)) ||
+            ((regs.trcsr & (TRCSR_TIE | TRCSR_TDRE)) == (TRCSR_TIE | TRCSR_TDRE))) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
 //            if (logsw) sprintf(pPC->Log_String,"%s TAKE_SCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
@@ -3776,7 +3776,7 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     for(int i = 0; i < 4; i++) {
 //        init_output_signals(&port[i].outputs);
-        port[i].wreg = port[i].rreg = 0;//0xff;
+        regs.port[i].wreg = regs.port[i].rreg = 0;//0xff;
     }
 //    init_output_signals(&outputs_sio);
 #endif
@@ -3808,11 +3808,7 @@ bool Cmc6800::exit()
 
 void Cmc6800::step()
 {
-#if 0
-    run(-1);
-#else
     run_one_opecode();
-#endif
 }
 
 void Cmc6800::Load_Internal(QXmlStreamReader *xmlIn)
@@ -3822,7 +3818,8 @@ void Cmc6800::Load_Internal(QXmlStreamReader *xmlIn)
              (xmlIn->attributes().value("model").toString() == "mc6800")) {
             QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
             memcpy((char *) &regs,ba_reg.data(),sizeof(MC6800info));
-
+            QByteArray ba_imem = QByteArray::fromBase64(xmlIn->attributes().value("iMem").toString().toLatin1());
+            memcpy((char *) &imem,ba_imem.data(),0x200);
         }
         xmlIn->skipCurrentElement();
     }
@@ -3835,6 +3832,8 @@ void Cmc6800::save_internal(QXmlStreamWriter *xmlOut)
         xmlOut->writeAttribute("model","mc6800");
         QByteArray ba_reg((char*)&regs,sizeof(MC6800info));
         xmlOut->writeAttribute("registers",ba_reg.toBase64());
+        QByteArray ba_imem((char*)imem,0x200);
+        xmlOut->writeAttribute("iMem",ba_imem.toBase64());
     xmlOut->writeEndElement();
 }
 
@@ -3878,7 +3877,7 @@ void Cmc6800::Regs_Info(UINT8 Type)
         break;
     case 1:			// For Log File
         sprintf(Regs_String,	"PC:%.4x A:%02X B:%02X D:%04X X:%04X SP:%04X T:%02X C:%08X %s%s%s%s%s%s",
-                            PC,A,B,D,X,S,tcsr,timer_next,
+                            PC,A,B,D,X,S,regs.tcsr,regs.timer_next,
                 CC&0x20 ? "H":".",
                 CC&0x10 ? "I":".",
                 CC&0x08 ? "N":".",
