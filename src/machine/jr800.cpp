@@ -352,7 +352,7 @@ UINT16 Cjr800::getKey()
             if (KEY('+'))			data|=0x08;
             if (KEY('='))			data|=0x10;
             if (KEY('-'))			data|=0x20;
-            if (KEY('.'))			data|=0x40;
+            if (KEY(K_PT))			data|=0x40;
             if (KEY('/'))			data|=0x80;
         }
         if (ks&0x04) {
@@ -374,7 +374,7 @@ UINT16 Cjr800::getKey()
             if (KEY(','))			data|=0x10;
             if (KEY('^'))			data|=0x20;
             if (KEY('.'))			data|=0x40;
-            if (KEY(K_F1))			data|=0x80;
+            if (KEY(K_CLR))			data|=0x80;
 
         }
 
@@ -420,24 +420,24 @@ UINT16 Cjr800::getKey()
         }
 
         if (ks&0x100) {
-//            if (KEY(K_F1))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY(K_F3))			data|=0x04;
-//            if (KEY(K_F4))			data|=0x08;
-//            if (KEY(K_F5))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
-//            if (KEY(K_F7))			data|=0x40;
-//            if (KEY(K_F8))			data|=0x80;
-        }
-        if (ks&0x200) {
             if (KEY(K_F1))			data|=0x01;
             if (KEY(K_F2))			data|=0x02;
+            if (KEY(K_F3))			data|=0x04;
+            if (KEY(K_F4))			data|=0x08;
+            if (KEY(K_F5))			data|=0x10;
+            if (KEY(K_F6))			data|=0x20;
+            if (KEY(K_F7))			data|=0x40;
+            if (KEY(K_F8))			data|=0x80;
+        }
+        if (ks&0x200) {
+//            if (KEY(K_F1))			data|=0x01;
+//            if (KEY(K_F2))			data|=0x02;
             if (KEY(K_MENU))		data|=0x04;
             if (KEY(K_SHT))			data|=0x08;
             if (KEY(K_CTRL))		data|=0x10;
-            if (KEY(K_F6))			data|=0x20;
-            if (KEY(K_F7))			data|=0x40;
-            if (KEY(K_F5))			data|=0x80;
+//            if (KEY(K_F6))			data|=0x20;
+//            if (KEY(K_F7))			data|=0x40;
+//            if (KEY(K_F5))			data|=0x80;
         }
 
 

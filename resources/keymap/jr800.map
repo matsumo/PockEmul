@@ -11,8 +11,9 @@
     <KEY description="F8" height="22" left="739" masterscancode="0x00" modifier="" scancode="0xfd" top="137" view="FRONT" width="32"/>
     <KEY description="F9" height="22" left="788" masterscancode="0x00" modifier="" scancode="0xfe" top="137" view="FRONT" width="32"/>
     <KEY description="F10" height="22" left="839" masterscancode="0x00" modifier="" scancode="0xff" top="137" view="FRONT" width="32"/>
+    <KEY description="^" height="32" left="553" masterscancode="0x00" modifier="" scancode="0x5e" top="303" view="FRONT" width="32"/>
     <KEY description="-" height="32" left="840" masterscancode="0x00" modifier="" scancode="0x2d" top="397" view="FRONT" width="32"/>
-   <KEY description="*" height="32" left="840" masterscancode="0x00" modifier="" scancode="0x2a" top="351" view="FRONT" width="32"/>
+    <KEY description="*" height="32" left="840" masterscancode="0x00" modifier="" scancode="0x2a" top="351" view="FRONT" width="32"/>
     <KEY description="," height="32" left="465" masterscancode="0x00" modifier="" scancode="0x2c" top="445" view="FRONT" width="32"/>
     <KEY description="." height="32" left="516" masterscancode="0x00" modifier="" scancode="0x2e" top="442" view="FRONT" width="32"/>
     <KEY description="/" height="32" left="838" masterscancode="0x00" modifier="" scancode="0x2f" top="303" view="FRONT" width="32"/>
@@ -81,5 +82,6 @@
     <KEY description="Pad 7" height="32" left="687" masterscancode="0x00" modifier="" scancode="0xa7" top="302" view="FRONT" width="32"/>
     <KEY description="Pad 8" height="32" left="739" masterscancode="0x00" modifier="" scancode="0xa8" top="304" view="FRONT" width="32"/>
     <KEY description="Pad 9" height="32" left="789" masterscancode="0x00" modifier="" scancode="0xa9" top="304" view="FRONT" width="32"/>
+    <KEY description="Pad ." height="32" left="740" masterscancode="0x00" modifier="" scancode="0xab" top="442" view="FRONT" width="32"/>
 </Keyboard>
 </KEYBMAP>
