@@ -185,6 +185,7 @@ static const int RMCR_SS[] = { 16, 128, 1024, 4096 };
 
 UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
 { 
+    UINT32 _data=0;
     switch (offset) {
     case 0x00:
         // port1 data direction register
@@ -194,10 +195,15 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
         return regs.port[1].ddr;
     case 0x02:
         // port1 data register
-        return (regs.port[0].rreg & ~regs.port[0].ddr) | (regs.port[0].wreg & regs.port[0].ddr);
+        _data = (regs.port[0].rreg & ~regs.port[0].ddr) | (regs.port[0].wreg & regs.port[0].ddr);
+//        qWarning()<<tr("Read Port 0:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+        return _data;
     case 0x03:
         // port2 data register
-        return (regs.port[1].rreg & ~regs.port[1].ddr) | (regs.port[1].wreg & regs.port[1].ddr);
+        _data = (regs.port[1].rreg & ~regs.port[1].ddr) | (regs.port[1].wreg & regs.port[1].ddr);
+//        _data = 0x02;
+//        qWarning()<<tr("Read Port 1:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+        return _data;
     case 0x04:
         // port3 data direction register (write only???)
         return regs.port[2].ddr;
@@ -291,6 +297,17 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
     return 0;
 }
 
+void Cmc6800::write_signals(outputs_t *items, UINT32 data)
+{
+    for(int i = 0; i < items->count; i++) {
+        output_t *item = &items->item[i];
+        int shift = item->shift;
+        UINT32 val = (shift < 0) ? (data >> (-shift)) : (data << shift);
+        UINT32 mask = (shift < 0) ? (item->mask >> (-shift)) : (item->mask << shift);
+        write_signal(item->id, val, mask);
+    }
+}
+
 void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 {
 
@@ -306,26 +323,36 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
     case 0x02:
         // port1 data register
         if(regs.port[0].wreg != data || regs.port[0].first_write) {
-//            write_signals(&port[0].outputs, data);
+           write_signals(&regs.port[0].outputs, data);
             regs.port[0].wreg = data;
+//            qWarning()<<tr("Write Port 0:%1 - %2").arg(regs.port[0].rreg,2,16,QChar('0')).arg(data,2,16,QChar('0'))
+//                    <<"="<<(regs.port[0].rreg!=0?QChar(regs.port[0].rreg):' ');
             regs.port[0].first_write = false;
         }
         break;
     case 0x03:
         // port2 data register
         if(regs.port[1].wreg != data || regs.port[1].first_write) {
-//            write_signals(&port[1].outputs, data);
+            write_signals(&regs.port[1].outputs, data);
             regs.port[1].wreg = data;
+            qWarning()<<tr("Write Port 1:%1").arg(regs.port[1].rreg,2,16,QChar('0'))
+                    <<"="<<(regs.port[1].rreg!=0?QChar(regs.port[1].rreg):' ');
             regs.port[1].first_write = false;
         }
         break;
     case 0x04:
         // port3 data direction register
        regs. port[2].ddr = data;
+       qWarning()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
+               <<"="<<(regs.port[2].rreg!=0?QChar(regs.port[2].rreg):' ');
+
         break;
     case 0x05:
         // port4 data direction register
         regs.port[3].ddr = data;
+        qWarning()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
+                <<"="<<(regs.port[3].rreg!=0?QChar(regs.port[3].rreg):' ');
+
         break;
     case 0x06:
         // port3 data register
@@ -334,16 +361,18 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
             regs.p3csr &= ~P3CSR_IS3_FLAG;
         }
         if(regs.port[2].wreg != data || regs.port[2].first_write) {
-//            write_signals(&port[2].outputs, data);
+            write_signals(&regs.port[2].outputs, data);
             regs.port[2].wreg = data;
+//            qWarning()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))<<"="<<QChar(regs.port[2].rreg);
             regs.port[2].first_write = false;
         }
         break;
     case 0x07:
         // port4 data register
         if(regs.port[3].wreg != data || regs.port[3].first_write) {
-//            write_signals(&port[3].outputs, data);
+            write_signals(&regs.port[3].outputs, data);
             regs.port[3].wreg = data;
+//            qWarning()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))<<"="<<QChar(regs.port[3].rreg);
             regs.port[3].first_write = false;
         }
         break;
@@ -439,7 +468,7 @@ void Cmc6800::increment_counter(int amount)
     // serial i/o
     if((regs.sio_counter -= amount) <= 0) {
         if((regs.trcsr & TRCSR_TE) && !(regs.trcsr & TRCSR_TDRE)) {
-//            write_signals(&outputs_sio, tdr);
+            write_signals(&regs.outputs_sio, regs.tdr);
             regs.trcsr |= TRCSR_TDRE;
         }
         if((regs.trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
@@ -754,7 +783,7 @@ void Cmc6800::write_signal(int id, UINT32 data, UINT32 mask)
         regs.sc2_state = ((data & mask) != 0);
         break;
     case SIG_MC6801_SIO_RECV:
-//        recv_buffer->write(data & mask);
+        recv_buffer.append(data & mask);
         break;
 #endif
     }

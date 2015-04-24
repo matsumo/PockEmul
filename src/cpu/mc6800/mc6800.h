@@ -125,10 +125,14 @@ typedef struct {
 class Cmc6800 :  public CCPU
 {
     Q_OBJECT
+
+public:
+    MC6800info regs;
+
 private:
 //    DEVICE *d_mem;
 
-    MC6800info regs;
+
 
 
     int wai_state;
@@ -466,6 +470,7 @@ public:
 #endif
 
 
+    void write_signals(outputs_t *items, UINT32 data);
 };
 
 

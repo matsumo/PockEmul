@@ -55,7 +55,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new Cmc6800(this);
     for (int i=0;i<8;i++) {
         hd44102[i]  = new CHD44102(this);
-        qWarning()<<hd44102[i];
+//        qWarning()<<hd44102[i];
     }
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"jr800.map");
@@ -80,7 +80,7 @@ bool Cjr800::init(void)				// initialize
     pTIMER->resetTimer(1);
 
     pTAPECONNECTOR	= new Cconnector(this,3,0,Cconnector::Jack,"Line in / Rec / Rmt",false,
-                                     QPoint(804,231),Cconnector::EAST);
+                                     QPoint(804,0),Cconnector::NORTH);
     publish(pTAPECONNECTOR);
     pPRINTERCONNECTOR	= new Cconnector(this,9,1,Cconnector::DIN_8,"Printer",false,
                                          QPoint(402,0),Cconnector::NORTH);
@@ -90,9 +90,7 @@ bool Cjr800::init(void)				// initialize
 
     for (int i=0;i<8;i++) {
         hd44102[i]->init();
-        qWarning()<<hd44102[i];
     }
-//    portB = 0;
 
     return true;
 }
@@ -101,7 +99,13 @@ bool Cjr800::run() {
 
     CpcXXXX::run();
 
-//    fillSoundBuffer(upd7907->upd7907stat.to ? 0xff : 0x00);
+    BYTE _soundData = 0;
+    if((((Cmc6800*)pCPU)->regs.port[0].wreg & 0x08)) {
+        _soundData = (((Cmc6800*)pCPU)->regs.port[0].wreg & 0x10) ? 0xff : 0x00;
+        fillSoundBuffer(_soundData);
+    }
+
+
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
@@ -259,8 +263,8 @@ bool Cjr800::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-//    pTAPECONNECTOR->Set_pin(3,true);       // RMT
-//    pTAPECONNECTOR->Set_pin(2,upd7907->upd7907stat.imem[0x00] & 0x10 ? 0xff : 0x00);    // Out
+    pTAPECONNECTOR->Set_pin(3,true);       // RMT
+    pTAPECONNECTOR->Set_pin(2,(((Cmc6800*)pCPU)->regs.port[0].wreg & 0x01) ? 0x00 : 0xff); // TAPE OUT
 
 //    if (sendToPrinter>0) {
 //        pPRINTERCONNECTOR->Set_values(sendToPrinter);

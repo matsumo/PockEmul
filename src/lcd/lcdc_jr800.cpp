@@ -249,35 +249,3 @@ void Clcdc_jr800::disp(void)
 }
 
 
-//-------------------------------------------------
-//  update_screen - update screen
-//-------------------------------------------------
-#if 0
-UINT32 CHD44102::screen_update(screen_device &screen, bitmap_ind16 &bitmap, const rectangle &cliprect)
-{
-    for (int y = 0; y < 50; y++)
-    {
-        int z = m_page << 3;
-
-        for (int x = 0; x < 32; x++)
-        {
-            UINT8 data = m_ram[z / 8][y];
-
-            int sy = m_sy + z;
-            int sx = m_sx + y;
-
-            if (cliprect.contains(sx, sy))
-            {
-                int color = (m_status & STATUS_DISPLAY_OFF) ? 0 : BIT(data, z % 8);
-
-                bitmap.pix16(sy, sx) = color;
-            }
-
-            z++;
-            z %= 32;
-        }
-    }
-    return 0;
-}
-#endif
-
