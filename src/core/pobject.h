@@ -137,6 +137,7 @@ public:
     QMenu *menuext;
     QMenu *menuconfig;
     QMenu *menucpuspeed;
+    QMenu *menuAudioVolume;
     QMenu *menulcd;
     QMenu *menulink;
     QMenu *menuunlink;
@@ -250,6 +251,7 @@ public slots:
 	void KeyList();
 
     void slotCpu(QAction*);
+    void slotAudioVolume(QAction*);
 
     void slotContrast(QAction *);
 

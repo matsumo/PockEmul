@@ -33,6 +33,8 @@ public:
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
     virtual bool UpdateFinalImage();
 
+    virtual bool	InitDisplay(void);
+
     Cconnector	*pCONNECTOR;	qint64 pCONNECTOR_value;
     Cconnector	*pEXTCONNECTOR;	qint64 pEXTCONNECTOR_value;
     Cconnector	*pTAPECONNECTOR;qint64 pTAPECONNECTOR_value;

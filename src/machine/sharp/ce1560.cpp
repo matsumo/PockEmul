@@ -20,7 +20,7 @@ Cce1560::Cce1560(CPObject *parent):CpcXXXX(parent)
     //[constructor]
     BackGroundFname	= P_RES(":/pc1500/ce1560_1.png");
     setcfgfname(QString("ce1560"));
-    coverImage = QImage(P_RES(":/pc1500/ce1560_cover.png"));
+//
 
     setDXmm(329);
     setDYmm(115);
@@ -428,11 +428,11 @@ bool Cce1560::UpdateFinalImage(void) {
 
 
 
-    QImage screenImage = FinalImage->copy(60,0,692,getDY()/2).mirrored(false,true);
+    QImage screenImage = FinalImage->copy(60*internalImageRatio,0,(getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2).mirrored(false,true);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(60,0,692,getDY()/2,Qt::transparent);
+    painter.fillRect(60*internalImageRatio,0,(getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2,Qt::transparent);
 
-    painter.translate((getDX()-60)/2+60,getDY()/2);
+    painter.translate((getDX()+60*internalImageRatio)/2,getDY()*internalImageRatio/2);
 
     QTransform matrix;
     matrix.scale(m_zoom,m_zoom);
@@ -446,9 +446,9 @@ bool Cce1560::UpdateFinalImage(void) {
     painter.setTransform(matrix2,true);
 
     if (m_screenAngle<=90)
-        screenImage = coverImage.copy(60,0,692,getDY()/2);
+        screenImage = coverImage;//.copy(60*internalImageRatio,0,692*internalImageRatio,getDY()*internalImageRatio/2);
 
-    painter.drawImage(-getDX()/2+60/2,0,screenImage);
+    painter.drawImage(-getDX()/2+60*internalImageRatio/2,0,screenImage);
     painter.end();
     mask = QPixmap::fromImage(*FinalImage).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
 
@@ -480,6 +480,14 @@ bool Cce1560::UpdateFinalImage(void) {
         emit stackPosChanged();
     }
 
+    return true;
+}
+
+bool Cce1560::InitDisplay()
+{
+    CpcXXXX::InitDisplay();
+    coverImage = QImage(P_RES(":/pc1500/ce1560_cover.png")).scaled((getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2);
+qWarning()<<coverImage.size();
     return true;
 }
 

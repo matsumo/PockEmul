@@ -5,8 +5,7 @@
 
 #include "jr800.h"
 #include "mc6800/mc6800.h"
-#include "upd16434.h"
-//#include "pd1990ac.h"
+//#include "upd16434.h"
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"
@@ -102,6 +101,7 @@ bool Cjr800::run() {
     BYTE _soundData = 0;
     if((((Cmc6800*)pCPU)->regs.port[0].wreg & 0x08)) {
         _soundData = (((Cmc6800*)pCPU)->regs.port[0].wreg & 0x10) ? 0xff : 0x00;
+//        qWarning()<<_soundData;
         fillSoundBuffer(_soundData);
     }
 
@@ -234,6 +234,8 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 UINT8 Cjr800::in(UINT8 Port)
 {
+    Q_UNUSED(Port)
+
 //    switch (Port) {
 //    case 0x01 : return portB  | (pTAPECONNECTOR->Get_pin(1) ? 0x80 : 0x00); break;
 //    case 0x02 : return (getKey() & 0x3F); break;
@@ -252,6 +254,9 @@ UINT8 Cjr800::out(UINT8 Port, UINT8 x)
 
 UINT16 Cjr800::out16(UINT16 address, UINT16 value)
 {
+    Q_UNUSED(address)
+    Q_UNUSED(value)
+
 //    if (address == UPD7907_PORTE) {
 //        kstrobe = value;
 //    }
@@ -305,10 +310,9 @@ void Cjr800::TurnON(void){
 void Cjr800::Reset()
 {
     CpcXXXX::Reset();
-//    upd7907->upd7907stat.pc.w.l=0;
+
 //    pLCDC->init();
     for (int i=0;i<8;i++) hd44102[i]->Reset();
-//    sendToPrinter=0;
 
 }
 

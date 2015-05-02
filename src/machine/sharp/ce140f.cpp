@@ -26,6 +26,8 @@
 #include "watchpoint.h"
 #include "Keyb.h"
 
+#include "ce1600f.h"
+
 #define DOWN	0
 #define UP		1
 
@@ -47,6 +49,8 @@ Cce140f::Cce140f(CPObject *parent):CPObject(parent)
     t = 0;
     c = 0;
     busyLed = false;
+
+    pce1600f = new Cce1600f(this);
 }
 
 Cce140f::~Cce140f() {
@@ -225,6 +229,8 @@ void Cce140f::Push4(BYTE b) {
 }
 
 bool Cce140f::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     BUSY    = GET_PIN(PIN_BUSY);
     D_OUT	= GET_PIN(PIN_D_OUT);
@@ -239,6 +245,8 @@ bool Cce140f::Get_Connector(Cbus *_bus) {
 }
 
 bool Cce140f::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     //MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     //BUSY    = GET_PIN(PIN_BUSY);
     bool extD_OUT	= pCONNECTOR_Ext->Get_pin(PIN_D_OUT);
@@ -489,6 +497,7 @@ bool Cce140f::run(void)
 
 void Cce140f::processCommand(void) {
     if (data.isEmpty()) return;
+
     QString s ="";
     for (int i =0;i< data.size();i++) {
         s.append(QChar(data.at(i)));
@@ -536,7 +545,7 @@ void Cce140f::processCommand(void) {
         //    case 0x20: process_INPUT(0x20);break;
     case 0xFE: process_SAVE(0xfe);break;    // Handle ascii saved data stream
     case 0xFF: process_SAVE(0xff);break;    // Handle saved data stream
-    default: emit msgError("CE-140F : Unknown command.");
+    default: emit msgError(tr("CE-140F : Unknown command : %1").arg(data.first(),2,16,QChar('0')));
     }
 }
 
@@ -831,6 +840,8 @@ void Cce140f::process_KILL(int cmd) {
 }
 
 void Cce140f::process_CLOSE(int cmd) {
+    Q_UNUSED(cmd)
+
     QString s = "";
     BYTE arg = data.at(1);
     AddLog(LOG_PRINTER,tr("process_CLOSE qrg=%1").arg(arg));

@@ -11,7 +11,7 @@
      <example brand="SHARP" idpocket="CE-123P" filename="./" name="Sharp ce-123p" image=":/ext/ce-123p.jpg" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-129P" filename="./" name="Sharp ce-129p" image=":/ext/ce-129p.jpg" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-120P" filename="./" name="Sharp ce-120p" image=":/ext/ce-120p.png" connectortype="Sharp_11" conngender="male"/>
-     <example brand="SHARP" idpocket="CE-140P" filename="./" name="Sharp ce-140p" image=":/ext/ce-140p.jpg" connectortype="Sharp_15" conngender="male"/>
+     <example brand="SHARP" idpocket="CE-140P" filename="./" name="Sharp ce-140p" image=":/ext/ce-140p.png" connectortype="Sharp_15" conngender="male"/>
      <example brand="SHARP" idpocket="CE-150" filename="./" name="Sharp ce-150" image=":/ext/ce-150.png" connectortype="Sharp_60" conngender="male"/>
      <example brand="SHARP" idpocket="CE-153" filename="./" name="Sharp ce-153" image=":/pc1500/ce153.png" connectortype="Sharp_60" conngender="male"/>
      <example brand="SHARP" idpocket="CE-162E" filename="./" name="Sharp ce-162e" image=":/pc1500/ce162e.png" connectortype="Sharp_60" conngender="male"/>

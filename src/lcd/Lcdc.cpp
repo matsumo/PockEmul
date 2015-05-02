@@ -61,6 +61,10 @@ Clcdc::~Clcdc() {
 
 }
 
+float Clcdc::getContrast() {
+    return contrast;
+}
+
 void Clcdc::Contrast(int command)
 {
 

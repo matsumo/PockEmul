@@ -55,7 +55,10 @@ public:
 	void disp_one_symb(const char *figure, QColor color, int x, int y);
     static void disp_one_symb(QPainter *painter, const char *figure, QColor color, int x, int y);
 	virtual void disp_symb(void);
-	void Contrast(int command);
+
+    void Contrast(int command);
+    float getContrast();
+
     const char*	GetClassName(){ return("Clcdc");}
     void SetDirtyBuf(WORD);
 	QColor	Color_On;
@@ -84,6 +87,7 @@ public:
     QMutex lock;
 
     void drawPixel(QPainter *painter, float x, float y, QColor color);
+
 protected:
     QColor origColor_Off;
     WORD baseAdr;

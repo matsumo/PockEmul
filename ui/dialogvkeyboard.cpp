@@ -206,12 +206,12 @@ void DialogVKeyboard::senData()
 int DialogVKeyboard::convertKeyCode(int c) {
     int key = 0;
     switch (c) {
-    case K_SHT:	key = Qt::Key_Shift; break;
+    case K_SHT:	key =   Qt::Key_Shift; break;
     case K_CTRL:key = 	Qt::Key_Control; break;
-    case K_RET:	key = Qt::Key_Return; break;
-    case K_DEL:	key = Qt::Key_Delete; break;
-    case K_INS:	key = Qt::Key_Insert; break;
-    case K_QUOTE:key = Qt::Key_QuoteLeft; break;
+    case K_RET:	key =   Qt::Key_Return; break;
+    case K_DEL:	key =   Qt::Key_Delete; break;
+    case K_INS:	key =   Qt::Key_Insert; break;
+    case K_QUOTE:key =  Qt::Key_QuoteLeft; break;
     case K_TAB: key =   Qt::Key_Tab; break;
     case ' ':	key = 	Qt::Key_Space; break;
     case '.':	key = 	Qt::Key_Period; break;
@@ -225,7 +225,7 @@ int DialogVKeyboard::convertKeyCode(int c) {
     case ',':	key = 	Qt::Key_Comma; break;
     case '(':   key =   Qt::Key_ParenLeft; break;
     case ')':   key =   Qt::Key_ParenRight; break;
-    case K_BS:	key = Qt::Key_Backspace; break;
+    case K_BS:	key =   Qt::Key_Backspace; break;
     case '$':	key = 	Qt::Key_Dollar; break;
     case '&':	key = 	Qt::Key_Ampersand; break;
     case K_SML:	key = Qt::Key_CapsLock; break;
@@ -240,8 +240,9 @@ int DialogVKeyboard::convertKeyCode(int c) {
     case K_F5:	key = Qt::Key_F5; break;
     case K_F6:	key = Qt::Key_F6; break;
     case K_F7:	key = Qt::Key_F7; break;
-    case K_CLR:	key = Qt::Key_F8; break;
-    case K_DEF:	key = Qt::Key_F9; break;
+    case K_F8:	key = Qt::Key_F8; break;
+    case K_F9:	key = Qt::Key_F9; break;
+    case K_F0:	key = Qt::Key_F10; break;
     case K_BRK:	key = Qt::Key_F11; break;
     default: key = c;
     }

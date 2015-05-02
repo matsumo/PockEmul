@@ -387,7 +387,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["TI-74"]= TI74;
     objtable["TI-95"]= TI95;
 
-    objtable["National JR-800"]= JR800;
+    objtable["JR-800"]= JR800;
 
     objtable["#BRAND#HEWLETT-PACKARD"]=0;
     objtable["#BRAND#CASIO"]=0;
@@ -1054,7 +1054,8 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
         qWarning()<<"ok2";
     }
     else {
-        QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
+        qWarning()<<"ok2bis";
+        QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
     }
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");

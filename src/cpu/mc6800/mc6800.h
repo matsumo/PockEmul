@@ -23,10 +23,6 @@
 
 #include "cpu.h"
 
-//#include "vm.h"
-//#include "../emu.h"
-//#include "device.h"
-
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
 #define SIG_MC6801_PORT_1	0
 #define SIG_MC6801_PORT_2	1

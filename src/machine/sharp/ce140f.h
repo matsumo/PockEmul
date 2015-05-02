@@ -24,6 +24,7 @@
 
 
 class Cconnector;
+class Cce1600f;
 
 /*
 Boot sector
@@ -102,6 +103,8 @@ public:
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
     Cconnector	*pCONNECTOR_Ext;	qint64 pCONNECTOR_Ext_value;
+
+    Cce1600f *pce1600f;
 
     int ce140f_Mode;
 

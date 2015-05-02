@@ -61,9 +61,9 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     busMem  = 0;
     BackgroundImage = 0;
 
-
     flipping = false;
     currentView = FRONTview;
+
     extensionArray[0] = 0;
     extensionArray[1] = 0;
     extensionArray[2] = 0;
@@ -90,7 +90,9 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     Power = false;
     audioBuff.clear();
 
-    contextMenu=menupocket=menuext=menuconfig=menucpuspeed=menulcd=menulink=menuunlink=menuweblink=menuDocument=0;
+    m_audioOutput = 0;
+
+    contextMenu=menupocket=menuext=menuconfig=menucpuspeed=menuAudioVolume=menulcd=menulink=menuunlink=menuweblink=menuDocument=0;
     ioFreq = 0;
     off =true;
     closed = false;
@@ -133,16 +135,16 @@ CPObject::~CPObject()
 
 void CPObject::serialize(QXmlStreamWriter *xml,int id) {
     xml->writeStartElement("object");
-    xml->writeAttribute("name", getName());
-    xml->writeAttribute("id", QString("%1").arg(id));
-    xml->writeAttribute("front",Front?"true":"false");
-    xml->writeAttribute("power",Power?"true":"false");
+        xml->writeAttribute("name", getName());
+        xml->writeAttribute("id", QString("%1").arg(id));
+        xml->writeAttribute("front",Front?"true":"false");
+        xml->writeAttribute("power",Power?"true":"false");
         xml->writeStartElement("position");
-        xml->writeAttribute("x", QString("%1").arg(posx()));
-        xml->writeAttribute("y", QString("%1").arg(posy()));
-        xml->writeAttribute("width", QString("%1").arg(getDX()));
-        xml->writeAttribute("height", QString("%1").arg(getDY()));
-        xml->writeAttribute("rotation", QString("%1").arg(getRotation()));
+            xml->writeAttribute("x", QString("%1").arg(posx()));
+            xml->writeAttribute("y", QString("%1").arg(posy()));
+            xml->writeAttribute("width", QString("%1").arg(getDX()));
+            xml->writeAttribute("height", QString("%1").arg(getDY()));
+            xml->writeAttribute("rotation", QString("%1").arg(getRotation()));
         xml->writeEndElement(); // position
         this->SaveSession_File(xml);
     xml->writeEndElement(); // object
@@ -447,6 +449,7 @@ int CPObject::initsound()
     m_audioOutput->setBufferSize(1000);
 
     m_output = m_audioOutput->start();
+    m_audioOutput->setVolume(0.25);
 //    int p = m_audioOutput->periodSize();
 //    qWarning()<<p;
 #endif
@@ -498,7 +501,7 @@ void CPObject::fillSoundBuffer(BYTE val)
             while ((pTIMER->state - fillSoundBuffer_old_state) >= wait)
             {
                 audioBuff.append(val);
-
+//qWarning()<<val;
                 fillSoundBuffer_old_state += wait;
                 //delta_state -= wait;
             }
@@ -520,7 +523,7 @@ void CPObject::fillSoundBuffer(BYTE val)
 #if 1
             if((m_audioOutput->bufferSize()-m_audioOutput->bytesFree()) < ps) {
                 AddLog(LOG_TEMP,tr("sound1 size:%1    free:%2   diff:%3   ps:%4").arg(m_audioOutput->bufferSize()).arg(m_audioOutput->bytesFree()).arg(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()).arg(ps));
-                QByteArray fill(ps-(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()),0);
+                QByteArray fill(2*ps-(m_audioOutput->bufferSize()-m_audioOutput->bytesFree()),0);
                 m_output->write(fill.constData(),fill.size());
             }
 #endif
@@ -1263,6 +1266,39 @@ void CPObject::BuildContextMenu(QMenu * menu)
         connect(menulcd, SIGNAL(triggered(QAction*)), this, SLOT(slotContrast(QAction*)));
 
     }
+
+    if (m_audioOutput )
+    {
+        menuAudioVolume = menuconfig->addMenu(tr("Sound volume"));
+        QAction *_a;
+        _a = new QAction(tr("Mute"),this);
+        _a->setCheckable(true);
+        _a->setChecked(m_audioOutput->volume()==0);
+        menuAudioVolume->addAction(_a);
+
+        _a = new QAction(tr("25%"),this);
+        _a->setCheckable(true);
+        _a->setChecked(m_audioOutput->volume()==0.25);
+        menuAudioVolume->addAction(_a);
+
+        _a = new QAction(tr("50%"),this);
+        _a->setCheckable(true);
+        _a->setChecked(m_audioOutput->volume()==0.5);
+        menuAudioVolume->addAction(_a);
+
+        _a = new QAction(tr("75%"),this);
+        _a->setCheckable(true);
+        _a->setChecked(m_audioOutput->volume()==0.75);
+        menuAudioVolume->addAction(_a);
+
+        _a = new QAction(tr("100%"),this);
+        _a->setCheckable(true);
+        _a->setChecked(m_audioOutput->volume()==1);
+        menuAudioVolume->addAction(_a);
+
+        connect(menuAudioVolume, SIGNAL(triggered(QAction*)), this, SLOT(slotAudioVolume(QAction*)));
+    }
+
     if (pKEYB) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
@@ -1484,6 +1520,14 @@ void CPObject::slotCpu(QAction* action) {
     if (action->text() == tr("300%")) setCpu(3);
     if (action->text() == tr("500%")) setCpu(5);
     if (action->text() == tr("Maximum")) setCpu(1000);
+}
+
+void CPObject::slotAudioVolume(QAction * action) {
+    if (action->text() == tr("Mute")) m_audioOutput->setVolume(0);
+    if (action->text() == tr("25%")) m_audioOutput->setVolume(0.25);
+    if (action->text() == tr("50%")) m_audioOutput->setVolume(0.5);
+    if (action->text() == tr("75%")) m_audioOutput->setVolume(0.75);
+    if (action->text() == tr("100%")) m_audioOutput->setVolume(1);
 }
 
 void CPObject::slotContrast(QAction * action) {
