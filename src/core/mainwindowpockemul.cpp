@@ -912,6 +912,7 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                 while (xml->readNextStartElement()) {
                     QString eltname = xml->name().toString();
                     CPObject * locPC;
+                    bool _Power = false;
                     if (eltname == "object") {
                         QString name = xml->attributes().value("name").toString();
                         locPC = LoadPocket(name);
@@ -922,10 +923,13 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                         map.insert(id,locPC);
                         locPC->Front = (xml->attributes().value("front")=="true") ?true:false;
 
-                        locPC->Power = (xml->attributes().value("power")=="true") ?true:false;
-                        if (locPC->Power) {
+                        _Power = (xml->attributes().value("power")=="true") ?true:false;
+                        if (_Power) {
                             toPowerOn.append(locPC);
                         }
+
+                        bool _Visible = (xml->attributes().value("visible")=="false") ? false : true;
+                        if (!_Visible) locPC->hide();
 
                         while (xml->readNextStartElement()) {
                             QString eltname = xml->name().toString();
@@ -958,6 +962,7 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                             else
                             if (eltname == "session") {
                                 locPC->LoadSession_File(xml);
+                                locPC->Power = _Power;
                                 xml->skipCurrentElement();
                             }
                             else

@@ -139,6 +139,7 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
         xml->writeAttribute("id", QString("%1").arg(id));
         xml->writeAttribute("front",Front?"true":"false");
         xml->writeAttribute("power",Power?"true":"false");
+        xml->writeAttribute("visible",isVisible()?"true":"false");
         xml->writeStartElement("position");
             xml->writeAttribute("x", QString("%1").arg(posx()));
             xml->writeAttribute("y", QString("%1").arg(posy()));
