@@ -76,6 +76,7 @@ extern QQuickWidget* view;
 extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
+extern QString workDir;
 
 #define NBFRAMEPERSEC		30
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
@@ -1060,7 +1061,7 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     }
     else {
         qWarning()<<"ok2bis";
-        QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+        QPixmap::grabWidget(centralwidget).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
     }
 #else
     QPixmap::grabWidget(this).toImage().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "PNG");
@@ -1143,10 +1144,13 @@ QString MainWindowPockemul::saveassession()
     saveassession(xml);
     //MSG_ERROR(s)
 
+    QDir dir;
+    dir.mkpath(workDir+"/sessions/");
+    dir.setPath(workDir+"/sessions/");
     QString fn = QFileDialog::getSaveFileName(
                 mainwindow,
                 tr("Choose a filename to save session"),
-                ".",
+                dir.path(),
                 tr("Session File (*.pml)"));
 
 

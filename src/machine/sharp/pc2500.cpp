@@ -185,31 +185,19 @@ void	Cpc2500::Set_PortF(BYTE data)
 
 BYTE Cpc2500::Get_PC(UINT32 adr)
 {
-#if 1
-    //Chk_Adr_R(&adr,bREAD);
     if ( (adr >= 0x8000) && (adr<=0xFFFF) && (RomBank & 0x02) ) {
         adr += 0x8000;
     }
-
     return(mem[adr]);
-#else
-    return Get_8(adr);
-#endif
 }
 
 WORD Cpc2500::Get_16rPC(UINT32 adr)
 {
-//    return Get_16r(adr);
     UINT32	a;
-
     if ( (adr >= 0x8000) && (adr<=0xFFFF) && (RomBank & 0x02) ) {
         adr += 0x8000;
     }
-
     a=adr+1;
-    //Chk_Adr_R(&adr,bREAD);
-    //Chk_Adr_R(&a,bREAD);
-    //if (pCPU->fp_log) fprintf(pCPU->fp_log,"XXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
     return((mem[adr]<<8)+mem[a]);
 }
 

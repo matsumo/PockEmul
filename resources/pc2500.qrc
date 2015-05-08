@@ -3,8 +3,6 @@
         <file>pc2500/cpu-2500.bin</file>
         <file>pc2500/r1-2500.bin</file>
         <file>pc2500/r2-2500.bin</file>
-        <file>pc2500/2500lcd.png</file>
-        <file>pc2500/2500symb.png</file>
         <file>pc2500/pc2500.png</file>
     </qresource>
 </RCC>

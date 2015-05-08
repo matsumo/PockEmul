@@ -53,6 +53,7 @@ LaunchButtonWidget* exitButton;
 
 bool soundEnabled=true;
 bool hiRes=true;
+bool syncEnabled=true;
 
 
 
@@ -220,9 +221,12 @@ int main(int argc, char *argv[])
     v_pos += v_inter;
     save->setToolTip("Save the current session.");
 
+    QDir dir;
+    dir.mkpath(workDir+"/sessions/");
+    dir.setPath(workDir+"/sessions/");
     load = new LaunchButtonWidget(mainwindow->centralwidget,
                                                       LaunchButtonWidget::FileBrowser,
-                                                      QStringList()<<"."<<"*.pml",
+                                                      QStringList()<<dir.path()<<"*.pml",
                                                       ":/core/load.png");
 //    mainwindow->connect(load,SIGNAL(clicked()),mainwindow,SLOT(opensession()));
     load->setGeometry(0,v_pos,iconSize,iconSize);

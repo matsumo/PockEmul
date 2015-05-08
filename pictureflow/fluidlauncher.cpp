@@ -240,7 +240,7 @@ qWarning()<<"After PopulatePictureFlow";
      }
 
      if (fileInfo.completeSuffix()=="pml") {
-         QFile file(fileInfo.fileName());
+         QFile file(fileInfo.filePath());
 
          file.open(QIODevice::ReadOnly);
          QXmlStreamReader xml;
@@ -271,12 +271,13 @@ qWarning()<<"After PopulatePictureFlow";
      QString path = Config.at(0);
      QString filter = Config.at(1);
      dir.cd(path);
-     //     QMessageBox::information(mainwindow,"new path",dir.absolutePath(),QMessageBox::Ok);
+//          QMessageBox::information(mainwindow,"new path",dir.absolutePath(),QMessageBox::Ok);
      dir.setFilter(QDir::Files | QDir::NoSymLinks | QDir::AllDirs | QDir::NoDot);
      dir.setSorting(QDir::DirsFirst | QDir::Name | QDir::IgnoreCase);
 
      QFileInfoList list = dir.entryInfoList(QStringList() << filter);
 
+//     qWarning()<<"List:"<<list;
      pictureFlowWidget->setSlideCount(list.count());
 
      for (int i = 0; i < list.size(); ++i) {
@@ -298,11 +299,13 @@ qWarning()<<"After PopulatePictureFlow";
                      list.at(i).fileName(),
                      list.at(i).fileName(),
                      list.at(i).fileName(),
-                     "",
-                     sl);
+                     list.at(i).filePath(),
+                     sl,
+                     list.at(i).filePath());
          demoList.append(newDemo);
          pictureFlowWidget->setSlide(i, *img);
          pictureFlowWidget->setSlideCaption(i, list.at(i).fileName());
+         pictureFlowWidget->setSlideFilePath(i, list.at(i).filePath());
          delete img;
      }
      pictureFlowWidget->setCurrentSlide(list.count()/2);
@@ -423,11 +426,12 @@ Vibrate();
          }
          else {
              if (Config.at(1)=="*.pml") {
-                 mainwindow->opensession(pictureFlowWidget->getSlideCaption(index));
+                 qWarning()<<"open:"<<pictureFlowWidget->getSlideDescription(index);
+                 mainwindow->opensession(pictureFlowWidget->getSlideFilePath(index));
              }
              if (Config.at(1)=="*.pdf") {
 //                 qWarning()<<"open pdf:"<<Config.at(0)+"/"+pictureFlowWidget->getSlideCaption(index);
-                 QUrl url = QUrl::fromLocalFile(Config.at(0)+"/"+pictureFlowWidget->getSlideCaption(index));
+                 QUrl url = QUrl::fromLocalFile(Config.at(0)+"/"+pictureFlowWidget->getSlideDescription(index));
                  //QDesktopServices::openUrl(url);
                  m_openURL(url);
              }

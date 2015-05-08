@@ -376,6 +376,7 @@ public:
 
   QVector<QString> captions;
   QVector<QString> descriptions;
+  QVector<QString> filePath;
 
 private:
   PictureFlow* widget;
@@ -445,6 +446,7 @@ void PictureFlowPrivate::setSlideCount(int count)
   slideImages.resize(count);
   captions.resize(count);
   descriptions.resize(count);
+  filePath.resize(count);
   surfaceCache.clear();
   resetSlides();
   triggerRender();
@@ -1245,6 +1247,16 @@ void PictureFlow::setSlideDescription(int index, QString desc)
 QString PictureFlow::getSlideDescription(int index)
 {
   return d->descriptions[index];
+}
+
+
+void PictureFlow::setSlideFilePath(int index, QString desc)
+{
+  d->filePath[index] = desc;
+}
+QString PictureFlow::getSlideFilePath(int index)
+{
+  return d->filePath[index];
 }
 
 void PictureFlow::setSlideCaption(int index, QString caption)

@@ -156,6 +156,9 @@
 
    virtual QString getSlideDescription(int index);
    virtual void setSlideDescription(int index, QString desc);
+
+   virtual QString getSlideFilePath(int index);
+   virtual void setSlideFilePath(int index, QString desc);
    /*!
      Sets a pixmap for specified slide. If the slide already exists,
      it will be replaced.

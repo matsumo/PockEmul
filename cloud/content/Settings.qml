@@ -33,6 +33,7 @@ Rectangle {
                 rootCloud.user_login(usernameFld.inputText,passwordFld.inputText);
             }
         }
+        SettingsDelegate { id: syncEnabled; name: "syncEnabled"; labelString: "Enable file synchronization"; type: "checkbox"; defaultText: "on"}
 
         SettingsDelegate { id: labelAppSettings; name: "labelAppSettings"; labelString: "Application Settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: soundEnabled; name: "soundEnabled"; labelString: "Enable sound"; type: "checkbox"; defaultText: "on"}

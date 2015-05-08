@@ -50,6 +50,7 @@ extern MainWindowPockemul *mainwindow;
 extern CrenderView* view;
 extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
+extern bool syncEnabled;
 extern bool soundEnabled;
 extern bool hiRes;
 extern QList<CPObject *> listpPObject;
@@ -336,6 +337,7 @@ void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
     settings.setValue(objectName, QVariant(inputValue));
 //    qWarning()<<"saveValue("<<objectName<<","<<inputValue<<") in "<<workDir+"config.ini";
 
+    if (objectName == "syncEnabled") syncEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "soundEnabled") soundEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "hiRes") hiRes =  (inputValue=="on") ? true : false;
 }
