@@ -136,23 +136,13 @@ void Cpc1360::PreFlip(Direction dir, View targetView)
     manageCardVisibility();
 }
 
-void Cpc1360::PostFlip()
-{
-    manageCardVisibility();
-}
+
 
 void Cpc1360::manageCardVisibility() {
+    Cpc13XX::manageCardVisibility();
+
     if (currentView == BACKview) {
         // show memory cards
-        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
-        if (S1PC){
-            if (backdoorS1Open) {
-                S1PC->showObject();
-            }
-            else {
-                S1PC->hideObject();
-            }
-        }
         CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
         if (S2PC) {
             if (backdoorS2Open) {
@@ -577,13 +567,11 @@ void Cpc1360::animateBackDoorS2(bool _open) {
 
 }
 
-void Cpc1360::setbackdoorS1Angle(int value) {
-    this->m_backdoorS1Angle = value;
-}
-
 void Cpc1360::setbackdoorS2Angle(int value) {
     this->m_backdoorS2Angle = value;
 }
+
+
 
 void Cpc1360::endbackdoorAnimation()
 {

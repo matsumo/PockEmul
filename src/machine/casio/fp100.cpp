@@ -1,4 +1,5 @@
 //TODO: Key management
+// FIXME: Image ratio
 
 #include <QPainter>
 
@@ -76,6 +77,8 @@ bool Cfp100::init(void) {
     WatchPoint.add(&pCONNECTOR_value,64,36,this,"// 36pins connector",lbl);
 
     paperWidget->hide();
+
+    setPaperPos(QRect(154* internalImageRatio,26* internalImageRatio,731* internalImageRatio,300* internalImageRatio));
 
     return true;
 }
@@ -204,6 +207,8 @@ bool Cfp100::InitDisplay()
 {
     Cce515p::InitDisplay();
     UpdateFinalImage();
+
+    return true;
 }
 
 void Cfp100::paintEvent(QPaintEvent *event)

@@ -16,6 +16,7 @@ class Cbus;
 
 class Cpc13XX:public CpcXXXX{						//PC1350 emulator main class
 Q_OBJECT
+        Q_PROPERTY(int backdoorS1angle READ backdoorS1Angle WRITE setbackdoorS1Angle)
 public:
     virtual const char*	GetClassName(){ return("Cpc13XX");}
 
@@ -39,8 +40,20 @@ public:
     Cpc13XX(CPObject *parent = 0);
 
     virtual ~Cpc13XX();
-private:
+    virtual void manageCardVisibility();
+    virtual void PostFlip();
+    void animateBackDoorS1(bool _open);
+public slots:
+    void endbackdoorAnimation();
+    void linkObject(QString item, CPObject *pPC);
+protected:
+
+    int currentSlot;
     BYTE cnt;
+    void setbackdoorS1Angle(int value);
+    int backdoorS1Angle() const { return m_backdoorS1Angle; }
+    int m_backdoorS1Angle;
+
 };
 
 class Cpc1350:public Cpc13XX{						//PC1350 emulator main class

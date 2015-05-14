@@ -20,6 +20,7 @@
 #include "dialoganalog.h"
 #include "bus.h"
 #include "watchpoint.h"
+#include "clink.h"
 
 Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
@@ -343,6 +344,11 @@ if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
 	if ( (*d>=0x4000) && (*d<=0x5FFF) )	{ return( EXTENSION_CE201M_CHECK | EXTENSION_CE202M_CHECK | EXTENSION_CE203M_CHECK); }	// 32K
 	if ( (*d>=0x6000) && (*d<=0x7FFF) ) return(1);																				// Internal RAM area(6000-8000)
 
+//    if ( (*d>=0x2000) && (*d<=0x5FFF)) {
+//        UINT32 _addr = *d &0xDFFF;
+//        writeBus(busS1 ,&_addr,data);
+//    }
+
 	return(0);
 
 }
@@ -353,8 +359,88 @@ bool Cpc1350::Chk_Adr_R(UINT32 *d,UINT32 *data) {
 if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]=%02x (%c)\n",*d,mem[*d],mem[*d]);
     }
+
+//    UINT32 _addr = *d &0x7FFF;
+//    readBus(busS1 ,&_addr,data);
+
     return(1);
 }
 
+void Cpc13XX::PostFlip()
+{
+    manageCardVisibility();
+}
+
+void Cpc13XX::manageCardVisibility() {
+    if (currentView == BACKview) {
+        // show memory cards
+        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+        if (S1PC){
+            if (backdoorS1Open) {
+                S1PC->showObject();
+            }
+            else {
+                S1PC->hideObject();
+            }
+        }
+    }
+}
+
+void Cpc13XX::animateBackDoorS1(bool _open) {
+    qWarning()<<"ANIMATE S1";
+    if (backdoorS1Open == _open) return;
+
+    backdoorS1Open = _open;
 
 
+    QPropertyAnimation *animation1 = new QPropertyAnimation(this, "backdoorS1angle");
+     animation1->setDuration(1500);
+     if (backdoorS1Open) {
+         animation1->setStartValue(m_backdoorS1Angle);
+         animation1->setEndValue(70);
+     }
+     else {
+         manageCardVisibility();
+         animation1->setStartValue(m_backdoorS1Angle);
+         animation1->setEndValue(0);
+     }
+
+     QParallelAnimationGroup *group = new QParallelAnimationGroup;
+     group->addAnimation(animation1);
+
+     connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(RefreshDisplay()));
+     connect(animation1,SIGNAL(finished()),this,SLOT(endbackdoorAnimation()));
+     backdoorFlipping = true;
+     group->start();
+
+}
+
+void Cpc13XX::endbackdoorAnimation()
+{
+    backdoorFlipping = false;
+    manageCardVisibility();
+}
+
+void Cpc13XX::linkObject(QString item,CPObject *pPC)
+{
+    qWarning()<<"currentslot:"<<currentSlot;
+    Cconnector *_conn = 0;
+    QRect _rect;
+    if (currentSlot==1) {
+        _conn = pS1CONNECTOR;
+        _rect = pKEYB->getKey(0x241).Rect;
+    }
+
+    mainwindow->pdirectLink->addLink(_conn,pPC->ConnList.at(0),true);
+    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom/100);
+    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom/100);
+    pPC->raise();
+    if (currentSlot==1) {
+        pPC->setRotation(180);
+    }
+    emit stackPosChanged();
+}
+
+void Cpc13XX::setbackdoorS1Angle(int value) {
+    this->m_backdoorS1Angle = value;
+}

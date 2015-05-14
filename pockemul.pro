@@ -458,7 +458,8 @@ HEADERS *= \
     src/core/pobjectInterface.h \
     src/machine/sharp/cemem.h \
     src/cpu/hd44102.h \
-    src/lcd/lcdc_jr800.h
+    src/lcd/lcdc_jr800.h \
+    src/machine/extslot.h
 
 
 
@@ -742,7 +743,8 @@ SOURCES *=  \
     src/cpu/sc62015d.cpp \
     src/machine/sharp/cemem.cpp \
     src/cpu/hd44102.cpp \
-    src/lcd/lcdc_jr800.cpp
+    src/lcd/lcdc_jr800.cpp \
+    src/machine/extslot.cpp
 
 
 

@@ -165,6 +165,11 @@
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-e500s_e.html"/>
         <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PCE500_OM_GB.pdf"/>
     </model>
+    <model value="pc2001">
+        <url desc="Pocket Museum" link="http://pocket.free.fr/html/nec/pc-2001_e.html"/>
+        <document desc="User Guide (jp)" link="http://pockemul.free.fr/Documents/userguide/PC2001/PC2001_User_Guide.pdf"/>
+        <document desc="BASIC Reference (jp)" link="http://pockemul.free.fr/Documents/userguide/PC2001/PC2001_BASIC.pdf"/>
+    </model>
     <model value="md100">
         <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=671"/>
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/md-100_e.html"/>

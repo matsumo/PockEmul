@@ -33,7 +33,6 @@ public:
     virtual bool	run(void);
 
     virtual void PreFlip(Direction dir,View targetView);
-    virtual void PostFlip();
 
 
     virtual void TurnON(void);
@@ -50,19 +49,18 @@ public:
     virtual void ComputeKey(KEYEVENT ke, int scancode);
     virtual bool UpdateFinalImage();
     virtual bool InitDisplay(void);
-    void manageCardVisibility();
+    virtual void manageCardVisibility();
 public slots:
     void linkObject(QString item, CPObject *pPC);
     void endbackdoorAnimation(void);
 private:
-    int currentSlot;
     QImage *backDoorImage;
     QImage BackImageBackup;
-    void setbackdoorS1Angle(int value);
-    int backdoorS1Angle() const { return m_backdoorS1Angle; }
+
+
     void setbackdoorS2Angle(int value);
     int backdoorS2Angle() const { return m_backdoorS2Angle; }
-    int m_backdoorS1Angle;
+
     int m_backdoorS2Angle;
 
 

@@ -12,6 +12,7 @@
 #include "watchpoint.h"
 #include "Keyb1280.h"
 #include "clink.h"
+#include "bus.h"
 
 Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
 {								//[constructor]
@@ -183,6 +184,11 @@ bool Cpc1280::Chk_Adr(UINT32 *d,UINT32 data)
 
     }
 
+    //    if ( (*d>=0x8000) && (*d<=0xFFFF)) {
+    //        *d += (RamBank * 0x8000);
+    //        UINT32 _addr = *d &0xDFFF;
+    //        writeBus(busS1 ,&_addr,data);
+
     return(0);
 }
 
@@ -195,6 +201,10 @@ bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
     if ( (*d>=0x4000) && (*d<=0x7FFF) )	{ *d += 0xC000 + ( RomBank * 0x4000 ); return(1); }	// Manage ROM Bank
     if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]\n",*d);
     if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ *d += 0x28000 + ( RamBank * 0x8000 ); return(1);}	// Manage ram bank
+
+
+    //    UINT32 _addr = *d &0x7FFF;
+    //    readBus(busS1 ,&_addr,data);
 
     return(1);
 }
@@ -223,6 +233,12 @@ bool Cpc1280::Set_Connector(Cbus *_bus)
 bool Cpc1280::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+    if (_bus == busS1) {
+        busS1->fromUInt64(pS1CONNECTOR->Get_values());
+        busS1->setEnable(false);
+        return true;
+    }
 
     Set_Port_Bit(PORT_B,1,pCONNECTOR->Get_pin(PIN_SEL1));	// DIN	:	IB1
     Set_Port_Bit(PORT_B,2,pCONNECTOR->Get_pin(PIN_SEL2));	// DIN	:	IB2
@@ -396,7 +412,7 @@ void Cpc1280::endAnimation()
 {
     flipping = false;
     if (closed) {
-        setGeometry(posx(),posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*RATIO*mainwindow->zoom/100.0);
+        setGeometry(posx(),posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
     }
     else {
         changeGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);

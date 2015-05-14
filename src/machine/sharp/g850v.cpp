@@ -1,5 +1,5 @@
 //TODO: PIO output
-
+#include <QDebug>
 
 #include "common.h"
 
@@ -118,6 +118,8 @@ bool Cg850v::init()
 
 bool Cg850v::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 #if 0
     switch(pin11If) {
     case PIN11IF_3IO:
@@ -135,6 +137,8 @@ bool Cg850v::Set_Connector(Cbus *_bus)
 
 bool Cg850v::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     pin11If = pCONNECTOR->Get_values() >> 3;
 
     return true;
@@ -377,6 +381,7 @@ UINT8 Cg850v::out(UINT8 address, UINT8 value)
     case 0x1b:
         ramBank = value & 0x04;
         AddLog(LOG_CONSOLE,tr("RAM bank:%1\n").arg(ramBank));
+        qWarning()<<"RAM BANK"<<ramBank;
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"RAM BANK SWITCH: %i\n",ramBank);
         return 0;
     case 0x1c:
