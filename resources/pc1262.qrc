@@ -5,5 +5,6 @@
         <file>pc1262/1262lcd.png</file>
         <file>pc1262/1262symb.png</file>
         <file>pc1262/pc1262.png</file>
+        <file>pc1262/PC1262Back.png</file>
     </qresource>
 </RCC>

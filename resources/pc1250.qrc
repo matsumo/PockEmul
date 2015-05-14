@@ -14,5 +14,8 @@
         <file>pc1250/powerRSV.png</file>
         <file>pc1250/powerRUN.png</file>
         <file>pc1250/125xLeft.png</file>
+        <file>pc1250/PC1250Top.png</file>
+        <file>pc1250/PC1250Right.png</file>
+        <file>pc1250/PC1250Bottom.png</file>
     </qresource>
 </RCC>

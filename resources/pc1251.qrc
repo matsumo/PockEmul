@@ -9,5 +9,6 @@
         <file>pc1251/bas-1253.rom</file>
         <file>pc1251/sc61860A04.rom</file>
         <file>pc1251/pc1253prom.png</file>
+        <file>pc1251/PC1251Back.png</file>
     </qresource>
 </RCC>

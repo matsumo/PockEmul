@@ -18,6 +18,8 @@ Cpc1251::Cpc1251(CPObject *parent)	: Cpc1250(parent)
 
     BackGroundFname	= P_RES(":/pc1251/pc1251.png");
 
+    BackFname = P_RES(":/pc1251/PC1251Back.png");
+
     memsize			= 0x10000;
 
     SlotList.clear();

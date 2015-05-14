@@ -94,6 +94,7 @@ Cpc1262::Cpc1262(CPObject *parent)	: Cpc1261(parent)
     Initial_Session_Fname ="pc1262.pkm";
 
     BackGroundFname	= P_RES(":/pc1262/pc1262.png");
+    BackFname = P_RES(":/pc1262/PC1262Back.png");
 
     memsize			= 0x10000;
 

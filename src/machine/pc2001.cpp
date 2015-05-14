@@ -15,6 +15,9 @@
 #include "watchpoint.h"
 
 // TODO: Keyboard map is not complete
+//          Power switch paint
+//      TIMER
+//      SERIAL INTERFACE
 
 /*
 
@@ -142,6 +145,9 @@ bool Cpc2001::run() {
     if ( (data > 0) && (data != 0xff))
     {
 
+//        if (upd7907->upd7907stat.imem[0x00] & 0x08) {
+//            qWarning()<<"TIMER";
+//        }
         switch (upd7907->upd7907stat.imem[0x00]>>6) {
         case 0x00:   // LCD transmission
         {
@@ -205,6 +211,7 @@ UINT8 Cpc2001::out(UINT8 Port, UINT8 x)
     Q_UNUSED(Port)
     Q_UNUSED(x)
 
+    qWarning()<<"Write port :"<<Port<<x;
     return 0;
 }
 
