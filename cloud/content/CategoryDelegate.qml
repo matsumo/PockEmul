@@ -49,6 +49,7 @@ Item {
 
     Text {
         id:textlabel
+        renderType: Text.NativeRendering
         text: name+" ("+counter+")"
         color: delegate.ListView.isCurrentItem ? "white" : "black"
         font { family: "Helvetica"; pointSize: 14; bold: false }

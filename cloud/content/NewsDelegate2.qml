@@ -119,6 +119,7 @@ Item {
             Text {
                 id: usernameText
                 text: username;
+                renderType: Text.NativeRendering
                 //            width: parent.width;
                 wrapMode: Text.WordWrap
                 font { bold: false; family: "Helvetica"; pointSize: 14 }

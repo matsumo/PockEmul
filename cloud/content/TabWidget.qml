@@ -85,6 +85,7 @@ Item {
                     text: stack.children[index].title
                     elide: Text.ElideRight
                     font.bold: tabWidget.current == index
+                    renderType: Text.NativeRendering
                 }
                 MouseArea {
                     anchors.fill: parent

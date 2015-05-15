@@ -23,6 +23,7 @@ Rectangle {
 
     Text {
         id: fontstyle
+        renderType: Text.NativeRendering
         text: ""
         visible: false
         font.pointSize: 16
@@ -34,6 +35,7 @@ Rectangle {
         spacing: 10
         Text {
             id: label
+            renderType: Text.NativeRendering
             text: "Label"
             font: fontstyle.font
             anchors.verticalCenter: parent.verticalCenter

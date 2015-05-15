@@ -1546,6 +1546,7 @@ void MainWindowPockemul::initCommandLine(void) {
        cmdline->addOption('r',"run","Run a pocket");
        cmdline->addSwitch('g',"nogl","Do not use openGl");
        cmdline->addSwitch('v', "version", "show current version");
+       cmdline->addSwitch('w', "warning", "show warning messages");
 
 
 
@@ -1581,6 +1582,9 @@ void MainWindowPockemul::switchFound(const QString & name)
       bookcase->show();
       exitButton->show();
 
+  }
+  if (name == "warning") {
+      qInstallMessageHandler(0);
   }
 }
 

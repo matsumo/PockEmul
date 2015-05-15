@@ -46,6 +46,7 @@ Rectangle {
                     text: name+"("+myitem.z+")"
                     font.pointSize: 16
                     color: wrapper.PathView.isCurrentItem ? "red" : "black"
+                    renderType: Text.NativeRendering
                 }
             }
         }

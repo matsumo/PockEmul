@@ -68,6 +68,7 @@ FocusScope {
         text: "Type something..."
         color: "gray"
         font.italic: true
+        renderType: Text.NativeRendering
     }
 
     MouseArea { 

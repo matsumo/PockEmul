@@ -49,7 +49,7 @@ Rectangle {
 
         TextEdit {
             id: edit
-
+            renderType: Text.NativeRendering
             width: rootEdit.width-10
 //            height: root.height-10
 //            anchors.centerIn: root

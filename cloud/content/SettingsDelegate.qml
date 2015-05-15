@@ -52,6 +52,7 @@ Item {
             font { family: "Helvetica"; pointSize: 16; bold: false }
             anchors.verticalCenter: parent.verticalCenter
             visible: ((type == "text") | (type == "checkbox"))
+            renderType: Text.NativeRendering
         }
 
         TextButton {

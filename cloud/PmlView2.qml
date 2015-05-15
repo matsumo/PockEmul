@@ -359,6 +359,7 @@ Rectangle {
             width: categories.width; height: expandcollapsebutton.height
             Text {
                 id: expandcollapsebutton
+                renderType: Text.NativeRendering
                 text: "Refresh"
                 font { family: "Helvetica"; pointSize: 16; bold: false }
                 anchors {

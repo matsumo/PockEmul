@@ -80,6 +80,7 @@ Rectangle {
 		anchors.bottomMargin: 4
 		color: "white"
 		text: tabsModel.children[index].name
+        renderType: Text.NativeRendering
 	    }
 
         MouseArea {

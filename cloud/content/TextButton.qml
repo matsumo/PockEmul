@@ -25,6 +25,7 @@ Rectangle {
         id: label
         color: rootCloud.textButtonColor
         anchors.centerIn: parent
+        renderType: Text.NativeRendering
     }
 
     states: State {

@@ -133,6 +133,7 @@ Rectangle {
 
     Text {
         id: messageText
+        renderType: Text.NativeRendering
         width: parent.width
 //        anchors.margins: 10
         text: txt
