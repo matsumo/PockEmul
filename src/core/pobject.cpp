@@ -76,6 +76,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 
     memsize			= 0;
     InitMemValue	= 0x00;
+    mem             = 0;
 
     Front = true;
     fullscreenMode = false;
@@ -112,6 +113,7 @@ CPObject::~CPObject()
 {
     if (dialogdasm) delete dialogdasm;
 
+    if (mem) free(mem);
 
     //FIXME: When extension are connected , they share the timer with the host.
     //delete pTIMER;
@@ -1555,19 +1557,16 @@ void CPObject::slotPower()
 void CPObject::slotResetNow() {
     resetAt = pTIMER->state;
 
-//    Reset();
 }
 
 void CPObject::slotReset() {
     resetAt = (pTIMER->CPUSpeed * getfrequency())*5 + pTIMER->state;
 
-//    Reset();
 }
 
 void CPObject::slotHardReset() {
     hardresetAt = (pTIMER->CPUSpeed * getfrequency())*5 + pTIMER->state;
 
-//    Reset();
 }
 
 void CPObject::slotLoadSession()

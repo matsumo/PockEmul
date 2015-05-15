@@ -22,7 +22,7 @@
 	\file qsnippetmanager.h
 	\brief Definition of the QSnippetManager class
 */
-
+#include <QObject>
 #include <QStringList>
 
 class QSnippet;
