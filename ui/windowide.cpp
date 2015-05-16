@@ -70,6 +70,10 @@ WindowIDE::WindowIDE(QWidget *parent) :
     this->setAttribute(Qt::WA_DeleteOnClose,true);
 
 //    ui->verticalLayout_2->addWidget(new QEditConfig());
+
+    devDir.mkpath(workDir+"/dev/");
+    devDir.setPath(workDir+"/dev/");
+
     setupEditor();
 
     connect(ui->actionCompile, SIGNAL(triggered()), this, SLOT(compile()));
@@ -91,6 +95,7 @@ WindowIDE::WindowIDE(QWidget *parent) :
     connect(ui->pbRemoveMB,SIGNAL(clicked()),this,SLOT(RemoveModelBuilder()));
 
     connect(mainwindow,SIGNAL(DestroySignal(CPObject*)),this,SLOT(DestroySlot(CPObject*)));
+
 
     loadConfig();
 
@@ -257,6 +262,7 @@ void WindowIDE::compileINTERNAL() {
     QString sourcefname = locEditorWidget->m_editControl->editor()->fileName();
     QString source = "#include <internal.h>\r\n"+locEditorWidget->m_editControl->editor()->text();
 
+    QString _path = QFileInfo(sourcefname).absolutePath();
     QFileInfo fInfo(sourcefname);
 
     if (locEditorWidget->m_editControl->editor()->languageDefinition()->language()=="C++") {
@@ -269,9 +275,9 @@ void WindowIDE::compileINTERNAL() {
 #if 1
         Clcc *lcc = new Clcc(&mapPP,&mapASM);
         lcc->run();
-        createEditorTab(fInfo.baseName()+".log",mapASM["LOG"]);
+        createEditorTab(_path+"/"+fInfo.baseName()+".log",mapASM["LOG"]);
 
-        createEditorTab(fInfo.baseName()+".asm",mapASM[fInfo.baseName()+".asm"]);
+        createEditorTab(_path+"/"+fInfo.baseName()+".asm",mapASM[fInfo.baseName()+".asm"]);
 
         createOutputTab("C Compiler :"+fInfo.fileName(),mapASM["output"]);
 #endif
@@ -288,7 +294,7 @@ void WindowIDE::compileINTERNAL() {
             pasm->savefile("BIN");
             pasm->savefile("HEX");
 
-            createEditorTab(fInfo.baseName()+".bas",mapLM["BAS"]);
+            createEditorTab(_path+"/"+fInfo.baseName()+".bas",mapLM["BAS"]);
 
             createOutputTab("ASM Compiler :"+fInfo.fileName(),mapLM["output"]);
 
@@ -325,6 +331,7 @@ void WindowIDE::compile() {
 
     CEditorWidget *currentWidget = ((CEditorWidget*)ui->tabWidget->currentWidget());
     QString fn = currentWidget->m_editControl->editor()->fileName();
+    qWarning()<<"src fileName:"<<fn;
     QString _path = QFileInfo(fn).absolutePath();
     QString _filename = QFileInfo(fn).fileName();
     QString _ext = QFileInfo(fn).suffix();
@@ -518,7 +525,7 @@ void WindowIDE::OpenNewBuilder()
     QString fn = QFileDialog::getOpenFileName(
             this,
             tr("Choose the builder file"),
-            ".");
+            devDir.path());
     if (fn.isEmpty()) return;
 
     ui->leNewBuilderFileName->setText(fn);
@@ -639,7 +646,7 @@ void WindowIDE::refreshFileList(void) {
 //        ui->listWidget->addItem(fileInfo.fileName());
 //    }
     model = new QFileSystemModel;
-    model->setRootPath(QDir::currentPath());
+    model->setRootPath(devDir.path());
     model->setNameFilters(QStringList() << "*.c" << "*.asm" << "*.h"<<"*.sym"<<"*.log"<<"*.bin"<<"*.inc");
     model->setNameFilterDisables(false);
     ui->treeView->setModel(model);
@@ -647,7 +654,8 @@ void WindowIDE::refreshFileList(void) {
     ui->treeView->hideColumn(2);
     ui->treeView->hideColumn(3);
     ui->treeView->header()->hide();
-    ui->treeView->setRootIndex(model->index(QDir::currentPath()));
+    ui->treeView->setRootIndex(model->index(devDir.path()));
+    qWarning()<<"devDir:"<<devDir.path();
 }
 
 /*!
@@ -715,7 +723,7 @@ void WindowIDE::newFile()
     QString fileName = QFileDialog::getSaveFileName(
                         this,
                         tr("Choose a file"),
-                        ".",
+                        devDir.path(),
                         tr("C source (*.c *.h);;ASM source (*.asm)"),
                         new QString("(*.c)"));
 

@@ -28,6 +28,8 @@ public:
     explicit WindowIDE(QWidget *parent = 0);
     ~WindowIDE();
 
+    QDir devDir;
+
     void refreshFileList(void);
 
     CEditorWidget * createEditorTab(QString fname, QString text,bool = false);
