@@ -74,6 +74,7 @@ Rectangle {
                 anchors.centerIn: parent
                 id: input
                 objectName: "inputField"
+                renderType: Text.NativeRendering
                 text: cloud.getValueFor(input.objectName, defaultText)
                 font: fontstyle.font
                 inputMethodHints: Qt.ImhNoPredictiveText

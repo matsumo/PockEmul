@@ -110,7 +110,7 @@ void Clcdc_cc40::disp(void)
 
 
     QPainter painterSymb(SymbImage);
-    painter.setCompositionMode(QPainter::CompositionMode_Source);
+    painterSymb.setCompositionMode(QPainter::CompositionMode_Source);
     info->m_lines = 2;
     info->m_chars = 16;
     pHD44780->set_pixel_update_cb(&Ccc40_update_pixel_symb);
