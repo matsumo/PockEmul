@@ -64,6 +64,9 @@ void test();
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    if(msg.startsWith("Invalid parameter")) {
+        qWarning()<<msg;
+    }
 //    QByteArray localMsg = msg.toLocal8Bit();
 //    switch (type) {
 //    case QtDebugMsg:
@@ -87,7 +90,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 int main(int argc, char *argv[])
 {
 
-//    qInstallMessageHandler(myMessageOutput);
+    qInstallMessageHandler(myMessageOutput);
 
     QApplication *app = new QApplication(argc, argv);
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);

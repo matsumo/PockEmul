@@ -113,7 +113,6 @@ CPObject::~CPObject()
 {
     if (dialogdasm) delete dialogdasm;
 
-    if (mem) free(mem);
 
     //FIXME: When extension are connected , they share the timer with the host.
     //delete pTIMER;
@@ -131,6 +130,8 @@ CPObject::~CPObject()
 //    delete extensionArray[2];
 //    delete extensionArray[3];
 //    delete extensionArray[4];
+
+//    if (mem) free(mem);
 }
 
 

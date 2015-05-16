@@ -83,7 +83,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
 
 CpcXXXX::~CpcXXXX()
 {
-    free(mem);
     delete pCONNECTOR;
     delete pSIOCONNECTOR;
     delete pCPU;
