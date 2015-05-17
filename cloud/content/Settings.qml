@@ -15,7 +15,7 @@ Rectangle {
         SettingsDelegate { id: usernameFld; name: "username"; labelString: "User Name"; type: "input"; }
         SettingsDelegate { id: passwordFld; name: "password"; labelString: "Password"; type: "input"; echoMode: TextInput.Password; }
         SettingsDelegate { id: passwordFld2; name: "password2"; labelString: "Confirm Password"; type: "input"; echoMode: TextInput.Password; saveInput:false;}
-        SettingsDelegate { name: "registercloud"; labelString: "Register elgg"; type: "action"; saveInput:false;
+        SettingsDelegate { name: "registercloud"; labelString: "Register PockEmul Cloud"; type: "action"; saveInput:false;
             onButtonClicked: {
                 if (passwordFld.inputText != passwordFld2.inputText) {
                     apikey.inputText = "Passwords mismatch !.";

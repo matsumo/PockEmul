@@ -329,6 +329,16 @@ int main(int argc, char *argv[])
         windowLayout->addWidget(view);
         windowLayout->setMargin(0);
     }
+    else {
+        launch1->show();
+        launch2->show();
+        dev->show();
+        save->show();
+        load->show();
+        cloudButton->show();
+        bookcase->show();
+        exitButton->show();
+    }
 
     if (!mainwindow->loadPML.isEmpty()) {
         mainwindow->opensession(mainwindow->loadPML);

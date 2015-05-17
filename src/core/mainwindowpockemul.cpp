@@ -109,7 +109,7 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     scaleFactor = 1;
     zoom = 100;
     saveAll = ASK;
-    openGlFlag = true;
+    openGlFlag = false;
     startKeyDrag = false;
     startPosDrag = false;
 
@@ -1544,7 +1544,7 @@ void MainWindowPockemul::initCommandLine(void) {
 
        cmdline->addOption('l',"load","Load a .pml session file");
        cmdline->addOption('r',"run","Run a pocket");
-       cmdline->addSwitch('g',"nogl","Do not use openGl");
+       cmdline->addSwitch('g',"gl","use avanced openGl");
        cmdline->addSwitch('v', "version", "show current version");
        cmdline->addSwitch('w', "warning", "show warning messages");
 
@@ -1571,16 +1571,16 @@ extern LaunchButtonWidget *launch1,*launch2,*dev,*save,*load,*cloudButton,*bookc
 void MainWindowPockemul::switchFound(const QString & name)
 {
   qDebug() << "Switch:" << name;
-  if (name == "nogl") {
-      openGlFlag = false;
-      launch1->show();
-      launch2->show();
-      dev->show();
-      save->show();
-      load->show();
-      cloudButton->show();
-      bookcase->show();
-      exitButton->show();
+  if (name == "gl") {
+      openGlFlag = true;
+//      launch1->show();
+//      launch2->show();
+//      dev->show();
+//      save->show();
+//      load->show();
+//      cloudButton->show();
+//      bookcase->show();
+//      exitButton->show();
 
   }
   if (name == "warning") {
