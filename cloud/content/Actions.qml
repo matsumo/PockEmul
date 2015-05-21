@@ -12,10 +12,10 @@ Column {
         expand: false
         font.pointSize: 16
         onClicked: {
-            cloudHide();
+//            cloudHide();
             if (cloud.askDialog("Do you confirm your upload ?",2)==2) return;
             save_pml("un titre provisoire","une description provisoire");
-            cloudShow();
+//            cloudShow();
         }
     }
 

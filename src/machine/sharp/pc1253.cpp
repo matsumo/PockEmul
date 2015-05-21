@@ -12,7 +12,7 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
     SessionHeader	= "PC1253PKM";
     Initial_Session_Fname ="pc1253.pkm";
 
-    BackGroundFname	= P_RES(":/pc1251/pc1253prom.png");
+    BackGroundFname	= P_RES(":/pc1251/pc1253.png");
 
     memsize			= 0x30000;
     SlotList.clear();

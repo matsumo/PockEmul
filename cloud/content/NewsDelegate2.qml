@@ -311,10 +311,10 @@ Item {
                         '&file_guid='+pmlid+
                         '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                         '&auth_token='+auth_token;
-                cloudHide();
+//                cloudHide();
                 if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
                 var xml = cloud.save();
-                cloudShow();
+//                cloudShow();
 //                console.log('url:'+url);
                 requestPost(url, xml , function (o) {
 
