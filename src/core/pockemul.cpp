@@ -64,6 +64,9 @@ void test();
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
+    Q_UNUSED(type)
+    Q_UNUSED(context)
+
     if(msg.startsWith("Invalid parameter")) {
         qWarning()<<msg;
     }
@@ -192,10 +195,7 @@ int main(int argc, char *argv[])
 
 #ifndef EMSCRIPTEN
     downloadManager = new DownloadManager();
-    downloadManager->targetDir = QDir::homePath()+"/pockemul/documents";
-#   ifdef Q_OS_ANDROID
-        downloadManager->targetDir = "/sdcard/pockemul/documents";
-#   endif
+    downloadManager->targetDir = workDir+"documents";
 #endif
 
         soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
@@ -265,11 +265,8 @@ int main(int argc, char *argv[])
     cloudButton = new LaunchButtonWidget(mainwindow->centralwidget,
                                                      LaunchButtonWidget::Action,
                                                      QStringList(),
-#if 1 //def Q_OS_ANDROID
                                                      ":/core/cloud-white.png");
-#else
-                                                       ":/core/cloud.png");
-#endif
+
     mainwindow->connect(cloudButton,SIGNAL(clicked()),mainwindow,SLOT(CloudSlot()));
     cloudButton->setGeometry(0,v_pos,iconSize,iconSize);
     cloudButton->hide();

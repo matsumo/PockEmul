@@ -71,14 +71,7 @@ CloudWindow::CloudWindow(QWidget *parent)
         cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
         cloud.object = (QObject*) cloudView->rootObject();
     }
-//    else {
-//        declarativeView = new QDeclarativeView(this);
-//        declarativeView->engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
-//        declarativeView->rootContext()->setContextProperty("cloud", &cloud);
-//        declarativeView->setSource(QUrl("qrc:/Main.qml"));
-//        declarativeView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
-//        cloud.object = (QObject*) declarativeView->rootObject();
-//    }
+
 
     connect(cloud.object, SIGNAL(close()), this,SLOT(closeQuick()));
     connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(closeQuick()));

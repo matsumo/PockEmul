@@ -36,16 +36,6 @@ public slots:
     void loadfinished(QNetworkReply *reply);
 };
 
-class PocketImageProvider : public QObject, public QQuickImageProvider //QDeclarativeImageProvider
-{
-Q_OBJECT
 
-public:
-    PocketImageProvider(QObject*);
-    ~PocketImageProvider();
-    QImage requestImage(const QString& id, QSize* size, const QSize& requestedSize);
-//    QPixmap requestPixmap(const QString& id, QSize* size, const QSize& requestedSize);
-
-};
 
 #endif // CLOUDIMAGEPROVIDER_H

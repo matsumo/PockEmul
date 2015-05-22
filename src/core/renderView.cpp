@@ -4,6 +4,7 @@
 
 #include "renderView.h"
 #include "cloud/cloudimageprovider.h"
+#include "cloud/pocketimageprovider.h"
 
 #include "mainwindowpockemul.h"
 #include "pobject.h"
