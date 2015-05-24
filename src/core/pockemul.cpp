@@ -117,10 +117,10 @@ int main(int argc, char *argv[])
 
 
 #ifdef Q_OS_MAC
-    QDir dir(QApplication::applicationDirPath());
-    dir.cdUp();
-    dir.cd("plugins");
-    QApplication::setLibraryPaths(QStringList(dir.absolutePath()));
+    QDir tmpdir(QApplication::applicationDirPath());
+    tmpdir.cdUp();
+    tmpdir.cd("plugins");
+    QApplication::setLibraryPaths(QStringList(tmpdir.absolutePath()));
     qWarning()<<QApplication::libraryPaths();
 #endif
 
