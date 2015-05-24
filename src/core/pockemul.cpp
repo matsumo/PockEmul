@@ -93,7 +93,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 int main(int argc, char *argv[])
 {
 
-    qInstallMessageHandler(myMessageOutput);
+//    qInstallMessageHandler(myMessageOutput);
 
     QApplication *app = new QApplication(argc, argv);
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -310,14 +310,14 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
     mainwindow->showFullScreen();
+    mainwindow->openGlFlag=true;
 #else
     mainwindow->show();
 #endif
 
-//#ifndef Q_OS_ANDROID
     mainwindow->initCommandLine();
-//#endif
 
+qWarning()<<"okl";
     view = 0;
     if (mainwindow->openGlFlag) {
         qWarning()<<"opengl";
@@ -327,6 +327,7 @@ int main(int argc, char *argv[])
         windowLayout->setMargin(0);
     }
     else {
+        qWarning()<<"full opengl";
         launch1->show();
         launch2->show();
         dev->show();
@@ -335,10 +336,11 @@ int main(int argc, char *argv[])
         cloudButton->show();
         bookcase->show();
         exitButton->show();
+        qWarning()<<"end fullopengl";
     }
 
     if (!mainwindow->loadPML.isEmpty()) {
-        mainwindow->opensession(mainwindow->loadPML);
+        mainwindow->opensession(workDir+"sessions/"+mainwindow->loadPML);
     }
     if (!mainwindow->runPocket.isEmpty()) {
         CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);

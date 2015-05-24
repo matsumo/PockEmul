@@ -12,7 +12,6 @@ extern MainWindowPockemul *mainwindow;
 
 PocketImageProvider::PocketImageProvider(QObject *parent) : QObject(parent),
     QQuickImageProvider(QQuickImageProvider::Image)
-//    QDeclarativeImageProvider(QDeclarativeImageProvider::Image)
 {
     // This space intentionally left blank.
 }

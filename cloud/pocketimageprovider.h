@@ -4,7 +4,7 @@
 #include <QImage>
 #include <QQuickImageProvider>
 
-class PocketImageProvider : public QObject, public QQuickImageProvider //QDeclarativeImageProvider
+class PocketImageProvider : public QObject, public QQuickImageProvider
 {
 Q_OBJECT
 

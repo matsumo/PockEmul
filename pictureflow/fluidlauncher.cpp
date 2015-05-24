@@ -200,6 +200,7 @@ qWarning()<<"After PopulatePictureFlow";
              if (!filename.isEmpty()) {
                  QStringRef _brand = attrs.value("brand");
                  QStringRef name = attrs.value("name");
+//                 qWarning()<<name;
                  QStringRef image = attrs.value("image");
                  QStringRef args = attrs.value("args");
                  QStringRef idpocket = attrs.value("idpocket");

@@ -85,7 +85,7 @@ void Clcdc_pc1403::disp_symb(void)
     Refresh = true;
     }
 
-    Clcdc::disp_symb();
+//    Clcdc::disp_symb();
 
 }
 
@@ -111,7 +111,6 @@ void Clcdc_pc1403::disp(void)
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
-#if 1
     // 1-6
     for (ind=0; ind<0x1E; ind++)
     {
@@ -131,8 +130,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
-#if 1
+
     // 7-9
     for (ind=0; ind<0x0f; ind++)
     {
@@ -155,8 +153,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
-#if 1
+
     // 10-12
     for (ind=0; ind<0x0f; ind++)
     {
@@ -178,9 +175,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
 
-#if 1
     // 13-15
     for (ind=0x0e; ind>=0; ind--)
     {
@@ -202,8 +197,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
-#if 1
+
     // 16-18
     for (ind=0x0e; ind>=0; ind--)
     {
@@ -225,9 +219,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
 
-#if 1
     //	19-24
 
     for (ind=0x1d; ind>=0; ind--)
@@ -248,7 +240,7 @@ void Clcdc_pc1403::disp(void)
             DirtyBuf[adr-0x3000] = 0;
         }
     }
-#endif
+
 
     painter.end();
 }
