@@ -388,7 +388,7 @@ void Cfp200::ExtChanged()
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
 quint16 Cfp200::getKey()
 {
 
@@ -427,7 +427,7 @@ quint16 Cfp200::getKey()
         if (strobe & 0x10) {
 
             if (KEY(K_DEF))			data|=0x01;
-            if (KEY(K_INS))			data|=0x04;
+            if (KEY(K_INS))			data|=0x02;
             if (KEY(K_CLR))			data|=0x04;
             if (KEY(K_F0))			data|=0x08;
             if (KEY('1'))			data|=0x10;
@@ -510,6 +510,13 @@ quint16 Cfp200::getKey()
 //        i85cpu->i8085_set_RST75(1);
         AddLog(LOG_KEYBOARD,tr("KEY PRESSED=%1").arg(data,2,16,QChar('0')));
     }
+
+    if (ks==5) i85cpu->i8085_set_SID(Cetl?0:1);
+    if (ks==6) i85cpu->i8085_set_SID(pKEYB->isShift?0:1);
+    if (ks==7) i85cpu->i8085_set_SID(pKEYB->LastKey == 0x03 ? 0:1);        // BREAK
+//    if (ks==8) i85cpu->i8085_set_SID(1);        // GRAPH
+    if (ks==9) i85cpu->i8085_set_SID(pKEYB->isCtrl?0:1);
+
     return data;//^0xff;
 
 }

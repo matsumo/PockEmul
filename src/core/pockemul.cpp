@@ -93,7 +93,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 int main(int argc, char *argv[])
 {
 
-//    qInstallMessageHandler(myMessageOutput);
+    qInstallMessageHandler(myMessageOutput);
 
     QApplication *app = new QApplication(argc, argv);
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -443,6 +443,7 @@ void m_openURL(QUrl url) {
     }
 
 #endif
+    qWarning()<<"open url:"<<url;
     QDesktopServices::openUrl(url);
 }
 

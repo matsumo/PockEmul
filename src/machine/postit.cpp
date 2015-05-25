@@ -103,7 +103,7 @@ bool Cpostit::InitDisplay()
 bool Cpostit::UpdateFinalImage()
 {
     CPObject::UpdateFinalImage();
-#if 0
+#if 1
     QPainter painter;
     painter.begin(FinalImage);
     QFont font("Arial", 6);

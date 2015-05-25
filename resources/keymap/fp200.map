@@ -8,8 +8,7 @@
     <KEY description="F3" height="58" left="184" masterscancode="0x00" modifier="" scancode="0xf8" top="270" width="58"/>
     <KEY description="F4" height="58" left="251" masterscancode="0x00" modifier="" scancode="0xf9" top="268" width="58"/>
     <KEY description="F5" height="58" left="319" masterscancode="0x00" modifier="" scancode="0xfa" top="267" width="58"/>
-    <KEY description="INS" height="58" left="924" masterscancode="0x00" modifier="" scancode="0x12" top="333" width="58"/>
-    <KEY description="DEL" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x16" top="0" width="20"/>
+    <KEY description="INS" height="58" left="924" masterscancode="0x00" modifier="" scancode="0x09" top="333" width="58"/>
     <KEY description="HOME/CLR" height="58" left="700" masterscancode="0x00" modifier="" scancode="0x0c" top="271" width="58"/>
     <KEY description="On/Brk" height="58" left="831" masterscancode="0x00" modifier="" scancode="0x03" top="269" width="58"/>
     <KEY description="Off" height="45" left="903" masterscancode="0x00" modifier="" scancode="0x100003b" top="277" width="40"/>

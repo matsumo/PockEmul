@@ -197,7 +197,7 @@ bool Crlp2001::UpdateFinalImage(void) {
     // PRINTER SWITCH
     painter.begin(FinalImage);
 
-    painter.drawImage(200,30,*screen);
+    painter.drawImage(200,20,screen->scaled(screen->size()*1.5));
 
     painter.end();
 

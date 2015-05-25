@@ -430,10 +430,8 @@ Vibrate();
                  qWarning()<<"open:"<<pictureFlowWidget->getSlideDescription(index);
                  mainwindow->opensession(pictureFlowWidget->getSlideFilePath(index));
              }
-             if (Config.at(1)=="*.pdf") {
-//                 qWarning()<<"open pdf:"<<Config.at(0)+"/"+pictureFlowWidget->getSlideCaption(index);
-                 QUrl url = QUrl::fromLocalFile(Config.at(0)+"/"+pictureFlowWidget->getSlideDescription(index));
-                 //QDesktopServices::openUrl(url);
+             else if (Config.at(1)=="*.pdf") {
+                 QUrl url = pictureFlowWidget->getSlideFilePath(index);
                  m_openURL(url);
              }
              close();
