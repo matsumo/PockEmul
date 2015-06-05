@@ -26,5 +26,6 @@
         <file>G850V/rom15.bin</file>
         <file>G850V/g850vlcd.png</file>
         <file>G850V/g850vsymb.png</file>
+        <file>G850V/g850vLeft.png</file>
     </qresource>
 </RCC>

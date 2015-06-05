@@ -140,6 +140,8 @@ void Clcdc_g850::disp(void)
 
     Refresh = true;
 
+    Color_Off.setAlphaF( g850->pSED1560->info.ElectCtrl * 5.0f / 100);
+
     disp_symb();
 
     QPainter painter(LcdImage);

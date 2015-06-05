@@ -93,7 +93,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 int main(int argc, char *argv[])
 {
 
-    qInstallMessageHandler(myMessageOutput);
+//    qInstallMessageHandler(myMessageOutput);
 
     QApplication *app = new QApplication(argc, argv);
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
@@ -201,7 +201,9 @@ int main(int argc, char *argv[])
         soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
         hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
 
-    float ratio = MAX(1,QGuiApplication::primaryScreen()->logicalDotsPerInch()/150);
+        qWarning()<<QGuiApplication::primaryScreen()->physicalDotsPerInch();
+
+    float ratio = MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150);
     int iconSize = 48*ratio;
     int v_inter = 50*ratio;
     int v_pos = 12;
@@ -314,6 +316,8 @@ int main(int argc, char *argv[])
 #else
     mainwindow->show();
 #endif
+
+    test();
 
     mainwindow->initCommandLine();
 

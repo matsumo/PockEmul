@@ -1227,7 +1227,7 @@ void CPObject::BuildContextMenu(QMenu * menu)
             menupocket->addAction(tr("Reset"),this,SLOT(slotResetNow()));
             menupocket->addAction(tr("Reset (5s delay)"),this,SLOT(slotReset()));
             menupocket->addAction(tr("Hard Reset (5s delay)"),this,SLOT(slotHardReset()));
-            //menupocket->addAction(tr("Detach"),this,SLOT(slotDetach()));
+            menupocket->addAction(tr("Detach"),this,SLOT(slotDetach()));
             menupocket->addSeparator();
             menupocket->addAction(tr("Load ..."),this,SLOT(slotLoadSession()));
             menupocket->addAction(tr("Save ..."),this,SLOT(slotSaveSession()));
@@ -1568,6 +1568,17 @@ void CPObject::slotReset() {
 void CPObject::slotHardReset() {
     hardresetAt = (pTIMER->CPUSpeed * getfrequency())*5 + pTIMER->state;
 
+}
+
+void CPObject::slotDetach()
+{
+    if (parentWidget()==0) {
+        setParent(mainwindow->centralWidget());
+    }
+    else {
+        setParent(0);
+    }
+    show();
 }
 
 void CPObject::slotLoadSession()

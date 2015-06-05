@@ -34,6 +34,8 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="g850.pkm";
     BackGroundFname	= P_RES(":/G850V/g850v.png");
 
+    LeftFname = P_RES(":/G850V/g850vLeft.png");
+
     memsize			= 0x060000;
     InitMemValue	= 0xff;
 
@@ -148,9 +150,10 @@ bool Cg850v::Get_Connector(Cbus *_bus)
 void Cg850v::TurnON()
 {
     pSED1560->updated = true;
-    CpcXXXX::TurnON();
+//    CpcXXXX::TurnON();
 
-#if 0
+
+#if 1
     if (!Power && pKEYB->LastKey == K_BRK) {
         AddLog(LOG_MASTER,"TURN ON");
         if (!hardreset) {
@@ -176,7 +179,8 @@ void Cg850v::TurnOFF(void) {
 void Cg850v::Reset()
 {
     pCPU->Reset();
-#if 1
+    Mem_Load(0);
+
     out( 0x11, 0);
     out( 0x12, 0);
     out( 0x14, 0);
@@ -212,8 +216,8 @@ void Cg850v::Reset()
     out( 0x6c, 0);
     out( 0x6d, 0);
     out( 0x6e, 4);
-#endif
-    Mem_Load(0);
+
+
 }
 
 bool Cg850v::Mem_Mirror(UINT32 *d)

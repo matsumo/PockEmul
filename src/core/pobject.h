@@ -259,7 +259,7 @@ public slots:
     void slotResetNow();
     void slotReset();
     void slotHardReset();
-    //void slotDetach();
+    void slotDetach();
     void slotLoadSession();
     void slotSaveSession();
 	void Dump();
