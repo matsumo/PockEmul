@@ -1,7 +1,5 @@
-/*** PC-XXXX Emulator [LCDC.CPP] **************************/
-/* LCD Controller emulation                               */
-/**********************************************************/
-//#include <string.h>
+
+
 #include <stdlib.h>
 #include <QPainter>
 #include <QDebug>

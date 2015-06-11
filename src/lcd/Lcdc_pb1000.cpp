@@ -56,8 +56,6 @@ void Clcdc_pb1000::disp(void)
                             UINT8 d = CHD44352::compute_newval((info.m_cursor_status>>5) & 0x07, info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48], info.cursor[a].m_cursor[c]);
                             for (int b=0; b<8; b++)
                             {
-//                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-//                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
                                 drawPixel(&painter,a*cw*16 + px*cw + c, py*8 + b,BIT(d, 7-b) ? Color_On : Color_Off);
                             }
                         }
@@ -69,8 +67,6 @@ void Clcdc_pb1000::disp(void)
                             UINT8 d = info.m_video_ram[a][py*16*cw + px*cw + c + info.m_scroll * 48];
                             for (int b=0; b<8; b++)
                             {
-//                                painter.setPen((BIT(d, 7-b)) ? Color_On : Color_Off );
-//                                painter.drawPoint( a*cw*16 + px*cw + c, py*8 + b );
                                 drawPixel(&painter,a*cw*16 + px*cw + c, py*8 + b,BIT(d, 7-b) ? Color_On : Color_Off);
                             }
                         }

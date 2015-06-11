@@ -1574,16 +1574,8 @@ void MainWindowPockemul::switchFound(const QString & name)
   qDebug() << "Switch:" << name;
   if (name == "gl") {
       openGlFlag = true;
-//      launch1->show();
-//      launch2->show();
-//      dev->show();
-//      save->show();
-//      load->show();
-//      cloudButton->show();
-//      bookcase->show();
-//      exitButton->show();
-
   }
+
   if (name == "warning") {
       qInstallMessageHandler(0);
   }

@@ -403,14 +403,16 @@ bool CPObject::run(void){
         Reset();
         resetAt = 0;
     }
-    if ((hardresetAt>0) && (pTIMER->state >= hardresetAt)) {
-        qWarning()<<"HardReset";
-        // FIXME: cannot call init from CPU Thread. Use a SIGNAL
-        hardreset = true;
-        init();
-        Reset();
-        hardresetAt = 0;
-    }
+
+
+//    if ((hardresetAt>0) && (pTIMER->state >= hardresetAt)) {
+//        qWarning()<<"HardReset";
+//        // FIXME: cannot call init from CPU Thread. Use a SIGNAL
+//        hardreset = true;
+//        init();
+//        Reset();
+//        hardresetAt = 0;
+//    }
    return true;
 }
 

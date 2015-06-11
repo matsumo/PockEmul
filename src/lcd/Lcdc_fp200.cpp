@@ -375,20 +375,20 @@ void Clcdc_fp200::disp(void)
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
-//    if (((Ce500 *)pPC)->pHD61102_2->info.on_off) {
-        for (int i = 0 ; i < 64; i++)
-        {
-            for (int li = 0 ; li < 20 ; li++)
-            {
 
-                quint8 data = mem_video[li][ i ];
-                for (b=0; b<8;b++)
-                {
-                    quint8 y = computeSL((li<10)?1:2,i);
-                    drawPixel(&painter,li*8+b,y,((data>>b)&0x01) ? Color_On : Color_Off);
-                }
+    for (int i = 0 ; i < 64; i++)
+    {
+        for (int li = 0 ; li < 20 ; li++)
+        {
+
+            quint8 data = mem_video[li][ i ];
+            for (b=0; b<8;b++)
+            {
+                quint8 y = computeSL((li<10)?1:2,i);
+                drawPixel(&painter,li*8+b,y,((data>>b)&0x01) ? Color_On : Color_Off);
             }
         }
+    }
 
     painter.end();
 }

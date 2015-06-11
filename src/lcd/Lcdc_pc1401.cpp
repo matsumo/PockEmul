@@ -122,11 +122,8 @@ void Clcdc_pc1401::disp(void)
             x =ind + (ind/5);			// +1 every 5 cols
             y = 0;
 
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x,	y+b	);
             }
             DirtyBuf[adr-0x6000] = 0;
         }
@@ -142,11 +139,8 @@ void Clcdc_pc1401::disp(void)
             x = 94 - ind - (ind/5);			// +1 every 5 cols
             y = 0;
 
-            for (b=0; b<7;b++)
-            {
+            for (b=0; b<7;b++) {
                 drawPixel(&painter,x,y+b,((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-//                painter.drawPoint( x,	y+b	);
             }
             DirtyBuf[adr-0x6000] = 0;
         }

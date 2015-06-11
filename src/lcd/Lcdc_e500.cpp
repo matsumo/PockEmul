@@ -117,13 +117,9 @@ void Clcdc_e500::disp(void)
                 BYTE data = ((Ce500 *)pPC)->pHD61102_2->info.imem[ (j * 0x40) + i ];
                 for (b=0; b<8;b++)
                 {
-                    //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",i,j*8+b);
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_2,j*8+b);
                     if ((y>=0)&&(y < 32))
                         drawPixel(&painter,i, y,((data>>b)&0x01) ? Color_On : Color_Off );
-//                    painter.drawPoint( i, y );
                 }
             }
         }
@@ -143,13 +139,9 @@ void Clcdc_e500::disp(void)
                 BYTE data = ((Ce500 *)pPC)->pHD61102_1->info.imem[ (j * 0x40) + i ];
                 for (b=0; b<8;b++)
                 {
-                    //if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",64+i,j*8+b);
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
-    //                painter.drawPoint( 64+i, computeSL(j*8+b));
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_1,j*8+b);
                      if ((y>=0)&&(y < 32))
                          drawPixel(&painter,64+i, y,((data>>b)&0x01) ? Color_On : Color_Off );
-//                     painter.drawPoint( 64+i, y );
                 }
             }
         }
@@ -170,13 +162,9 @@ void Clcdc_e500::disp(void)
                 BYTE data = ((Ce500 *)pPC)->pHD61102_1->info.imem[ (j * 0x40) + i ];
                 for (b=0; b<8;b++)
                 {
-    //                if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",128+i,(j-4)*8+b);
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_1,j*8+b-32);
                     if ((y>=0)&&(y < 32))
                         drawPixel(&painter,175-i, y,((data>>b)&0x01) ? Color_On : Color_Off );
-//                        painter.drawPoint( 175-i, y );
-
                 }
             }
         }
@@ -188,8 +176,6 @@ void Clcdc_e500::disp(void)
                 drawPixel(&painter,175-i,j,Color_Off);
     }
 
-
-
     if (((Ce500 *)pPC)->pHD61102_2->info.on_off) {
 
         for (int i = 0 ; i < 64; i++)
@@ -199,13 +185,9 @@ void Clcdc_e500::disp(void)
                 BYTE data = ((Ce500 *)pPC)->pHD61102_2->info.imem[ (j * 0x40) + i ];
                 for (b=0; b<8;b++)
                 {
-    //                if (((data>>b)&0x01) && (pPC->pCPU->fp_log)) fprintf(pPC->pCPU->fp_log,"PSET [%i,%i]\n",128+i,(j-4)*8+b);
-//                    painter.setPen( ((data>>b)&0x01) ? Color_On : Color_Off );
                     int y = computeSL(((Ce500 *)pPC)->pHD61102_2,j*8+b-32);
                     if ((y>=0)&&(y < 32))
                         drawPixel(&painter,239-i, y,((data>>b)&0x01) ? Color_On : Color_Off );
-//                    painter.drawPoint( 239-i, y );
-
                 }
             }
         }

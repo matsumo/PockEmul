@@ -184,10 +184,8 @@ int main(int argc, char *argv[])
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
-
-#if 1 //def Q_OS_ANDROID
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
-#endif
+
 
 #ifdef EMSCRIPTEN
     mainwindow->setWindowTitle("PockEmul Online");
@@ -198,10 +196,10 @@ int main(int argc, char *argv[])
     downloadManager->targetDir = workDir+"documents";
 #endif
 
-        soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
-        hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
+    soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
+    hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
 
-        qWarning()<<QGuiApplication::primaryScreen()->physicalDotsPerInch();
+    qWarning()<<QGuiApplication::primaryScreen()->physicalDotsPerInch();
 
     float ratio = MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150);
     int iconSize = 48*ratio;
