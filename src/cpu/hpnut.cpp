@@ -84,6 +84,7 @@ CHPNUT::~CHPNUT()
 
 bool CHPNUT::init()
 {
+    Check_Log();
     nut_init_ops(reg);
     nut_clear_memory(reg);
 

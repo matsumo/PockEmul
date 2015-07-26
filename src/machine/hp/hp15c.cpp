@@ -135,7 +135,7 @@ Chp15c::~Chp15c()
 
 bool Chp15c::init()
 {
-    //pCPU->logsw = true;
+//    pCPU->logsw = true;
 
 
 

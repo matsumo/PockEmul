@@ -218,8 +218,10 @@ bool Clbc1100::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
 
-    if(*d < 0x8000) return false; /* ROM */
-//    if(*d < 0xE000) return false; /* RAM */
+    if(*d < 0x1000) return false; /* ROM */
+    if( (*d >= 0x1000) && (*d < 0x4000) ) return true; /* RAM */
+    if( (*d >= 0x4000) && (*d < 0x8000) ) return false; /* ROM */
+    if( (*d >= 0x8000) && (*d < 0x10000) ) return true; /* ROM */
 
     return true;
 }
@@ -266,6 +268,8 @@ UINT16 Clbc1100::out16(UINT16 address, UINT16 value)
 
 bool Clbc1100::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
 //    pTAPECONNECTOR->Set_pin(3,true);       // RMT
 //    pTAPECONNECTOR->Set_pin(2,upd7907->upd7907stat.imem[0x00] & 0x10 ? 0xff : 0x00);    // Out
 
@@ -281,6 +285,7 @@ bool Clbc1100::Set_Connector(Cbus *_bus)
 
 bool Clbc1100::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
 
     if (pCONNECTOR->Get_pin(9)) {
         sendToPrinter = 0;
