@@ -460,7 +460,11 @@ HEADERS *= \
     src/cpu/hd44102.h \
     src/lcd/lcdc_jr800.h \
     src/machine/extslot.h \
-    cloud/pocketimageprovider.h
+    cloud/pocketimageprovider.h \
+    src/machine/ti/ti59.h \
+    src/lcd/lcdc_ti59.h \
+    src/cpu/tmc0501.h \
+    src/cpu/tmc0501_dasm.h
 
 
 
@@ -691,7 +695,8 @@ DEFINES += LOCRES
 
 RESOURCES +=  \
     resources/cemem.qrc \
-    resources/jr800.qrc
+    resources/jr800.qrc \
+    resources/ti59.qrc
 
 
 SOURCES *=  \
@@ -746,7 +751,11 @@ SOURCES *=  \
     src/cpu/hd44102.cpp \
     src/lcd/lcdc_jr800.cpp \
     src/machine/extslot.cpp \
-    cloud/pocketimageprovider.cpp
+    cloud/pocketimageprovider.cpp \
+    src/machine/ti/ti59.cpp \
+    src/lcd/lcdc_ti59.cpp \
+    src/cpu/tmc0501.cpp \
+    src/cpu/tmc0501_dasm.cpp
 
 
 

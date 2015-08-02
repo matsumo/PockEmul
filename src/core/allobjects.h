@@ -82,6 +82,7 @@
 #include "panasonic/rlp1005.h"
 
 #include "ti/ti57.h"
+#include "ti/ti59.h"
 #include "ti/cc40.h"
 #include "ti/ti74.h"
 

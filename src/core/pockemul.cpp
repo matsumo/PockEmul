@@ -347,11 +347,14 @@ qWarning()<<"okl";
     if (!mainwindow->runPocket.isEmpty()) {
         CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);
 
+//        mainwindow->setCentralWidget(pPC);
+//         mainwindow->centralwidget = pPC;
+        pPC->slotDoubleClick(QPoint(0,0));
   #ifdef Q_OS_ANDROID
-  //      if (pPC->getDX()> pPC->getDY())
-  //          pPC->maximizeWidth();
-  //      else
-  //          pPC->maximizeHeight();
+        if (pPC->getDX()> pPC->getDY())
+            pPC->maximizeWidth();
+        else
+            pPC->maximizeHeight();
   #else
         Q_UNUSED(pPC)
   #endif

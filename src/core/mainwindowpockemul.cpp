@@ -375,7 +375,6 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Panasonic RL-P1005"]=RLP1005;
 
     objtable["Post-it"]=POSTIT;
-    objtable["TI-57"]=TI57;
     objtable["HP-41"]=HP41;
     objtable["HP-15C"]=HP15;
     objtable["HP-11C"]=HP11;
@@ -384,6 +383,10 @@ void MainWindowPockemul::initObjectTable() {
     objtable["HP82143A"]=HP82143A;
     objtable["CE-1560"]= CE1560;
 
+
+    objtable["TI-57"]=TI57;
+    objtable["TI-58"]=TI58;
+    objtable["TI-59"]=TI59;
     objtable["CC-40"]= CC40;
     objtable["TI-74"]= TI74;
     objtable["TI-95"]= TI95;
@@ -566,7 +569,6 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
 
     case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
 
-    case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
     case HP41 : pPC = new Chp41;      pPC->setName("HP-41"); break;
     case HP15 : pPC = new Chp15c;      pPC->setName("HP-15C"); break;
     case HP11 : pPC = new Chp15c(0,HP11);      pPC->setName("HP-11C"); break;
@@ -574,6 +576,9 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case HP16 : pPC = new Chp15c(0,HP16);      pPC->setName("HP-16C"); break;
     case HP82143A : pPC = new Chp82143A;      pPC->setName("HP82143A"); break;
 
+    case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
+    case TI59 : pPC = new Cti59;      pPC->setName("TI-59"); break;
+    case TI58 : pPC = new Cti59(0,TI58);pPC->setName("TI-58"); break;
     case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;
     case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
     case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;

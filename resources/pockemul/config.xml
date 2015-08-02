@@ -2,7 +2,6 @@
  <demolauncher>
    <demos>
    <example brand="SHARP_PC12XX" idpocket="PC-1211" filename="./" name="Sharp pc-1211 SIMULATOR!!!  in progress..." image=":/pc1211/pc-1211.png"/>
-   <example brand="TEXAS INSTRUMENTS" idpocket="TI-57" filename="./" name="Texas Instruments TI-57" image=":/ti57/ti57.png"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP-41" filename="./" name="Work in Progress HP-41" image=":/hp41/hp41.png"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP-11C" filename="./" name="HP-11C" image=":/hp11c/hp11c.png"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP-12C" filename="./" name="HP-12C" image=":/hp12c/hp12c.png"/>
@@ -39,6 +38,8 @@
      <example brand="SHARP_PC13XX" idpocket="PC-2500" filename="./" name="Sharp pc-2500" image=":/pc2500/pc2500.png"/>
      <example brand="CASIO" idpocket="Casio FP-200" filename="./" name="Casio FP-200" image=":/fp200/fp200.png"/>
      <example brand="OTHER" idpocket="Canon X-07" filename="./" name="Canon X-07" image=":/x07/x07.png"/>
+     <example brand="TEXAS INSTRUMENTS" idpocket="TI-57" filename="./" name="Texas Instruments TI-57" image=":/ti57/ti57.png"/>
+     <example brand="TEXAS INSTRUMENTS" idpocket="TI-59" filename="./" name="Texas Instruments TI-59" image=":/ti59/ti59.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="CC-40" filename="./" name="Texas Instruments CC-40" image=":/cc40/cc40.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="TI-74" filename="./" name="Texas Instruments TI-74" image=":/ti74/ti74.png"/>
      <example brand="TEXAS INSTRUMENTS" idpocket="TI-95" filename="./" name="Texas Instruments TI-95" image=":/ti74/ti95.png"/>

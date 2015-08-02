@@ -97,6 +97,8 @@ enum Models {
     RLP2001,
     POSTIT,
     TI57,
+    TI58,
+    TI59,
     HP41,
     HP15,
     HP11,
