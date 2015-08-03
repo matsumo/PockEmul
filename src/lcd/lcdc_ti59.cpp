@@ -65,7 +65,7 @@ void Clcdc_ti59::disp(void)
         blinkTimer->stop();
     }
 
-//    qWarning()<<"display:"<<s;
+    qWarning()<<"lcd display:"<<s;
 
 #define YOFFSET 5
 

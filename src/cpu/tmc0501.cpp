@@ -14,6 +14,7 @@
 #include "pcxxxx.h"
 #include "Lcdc.h"
 #include "ui/cregsz80widget.h"
+#include "Inter.h"
 
 // ====================================
 // card file names
@@ -441,7 +442,7 @@ void Ctmc0501::Regs_Info(UINT8)
 
 
 void Ctmc0501::Emulate() {
-    WORD _op = pPC->Get_16(r->addr<<1);
+    WORD _op = pPC->Get_16r(r->addr<<1);
     execute (_op);
 
 }
@@ -545,10 +546,14 @@ int Ctmc0501::execute (unsigned short opcode) {
     r->digit = 15;
 
   // update instruction cycle counter
-  if (r->flags & FLG_IDLE)
+  if (r->flags & FLG_IDLE) {
     r->cycle += 4;
-  else
+    pPC->pTIMER->state+=4;
+  }
+  else {
     r->cycle++;
+    pPC->pTIMER->state++;
+  }
   // clear HOLD bit
   r->flags &= ~FLG_HOLD;
   // process PREG bit
@@ -716,47 +721,47 @@ int Ctmc0501::execute (unsigned short opcode) {
     // keyboard operations
     // ================================
     case 0x0800:
-      {
-    unsigned char mask;
-    // get pressed key(s) mask
-    mask = (((opcode & 0x07) | ((opcode >> 1) & 0x78)) ^ 0x7F) & r->key[r->digit];
-    // check if more than 1 key is pressed
-    if (mask & (mask - 1))
-      mask = 0;
-    if (!(opcode & 0x0008)) {
-      // scan all keyboard
-      // scan current row
-      if (r->key[r->digit] & mask) {
-        unsigned char bit = 0;
-//        if (log_flags & LOG_DEBUG)
-//          LOG ("(K%d=%02X)", r->digit, r->key[r->digit] & mask);
-        // get bit position
-        while (!(mask & 1)) {
-          bit++;
-          mask >>= 1;
-        }
-        // clear COND
-        r->flags &= ~FLG_COND;
-        // set result to KR
-        r->KR = /*(r->KR & ~0x07F0) |*/ (r->digit << 4) | ((bit << 8) & 0x0700);
-//        if (log_flags & LOG_SHORT)
-//          LOG ("KR=%04X COND=0", r->KR);
-      } else
-      if (r->digit) {
-        // wait for digit 0 counter - end of scan
-        r->flags |= FLG_HOLD;
-        return 11;
+  {
+      unsigned char mask;
+      // get pressed key(s) mask
+      mask = (((opcode & 0x07) | ((opcode >> 1) & 0x78)) ^ 0x7F) & r->key[r->digit];
+      // check if more than 1 key is pressed
+      if (mask & (mask - 1))
+          mask = 0;
+      if (!(opcode & 0x0008)) {
+          // scan all keyboard
+          // scan current row
+          if (r->key[r->digit] & mask) {
+              unsigned char bit = 0;
+              //        if (log_flags & LOG_DEBUG)
+              //          LOG ("(K%d=%02X)", r->digit, r->key[r->digit] & mask);
+              // get bit position
+              while (!(mask & 1)) {
+                  bit++;
+                  mask >>= 1;
+              }
+              // clear COND
+              r->flags &= ~FLG_COND;
+              // set result to KR
+              r->KR = /*(r->KR & ~0x07F0) |*/ (r->digit << 4) | ((bit << 8) & 0x0700);
+              //        if (log_flags & LOG_SHORT)
+              //          LOG ("KR=%04X COND=0", r->KR);
+          } else
+              if (r->digit) {
+                  // wait for digit 0 counter - end of scan
+                  r->flags |= FLG_HOLD;
+                  return 11;
+              }
+      } else {
+          // scan current row and update COND
+          if (r->key[r->digit] & mask)
+              r->flags &= ~FLG_COND;
+          //      if (log_flags & LOG_DEBUG)
+          //        LOG ("(K%d=%02X) ", r->digit, r->key[r->digit] & mask);
+          //      if (log_flags & LOG_SHORT)
+          //        LOG ("COND=%u", (r->flags & FLG_COND) != 0);
       }
-    } else {
-      // scan current row and update COND
-      if (r->key[r->digit] & mask)
-        r->flags &= ~FLG_COND;
-//      if (log_flags & LOG_DEBUG)
-//        LOG ("(K%d=%02X) ", r->digit, r->key[r->digit] & mask);
-//      if (log_flags & LOG_SHORT)
-//        LOG ("COND=%u", (r->flags & FLG_COND) != 0);
-    }
-      }
+  }
       break;
     // ================================
     // wait operations
@@ -850,34 +855,34 @@ int Ctmc0501::execute (unsigned short opcode) {
 //          if (log_flags & LOG_SHORT)
 //        LOG ("EXT=%04X", r->EXT);
           break;
-        case 0x0030:
+      case 0x0030:
           // WRITE
-//	      card_write (r->KR >> 4)
+          //	      card_write (r->KR >> 4)
           r->CRD_BUF[r->CRD_PTR++] = (r->KR >> 4);
           break;
-        case 0x0040:
+      case 0x0040:
           // CRDOFF
           if (r->CRD_FLAGS & CRD_WRITE) {
-        FILE *f;
-        if ((f = fopen (card_output, "r+b")) == NULL)
-          f = fopen (card_output, "wb");
-        if (f == NULL) {
-          fprintf (stderr, "Can't access file %s!\n", card_output);
-        } else {
-          fseek (f, CRD_LEN * ((r->CRD_BUF[2] & 0x0F) / 3), SEEK_SET);
-          fwrite (r->CRD_BUF, CRD_LEN, 1, f);
-          fclose (f);
-        }
+              FILE *f;
+              if ((f = fopen (card_output, "r+b")) == NULL)
+                  f = fopen (card_output, "wb");
+              if (f == NULL) {
+                  fprintf (stderr, "Can't access file %s!\n", card_output);
+              } else {
+                  fseek (f, CRD_LEN * ((r->CRD_BUF[2] & 0x0F) / 3), SEEK_SET);
+                  fwrite (r->CRD_BUF, CRD_LEN, 1, f);
+                  fclose (f);
+              }
           } else
-          if (r->CRD_FLAGS & CRD_READ) {
-        r->CRD_BUF[2] += 3;
-          }
+              if (r->CRD_FLAGS & CRD_READ) {
+                  r->CRD_BUF[2] += 3;
+              }
           r->CRD_FLAGS = 0;
           r->CRD_PTR = 0;
           // clear card switch
           if (currentModel == TI59)
-        // TI-59: D10-KR card switch normally closed
-        r->key[10] |= (1 << KR_BIT);
+              // TI-59: D10-KR card switch normally closed
+              r->key[10] |= (1 << KR_BIT);
           break;
         case 0x0050:
           // CRDREAD
@@ -986,7 +991,7 @@ int Ctmc0501::execute (unsigned short opcode) {
       r->flags |= FLG_IDLE;
 //      if (log_flags & LOG_SHORT)
 //        LOG ("IDLE=1");
-      qWarning()<<"IDLE=1";
+//      qWarning()<<"IDLE=1";
       break;
     case 0x000A:
       // CLFB

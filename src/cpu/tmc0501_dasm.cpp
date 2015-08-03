@@ -242,7 +242,7 @@ UINT32 Cdebug_tmc0501::DisAsm_1(UINT32 oldpc)
 
     oldpc &= 0xffff;
     DasmAdr = oldpc;
-    WORD _op = pCPU->pPC->Get_16(DasmAdr<<1);
+    WORD _op = pCPU->pPC->Get_16r(DasmAdr<<1);
 
     Buffer[0] = '\0';
 

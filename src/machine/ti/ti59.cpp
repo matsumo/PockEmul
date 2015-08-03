@@ -64,7 +64,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_ti59(this,
-                                 QRect(30,43,220,40),
+                                 QRect(40,70,210,35),
                                  QRect(),
                                  P_RES(":/ti59/ti59lcd.png"));
     pCPU		= new Ctmc0501(this,currentModel);    ti59cpu = (Ctmc0501*)pCPU;
@@ -96,33 +96,16 @@ bool Cti59::run() {
 
     TMC0501regs * _regs = ti59cpu->r;
 
-    displayString = Display();
-    if (ti59cpu->r->flags & FLG_DISP)
-        pLCDC->updated = true;
+
+//    if (ti59cpu->r->flags & FLG_DISP)
+//        pLCDC->updated = true;
 
     getKey();
 
-
-//    if (
-//            !_regs->Power &&
-//         (_regs->KEYR !=0 )) {
-//        _regs->COND = 1;
-//        _regs->R5 = _regs->KEYR;
-//        _regs->Timer=0;
-//        _regs->Power = true;
-//        ti59cpu->halt = false;
-//        qWarning()<<"Wakeup";
-
-//    }
-
-
-//    if (ti59cpu->r->KEYR != 0) {
-//        qWarning() << "KEY:"<<ti59cpu->r->KEYR;
-//    }
-
     CpcXXXX::run();
 
-    pTIMER->state++;
+    Display();
+
     return true;
 }
 
@@ -222,7 +205,7 @@ QString Cti59::Display() {
   if (!ti59cpu->r->digit) {
       static char disp_filter = 0;
       if (ti59cpu->r->flags & FLG_IDLE) {
-          qWarning()<<"ok";
+//          qWarning()<<"ok";
           // display enabled
           static unsigned char dA[16], dB[16];
           int i;
@@ -240,6 +223,7 @@ QString Cti59::Display() {
           if (!(ti59cpu->r->flags & FLG_DISP)) {
               int zero = 1;
               ti59cpu->r->flags |= FLG_DISP;
+              pLCDC->updated = true;
               //        putchar ('\r');
               if (ti59cpu->r->fA & 0x4000) {
                   //          putchar ('C');
@@ -289,6 +273,8 @@ QString Cti59::Display() {
 #endif
               putchar ('|'); putchar (' ');
                 qWarning()<<"DISPLAY:"<<s;
+               displayString = s;
+               pLCDC->updated = true;
           }
           disp_filter = 0;
       } else
@@ -313,67 +299,71 @@ QString Cti59::Display() {
 }
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-#define KPORT(CODE)    ti59cpu->r->key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07)
+#define KPORT(COND,CODE)    if(COND) \
+                                ti59cpu->r->key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07); \
+                            else \
+                                ti59cpu->r->key[(CODE) & 0x0F] &= ~(1 << (((CODE) >> 4) & 0x07));
 
 UINT8 Cti59::getKey()
 {
     UINT8 code = 0;
-    if (pKEYB->LastKey)
+//    memset(ti59cpu->r->key,0,sizeof(ti59cpu->r->key));
+//    if (pKEYB->LastKey)
     {
 
-        if (KEY(K_RS))			KPORT(0x19);
-        if (KEY('0'))			KPORT(0x29);
-        if (KEY('.'))			KPORT(0x39);
-        if (KEY(K_SIGN))		KPORT(0x59);
-        if (KEY('='))			KPORT(0x69);
+        KPORT(KEY(K_RS),0x19);
+        KPORT(KEY('0'),0x29);
+        KPORT(KEY('.'),0x39);
+        KPORT(KEY(K_SIGN),0x59);
+        KPORT(KEY('='),0x69);
 
-        if (KEY(K_RST))			KPORT(0x18);
-        if (KEY('1'))			KPORT(0x28);
-        if (KEY('2'))			KPORT(0x38);
-        if (KEY('3'))			KPORT(0x58);
-        if (KEY('+'))			KPORT(0x68);
+        KPORT(KEY(K_RST),0x18);
+        KPORT(KEY('1'),0x28);
+        KPORT(KEY('2'),0x38);
+        KPORT(KEY('3'),0x58);
+        KPORT(KEY('+'),0x68);
 
-        if (KEY(K_SBR))			KPORT(0x17);
-        if (KEY('4'))			KPORT(0x27);
-        if (KEY('5'))			KPORT(0x37);
-        if (KEY('6'))			KPORT(0x57);
-        if (KEY('-'))			KPORT(0x67);
+        KPORT(KEY(K_SBR),0x17);
+        KPORT(KEY('4'),0x27);
+        KPORT(KEY('5'),0x37);
+        KPORT(KEY('6'),0x57);
+        KPORT(KEY('-'),0x67);
 
-        if (KEY(K_GTO))			KPORT(0x16);
-        if (KEY('7'))			KPORT(0x26);
-        if (KEY('8'))			KPORT(0x36);
-        if (KEY('9'))			KPORT(0x56);
-        if (KEY('*'))			KPORT(0x66);
+        KPORT(KEY(K_GTO),0x16);
+        KPORT(KEY('7'),0x26);
+        KPORT(KEY('8'),0x36);
+        KPORT(KEY('9'),0x56);
+        KPORT(KEY('*'),0x66);
 
-        if (KEY(K_BST))			KPORT(0x15);
-        if (KEY(K_EE))			KPORT(0x25);
-        if (KEY('('))			KPORT(0x35);
-        if (KEY(')'))			KPORT(0x55);
-        if (KEY('/'))			KPORT(0x65);
+        KPORT(KEY(K_BST),0x15);
+        KPORT(KEY(K_EE),0x25);
+        KPORT(KEY('('),0x35);
+        KPORT(KEY(')'),0x55);
+        KPORT(KEY('/'),0x65);
 
-        if (KEY(K_SST))			KPORT(0x14);
-        if (KEY(K_STO))			KPORT(0x24);
-        if (KEY(K_RCL))			KPORT(0x34);
-        if (KEY(K_SUM))			KPORT(0x54);
-        if (KEY(K_POT))			KPORT(0x64);  // X^Y
+        KPORT(KEY(K_SST),0x14);
+        KPORT(KEY(K_STO),0x24);
+        KPORT(KEY(K_RCL),0x34);
+        KPORT(KEY(K_SUM),0x54);
+        KPORT(KEY(K_POT),0x64);  // X^Y
 
-        if (KEY(K_LRN))			KPORT(0x13);
-        if (KEY(K_XT))			KPORT(0x23);
-        if (KEY(K_SQR))			KPORT(0x33);
-        if (KEY(K_ROOT))		KPORT(0x53);
-        if (KEY(K_1X))			KPORT(0x63);
+        KPORT(KEY(K_LRN),0x13);
+        KPORT(KEY(K_XT),0x23);
+        KPORT(KEY(K_SQR),0x33);
+        KPORT(KEY(K_ROOT),0x53);
+        KPORT(KEY(K_1X),0x63);
 
-        if (KEY(K_SHT))			KPORT(0x12);  // 2nd
-        if (KEY(K_DEF))			KPORT(0x22);  // INV
-        if (KEY(K_LN))			KPORT(0x32);
-        if (KEY(K_CE))			KPORT(0x52);
-        if (KEY(K_CCE))			KPORT(0x62);  // CLR
+        KPORT(KEY(K_SHT),0x12);  // 2nd
+        KPORT(KEY(K_DEF),0x22);  // INV
+        KPORT(KEY(K_LN),0x32);
+        KPORT(KEY(K_CE),0x52);
+        KPORT(KEY(K_CCE),0x62);  // CLR
 
-        if (KEY('A'))			KPORT(0x11);  // 2nd
-        if (KEY('B'))			KPORT(0x21);  // INV
-        if (KEY('C'))			KPORT(0x31);
-        if (KEY('D'))			KPORT(0x51);
-        if (KEY('E'))			KPORT(0x61);  // CLR
+        KPORT(KEY('A'),0x11);  // 2nd
+        KPORT(KEY('B'),0x21);  // INV
+        KPORT(KEY('C'),0x31);
+        KPORT(KEY('D'),0x51);
+        KPORT(KEY('E'),0x61);  // CLR
 
     }
 
