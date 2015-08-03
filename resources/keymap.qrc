@@ -61,6 +61,7 @@
         <file>keymap/pc1253.map</file>
         <file>keymap/pc1475.map</file>
         <file>keymap/jr800.map</file>
+        <file>keymap/ti59.map</file>
     </qresource>
     <qresource prefix="/"/>
 </RCC>

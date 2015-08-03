@@ -48,7 +48,7 @@ void Clcdc_ti59::disp(void)
     font.setPixelSize(30);
     painter.setFont(font);
 
-    QString s = ((Cti59 *)pPC)->Display();
+    QString s = ((Cti59 *)pPC)->displayString;
     // Check for ERROR
     if (s.startsWith('E')) {
 //        qWarning()<<"ERROR";

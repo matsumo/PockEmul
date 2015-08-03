@@ -5,7 +5,8 @@
 #include "pcxxxx.h"
 
 // disassembly output macro
-#define	DIS(...)	sprintf(Buffer, __VA_ARGS__)
+#define	DIS(...)	sprintf(_tmc0501DASM, __VA_ARGS__)
+char _tmc0501DASM[2000];
 
 void Cdebug_tmc0501::disasm (unsigned addr, unsigned opcode) {
 // I11..8
@@ -241,27 +242,14 @@ UINT32 Cdebug_tmc0501::DisAsm_1(UINT32 oldpc)
 
     oldpc &= 0xffff;
     DasmAdr = oldpc;
-    UINT32 pc=oldpc;
-    quint8 op = pCPU->pPC->Get_8(pc);
+    WORD _op = pCPU->pPC->Get_16(DasmAdr<<1);
 
     Buffer[0] = '\0';
-    char LocBuffer[200];
-    LocBuffer[0] = '\0';
-    int len =1;
 
-    TMC0501regs r;
-//    r.PC = pc;
-//    r.OP = pCPU->pPC->Get_16(r.PC<<1);
+    disasm(DasmAdr , _op);
+    sprintf(Buffer," %04X:%04X %s",DasmAdr ,_op,_tmc0501DASM);
 
-////    sprintf(Buffer," %06X:%02X",pc,op);
-//    QString t = Tracing(&r);
-
-//    qWarning()<<"**"<<t<<"**";
-
-//    sprintf(Buffer,"%s",t.toLatin1().data());
-    disasm(((Ctmc0501*)pCPU)->r->addr , pCPU->pPC->Get_16(((Ctmc0501*)pCPU)->r->addr << 1));
-    DasmAdr = oldpc;
-    NextDasmAdr = oldpc+len;
+    NextDasmAdr = DasmAdr+1;
     debugged = true;
     return NextDasmAdr;
 }

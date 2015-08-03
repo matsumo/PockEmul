@@ -543,6 +543,7 @@ int Ctmc0501::execute (unsigned short opcode) {
     r->digit--;
   else
     r->digit = 15;
+
   // update instruction cycle counter
   if (r->flags & FLG_IDLE)
     r->cycle += 4;
@@ -985,6 +986,7 @@ int Ctmc0501::execute (unsigned short opcode) {
       r->flags |= FLG_IDLE;
 //      if (log_flags & LOG_SHORT)
 //        LOG ("IDLE=1");
+      qWarning()<<"IDLE=1";
       break;
     case 0x000A:
       // CLFB

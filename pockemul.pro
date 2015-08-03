@@ -1383,6 +1383,9 @@ SOURCES+= \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
+DISTFILES += \
+    resources/keymap/ti59.map
+
 
 
 

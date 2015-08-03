@@ -96,7 +96,12 @@ bool Cti59::run() {
 
     TMC0501regs * _regs = ti59cpu->r;
 
-//    _regs->KEYR = getKey();
+    displayString = Display();
+    if (ti59cpu->r->flags & FLG_DISP)
+        pLCDC->updated = true;
+
+    getKey();
+
 
 //    if (
 //            !_regs->Power &&
@@ -182,9 +187,9 @@ bool Cti59::SaveConfig(QXmlStreamWriter *xmlOut)
 QString Cti59::Display() {
   QChar c;
   QString s;
-#if 0
   if (!pCPU) return "";
   s="";
+#if 0
   if (Power)
     for (int i = 11;i >=0; i--) {
         if (ti59cpu->r->RB[i] & 8) c=' ';
@@ -212,60 +217,163 @@ QString Cti59::Display() {
       s.prepend('E');
   }
 #endif
-//  qWarning()<<"DISPLAY:"<<s;
+
+
+  if (!ti59cpu->r->digit) {
+      static char disp_filter = 0;
+      if (ti59cpu->r->flags & FLG_IDLE) {
+          qWarning()<<"ok";
+          // display enabled
+          static unsigned char dA[16], dB[16];
+          int i;
+          if (ti59cpu->r->flags & FLG_DISP) {
+              // check difference between current and saved registers
+              for (i = 13; i >= 2; i--) {
+                  if (dA[i] != ti59cpu->r->A[i] || dB[i] != ti59cpu->r->B[i]) {
+                      ti59cpu->r->flags &= ~FLG_DISP;
+                      break;
+                  }
+              }
+              if ((ti59cpu->r->flags ^ ti59cpu->r->fA) & FLG_DISP_C)
+                  ti59cpu->r->flags &= ~FLG_DISP;
+          }
+          if (!(ti59cpu->r->flags & FLG_DISP)) {
+              int zero = 1;
+              ti59cpu->r->flags |= FLG_DISP;
+              //        putchar ('\r');
+              if (ti59cpu->r->fA & 0x4000) {
+                  //          putchar ('C');
+                  ti59cpu->r->flags |= FLG_DISP_C;
+              } else {
+                  ti59cpu->r->flags &= ~FLG_DISP_C;
+              }
+#if 1
+              for (i = 13; i >= 2; i--) {
+                  dA[i] = ti59cpu->r->A[i];
+                  dB[i] = ti59cpu->r->B[i];
+                  if (i == 3 || ti59cpu->r->R5 == i || ti59cpu->r->B[i] >= 8)
+                      zero = 0;
+                  if (i == 2)
+                      zero = 1;
+                  if (ti59cpu->r->B[i] == 7 || ti59cpu->r->B[i] == 3 || (ti59cpu->r->B[i] <= 4 && zero && !ti59cpu->r->A[i]))
+                      s.append(' ');
+                  else
+                      if (ti59cpu->r->B[i] == 6 || (ti59cpu->r->B[i] == 5 && !ti59cpu->r->A[i]))
+                          s.append ('-');
+                      else
+                          if (ti59cpu->r->B[i] == 5)
+                              putchar ('o');
+                          else
+                              if (ti59cpu->r->B[i] == 4)
+                                  putchar ('\'');
+                              else
+                                  if (ti59cpu->r->B[3] == 2)
+                                      putchar ('"');
+                                  else {
+                                      s.append ('0' + ti59cpu->r->A[i]);
+                                      if (ti59cpu->r->A[i])
+                                          zero = 0;
+                                  }
+                  if (ti59cpu->r->R5 == i)
+                      s.append ('.');
+              }
+#else
+              for (i = 13; i >= 2; i--) {
+                  putchar ('0'+ti59cpu->r->A[i]);
+                  if (ti59cpu->r->R5 == i)
+                      putchar ('.');
+              }
+              putchar (' ');
+              for (i = 13; i >= 2; i--)
+                  putchar ('0'+ti59cpu->r->B[i]);
+#endif
+              putchar ('|'); putchar (' ');
+                qWarning()<<"DISPLAY:"<<s;
+          }
+          disp_filter = 0;
+      } else
+      if (disp_filter < 3)
+          disp_filter++;
+      else {
+          // display disabled
+          if ((ti59cpu->r->flags & FLG_DISP) /*|| (!ti59cpu->r->fA && (ti59cpu->r->flags & FLG_DISP_C))*/ || (ti59cpu->r->fA && !(ti59cpu->r->flags & FLG_DISP_C))) {
+              ti59cpu->r->flags &= ~FLG_DISP;
+              if (ti59cpu->r->fA) {
+                  printf ("\rC            |");
+                  ti59cpu->r->flags |= FLG_DISP_C;
+              } else {
+                  printf ("\r             |");
+                  ti59cpu->r->flags &= ~FLG_DISP_C;
+              }
+          }
+      }
+  }
+
   return s;
 }
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+#define KPORT(CODE)    ti59cpu->r->key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07)
 
 UINT8 Cti59::getKey()
 {
     UINT8 code = 0;
     if (pKEYB->LastKey)
     {
-        if (KEY('0'))			code = 0x27;
-        if (KEY('1'))			code = 0x26;
-        if (KEY('2'))			code = 0x36;
-        if (KEY('3'))			code = 0x46;
-        if (KEY('4'))			code = 0x25;
-        if (KEY('5'))			code = 0x35;
-        if (KEY('6'))			code = 0x45;
-        if (KEY('7'))			code = 0x24;
-        if (KEY('8'))			code = 0x34;
-        if (KEY('9'))			code = 0x44;
 
-        if (KEY('.'))			code = 0x37;
-        if (KEY('+'))			code = 0x56;
-        if (KEY('('))			code = 51;
-        if (KEY(')'))			code = 67;
-        if (KEY('-'))			code = 0x55;
-        if (KEY('*'))			code = 0x54;
-        if (KEY('/'))			code = 0x53;
-        if (KEY('='))			code = 0x57;
+        if (KEY(K_RS))			KPORT(0x19);
+        if (KEY('0'))			KPORT(0x29);
+        if (KEY('.'))			KPORT(0x39);
+        if (KEY(K_SIGN))		KPORT(0x59);
+        if (KEY('='))			KPORT(0x69);
 
-        if (KEY(K_CCE))			code = 80;  // CLR
-        if (KEY(K_LN))			code = 48;
-        if (KEY(K_CE))			code = 64;
-        if (KEY(K_GTO))			code = 20;
-        if (KEY(K_SBR))			code = 21;
-        if (KEY(K_RST))			code = 22;
-        if (KEY(K_SHT))			code = 0x10;  // 2nd
-        if (KEY(K_DEF))			code = 0x20;  // INV
-        if (KEY(K_RS))			code = 23;
-        if (KEY(K_SIGN))		code = 71;
-        if (KEY(K_LRN))			code = 17;
-        if (KEY(K_XT))			code = 33;
+        if (KEY(K_RST))			KPORT(0x18);
+        if (KEY('1'))			KPORT(0x28);
+        if (KEY('2'))			KPORT(0x38);
+        if (KEY('3'))			KPORT(0x58);
+        if (KEY('+'))			KPORT(0x68);
 
-        if (KEY(K_SQR))			code = 49;
-        if (KEY(K_ROOT))		code = 65;
-        if (KEY(K_1X))			code = 81;
-        if (KEY(K_SST))			code = 18;
-        if (KEY(K_STO))			code = 34;
-        if (KEY(K_RCL))			code = 50;
-        if (KEY(K_SUM))			code = 66;
-        if (KEY(K_POT))			code = 82;  // X^Y
-        if (KEY(K_BST))			code = 19;
-        if (KEY(K_EE))			code = 35;
+        if (KEY(K_SBR))			KPORT(0x17);
+        if (KEY('4'))			KPORT(0x27);
+        if (KEY('5'))			KPORT(0x37);
+        if (KEY('6'))			KPORT(0x57);
+        if (KEY('-'))			KPORT(0x67);
+
+        if (KEY(K_GTO))			KPORT(0x16);
+        if (KEY('7'))			KPORT(0x26);
+        if (KEY('8'))			KPORT(0x36);
+        if (KEY('9'))			KPORT(0x56);
+        if (KEY('*'))			KPORT(0x66);
+
+        if (KEY(K_BST))			KPORT(0x15);
+        if (KEY(K_EE))			KPORT(0x25);
+        if (KEY('('))			KPORT(0x35);
+        if (KEY(')'))			KPORT(0x55);
+        if (KEY('/'))			KPORT(0x65);
+
+        if (KEY(K_SST))			KPORT(0x14);
+        if (KEY(K_STO))			KPORT(0x24);
+        if (KEY(K_RCL))			KPORT(0x34);
+        if (KEY(K_SUM))			KPORT(0x54);
+        if (KEY(K_POT))			KPORT(0x64);  // X^Y
+
+        if (KEY(K_LRN))			KPORT(0x13);
+        if (KEY(K_XT))			KPORT(0x23);
+        if (KEY(K_SQR))			KPORT(0x33);
+        if (KEY(K_ROOT))		KPORT(0x53);
+        if (KEY(K_1X))			KPORT(0x63);
+
+        if (KEY(K_SHT))			KPORT(0x12);  // 2nd
+        if (KEY(K_DEF))			KPORT(0x22);  // INV
+        if (KEY(K_LN))			KPORT(0x32);
+        if (KEY(K_CE))			KPORT(0x52);
+        if (KEY(K_CCE))			KPORT(0x62);  // CLR
+
+        if (KEY('A'))			KPORT(0x11);  // 2nd
+        if (KEY('B'))			KPORT(0x21);  // INV
+        if (KEY('C'))			KPORT(0x31);
+        if (KEY('D'))			KPORT(0x51);
+        if (KEY('E'))			KPORT(0x61);  // CLR
 
     }
 

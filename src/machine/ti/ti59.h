@@ -48,6 +48,7 @@ public:
     Ctmc0501 *ti59cpu;
 
     QString Display();
+    QString displayString;
 private:
     Models currentModel;
 };
