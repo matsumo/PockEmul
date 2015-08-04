@@ -51,6 +51,9 @@ public:
     QString displayString;
 private:
     Models currentModel;
+
+    unsigned char dA[16], dB[16];
+    char disp_filter;
 };
 
 #endif // TI59_H

@@ -132,13 +132,13 @@ public:
     virtual	bool	Get_Xout(void) {return true;}
     virtual	void	Set_Xout(bool) {}
 
-    virtual	UINT32	get_PC(void) { return r->addr;}					//get Program Counter
+    virtual	UINT32	get_PC(void) { return r.addr;}					//get Program Counter
     virtual void	Regs_Info(UINT8);
 
 
     QString IntToHex(int val, int nb);
 
-    TMC0501regs *r;
+    TMC0501regs r;
 private:
 
 //    Tracer: TextFile;

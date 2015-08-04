@@ -14,17 +14,12 @@
 #include "Inter.h"
 #include "Connect.h"
 
-#define	CARD_INSERTED	(ti59cpu->r->key[10] & (1 << KR_BIT))
-#define	PRN_CONNECTED	(ti59cpu->r->key[0] & (1 << KP_BIT))
-#define	PRN_TRACE	(ti59cpu->r->key[15] & (1 << KP_BIT))
-#define	PRN_ADVANCE	(ti59cpu->r->key[12] & (1 << KN_BIT))
-#define	PRN_PRINT	(ti59cpu->r->key[12] & (1 << KP_BIT))
+#define	CARD_INSERTED	(ti59cpu->r.key[10] & (1 << KR_BIT))
+#define	PRN_CONNECTED	(ti59cpu->r.key[0] & (1 << KP_BIT))
+#define	PRN_TRACE	(ti59cpu->r.key[15] & (1 << KP_BIT))
+#define	PRN_ADVANCE	(ti59cpu->r.key[12] & (1 << KN_BIT))
+#define	PRN_PRINT	(ti59cpu->r.key[12] & (1 << KP_BIT))
 
-// SCOM registers
-unsigned char SCOM[16][16];
-
-// RAM registers
-unsigned char RAM[120][16];
 
 
 Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
@@ -86,7 +81,7 @@ bool Cti59::init(void)				// initialize
 #endif
     CpcXXXX::init();
 
-
+    disp_filter = 0;
     return true;
 }
 
@@ -133,17 +128,17 @@ void Cti59::Reset()
     // TI-58/59 mode
     if (currentModel == TI59) {
         // TI-59: D10-KR card switch normally closed
-        ti59cpu->r->key[10] |= (1 << KR_BIT);
+        ti59cpu->r.key[10] |= (1 << KR_BIT);
     }
     if (currentModel == TI58) {
         // TI-58: D7-KR diode
-        ti59cpu->r->key[7] |= (1 << KR_BIT);
+        ti59cpu->r.key[7] |= (1 << KR_BIT);
     }
 
 //    // printer mode
 //    if (mode_flags & MODE_PRINTER)
 //      // printer: D0-KP diode
-//      ti59cpu->r->key[0] |= (1 << KP_BIT);
+//      ti59cpu->r.key[0] |= (1 << KP_BIT);
 
 
 }
@@ -164,75 +159,75 @@ QString Cti59::Display() {
   if (!pCPU) return "";
   s="";
 
-  if (!ti59cpu->r->digit) {
-      static char disp_filter = 0;
-      if (ti59cpu->r->flags & FLG_IDLE) {
+  if (!ti59cpu->r.digit) {
+
+      if (ti59cpu->r.flags & FLG_IDLE) {
 //          qWarning()<<"ok";
           // display enabled
-          static unsigned char dA[16], dB[16];
+
           int i;
-          if (ti59cpu->r->flags & FLG_DISP) {
+          if (ti59cpu->r.flags & FLG_DISP) {
               // check difference between current and saved registers
               for (i = 13; i >= 2; i--) {
-                  if (dA[i] != ti59cpu->r->A[i] || dB[i] != ti59cpu->r->B[i]) {
-                      ti59cpu->r->flags &= ~FLG_DISP;
+                  if (dA[i] != ti59cpu->r.A[i] || dB[i] != ti59cpu->r.B[i]) {
+                      ti59cpu->r.flags &= ~FLG_DISP;
                       break;
                   }
               }
-              if ((ti59cpu->r->flags ^ ti59cpu->r->fA) & FLG_DISP_C)
-                  ti59cpu->r->flags &= ~FLG_DISP;
+              if ((ti59cpu->r.flags ^ ti59cpu->r.fA) & FLG_DISP_C)
+                  ti59cpu->r.flags &= ~FLG_DISP;
           }
-          if (!(ti59cpu->r->flags & FLG_DISP)) {
+          if (!(ti59cpu->r.flags & FLG_DISP)) {
               int zero = 1;
-              ti59cpu->r->flags |= FLG_DISP;
+              ti59cpu->r.flags |= FLG_DISP;
               pLCDC->updated = true;
               //        putchar ('\r');
-              if (ti59cpu->r->fA & 0x4000) {
+              if (ti59cpu->r.fA & 0x4000) {
                   //          putchar ('C');
                   s.append('C');
-                  ti59cpu->r->flags |= FLG_DISP_C;
+                  ti59cpu->r.flags |= FLG_DISP_C;
               } else {
-                  ti59cpu->r->flags &= ~FLG_DISP_C;
+                  ti59cpu->r.flags &= ~FLG_DISP_C;
               }
 #if 1
               for (i = 13; i >= 2; i--) {
-                  dA[i] = ti59cpu->r->A[i];
-                  dB[i] = ti59cpu->r->B[i];
-                  if (i == 3 || ti59cpu->r->R5 == i || ti59cpu->r->B[i] >= 8)
+                  dA[i] = ti59cpu->r.A[i];
+                  dB[i] = ti59cpu->r.B[i];
+                  if (i == 3 || ti59cpu->r.R5 == i || ti59cpu->r.B[i] >= 8)
                       zero = 0;
                   if (i == 2)
                       zero = 1;
-                  if (ti59cpu->r->B[i] == 7 || ti59cpu->r->B[i] == 3 || (ti59cpu->r->B[i] <= 4 && zero && !ti59cpu->r->A[i]))
+                  if (ti59cpu->r.B[i] == 7 || ti59cpu->r.B[i] == 3 || (ti59cpu->r.B[i] <= 4 && zero && !ti59cpu->r.A[i]))
                       s.append(' ');
                   else
-                  if (ti59cpu->r->B[i] == 6 || (ti59cpu->r->B[i] == 5 && !ti59cpu->r->A[i]))
+                  if (ti59cpu->r.B[i] == 6 || (ti59cpu->r.B[i] == 5 && !ti59cpu->r.A[i]))
                       s.append ('-');
                   else
-                  if (ti59cpu->r->B[i] == 5)
+                  if (ti59cpu->r.B[i] == 5)
                       putchar ('o');
                   else
-                  if (ti59cpu->r->B[i] == 4)
+                  if (ti59cpu->r.B[i] == 4)
                       putchar ('\'');
                   else
-                  if (ti59cpu->r->B[3] == 2)
+                  if (ti59cpu->r.B[3] == 2)
                       putchar ('"');
                   else {
-                      s.append ('0' + ti59cpu->r->A[i]);
-                      if (ti59cpu->r->A[i])
+                      s.append ('0' + ti59cpu->r.A[i]);
+                      if (ti59cpu->r.A[i])
                           zero = 0;
                   }
-                  if (ti59cpu->r->R5 == i)
+                  if (ti59cpu->r.R5 == i)
                       s.append ('.');
               }
 #else
               for (i = 13; i >= 2; i--) {
-                  putchar ('0'+ti59cpu->r->A[i]);
-                  if (ti59cpu->r->R5 == i)
+                  putchar ('0'+ti59cpu->r.A[i]);
+                  if (ti59cpu->r.R5 == i)
                       putchar ('.');
               }
               putchar (' ');
               for (i = 13; i >= 2; i--)
-                  putchar ('0'+ti59cpu->r->B[i]);
+                  putchar ('0'+ti59cpu->r.B[i]);
 #endif
 //              putchar ('|'); putchar (' ');
                 qWarning()<<"DISPLAY:"<<s;
@@ -246,16 +241,16 @@ QString Cti59::Display() {
       else {
           // display disabled
 
-          if ((ti59cpu->r->flags & FLG_DISP) /*|| (!ti59cpu->r->fA && (ti59cpu->r->flags & FLG_DISP_C))*/ || (ti59cpu->r->fA && !(ti59cpu->r->flags & FLG_DISP_C)))
+          if ((ti59cpu->r.flags & FLG_DISP) /*|| (!ti59cpu->r.fA && (ti59cpu->r.flags & FLG_DISP_C))*/ || (ti59cpu->r.fA && !(ti59cpu->r.flags & FLG_DISP_C)))
           {
-              ti59cpu->r->flags &= ~FLG_DISP;
-              if (ti59cpu->r->fA) {
+              ti59cpu->r.flags &= ~FLG_DISP;
+              if (ti59cpu->r.fA) {
 //                  printf ("\rC            |");
-                  ti59cpu->r->flags |= FLG_DISP_C;
+                  ti59cpu->r.flags |= FLG_DISP_C;
                   displayString = "C";
               } else {
 //                  printf ("\r             |");
-                  ti59cpu->r->flags &= ~FLG_DISP_C;
+                  ti59cpu->r.flags &= ~FLG_DISP_C;
                   displayString = "";
               }
           }
@@ -268,14 +263,14 @@ QString Cti59::Display() {
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 #define KPORT(COND,CODE)    if(COND) \
-                                ti59cpu->r->key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07); \
+                                ti59cpu->r.key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07); \
                             else \
-                                ti59cpu->r->key[(CODE) & 0x0F] &= ~(1 << (((CODE) >> 4) & 0x07));
+                                ti59cpu->r.key[(CODE) & 0x0F] &= ~(1 << (((CODE) >> 4) & 0x07));
 
 UINT8 Cti59::getKey()
 {
     UINT8 code = 0;
-//    memset(ti59cpu->r->key,0,sizeof(ti59cpu->r->key));
+//    memset(ti59cpu->r.key,0,sizeof(ti59cpu->r.key));
 //    if (pKEYB->LastKey)
     {
 
