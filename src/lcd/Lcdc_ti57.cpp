@@ -173,6 +173,7 @@ bool seg1, seg2, seg3, seg4, seg5, seg6, seg7;
         case 14: seg1 = seg4 = seg3 = seg5 = seg2 = true; break;  // e
         case 15: seg1 = seg4 = seg3 = seg5 = true; break;  // f
         case 16: seg3 = true; break;  // -
+        case 17: seg1 = seg4 = seg5 = seg2 = true; break;  // C
     }
 
 

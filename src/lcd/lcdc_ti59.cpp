@@ -65,7 +65,7 @@ void Clcdc_ti59::disp(void)
         blinkTimer->stop();
     }
 
-    qWarning()<<"lcd display:"<<s;
+//    qWarning()<<"lcd display:"<<s;
 
 #define YOFFSET 5
 
@@ -80,10 +80,11 @@ void Clcdc_ti59::disp(void)
         for (int i =0;i<s.length();i++) {
             int code = s.at(i).digitValue();
             if (s.at(i) == '-') code = 16;
-            if (s.at(i) == '.') code = 17;
+            if (s.at(i) == 'C') code = 17;
+            if (s.at(i) == '.') code = 99;
             if (s.at(i) == ' ') pos+=charSpace;
 
-            if (code == 17) {
+            if (code == 99) {
                 QRect rect(pos- charSpace + 10,12,1,1);
                 painter.drawRect(rect);
             }

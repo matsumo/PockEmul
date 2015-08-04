@@ -64,7 +64,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_ti59(this,
-                                 QRect(40,70,210,35),
+                                 QRect(40,68,210,40),
                                  QRect(),
                                  P_RES(":/ti59/ti59lcd.png"));
     pCPU		= new Ctmc0501(this,currentModel);    ti59cpu = (Ctmc0501*)pCPU;
@@ -94,12 +94,6 @@ bool Cti59::init(void)				// initialize
 
 bool Cti59::run() {
 
-    TMC0501regs * _regs = ti59cpu->r;
-
-
-//    if (ti59cpu->r->flags & FLG_DISP)
-//        pLCDC->updated = true;
-
     getKey();
 
     CpcXXXX::run();
@@ -128,9 +122,6 @@ void Cti59::TurnOFF(void) {
 void Cti59::TurnON(void){
     CpcXXXX::TurnON();
 
-//    ti59cpu->r->Run = true;
-//    ti59cpu->r->Power = !ti59cpu->r->Power;
-//    ti59cpu->halt = !ti59cpu->halt;
     pLCDC->updated = true;
 }
 
@@ -172,35 +163,6 @@ QString Cti59::Display() {
   QString s;
   if (!pCPU) return "";
   s="";
-#if 0
-  if (Power)
-    for (int i = 11;i >=0; i--) {
-        if (ti59cpu->r->RB[i] & 8) c=' ';
-        else if (ti59cpu->r->RB[i] & 1) c='-';
-        else
-            switch(ti59cpu->r->RA[i]) {
-            case 0:
-            case 1:
-            case 2:
-            case 3:
-            case 4:
-            case 5:
-            case 6:
-            case 7:
-            case 8:
-            case 9: c=QChar(0x30 + ti59cpu->r->RA[i]); break;
-            default: qWarning()<<"default:"<<i;c=QChar(0x41-10+ti59cpu->r->RA[i]); break;
-            }
-        s.append(c);
-        if (ti59cpu->r->RB[i] & 2) s.append('.');
-    }
-  // Check for error
-  if (ti59cpu->r->RA[14]==0x0e) {
-      // error, blink screen
-      s.prepend('E');
-  }
-#endif
-
 
   if (!ti59cpu->r->digit) {
       static char disp_filter = 0;
@@ -227,6 +189,7 @@ QString Cti59::Display() {
               //        putchar ('\r');
               if (ti59cpu->r->fA & 0x4000) {
                   //          putchar ('C');
+                  s.append('C');
                   ti59cpu->r->flags |= FLG_DISP_C;
               } else {
                   ti59cpu->r->flags &= ~FLG_DISP_C;
@@ -242,22 +205,22 @@ QString Cti59::Display() {
                   if (ti59cpu->r->B[i] == 7 || ti59cpu->r->B[i] == 3 || (ti59cpu->r->B[i] <= 4 && zero && !ti59cpu->r->A[i]))
                       s.append(' ');
                   else
-                      if (ti59cpu->r->B[i] == 6 || (ti59cpu->r->B[i] == 5 && !ti59cpu->r->A[i]))
-                          s.append ('-');
-                      else
-                          if (ti59cpu->r->B[i] == 5)
-                              putchar ('o');
-                          else
-                              if (ti59cpu->r->B[i] == 4)
-                                  putchar ('\'');
-                              else
-                                  if (ti59cpu->r->B[3] == 2)
-                                      putchar ('"');
-                                  else {
-                                      s.append ('0' + ti59cpu->r->A[i]);
-                                      if (ti59cpu->r->A[i])
-                                          zero = 0;
-                                  }
+                  if (ti59cpu->r->B[i] == 6 || (ti59cpu->r->B[i] == 5 && !ti59cpu->r->A[i]))
+                      s.append ('-');
+                  else
+                  if (ti59cpu->r->B[i] == 5)
+                      putchar ('o');
+                  else
+                  if (ti59cpu->r->B[i] == 4)
+                      putchar ('\'');
+                  else
+                  if (ti59cpu->r->B[3] == 2)
+                      putchar ('"');
+                  else {
+                      s.append ('0' + ti59cpu->r->A[i]);
+                      if (ti59cpu->r->A[i])
+                          zero = 0;
+                  }
                   if (ti59cpu->r->R5 == i)
                       s.append ('.');
               }
@@ -271,7 +234,7 @@ QString Cti59::Display() {
               for (i = 13; i >= 2; i--)
                   putchar ('0'+ti59cpu->r->B[i]);
 #endif
-              putchar ('|'); putchar (' ');
+//              putchar ('|'); putchar (' ');
                 qWarning()<<"DISPLAY:"<<s;
                displayString = s;
                pLCDC->updated = true;
@@ -282,16 +245,21 @@ QString Cti59::Display() {
           disp_filter++;
       else {
           // display disabled
-          if ((ti59cpu->r->flags & FLG_DISP) /*|| (!ti59cpu->r->fA && (ti59cpu->r->flags & FLG_DISP_C))*/ || (ti59cpu->r->fA && !(ti59cpu->r->flags & FLG_DISP_C))) {
+
+          if ((ti59cpu->r->flags & FLG_DISP) /*|| (!ti59cpu->r->fA && (ti59cpu->r->flags & FLG_DISP_C))*/ || (ti59cpu->r->fA && !(ti59cpu->r->flags & FLG_DISP_C)))
+          {
               ti59cpu->r->flags &= ~FLG_DISP;
               if (ti59cpu->r->fA) {
-                  printf ("\rC            |");
+//                  printf ("\rC            |");
                   ti59cpu->r->flags |= FLG_DISP_C;
+                  displayString = "C";
               } else {
-                  printf ("\r             |");
+//                  printf ("\r             |");
                   ti59cpu->r->flags &= ~FLG_DISP_C;
+                  displayString = "";
               }
           }
+          pLCDC->updated = true;
       }
   }
 
