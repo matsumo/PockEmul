@@ -19,7 +19,7 @@
 // ====================================
 // card file names
 // ====================================
-static char card_input[1024] = "";
+static char card_input[1024] = "card.bin";
 static char card_output[1024] = "card.bin";
 
 #define	MODE_PRINTER	0x0002
@@ -864,8 +864,10 @@ int Ctmc0501::execute (unsigned short opcode) {
           // CRDOFF
           if (r.CRD_FLAGS & CRD_WRITE) {
               FILE *f;
-              if ((f = fopen (card_output, "r+b")) == NULL)
+              if ((f = fopen (card_output, "r+b")) == NULL) {
                   f = fopen (card_output, "wb");
+                  qWarning()<<card_output<<" created.";
+              }
               if (f == NULL) {
                   fprintf (stderr, "Can't access file %s!\n", card_output);
               } else {

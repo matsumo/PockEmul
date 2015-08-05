@@ -328,9 +328,39 @@ UINT8 Cti59::getKey()
         KPORT(KEY('D'),0x51);
         KPORT(KEY('E'),0x61);  // CLR
 
+        KPORT(!KEY('Z'),0x4A);
+
     }
 
     return code;
 
 }
 
+void Cti59::contextMenuEvent ( QContextMenuEvent * event )
+{
+
+    QMenu *menu = new QMenu(this);
+
+    BuildContextMenu(menu);
+
+    if (currentModel == TI59) {
+        menu->addSeparator();
+
+//        QMenu *menuUart = menu->addMenu(tr("Card Management"));
+        menu->addAction(tr("Insert card"),this,SLOT(InsertCard()));
+//        menuUart->addAction(tr("Hide console"),pUART,SLOT(HideConsole()));
+
+//        QMenu *menuTape = menu->addMenu(tr("Tape I/O"));
+//        menu->addAction(tr("Change Solid State Module"),this,SLOT(LoadModule()));
+//        menuTape->addAction(tr("Save to CAS..."),this,SLOT(LoadNewK7()));
+    }
+
+    menu->popup(event->globalPos () );
+    event->accept();
+}
+
+void Cti59::InsertCard()
+{
+     pKEYB->keyPressedList.append('Z');
+     pKEYB->LastKey='Z';
+}

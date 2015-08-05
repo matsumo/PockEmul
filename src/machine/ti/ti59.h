@@ -54,6 +54,10 @@ private:
 
     unsigned char dA[16], dB[16];
     char disp_filter;
+
+protected slots:
+    void contextMenuEvent ( QContextMenuEvent * );
+    void InsertCard(void);
 };
 
 #endif // TI59_H
