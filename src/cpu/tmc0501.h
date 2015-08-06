@@ -139,6 +139,13 @@ public:
     QString IntToHex(int val, int nb);
 
     TMC0501regs r;
+
+
+    // ====================================
+    // card file names
+    // ====================================
+    char card_output[1024];
+
 private:
 
 //    Tracer: TextFile;

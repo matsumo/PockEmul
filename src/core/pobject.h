@@ -237,6 +237,7 @@ public:
 signals:
     void msgError(QString);
     void stackPosChanged();
+    void ObjLinkedTo(Cconnector *, Cconnector *);
 
 public slots:
     void slotDoubleClick(QPoint pos);

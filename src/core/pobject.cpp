@@ -919,6 +919,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
                             QList<CPObject *> list;
                             listpPObject.at(k)->manageStackPos(&list);
                             emit stackPosChanged();
+                            emit ObjLinkedTo(nearList.at(r),listpPObject.at(k)->ConnList.at(c));
                         }
 //                        qWarning("post box :%i",mainwindow);
                     }

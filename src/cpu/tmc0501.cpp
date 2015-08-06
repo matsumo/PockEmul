@@ -16,11 +16,6 @@
 #include "ui/cregsz80widget.h"
 #include "Inter.h"
 
-// ====================================
-// card file names
-// ====================================
-static char card_input[1024] = "card.bin";
-static char card_output[1024] = "card.bin";
 
 #define	MODE_PRINTER	0x0002
 #define	MODE_CARD	0x0004
@@ -371,6 +366,8 @@ Ctmc0501::Ctmc0501(CPObject *parent, Models mod) : CCPU(parent)
 //    r = new TMC0501regs;
     pDEBUG = new Cdebug_tmc0501(this);
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
+
+    strcpy(card_output,"card.bin");
 }
 
 Ctmc0501::~Ctmc0501()
@@ -890,8 +887,8 @@ int Ctmc0501::execute (unsigned short opcode) {
           // CRDREAD
           if (!r.CRD_FLAGS) {
         FILE *f;
-        if ((f = fopen (card_input, "rb")) == NULL) {
-          fprintf (stderr, "Can't open file %s!\n", card_input);
+        if ((f = fopen (card_output, "rb")) == NULL) {
+          fprintf (stderr, "Can't open file %s!\n", card_output);
           break;
         }
         fseek (f, CRD_LEN * ((r.CRD_BUF[2] & 0x0F) / 3), SEEK_SET);

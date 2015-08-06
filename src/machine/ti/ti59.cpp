@@ -5,6 +5,7 @@
  */
 
 #include <QDebug>
+#include <QFileDialog>
 
 #include "ti59.h"
 #include "tmc0501.h"
@@ -33,8 +34,9 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     Initial_Session_Fname ="ti59.pkm";
 
     BackGroundFname	= P_RES(":/ti59/ti59.png");
-//    LcdFname		= P_RES(":/ti59/ti59lcd.png");
-//    SymbFname		= "";
+    LeftFname       = P_RES(":/ti59/ti59LEFT.png");
+    RightFname      = P_RES(":/ti59/ti59RIGHT.png");
+    BackFname       = P_RES(":/ti59/ti59BACK.png");
 
     memsize		= 0xFFFF;
     InitMemValue	= 0xFF;
@@ -66,6 +68,8 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     pKEYB		= new Ckeyb(this,"ti59.map");
 
     ioFreq = 0;
+
+    changeCardAction = 0;
 }
 
 Cti59::~Cti59() {
@@ -328,7 +332,7 @@ UINT8 Cti59::getKey()
         KPORT(KEY('D'),0x51);
         KPORT(KEY('E'),0x61);  // CLR
 
-        KPORT(!KEY('Z'),0x4A);
+        KPORT(!KEY('R'),0x4A);
 
     }
 
@@ -346,21 +350,26 @@ void Cti59::contextMenuEvent ( QContextMenuEvent * event )
     if (currentModel == TI59) {
         menu->addSeparator();
 
-//        QMenu *menuUart = menu->addMenu(tr("Card Management"));
-        menu->addAction(tr("Insert card"),this,SLOT(InsertCard()));
-//        menuUart->addAction(tr("Hide console"),pUART,SLOT(HideConsole()));
+        QString _fn = QFileInfo(ti59cpu->card_output).fileName();
+        changeCardAction = menu->addAction(tr("Card Name : ")+_fn,this,SLOT(changeCard()));
 
-//        QMenu *menuTape = menu->addMenu(tr("Tape I/O"));
-//        menu->addAction(tr("Change Solid State Module"),this,SLOT(LoadModule()));
-//        menuTape->addAction(tr("Save to CAS..."),this,SLOT(LoadNewK7()));
     }
 
     menu->popup(event->globalPos () );
     event->accept();
 }
 
-void Cti59::InsertCard()
+void Cti59::changeCard()
 {
-     pKEYB->keyPressedList.append('Z');
-     pKEYB->LastKey='Z';
+    QString CardFileName = QFileDialog::getSaveFileName(
+                    this,
+                    "Choose a filename to save under",
+                    ".",
+                    "Card Files (*.bin)",
+                    0,
+                    QFileDialog::DontConfirmOverwrite);
+
+    if (!CardFileName.isEmpty()) {
+        strcpy(ti59cpu->card_output,qstrdup(CardFileName.toLocal8Bit()));
+    }
 }

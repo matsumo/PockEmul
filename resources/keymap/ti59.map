@@ -47,5 +47,6 @@
     <KEY description="BST" height="20" left="38" masterscancode="0x00" modifier="" scancode="0x23a" top="335" view="FRONT" width="20"/>
     <KEY description="EE" height="20" left="84" masterscancode="0x00" modifier="" scancode="0x23b" top="336" view="FRONT" width="20"/>
     <KEY description="CE" height="20" left="175" masterscancode="0x00" modifier="" scancode="0x23c" top="227" view="FRONT" width="20"/>
+    <KEY description="Card (R)eader" height="75" left="54" masterscancode="0x00" modifier="" scancode="0x72" top="117" view="RIGHT" width="15"/>
 </Keyboard>
 </KEYBMAP>
