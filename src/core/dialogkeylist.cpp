@@ -38,14 +38,27 @@ void DialogKeyList::InsertKeys(void)
 {
 	QListWidgetItem *item;	
 
-	AddLog(LOG_MASTER,tr("pPC=%1").arg((long) pPC));
-	QList<CKey>::iterator it;
     for (int i=0; i < pPC->pKEYB->Keys.count(); i++)
  	{
-//        if (it->MasterScanCode == 0 )
+        item = new QListWidgetItem(pPC->pKEYB->Keys.at(i).Description, lwKeys);
+        item->setData( Qt::UserRole, qVariantFromValue( pPC->pKEYB->Keys.at(i).ScanCode ) );
+        if (pPC->pKEYB->Keys.at(i).MasterScanCode != 0 )
+            item->setHidden(true);
+    }
+}
+
+void DialogKeyList::InsertRelKeys(int masterScanCode)
+{
+    relKeys->clear();
+
+    QListWidgetItem *item;
+
+    for (int i=0; i < pPC->pKEYB->Keys.count(); i++)
+    {
+        if (pPC->pKEYB->Keys.at(i).MasterScanCode == masterScanCode )
         {
-            item = new QListWidgetItem(pPC->pKEYB->Keys.at(i).Description, lwKeys);
-            item->setData( Qt::UserRole, qVariantFromValue( pPC->pKEYB->Keys.at(i).ScanCode ) );
+            item = new QListWidgetItem(pPC->pKEYB->Keys.at(i).Description, relKeys);
+            item->setData( Qt::UserRole, qVariantFromValue( pPC->pKEYB->Keys.at(i).MasterScanCode ) );
         }
     }
 }
@@ -171,6 +184,8 @@ void DialogKeyList::slotSelectKey()
         if (lwKeys->item(i)->isSelected()) {
             sbHor->setValue(pPC->pKEYB->Keys.at(i).Rect.width());
             sbVer->setValue(pPC->pKEYB->Keys.at(i).Rect.height());
+
+            InsertRelKeys(pPC->pKEYB->Keys.at(i).ScanCode);
         }
     }
     pPC->Refresh_Display = true;

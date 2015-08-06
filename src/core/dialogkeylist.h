@@ -21,6 +21,7 @@ public:
     QList<QRect> listRect;
 
     CKey findKey(QString desc);
+    void InsertRelKeys(int masterScanCode);
 private slots:
     void	slotSelectKey();
 	void	slotInitSize();
