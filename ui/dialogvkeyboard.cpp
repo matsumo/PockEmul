@@ -152,7 +152,7 @@ void DialogVKeyboard::senData()
     if (ui->cmdCB->isChecked()) {
         QString _cs = ui->csLE->text();
         if (_cs.isEmpty()) _cs = " ";
-        list = finalString.split(QRegExp(QString("[\\²")+_cs+QString("\\r]")));
+        list = finalString.split(QRegExp(QString("[\\²")+_cs+QString("\\\\r]")));
     }
     else {
         list = finalString.split(QRegExp("[\\²]"));

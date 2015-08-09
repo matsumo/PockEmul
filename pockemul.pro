@@ -464,7 +464,8 @@ HEADERS *= \
     src/machine/ti/ti59.h \
     src/lcd/lcdc_ti59.h \
     src/cpu/tmc0501.h \
-    src/cpu/tmc0501_dasm.h
+    src/cpu/tmc0501_dasm.h \
+    src/machine/ti/pc100.h
 
 
 
@@ -755,7 +756,8 @@ SOURCES *=  \
     src/machine/ti/ti59.cpp \
     src/lcd/lcdc_ti59.cpp \
     src/cpu/tmc0501.cpp \
-    src/cpu/tmc0501_dasm.cpp
+    src/cpu/tmc0501_dasm.cpp \
+    src/machine/ti/pc100.cpp
 
 
 
@@ -1384,7 +1386,8 @@ SOURCES+= \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 DISTFILES += \
-    resources/keymap/ti59.map
+    resources/keymap/ti59.map \
+    resources/keymap/pc100.map
 
 
 

@@ -45,6 +45,7 @@ public:
         Centronics_36,
         DB_25,
         DIN_8,
+        TI_8,
         General_20,
         Panasonic_44,
         Panasonic_Capsule,

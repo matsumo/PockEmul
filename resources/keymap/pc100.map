@@ -1,0 +1,9 @@
+<!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
+<model>pc100</model>
+<Keyboard>
+    <KEY description="PRINT" height="40" left="124" masterscancode="0x00" modifier="" scancode="0xc0" top="797" view="FRONT" width="65"/>
+    <KEY description="TRACE" height="40" left="196" masterscancode="0x00" modifier="" scancode="0xca" top="795" view="FRONT" width="65"/>
+    <KEY description="ADV" height="40" left="261" masterscancode="0x00" modifier="" scancode="0xc1" top="797" view="FRONT" width="65"/>
+    <KEY description="Paper Pos" height="500" left="100" masterscancode="0x00" modifier="" scancode="0x260" top="0" view="FRONT" width="223"/>
+</Keyboard>
+</KEYBMAP>

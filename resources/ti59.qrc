@@ -3,5 +3,9 @@
         <file>ti59/ti59.bin</file>
         <file>ti59/ti59.png</file>
         <file>ti59/ti59lcd.png</file>
+        <file>ti59/pc100c.png</file>
+        <file>ti59/pc100table.bmp</file>
+        <file>ti59/ti59c.png</file>
+        <file>ti59/ti58c.png</file>
     </qresource>
 </RCC>

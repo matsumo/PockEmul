@@ -385,8 +385,10 @@ void MainWindowPockemul::initObjectTable() {
 
 
     objtable["TI-57"]=TI57;
-    objtable["TI-58"]=TI58;
+    objtable["TI-58C"]=TI58C;
     objtable["TI-59"]=TI59;
+    objtable["TI-59C"]=TI59C;
+    objtable["PC-100"]=PC100;
     objtable["CC-40"]= CC40;
     objtable["TI-74"]= TI74;
     objtable["TI-95"]= TI95;
@@ -578,7 +580,9 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
 
     case TI57 : pPC = new Cti57;      pPC->setName("TI-57"); break;
     case TI59 : pPC = new Cti59;      pPC->setName("TI-59"); break;
-    case TI58 : pPC = new Cti59(0,TI58);pPC->setName("TI-58"); break;
+    case TI59C : pPC = new Cti59(0,TI59C);pPC->setName("TI-59C"); break;
+    case TI58C : pPC = new Cti59(0,TI58C);pPC->setName("TI-58C"); break;
+    case PC100: pPC = new Cpc100;      pPC->setName("PC-100"); break;
     case CC40 : pPC = new Ccc40;      pPC->setName("CC-40"); break;
     case TI74 : pPC = new Cti74;      pPC->setName("TI-74"); break;
     case TI95 : pPC = new Cti95;      pPC->setName("TI-95"); break;

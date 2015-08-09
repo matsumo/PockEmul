@@ -47,8 +47,11 @@ public:
 
     Ctmc0501 *ti59cpu;
 
+    Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;
+
     QString Display();
     QString displayString;
+    quint8 sendToPrinter;
 private:
     Models currentModel;
 

@@ -16,10 +16,11 @@
 #include "ui/cregsz80widget.h"
 #include "Inter.h"
 
+#include "ti/ti59.h"
 
 #define	MODE_PRINTER	0x0002
 #define	MODE_CARD	0x0004
-static unsigned mode_flags = 0;
+static unsigned mode_flags = MODE_PRINTER;
 
 unsigned char LIB[5000] = {
   0x25,0x00,0x00,0x54,0x02,0x43,0x11,0x41,0x14,0x15,0x15,0x82,0x17,0x01,0x19,0x51,0x20,0x29,0x21,0x73,0x22,0x91,0x24,0x14,0x26,
@@ -404,25 +405,29 @@ void Ctmc0501::Reset()
 
 void Ctmc0501::Load_Internal(QXmlStreamReader *xmlIn)
 {
-    qWarning()<<"Load internal ti57cpu";
-    if (xmlIn->readNextStartElement()) {
-        if ( (xmlIn->name()=="cpu") &&
-             (xmlIn->attributes().value("model").toString() == "ti57")) {
-            QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
-            memcpy((char *) &r,ba_reg.data(),sizeof(TMC0501regs));
-            qWarning()<<"regs read ti57cpu";
+    if ((currentModel==TI58C)||(currentModel==TI59C)) {
+        qWarning()<<"Load internal tmc0501";
+        if (xmlIn->readNextStartElement()) {
+            if ( (xmlIn->name()=="cpu") &&
+                 (xmlIn->attributes().value("model").toString() == "tmc0501")) {
+                QByteArray ba_reg = QByteArray::fromBase64(xmlIn->attributes().value("registers").toString().toLatin1());
+                memcpy((char *) &r,ba_reg.data(),sizeof(TMC0501regs));
+                qWarning()<<"regs read ti57cpu";
+            }
+            xmlIn->skipCurrentElement();
         }
-        xmlIn->skipCurrentElement();
     }
 }
 
 void Ctmc0501::save_internal(QXmlStreamWriter *xmlOut)
 {
-    xmlOut->writeStartElement("cpu");
-        xmlOut->writeAttribute("model","ti57");
+    if ((currentModel==TI58C)||(currentModel==TI59C)) {
+        xmlOut->writeStartElement("cpu");
+        xmlOut->writeAttribute("model","tmc0501");
         QByteArray ba_reg((char*)&r,sizeof(TMC0501regs));
         xmlOut->writeAttribute("registers",ba_reg.toBase64());
-    xmlOut->writeEndElement();
+        xmlOut->writeEndElement();
+    }
 }
 
 void Ctmc0501::Regs_Info(UINT8)
@@ -879,7 +884,7 @@ int Ctmc0501::execute (unsigned short opcode) {
           r.CRD_FLAGS = 0;
           r.CRD_PTR = 0;
           // clear card switch
-          if (currentModel == TI59)
+          if ((currentModel == TI59)||(currentModel == TI59C))
               // TI-59: D10-KR card switch normally closed
               r.key[10] |= (1 << KR_BIT);
           break;
@@ -900,98 +905,109 @@ int Ctmc0501::execute (unsigned short opcode) {
           break;
         case 0x0060:
           // LOAD
-//	      print_char ((r.KR >> 4) & 0x3F);
+          //	      print_char ((r.KR >> 4) & 0x3F);
           if (mode_flags & MODE_PRINTER) {
-        r.PRN_BUF[r.PRN_PTR++] = PRN_CODE[(r.KR >> 4) & 0x3F];
-        if (r.PRN_PTR >= sizeof (r.PRN_BUF)) r.PRN_PTR = 0;
-          }
-          break;
-        case 0x0070:
-          // FUNCTION
-//	      print_func ((r.KR >> 4) & 0x7F);
-          if (mode_flags & MODE_PRINTER) {
-        int i;
-        unsigned char code = (r.KR >> 4) & 0x7F;
-        for (i = 0; *PRN_STR[i].str; i++) {
-          if (code == PRN_STR[i].code) {
-            for (code = 3; code; ) {
-              r.PRN_BUF[r.PRN_PTR++] = PRN_STR[i].str[--code];
+              r.PRN_BUF[r.PRN_PTR++] = PRN_CODE[(r.KR >> 4) & 0x3F];
+              ((Cti59*)pPC)->sendToPrinter =0x80 | ((r.KR >> 4) & 0x3F);
               if (r.PRN_PTR >= sizeof (r.PRN_BUF)) r.PRN_PTR = 0;
-            }
-          }
-        }
           }
           break;
-        case 0x0080:
+      case 0x0070:
+          // FUNCTION
+          //	      print_func ((r.KR >> 4) & 0x7F);
+          if (mode_flags & MODE_PRINTER) {
+              int i;
+              unsigned char code = (r.KR >> 4) & 0x7F;
+              ((Cti59*)pPC)->sendToPrinter = code;
+              for (i = 0; *PRN_STR[i].str; i++) {
+                  if (code == PRN_STR[i].code) {
+                      for (code = 3; code; ) {
+                          char _code = PRN_STR[i].str[--code];
+                          r.PRN_BUF[r.PRN_PTR++] = _code;
+                          //              ((Cti59*)pPC)->sendToPrinter = _code;
+                          if (r.PRN_PTR >= sizeof (r.PRN_BUF)) r.PRN_PTR = 0;
+                      }
+                  }
+              }
+          }
+          break;
+      case 0x0080:
           // CLEAR
           // clear printer buffer
-//	      print_clear ();
+          //	      print_clear ();
           if (mode_flags & MODE_PRINTER) {
-        memset (r.PRN_BUF, ' ', sizeof (r.PRN_BUF));
-        r.PRN_PTR = 0;
+              memset (r.PRN_BUF, ' ', sizeof (r.PRN_BUF));
+              r.PRN_PTR = 0;
+              ((Cti59*)pPC)->sendToPrinter = 0xF1; // Clear buffer
+              qWarning()<<"***CLEAR BUFFER";
           }
           break;
-        case 0x0090:
+      case 0x0090:
           // STEP
           // decrement printer position
           if (mode_flags & MODE_PRINTER) {
-        r.PRN_BUF[r.PRN_PTR++] = ' ';
-        if (r.PRN_PTR >= sizeof (r.PRN_BUF)) r.PRN_PTR = 0;
-        if (r.PRN_BUSY) {
-          if ((r.cycle - r.PRN_BUSY) < (150*pPC->getfrequency())) {
-            r.flags |= FLG_BUSY;
-          } else {
-            r.PRN_BUSY = 0;
-          }
-        }
+              r.PRN_BUF[r.PRN_PTR++] = ' ';
+              ((Cti59*)pPC)->sendToPrinter = 0x80; // Spaceq
+              qWarning()<<"***STEP";
+              if (r.PRN_PTR >= sizeof (r.PRN_BUF)) r.PRN_PTR = 0;
+              if (r.PRN_BUSY) {
+                  if ((r.cycle - r.PRN_BUSY) < (150*pPC->getfrequency())) {
+                      r.flags |= FLG_BUSY;
+                  } else {
+                      r.PRN_BUSY = 0;
+                  }
+              }
           }
           break;
-        case 0x00A0:
+      case 0x00A0:
           // PRINT
           // print data from buffer
           if (mode_flags & MODE_PRINTER) {
-        int i;
-        fprintf (stderr, "\r\t\t");
-        for (i = 20; i; )
-          fputc (r.PRN_BUF[--i], stderr);
-        // force display re-print
-        r.flags ^= FLG_DISP;
+              int i;
+              fprintf (stderr, "\r\t\t");
+              for (i = 20; i; )
+                  fputc (r.PRN_BUF[--i], stderr);
+              // force display re-print
+              r.flags ^= FLG_DISP;
           }
-          //break;
-        case 0x00B0:
-          // PAPER ADVANCE
+          ((Cti59*)pPC)->sendToPrinter = 0xF2; // Print buffer
+          qWarning()<<"************Print buffer";
+          break;
+      case 0x00B0:
+          qWarning()<<"**********PAPER ADVANCE";
           // scroll paper in printer
           if (mode_flags & MODE_PRINTER) {
-        fputc ('\n', stderr);
-        // check if advance buttons (. or @) are pressed
-        if ((r.key[9] & (1 << 3)) || (r.key[0xC] & (1 << 0))) {
-          // use real delay for button-driven paper feed
-          r.PRN_BUSY = r.cycle;
-          if (!r.PRN_BUSY) r.PRN_BUSY--;
-        }
+              fputc ('\n', stderr);
+              ((Cti59*)pPC)->sendToPrinter = 0xf3; // Paper advance
+              // check if advance buttons (. or @) are pressed
+              if ((r.key[9] & (1 << 3)) || (r.key[0xC] & (1 << 0))) {
+                  // use real delay for button-driven paper feed
+                  r.PRN_BUSY = r.cycle;
+                  if (!r.PRN_BUSY) r.PRN_BUSY--;
+              }
           }
           break;
-        case 0x00C0:
+      case 0x00C0:
           // CRDWRITE
           if (!r.CRD_FLAGS) {
-        r.CRD_FLAGS = CRD_WRITE;
-        //r.CRD_PTR = 0;
+              r.CRD_FLAGS = CRD_WRITE;
+              //r.CRD_PTR = 0;
           }
           break;
-        case 0x00F0:
+      case 0x00F0:
           // RAMOP
           // next IO contains specification for RAM operation
           r.flags |= FLG_RAM_OP;
           break;
       }
-      break;
-    case 0x0009:
-      // Set Idle
-      r.flags |= FLG_IDLE;
-//      if (log_flags & LOG_SHORT)
-//        LOG ("IDLE=1");
-//      qWarning()<<"IDLE=1";
-      break;
+          break;
+      case 0x0009:
+          // Set Idle
+          r.flags |= FLG_IDLE;
+          //      if (log_flags & LOG_SHORT)
+          //        LOG ("IDLE=1");
+          //      qWarning()<<"IDLE=1";
+          break;
     case 0x000A:
       // CLFB
       r.fB = 0;
@@ -1165,7 +1181,7 @@ int Ctmc0501::execute (unsigned short opcode) {
 //        LOG ("[RCL.%u:", r.REG_ADDR); for (i = 15; i >= 0; i--) LOG ("%X", alu_out->dst[i]); LOG ("]");
 //          }
         } else
-        if ((r.flags & FLG_RAM_READ) && ((currentModel==TI59) || r.RAM_ADDR < 60)) {
+        if ((r.flags & FLG_RAM_READ) && ((currentModel==TI59) || (currentModel==TI59C) || r.RAM_ADDR < 60)) {
           r.flags &= ~FLG_RAM_READ;
           Alu (alu_out->dst, 0, r.RAM[r.RAM_ADDR], mask, ALU_ADD);
 //          if (alu_out->dst && (log_flags & LOG_DEBUG)) {

@@ -14,6 +14,7 @@
 #include "Keyb.h"
 #include "Inter.h"
 #include "Connect.h"
+#include "watchpoint.h"
 
 #define	CARD_INSERTED	(ti59cpu->r.key[10] & (1 << KR_BIT))
 #define	PRN_CONNECTED	(ti59cpu->r.key[0] & (1 << KP_BIT))
@@ -21,6 +22,12 @@
 #define	PRN_ADVANCE	(ti59cpu->r.key[12] & (1 << KN_BIT))
 #define	PRN_PRINT	(ti59cpu->r.key[12] & (1 << KP_BIT))
 
+#define KPORT(COND,CODE)    if(COND) \
+                                ti59cpu->r.key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07); \
+                            else \
+                                ti59cpu->r.key[(CODE) & 0x0F] &= ~(1 << (((CODE) >> 4) & 0x07));
+#define KPORT_ON_OFF(COND,CODE)    if(COND) \
+                                ti59cpu->r.key[(CODE) & 0x0F] ^= 1 << (((CODE) >> 4) & 0x07); \
 
 
 Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
@@ -33,7 +40,13 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     SessionHeader	= "TI59PKM";
     Initial_Session_Fname ="ti59.pkm";
 
-    BackGroundFname	= P_RES(":/ti59/ti59.png");
+    switch (mod) {
+    case TI59:  BackGroundFname	= P_RES(":/ti59/ti59.png"); break;
+    case TI59C: BackGroundFname	= P_RES(":/ti59/ti59c.png"); break;
+    case TI58C: BackGroundFname	= P_RES(":/ti59/ti58c.png"); break;
+    }
+
+
     LeftFname       = P_RES(":/ti59/ti59LEFT.png");
     RightFname      = P_RES(":/ti59/ti59RIGHT.png");
     BackFname       = P_RES(":/ti59/ti59BACK.png");
@@ -85,7 +98,15 @@ bool Cti59::init(void)				// initialize
 #endif
     CpcXXXX::init();
 
+    pPRINTERCONNECTOR	= new Cconnector(this,9,1,Cconnector::TI_8,"Printer",false,
+                                         QPoint(402,0),Cconnector::NORTH);
+    publish(pPRINTERCONNECTOR);
+    WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
+
     disp_filter = 0;
+
+    if (currentModel == TI59) Reset();
+
     return true;
 }
 
@@ -99,6 +120,12 @@ bool Cti59::run() {
 
     Display();
 
+    if (sendToPrinter) {
+//        qWarning()<<"sendToPrinter="<<sendToPrinter;
+    }
+
+    pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
+
     return true;
 }
 
@@ -106,8 +133,42 @@ bool Cti59::Chk_Adr(UINT32 *d, UINT32 data) { return false; }
 bool Cti59::Chk_Adr_R(UINT32 *d, UINT32 *data) { return true; }
 UINT8 Cti59::in(UINT8 Port) { return 0;}
 UINT8 Cti59::out(UINT8 Port, UINT8 x) { return 0; }
-bool Cti59::Set_Connector(Cbus *_bus) { return true; }
-bool Cti59::Get_Connector(Cbus *_bus) { return true; }
+
+bool Cti59::Set_Connector(Cbus *_bus) {
+
+    Q_UNUSED(_bus)
+
+    pPRINTERCONNECTOR->Set_pin(10,0);
+
+    if (sendToPrinter>0) {
+        pPRINTERCONNECTOR->Set_values(sendToPrinter);
+        AddLog(LOG_PRINTER,QString("Send Char:%1").arg(sendToPrinter,2,16,QChar('0')));
+    }
+    else
+        pPRINTERCONNECTOR->Set_values(0);
+
+    return true;
+}
+
+bool Cti59::Get_Connector(Cbus *_bus) {
+
+    Q_UNUSED(_bus)
+
+    if (pPRINTERCONNECTOR->Get_pin(9)) {
+        sendToPrinter = 0;
+    }
+
+    if (pPRINTERCONNECTOR->Get_pin(10)) {
+        // printer: D0-KP diode
+        ti59cpu->r.key[0] |= (1 << KP_BIT);
+    }
+
+    KPORT(pPRINTERCONNECTOR->Get_pin(11),0x2C);
+    KPORT_ON_OFF(pPRINTERCONNECTOR->Get_pin(12),0x2F);
+    KPORT(pPRINTERCONNECTOR->Get_pin(13),0x0C);
+
+    return true;
+}
 
 
 void Cti59::TurnOFF(void) {
@@ -130,11 +191,11 @@ void Cti59::Reset()
     CpcXXXX::Reset();
 
     // TI-58/59 mode
-    if (currentModel == TI59) {
+    if ((currentModel == TI59)||(currentModel == TI59C)) {
         // TI-59: D10-KR card switch normally closed
         ti59cpu->r.key[10] |= (1 << KR_BIT);
     }
-    if (currentModel == TI58) {
+    if (currentModel == TI58C) {
         // TI-58: D7-KR diode
         ti59cpu->r.key[7] |= (1 << KR_BIT);
     }
@@ -266,10 +327,6 @@ QString Cti59::Display() {
 }
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-#define KPORT(COND,CODE)    if(COND) \
-                                ti59cpu->r.key[(CODE) & 0x0F] |= 1 << (((CODE) >> 4) & 0x07); \
-                            else \
-                                ti59cpu->r.key[(CODE) & 0x0F] &= ~(1 << (((CODE) >> 4) & 0x07));
 
 UINT8 Cti59::getKey()
 {
@@ -333,6 +390,7 @@ UINT8 Cti59::getKey()
         KPORT(KEY('E'),0x61);  // CLR
 
         KPORT(!KEY('R'),0x4A);
+        KPORT(KEY('P'),0x0C);
 
     }
 
