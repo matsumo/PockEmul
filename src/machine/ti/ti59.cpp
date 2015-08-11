@@ -7,6 +7,8 @@
 #include <QDebug>
 #include <QFileDialog>
 
+#include "fluidlauncher.h"
+
 #include "ti59.h"
 #include "tmc0501.h"
 #include "Lcdc_ti59.h"
@@ -44,6 +46,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     case TI59:  BackGroundFname	= P_RES(":/ti59/ti59.png"); break;
     case TI59C: BackGroundFname	= P_RES(":/ti59/ti59c.png"); break;
     case TI58C: BackGroundFname	= P_RES(":/ti59/ti58c.png"); break;
+    default: break;
     }
 
 
@@ -56,6 +59,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(12 , 0x0000 ,	P_RES(":/ti59/ti59.bin"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(5 , 0x3000 ,	P_RES(":/ti59/modules/ML-541.bin"), ""	, CSlot::ROM , "MODULE"));
 
     setDXmm(81);
     setDYmm(162);
@@ -94,7 +98,6 @@ bool Cti59::init(void)				// initialize
 //pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
-//    if (!fp_log) fp_log=fopen("pc2001.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
 
@@ -120,19 +123,19 @@ bool Cti59::run() {
 
     Display();
 
-    if (sendToPrinter) {
+//    if (sendToPrinter) {
 //        qWarning()<<"sendToPrinter="<<sendToPrinter;
-    }
+//    }
 
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
 
     return true;
 }
 
-bool Cti59::Chk_Adr(UINT32 *d, UINT32 data) { return false; }
-bool Cti59::Chk_Adr_R(UINT32 *d, UINT32 *data) { return true; }
-UINT8 Cti59::in(UINT8 Port) { return 0;}
-UINT8 Cti59::out(UINT8 Port, UINT8 x) { return 0; }
+bool Cti59::Chk_Adr(UINT32 *, UINT32) { return false; }
+bool Cti59::Chk_Adr_R(UINT32 *, UINT32 *) { return true; }
+UINT8 Cti59::in(UINT8) { return 0;}
+UINT8 Cti59::out(UINT8 , UINT8 ) { return 0; }
 
 bool Cti59::Set_Connector(Cbus *_bus) {
 
@@ -208,12 +211,12 @@ void Cti59::Reset()
 
 }
 
-bool Cti59::LoadConfig(QXmlStreamReader *xmlIn)
+bool Cti59::LoadConfig(QXmlStreamReader *)
 {
     return true;
 }
 
-bool Cti59::SaveConfig(QXmlStreamWriter *xmlOut)
+bool Cti59::SaveConfig(QXmlStreamWriter *)
 {
     return true;
 }
@@ -389,7 +392,10 @@ UINT8 Cti59::getKey()
         KPORT(KEY('D'),0x51);
         KPORT(KEY('E'),0x61);  // CLR
 
-        KPORT(!KEY('R'),0x4A);
+        if ((currentModel==TI59)||(currentModel==TI59C)) {
+            KPORT(!KEY('R'),0x4A);
+        }
+
         KPORT(KEY('P'),0x0C);
 
     }
@@ -430,4 +436,119 @@ void Cti59::changeCard()
     if (!CardFileName.isEmpty()) {
         strcpy(ti59cpu->card_output,qstrdup(CardFileName.toLocal8Bit()));
     }
+}
+
+void Cti59::addModule(QString item,CPObject *pPC)
+{
+    Q_UNUSED(pPC)
+
+    qWarning()<<"Add Module:"<< item;
+    bool load = false;
+    if ( currentSlot!=1) return;
+
+    int _res = 0;
+    CSlot::SlotType customModule = CSlot::ROM;
+    QString moduleName;
+//    if (item=="ML-541") {
+//        moduleName = P_RES(":/ti59/modules/ML-541.bin");
+//        load = true;
+//    }
+//    if (item=="SY-544") {
+//        moduleName = P_RES(":/ti59/modules/SY-544.bin");
+//        load = true;
+//    }
+//    if (item=="LE-547") {
+//        moduleName = P_RES(":/ti59/modules/LE-547.bin");
+//        load = true;
+//    }
+//    if (item=="MU-550") {
+//        moduleName = P_RES(":/ti59/modules/MU-550.bin");
+//        load = true;
+//    }
+    if (item=="SSSM") {
+        moduleName = QFileDialog::getOpenFileName(
+                    mainwindow,
+                    tr("Choose a Module file"),
+                    ".",
+                    tr("Module File (*.bin)"));
+        load = true;
+        customModule = CSlot::CUSTOM_ROM;
+    }
+    else if (!item.isEmpty()) {
+        moduleName = P_RES(":/ti59/modules/"+item+".bin");
+        load = true;
+    }
+
+    if (!load) return;
+
+    bool result = true; // check this is a true capsule
+
+    qWarning()<<"loaded:"<<_res;
+    if (result) {
+        SlotList[currentSlot].setEmpty(false);
+        SlotList[currentSlot].setResID(moduleName);
+        SlotList[currentSlot].setType(customModule);
+        Mem_Load(currentSlot);
+        // Analyse capsule
+        // 0x01 = 'C'
+        // 0x01 - 0x28 : Copyright
+        // 0x2C : title lenght
+        // 0x2D - .. : title
+
+        BYTE* capsule = &mem[currentSlot*0x4000];
+        if (capsule[1]=='C') {
+            QString copyright = QString::fromLocal8Bit(QByteArray((const char*)&capsule[1],0x26));
+            QString title  = QString::fromLocal8Bit(QByteArray((const char*)&capsule[0x2d],capsule[0x2c]));
+            qWarning()<<"title:"<<title;
+            SlotList[currentSlot].setLabel(title);
+        }
+
+        slotChanged = true;
+    }
+
+    currentSlot = -1;
+
+}
+
+extern int ask(QWidget *parent,QString msg,int nbButton);
+void Cti59::ComputeKey(KEYEVENT ke,int scancode)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
+    int _slot = -1;
+    if (KEY(0x240)) {
+        _slot = 1;
+        pKEYB->keyPressedList.removeAll(0x240);
+        if (Power) {
+            ask(this, "Please turn off the pocket before unplugging the cartridge.",1);
+            return;
+        }
+    }
+
+    if (_slot == -1) return;
+    int _response = 0;
+    BYTE* capsule = &mem[0x3000];
+    if (!SlotList[_slot].isEmpty() || (capsule[0]!=0x00)) {
+        _response=ask(this,
+                      "The "+SlotList[_slot].getLabel()+ " module is already plugged in this slot.\nDo you want to unplug it ?",
+                      2);
+    }
+
+    if (_response == 1) {
+        SlotList[_slot].setEmpty(true);
+
+        memset((void *)capsule ,0x00,0x1400);
+        SlotList[_slot].setLabel(QString("ROM bank %1").arg(_slot+1));
+
+    }
+    if (_response==2) return;
+    currentSlot = _slot;
+    FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                FluidLauncher::PictureFlowType,QString(),
+                                                "TI-59_Module");
+    connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+    launcher->show();
+
 }

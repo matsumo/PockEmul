@@ -28,7 +28,7 @@
 //};
 //int KeyMappc100Lenght = 3;
 
-static const char PC100_CODE[64] = {
+static const unsigned char PC100_CODE[64] = {
   ' ','0','1','2','3','4','5','6','7','8','9','A','B','C','D','E',
   '-','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T',
   '.','U','V','W','X','Y','Z','+','x','*','s','p','e','(',')',',',
@@ -47,15 +47,15 @@ static const struct {
   {0x16, " / ","\x00\x33\x00"},
   {0x17, " x ","\x00\x28\x00"},
   {0x1A, "xsY","\x28\x2A\x25"}, //x_sqrt_Y
-  {0x1B, "Y^x","\x00\x00\x00"}, //Yx_
-  {0x21, "CLR","\x00\x00\x00"},
-  {0x22, "INV","\x00\x00\x00"},
-  {0x23, "DPT","\x00\x00\x00"},
-  {0x26, "CE ","\x00\x00\x00"},
-  {0x27, "+/-","\x00\x00\x00"},
-  {0x2D, "EE ","\x00\x00\x00"},
-  {0x31, "e^x","\x00\x00\x00"}, // ex_
-  {0x33, "x^2","\x00\x00\x00"}, // x2_
+  {0x1B, "Y^x","\x25\x30\x28"}, //Yx_
+  {0x21, "CLR","\x0D\x17\x1D"},
+  {0x22, "INV","\x14\x19\x22"},
+  {0x23, "DPT","\x0E\x1B\x1F"},
+  {0x26, "CE ","\x0D\x0F\x00"},
+  {0x27, "+/-","\x27\x33\x10"},
+  {0x2D, "EE ","\x0F\x0F\x00"},
+  {0x31, "e^x","\x2C\x30\x28"}, // ex_
+  {0x33, "x^2","\x28\x30\x03"}, // x2_
   {0x36, "1/x","\x00\x00\x00"},
   {0x3C, "sX ","\x00\x00\x00"}, // sqrt_X_
   {0x3D, "X_Y","\x00\x00\x00"}, // X exchange Y ??
@@ -306,7 +306,7 @@ bool Cpc100::init(void)
     // Fill it blank
     clearPaper();
 
-    run_oldstate = -1;
+    run_oldstate = 0;
 
     print = trace = adv = false;
 
@@ -358,10 +358,14 @@ void Cpc100::Printer(qint8 d)
 
 
 bool Cpc100::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     return true;
 }
 
 bool Cpc100::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     SET_PIN(10,1);
     SET_PIN(11,print ? 1 : 0);
     SET_PIN(12,trace ? 1 : 0);
@@ -382,9 +386,9 @@ bool Cpc100::run(void)
 // Try to introduce a latency
     quint64	deltastate = 0;
 
-    if (run_oldstate == -1) run_oldstate = pTIMER->state;
+    if (run_oldstate == 0) run_oldstate = pTIMER->state;
     deltastate = pTIMER->state - run_oldstate;
-    if (deltastate < pc100LATENCY ) return true;
+    if (deltastate < (quint64)pc100LATENCY ) return true;
     run_oldstate	= pTIMER->state;
 #endif
 

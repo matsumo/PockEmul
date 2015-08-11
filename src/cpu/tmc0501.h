@@ -90,7 +90,7 @@ typedef struct {
 
 // mask definitions
 typedef struct {
-  unsigned char start, end, cpos, cval;
+  qint8 start, end, cpos, cval;
 } mask_type;
 static const mask_type mask_info[16] = {
   {-1, 0,  0,   0},

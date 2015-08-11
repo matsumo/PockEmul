@@ -94,6 +94,11 @@
    <example brand="TEXAS INSTRUMENTS" idpocket="MATHEMATICS74" filename="./" name="Mathematics" image=":/ti74/cartimg/mathematics.png" connectortype="TI-74_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="RAM32K74" filename="./" name="32Ko RAM" image=":/ti74/cartimg/finance.png" connectortype="TI-74_Cartridge" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="PC-100" filename="./" name="Texas Instruments PC-100" image=":/ti59/pc100c.png" connectortype="TI" conngender="female"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="ML-541" filename="./" name="Master Library module" image=":/ti59/modules/ML-541.png" connectortype="TI-59_Module" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="SY-544" filename="./" name="Surveying module" image=":/ti59/modules/SY-544.png" connectortype="TI-59_Module" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="LE-547" filename="./" name="Leisure Library module" image=":/ti59/modules/LE-547.png" connectortype="TI-59_Module" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="MU-550" filename="./" name="Math Utilities module" image=":/ti59/modules/MU-550.png" connectortype="TI-59_Module" conngender="male"/>
+   <example brand="TEXAS INSTRUMENTS" idpocket="SSSM" filename="./" name="Custom module" image=":/ti59/modules/SSSM.png" connectortype="TI-59_Module" conngender="male"/>
 
 </demos>
  </demolauncher>

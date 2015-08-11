@@ -7,5 +7,14 @@
         <file>ti59/pc100table.bmp</file>
         <file>ti59/ti59c.png</file>
         <file>ti59/ti58c.png</file>
+        <file>ti59/modules/LE-547.bin</file>
+        <file>ti59/modules/ML-541.bin</file>
+        <file>ti59/modules/MU-550.bin</file>
+        <file>ti59/modules/SY-544.bin</file>
+        <file>ti59/modules/LE-547.png</file>
+        <file>ti59/modules/ML-541.png</file>
+        <file>ti59/modules/MU-550.png</file>
+        <file>ti59/modules/SY-544.png</file>
+        <file>ti59/modules/SSSM.png</file>
     </qresource>
 </RCC>

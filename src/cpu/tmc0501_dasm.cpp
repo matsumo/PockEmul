@@ -238,7 +238,7 @@ UINT32 Cdebug_tmc0501::DisAsm_1(UINT32 oldpc)
 {
     //return (oldpc);
     Buffer[0] = '\0';
-    char *str = Buffer;
+//    char *str = Buffer;
 
     oldpc &= 0xffff;
     DasmAdr = oldpc;

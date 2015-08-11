@@ -32,6 +32,8 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+
     quint16 kstrobe;
 
     bool init();
@@ -60,9 +62,13 @@ private:
 
     QAction * changeCardAction;
 
+    bool slotChanged;
+    int currentSlot;
+
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );
     void changeCard(void);
+    void addModule(QString item, CPObject *pPC);
 };
 
 #endif // TI59_H
