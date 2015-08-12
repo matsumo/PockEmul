@@ -52,7 +52,6 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     default: break;
     }
 
-
     LeftFname       = P_RES(":/ti59/ti59LEFT.png");
     RightFname      = P_RES(":/ti59/ti59RIGHT.png");
     BackFname       = P_RES(":/ti59/ti59BACK.png");
@@ -76,13 +75,6 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
 
     setDX(279);
     setDY(564);
-
-//    Lcd_X		= 30;
-//    Lcd_Y		= 43;
-//    Lcd_DX		= 220;
-//    Lcd_DY		= 40;
-//    Lcd_ratio_X	= 1;
-//    Lcd_ratio_Y	= 1;
 
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_ti59(this,
@@ -122,7 +114,7 @@ bool Cti59::init(void)				// initialize
     if (currentModel == TI59) Reset();
 
     cardIndex = 0;
-
+    drawCard = true;
     return true;
 }
 
@@ -502,8 +494,9 @@ void Cti59::ComputeKey(KEYEVENT ke,int scancode)
     Q_UNUSED(scancode)
 
     if ((ke==KEY_PRESSED) && (scancode == 0x241)) {
-        drawCard = ! drawCard;
-        qWarning()<<"drawCard:"<<drawCard;
+        cardIndex++;
+        if (cardIndex>25) cardIndex = 0;
+        Refresh_Display = true;
         return;
     }
 
@@ -554,13 +547,14 @@ void Cti59::wheelEvent(QWheelEvent *event)
 
 //qWarning()<<_cardRect<<event->pos();
     if (_r.contains(event->pos())) {
-        qWarning()<<"SCROLL: ";
-        if (event->delta()>0) {
-            cardIndex = MIN(cardIndex +1,25);
+        if (event->delta()<0) {
+            cardIndex++;
+            if (cardIndex>25) cardIndex = 0;
             Refresh_Display = true;
         }
         else {
-            cardIndex = MAX(cardIndex - 1,0);
+            cardIndex--;
+            if (cardIndex<0) cardIndex = 25;
             Refresh_Display = true;
         }
 
