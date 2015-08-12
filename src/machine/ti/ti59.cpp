@@ -45,7 +45,10 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     switch (mod) {
     case TI59:  BackGroundFname	= P_RES(":/ti59/ti59.png"); break;
     case TI59C: BackGroundFname	= P_RES(":/ti59/ti59c.png"); break;
-    case TI58C: BackGroundFname	= P_RES(":/ti59/ti58c.png"); break;
+    case TI58C: setcfgfname(QString("ti58c"));
+                Initial_Session_Fname ="ti58c.pkm";
+                SessionHeader	= "TI58CPKM";
+                BackGroundFname	= P_RES(":/ti59/ti58c.png"); break;
     default: break;
     }
 
@@ -53,6 +56,11 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     LeftFname       = P_RES(":/ti59/ti59LEFT.png");
     RightFname      = P_RES(":/ti59/ti59RIGHT.png");
     BackFname       = P_RES(":/ti59/ti59BACK.png");
+
+
+    QString _cardFname       = P_RES(":/ti59/modules/MLcards.png");
+    currentCard = CreateImage(QSize(),_cardFname);
+    renderedCard = 0;
 
     memsize		= 0xFFFF;
     InitMemValue	= 0xFF;
@@ -87,9 +95,12 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     ioFreq = 0;
 
     changeCardAction = 0;
+    generateCard(0);
+
 }
 
 Cti59::~Cti59() {
+    delete renderedCard;
 }
 
 bool Cti59::init(void)				// initialize
@@ -109,6 +120,8 @@ bool Cti59::init(void)				// initialize
     disp_filter = 0;
 
     if (currentModel == TI59) Reset();
+
+    cardIndex = 0;
 
     return true;
 }
@@ -449,22 +462,7 @@ void Cti59::addModule(QString item,CPObject *pPC)
     int _res = 0;
     CSlot::SlotType customModule = CSlot::ROM;
     QString moduleName;
-//    if (item=="ML-541") {
-//        moduleName = P_RES(":/ti59/modules/ML-541.bin");
-//        load = true;
-//    }
-//    if (item=="SY-544") {
-//        moduleName = P_RES(":/ti59/modules/SY-544.bin");
-//        load = true;
-//    }
-//    if (item=="LE-547") {
-//        moduleName = P_RES(":/ti59/modules/LE-547.bin");
-//        load = true;
-//    }
-//    if (item=="MU-550") {
-//        moduleName = P_RES(":/ti59/modules/MU-550.bin");
-//        load = true;
-//    }
+
     if (item=="SSSM") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,
@@ -489,19 +487,6 @@ void Cti59::addModule(QString item,CPObject *pPC)
         SlotList[currentSlot].setResID(moduleName);
         SlotList[currentSlot].setType(customModule);
         Mem_Load(currentSlot);
-        // Analyse capsule
-        // 0x01 = 'C'
-        // 0x01 - 0x28 : Copyright
-        // 0x2C : title lenght
-        // 0x2D - .. : title
-
-        BYTE* capsule = &mem[currentSlot*0x4000];
-        if (capsule[1]=='C') {
-            QString copyright = QString::fromLocal8Bit(QByteArray((const char*)&capsule[1],0x26));
-            QString title  = QString::fromLocal8Bit(QByteArray((const char*)&capsule[0x2d],capsule[0x2c]));
-            qWarning()<<"title:"<<title;
-            SlotList[currentSlot].setLabel(title);
-        }
 
         slotChanged = true;
     }
@@ -515,6 +500,12 @@ void Cti59::ComputeKey(KEYEVENT ke,int scancode)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+
+    if ((ke==KEY_PRESSED) && (scancode == 0x241)) {
+        drawCard = ! drawCard;
+        qWarning()<<"drawCard:"<<drawCard;
+        return;
+    }
 
     int _slot = -1;
     if (KEY(0x240)) {
@@ -551,4 +542,67 @@ void Cti59::ComputeKey(KEYEVENT ke,int scancode)
     connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
     launcher->show();
 
+}
+
+void Cti59::wheelEvent(QWheelEvent *event)
+{
+    QRect _r = pKEYB->getKey(0x241).Rect;
+    _r.setCoords(_r.x()*mainwindow->zoom/100,
+                 _r.y()*mainwindow->zoom/100,
+                 (_r.x()+_r.width())*mainwindow->zoom/100,
+                 (_r.y()+_r.height())*mainwindow->zoom/100);
+
+//qWarning()<<_cardRect<<event->pos();
+    if (_r.contains(event->pos())) {
+        qWarning()<<"SCROLL: ";
+        if (event->delta()>0) {
+            cardIndex = MIN(cardIndex +1,25);
+            Refresh_Display = true;
+        }
+        else {
+            cardIndex = MAX(cardIndex - 1,0);
+            Refresh_Display = true;
+        }
+
+//        generateCard(cardIndex);
+
+        event->accept();
+    }
+    else {
+        event->ignore();
+    }
+}
+
+void Cti59::generateCard(int Id) {
+
+    if (renderedCard) delete renderedCard;
+    renderedCard = new QImage(*currentCard);
+//    QPainter painter(renderedCard);
+//    QPen _pen(QColor(0xac,0x92,0x20),4);
+//    painter.setPen(_pen);
+//    QFont font("Helvetica", 35, QFont::Bold);
+//    painter.setFont(font);
+//    painter.drawText(30,32,QString("Test de TITLE                         : →|A|, Aˉ¹"));
+//    painter.drawLine(0,41,1000,41);
+//    painter.end();
+}
+
+bool Cti59::UpdateFinalImage(void) {
+
+    CpcXXXX::UpdateFinalImage();
+
+    if (drawCard) {
+        QPainter painter;
+        painter.begin(FinalImage);
+
+        QRect _r = pKEYB->getKey(0x241).Rect;
+        painter.drawImage(_r.x()*internalImageRatio,_r.y()*internalImageRatio,
+                          renderedCard->copy(0,150*cardIndex,944,150).
+                          scaled(QSize(_r.width()*internalImageRatio,_r.height()*internalImageRatio)),
+                                Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
+
+        painter.end();
+    }
+
+    return true;
 }

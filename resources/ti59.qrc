@@ -16,5 +16,7 @@
         <file>ti59/modules/MU-550.png</file>
         <file>ti59/modules/SY-544.png</file>
         <file>ti59/modules/SSSM.png</file>
+        <file>ti59/modules/card.png</file>
+        <file>ti59/modules/MLcards.png</file>
     </qresource>
 </RCC>

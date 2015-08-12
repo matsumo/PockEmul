@@ -34,6 +34,9 @@ public:
 
     virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
 
+
+    void wheelEvent(QWheelEvent *event);
+
     quint16 kstrobe;
 
     bool init();
@@ -45,6 +48,8 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
+    virtual bool UpdateFinalImage(void);
+
     UINT8 getKey();
 
     Ctmc0501 *ti59cpu;
@@ -54,6 +59,7 @@ public:
     QString Display();
     QString displayString;
     quint8 sendToPrinter;
+    void generateCard(int Id);
 private:
     Models currentModel;
 
@@ -64,6 +70,10 @@ private:
 
     bool slotChanged;
     int currentSlot;
+
+    bool drawCard;
+    QImage *currentCard, *renderedCard;
+    int cardIndex;
 
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );
