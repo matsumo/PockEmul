@@ -152,7 +152,7 @@ void Cfp100::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Cfp100::ComputeKey(KEYEVENT ke,int scancode)
+void Cfp100::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

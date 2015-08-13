@@ -18,9 +18,8 @@
 
 #include "ti/ti59.h"
 
-#define	MODE_PRINTER	0x0002
-#define	MODE_CARD	0x0004
-static unsigned mode_flags = MODE_PRINTER;
+
+
 
 unsigned char CONSTANT[64][16] = {
   // constants
@@ -166,6 +165,8 @@ Ctmc0501::Ctmc0501(CPObject *parent, Models mod) : CCPU(parent)
     regwidget = (CregCPU*) new Cregsz80Widget(0,this);
 
     strcpy(card_output,"card.bin");
+
+    mode_flags = 0;
 }
 
 Ctmc0501::~Ctmc0501()
@@ -850,6 +851,7 @@ qWarning()<< "Unknown behaviour...";
           // LOAD PC
           r.LIB /= 10;
           r.LIB += ((r.KR >> 4) & 0xF) * 1000;
+          qWarning()<<"r.LIB:"<<r.LIB;
 //          if (log_flags & LOG_SHORT)
 //        LOG ("LIB.addr=%04d", r.LIB);
           break;

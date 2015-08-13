@@ -333,7 +333,7 @@ void Crlp3001::readData()
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-void Crlp3001::ComputeKey(KEYEVENT ke,int scancode)
+void Crlp3001::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

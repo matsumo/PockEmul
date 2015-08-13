@@ -43,7 +43,7 @@ CprinterCtronics::~CprinterCtronics() {
     delete charTable;
 }
 
-void CprinterCtronics::ComputeKey(KEYEVENT ke,int scancode)
+void CprinterCtronics::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

@@ -13,7 +13,8 @@
 #include "modelids.h"
 
 #define MAXROM 0x07FF
-
+#define	MODE_PRINTER	0x0002
+#define	MODE_CARD	0x0004
 typedef UINT8 TRegister[16];
 
 // ====================================
@@ -139,7 +140,7 @@ public:
     QString IntToHex(int val, int nb);
 
     TMC0501regs r;
-
+    unsigned mode_flags;
 
     // ====================================
     // card file names

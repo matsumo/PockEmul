@@ -35,7 +35,7 @@ public:
     bool SaveConfig(QXmlStreamWriter *xmlOut);
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     Ctms70c46 *ptms70c46cpu;
     CHD44780 *pHD44780;

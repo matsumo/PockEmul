@@ -11,7 +11,7 @@ extern int KeyMapce125tapeLenght;
 class Cce125tape:public Cce152
 {
 public:
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 	
     Cce125tape(CPObject *parent = 0);
 
@@ -29,7 +29,7 @@ public:
 	virtual	bool run(void);					//check access
     virtual void resizeEvent ( QResizeEvent * );
     virtual bool UpdateFinalImage(void);
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     Cce125(CPObject *parent = 0);
     virtual ~Cce125();

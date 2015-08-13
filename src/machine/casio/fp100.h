@@ -13,7 +13,7 @@ public:
     virtual bool init(void);				//initialize
     virtual bool exit(void);				//end
     //virtual void ExportByte(qint8);
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
     virtual bool UpdateFinalImage(void);
     virtual bool InitDisplay(void);
 

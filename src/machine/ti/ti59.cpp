@@ -18,6 +18,7 @@
 #include "Connect.h"
 #include "watchpoint.h"
 
+#define CARD_HEIGHT     150
 #define	CARD_INSERTED	(ti59cpu->r.key[10] & (1 << KR_BIT))
 #define	PRN_CONNECTED	(ti59cpu->r.key[0] & (1 << KP_BIT))
 #define	PRN_TRACE	(ti59cpu->r.key[15] & (1 << KP_BIT))
@@ -57,8 +58,8 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     BackFname       = P_RES(":/ti59/ti59BACK.png");
 
 
-    QString _cardFname       = P_RES(":/ti59/modules/MLcards.png");
-    currentCard = CreateImage(QSize(),_cardFname);
+
+    currentCard = 0;
     renderedCard = 0;
 
     memsize		= 0xFFFF;
@@ -66,7 +67,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(12 , 0x0000 ,	P_RES(":/ti59/ti59.bin"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(5 , 0x3000 ,	P_RES(":/ti59/modules/ML-541.bin"), ""	, CSlot::ROM , "MODULE"));
+    SlotList.append(CSlot(5 , 0x3000 ,	P_RES(":/ti59/modules/ML-541.bin"), ""	, CSlot::ROM , "ML-541"));
 
     setDXmm(81);
     setDYmm(162);
@@ -87,7 +88,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
     ioFreq = 0;
 
     changeCardAction = 0;
-    generateCard(0);
+    currentModule = "ML-541";
 
 }
 
@@ -114,7 +115,7 @@ bool Cti59::init(void)				// initialize
     if (currentModel == TI59) Reset();
 
     cardIndex = 0;
-    drawCard = true;
+    generateCard();
     return true;
 }
 
@@ -169,6 +170,11 @@ bool Cti59::Get_Connector(Cbus *_bus) {
     if (pPRINTERCONNECTOR->Get_pin(10)) {
         // printer: D0-KP diode
         ti59cpu->r.key[0] |= (1 << KP_BIT);
+        ti59cpu->mode_flags |= MODE_PRINTER;
+    }
+    else {
+        ti59cpu->r.key[0] &= ~(1 << KP_BIT);
+        ti59cpu->mode_flags &= ~MODE_PRINTER;
     }
 
     KPORT(pPRINTERCONNECTOR->Get_pin(11),0x2C);
@@ -216,13 +222,24 @@ void Cti59::Reset()
 
 }
 
-bool Cti59::LoadConfig(QXmlStreamReader *)
+bool Cti59::LoadConfig(QXmlStreamReader *xmlIn)
 {
+
+    if (xmlIn->readNextStartElement() && xmlIn->name() == "modules" ) {
+        Mem_Load(xmlIn,1);
+        currentModule = SlotList[1].getLabel();
+        generateCard();
+        xmlIn->skipCurrentElement();
+    }
+
     return true;
 }
 
-bool Cti59::SaveConfig(QXmlStreamWriter *)
+bool Cti59::SaveConfig(QXmlStreamWriter *xmlOut)
 {
+    xmlOut->writeStartElement("modules");
+       Mem_Save(xmlOut,1,(SlotList[1].getType()==CSlot::ROM)?false:true);
+    xmlOut->writeEndElement();
     return true;
 }
 
@@ -469,6 +486,8 @@ void Cti59::addModule(QString item,CPObject *pPC)
         load = true;
     }
 
+    currentModule = item;
+
     if (!load) return;
 
     bool result = true; // check this is a true capsule
@@ -478,8 +497,9 @@ void Cti59::addModule(QString item,CPObject *pPC)
         SlotList[currentSlot].setEmpty(false);
         SlotList[currentSlot].setResID(moduleName);
         SlotList[currentSlot].setType(customModule);
+        SlotList[currentSlot].setLabel(item);
         Mem_Load(currentSlot);
-
+        generateCard();
         slotChanged = true;
     }
 
@@ -488,14 +508,22 @@ void Cti59::addModule(QString item,CPObject *pPC)
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-void Cti59::ComputeKey(KEYEVENT ke,int scancode)
+void Cti59::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
 
-    if ((ke==KEY_PRESSED) && (scancode == 0x241)) {
-        cardIndex++;
-        if (cardIndex>25) cardIndex = 0;
+    if ((ke==KEY_PRESSED) && (scancode == 0x241) && event) {
+        qWarning()<< pKEYB->getKey(0x241).Rect.center().x()<<event->pos().x();
+        if (pKEYB->getKey(0x241).Rect.center().x() < event->pos().x()) {
+            cardIndex++;
+        }
+        else {
+            cardIndex--;
+        }
+
+        if (cardIndex >= moduleNbCards) cardIndex = 0;
+        if (cardIndex < 0) cardIndex = moduleNbCards - 1;
         Refresh_Display = true;
         return;
     }
@@ -549,12 +577,12 @@ void Cti59::wheelEvent(QWheelEvent *event)
     if (_r.contains(event->pos())) {
         if (event->delta()<0) {
             cardIndex++;
-            if (cardIndex>25) cardIndex = 0;
+            if (cardIndex >= moduleNbCards) cardIndex = 0;
             Refresh_Display = true;
         }
         else {
             cardIndex--;
-            if (cardIndex<0) cardIndex = 25;
+            if (cardIndex<0) cardIndex = moduleNbCards - 1;
             Refresh_Display = true;
         }
 
@@ -567,31 +595,34 @@ void Cti59::wheelEvent(QWheelEvent *event)
     }
 }
 
-void Cti59::generateCard(int Id) {
+void Cti59::generateCard() {
 
-    if (renderedCard) delete renderedCard;
-    renderedCard = new QImage(*currentCard);
-//    QPainter painter(renderedCard);
-//    QPen _pen(QColor(0xac,0x92,0x20),4);
-//    painter.setPen(_pen);
-//    QFont font("Helvetica", 35, QFont::Bold);
-//    painter.setFont(font);
-//    painter.drawText(30,32,QString("Test de TITLE                         : →|A|, Aˉ¹"));
-//    painter.drawLine(0,41,1000,41);
-//    painter.end();
+    delete renderedCard; renderedCard = 0;
+    delete currentCard; currentCard = 0;
+
+    if (currentModule == "ML-541"){
+        QString _cardFname       = P_RES(":/ti59/modules/MLcards.png");
+        currentCard = CreateImage(QSize(),_cardFname);
+    }
+
+    if (currentCard) {
+        renderedCard = new QImage(*currentCard);
+        moduleNbCards = renderedCard->height()/CARD_HEIGHT;
+        drawCard = true;
+    }
 }
 
 bool Cti59::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
-    if (drawCard) {
+    if (drawCard && renderedCard) {
         QPainter painter;
         painter.begin(FinalImage);
 
         QRect _r = pKEYB->getKey(0x241).Rect;
         painter.drawImage(_r.x()*internalImageRatio,_r.y()*internalImageRatio,
-                          renderedCard->copy(0,150*cardIndex,944,150).
+                          renderedCard->copy(0,CARD_HEIGHT*cardIndex,944,CARD_HEIGHT).
                           scaled(QSize(_r.width()*internalImageRatio,_r.height()*internalImageRatio)),
                                 Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 

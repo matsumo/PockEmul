@@ -60,7 +60,7 @@ public:
   virtual void TurnON();
   virtual void TurnOFF();
   virtual void BuildContextMenu(QMenu * menu);
-  virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+  virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
   UINT8 getKey();
 

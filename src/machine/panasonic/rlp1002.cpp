@@ -269,7 +269,7 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-void Crlp1002::ComputeKey(KEYEVENT ke,int scancode)
+void Crlp1002::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

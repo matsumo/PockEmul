@@ -29,7 +29,7 @@ public:
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
     virtual bool	InitDisplay(void);
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
 

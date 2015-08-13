@@ -20,7 +20,7 @@ Cce125tape::Cce125tape(CPObject *parent)	: Cce152(parent)
     pKEYB		= new Ckeyb(this,"ce125tape.map");
 }
 
-void Cce125tape::ComputeKey(KEYEVENT ke,int scancode)
+void Cce125tape::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
@@ -130,7 +130,7 @@ Cce125::~Cce125() {
 bool Cce125::UpdateFinalImage(void) {
     Cprinter::UpdateFinalImage();
 
-    // Draw switch by 180° rotation
+    // Draw switch by 180ï¿½ rotation
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -146,7 +146,7 @@ bool Cce125::UpdateFinalImage(void) {
     return true;
 }
 
-void Cce125::ComputeKey(CPObject::KEYEVENT ke, int scancode)
+void Cce125::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     qWarning()<<"ComputeKey"<<ke<<scancode<<pKEYB->LastKey;
     Cce126::ComputeKey(ke,scancode);

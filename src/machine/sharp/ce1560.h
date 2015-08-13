@@ -30,7 +30,7 @@ public:
     virtual bool		exit(void);
     virtual bool	LoadConfig(QXmlStreamReader *xmlIn);	// Load PC Configuration
     virtual bool	SaveConfig(QXmlStreamWriter *xmlOut);	// Save PC Configuration
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
     virtual bool UpdateFinalImage();
 
     virtual bool	InitDisplay(void);

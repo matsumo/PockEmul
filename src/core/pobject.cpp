@@ -749,7 +749,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
         if (pKEYB->LastKey != 0)
         {
-            ComputeKey(KEY_PRESSED,pKEYB->LastKey);
+            ComputeKey(KEY_PRESSED,pKEYB->LastKey,event);
             Vibrate();
         }
 
@@ -933,7 +933,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     setCursor(Qt::ArrowCursor);
     if (pKEYB) {
         pKEYB->keyPressedList.removeAll(pKEYB->lastMousePressedKey);
-        ComputeKey(KEY_RELEASED,pKEYB->lastMousePressedKey);
+        ComputeKey(KEY_RELEASED,pKEYB->lastMousePressedKey,event);
         pKEYB->lastMousePressedKey = 0;
         pKEYB->LastKey = 0;
     }
@@ -1024,7 +1024,7 @@ bool CPObject::LoadSession_File(QXmlStreamReader *)
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
-void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode)
+void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

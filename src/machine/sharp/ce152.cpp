@@ -178,7 +178,7 @@ bool Cce152::exit(void)
 	return true;
 }
 
-void Cce152::ComputeKey(KEYEVENT ke,int scancode)
+void Cce152::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

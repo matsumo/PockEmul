@@ -125,7 +125,7 @@ Cpc100::~Cpc100() {
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
-void Cpc100::ComputeKey(KEYEVENT ke,int scancode)
+void Cpc100::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

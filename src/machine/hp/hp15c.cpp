@@ -177,7 +177,7 @@ void Chp15c::BuildContextMenu(QMenu *menu)
 
 }
 
-void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode)
+void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
 {
 //    if (!Power && turnOnNext) {
 //        qWarning()<<"Turn on next";

@@ -56,7 +56,7 @@ bool Cfp40::init(void) {
     return true;
 }
 
-void Cfp40::ComputeKey(KEYEVENT ke,int scancode)
+void Cfp40::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

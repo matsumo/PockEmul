@@ -84,7 +84,7 @@ Cce126::~Cce126() {
 //    delete bells;
 }
 
-void Cce126::ComputeKey(KEYEVENT ke,int scancode)
+void Cce126::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

@@ -76,7 +76,7 @@ public:
     QList<CSlot> SlotList;
 
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 	CPObject	*Parent;
 	CpcXXXX		*pPC;
 

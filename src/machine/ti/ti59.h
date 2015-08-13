@@ -32,7 +32,7 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
 
     void wheelEvent(QWheelEvent *event);
@@ -59,7 +59,7 @@ public:
     QString Display();
     QString displayString;
     quint8 sendToPrinter;
-    void generateCard(int Id);
+    void generateCard();
 private:
     Models currentModel;
 
@@ -70,7 +70,8 @@ private:
 
     bool slotChanged;
     int currentSlot;
-
+    QString currentModule;
+    int moduleNbCards;
     bool drawCard;
     QImage *currentCard, *renderedCard;
     int cardIndex;

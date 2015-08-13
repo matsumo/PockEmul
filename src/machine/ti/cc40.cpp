@@ -643,7 +643,7 @@ bool Ccc40::Set_Connector(Cbus *_bus) {
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-void Ccc40::ComputeKey(KEYEVENT ke,int scancode)
+void Ccc40::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

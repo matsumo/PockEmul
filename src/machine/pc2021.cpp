@@ -72,7 +72,7 @@ Cpc2021::~Cpc2021() {
 //    delete bells;
 }
 
-void Cpc2021::ComputeKey(KEYEVENT ke,int scancode)
+void Cpc2021::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

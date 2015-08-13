@@ -1465,7 +1465,7 @@ bool CLH5810_PC1600::step()
 }
 
 
-void Cpc1600::ComputeKey(KEYEVENT ke,int scancode)
+void Cpc1600::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

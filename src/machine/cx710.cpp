@@ -102,7 +102,7 @@ void Cx710::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Cx710::ComputeKey(KEYEVENT ke,int scancode)
+void Cx710::ComputeKey(KEYEVENT ke,int scancode,QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

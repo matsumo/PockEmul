@@ -97,7 +97,7 @@ bool Cce122::run(void)
     return true;
 }
 
-void Cce122::ComputeKey(KEYEVENT ke,int scancode)
+void Cce122::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
@@ -131,7 +131,7 @@ void Cce122::ComputeKey(KEYEVENT ke,int scancode)
 bool Cce122::UpdateFinalImage(void) {
     Cprinter::UpdateFinalImage();
 
-    // Draw switch by 180° rotation
+    // Draw switch by 180ï¿½ rotation
     QPainter painter;
 
     // PRINTER SWITCH

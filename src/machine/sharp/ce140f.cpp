@@ -75,7 +75,7 @@ bool Cce140f::UpdateFinalImage(void) {
 
 }
 
-void Cce140f::ComputeKey(KEYEVENT ke,int scancode)
+void Cce140f::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

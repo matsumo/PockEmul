@@ -517,7 +517,7 @@ bool Cti74::Set_Connector(Cbus *_bus) {
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-void Cti74::ComputeKey(KEYEVENT ke,int scancode)
+void Cti74::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

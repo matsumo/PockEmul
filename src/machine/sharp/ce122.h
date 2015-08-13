@@ -8,7 +8,7 @@ class Cce122:public Cce126
 public:
     Cce122(CPObject *parent=0);
     bool run();
-    void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     bool UpdateFinalImage();
     virtual void TurnON();

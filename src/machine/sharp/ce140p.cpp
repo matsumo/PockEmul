@@ -151,7 +151,7 @@ void Cce140p::BuildContextMenu(QMenu *menu)
     menu->addAction(tr("Hide serial console"),pSIO,SLOT(HideConsole()));
 }
 
-void Cce140p::ComputeKey(KEYEVENT ke,int scancode)
+void Cce140p::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)

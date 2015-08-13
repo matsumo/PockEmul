@@ -20,7 +20,7 @@ public:
     virtual UINT8 in(UINT8 address);
     virtual UINT8 out(UINT8 address,UINT8 value);
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
     virtual bool Set_Connector(Cbus *_bus = 0);
     virtual bool Get_Connector(Cbus *_bus = 0);
     virtual bool UpdateFinalImage();

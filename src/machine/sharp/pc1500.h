@@ -53,7 +53,7 @@ public:
     bool	SaveConfig(QXmlStreamWriter *);
 	bool	InitDisplay(void);
 	bool	CompleteDisplay(void);
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
     virtual bool init(void);
     virtual bool run(void);				// emulator main
     virtual bool Chk_Adr(UINT32 *d,UINT32 data);

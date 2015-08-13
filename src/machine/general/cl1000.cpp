@@ -146,7 +146,7 @@ void Ccl1000::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
-void Ccl1000::ComputeKey(KEYEVENT ke,int scancode)
+void Ccl1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
