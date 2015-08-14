@@ -115,6 +115,7 @@ bool Cti59::init(void)				// initialize
     if (currentModel == TI59) Reset();
 
     cardIndex = 0;
+    currentPrgm = 0;
     generateCard();
     return true;
 }
@@ -126,6 +127,12 @@ bool Cti59::run() {
     getKey();
 
     CpcXXXX::run();
+
+    if (currentPrgm != (ti59cpu->r.SCOM[9][3] & 0x0f) +  10 * (ti59cpu->r.SCOM[9][4] & 0x0f)) {
+        currentPrgm = (ti59cpu->r.SCOM[9][3] & 0x0f) +  10 * (ti59cpu->r.SCOM[9][4] & 0x0f);
+        cardIndex = currentPrgm-1;
+        Refresh_Display = true;
+    }
 
     Display();
 
@@ -320,7 +327,7 @@ QString Cti59::Display() {
                   putchar ('0'+ti59cpu->r.B[i]);
 #endif
 //              putchar ('|'); putchar (' ');
-                qWarning()<<"DISPLAY:"<<s;
+//                qWarning()<<"DISPLAY:"<<s;
                displayString = s;
                pLCDC->updated = true;
           }
@@ -420,6 +427,8 @@ UINT8 Cti59::getKey()
 
         KPORT(KEY('P'),0x0C);
 
+        if (KEY('Z'))
+          qWarning()<<currentPrgm<< (ti59cpu->r.SCOM[9][3] & 0x0f) << (ti59cpu->r.SCOM[9][4] & 0x0f);
     }
 
     return code;
@@ -514,7 +523,6 @@ void Cti59::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     Q_UNUSED(scancode)
 
     if ((ke==KEY_PRESSED) && (scancode == 0x241) && event) {
-        qWarning()<< pKEYB->getKey(0x241).Rect.center().x()<<event->pos().x();
         if (pKEYB->getKey(0x241).Rect.center().x() < event->pos().x()) {
             cardIndex++;
         }

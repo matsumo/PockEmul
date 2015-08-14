@@ -851,7 +851,7 @@ qWarning()<< "Unknown behaviour...";
           // LOAD PC
           r.LIB /= 10;
           r.LIB += ((r.KR >> 4) & 0xF) * 1000;
-          qWarning()<<"r.LIB:"<<r.LIB;
+//          qWarning()<<"r.LIB:"<<((r.KR >> 4) & 0xF)<<r.LIB;
 //          if (log_flags & LOG_SHORT)
 //        LOG ("LIB.addr=%04d", r.LIB);
           break;
@@ -977,7 +977,6 @@ qWarning()<< "Unknown behaviour...";
           Alu (alu_out->dst, 0, r.SCOM[r.REG_ADDR], mask, ALU_ADD);
 //          if (alu_out->dst && (log_flags & LOG_DEBUG)) {
 //        int i;
-//        LOG ("[RCL.%u:", r.REG_ADDR); for (i = 15; i >= 0; i--) LOG ("%X", alu_out->dst[i]); LOG ("]");
 //          }
         } else
         if ((r.flags & FLG_RAM_READ) && ((currentModel==TI59) || (currentModel==TI59C) || r.RAM_ADDR < 60)) {
@@ -1108,7 +1107,9 @@ qWarning()<< "Unknown behaviour...";
   return 1;
 }
 
-
+QByteArray Ctmc0501::getimem() {
+    return (QByteArray((const char*)&(r.SCOM),sizeof(r.SCOM)));
+}
 
 
 

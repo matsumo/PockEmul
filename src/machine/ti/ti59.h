@@ -75,6 +75,7 @@ private:
     bool drawCard;
     QImage *currentCard, *renderedCard;
     int cardIndex;
+    int currentPrgm;
 
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );

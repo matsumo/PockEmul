@@ -172,8 +172,8 @@ void DialogDasm::ManualDasm() {
 
 void DialogDasm::RefreshDasm()
 {
-show();
- if ( pPC->pCPU->pDEBUG->debugged)
+    show();
+    if ( pPC->pCPU->pDEBUG->debugged)
     {
         QString	text;
 
@@ -264,6 +264,7 @@ void DialogDasm::loadImem()
             imemHexEditor->setData(pPC->getmem());
     }
 
+    imemHexEditor->resize( ui->imemframe->size());
     imemHexEditor->setReadOnly(false);
     imemHexEditor->setCursorPosition(_curPos,BINEditor::BinEditor::MoveAnchor);
     imemHexEditor->verticalScrollBar()->setValue(_scrollPos);

@@ -136,6 +136,7 @@ public:
     virtual	UINT32	get_PC(void) { return r.addr;}					//get Program Counter
     virtual void	Regs_Info(UINT8);
 
+    virtual QByteArray getimem();
 
     QString IntToHex(int val, int nb);
 
