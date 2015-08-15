@@ -465,7 +465,8 @@ HEADERS *= \
     src/lcd/lcdc_ti59.h \
     src/cpu/tmc0501.h \
     src/cpu/tmc0501_dasm.h \
-    src/machine/ti/pc100.h
+    src/machine/ti/pc100.h \
+    src/machine/hx20.h
 
 
 
@@ -697,7 +698,8 @@ DEFINES += LOCRES
 RESOURCES +=  \
     resources/cemem.qrc \
     resources/jr800.qrc \
-    resources/ti59.qrc
+    resources/ti59.qrc \
+    resources/hx20.qrc
 
 
 SOURCES *=  \
@@ -757,7 +759,8 @@ SOURCES *=  \
     src/lcd/lcdc_ti59.cpp \
     src/cpu/tmc0501.cpp \
     src/cpu/tmc0501_dasm.cpp \
-    src/machine/ti/pc100.cpp
+    src/machine/ti/pc100.cpp \
+    src/machine/hx20.cpp
 
 
 

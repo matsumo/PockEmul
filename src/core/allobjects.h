@@ -95,5 +95,7 @@
 
 #include "jr800.h"
 
+#include "hx20.h"
+
 
 #endif // ALLOBJECTS_H

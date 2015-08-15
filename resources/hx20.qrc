@@ -1,0 +1,18 @@
+<RCC>
+    <qresource prefix="/">
+        <file>hx20/hd6301v1.6d</file>
+        <file>hx20/hx20_v10.12e</file>
+        <file>hx20/hx20_v10.13e</file>
+        <file>hx20/hx20_v10.14e</file>
+        <file>hx20/hx20_v10.15e</file>
+        <file>hx20/hx20_v11.12e</file>
+        <file>hx20/hx20_v11.13e</file>
+        <file>hx20/hx20_v11.14e</file>
+        <file>hx20/hx20_v11.15e</file>
+        <file>hx20/hx20_v11e.12e</file>
+        <file>hx20/hx20_v11e.13e</file>
+        <file>hx20/hx20_v11e.14e</file>
+        <file>hx20/hx20_v11e.15e</file>
+        <file>hx20/hx20.png</file>
+    </qresource>
+</RCC>
