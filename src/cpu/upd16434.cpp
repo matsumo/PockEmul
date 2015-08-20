@@ -242,9 +242,14 @@ const unsigned short upd16434charfont5x7[] = {
 
 
 
-CUPD16434::CUPD16434(CpcXXXX *parent)
+CUPD16434::CUPD16434(CpcXXXX *parent, quint8 id,chipModel mod)
 {
     pPC = parent;
+    this->id = id;
+    switch (mod) {
+    case UPD16434: memoryLimit = 0x7f; break;
+    case UPD07728: memoryLimit = 39; break;
+    }
 }
 
 CUPD16434::~CUPD16434() {
@@ -267,6 +272,7 @@ bool CUPD16434::exit()
 
 void CUPD16434::Reset()
 {
+//    qWarning()<<"UPD16434["<<id<<"]"<<" RESET";
     memset(info.imem,0,sizeof(info.imem));
     info.mode = SWM;
     info.on_off = 0;
@@ -285,9 +291,11 @@ void CUPD16434::addChar(quint8 c,bool right) {
     if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 ADD CHAR at %i: %02x=(%c)\n",info.dataPointer,c,c);
     for (int i = 0;i<5;i++) {
         info.imem[info.dataPointer] = upd16434charfont5x7[(c-0x20)*5+4-i];
-        info.dataPointer += (right ? 1 : -1);
+        if (right) info.dataPointer ++;
+        else info.dataPointer --;
+
         info.dataPointer &= 0x7f;
-        if (info.dataPointer>=0x80) {
+        if (info.dataPointer > 0x7f) {
             qWarning()<<"INDEX ERROR";
         }
     }
@@ -295,6 +303,7 @@ void CUPD16434::addChar(quint8 c,bool right) {
 
 BYTE CUPD16434::data(quint8 cmd)
 {
+//    qWarning()<<"UPD16434["<<id<<"]"<<" start DATA:"<<cmd<<" mode:"<<info.mode<<"  DP:"<<info.dataPointer;
     switch (info.mode) {
 
     case SCMR: addChar(cmd,true);
@@ -315,10 +324,13 @@ BYTE CUPD16434::data(quint8 cmd)
             break;
 
         default:
-            if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 Unknown mode %i\n",info.mode);
-            AddLog(LOG_DISPLAY,QString("mode:%1").arg(info.mode));
+//            qWarning()<<"UPD16434["<<id<<"]"<<" Unknown mode ";
+//            if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 Unknown mode %i\n",info.mode);
+//            AddLog(LOG_DISPLAY,QString("mode:%1").arg(info.mode));
             break;
         }
+
+//        qWarning()<<"UPD16434["<<id<<"]"<<" end  DATA:"<<cmd<<" mode:"<<info.mode<<"  DP:"<<info.dataPointer;
         updated = true;
 
     }
@@ -334,7 +346,7 @@ BYTE CUPD16434::instruction(quint8 cmd)
     if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 CMD: %02x\n",cmd);
 
 //    AddLog(LOG_DISPLAY,tr("UPD16434 CMD:%1").arg(cmd,4,16,QChar('0')));
-//    qWarning()<<"UPD16434 CMD:"<<cmd;
+//    qWarning()<<"UPD16434["<<id<<"]"<<" CMD:"<<cmd;
 //    updated = true;
 
     if ((cmd & MASK_LDPI) == MASK_LDPI ) { return cmd_LDPI(cmd); }
@@ -408,14 +420,14 @@ BYTE CUPD16434::cmd_BSET(quint8 cmd,bool set)
     quint8 mode= cmd & 0x03;
     if (set){
         if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 PSET(%i,%i)\n",info.dataPointer,bit);
-        if (info.dataPointer>=0x80) {
+        if (info.dataPointer>0x7f) {
             qWarning()<<"INDEX ERROR2";
         }
         info.imem[info.dataPointer] |= (0x01 << bit);
     }
     else {
         if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"UPD16434 PRESET(%i,%i)\n",info.dataPointer,bit);
-        if (info.dataPointer>=0x80) {
+        if (info.dataPointer>0x7f) {
             qWarning()<<"INDEX ERROR3";
         }
         info.imem[info.dataPointer] &= ~(0x01 << bit);

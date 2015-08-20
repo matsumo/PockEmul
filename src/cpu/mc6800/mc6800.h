@@ -116,6 +116,8 @@ typedef struct {
 
     // memory controller
     UINT8 ram_ctrl;
+    UINT8 maskrom[0x1000];
+    UINT8 opmode;
 } MC6800info;
 
 class Cmc6800 :  public CCPU
@@ -141,13 +143,7 @@ private:
     UINT32 RM16(UINT32 Addr);
     void WM16(UINT32 Addr, PAIR *p);
 
-#if defined(HAS_MC6801) || defined(HAS_HD6301)
-    QQueue<int> recv_buffer;
 
-    UINT32 mc6801_io_r(UINT32 offset);
-    void mc6801_io_w(UINT32 offset, UINT32 data);
-    void increment_counter(int amount);
-#endif
 
     void run_one_opecode();
     void enter_interrupt(UINT16 irq_vector);
@@ -435,6 +431,14 @@ public:
     void initialize();
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     void release();
+#endif
+
+#if defined(HAS_MC6801) || defined(HAS_HD6301)
+    QQueue<int> recv_buffer;
+
+    UINT32 mc6801_io_r(UINT32 offset);
+    void mc6801_io_w(UINT32 offset, UINT32 data);
+    void increment_counter(int amount);
 #endif
 
     int run(int clock);

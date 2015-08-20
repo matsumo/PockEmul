@@ -64,6 +64,10 @@ UINT32 Cmc6800::RM(UINT32 Addr)
         if (logsw) sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
         return _ret;
     }
+    else if ((regs.opmode == 7) && (Addr >= 0xF000)) {
+        // Mask ROM
+        return regs.maskrom[Addr - 0xF000];
+    }
 #endif
     UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
     if (logsw) sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
@@ -86,13 +90,18 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
         if (logsw) sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
+    else if ((regs.opmode == 7) && (Addr >= 0xF000)) {
+        // Mask ROM
+        // write to mask rom ignored
+    }
     else
 #endif
+
     {
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
         if (logsw) sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
     }
-//    d_mem->write_data8(Addr, Value);
+
 }
 
 UINT32 Cmc6800::RM16(UINT32 Addr)
@@ -334,7 +343,8 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
         // port2 data register
         if(regs.port[1].wreg != data || regs.port[1].first_write) {
             write_signals(&regs.port[1].outputs, data);
-            regs.port[1].wreg = data;
+            regs.port[1].wreg = data;           
+            regs.opmode = data >> 5;
             qWarning()<<tr("Write Port 1:%1").arg(regs.port[1].rreg,2,16,QChar('0'))
                     <<"="<<(regs.port[1].rreg!=0?QChar(regs.port[1].rreg):' ');
             regs.port[1].first_write = false;
@@ -469,6 +479,7 @@ void Cmc6800::increment_counter(int amount)
     if((regs.sio_counter -= amount) <= 0) {
         if((regs.trcsr & TRCSR_TE) && !(regs.trcsr & TRCSR_TDRE)) {
             write_signals(&regs.outputs_sio, regs.tdr);
+            pPC->out(0x01,regs.tdr);
             regs.trcsr |= TRCSR_TDRE;
         }
         if((regs.trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
@@ -818,6 +829,8 @@ int Cmc6800::run(int clock)
 
 void Cmc6800::run_one_opecode()
 {
+
+
     if(wai_state & (Cmc6800_WAI | HD6301_SLP)) {
         increment_counter(1);
     }
@@ -3811,6 +3824,7 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 #endif
 
     memset(&regs,0,sizeof(regs));
+    memset(&regs.maskrom,0xdd,sizeof(regs.maskrom));
     pDEBUG = new Cdebug_mc6800(this);
 
     fn_log="mc6800.log";

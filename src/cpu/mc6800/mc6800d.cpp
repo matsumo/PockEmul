@@ -86,7 +86,7 @@ static const UINT8 table[0x102][3] = {
     {clc, inh,0},{sec, inh,0},{cli, inh,0},{sei, inh,0},
     {sba, inh,0},{cba, inh,0},{asx1,sx1,0},{asx2,sx1,0},/* 10 */
     {ill, inh,7},{ill, inh,7},{tab, inh,0},{tba, inh,0},
-    {xgdx,inh,3},{daa, inh,0},{ill, inh,7},{aba, inh,0},
+    {xgdx,inh,3},{daa, inh,0},{ill, inh,3},{aba, inh,0},
     {ill, inh,7},{ill, inh,7},{ill, inh,7},{ill, inh,7},
     {bra, rel,0},{brn, rel,0},{bhi, rel,0},{bls, rel,0},/* 20 */
     {bcc, rel,0},{bcs, rel,0},{bne, rel,0},{beq, rel,0},

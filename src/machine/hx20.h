@@ -5,6 +5,7 @@ class CPObject;
 
 class CUPD16434;
 class Cconnector;
+class Cmc6800;
 
 #include "pcxxxx.h"
 
@@ -26,7 +27,7 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
-
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     virtual bool init();
     virtual bool run();
@@ -43,10 +44,18 @@ public:
 
     Cconnector	*pTAPECONNECTOR;	qint64 pTAPECONNECTOR_value;
     Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;
+    void send_to_main(quint8 val);
+    void send_to_slave(quint8 val);
 private:
     UINT16 kstrobe;
     UINT8 lcd_select;
-    UINT8 lcd_clk_counter;
+    QByteArray cmd_buf;
+
+    int int_status;
+    int int_mask;
+    int key_intmask;
+
+    Cmc6800* pmc6301;
 };
 
 

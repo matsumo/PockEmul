@@ -12,11 +12,16 @@ typedef struct {
     BYTE    imem[0x80];
 } UPD16434info;
 
+
+
 class CUPD16434{
 
-
-
 public:
+    enum  chipModel{
+        UPD16434,
+        UPD07728
+    };
+
     const char*	GetClassName(){ return("CUPD16434");}
     CpcXXXX		*pPC;
 
@@ -46,13 +51,16 @@ public:
     void	Load_Internal(QXmlStreamReader *);
     void	save_internal(QXmlStreamWriter *);
 
-    CUPD16434(CpcXXXX *parent);
+    CUPD16434(CpcXXXX *parent, quint8 id=0, chipModel mod = UPD16434);
     ~CUPD16434();
 
     void	addretrace (void);
 
 
     void addChar(quint8 c, bool right);
+
+    int memoryLimit;
+    quint8 id;
 };
 
 #endif // UPD16434_H
