@@ -763,6 +763,7 @@ void Cmc6800::write_signal(int id, UINT32 data, UINT32 mask)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     case SIG_MC6801_PORT_1:
         regs.port[0].rreg = (regs.port[0].rreg & ~mask) | (data & mask);
+//        qWarning()<<"PORT 1 set to :"<<regs.port[0].rreg;
         break;
     case SIG_MC6801_PORT_2:
         if((mask & 1) && (regs.port[1].rreg & 1) != (data & 1) && (regs.tcsr & 2) == ((data << 1) & 2)) {

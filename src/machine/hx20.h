@@ -54,6 +54,7 @@ private:
     int int_status;
     int int_mask;
     int key_intmask;
+    int key_data;
 
     Cmc6800* pmc6301;
 };

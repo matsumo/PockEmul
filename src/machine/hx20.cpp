@@ -147,6 +147,8 @@ bool Chx20::init(void)				// initialize
     for (int i=0;i<6;i++) {
         upd16434[i]->init();
     }
+
+    Reset();
     return true;
 }
 
@@ -209,43 +211,29 @@ UINT8 Chx20::in(UINT8 addr)
     case 0x20:
         return pKEYB->Get_KS();
     case 0x22:
-        return getKey() & 0xff;
-//    case 0x26:
-//        // interrupt mask reset in sleep mode
-//        if(int_mask) {
-//            int_mask = 0;
-//            //				update_intr();
-//        }
-//        break;
+        return key_data & 0xff;
+    case 0x26:
+        // interrupt mask reset in sleep mode
+        if(int_mask) {
+            int_mask = 0;
+            //				update_intr();
+        }
+        break;
     case 0x28:
         // bit6: power switch interrupt flag (0=active)
         // bit7: busy signal of lcd controller (0=busy)
-        return 0x50 | 0xa8;
-//        return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0xa8;
+//        return 0x43 | 0xa8;
+        return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0xa8;
     case 0x2a:
     case 0x2b:
-//        qWarning()<<"READ "<<addr;
-//        if(lcd_clock > 0 && --lcd_clock <= 0) {
-//            int c = lcd_select & 7;
-//            if(c >= 1 && c <= 6) {
-//                lcd_t *block = &lcd[c - 1];
-//                if(lcd_select & 8) {
-//                    block->bank = lcd_data & 0x40 ? 40 : 0;
-//                    block->addr = lcd_data & 0x3f;
-//                } else if(block->addr < 40) {
-//                    block->buffer[block->bank + block->addr] = lcd_data;
-//                    block->addr++;
-//                }
-//            }
-//        }
         break;
-//    case 0x2c:
-//        // used for interrupt mask setting in sleep mode
-//        if(!int_mask) {
-//            int_mask = 1;
-//            //				update_intr();
-//        }
-//        break;
+    case 0x2c:
+        // used for interrupt mask setting in sleep mode
+        if(!int_mask) {
+            int_mask = 1;
+            //				update_intr();
+        }
+        break;
 //    case 0x30:
 //        //			SET_BANK(0x4000, 0x7fff, ram + 0x4000, ram + 0x4000);
 //        SET_BANK(0x8000, 0xbfff, ext, rom);
@@ -276,6 +264,8 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data)
                 pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
             }
             pmc6301->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
+            qWarning()<<"strobe:"<<data;
+            key_data = getKey();
         }
         break;
     case 0x26:
@@ -383,8 +373,8 @@ void Chx20::Reset()
 {
     CpcXXXX::Reset();
 
-    ((Cmc6800*)pCPU)->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
-    ((Cmc6800*)pCPU)->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
+    pmc6301->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
+    pmc6301->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
 
     pLCDC->init();
     for (int i=0;i<6;i++) upd16434[i]->Reset();
@@ -411,8 +401,9 @@ void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
 
-    if (ke==KEY_PRESSED) {
+    if ( (getKey() & 0xff) != 0xff) {
         // raise key interrupt
+        qWarning()<<"raise key interrupt";
         if(!(int_status & INT_KEYBOARD)) {
             int_status |= INT_KEYBOARD;
             pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
@@ -424,10 +415,10 @@ void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 UINT16 Chx20::getKey()
 {
 
-    UINT16 ks = kstrobe^0xFFFF;
+    UINT8 ks = pKEYB->Get_KS()^0xff;
     UINT16 data=0;
 
-//    if ((pKEYB->LastKey) && ks )
+    if ((pKEYB->LastKey) && ks )
     {
 //        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
 
@@ -440,7 +431,7 @@ UINT16 Chx20::getKey()
             if (KEY('5'))			data|=0x20;
             if (KEY('6'))			data|=0x40;
             if (KEY('7'))			data|=0x80;
-//             n ^= keyboard_map[(uint8_t)'0']  | (keyboard_map[(uint8_t)'1'] << 1) | (keyboard_map[(uint8_t)'2'] << 2)  | (keyboard_map[(uint8_t)'3'] << 3) | (keyboard_map[(uint8_t)'4'] << 4) | (keyboard_map[(uint8_t)'5'] << 5)  | (keyboard_map[(uint8_t)'6'] << 6) | (keyboard_map[(uint8_t)'7'] << 7);
+            if (KEY(K_F1))			data|=0x100;
 
         }
 
@@ -453,11 +444,7 @@ UINT16 Chx20::getKey()
             if (KEY('-'))			data|=0x20;
             if (KEY('.'))			data|=0x40;
             if (KEY('/'))			data|=0x80;
-
-//            if (l & 0x02) n ^= keyboard_map[(uint8_t)'8']  | (keyboard_map[(uint8_t)'9'] << 1) |
-//                    (keyboard_map[(uint8_t)':'] << 2)  | (keyboard_map[(uint8_t)';'] << 3) |
-//                    (keyboard_map[(uint8_t)','] << 4) | (keyboard_map[(uint8_t)'-'] << 5)  |
-//                    (keyboard_map[(uint8_t)'.'] << 6) | (keyboard_map[(uint8_t)'/'] << 7);
+            if (KEY(K_F2))			data|=0x100;
 
         }
         if (ks&0x04) {
@@ -469,11 +456,8 @@ UINT16 Chx20::getKey()
             if (KEY('E'))			data|=0x20;
             if (KEY('F'))			data|=0x40;
             if (KEY('G'))			data|=0x80;
+            if (KEY(K_F3))			data|=0x100;
 
-//            if (l & 0x04) n ^= keyboard_map[(uint8_t)'@']  | (keyboard_map[(uint8_t)'a'] << 1) |
-//                    (keyboard_map[(uint8_t)'b'] << 2)  | (keyboard_map[(uint8_t)'c'] << 3) |
-//                    (keyboard_map[(uint8_t)'d'] << 4) | (keyboard_map[(uint8_t)'e'] << 5)  |
-//                    (keyboard_map[(uint8_t)'f'] << 6) | (keyboard_map[(uint8_t)'g'] << 7);
 
         }
 
@@ -486,11 +470,8 @@ UINT16 Chx20::getKey()
             if (KEY('M'))			data|=0x20;
             if (KEY('N'))			data|=0x40;
             if (KEY('O'))			data|=0x80;
+            if (KEY(K_F4))			data|=0x100;
 
-//            if (l & 0x08) n ^= keyboard_map[(uint8_t)'h']  | (keyboard_map[(uint8_t)'i'] << 1) |
-//                    (keyboard_map[(uint8_t)'j'] << 2)  | (keyboard_map[(uint8_t)'k'] << 3) |
-//                    (keyboard_map[(uint8_t)'l'] << 4) | (keyboard_map[(uint8_t)'m'] << 5)  |
-//                    (keyboard_map[(uint8_t)'n'] << 6) | (keyboard_map[(uint8_t)'o'] << 7);
 
         }
 
@@ -503,11 +484,8 @@ UINT16 Chx20::getKey()
             if (KEY('U'))			data|=0x20;
             if (KEY('V'))			data|=0x40;
             if (KEY('W'))			data|=0x80;
+            if (KEY(K_F5))			data|=0x100;
 
-//            if (l & 0x10) n ^= keyboard_map[(uint8_t)'p']  | (keyboard_map[(uint8_t)'q'] << 1) |
-//                    (keyboard_map[(uint8_t)'r'] << 2)  | (keyboard_map[(uint8_t)'s'] << 3) |
-//                    (keyboard_map[(uint8_t)'t'] << 4) | (keyboard_map[(uint8_t)'u'] << 5)  |
-//                    (keyboard_map[(uint8_t)'v'] << 6) | (keyboard_map[(uint8_t)'w'] << 7);
 
         }
         if (ks&0x20) {
@@ -517,13 +495,10 @@ UINT16 Chx20::getKey()
             if (KEY('['))			data|=0x08;
             if (KEY(']'))			data|=0x10;
             if (KEY('\\'))			data|=0x20;
-//            if (KEY(''))			data|=0x40;
-//            if (KEY(''))			data|=0x80;
-
-//            if (l & 0x20) n ^= keyboard_map[(uint8_t)'x']  | (keyboard_map[(uint8_t)'y'] << 1) |
-//                    (keyboard_map[(uint8_t)'z'] << 2)  | (keyboard_map[(uint8_t)'['] << 3) |
-//                    (keyboard_map[(uint8_t)']'] << 4) | (keyboard_map[(uint8_t)'\\'] << 5) |
-//                    (keyboard_map[0] << 6)            | (keyboard_map[0] << 7);
+            if (KEY(K_RA))			data|=0x40;
+            if (KEY(K_LA))			data|=0x80;
+            if (KEY(K_PFEED))		data|=0x100;
+            if (KEY(K_SHT))			data|=0x200;
 
 
         }
@@ -533,14 +508,27 @@ UINT16 Chx20::getKey()
             if (KEY(K_TAB))			data|=0x04; // OK
 //            if (KEY(''))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
-//            if (KEY(''))			data|=0x20;
-//            if (KEY(''))			data|=0x40;
-//            if (KEY(''))			data|=0x80;
+            if (KEY(K_DEF))			data|=0x20; // NUM
+            if (KEY(0x15))			data|=0x40; // GRAPH
+            if (KEY(K_SML))			data|=0x80;
+//            if (KEY(''))			data|=0x100;
+            if (KEY(K_CTRL)) {
+                data|=0x200;
+                pKEYB->isCtrl = true;
+            }
 
-//            if (l & 0x40) n ^= keyboard_map[(uint8_t)'\n'] | (keyboard_map[(uint8_t)' '] << 1) |
-//                    (keyboard_map[(uint8_t)'\t'] << 2) | (keyboard_map[0] << 3)            |
-//                    (keyboard_map[0] << 4)            | (keyboard_map[0] << 5)             |
-//                    (keyboard_map[0] << 6)            | (keyboard_map[0] << 7);
+            if (ks&0x80) {
+//                if (KEY(K_RET))			data|=0x01; // OK
+//                if (KEY(' '))			data|=0x02; // OK
+//                if (KEY(K_TAB))			data|=0x04; // OK
+    //            if (KEY(''))			data|=0x08;
+    //            if (KEY(''))			data|=0x10;
+                if (KEY(K_MENU))		data|=0x20; // MENU
+//                if (KEY(0x15))			data|=0x40;
+//                if (KEY(K_SML))			data|=0x80;
+    //            if (KEY(''))			data|=0x100;
+            }
+
 
 
         }
@@ -548,8 +536,9 @@ UINT16 Chx20::getKey()
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
+        qWarning()<<"getkey:"<<tr("%1 , %2").arg(ks,2,16,QChar('0')).arg(data^0xffff,4,16,QChar('0'));
     }
-    return (data^0xff);
+    return (data^0xffff);
 
 }
 
@@ -644,13 +633,13 @@ void Chx20::send_to_slave(quint8 val)
 //		}
 //		send_to_main(0x01);
 //		break;
-//	case 0x0c: // terminate process
-//		cmd_buf->read();
-//		send_to_main(0x02);
-//		// stop sound
+    case 0x0c: // terminate process
+        cmd_buf.remove(0,1);
+        send_to_main(0x02);
+        // stop sound
 //		d_beep->write_signal(SIG_BEEP_ON, 0, 0);
 //		sound_ptr = sound_count;
-//		break;
+        break;
 //	case 0x0d: // cuts off power supply
 //		if(cmd_buf->count() == 2) {
 //			cmd_buf->read();
@@ -858,10 +847,10 @@ void Chx20::send_to_slave(quint8 val)
 //		}
 //		send_to_main(0x41);
 //		break;
-//	case 0x50: // identifies the plug-in option
-//		cmd_buf->read();
-//		send_to_main(0x02);
-//		break;
+    case 0x50: // identifies the plug-in option
+        cmd_buf.remove(0,1);
+        send_to_main(0x02);
+        break;
 //	case 0x51: // turns power of plug-in rom cartridge on
 //	case 0x52: // turns power of plug-in rom cartridge off
 //		cmd_buf->read();

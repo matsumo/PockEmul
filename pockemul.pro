@@ -1392,7 +1392,8 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 DISTFILES += \
     resources/keymap/ti59.map \
-    resources/keymap/pc100.map
+    resources/keymap/pc100.map \
+    resources/keymap/hx20.map
 
 
 
