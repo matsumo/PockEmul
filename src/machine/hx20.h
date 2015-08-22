@@ -49,7 +49,7 @@ public:
 private:
     UINT16 kstrobe;
     UINT8 lcd_select;
-    QByteArray cmd_buf;
+    QList<UINT8> cmd_buf;
 
     int int_status;
     int int_mask;
@@ -57,6 +57,8 @@ private:
     int key_data;
 
     Cmc6800* pmc6301;
+
+    bool special_cmd_masked;
 };
 
 

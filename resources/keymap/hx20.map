@@ -1,8 +1,8 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>hx20</model>
 <Keyboard>
-    <KEY description="BASIC" height="40" left="878" masterscancode="0x00" modifier="" scancode="0xe2" top="219" view="FRONT" width="60"/>
-    <KEY description="CETL" height="40" left="944" masterscancode="0x00" modifier="" scancode="0x20e" top="219" view="FRONT" width="60"/>
+    <KEY description="BASIC" height="58" left="878" masterscancode="0x00" modifier="" scancode="0xe2" top="219" view="FRONT" width="58"/>
+    <KEY description="MENU" height="26" left="99" masterscancode="0x00" modifier="" scancode="0xda" top="354" view="FRONT" width="50"/>
     <KEY description="F1" height="30" left="247" masterscancode="0x00" modifier="" scancode="0xf6" top="353" view="FRONT" width="50"/>
     <KEY description="F2" height="30" left="312" masterscancode="0x00" modifier="" scancode="0xf7" top="354" view="FRONT" width="50"/>
     <KEY description="F3" height="30" left="376" masterscancode="0x00" modifier="" scancode="0xf8" top="355" view="FRONT" width="50"/>

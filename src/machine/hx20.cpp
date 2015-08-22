@@ -264,7 +264,7 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data)
                 pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
             }
             pmc6301->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
-            qWarning()<<"strobe:"<<data;
+//            qWarning()<<"strobe:"<<data;
             key_data = getKey();
         }
         break;
@@ -403,7 +403,6 @@ void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
     if ( (getKey() & 0xff) != 0xff) {
         // raise key interrupt
-        qWarning()<<"raise key interrupt";
         if(!(int_status & INT_KEYBOARD)) {
             int_status |= INT_KEYBOARD;
             pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
@@ -417,6 +416,8 @@ UINT16 Chx20::getKey()
 
     UINT8 ks = pKEYB->Get_KS()^0xff;
     UINT16 data=0;
+
+    UINT8 DipSwitch = 0;
 
     if ((pKEYB->LastKey) && ks )
     {
@@ -432,6 +433,7 @@ UINT16 Chx20::getKey()
             if (KEY('6'))			data|=0x40;
             if (KEY('7'))			data|=0x80;
             if (KEY(K_F1))			data|=0x100;
+            if (DipSwitch & 0x01)			data|=0x200; // Deep Switch 1
 
         }
 
@@ -445,6 +447,7 @@ UINT16 Chx20::getKey()
             if (KEY('.'))			data|=0x40;
             if (KEY('/'))			data|=0x80;
             if (KEY(K_F2))			data|=0x100;
+            if (DipSwitch & 0x02)			data|=0x200; // Deep Switch 2
 
         }
         if (ks&0x04) {
@@ -457,6 +460,7 @@ UINT16 Chx20::getKey()
             if (KEY('F'))			data|=0x40;
             if (KEY('G'))			data|=0x80;
             if (KEY(K_F3))			data|=0x100;
+            if (DipSwitch & 0x04)			data|=0x200; // Deep Switch 3
 
 
         }
@@ -471,6 +475,7 @@ UINT16 Chx20::getKey()
             if (KEY('N'))			data|=0x40;
             if (KEY('O'))			data|=0x80;
             if (KEY(K_F4))			data|=0x100;
+            if (DipSwitch & 0x08)			data|=0x200; // Deep Switch 4
 
 
         }
@@ -536,7 +541,7 @@ UINT16 Chx20::getKey()
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
-        qWarning()<<"getkey:"<<tr("%1 , %2").arg(ks,2,16,QChar('0')).arg(data^0xffff,4,16,QChar('0'));
+//        qWarning()<<"getkey:"<<tr("%1 , %2").arg(ks,2,16,QChar('0')).arg(data^0xffff,4,16,QChar('0'));
     }
     return (data^0xffff);
 
@@ -550,33 +555,33 @@ void Chx20::send_to_main(quint8 val)
 void Chx20::send_to_slave(quint8 val)
 {
     cmd_buf.append(val);
-    quint8 cmd = cmd_buf.at(0);
+    quint8 cmd = cmd_buf.first();
 
-//	emu->out_debug_log("Command = %2x", cmd);
-//	for(int i = 1; i < cmd_buf->count(); i++) {
-//		emu->out_debug_log(" %2x", cmd_buf->read_not_remove(i));
-//	}
-//	emu->out_debug_log("\n");
+    QString _out = QString("Command = %1 : ").arg(cmd,2,16,QChar('0'));
+    for(int i = 1; i < cmd_buf.size(); i++) {
+        _out += QString("%1 ").arg(cmd_buf.at(i),2,16,QChar('0'));
+    }
+    qWarning()<<_out;
 
     switch(cmd) {
     case 0x00: // slave mcpu ready check
     case 0x01: // sets the constants required by slave mcu
     case 0x02: // initialization
-        cmd_buf.remove(0,1);
+        cmd_buf.removeFirst();
         send_to_main(0x01);
         break;
-//	case 0x03: // opens masks for special commands
-//		if(cmd_buf->count() == 2) {
-//			cmd_buf->read();
-//			special_cmd_masked = (cmd_buf->read() != 0xaa);
-//		}
-//		send_to_main(0x01);
-//		break;
-//	case 0x04: // closes masks for special commands
-//		special_cmd_masked = true;
-//		cmd_buf->read();
-//		send_to_main(0x01);
-//		break;
+    case 0x03: // opens masks for special commands
+        if(cmd_buf.size() == 2) {
+            cmd_buf.removeFirst();
+            special_cmd_masked = (cmd_buf.takeFirst() != 0xaa);
+        }
+        send_to_main(0x01);
+        break;
+    case 0x04: // closes masks for special commands
+        special_cmd_masked = true;
+        cmd_buf.takeFirst(),
+        send_to_main(0x01);
+        break;
 //	case 0x05: // reads slave mcu memory
 //		if(special_cmd_masked) {
 //			cmd_buf->read();
@@ -634,7 +639,7 @@ void Chx20::send_to_slave(quint8 val)
 //		send_to_main(0x01);
 //		break;
     case 0x0c: // terminate process
-        cmd_buf.remove(0,1);
+        cmd_buf.removeFirst();
         send_to_main(0x02);
         // stop sound
 //		d_beep->write_signal(SIG_BEEP_ON, 0, 0);
@@ -650,17 +655,17 @@ void Chx20::send_to_slave(quint8 val)
 //		}
 //		send_to_main(0x01);
 //		break;
-//	case 0x10: // prints out 6-dot data (bit0-5) to the built-in printer
-//	case 0x11: // feeds the specified number of dot lines to the built-in printer
-//		if(cmd_buf->count() == 2) {
-//			cmd_buf->clear();
-//		}
-//		send_to_main(0x01);
-//		break;
-//	case 0x12: // paper feed operation (1.2sec)
-//		cmd_buf->read();
-//		send_to_main(0x01);
-//		break;
+    case 0x10: // prints out 6-dot data (bit0-5) to the built-in printer
+    case 0x11: // feeds the specified number of dot lines to the built-in printer
+        if(cmd_buf.size() == 2) {
+            cmd_buf.clear();
+        }
+        send_to_main(0x01);
+        break;
+    case 0x12: // paper feed operation (1.2sec)
+        cmd_buf.removeFirst();
+        send_to_main(0x01);
+        break;
 //	case 0x20: // executes external cassette ready check
 //		send_to_main(0x21);
 //		cmd_buf->read();
@@ -848,7 +853,7 @@ void Chx20::send_to_slave(quint8 val)
 //		send_to_main(0x41);
 //		break;
     case 0x50: // identifies the plug-in option
-        cmd_buf.remove(0,1);
+        cmd_buf.removeFirst();
         send_to_main(0x02);
         break;
 //	case 0x51: // turns power of plug-in rom cartridge on
@@ -857,11 +862,11 @@ void Chx20::send_to_slave(quint8 val)
 //		send_to_main(0x01);
 //		break;
 //	case 0x60: // executes micro cassette ready check (no respose)
-//		cmd_buf->read();
-//		break;
+        cmd_buf.removeFirst();
+        break;
     default:
         // unknown command
-//        emu->out_debug_log("Unknown Command = %2x\n", cmd);
+        qWarning()<<tr("Unknown Slave CPU Command = %1").arg(cmd,2,16,QChar('0'));
         send_to_main(0x0f);
         break;
     }
