@@ -19,8 +19,8 @@ public:
     virtual bool run();
     virtual bool Chk_Adr(UINT32 *d, UINT32 data);
     virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
-    virtual UINT8 in(UINT8 Port);
-    virtual UINT8 out(UINT8 Port, UINT8 Value);
+    virtual UINT8 in(UINT8 Port,QString sender=QString());
+    virtual UINT8 out(UINT8 Port, UINT8 Value,QString sender=QString());
     virtual void TurnOFF();
     virtual void TurnON();
     virtual void Reset();

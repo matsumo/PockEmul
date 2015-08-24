@@ -202,7 +202,7 @@ bool Ctpc8300::Chk_Adr_R(UINT32 *d, UINT32 *data)
 }
 
 
-UINT8 Ctpc8300::in(UINT8 Port)
+UINT8 Ctpc8300::in(UINT8 Port,QString)
 {
     switch (Port) {
     case 0x01 : return portB | (pCONNECTOR->Get_pin(12) ? 0x80 : 0x00); break;
@@ -214,7 +214,7 @@ UINT8 Ctpc8300::in(UINT8 Port)
 
 
 
-UINT8 Ctpc8300::out(UINT8 Port, UINT8 x)
+UINT8 Ctpc8300::out(UINT8 Port, UINT8 x, QString sender)
 {
     switch (Port) {
 //    case 0x01 : portB = x; break;

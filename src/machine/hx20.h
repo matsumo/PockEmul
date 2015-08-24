@@ -20,8 +20,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-    virtual UINT8 in(UINT8 addr);
-    virtual UINT8 out(UINT8 addr, UINT8 data);
+    virtual UINT8 in(UINT8 addr,QString sender=QString());
+    virtual UINT8 out(UINT8 addr, UINT8 data,QString sender=QString());
     virtual UINT16 out16(UINT16 address,UINT16 value);
 
     virtual bool	Set_Connector(Cbus *_bus = 0);
@@ -56,9 +56,10 @@ private:
     int key_intmask;
     int key_data;
 
-    Cmc6800* pmc6301;
+    Cmc6800 *pmc6301,*pSlaveCPU;
 
     bool special_cmd_masked;
+    bool runSlave(CCPU *);
 };
 
 

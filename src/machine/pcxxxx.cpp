@@ -45,9 +45,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     setcfgfname(QString("pcXXXX"));
     SessionHeader	= "PCXXXXPKM";
 
-    memset(Log_String,0,sizeof(Log_String));
-    memset(Regs_String,0,sizeof(Regs_String));
-
     mem = 0;
 
     SoundOn			= 1;
@@ -603,7 +600,7 @@ bool CpcXXXX::exit(void)
 	return(1);
 }
 
-INLINE bool CpcXXXX::checkTraceRange(UINT32 adr) {
+ bool CpcXXXX::checkTraceRange(UINT32 adr) {
     if (TraceRange.isEmpty()) return true;
 
     QMapIterator<QPair<UINT32,UINT32>, Qt::CheckState> i(TraceRange);
@@ -635,13 +632,13 @@ bool CpcXXXX::run(void)
 
     if(!(pCPU->halt|pCPU->off) && !off)
 	{
-        memset(Log_String,0,sizeof(Log_String));
+        memset(pCPU->Log_String,0,sizeof(pCPU->Log_String));
 
         if (  pCPU->logsw && pCPU->fp_log && checkTraceRange(pCPU->get_PC()))
         {
             fflush(pCPU->fp_log);
             //char	s[2000];
-//            sprintf(Log_String," ");
+//            sprintf(pCPU->Log_String," ");
             pCPU->pDEBUG->DisAsm_1(pCPU->get_PC());
             fprintf(pCPU->fp_log,"[%lld] ",pTIMER->state);
             fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
@@ -650,7 +647,7 @@ bool CpcXXXX::run(void)
             pCPU->step();
             Regs_Info(1);
 
-            fprintf(pCPU->fp_log,"%-40s   %s  %s\n",pCPU->pDEBUG->Buffer,pCPU->Regs_String,Log_String);
+            fprintf(pCPU->fp_log,"%-40s   %s  %s\n",pCPU->pDEBUG->Buffer,pCPU->Regs_String,pCPU->Log_String);
             if (pCPU->prevCallSubLevel < pCPU->CallSubLevel) {
                 for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
                 fprintf(pCPU->fp_log,"{\n");
@@ -703,7 +700,7 @@ bool CpcXXXX::run(void)
     else {
         if (!off) {
             UINT32 _prevPC = pCPU->get_PC();
-            memset(Log_String,0,sizeof(Log_String));
+            memset(pCPU->Log_String,0,sizeof(pCPU->Log_String));
 
             pCPU->step();
 
@@ -715,7 +712,7 @@ bool CpcXXXX::run(void)
                 fprintf(pCPU->fp_log,"[%02i]",pCPU->prevCallSubLevel);
                 for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
                 Regs_Info(1);
-                fprintf(pCPU->fp_log,"%-40s   %s  %s\n",pCPU->pDEBUG->Buffer,pCPU->Regs_String,Log_String);
+                fprintf(pCPU->fp_log,"%-40s   %s  %s\n",pCPU->pDEBUG->Buffer,pCPU->Regs_String,pCPU->Log_String);
                 if (pCPU->prevCallSubLevel < pCPU->CallSubLevel) {
                     for (int g=0;g<pCPU->prevCallSubLevel;g++) fprintf(pCPU->fp_log,"\t");
                     fprintf(pCPU->fp_log,"{\n");

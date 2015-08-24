@@ -20,8 +20,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-    virtual UINT8 in(UINT8 address);
-    virtual UINT8 out(UINT8 address,UINT8 value);
+    virtual UINT8 in(UINT8 address,QString sender=QString());
+    virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString());
     virtual UINT8 in8(UINT16 Port);
     virtual UINT8 out8(UINT16 Port,UINT8 x);
     virtual UINT16 in16(UINT16 Port);

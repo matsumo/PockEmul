@@ -85,8 +85,8 @@ public:
 
     virtual bool		Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool		Chk_Adr_R(UINT32 *d, UINT32 *data);
-    UINT8		in(UINT8 address);
-    UINT8       out(UINT8 address,UINT8 value);
+    UINT8		in(UINT8 address,QString sender=QString());
+    UINT8       out(UINT8 address,UINT8 value,QString sender=QString());
     bool		Set_Connector(Cbus *_bus = 0);
     bool		Get_Connector(Cbus *_bus = 0);
     BYTE        getKey(void);

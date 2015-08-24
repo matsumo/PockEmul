@@ -235,7 +235,7 @@ bool Clbc1100::Chk_Adr_R(UINT32 *d, UINT32 *data)
 }
 
 
-UINT8 Clbc1100::in(UINT8 Port)
+UINT8 Clbc1100::in(UINT8 Port,QString)
 {
     switch (Port) {
     case 0x01 : return portB ;// | (pTAPECONNECTOR->Get_pin(1) ? 0x80 : 0x00); break;
@@ -247,7 +247,7 @@ UINT8 Clbc1100::in(UINT8 Port)
 
 
 
-UINT8 Clbc1100::out(UINT8 Port, UINT8 x)
+UINT8 Clbc1100::out(UINT8 Port, UINT8 x, QString sender)
 {
     switch (Port) {
 //    case 0x01 : portB = x; break;

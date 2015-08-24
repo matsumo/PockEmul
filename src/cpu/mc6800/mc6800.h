@@ -424,7 +424,7 @@ public:
 
     virtual void	Reset(void);
 
-    Cmc6800( CPObject *parent);
+    Cmc6800(CPObject *parent, UINT8 _opmode = 4, QString _maskRomfn=QString());
     ~Cmc6800();
 
     // common functions
@@ -471,6 +471,7 @@ public:
 
 
     void write_signals(outputs_t *items, UINT32 data);
+    virtual UINT32 get_mem(UINT32 adr, int size);
 };
 
 

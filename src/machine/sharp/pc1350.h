@@ -24,8 +24,8 @@ public:
 	virtual BYTE	Get_PortA(void);
 	virtual bool	init(void);
     virtual void	initExtension(void){}
-    virtual UINT8   in(UINT8 ){return(1);}
-    virtual UINT8   out(UINT8 ,UINT8 ){return(1);}
+    virtual UINT8   in(UINT8,QString sender=QString() ){return(1);}
+    virtual UINT8   out(UINT8 ,UINT8 ,QString sender=QString()){return(1);}
     virtual bool    CheckUpdateExtension(CExtension *ext);
     virtual int     mapKey(QKeyEvent *event);
 

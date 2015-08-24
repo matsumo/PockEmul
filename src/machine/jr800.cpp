@@ -232,7 +232,7 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cjr800::in(UINT8 Port)
+UINT8 Cjr800::in(UINT8 Port,QString)
 {
     Q_UNUSED(Port)
 
@@ -244,7 +244,7 @@ UINT8 Cjr800::in(UINT8 Port)
     return 0;
 }
 
-UINT8 Cjr800::out(UINT8 Port, UINT8 x)
+UINT8 Cjr800::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)

@@ -260,14 +260,14 @@ bool Cpb1000::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cpb1000::in(UINT8 Port)
+UINT8 Cpb1000::in(UINT8 Port,QString)
 {
     Q_UNUSED(Port)
 
     return 0;
 }
 
-UINT8 Cpb1000::out(UINT8 Port, UINT8 Value)
+UINT8 Cpb1000::out(UINT8 Port, UINT8 Value, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(Value)

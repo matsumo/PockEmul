@@ -25,7 +25,7 @@
 //TODO: SERIAL INPUT  INIT#5,"COM:"  EXEC &HEE1F
 
 /*
-           Mémoire du XO7
+           Mï¿½moire du XO7
   0000    ----------------
          |  XXXX  |  RAM  |
   2000    ----------------
@@ -320,7 +320,7 @@ bool Cx07::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cx07::in(UINT8 Port)
+UINT8 Cx07::in(UINT8 Port, QString sender)
 {
     UINT8 Value=0;
 
@@ -361,7 +361,7 @@ UINT8 Cx07::in(UINT8 Port)
                    }
                    Value = Port_FX.R.F6;
                    break;
-       case 0xF7 : /* Données recu par l'UART */
+       case 0xF7 : /* Donnï¿½es recu par l'UART */
                    Value = Port_FX.R.F7;
                    break;
       }
@@ -394,7 +394,7 @@ void Cx07::manageSound(void) {
 
 //FILE *fp_tmp3;
 
-UINT8 Cx07::out(UINT8 Port, UINT8 Value)
+UINT8 Cx07::out(UINT8 Port, UINT8 Value, QString sender)
 {
 
 //    if (fp_tmp3==NULL)
@@ -541,7 +541,7 @@ UINT8 Cx07::out(UINT8 Port, UINT8 Value)
                Port_FX.W.F6 = Value;
 //               Port_FX.R.F6 = Value;
                break;
-   case 0xF7 : /* Données émises par l'UART */
+   case 0xF7 : /* Donnï¿½es ï¿½mises par l'UART */
                Port_FX.W.F7 = Value;
                break;
   }

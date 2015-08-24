@@ -30,8 +30,8 @@ public:
     virtual bool	LoadConfig(QXmlStreamReader *xmlIn);	// Load PC Configuration
     virtual bool	SaveConfig(QXmlStreamWriter *xmlOut);	// Save PC Configuration
 
-    virtual UINT8 in(UINT8 address);
-    virtual UINT8 out(UINT8 address,UINT8 value);
+    virtual UINT8 in(UINT8 address,QString sender=QString());
+    virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString());
 
     Ce500(CPObject *parent = 0,Models mod=E500);
 

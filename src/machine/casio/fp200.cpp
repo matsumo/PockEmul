@@ -104,7 +104,7 @@ bool Cfp200::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 #define SOD (i85cpu->i85stat.regs.sod_state)
 
-UINT8 Cfp200::in(UINT8 Port)
+UINT8 Cfp200::in(UINT8 Port,QString)
 {
     UINT8 Value=0;
     quint16 tmp=0;
@@ -161,7 +161,7 @@ UINT8 Cfp200::in(UINT8 Port)
      return (Value);
 }
 
-UINT8 Cfp200::out(UINT8 Port, UINT8 Value)
+UINT8 Cfp200::out(UINT8 Port, UINT8 Value, QString sender)
 {
     Clcdc_fp200 *pLcd = (Clcdc_fp200*)pLCDC;
 

@@ -12,6 +12,7 @@
 #include "Connect.h"
 #include "watchpoint.h"
 #include "upd16434.h"
+#include "debug.h"
 
 /*
     memory:
@@ -54,6 +55,7 @@
         p21	out	txd (RS-232C)
         p22	out	selection for CPU serial communication (0=slave 1=serial)
 */
+//#define FAKE_SLAVE
 
 #define INT_KEYBOARD	1
 #define INT_CLOCK	2
@@ -61,7 +63,7 @@
 
 Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 614400);
+    setfrequency( (int) 2457600 / 4);
     setcfgfname(QString("hx20"));
 
     SessionHeader	= "HX20PKM";
@@ -76,13 +78,6 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 
     memsize		= 0xFFFF;
     InitMemValue	= 0x00;
-
-
-    //ROM_REGION( 0x8000, HD6301V1_MAIN_TAG, ROMREGION_ERASEFF )
-    //ROMX_LOAD( "hx20_v11e.12e", 0x0000, 0x2000, CRC(4de0b4b6) SHA1(f15c537824b7effde9d9b9a21e92a081fb089371), ROM_BIOS(3) )
-    //ROMX_LOAD( "hx20_v11e.13e", 0x2000, 0x2000, CRC(10d6ae76) SHA1(3163954ed9981f70f590ee98bcc8e19e4be6527a), ROM_BIOS(3) )
-    //ROMX_LOAD( "hx20_v11e.14e", 0x4000, 0x2000, CRC(26c203a1) SHA1(b282d7233b2689820fcf718dbe1e93d623b67e4f), ROM_BIOS(3) )
-    //ROMX_LOAD( "hx20_v11e.15e", 0x6000, 0x2000, CRC(fd339aa5) SHA1(860c3579c45e96c5e6a877f4fbe77abacb0d674e), ROM_BIOS(3) )
 
     SlotList.clear();
     SlotList.append(CSlot(16, 0x0000 ,	"", ""	, CSlot::RAM , "RAM"));
@@ -103,11 +98,14 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_hx20(this,
-                                   QRect(420,90,290,90),//192*2,64*2),
+                                   QRect(420,90,290,90),
                                    QRect());
-    pCPU		= new Cmc6800(this);  pmc6301 = (Cmc6800*)pCPU;
+
+    pCPU		= new Cmc6800(this);  pmc6301 = (Cmc6800*)pCPU; pmc6301->setObjectName("Master");
+    pSlaveCPU	= new Cmc6800(this,7,P_RES(":/hx20/hd6301v1.6d")); pSlaveCPU->setObjectName("Slave");
+
     for (int i=0;i<6;i++) {
-        upd16434[i]  = new CUPD16434(this,i); //,CUPD16434::UPD07728);
+        upd16434[i]  = new CUPD16434(this,i);
     }
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"hx20.map");
@@ -127,11 +125,13 @@ bool Chx20::init(void)				// initialize
 {
 
 //pCPU->logsw = true;
+//    pSlaveCPU->logsw = true;
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("hx20.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
+    pSlaveCPU->init();
 
     pTIMER->resetTimer(1);
 
@@ -163,11 +163,98 @@ bool Chx20::run() {
 //        fillSoundBuffer(_soundData);
 //    }
 
-
+#ifndef FAKE_SLAVE
+    runSlave(pSlaveCPU);
+#endif
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
     return true;
+}
+
+bool Chx20::runSlave(CCPU *_cpu)
+{
+
+    if (DasmFlag) return true;
+
+    if(!(_cpu->halt|_cpu->off) && !off)
+    {
+        memset(_cpu->Log_String,0,sizeof(_cpu->Log_String));
+
+        if (  _cpu->logsw && _cpu->fp_log && checkTraceRange(_cpu->get_PC()))
+        {
+            fflush(_cpu->fp_log);
+            _cpu->pDEBUG->DisAsm_1(_cpu->get_PC());
+            fprintf(_cpu->fp_log,"[%lld] ",pTIMER->state);
+            fprintf(_cpu->fp_log,"[%02i]",_cpu->prevCallSubLevel);
+            for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
+
+            _cpu->step();
+            Regs_Info(1);
+
+            fprintf(_cpu->fp_log,"%-40s   %s  %s\n",_cpu->pDEBUG->Buffer,_cpu->Regs_String,_cpu->Log_String);
+            if (_cpu->prevCallSubLevel < _cpu->CallSubLevel) {
+                for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
+                fprintf(_cpu->fp_log,"{\n");
+            }
+            if (_cpu->prevCallSubLevel > _cpu->CallSubLevel) {
+                for (int g=0;g<(_cpu->prevCallSubLevel-1);g++) fprintf(_cpu->fp_log,"\t");
+                fprintf(_cpu->fp_log,"}\n");
+            }
+            if (_cpu->CallSubLevel <0) _cpu->CallSubLevel=0;
+            _cpu->prevCallSubLevel = _cpu->CallSubLevel;
+
+            //fprintf(pCPU->fp_log,s);
+//            fflush(pCPU->fp_log);
+        }
+        else {
+//            fprintf(_loclog,"[%lld] %05x",pTIMER->state,pCPU->get_PC());
+            if (!off) {
+
+                _cpu->step();
+
+
+
+            }
+#ifndef QT_NO_DEBUG
+            Regs_Info(0);
+#endif
+        }
+
+    }
+    else {
+        if (!off) {
+            UINT32 _prevPC = _cpu->get_PC();
+            memset(_cpu->Log_String,0,sizeof(_cpu->Log_String));
+
+            _cpu->step();
+
+            if(!_cpu->halt && _cpu->logsw && _cpu->fp_log)
+            {
+                fflush(_cpu->fp_log);
+                _cpu->pDEBUG->DisAsm_1(_prevPC);
+                fprintf(_cpu->fp_log,"*[%lld] ",pTIMER->state);
+                fprintf(_cpu->fp_log,"[%02i]",_cpu->prevCallSubLevel);
+                for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
+                Regs_Info(1);
+                fprintf(_cpu->fp_log,"%-40s   %s  %s\n",_cpu->pDEBUG->Buffer,_cpu->Regs_String,_cpu->Log_String);
+                if (_cpu->prevCallSubLevel < _cpu->CallSubLevel) {
+                    for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
+                    fprintf(_cpu->fp_log,"{\n");
+                }
+                if (_cpu->prevCallSubLevel > _cpu->CallSubLevel) {
+                    for (int g=0;g<(_cpu->prevCallSubLevel-1);g++) fprintf(_cpu->fp_log,"\t");
+                    fprintf(_cpu->fp_log,"}\n");
+                }
+                if (_cpu->CallSubLevel <0) _cpu->CallSubLevel=0;
+                _cpu->prevCallSubLevel = _cpu->CallSubLevel;
+            }
+        }
+        else {
+            pTIMER->state +=20;//= pTIMER->currentState();
+        }
+    }
+    return(1);
 }
 
 bool Chx20::Chk_Adr(UINT32 *d, UINT32 data)
@@ -175,7 +262,7 @@ bool Chx20::Chk_Adr(UINT32 *d, UINT32 data)
     Q_UNUSED(data)
 
     if(*d < 0x40) {
-        out(*d,data);
+        out(*d,data,"Master");
     }
 //    else if(addr < 0x80) {
 //		d_rtc->write_io8(1, addr & 0x3f);
@@ -195,120 +282,139 @@ bool Chx20::Chk_Adr_R(UINT32 *d, UINT32 *data)
     Q_UNUSED(data)
 
     if(*d < 0x40) {
-        *data = in(*d);
+        *data = in(*d,"Master");
         return false;
     }
 
     return true;
 }
 
-UINT8 Chx20::in(UINT8 addr)
+UINT8 Chx20::in(UINT8 addr,QString sender)
 {
     Q_UNUSED(addr)
 
-
-    switch(addr) {
-    case 0x20:
-        return pKEYB->Get_KS();
-    case 0x22:
-        return key_data & 0xff;
-    case 0x26:
-        // interrupt mask reset in sleep mode
-        if(int_mask) {
-            int_mask = 0;
-            //				update_intr();
+    if (sender == "Master") {
+        switch(addr) {
+        case 0x20:
+            return pKEYB->Get_KS();
+        case 0x22:
+            return key_data & 0xff;
+        case 0x26:
+            // interrupt mask reset in sleep mode
+            if(int_mask) {
+                int_mask = 0;
+                //				update_intr();
+            }
+            break;
+        case 0x28:
+            // bit6: power switch interrupt flag (0=active)
+            // bit7: busy signal of lcd controller (0=busy)
+            //        return 0x43 | 0xa8;
+            return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0xa8;
+        case 0x2a:
+        case 0x2b:
+            break;
+        case 0x2c:
+            // used for interrupt mask setting in sleep mode
+            if(!int_mask) {
+                int_mask = 1;
+                //				update_intr();
+            }
+            break;
+            //    case 0x30:
+            //        //			SET_BANK(0x4000, 0x7fff, ram + 0x4000, ram + 0x4000);
+            //        SET_BANK(0x8000, 0xbfff, ext, rom);
+            //        break;
+            //    case 0x32:
+            //    case 0x33:
+            //        //			SET_BANK(0x4000, 0x7fff, wdmy, rdmy);
+            //        SET_BANK(0x8000, 0xbfff, wdmy, rom);
+            //        break;
         }
-        break;
-    case 0x28:
-        // bit6: power switch interrupt flag (0=active)
-        // bit7: busy signal of lcd controller (0=busy)
-//        return 0x43 | 0xa8;
-        return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0xa8;
-    case 0x2a:
-    case 0x2b:
-        break;
-    case 0x2c:
-        // used for interrupt mask setting in sleep mode
-        if(!int_mask) {
-            int_mask = 1;
-            //				update_intr();
-        }
-        break;
-//    case 0x30:
-//        //			SET_BANK(0x4000, 0x7fff, ram + 0x4000, ram + 0x4000);
-//        SET_BANK(0x8000, 0xbfff, ext, rom);
-//        break;
-//    case 0x32:
-//    case 0x33:
-//        //			SET_BANK(0x4000, 0x7fff, wdmy, rdmy);
-//        SET_BANK(0x8000, 0xbfff, wdmy, rom);
-//        break;
     }
     //		return ram[addr];
     return 0;
 
 }
 
-UINT8 Chx20::out(UINT8 addr, UINT8 data)
+UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
 {
     Q_UNUSED(addr)
     Q_UNUSED(data)
-    switch(addr) {
-    case 0x01: // send to slave
-        send_to_slave(data);
-        break;
-    case 0x20:
-        if(pKEYB->Get_KS() != data) {
-            pKEYB->Set_KS(data);
-            if((int_status & INT_KEYBOARD) && (int_status &= ~INT_KEYBOARD) == 0) {
-                pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
-            }
-            pmc6301->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
-//            qWarning()<<"strobe:"<<data;
-            key_data = getKey();
+#ifndef FAKE_SLAVE
+    if (sender == "Slave") {
+        switch(addr) {
+        case 0x01: // send to master
+            pmc6301->recv_buffer.append(data);
+            if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO MASTER\n");
+            break;
         }
-        break;
-    case 0x26:
-        lcd_select = data & 0x0f;
-        key_intmask = data & 0x10;
-        // interrupt mask reset in sleep mode
-        if(int_mask) {
-            int_mask = 0;
-//				update_intr();
-        }
-        break;
-    case 0x2a:    
-        if (lcd_select & 0x07) {
-            quint8 n = (lcd_select & 0x07);
-
-            if (n > 0) {
-                if (lcd_select & 0x08) {
-                    upd16434[n-1]->instruction(data);
-                }
-                else {
-                    upd16434[n-1]->data(data);
-                }
-            }
-        }
-        break;
-    case 0x2c:
-        // used for interrupt mask setting in sleep mode
-        if(!int_mask) {
-            int_mask = 1;
-//				update_intr();
-        }
-        break;
-//    case 0x30:
-////			SET_BANK(0x4000, 0x7fff, ram + 0x4000, ram + 0x4000);
-//        SET_BANK(0x8000, 0xbfff, wdmy, ext);
-//        break;
-//    case 0x32:
-//    case 0x33:
-////			SET_BANK(0x4000, 0x7fff, wdmy, rdmy);
-//        SET_BANK(0x8000, 0xbfff, wdmy, rom);
-//        break;
     }
+#endif
 
+    if (sender == "Master") {
+        switch(addr) {
+        case 0x01: // send to slave
+#ifdef FAKE_SLAVE
+            send_to_slave(data);
+#else
+            // send to real slave CPU too
+            pSlaveCPU->recv_buffer.append(data);
+            if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO SLAVE\n");
+#endif
+            break;
+        case 0x20:
+            if(pKEYB->Get_KS() != data) {
+                pKEYB->Set_KS(data);
+                if((int_status & INT_KEYBOARD) && (int_status &= ~INT_KEYBOARD) == 0) {
+                    pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
+                }
+                pmc6301->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
+                //            qWarning()<<"strobe:"<<data;
+                key_data = getKey();
+            }
+            break;
+        case 0x26:
+            lcd_select = data & 0x0f;
+            key_intmask = data & 0x10;
+            // interrupt mask reset in sleep mode
+            if(int_mask) {
+                int_mask = 0;
+                //				update_intr();
+            }
+            break;
+        case 0x2a:
+            if (lcd_select & 0x07) {
+                quint8 n = (lcd_select & 0x07);
+
+                if (n > 0) {
+                    if (lcd_select & 0x08) {
+                        upd16434[n-1]->instruction(data);
+                    }
+                    else {
+                        upd16434[n-1]->data(data);
+                    }
+                }
+            }
+            break;
+        case 0x2c:
+            // used for interrupt mask setting in sleep mode
+            if(!int_mask) {
+                int_mask = 1;
+                //				update_intr();
+            }
+            break;
+            //    case 0x30:
+            ////			SET_BANK(0x4000, 0x7fff, ram + 0x4000, ram + 0x4000);
+            //        SET_BANK(0x8000, 0xbfff, wdmy, ext);
+            //        break;
+            //    case 0x32:
+            //    case 0x33:
+            ////			SET_BANK(0x4000, 0x7fff, wdmy, rdmy);
+            //        SET_BANK(0x8000, 0xbfff, wdmy, rom);
+            //        break;
+        }
+    }
 //    ram[addr] = data;
 
     return data;
@@ -355,7 +461,7 @@ bool Chx20::Get_Connector(Cbus *_bus)
 }
 
 void Chx20::TurnOFF(void) {
-    mainwindow->saveAll = NO;
+    mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
     mainwindow->saveAll = ASK;
     AddLog(LOG_TEMP,"TURN OFF");
@@ -373,12 +479,13 @@ void Chx20::Reset()
 {
     CpcXXXX::Reset();
 
-    pmc6301->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
-    pmc6301->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
-
     pLCDC->init();
     for (int i=0;i<6;i++) upd16434[i]->Reset();
 
+    pmc6301->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
+    pmc6301->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
+
+    pSlaveCPU->Reset();
 }
 
 bool Chx20::LoadConfig(QXmlStreamReader *xmlIn)
@@ -549,7 +656,7 @@ UINT16 Chx20::getKey()
 
 void Chx20::send_to_main(quint8 val)
 {
-    ((Cmc6800*)pCPU)->recv_buffer.append(val);
+    pmc6301->recv_buffer.append(val);
 }
 
 void Chx20::send_to_slave(quint8 val)
@@ -619,11 +726,11 @@ void Chx20::send_to_slave(quint8 val)
 //		}
 //		send_to_main(0x01);
 //		break;
-//	case 0x09: // bar-code reader power on
-//	case 0x0a: // bar-code reader power off
-//		cmd_buf->read();
-//		send_to_main(0x01);
-//		break;
+    case 0x09: // bar-code reader power on
+    case 0x0a: // bar-code reader power off
+        cmd_buf.takeFirst();
+        send_to_main(0x01);
+        break;
 //	case 0x0b: // sets the program counter to a specified value
 //		if(special_cmd_masked) {
 //			cmd_buf->read();
@@ -666,10 +773,10 @@ void Chx20::send_to_slave(quint8 val)
         cmd_buf.removeFirst();
         send_to_main(0x01);
         break;
-//	case 0x20: // executes external cassette ready check
-//		send_to_main(0x21);
-//		cmd_buf->read();
-//		break;
+    case 0x20: // executes external cassette ready check
+        send_to_main(0x21);
+        cmd_buf.takeFirst();
+        break;
 //	case 0x21: // sets constants for the external cassette
 //		if(cmd_buf->count() == 1) {
 //			send_to_main(0x01);
@@ -680,11 +787,11 @@ void Chx20::send_to_slave(quint8 val)
 //		}
 //		send_to_main(0x21);
 //		break;
-//	case 0x22: // turns the external cassette rem terminal on
-//	case 0x23: // turns the external cassette rem terminal off
-//		cmd_buf->read();
-//		send_to_main(0x01);
-//		break;
+    case 0x22: // turns the external cassette rem terminal on
+    case 0x23: // turns the external cassette rem terminal off
+        cmd_buf.takeFirst();
+        send_to_main(0x01);
+        break;
 //	case 0x24: // writes 1 block of data in EPSON format
 //		if(cmd_buf->count() == 1) {
 //			send_to_main(0x01);
@@ -861,7 +968,7 @@ void Chx20::send_to_slave(quint8 val)
 //		cmd_buf->read();
 //		send_to_main(0x01);
 //		break;
-//	case 0x60: // executes micro cassette ready check (no respose)
+    case 0x60: // executes micro cassette ready check (no respose)
         cmd_buf.removeFirst();
         break;
     default:

@@ -103,8 +103,8 @@ bool Cti57::run() {
 
 bool Cti57::Chk_Adr(UINT32 *d, UINT32 data) { return false; }
 bool Cti57::Chk_Adr_R(UINT32 *d, UINT32 *data) { return true; }
-UINT8 Cti57::in(UINT8 Port) { return 0;}
-UINT8 Cti57::out(UINT8 Port, UINT8 x) { return 0; }
+UINT8 Cti57::in(UINT8 Port,QString) { return 0;}
+UINT8 Cti57::out(UINT8 Port, UINT8 x, QString sender) { return 0; }
 bool Cti57::Set_Connector(Cbus *_bus) { return true; }
 bool Cti57::Get_Connector(Cbus *_bus) { return true; }
 

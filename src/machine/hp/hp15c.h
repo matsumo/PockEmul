@@ -55,8 +55,8 @@ public:
 
   virtual bool	init(void);				// initialize
   virtual bool	run(void);					// emulator main
-  virtual UINT8 in(UINT8 address);
-  virtual UINT8 out(UINT8 address,UINT8 value);
+  virtual UINT8 in(UINT8 address,QString sender=QString());
+  virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString());
   virtual void TurnON();
   virtual void TurnOFF();
   virtual void BuildContextMenu(QMenu * menu);

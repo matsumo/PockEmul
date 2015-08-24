@@ -147,8 +147,8 @@ bool Cti59::run() {
 
 bool Cti59::Chk_Adr(UINT32 *, UINT32) { return false; }
 bool Cti59::Chk_Adr_R(UINT32 *, UINT32 *) { return true; }
-UINT8 Cti59::in(UINT8) { return 0;}
-UINT8 Cti59::out(UINT8 , UINT8 ) { return 0; }
+UINT8 Cti59::in(UINT8, QString sender) { return 0;}
+UINT8 Cti59::out(UINT8 , UINT8 , QString sender) { return 0; }
 
 bool Cti59::Set_Connector(Cbus *_bus) {
 

@@ -196,7 +196,7 @@ bool Cpc2001::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cpc2001::in(UINT8 Port)
+UINT8 Cpc2001::in(UINT8 Port, QString sender)
 {
     switch (Port) {
     case 0x01 : return portB  | (pTAPECONNECTOR->Get_pin(1) ? 0x80 : 0x00); break;
@@ -206,7 +206,7 @@ UINT8 Cpc2001::in(UINT8 Port)
     return 0;
 }
 
-UINT8 Cpc2001::out(UINT8 Port, UINT8 x)
+UINT8 Cpc2001::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
@@ -215,7 +215,7 @@ UINT8 Cpc2001::out(UINT8 Port, UINT8 x)
     return 0;
 }
 
-UINT16 Cpc2001::out16(UINT16 address, UINT16 value)
+UINT16 Cpc2001::out16(UINT16 address, UINT16 value, QString sender)
 {
     if (address == UPD7907_PORTE) {
         kstrobe = value;

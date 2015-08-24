@@ -19,8 +19,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-    virtual UINT8 in(UINT8 address);
-    virtual UINT8 out(UINT8 address,UINT8 value);
+    virtual UINT8 in(UINT8 address,QString sender=QString());
+    virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString());
     virtual UINT16 out16(UINT16 address,UINT16 value);
 
     virtual bool	Set_Connector(Cbus *_bus = 0);

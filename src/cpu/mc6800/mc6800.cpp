@@ -56,23 +56,29 @@ UINT32 Cmc6800::RM(UINT32 Addr)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         UINT32 _ret = mc6801_io_r(Addr);
-        if (logsw) sprintf(pPC->Log_String,"%s Rp[%02X]=%02X",pPC->Log_String,Addr,_ret);
+        if (logsw) sprintf(Log_String,"%s Rp[%02X]=%02X",Log_String,Addr,_ret);
         return _ret;
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (regs.ram_ctrl & 0x40)) {
         UINT32 _ret = imem[Addr & 0x7f];
-        if (logsw) sprintf(pPC->Log_String,"%s Ri[%04X]=%02X",pPC->Log_String,Addr,_ret);
+        if (logsw) sprintf(Log_String,"%s Ri[%04X]=%02X",Log_String,Addr,_ret);
         return _ret;
     }
-    else if ((regs.opmode == 7) && (Addr >= 0xF000)) {
+    else if (((regs.opmode == 0)||(regs.opmode == 7)) && (Addr >= 0xF000)) {
         // Mask ROM
-        return regs.maskrom[Addr - 0xF000];
+        UINT32 _ret = regs.maskrom[Addr - 0xF000];
+//        if (logsw) sprintf(Log_String,"%s Rm[%04X]=%02X",Log_String,Addr,_ret);
+        return _ret;
     }
+    else if ((regs.opmode != 0) && (regs.opmode != 7))
 #endif
-    UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
-    if (logsw) sprintf(pPC->Log_String,"%s R[%04X]=%02X",pPC->Log_String,Addr,_ret);
-    return _ret;
-
+    {
+        UINT32 _ret =  (((CpcXXXX *)pPC)->Get_8(Addr));
+        if (logsw) sprintf(Log_String,"%s %s R[%04X]=%02X",Log_String,objectName().data(),Addr,_ret);
+        return _ret;
+    }
+    qWarning()<<objectName()<<"MC6800 addr ERROR";
+    return (0);
 }
 
 void Cmc6800::WM(UINT32 Addr, UINT32 Value)
@@ -82,12 +88,12 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     if(Addr < 0x20) {
         mc6801_io_w(Addr, Value);
-        if (logsw) sprintf(pPC->Log_String,"%s Wp[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(Log_String,"%s Wp[%04X]:%02X",Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr,Value);
     }
     else if(Addr >= 0x80 && Addr < 0x100 && (regs.ram_ctrl & 0x40)) {
         imem[Addr & 0x7f] = Value;
-        if (logsw) sprintf(pPC->Log_String,"%s Wi[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(Log_String,"%s Wi[%04X]:%02X",Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
     else if ((regs.opmode == 7) && (Addr >= 0xF000)) {
@@ -99,7 +105,7 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
 
     {
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
-        if (logsw) sprintf(pPC->Log_String,"%s W[%04X]:%02X",pPC->Log_String,Addr,Value);
+        if (logsw) sprintf(Log_String,"%s W[%04X]:%02X",Log_String,Addr,Value);
     }
 
 }
@@ -343,9 +349,8 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
         // port2 data register
         if(regs.port[1].wreg != data || regs.port[1].first_write) {
             write_signals(&regs.port[1].outputs, data);
-            regs.port[1].wreg = data;           
-            regs.opmode = data >> 5;
-            qWarning()<<tr("Write Port 1:%1").arg(regs.port[1].rreg,2,16,QChar('0'))
+            regs.port[1].wreg = data;
+            qWarning()<<objectName()<<tr("Write Port 1:%1").arg(regs.port[1].rreg,2,16,QChar('0'))
                     <<"="<<(regs.port[1].rreg!=0?QChar(regs.port[1].rreg):' ');
             regs.port[1].first_write = false;
         }
@@ -353,14 +358,14 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
     case 0x04:
         // port3 data direction register
        regs. port[2].ddr = data;
-       qWarning()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
+       qWarning()<<objectName()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
                <<"="<<(regs.port[2].rreg!=0?QChar(regs.port[2].rreg):' ');
 
         break;
     case 0x05:
         // port4 data direction register
         regs.port[3].ddr = data;
-        qWarning()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
+        qWarning()<<objectName()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
                 <<"="<<(regs.port[3].rreg!=0?QChar(regs.port[3].rreg):' ');
 
         break;
@@ -479,7 +484,8 @@ void Cmc6800::increment_counter(int amount)
     if((regs.sio_counter -= amount) <= 0) {
         if((regs.trcsr & TRCSR_TE) && !(regs.trcsr & TRCSR_TDRE)) {
             write_signals(&regs.outputs_sio, regs.tdr);
-            pPC->out(0x01,regs.tdr);
+            pPC->out(0x01,regs.tdr,objectName());
+            qWarning()<<objectName()<<tr("MC6800: SEND: %1").arg(regs.tdr,2,16,QChar('0'));
             regs.trcsr |= TRCSR_TDRE;
         }
         if((regs.trcsr & TRCSR_RE) && !recv_buffer.isEmpty()) {
@@ -491,6 +497,7 @@ void Cmc6800::increment_counter(int amount)
             else if(!(regs.trcsr & TRCSR_RDRF)) {
                 // note: wait reveived data is read by cpu, so overrun framing error never occurs
                 regs.rdr = recv_buffer.dequeue();
+                qWarning()<<objectName()<<tr("MC6800: RECEIVE: %1").arg(regs.rdr,2,16,QChar('0'));
                 regs.trcsr |= TRCSR_RDRF;
             }
         }
@@ -847,14 +854,14 @@ void Cmc6800::run_one_opecode()
     if(int_state & NMI_REQ_BIT) {
         wai_state &= ~HD6301_SLP;
         int_state &= ~NMI_REQ_BIT;
-//        if (logsw) sprintf(pPC->Log_String,"%s TAKE_FFFC[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//        if (logsw) sprintf(Log_String,"%s TAKE_FFFC[%lld] ",Log_String,pPC->pTIMER->state);
         enter_interrupt(0xfffc);
     }
     else if(int_state & INT_REQ_BIT) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
             int_state &= ~INT_REQ_BIT;
-//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_FFF8[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//            if (logsw) sprintf(Log_String,"%s TAKE_FFF8[%lld] ",Log_String,pPC->pTIMER->state);
             enter_interrupt(0xfff8);
         }
     }
@@ -862,21 +869,21 @@ void Cmc6800::run_one_opecode()
     else if((regs.tcsr & (TCSR_EICI | TCSR_ICF)) == (TCSR_EICI | TCSR_ICF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
-//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_ICI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//            if (logsw) sprintf(Log_String,"%s TAKE_ICI[%lld] ",Log_String,pPC->pTIMER->state);
             TAKE_ICI;
         }
     }
     else if((regs.tcsr & (TCSR_EOCI | TCSR_OCF)) == (TCSR_EOCI | TCSR_OCF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
-//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_OCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//            if (logsw) sprintf(Log_String,"%s TAKE_OCI[%lld] ",Log_String,pPC->pTIMER->state);
             TAKE_OCI;
         }
     }
     else if((regs.tcsr & (TCSR_ETOI | TCSR_TOF)) == (TCSR_ETOI | TCSR_TOF)) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
-//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_TOI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//            if (logsw) sprintf(Log_String,"%s TAKE_TOI[%lld] ",Log_String,pPC->pTIMER->state);
             TAKE_TOI;
         }
     }
@@ -885,7 +892,7 @@ void Cmc6800::run_one_opecode()
             ((regs.trcsr & (TRCSR_TIE | TRCSR_TDRE)) == (TRCSR_TIE | TRCSR_TDRE))) {
         wai_state &= ~HD6301_SLP;
         if(!(CC & 0x10)) {
-//            if (logsw) sprintf(pPC->Log_String,"%s TAKE_SCI[%lld] ",pPC->Log_String,pPC->pTIMER->state);
+//            if (logsw) sprintf(Log_String,"%s TAKE_SCI[%lld] ",Log_String,pPC->pTIMER->state);
             TAKE_SCI;
         }
     }
@@ -896,7 +903,7 @@ void Cmc6800::run_one_opecode()
 
 void Cmc6800::enter_interrupt(quint16 irq_vector)
 {
-    if (logsw) sprintf(pPC->Log_String,"%s TAKE_[%04X]-[%lld] ",pPC->Log_String,irq_vector,pPC->pTIMER->state);
+    if (logsw) sprintf(Log_String,"%s TAKE_[%04X]-[%lld] ",Log_String,irq_vector,pPC->pTIMER->state);
 
     if(wai_state & Cmc6800_WAI) {
         icount -= 4;
@@ -3814,7 +3821,7 @@ void Cmc6800::stx_ex()
 
 
 
-Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
+Cmc6800::Cmc6800(CPObject *parent, UINT8 _opmode, QString _maskRomfn) : CCPU(parent)
 {
 #if defined(HAS_MC6801) || defined(HAS_HD6301)
     for(int i = 0; i < 4; i++) {
@@ -3825,7 +3832,20 @@ Cmc6800::Cmc6800(CPObject *parent) : CCPU(parent)
 #endif
 
     memset(&regs,0,sizeof(regs));
-    memset(&regs.maskrom,0xdd,sizeof(regs.maskrom));
+    memset(&regs.maskrom,0x00,sizeof(regs.maskrom));
+
+    this->regs.opmode = _opmode;
+    if ( (this->regs.opmode == 7) && !_maskRomfn.isEmpty()) {
+        QFile file;
+        file.setFileName(_maskRomfn);
+        if (file.exists())
+        {
+            file.open(QIODevice::ReadOnly);
+            QDataStream in(&file);
+            in.readRawData ((char *) &regs.maskrom,4 * 1024 );
+        }
+    }
+
     pDEBUG = new Cdebug_mc6800(this);
 
     fn_log="mc6800.log";
@@ -3891,6 +3911,21 @@ void Cmc6800::set_PC(UINT32 val)
     PC = val;
 }
 
+UINT32	Cmc6800::get_mem(UINT32 adr,int size)
+{
+    switch(size)
+    {
+    case 8:
+    case SIZE_8 :return( RM(adr));
+    case 16:
+    case SIZE_16:return( RM(adr+1)+(RM(adr)<<8));
+    case 20:
+    case SIZE_20:return((RM(adr+2)+(RM(adr+1)<<8)+(RM(adr)<<16))&MASK_20);
+    case 24:
+    case SIZE_24:return((RM(adr+2)+(RM(adr+1)<<8)+(RM(adr)<<16))&MASK_24);
+    }
+    return(0);
+}
 void Cmc6800::Regs_Info(UINT8 Type)
 {
     sprintf(Regs_String,"");

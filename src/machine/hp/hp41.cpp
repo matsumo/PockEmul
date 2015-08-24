@@ -395,12 +395,12 @@ bool Chp41::run()
 
 
 
-UINT8 Chp41::in(UINT8 address)
+UINT8 Chp41::in(UINT8 address, QString sender)
 {
     return 0;
 }
 
-UINT8 Chp41::out(UINT8 address, UINT8 value)
+UINT8 Chp41::out(UINT8 address, UINT8 value,QString)
 {
     switch (address)
     {

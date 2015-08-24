@@ -138,7 +138,7 @@ bool Cti74::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 
 
-UINT8 Cti74::in(UINT8 Port)
+UINT8 Cti74::in(UINT8 Port,QString)
 {
     UINT8 Value=0;
 
@@ -155,7 +155,7 @@ UINT8 Cti74::in(UINT8 Port)
      return (Value);
 }
 
-UINT8 Cti74::out(UINT8 Port, UINT8 Value)
+UINT8 Cti74::out(UINT8 Port, UINT8 Value, QString sender)
 {
     switch (Port) {
     case TMS7000_PORTA: break;

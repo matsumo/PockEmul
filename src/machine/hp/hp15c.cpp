@@ -233,14 +233,14 @@ bool Chp15c::run()
 
 
 
-UINT8 Chp15c::in(UINT8 address)
+UINT8 Chp15c::in(UINT8 address,QString)
 {
     Q_UNUSED(address)
 
     return 0;
 }
 
-UINT8 Chp15c::out(UINT8 address, UINT8 value)
+UINT8 Chp15c::out(UINT8 address, UINT8 value, QString sender)
 {
     Q_UNUSED(address)
     Q_UNUSED(value)

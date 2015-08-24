@@ -562,7 +562,7 @@ BYTE Cpc15XX::Get_Port(PORTS Port){
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
-UINT8 Cpc15XX::in(UINT8 address)
+UINT8 Cpc15XX::in(UINT8 address,QString)
 {
     Q_UNUSED(address)
 

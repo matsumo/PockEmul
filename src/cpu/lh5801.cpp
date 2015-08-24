@@ -236,7 +236,7 @@ UINT32	CLH5801::get_mem(UINT32 adr,int size)
 	case SIZE_24:return((cpu_readmem(adr+2)+(cpu_readmem(adr+1)<<8)+(cpu_readmem(adr)<<16))&MASK_24);
 	}
 	return(0);
-};
+}
 
 void	CLH5801::set_mem(UINT32 adr,int size,UINT32 data)
 {

@@ -23,8 +23,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *,UINT32 ) { return true; }
     virtual bool	Chk_Adr_R(UINT32 *, UINT32 *) { return true; }
-    virtual UINT8 in(UINT8 ) { return 0; }
-    virtual UINT8 out(UINT8 ,UINT8 ) { return 0; }
+    virtual UINT8 in(UINT8 ,QString sender=QString()) { return 0; }
+    virtual UINT8 out(UINT8 ,UINT8 ,QString sender=QString()) { return 0; }
     virtual bool		run(void);
     virtual bool		init(void);
     virtual bool		exit(void);

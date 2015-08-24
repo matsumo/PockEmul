@@ -122,11 +122,11 @@ void Cti57cpu::BranchOP() {
     if (r->COND==( (r->OP & 0x0400)>>10)) {
         r->PC=(r->PC & 0x0400) | (r->OP & 0x03FF);
         if (fp_log) {
-            sprintf(pPC->Log_String,"%s Branchcondition =%04x ",pPC->Log_String,r->PC);
+            sprintf(Log_String,"%s Branchcondition =%04x ",Log_String,r->PC);
         }
     }
     if (fp_log) {
-        sprintf(pPC->Log_String,"%s reset cond",pPC->Log_String);
+        sprintf(Log_String,"%s reset cond",Log_String);
     }
     r->COND=0;
 }

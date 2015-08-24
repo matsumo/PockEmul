@@ -305,7 +305,7 @@ bool Cz1::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cz1::in(UINT8 Port)
+UINT8 Cz1::in(UINT8 Port,QString)
 {
     Q_UNUSED(Port)
 
@@ -415,7 +415,7 @@ if (ext_MemSlot1->ExtArray[ID_RP_256]->IsChecked) return 0x40;
      return (0);
 }
 
-UINT8 Cz1::out(UINT8 Port, UINT8 x)
+UINT8 Cz1::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)

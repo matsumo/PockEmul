@@ -997,7 +997,7 @@ BYTE Cpc1600::Get_Port(PORTS Port){
     return(0);
 }
 
-UINT8 Cpc1600::out(UINT8 address,UINT8 value)
+UINT8 Cpc1600::out(UINT8 address, UINT8 value, QString sender)
 {
     if (pCPU->fp_log) {
         pCPU->Regs_Info(1);
@@ -1114,7 +1114,7 @@ UINT8 Cpc1600::out(UINT8 address,UINT8 value)
 
 
 
-UINT8 Cpc1600::in(UINT8 address)
+UINT8 Cpc1600::in(UINT8 address,QString)
 {
     if (pCPU->fp_log) {
         pCPU->Regs_Info(0);

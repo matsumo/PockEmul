@@ -635,17 +635,18 @@ void Ce500::TurnOFF()
     mainwindow->saveAll = ASK;
 }
 
-UINT8 Ce500::in(UINT8 address)
+UINT8 Ce500::in(UINT8 address, QString)
 {
     Q_UNUSED(address)
 
     return 0;
 }
 
-UINT8 Ce500::out(UINT8 address, UINT8 value)
+UINT8 Ce500::out(UINT8 address, UINT8 value, QString sender)
 {
     Q_UNUSED(address)
     Q_UNUSED(value)
+    Q_UNUSED(sender)
 
     return 0;
 }

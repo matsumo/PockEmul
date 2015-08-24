@@ -191,12 +191,12 @@ public:
     void set_mem(UINT32 adr, int size, UINT32 data);
 	virtual bool	Chk_Adr(UINT32 *d,UINT32 data) = 0;
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data) = 0;
-    virtual UINT8 in(UINT8 address)=0;
-    virtual UINT8 out(UINT8 address,UINT8 value)=0;
-    virtual UINT8 in8(UINT16 address){Q_UNUSED(address) return 0;}
-    virtual UINT8 out8(UINT16 address,UINT8 value){Q_UNUSED(address) Q_UNUSED(value) return 0;}
-    virtual UINT16 in16(UINT16 address){Q_UNUSED(address) return 0;}
-    virtual UINT16 out16(UINT16 address,UINT16 value){Q_UNUSED(address) Q_UNUSED(value) return 0;}
+    virtual UINT8 in(UINT8 address,QString sender=QString())=0;
+    virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString())=0;
+    virtual UINT8 in8(UINT16 address,QString sender=QString()){Q_UNUSED(address) return 0;}
+    virtual UINT8 out8(UINT16 address,UINT8 value,QString sender=QString()){Q_UNUSED(address) Q_UNUSED(value) return 0;}
+    virtual UINT16 in16(UINT16 address,QString sender=QString()){Q_UNUSED(address) return 0;}
+    virtual UINT16 out16(UINT16 address,UINT16 value,QString sender=QString()){Q_UNUSED(address) Q_UNUSED(value) return 0;}
 
     QByteArray getmem();
 
@@ -208,7 +208,6 @@ public:
 	bool	LoadSession_File(QFile *);
     virtual bool	LoadSession_File(QXmlStreamReader *);
 
-    char	Log_String[1024];
 
     quint64	old_state;
 

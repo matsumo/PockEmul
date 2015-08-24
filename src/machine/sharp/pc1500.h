@@ -71,8 +71,8 @@ public:
 
     bool lh5810_write(UINT32 d, UINT32 data);
     quint8 lh5810_read(UINT32 d);
-    UINT8 in(UINT8 address);
-    UINT8 out(UINT8 ,UINT8 ){return(1);}
+    UINT8 in(UINT8 address,QString sender=QString());
+    UINT8 out(UINT8 ,UINT8,QString sender=QString() ){return(1);}
     virtual bool Set_Connector(Cbus *_bus = 0);
     virtual bool Get_Connector(Cbus *_bus = 0);
 

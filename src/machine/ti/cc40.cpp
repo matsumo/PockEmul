@@ -328,7 +328,7 @@ bool Ccc40::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 
 
-UINT8 Ccc40::in(UINT8 Port)
+UINT8 Ccc40::in(UINT8 Port,QString)
 {
     UINT8 Value=0;
 
@@ -345,7 +345,7 @@ UINT8 Ccc40::in(UINT8 Port)
      return (Value);
 }
 
-UINT8 Ccc40::out(UINT8 Port, UINT8 Value)
+UINT8 Ccc40::out(UINT8 Port, UINT8 Value, QString sender)
 {
     switch (Port) {
     case TMS7000_PORTA: break;

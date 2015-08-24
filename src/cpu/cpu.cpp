@@ -19,6 +19,9 @@ CCPU::CCPU(CPObject *parent)
     fn_log="cpu.log";
     CallSubLevel=prevCallSubLevel=0;
 
+    memset(Log_String,0,sizeof(Log_String));
+    memset(Regs_String,0,sizeof(Regs_String));
+
     imemsize = 0x200;
     for (int i=0;i<imemsize;i++) imem[i]=0;
 

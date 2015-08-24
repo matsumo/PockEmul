@@ -233,7 +233,7 @@ bool Cfx8000g::Chk_Adr_R(UINT32 *d, UINT32 *data) {
     return false;
 }
 
-UINT8 Cfx8000g::in(UINT8 Port) {
+UINT8 Cfx8000g::in(UINT8 Port,QString) {
 
     switch (Port) {
     case 1: {
@@ -246,7 +246,7 @@ UINT8 Cfx8000g::in(UINT8 Port) {
     return 0;
 }
 
-UINT8 Cfx8000g::out(UINT8 Port, UINT8 x) {
+UINT8 Cfx8000g::out(UINT8 Port, UINT8 x, QString sender) {
     switch (Port) {
     case 0:
 //        qWarning()<<"HD44352 Ctrl_write:"<<(x);

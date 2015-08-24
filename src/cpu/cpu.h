@@ -99,6 +99,8 @@ public:
     bool    resetFlag;
     char	Regs_String[1024];
 
+    char	Log_String[1024];
+
 	FILE	*fp_log;			// file pointer to log file
     const char    *fn_log;
 

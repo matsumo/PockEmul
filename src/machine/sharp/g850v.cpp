@@ -253,7 +253,7 @@ bool Cg850v::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-UINT8 Cg850v::in(UINT8 address)
+UINT8 Cg850v::in(UINT8 address,QString)
 {
     switch(address) {
     case 0x10: pCPU->imem[address] = getKey();
@@ -350,7 +350,7 @@ UINT8 Cg850v::in(UINT8 address)
     return 0;
 }
 
-UINT8 Cg850v::out(UINT8 address, UINT8 value)
+UINT8 Cg850v::out(UINT8 address, UINT8 value, QString sender)
 {
     switch(address) {
     case 0x11: ks1 = value;
