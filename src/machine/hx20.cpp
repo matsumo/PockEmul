@@ -115,6 +115,7 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
     int_status = 0;
     int_mask = 0;
     key_intmask = 0;
+    targetSlave = true;
 }
 
 Chx20::~Chx20() {
@@ -355,13 +356,18 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
     if (sender == "Master") {
         switch(addr) {
         case 0x01: // send to slave
+            if (targetSlave) {
 #ifdef FAKE_SLAVE
-            send_to_slave(data);
+                send_to_slave(data);
 #else
-            // send to real slave CPU too
-            pSlaveCPU->recv_buffer.append(data);
-            if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO SLAVE\n");
+                // send to real slave CPU too
+                pSlaveCPU->recv_buffer.append(data);
+                if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO SLAVE\n");
 #endif
+            }
+            break;
+        case 0x02: // check Serial target (1=serial, 0=Slave)
+            targetSlave = !(data & 0x04);
             break;
         case 0x20:
             if(pKEYB->Get_KS() != data) {

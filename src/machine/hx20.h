@@ -60,6 +60,7 @@ private:
 
     bool special_cmd_masked;
     bool runSlave(CCPU *);
+    bool targetSlave;
 };
 
 

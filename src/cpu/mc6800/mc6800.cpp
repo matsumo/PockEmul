@@ -343,6 +343,7 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
 //            qWarning()<<tr("Write Port 0:%1 - %2").arg(regs.port[0].rreg,2,16,QChar('0')).arg(data,2,16,QChar('0'))
 //                    <<"="<<(regs.port[0].rreg!=0?QChar(regs.port[0].rreg):' ');
             regs.port[0].first_write = false;
+            pPC->out(offset,data,objectName());
         }
         break;
     case 0x03:
