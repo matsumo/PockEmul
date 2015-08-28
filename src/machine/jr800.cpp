@@ -49,12 +49,13 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_jr800(this,
-                                   QRect(98,94,340,115),//192*2,64*2),
+                                   QRect(98,94,340,115),
                                    QRect(86,94,364,115));
     pCPU		= new Cmc6800(this);
     for (int i=0;i<8;i++) {
         hd44102[i]  = new CHD44102(this);
-//        qWarning()<<hd44102[i];
+        hd44102[i]->setObjectName(QString("%1").arg(i));
+        qWarning()<<hd44102[i];
     }
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"jr800.map");
@@ -91,6 +92,9 @@ bool Cjr800::init(void)				// initialize
         hd44102[i]->init();
     }
 
+    // Just to be sure, in case of an old saved session
+    ((Cmc6800*)pCPU)->regs.opmode = 4;
+
     return true;
 }
 
@@ -118,41 +122,41 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
 
 
     if ((*d>=0x0A00) && (*d<=0x0AFF)) {
-        int _chip = *d & 0xff;
-        int _id = 0;
+        UINT8 _chip = *d & 0xff;
+        UINT8 _id = 0;
         switch (_chip) {
-            case 0x01: _id = 0; break;
-            case 0x02: _id = 1; break;
-            case 0x04: _id = 2; break;
-            case 0x08: _id = 3; break;
-            case 0x10: _id = 4; break;
-            case 0x20: _id = 5; break;
-            case 0x40: _id = 6; break;
-            case 0x80: _id = 7; break;
+        case 0x01: _id = 0; break;
+        case 0x02: _id = 1; break;
+        case 0x04: _id = 2; break;
+        case 0x08: _id = 3; break;
+        case 0x10: _id = 4; break;
+        case 0x20: _id = 5; break;
+        case 0x40: _id = 6; break;
+        case 0x80: _id = 7; break;
         default: qWarning()<<"ERR - Write cmd:"<<data<<" to driver:"<<_chip;
             break;
         }
-//qWarning()<<"Write cmd:"<<data<<" to driver:"<<_id;
+//        qWarning()<<"Write cmd:"<<data<<" to driver:"<<_id;
         hd44102[_id]->cmd_write(data);
         return false;
     }
     if ((*d>=0x0B00) && (*d<=0x0BFF)) {
-        int _chip = *d & 0xff;
-        int _id = 0;
+        UINT8 _chip = *d & 0xff;
+        UINT8 _id = 0;
         switch (_chip) {
-            case 0x01: _id = 0; break;
-            case 0x02: _id = 1; break;
-            case 0x04: _id = 2; break;
-            case 0x08: _id = 3; break;
-            case 0x10: _id = 4; break;
-            case 0x20: _id = 5; break;
-            case 0x40: _id = 6; break;
-            case 0x80: _id = 7; break;
-        default: qWarning()<<tr("ERR - Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<_chip;
+        case 0x01: _id = 0; break;
+        case 0x02: _id = 1; break;
+        case 0x04: _id = 2; break;
+        case 0x08: _id = 3; break;
+        case 0x10: _id = 4; break;
+        case 0x20: _id = 5; break;
+        case 0x40: _id = 6; break;
+        case 0x80: _id = 7; break;
+        default: qWarning()<<tr("ERR - Write data:%1").arg(data,2,16,QChar('0'))<<" to driver:"<<tr("%1").arg(_chip,2,16,QChar('0'));
             break;
         }
-
         hd44102[_id]->set8(data);
+//        qWarning()<<"Write data:"<<data<<" to driver:"<<_id;
         return false;
     }
 
@@ -162,6 +166,7 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
     if ((*d>=0x6000) && (*d<=0x7FFF)) {
         return true; /* Extended RAM */
     }
+    qWarning()<<"ERR:"<<tr("%1").arg(*d,4,16,QChar('0'));
     return false;
 }
 
@@ -172,8 +177,8 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 
     if ((*d>=0x0A00) && (*d<=0x0AFF)) {
-        int _chip = *d & 0xff;
-        int _id = 0;
+        UINT8 _chip = *d & 0xff;
+        UINT8 _id = 0;
         switch (_chip) {
             case 0x01: _id = 0; break;
             case 0x02: _id = 1; break;
@@ -186,15 +191,14 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         default: qWarning()<<"ERR - Read status:"<<_chip;
             break;
         }
-
         *data = hd44102[_id]->cmd_status();
 //        qWarning()<<"Read status:"<<*data<<" from driver:"<<_id;
         return false;
     }
 
     if ((*d>=0x0B00) && (*d<=0x0BFF)) {
-        int _chip = *d & 0xff;
-        int _id = 0;
+        UINT8 _chip = *d & 0xff;
+        UINT8 _id = 0;
         switch (_chip) {
             case 0x01: _id = 0; break;
             case 0x02: _id = 1; break;
@@ -207,7 +211,6 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         default: qWarning()<<"ERR - Read data:"<<*data<<" from driver:"<<_chip;
             break;
         }
-
         *data = hd44102[_id]->get8();
 //        qWarning()<<"Read data:"<<*data<<" from driver:"<<_id;
         return false;

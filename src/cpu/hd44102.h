@@ -14,12 +14,6 @@ typedef struct {
     int m_x;						// X address
     int m_y;						// Y address
 
-//    BYTE    on_off;
-//    BYTE    displaySL;
-//    BYTE    Xadr;
-//    BYTE    Yadr;
-//    BYTE    status;
-//    BYTE    imem[0x200];
 } HD44102info;
 
 class CPObject;

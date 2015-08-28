@@ -17,6 +17,7 @@
  *
  */
 
+
 #include "mc6800d.h"
 #include "mc6800.h"
 
@@ -288,10 +289,9 @@ quint32 Cdebug_mc6800::DisAsm_1(quint32 pc)
     char data[1024];
     char str[1024];
 
-
     memset(str,0,sizeof(str));
         for (j = 0; j < 16;j++)
-            data[j] = pCPU->get_mem(pc + j,8);
+            data[j] = pCPU->get_mem(pc + j,SIZE_8);
         old_pc = pc;
 //        pc += DasmOpe(str, (unsigned char*)data,pc);
         pc += Dasm680x(6301,str,pc,(unsigned char*)data,(unsigned char*)data);

@@ -77,7 +77,7 @@ UINT32 Cmc6800::RM(UINT32 Addr)
         if (logsw) sprintf(Log_String,"%s %s R[%04X]=%02X",Log_String,objectName().data(),Addr,_ret);
         return _ret;
     }
-    qWarning()<<objectName()<<"MC6800 addr ERROR";
+    qWarning()<<objectName()<<"MC6800 addr ERROR:"<<regs.opmode;
     return (0);
 }
 
@@ -96,18 +96,21 @@ void Cmc6800::WM(UINT32 Addr, UINT32 Value)
         if (logsw) sprintf(Log_String,"%s Wi[%04X]:%02X",Log_String,Addr,Value);
 //        ((CpcXXXX *)pPC)->Set_8(Addr& 0x7f,Value);
     }
-    else if ((regs.opmode == 7) && (Addr >= 0xF000)) {
+    else if (((regs.opmode == 0)||(regs.opmode == 7)) && (Addr >= 0xF000)) {
         // Mask ROM
-        // write to mask rom ignored
+        qWarning()<<"write to mask rom ignored";
     }
-    else
+    else if ((regs.opmode != 0) && (regs.opmode != 7))
 #endif
 
     {
         ((CpcXXXX *)pPC)->Set_8(Addr,Value);
         if (logsw) sprintf(Log_String,"%s W[%04X]:%02X",Log_String,Addr,Value);
     }
+    else {
 
+        qWarning()<<objectName()<<"MC6800 Write addr ERROR:"<<regs.opmode<<Addr;
+    }
 }
 
 UINT32 Cmc6800::RM16(UINT32 Addr)

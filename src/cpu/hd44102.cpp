@@ -46,6 +46,7 @@
 inline void CHD44102::count_up_or_down()
 {
     info.m_output = info.imem[info.m_x][info.m_y];
+//    qWarning()<<objectName()<<" reg:"<<info.m_x<<info.m_y<<QString("=%1").arg(info.m_output,2,16,QChar('0'));
 
     if (info.m_status & STATUS_COUNT_UP)
     {
@@ -76,22 +77,6 @@ CHD44102::CHD44102(CPObject *parent)
 
 
 //-------------------------------------------------
-//  static_set_config - configuration helper
-//-------------------------------------------------
-
-//void CHD44102::static_set_config(device_t &device, const char *screen_tag, int sx, int sy)
-//{
-//    CHD44102 &hd44102 = downcast<CHD44102 &>(device);
-
-//    assert(screen_tag != NULL);
-
-//    hd44102.m_screen_tag = screen_tag;
-//    hd44102.m_sx = sx;
-//    hd44102.m_sy = sy;
-//}
-
-
-//-------------------------------------------------
 //  device_start - device-specific startup
 //-------------------------------------------------
 
@@ -104,6 +89,7 @@ bool CHD44102::init()
     info.m_y=0;
     updated = true;
 
+    Reset();
     return true;
 }
 
@@ -138,6 +124,7 @@ BYTE CHD44102::get8()
     UINT8 data = info.m_output; //info.imem[info.m_x][info.m_y];
     count_up_or_down();
 
+//    qWarning()<<objectName()<<" get:"<<QString("%1").arg(data,2,16,QChar('0'));
     return data;
 }
 
@@ -211,6 +198,8 @@ void CHD44102::save_internal(QXmlStreamWriter *xmlOut)
 //-------------------------------------------------
 void CHD44102::cmd_write(UINT8 data)
 {
+
+//    qWarning()<<objectName()<<"cmd:"<<tr("%1").arg(data,2,16,QChar('0'));
 
     if (info.m_status & STATUS_BUSY) return;
 
