@@ -49,7 +49,8 @@ public:
         General_20,
         Panasonic_44,
         Panasonic_Capsule,
-        hp41
+        hp41,
+        Custom
     };
 
     enum ConnectorDir

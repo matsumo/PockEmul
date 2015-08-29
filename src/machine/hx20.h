@@ -6,6 +6,7 @@ class CPObject;
 class CUPD16434;
 class Cconnector;
 class Cmc6800;
+class Cm160;
 
 #include "pcxxxx.h"
 
@@ -33,6 +34,9 @@ public:
     virtual bool run();
     virtual void Reset();
 
+    bool Set_PrinterConnector(Cconnector *_conn);
+    bool Get_PrinterConnector(Cconnector *_conn);
+
     void TurnON();
     void TurnOFF();
     bool SaveConfig(QXmlStreamWriter *xmlOut);
@@ -41,6 +45,8 @@ public:
     UINT16 getKey();
 
     CUPD16434 *upd16434[6];
+
+    Cm160 *pM160;
 
     Cconnector	*pTAPECONNECTOR;	qint64 pTAPECONNECTOR_value;
     Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;
@@ -59,8 +65,9 @@ private:
     Cmc6800 *pmc6301,*pSlaveCPU;
 
     bool special_cmd_masked;
-    bool runSlave(CCPU *);
     bool targetSlave;
+    void run(CCPU *_cpu);
+    bool printerSW;
 };
 
 

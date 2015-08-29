@@ -467,7 +467,8 @@ HEADERS *= \
     src/cpu/tmc0501_dasm.h \
     src/machine/ti/pc100.h \
     src/machine/hx20.h \
-    src/lcd/lcdc_hx20.h
+    src/lcd/lcdc_hx20.h \
+    src/machine/m160.h
 
 
 
@@ -762,7 +763,8 @@ SOURCES *=  \
     src/cpu/tmc0501_dasm.cpp \
     src/machine/ti/pc100.cpp \
     src/machine/hx20.cpp \
-    src/lcd/lcdc_hx20.cpp
+    src/lcd/lcdc_hx20.cpp \
+    src/machine/m160.cpp
 
 
 

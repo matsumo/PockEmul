@@ -13,6 +13,7 @@
 #include "watchpoint.h"
 #include "upd16434.h"
 #include "debug.h"
+#include "m160.h"
 
 /*
     memory:
@@ -55,7 +56,7 @@
         p21	out	txd (RS-232C)
         p22	out	selection for CPU serial communication (0=slave 1=serial)
 */
-//#define FAKE_SLAVE
+
 
 #define INT_KEYBOARD	1
 #define INT_CLOCK	2
@@ -63,7 +64,7 @@
 
 Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 2457600 / 4);
+    setfrequency( (int) 2457600 / 2);
     setcfgfname(QString("hx20"));
 
     SessionHeader	= "HX20PKM";
@@ -81,10 +82,10 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 
     SlotList.clear();
     SlotList.append(CSlot(16, 0x0000 ,	"", ""	, CSlot::RAM , "RAM"));
-    SlotList.append(CSlot(8, 0x8000 ,	P_RES(":/hx20/hx20_v11e.12e"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(8, 0xA000 ,	P_RES(":/hx20/hx20_v11e.13e"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(8, 0xC000 ,	P_RES(":/hx20/hx20_v11e.14e"), ""	, CSlot::ROM , "ROM"));
-    SlotList.append(CSlot(8, 0xE000 ,	P_RES(":/hx20/hx20_v11e.15e"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(8, 0x8000 ,	P_RES(":/hx20/hx20_v11.12e"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(8, 0xA000 ,	P_RES(":/hx20/hx20_v11.13e"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(8, 0xC000 ,	P_RES(":/hx20/hx20_v11.14e"), ""	, CSlot::ROM , "ROM"));
+    SlotList.append(CSlot(8, 0xE000 ,	P_RES(":/hx20/hx20_v11.15e"), ""	, CSlot::ROM , "ROM"));
 
     PowerSwitch	= 0;
 
@@ -110,12 +111,16 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
     pTIMER		= new Ctimer(this);
     pKEYB		= new Ckeyb(this,"hx20.map");
 
+    pM160 = new Cm160(this);
+
     ioFreq = 0;
 
     int_status = 0;
     int_mask = 0;
     key_intmask = 0;
     targetSlave = true;
+
+    printerSW = false;
 }
 
 Chx20::~Chx20() {
@@ -139,9 +144,8 @@ bool Chx20::init(void)				// initialize
     pTAPECONNECTOR	= new Cconnector(this,3,0,Cconnector::Jack,"Line in / Rec / Rmt",false,
                                      QPoint(804,0),Cconnector::NORTH);
     publish(pTAPECONNECTOR);
-    pPRINTERCONNECTOR	= new Cconnector(this,9,1,Cconnector::DIN_8,"Printer",false,
-                                         QPoint(402,0),Cconnector::NORTH);
-    publish(pPRINTERCONNECTOR);
+    pPRINTERCONNECTOR	= new Cconnector(this,64,1,Cconnector::Custom,"Printer",false);
+
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
 
@@ -149,114 +153,41 @@ bool Chx20::init(void)				// initialize
         upd16434[i]->init();
     }
 
+   if (pM160) {
+       pM160->init();
+       pM160->hide();
+   }
+
     Reset();
     return true;
 }
 
+void Chx20::run(CCPU *_cpu) {
+    CCPU *_keepCPU = pCPU;
+    pCPU = _cpu;
+    CpcXXXX::run();
+    pCPU = _keepCPU;
+}
+
 bool Chx20::run() {
 
-    CpcXXXX::run();
+    BYTE _soundData = (pSlaveCPU->regs.port[0].wreg & 0x20) ? 0xff : 0x00;
+    fillSoundBuffer(_soundData);
 
-    BYTE _soundData = 0;
-//    if((((Cmc6800*)pCPU)->regs.port[0].wreg & 0x08)) {
-//        _soundData = (((Cmc6800*)pCPU)->regs.port[0].wreg & 0x10) ? 0xff : 0x00;
-////        qWarning()<<_soundData;
-//        fillSoundBuffer(_soundData);
-//    }
+//    CpcXXXX::run();
+    run(pmc6301);
 
-#ifndef FAKE_SLAVE
-    runSlave(pSlaveCPU);
-#endif
+    run(pSlaveCPU);
+
+    Set_PrinterConnector(pM160->pCONNECTOR);
+    pM160->run();
+    Get_PrinterConnector(pM160->pCONNECTOR);
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
     return true;
 }
 
-bool Chx20::runSlave(CCPU *_cpu)
-{
-
-    if (DasmFlag) return true;
-
-    if(!(_cpu->halt|_cpu->off) && !off)
-    {
-        memset(_cpu->Log_String,0,sizeof(_cpu->Log_String));
-
-        if (  _cpu->logsw && _cpu->fp_log && checkTraceRange(_cpu->get_PC()))
-        {
-            fflush(_cpu->fp_log);
-            _cpu->pDEBUG->DisAsm_1(_cpu->get_PC());
-            fprintf(_cpu->fp_log,"[%lld] ",pTIMER->state);
-            fprintf(_cpu->fp_log,"[%02i]",_cpu->prevCallSubLevel);
-            for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
-
-            _cpu->step();
-            Regs_Info(1);
-
-            fprintf(_cpu->fp_log,"%-40s   %s  %s\n",_cpu->pDEBUG->Buffer,_cpu->Regs_String,_cpu->Log_String);
-            if (_cpu->prevCallSubLevel < _cpu->CallSubLevel) {
-                for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
-                fprintf(_cpu->fp_log,"{\n");
-            }
-            if (_cpu->prevCallSubLevel > _cpu->CallSubLevel) {
-                for (int g=0;g<(_cpu->prevCallSubLevel-1);g++) fprintf(_cpu->fp_log,"\t");
-                fprintf(_cpu->fp_log,"}\n");
-            }
-            if (_cpu->CallSubLevel <0) _cpu->CallSubLevel=0;
-            _cpu->prevCallSubLevel = _cpu->CallSubLevel;
-
-            //fprintf(pCPU->fp_log,s);
-//            fflush(pCPU->fp_log);
-        }
-        else {
-//            fprintf(_loclog,"[%lld] %05x",pTIMER->state,pCPU->get_PC());
-            if (!off) {
-
-                _cpu->step();
-
-
-
-            }
-#ifndef QT_NO_DEBUG
-            Regs_Info(0);
-#endif
-        }
-
-    }
-    else {
-        if (!off) {
-            UINT32 _prevPC = _cpu->get_PC();
-            memset(_cpu->Log_String,0,sizeof(_cpu->Log_String));
-
-            _cpu->step();
-
-            if(!_cpu->halt && _cpu->logsw && _cpu->fp_log)
-            {
-                fflush(_cpu->fp_log);
-                _cpu->pDEBUG->DisAsm_1(_prevPC);
-                fprintf(_cpu->fp_log,"*[%lld] ",pTIMER->state);
-                fprintf(_cpu->fp_log,"[%02i]",_cpu->prevCallSubLevel);
-                for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
-                Regs_Info(1);
-                fprintf(_cpu->fp_log,"%-40s   %s  %s\n",_cpu->pDEBUG->Buffer,_cpu->Regs_String,_cpu->Log_String);
-                if (_cpu->prevCallSubLevel < _cpu->CallSubLevel) {
-                    for (int g=0;g<_cpu->prevCallSubLevel;g++) fprintf(_cpu->fp_log,"\t");
-                    fprintf(_cpu->fp_log,"{\n");
-                }
-                if (_cpu->prevCallSubLevel > _cpu->CallSubLevel) {
-                    for (int g=0;g<(_cpu->prevCallSubLevel-1);g++) fprintf(_cpu->fp_log,"\t");
-                    fprintf(_cpu->fp_log,"}\n");
-                }
-                if (_cpu->CallSubLevel <0) _cpu->CallSubLevel=0;
-                _cpu->prevCallSubLevel = _cpu->CallSubLevel;
-            }
-        }
-        else {
-            pTIMER->state +=20;//= pTIMER->currentState();
-        }
-    }
-    return(1);
-}
 
 bool Chx20::Chk_Adr(UINT32 *d, UINT32 data)
 {
@@ -342,7 +273,7 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
 {
     Q_UNUSED(addr)
     Q_UNUSED(data)
-#ifndef FAKE_SLAVE
+
     if (sender == "Slave") {
         switch(addr) {
         case 0x01: // send to master
@@ -351,19 +282,16 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
             break;
         }
     }
-#endif
+
 
     if (sender == "Master") {
         switch(addr) {
         case 0x01: // send to slave
             if (targetSlave) {
-#ifdef FAKE_SLAVE
-                send_to_slave(data);
-#else
+//                send_to_slave(data);
                 // send to real slave CPU too
                 pSlaveCPU->recv_buffer.append(data);
                 if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO SLAVE\n");
-#endif
             }
             break;
         case 0x02: // check Serial target (1=serial, 0=Slave)
@@ -442,8 +370,13 @@ bool Chx20::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-    pTAPECONNECTOR->Set_pin(3,true);       // RMT
-    pTAPECONNECTOR->Set_pin(2,(((Cmc6800*)pCPU)->regs.port[0].wreg & 0x01) ? 0x00 : 0xff); // TAPE OUT
+//    pTAPECONNECTOR->Set_pin(3,true);       // RMT
+//    pTAPECONNECTOR->Set_pin(2,(((Cmc6800*)pCPU)->regs.port[0].wreg & 0x01) ? 0x00 : 0xff); // TAPE OUT
+
+
+
+
+
 
 //    if (sendToPrinter>0) {
 //        pPRINTERCONNECTOR->Set_values(sendToPrinter);
@@ -455,13 +388,30 @@ bool Chx20::Set_Connector(Cbus *_bus)
     return true;
 }
 
+bool Chx20::Set_PrinterConnector(Cconnector *_conn) {
+    _conn->Set_pin(1,pSlaveCPU->regs.port[0].wreg & 0x01);  // P10 H1
+    _conn->Set_pin(2,pSlaveCPU->regs.port[0].wreg & 0x02);  // P11 H2
+    _conn->Set_pin(3,pSlaveCPU->regs.port[0].wreg & 0x04);  // P12 H3
+    _conn->Set_pin(4,pSlaveCPU->regs.port[0].wreg & 0x08);  // P13 H4
+
+    _conn->Set_pin(5,pSlaveCPU->regs.port[0].wreg & 0x10);  // P14 M+
+    _conn->Set_pin(6,pSlaveCPU->regs.port[0].wreg & 0x80);  // P17 Motor Break
+
+    return true;
+}
+
 bool Chx20::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-//    if (pPRINTERCONNECTOR->Get_pin(9)) {
-//        sendToPrinter = 0;
-//    }
+    return true;
+}
+
+bool Chx20::Get_PrinterConnector(Cconnector *_conn)
+{
+
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(7), 0x80);  // P17 TS
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(8), 0x40);  // P16 RS
 
     return true;
 }
@@ -488,6 +438,8 @@ void Chx20::Reset()
     pLCDC->init();
     for (int i=0;i<6;i++) upd16434[i]->Reset();
 
+    if (pM160) pM160->Reset();
+
     pmc6301->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
     pmc6301->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
 
@@ -496,12 +448,14 @@ void Chx20::Reset()
 
 bool Chx20::LoadConfig(QXmlStreamReader *xmlIn)
 {
+    Q_UNUSED(xmlIn)
 //    for (int i=0;i<6;i++) upd16434[i]->Load_Internal(xmlIn);
     return true;
 }
 
 bool Chx20::SaveConfig(QXmlStreamWriter *xmlOut)
 {
+    Q_UNUSED(xmlOut)
 //    for (int i=0;i<6;i++) upd16434[i]->save_internal(xmlOut);
     return true;
 }
@@ -513,8 +467,9 @@ void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
-    if ( (getKey() & 0xff) != 0xff) {
+    if ( (getKey() & 0x1ff) != 0x1ff) {
         // raise key interrupt
         if(!(int_status & INT_KEYBOARD)) {
             int_status |= INT_KEYBOARD;
@@ -530,7 +485,7 @@ UINT16 Chx20::getKey()
     UINT8 ks = pKEYB->Get_KS()^0xff;
     UINT16 data=0;
 
-    UINT8 DipSwitch = 0;
+    UINT8 DipSwitch = 0x07;
 
     if ((pKEYB->LastKey) && ks )
     {
@@ -626,7 +581,7 @@ UINT16 Chx20::getKey()
             if (KEY(K_TAB))			data|=0x04; // OK
 //            if (KEY(''))			data|=0x08;
 //            if (KEY(''))			data|=0x10;
-            if (KEY(K_DEF))			data|=0x20; // NUM
+            if (KEY(K_NUM))			data|=0x20; // NUM
             if (KEY(0x15))			data|=0x40; // GRAPH
             if (KEY(K_SML))			data|=0x80;
 //            if (KEY(''))			data|=0x100;
@@ -636,15 +591,18 @@ UINT16 Chx20::getKey()
             }
 
             if (ks&0x80) {
-//                if (KEY(K_RET))			data|=0x01; // OK
-//                if (KEY(' '))			data|=0x02; // OK
-//                if (KEY(K_TAB))			data|=0x04; // OK
-    //            if (KEY(''))			data|=0x08;
-    //            if (KEY(''))			data|=0x10;
+                if (KEY(K_HOME))			data|=0x01; // OK
+                if (KEY(K_SCREEN))			data|=0x02; // HOME SCR
+                if (KEY(K_BRK))			data|=0x04; // OK
+                if (KEY(K_PAUSE))			data|=0x08;
+                if (KEY(K_INS))			data|=0x10;
                 if (KEY(K_MENU))		data|=0x20; // MENU
 //                if (KEY(0x15))			data|=0x40;
 //                if (KEY(K_SML))			data|=0x80;
     //            if (KEY(''))			data|=0x100;
+                if (KEY(K_PRINT_ON)) 	{ printerSW = true; qWarning()<<"PrtSw:"<<printerSW;}
+                if (KEY(K_PRINT_OFF)) 	{ printerSW = false;qWarning()<<"PrtSw:"<<printerSW;}
+                if (!printerSW)  data|=0x200;
             }
 
 

@@ -283,6 +283,10 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_CM      0x25c
 
 #define K_PAPER_POS 0x260
+#define K_HOME 0x261
+#define K_PAUSE 0x262
+#define K_NUM 0x263
+#define K_SCREEN 0x264
 
 
 class CPObject;

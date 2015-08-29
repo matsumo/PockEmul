@@ -1,18 +1,17 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>hx20</model>
 <Keyboard>
-    <KEY description="BASIC" height="58" left="878" masterscancode="0x00" modifier="" scancode="0xe2" top="219" view="FRONT" width="58"/>
+    <KEY description="PRINTER ON" height="20" left="66" masterscancode="0x00" modifier="" scancode="0xc3" top="294" view="FRONT" width="30"/>
+    <KEY description="PRINTER OFF" height="20" left="19" masterscancode="0x00" modifier="" scancode="0xc4" top="294" view="FRONT" width="30"/>
+    <KEY description="Paper Feed" height="20" left="161" masterscancode="0x00" modifier="" scancode="0xc1" top="294" view="FRONT" width="55"/>
+    <KEY description="BASIC" height="58" left="0" masterscancode="0x00" modifier="" scancode="0xe2" top="0" view="FRONT" width="58"/>
     <KEY description="MENU" height="26" left="99" masterscancode="0x00" modifier="" scancode="0xda" top="354" view="FRONT" width="50"/>
+    <KEY description="BREAK" height="26" left="166" masterscancode="0x00" modifier="" scancode="0x04" top="354" view="FRONT" width="50"/>
     <KEY description="F1" height="30" left="247" masterscancode="0x00" modifier="" scancode="0xf6" top="353" view="FRONT" width="50"/>
     <KEY description="F2" height="30" left="312" masterscancode="0x00" modifier="" scancode="0xf7" top="354" view="FRONT" width="50"/>
     <KEY description="F3" height="30" left="376" masterscancode="0x00" modifier="" scancode="0xf8" top="355" view="FRONT" width="50"/>
     <KEY description="F4" height="30" left="441" masterscancode="0x00" modifier="" scancode="0xf9" top="355" view="FRONT" width="50"/>
     <KEY description="F5" height="30" left="506" masterscancode="0x00" modifier="" scancode="0xfa" top="355" view="FRONT" width="50"/>
-    <KEY description="INS" height="58" left="904" masterscancode="0x00" modifier="" scancode="0x09" top="353" view="FRONT" width="58"/>
-    <KEY description="HOME/CLR" height="58" left="770" masterscancode="0x00" modifier="" scancode="0x0c" top="351" view="FRONT" width="58"/>
-    <KEY description="On/Brk" height="58" left="831" masterscancode="0x00" modifier="" scancode="0x03" top="269" view="FRONT" width="58"/>
-    <KEY description="Off" height="45" left="903" masterscancode="0x00" modifier="" scancode="0x100003b" top="277" view="FRONT" width="40"/>
-    <KEY description="F6" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x1000035" top="0" view="FRONT" width="20"/>
     <KEY description="Down Arrow" height="56" left="0" masterscancode="0x00" modifier="" scancode="0x04" top="0" view="FRONT" width="58"/>
     <KEY description="Left Arrow" height="55" left="828" masterscancode="0x00" modifier="" scancode="0x06" top="479" view="FRONT" width="58"/>
     <KEY description="Rigth Arrow" height="55" left="914" masterscancode="0x00" modifier="" scancode="0x07" top="478" view="FRONT" width="58"/>
@@ -31,7 +30,11 @@
     <KEY description="RETURN" height="60" left="837" masterscancode="0x00" modifier="" scancode="0x0d" top="546" view="FRONT" width="90"/>
     <KEY description="GRPH" height="58" left="906" masterscancode="0x00" modifier="" scancode="0x0b" top="613" view="FRONT" width="58"/>
     <KEY description="CAPS" height="58" left="210" masterscancode="0x00" modifier="" scancode="0x14" top="666" view="FRONT" width="58"/>
-    <KEY description="NUM" height="58" left="700" masterscancode="0x00" modifier="" scancode="0x15" top="357" view="FRONT" width="58"/>
+    <KEY description="NUM" height="58" left="700" masterscancode="0x00" modifier="" scancode="0x263" top="357" view="FRONT" width="58"/>
+    <KEY description="HOME CLR" height="58" left="770" masterscancode="0x00" modifier="" scancode="0x261" top="357" view="FRONT" width="58"/>
+    <KEY description="SCREEN" height="58" left="830" masterscancode="0x00" modifier="" scancode="0x264" top="357" view="FRONT" width="58"/>
+    <KEY description="INS/DEL" height="58" left="900" masterscancode="0x00" modifier="" scancode="0x09" top="357" view="FRONT" width="58"/>
+    <KEY description="PAUSE" height="26" left="33" masterscancode="0x00" modifier="" scancode="0x262" top="354" view="FRONT" width="50"/>
     <KEY description="Space" height="58" left="285" masterscancode="0x00" modifier="" scancode="0x20" top="674" view="FRONT" width="470"/>
     <KEY description="0" height="58" left="654" masterscancode="0x00" modifier="" scancode="0x30" top="420" view="FRONT" width="58"/>
     <KEY description="1" height="58" left="67" masterscancode="0x00" modifier="" scancode="0x31" top="420" view="FRONT" width="58"/>
