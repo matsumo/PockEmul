@@ -290,19 +290,23 @@ quint32 Cdebug_mc6800::DisAsm_1(quint32 pc)
     char str[1024];
 
     memset(str,0,sizeof(str));
-        for (j = 0; j < 16;j++)
-            data[j] = pCPU->get_mem(pc + j,SIZE_8);
-        old_pc = pc;
-//        pc += DasmOpe(str, (unsigned char*)data,pc);
-        pc += Dasm680x(6301,str,pc,(unsigned char*)data,(unsigned char*)data);
-        sprintf(Buffer,"%06X: %s", old_pc, str);
+    bool _loc_logsw = pCPU->logsw;
+    pCPU->logsw = false;
+    for (j = 0; j < 16;j++)
+        data[j] = pCPU->get_mem(pc + j,SIZE_8);
+    pCPU->logsw = _loc_logsw;
 
-        DasmAdr = old_pc;
+    old_pc = pc;
+    //        pc += DasmOpe(str, (unsigned char*)data,pc);
+    pc += Dasm680x(6301,str,pc,(unsigned char*)data,(unsigned char*)data);
+    sprintf(Buffer,"%06X: %s", old_pc, str);
 
-        NextDasmAdr = pc;
-        debugged = true;
+    DasmAdr = old_pc;
 
-        return NextDasmAdr;
+    NextDasmAdr = pc;
+    debugged = true;
+
+    return NextDasmAdr;
 
 }
 

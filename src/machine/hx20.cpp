@@ -64,7 +64,7 @@
 
 Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 2457600 / 2);
+    setfrequency( (int) 2457600 / 4);
     setcfgfname(QString("hx20"));
 
     SessionHeader	= "HX20PKM";
@@ -170,14 +170,26 @@ void Chx20::run(CCPU *_cpu) {
 }
 
 bool Chx20::run() {
+    static quint64 masterCount=0;
+    static quint64 slaveCount=0;
 
     BYTE _soundData = (pSlaveCPU->regs.port[0].wreg & 0x20) ? 0xff : 0x00;
     fillSoundBuffer(_soundData);
 
-//    CpcXXXX::run();
-    run(pmc6301);
 
-    run(pSlaveCPU);
+
+    quint64 _tmpCount = pTIMER->state;
+    run(pmc6301);
+    quint64 _tmpCount2 = pTIMER->state;
+    masterCount += _tmpCount2 - _tmpCount;
+
+    if(masterCount >= slaveCount) {
+        // Synchronize slave CPU speed with master CPU speed
+        run(pSlaveCPU);
+        slaveCount += pTIMER->state - _tmpCount2;
+    }
+    pTIMER->state = _tmpCount2;
+//    qWarning()<<"master:"<<masterCount<<"  slave:"<<slaveCount;
 
     Set_PrinterConnector(pM160->pCONNECTOR);
     pM160->run();
@@ -195,11 +207,13 @@ bool Chx20::Chk_Adr(UINT32 *d, UINT32 data)
 
     if(*d < 0x40) {
         out(*d,data,"Master");
+        return false;
     }
-//    else if(addr < 0x80) {
+    else if(*d < 0x80) {
 //		d_rtc->write_io8(1, addr & 0x3f);
 //		d_rtc->write_io8(0, data);
-//	}
+        return true;
+    }
 
     if ((*d>=0x0000) && (*d<=0x3FFF)) {
         return true; /* RAM */
@@ -242,7 +256,12 @@ UINT8 Chx20::in(UINT8 addr,QString sender)
             // bit6: power switch interrupt flag (0=active)
             // bit7: busy signal of lcd controller (0=busy)
             //        return 0x43 | 0xa8;
-            return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0xa8;
+        {
+            UINT8 _loc = ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0x80;
+//            qWarning()<<"Read 28 :"<<QString("%1 (%2)").arg(_loc,2,16,QChar('0')).arg(pKEYB->Get_KS(),2,16,QChar('0'));
+            return _loc;
+        }
+            return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0x80;
         case 0x2a:
         case 0x2b:
             break;
@@ -487,134 +506,125 @@ UINT16 Chx20::getKey()
 
     UINT8 DipSwitch = 0x07;
 
-    if ((pKEYB->LastKey) && ks )
-    {
-//        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
+    if (ks&0x01) {
+        if (KEY('0'))			data|=0x01; // OK
+        if (KEY('1'))			data|=0x02; // OK
+        if (KEY('2'))			data|=0x04; // OK
+        if (KEY('3'))			data|=0x08;
+        if (KEY('4'))			data|=0x10;
+        if (KEY('5'))			data|=0x20;
+        if (KEY('6'))			data|=0x40;
+        if (KEY('7'))			data|=0x80;
+        if (KEY(K_F1))			data|=0x100;
+        if (DipSwitch & 0x01)	data|=0x200; // Deep Switch 1
+    }
 
-        if (ks&0x01) {
-            if (KEY('0'))			data|=0x01; // OK
-            if (KEY('1'))			data|=0x02; // OK
-            if (KEY('2'))			data|=0x04; // OK
-            if (KEY('3'))			data|=0x08;
-            if (KEY('4'))			data|=0x10;
-            if (KEY('5'))			data|=0x20;
-            if (KEY('6'))			data|=0x40;
-            if (KEY('7'))			data|=0x80;
-            if (KEY(K_F1))			data|=0x100;
-            if (DipSwitch & 0x01)			data|=0x200; // Deep Switch 1
+    if (ks&0x02) {
+        if (KEY('8'))			data|=0x01; // OK
+        if (KEY('9'))			data|=0x02; // OK
+        if (KEY(':'))			data|=0x04; // OK
+        if (KEY(';'))			data|=0x08;
+        if (KEY(','))			data|=0x10;
+        if (KEY('-'))			data|=0x20;
+        if (KEY('.'))			data|=0x40;
+        if (KEY('/'))			data|=0x80;
+        if (KEY(K_F2))			data|=0x100;
+        if (DipSwitch & 0x02)	data|=0x200; // Deep Switch 2
+    }
 
+    if (ks&0x04) {
+        if (KEY('@'))			data|=0x01; // OK
+        if (KEY('A'))			data|=0x02; // OK
+        if (KEY('B'))			data|=0x04; // OK
+        if (KEY('C'))			data|=0x08;
+        if (KEY('D'))			data|=0x10;
+        if (KEY('E'))			data|=0x20;
+        if (KEY('F'))			data|=0x40;
+        if (KEY('G'))			data|=0x80;
+        if (KEY(K_F3))			{
+            pCPU->logsw = true;
+            pCPU->Check_Log();
+            data|=0x100;
         }
+        if (DipSwitch & 0x04)	data|=0x200; // Deep Switch 3
+    }
 
-        if (ks&0x02) {
-            if (KEY('8'))			data|=0x01; // OK
-            if (KEY('9'))			data|=0x02; // OK
-            if (KEY(':'))			data|=0x04; // OK
-            if (KEY(';'))			data|=0x08;
-            if (KEY(','))			data|=0x10;
-            if (KEY('-'))			data|=0x20;
-            if (KEY('.'))			data|=0x40;
-            if (KEY('/'))			data|=0x80;
-            if (KEY(K_F2))			data|=0x100;
-            if (DipSwitch & 0x02)			data|=0x200; // Deep Switch 2
+    if (ks&0x08) {
+        if (KEY('H'))			data|=0x01; // OK
+        if (KEY('I'))			data|=0x02; // OK
+        if (KEY('J'))			data|=0x04; // OK
+        if (KEY('K'))			data|=0x08;
+        if (KEY('L'))			data|=0x10;
+        if (KEY('M'))			data|=0x20;
+        if (KEY('N'))			data|=0x40;
+        if (KEY('O'))			data|=0x80;
+        if (KEY(K_F4))			data|=0x100;
+        if (DipSwitch & 0x08)			data|=0x200; // Deep Switch 4
+    }
 
+    if (ks&0x10) {
+        if (KEY('P'))			data|=0x01; // OK
+        if (KEY('Q'))			data|=0x02; // OK
+        if (KEY('R'))			data|=0x04; // OK
+        if (KEY('S'))			data|=0x08;
+        if (KEY('T'))			data|=0x10;
+        if (KEY('U'))			data|=0x20;
+        if (KEY('V'))			data|=0x40;
+        if (KEY('W'))			data|=0x80;
+        if (KEY(K_F5))			data|=0x100;
+    }
+
+    if (ks&0x20) {
+        if (KEY('X'))			data|=0x01; // OK
+        if (KEY('Y'))			data|=0x02; // OK
+        if (KEY('Z'))			data|=0x04; // OK
+        if (KEY('['))			data|=0x08;
+        if (KEY(']'))			data|=0x10;
+        if (KEY('\\'))			data|=0x20;
+        if (KEY(K_RA))			data|=0x40;
+        if (KEY(K_LA))			data|=0x80;
+        if (KEY(K_PFEED))		data|=0x100;
+        if (KEY(K_SHT))			data|=0x200;
+    }
+
+    if (ks&0x40) {
+        if (KEY(K_RET))			data|=0x01; // OK
+        if (KEY(' '))			data|=0x02; // OK
+        if (KEY(K_TAB))			data|=0x04; // OK
+        //            if (KEY(''))			data|=0x08;
+        //            if (KEY(''))			data|=0x10;
+        if (KEY(K_NUM))			data|=0x20; // NUM
+        if (KEY(0x15))			data|=0x40; // GRAPH
+        if (KEY(K_SML))			data|=0x80;
+        //            if (KEY(''))			data|=0x100;
+        if (KEY(K_CTRL)) {
+            data|=0x200;
+            pKEYB->isCtrl = true;
         }
-        if (ks&0x04) {
-            if (KEY('@'))			data|=0x01; // OK
-            if (KEY('A'))			data|=0x02; // OK
-            if (KEY('B'))			data|=0x04; // OK
-            if (KEY('C'))			data|=0x08;
-            if (KEY('D'))			data|=0x10;
-            if (KEY('E'))			data|=0x20;
-            if (KEY('F'))			data|=0x40;
-            if (KEY('G'))			data|=0x80;
-            if (KEY(K_F3))			data|=0x100;
-            if (DipSwitch & 0x04)			data|=0x200; // Deep Switch 3
+    }
 
+    if (ks&0x80) {
+        if (KEY(K_HOME))			data|=0x01; // OK
+        if (KEY(K_SCREEN))			data|=0x02; // HOME SCR
+        if (KEY(K_BRK))			data|=0x04; // OK
+        if (KEY(K_PAUSE))			data|=0x08;
+        if (KEY(K_INS))			data|=0x10;
+        if (KEY(K_MENU))		data|=0x20; // MENU
 
+        if (KEY(K_PRINT_ON)) 	{ printerSW = true; qWarning()<<"PrtSw:"<<printerSW;}
+        if (KEY(K_PRINT_OFF)) 	{ printerSW = false;qWarning()<<"PrtSw:"<<printerSW;}
+        if (printerSW) {
+            data|=0x200;
         }
+    }
 
-        if (ks&0x08) {
-            if (KEY('H'))			data|=0x01; // OK
-            if (KEY('I'))			data|=0x02; // OK
-            if (KEY('J'))			data|=0x04; // OK
-            if (KEY('K'))			data|=0x08;
-            if (KEY('L'))			data|=0x10;
-            if (KEY('M'))			data|=0x20;
-            if (KEY('N'))			data|=0x40;
-            if (KEY('O'))			data|=0x80;
-            if (KEY(K_F4))			data|=0x100;
-            if (DipSwitch & 0x08)			data|=0x200; // Deep Switch 4
-
-
-        }
-
-        if (ks&0x10) {
-            if (KEY('P'))			data|=0x01; // OK
-            if (KEY('Q'))			data|=0x02; // OK
-            if (KEY('R'))			data|=0x04; // OK
-            if (KEY('S'))			data|=0x08;
-            if (KEY('T'))			data|=0x10;
-            if (KEY('U'))			data|=0x20;
-            if (KEY('V'))			data|=0x40;
-            if (KEY('W'))			data|=0x80;
-            if (KEY(K_F5))			data|=0x100;
-
-
-        }
-        if (ks&0x20) {
-            if (KEY('X'))			data|=0x01; // OK
-            if (KEY('Y'))			data|=0x02; // OK
-            if (KEY('Z'))			data|=0x04; // OK
-            if (KEY('['))			data|=0x08;
-            if (KEY(']'))			data|=0x10;
-            if (KEY('\\'))			data|=0x20;
-            if (KEY(K_RA))			data|=0x40;
-            if (KEY(K_LA))			data|=0x80;
-            if (KEY(K_PFEED))		data|=0x100;
-            if (KEY(K_SHT))			data|=0x200;
-
-
-        }
-        if (ks&0x40) {
-            if (KEY(K_RET))			data|=0x01; // OK
-            if (KEY(' '))			data|=0x02; // OK
-            if (KEY(K_TAB))			data|=0x04; // OK
-//            if (KEY(''))			data|=0x08;
-//            if (KEY(''))			data|=0x10;
-            if (KEY(K_NUM))			data|=0x20; // NUM
-            if (KEY(0x15))			data|=0x40; // GRAPH
-            if (KEY(K_SML))			data|=0x80;
-//            if (KEY(''))			data|=0x100;
-            if (KEY(K_CTRL)) {
-                data|=0x200;
-                pKEYB->isCtrl = true;
-            }
-
-            if (ks&0x80) {
-                if (KEY(K_HOME))			data|=0x01; // OK
-                if (KEY(K_SCREEN))			data|=0x02; // HOME SCR
-                if (KEY(K_BRK))			data|=0x04; // OK
-                if (KEY(K_PAUSE))			data|=0x08;
-                if (KEY(K_INS))			data|=0x10;
-                if (KEY(K_MENU))		data|=0x20; // MENU
-//                if (KEY(0x15))			data|=0x40;
-//                if (KEY(K_SML))			data|=0x80;
-    //            if (KEY(''))			data|=0x100;
-                if (KEY(K_PRINT_ON)) 	{ printerSW = true; qWarning()<<"PrtSw:"<<printerSW;}
-                if (KEY(K_PRINT_OFF)) 	{ printerSW = false;qWarning()<<"PrtSw:"<<printerSW;}
-                if (!printerSW)  data|=0x200;
-            }
-
-
-
-        }
 
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
 //        qWarning()<<"getkey:"<<tr("%1 , %2").arg(ks,2,16,QChar('0')).arg(data^0xffff,4,16,QChar('0'));
-    }
-    return (data^0xffff);
+
+    return (data ^ 0x03ff);
 
 }
 

@@ -119,7 +119,7 @@ void Cx710::ComputeKey(KEYEVENT ke,int scancode,QMouseEvent *event)
 //bool Cx710::UpdateFinalImage(void) {
 //    Cce515p::UpdateFinalImage();
 
-////    // Draw switch by 180° rotation
+////    // Draw switch by 180 rotation
 ////    QPainter painter;
 
 ////    // PRINTER SWITCH
