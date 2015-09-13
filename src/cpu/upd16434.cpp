@@ -409,6 +409,16 @@ BYTE CUPD16434::cmd_MODE(quint8 cmd)
 {
     info.mode = cmd;
     updated = true;
+
+    if ((cmd >= 0x60) && (cmd <= 0x63)) {
+        info.mode = cmd;
+        outputRegister = info.imem[info.dataPointer];
+
+        qWarning()<<"UPD16434["<<id<<"]"<<" READ MODE("<<cmd<<"):"<<outputRegister<<" from:"<<info.dataPointer;
+        if ((info.mode & 0x03)==0) { info.dataPointer++; info.dataPointer &= 0x7f; }
+        if ((info.mode & 0x03)==1) { info.dataPointer--; info.dataPointer &= 0x7f; }
+    }
+
     return cmd;
 }
 
@@ -462,6 +472,26 @@ BYTE CUPD16434::cmd_DISPOFF(quint8 cmd)
 BYTE CUPD16434::cmd_STOP(quint8 cmd)
 {
     return 0;
+}
+
+bool CUPD16434::getBit()
+{
+    static int _bit=7;
+    bool _ret = true;
+
+    if (info.mode == MASK_SRM) {
+        _ret = (outputRegister & (1<<_bit)) ? true : false;
+        qWarning()<<"UPD16434["<<id<<"]"<<" SO:"<<_ret<<" bit:"<<_bit;
+        _bit--;
+        if (_bit == -1) {
+            _bit=7;
+            outputRegister = info.imem[info.dataPointer];
+            qWarning()<<"UPD16434["<<id<<"]"<<" READ MODE("<<info.mode<<"):"<<outputRegister<<" from:"<<info.dataPointer;
+            if ((info.mode & 0x03)==0) { info.dataPointer++; info.dataPointer &= 0x7f; }
+            if ((info.mode & 0x03)==1) { info.dataPointer--; info.dataPointer &= 0x7f; }
+        }
+    }
+    return _ret;
 }
 
 void CUPD16434::Load_Internal(QXmlStreamReader *xmlIn)

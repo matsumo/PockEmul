@@ -263,7 +263,16 @@ UINT8 Chx20::in(UINT8 addr,QString sender)
             // bit7: busy signal of lcd controller (0=busy)
             //        return 0x43 | 0xa8;
         {
-            UINT8 _loc = ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0x80;
+            quint8 _bit7= 0x80;
+            if (lcd_select & 0x07) {
+                quint8 n = (lcd_select & 0x07);
+
+                if ((n > 0) && !(lcd_select & 0x08)) {
+                    _bit7 = upd16434[n-1]->getBit() ? 0x80 : 0x00;
+                }
+            }
+
+            UINT8 _loc = ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | _bit7;
 //            qWarning()<<"Read 28 :"<<QString("%1 (%2)").arg(_loc,2,16,QChar('0')).arg(pKEYB->Get_KS(),2,16,QChar('0'));
             return _loc;
         }

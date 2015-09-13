@@ -43,6 +43,7 @@ public:
     BYTE    cmd_DISPOFF(quint8 cmd);
     BYTE    cmd_STOP(quint8 cmd);
 
+    bool getBit();
 
     UPD16434info info;
     bool    updated;
@@ -61,6 +62,7 @@ public:
 
     int memoryLimit;
     quint8 id;
+    quint8 outputRegister;
 };
 
 #endif // UPD16434_H
