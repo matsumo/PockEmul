@@ -173,7 +173,7 @@ void Chx20::run(CCPU *_cpu) {
 
 bool Chx20::run() {
     static quint64 masterCount=0;
-    static quint64 slaveCount=0;
+    static quint64 lastSlaveCount=0;
 
     BYTE _soundData = (pSlaveCPU->regs.port[0].wreg & 0x20) ? 0xff : 0x00;
     fillSoundBuffer(_soundData);
@@ -185,17 +185,21 @@ bool Chx20::run() {
     quint64 _tmpCount2 = pTIMER->state;
     masterCount += _tmpCount2 - _tmpCount;
 
-    if(masterCount >= slaveCount) {
+    pTIMER->state = lastSlaveCount;
+    while (lastSlaveCount < _tmpCount2) {
         // Synchronize slave CPU speed with master CPU speed
         run(pSlaveCPU);
-        slaveCount += pTIMER->state - _tmpCount2;
+        lastSlaveCount = pTIMER->state;
+
+        Set_PrinterConnector(pM160->pCONNECTOR);
+        pM160->run();
+        Get_PrinterConnector(pM160->pCONNECTOR);
     }
+
     pTIMER->state = _tmpCount2;
 //    qWarning()<<"master:"<<masterCount<<"  slave:"<<slaveCount;
 
-    Set_PrinterConnector(pM160->pCONNECTOR);
-    pM160->run();
-    Get_PrinterConnector(pM160->pCONNECTOR);
+
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();

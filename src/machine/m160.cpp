@@ -327,7 +327,7 @@ bool Cm160::run(void)
 //        top++;
 
     }
-    if (!RS && (count==252)) {
+    if (!RS && (count==253)) {
         RS = true;
         count=1;
         posX=0;
@@ -357,7 +357,7 @@ bool Cm160::run(void)
             painter.end();
         }
 
-        if (count%4==0) {
+        if ((count-2)%4==0) {
             posX++;
 //            qWarning()<<"posX:"<<posX<<" top="<<top;
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(3);
@@ -370,18 +370,18 @@ bool Cm160::run(void)
         if (count==144) {
             RS=false;
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
-                        posX=0;
-                        top++;
-                        m160buf = checkPaper(m160buf,top);
+            posX=0;
+            top++;
+            m160buf = checkPaper(m160buf,top);
 
-                        painter.begin(m160display);
-                        painter.drawImage(QRectF(0,MAX(149-top,0),330,MIN(top,149)),*m160buf,QRectF(0,MAX(0,top-149),340,MIN(top,149)));
-                        painter.end();
+            painter.begin(m160display);
+            painter.drawImage(QRectF(0,MAX(149-top,0),330,MIN(top,149)),*m160buf,QRectF(0,MAX(0,top-149),340,MIN(top,149)));
+            painter.end();
 
-                        Refresh_Display = true;
+            Refresh_Display = true;
 
-                        paperWidget->setOffset(QPoint(0,top));
-                        paperWidget->updated = true;
+            paperWidget->setOffset(QPoint(0,top));
+            paperWidget->updated = true;
 
         }
     }
