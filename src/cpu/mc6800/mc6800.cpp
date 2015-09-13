@@ -501,7 +501,7 @@ void Cmc6800::increment_counter(int amount)
             else if(!(regs.trcsr & TRCSR_RDRF)) {
                 // note: wait reveived data is read by cpu, so overrun framing error never occurs
                 regs.rdr = recv_buffer.dequeue();
-                qWarning()<<objectName()<<tr("MC6800: RECEIVE: %1").arg(regs.rdr,2,16,QChar('0'));
+//                qWarning()<<objectName()<<tr("MC6800: RECEIVE: %1").arg(regs.rdr,2,16,QChar('0'));
                 regs.trcsr |= TRCSR_RDRF;
             }
         }

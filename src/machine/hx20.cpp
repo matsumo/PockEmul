@@ -1,7 +1,8 @@
 
-
+#include <assert.h>
 
 #include <QDebug>
+#include <QPainter>
 
 #include "hx20.h"
 #include "mc6800/mc6800.h"
@@ -14,6 +15,7 @@
 #include "upd16434.h"
 #include "debug.h"
 #include "m160.h"
+#include "paperwidget.h"
 
 /*
     memory:
@@ -147,7 +149,7 @@ bool Chx20::init(void)				// initialize
     pPRINTERCONNECTOR	= new Cconnector(this,64,1,Cconnector::Custom,"Printer",false);
 
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
-    WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
+//    WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
 
     for (int i=0;i<6;i++) {
         upd16434[i]->init();
@@ -414,7 +416,7 @@ bool Chx20::Set_PrinterConnector(Cconnector *_conn) {
     _conn->Set_pin(4,pSlaveCPU->regs.port[0].wreg & 0x08);  // P13 H4
 
     _conn->Set_pin(5,pSlaveCPU->regs.port[0].wreg & 0x10);  // P14 M+
-    _conn->Set_pin(6,pSlaveCPU->regs.port[0].wreg & 0x80);  // P17 Motor Break
+    _conn->Set_pin(6,pSlaveCPU->regs.port[3].wreg & 0x02);  // P41  17 Motor Break
 
     return true;
 }
@@ -429,8 +431,8 @@ bool Chx20::Get_Connector(Cbus *_bus)
 bool Chx20::Get_PrinterConnector(Cconnector *_conn)
 {
 
-    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(7), 0x80);  // P17 TS
-    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(8), 0x40);  // P16 RS
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(7)?0x80:0x00, 0x80);  // P17 TS
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(8)?0x40:0x00, 0x40);  // P16 RS
 
     return true;
 }
@@ -953,3 +955,43 @@ void Chx20::send_to_slave(quint8 val)
     }
 }
 
+bool Chx20::UpdateFinalImage(void) {
+
+    assert(FinalImage!=0);
+    assert(pM160 != 0);
+    assert(pM160->paperWidget != 0);
+
+    CpcXXXX::UpdateFinalImage();
+
+    QPainter painter;
+
+    painter.begin(FinalImage);
+
+    float ratio = ( (float) pM160->paperWidget->width() ) / ( pM160->paperWidget->bufferImage->width() - pM160->paperWidget->getOffset().x() );
+
+    QRect source = QRect( QPoint(pM160->paperWidget->getOffset().x() ,
+                                 pM160->paperWidget->getOffset().y()  - pM160->paperWidget->height() / ratio ) ,
+                          QPoint(pM160->paperWidget->bufferImage->width(),
+                                 pM160->paperWidget->getOffset().y() +10)
+                          );
+//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+    int _x = pM160->PaperPos().x() * internalImageRatio;
+    int _y = pM160->PaperPos().y() * internalImageRatio;
+    painter.drawImage(_x , _y,
+                      pM160->paperWidget->bufferImage->copy(source).scaled(pM160->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+                      );
+
+    painter.end();
+
+    return true;
+}
+void Chx20::contextMenuEvent(QContextMenuEvent *e)
+{
+    if (pM160->PaperPos().contains(e->pos())) {
+        pM160->contextMenuEvent(e);
+    }
+    else
+        CpcXXXX::contextMenuEvent(e);
+
+    e->accept();
+}

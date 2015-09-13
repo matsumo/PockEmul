@@ -61,7 +61,7 @@ public:
 
 private:
 
-    bool H1,H2,H3,H4,Motor,MotorBreak,TS,RS;
+    bool H1,H2,H3,H4,Motor,MotorBreak,TS,RS,MotorP,MotorM;
     int TPIndex;
 
 

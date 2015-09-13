@@ -34,6 +34,8 @@ public:
     virtual bool run();
     virtual void Reset();
 
+    virtual bool UpdateFinalImage(void);
+
     bool Set_PrinterConnector(Cconnector *_conn);
     bool Get_PrinterConnector(Cconnector *_conn);
 
@@ -52,6 +54,8 @@ public:
     Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;
     void send_to_main(quint8 val);
     void send_to_slave(quint8 val);
+protected slots:
+    void contextMenuEvent (QContextMenuEvent * e);
 private:
     UINT16 kstrobe;
     UINT8 lcd_select;
