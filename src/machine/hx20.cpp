@@ -123,6 +123,8 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
     targetSlave = true;
 
     printerSW = false;
+
+    lcdBit = true;
 }
 
 Chx20::~Chx20() {
@@ -263,22 +265,39 @@ UINT8 Chx20::in(UINT8 addr,QString sender)
             // bit7: busy signal of lcd controller (0=busy)
             //        return 0x43 | 0xa8;
         {
-            quint8 _bit7= 0x80;
+            bool _bit7 = true;
             if (lcd_select & 0x07) {
                 quint8 n = (lcd_select & 0x07);
 
-                if ((n > 0) && !(lcd_select & 0x08)) {
-                    _bit7 = upd16434[n-1]->getBit() ? 0x80 : 0x00;
+                if (n > 0) {
+                    if (lcd_select & 0x08) {
+                    }
+                    else {
+                        _bit7 = lcdBit ;
+                    }
                 }
             }
-
-            UINT8 _loc = ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | _bit7;
-//            qWarning()<<"Read 28 :"<<QString("%1 (%2)").arg(_loc,2,16,QChar('0')).arg(pKEYB->Get_KS(),2,16,QChar('0'));
+            UINT8 _loc =((key_data >> 8) & 3) |
+                        ((int_status & INT_POWER) ? 0 : 0x40) |
+                        (_bit7 ? 0x80 : 0x00);
             return _loc;
         }
-            return ((key_data >> 8) & 3) | ((int_status & INT_POWER) ? 0 : 0x40) | 0x80;
         case 0x2a:
         case 0x2b:
+            lcdBit = true;
+            if (lcd_select & 0x07) {
+                quint8 n = (lcd_select & 0x07);
+
+                if (n > 0) {
+                    if (lcd_select & 0x08) {
+//                        qWarning()<<"Read bit instr:"<<_bit7;
+                    }
+                    else {
+                        lcdBit = upd16434[n-1]->getBit();
+//                        qWarning()<<"Read bit data:"<<lcdBit;
+                    }
+                }
+            }
             break;
         case 0x2c:
             // used for interrupt mask setting in sleep mode
@@ -557,8 +576,8 @@ UINT16 Chx20::getKey()
         if (KEY('F'))			data|=0x40;
         if (KEY('G'))			data|=0x80;
         if (KEY(K_F3))			{
-            pCPU->logsw = true;
-            pCPU->Check_Log();
+//            pCPU->logsw = true;
+//            pCPU->Check_Log();
             data|=0x100;
         }
         if (DipSwitch & 0x04)	data|=0x200; // Deep Switch 3

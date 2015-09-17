@@ -229,28 +229,6 @@ bool Cm160::exit(void)
 }
 
 
-/*****************************************************/
-/* CE-126P PRINTER emulation						 */
-/*****************************************************/
-
-void Cm160::Printer(qint8 d)
-{
-    if(ctrl_char && d==0x20) {
-        ctrl_char=false;
-        Refreshm160(d);
-    }
-    else
-    {
-        if(d==0xf || d==0xe || d==0x03)
-            ctrl_char=true;
-        else
-        {
-            Refreshm160(d);
-        }
-    }
-}
-
-
 #define		WAIT ( pPC->frequency / 10000*6)
 
 #define RECEIVE_MODE	1
@@ -292,6 +270,7 @@ bool Cm160::Set_Connector(Cbus *_bus) {
 bool Cm160::run(void)
 {
     static int count = 0;
+    static bool _print = false;
     QPainter painter;
 
     Get_Connector();
@@ -320,26 +299,24 @@ bool Cm160::run(void)
         return true;
     }
 
-    if (!RS && (count == 100)) {
+    if (!RS && !_print && (count == 100)) {
         RS = true;
+        _print = true;
         count=1;
         posX=0;
-//        top++;
 
     }
     if (!RS && (count==253)) {
         RS = true;
+        _print = true;
         count=1;
         posX=0;
     }
 
 
-//    if (count > 150) {
-//        RS = false;
-//        count=0;
-//    }
 
 //    if (RS /*&& (count%2==0)*/)
+    if (_print)
     {
         int _offset = -1;
         if (H1) _offset = 3;
@@ -359,18 +336,19 @@ bool Cm160::run(void)
 
         if ((count-2)%4==0) {
             posX++;
-//            qWarning()<<"posX:"<<posX<<" top="<<top;
+            qWarning()<<"posX:"<<posX<<" top="<<top<<"  count="<<count;
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(3);
         }
 
-        if (count==100) {
+        if (count==50) {
             RS = false;
         }
 
         if (count==144) {
+            _print = false;
             RS=false;
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
-            posX=0;
+//            posX=0;
             top++;
             m160buf = checkPaper(m160buf,top);
 

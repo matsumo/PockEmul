@@ -63,6 +63,7 @@ public:
     int memoryLimit;
     quint8 id;
     quint8 outputRegister;
+    int outputBit;
 };
 
 #endif // UPD16434_H

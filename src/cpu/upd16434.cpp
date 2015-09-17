@@ -390,6 +390,18 @@ BYTE CUPD16434::cmd_LDPI(quint8 cmd)
 {
     info.dataPointer = cmd & 0x7F;
     updated = true;
+
+    if ((info.mode >= 0x60) && (info.mode <= 0x63)) {
+        outputRegister = info.imem[info.dataPointer];
+        outputBit=7;
+
+        qWarning()<<"UPD16434["<<id<<"]"<<" Output register:"
+                 <<QString("%1").arg(outputRegister,2,16,QChar('0'))
+                <<" from:"<<info.dataPointer;
+        if ((info.mode & 0x03)==0) { info.dataPointer++; info.dataPointer &= 0x7f; }
+        if ((info.mode & 0x03)==1) { info.dataPointer--; info.dataPointer &= 0x7f; }
+    }
+
     return 0;
 }
 
@@ -413,8 +425,11 @@ BYTE CUPD16434::cmd_MODE(quint8 cmd)
     if ((cmd >= 0x60) && (cmd <= 0x63)) {
         info.mode = cmd;
         outputRegister = info.imem[info.dataPointer];
+        outputBit=7;
 
-        qWarning()<<"UPD16434["<<id<<"]"<<" READ MODE("<<cmd<<"):"<<outputRegister<<" from:"<<info.dataPointer;
+        qWarning()<<"UPD16434["<<id<<"]"<<" READ MODE("<<cmd<<"):"
+                 <<QString("%1").arg(outputRegister,2,16,QChar('0'))
+                <<" from:"<<info.dataPointer;
         if ((info.mode & 0x03)==0) { info.dataPointer++; info.dataPointer &= 0x7f; }
         if ((info.mode & 0x03)==1) { info.dataPointer--; info.dataPointer &= 0x7f; }
     }
@@ -476,17 +491,18 @@ BYTE CUPD16434::cmd_STOP(quint8 cmd)
 
 bool CUPD16434::getBit()
 {
-    static int _bit=7;
     bool _ret = true;
 
-    if (info.mode == MASK_SRM) {
-        _ret = (outputRegister & (1<<_bit)) ? true : false;
-        qWarning()<<"UPD16434["<<id<<"]"<<" SO:"<<_ret<<" bit:"<<_bit;
-        _bit--;
-        if (_bit == -1) {
-            _bit=7;
+    if ((info.mode >= 0x60) && (info.mode <= 0x63)) {
+        _ret = (outputRegister & (1<<outputBit)) ? true : false;
+//        qWarning()<<"UPD16434["<<id<<"]"<<" SO:"<<_ret<<" bit:"<<outputBit;
+        outputBit--;
+        if (outputBit == -1) {
+            outputBit=7;
             outputRegister = info.imem[info.dataPointer];
-            qWarning()<<"UPD16434["<<id<<"]"<<" READ MODE("<<info.mode<<"):"<<outputRegister<<" from:"<<info.dataPointer;
+//            qWarning()<<"UPD16434["<<id<<"]"<<" READ Next Byte="
+//                     <<QString("%1").arg(outputRegister,2,16,QChar('0'))
+//                     <<" from:"<<info.dataPointer;
             if ((info.mode & 0x03)==0) { info.dataPointer++; info.dataPointer &= 0x7f; }
             if ((info.mode & 0x03)==1) { info.dataPointer--; info.dataPointer &= 0x7f; }
         }

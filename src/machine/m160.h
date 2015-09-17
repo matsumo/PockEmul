@@ -54,7 +54,6 @@ int pc2021_Mode;
 public:
     bool    rmtSwitch;
     int     internal_device_code;
-    void	Printer(qint8 d);			//printer emulator
     QImage *charTable;
     int margin;
     int		top;
