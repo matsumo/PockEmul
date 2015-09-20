@@ -1004,7 +1004,7 @@ bool Chx20::UpdateFinalImage(void) {
     QRect source = QRect( QPoint(pM160->paperWidget->getOffset().x() ,
                                  pM160->paperWidget->getOffset().y()  - pM160->paperWidget->height() / ratio ) ,
                           QPoint(pM160->paperWidget->bufferImage->width(),
-                                 pM160->paperWidget->getOffset().y() +10)
+                                 pM160->paperWidget->getOffset().y() /*+10*/)
                           );
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
     int _x = pM160->PaperPos().x() * internalImageRatio;

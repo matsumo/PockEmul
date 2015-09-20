@@ -19,24 +19,15 @@
 #include "Connect.h"
 #include "dialoganalog.h"
 
-#define DOWN	0
-#define UP		1
-
-TransMap KeyMapm160[]={
-    {1,	"FEED  ",	K_PFEED,34,234,	9},
-    {2,	"POWER ON",	K_POW_ON,34,234,	9},
-    {3,	"POWER OFF",K_POW_OFF,34,234,	9}
-};
-int KeyMapm160Lenght = 3;
+extern int ask(QWidget *parent,QString msg,int nbButton);
 
 Cm160::Cm160(CPObject *parent):Cprinter(parent)
 {								//[constructor]
     setfrequency( 32767 );
     m160buf	= 0;
     m160display= 0;
-    //bells		= 0;
     charTable = 0;
-    margin = 25;
+    margin = 15;
     ToDestroy	= false;
     BackGroundFname	= P_RES(":/ext/pc-2021.png");
     setcfgfname("m160");
@@ -45,9 +36,7 @@ Cm160::Cm160(CPObject *parent):Cprinter(parent)
     setposX(0);
 
     pTIMER		= pPC->pTIMER; //new Ctimer(this);
-    KeyMap      = KeyMapm160;
-    KeyMapLenght= KeyMapm160Lenght;
-    pKEYB		= new Ckeyb(this,"m160.map");
+
     setDXmm(108);
     setDYmm(130);
     setDZmm(43);
@@ -55,7 +44,7 @@ Cm160::Cm160(CPObject *parent):Cprinter(parent)
     setDX(386);
     setDY(464);
 
-    setPaperPos(QRect(70,-3,275,149));
+    setPaperPos(QRect(90,0,195,180));
 
     ctrl_char = false;
     t = 0;
@@ -72,92 +61,14 @@ Cm160::~Cm160() {
     delete m160display;
     delete pCONNECTOR;
     delete charTable;
-//    delete bells;
-}
-
-void Cm160::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
-{
-    Q_UNUSED(ke)
-    Q_UNUSED(scancode)
-
-    if (pKEYB->LastKey == K_PFEED) {
-        Refreshm160(0x0d);
-    }
 }
 
 
 void Cm160::SaveAsText(void)
 {
-    mainwindow->releaseKeyboard();
-
-    QString s = QFileDialog::getSaveFileName(
-                    mainwindow,
-                    tr("Choose a filename to save under"),
-                    ".",
-                   tr("Text File (*.txt)"));
-
-    QFile file(s);
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
-        return;
-
-    file.write(TextBuffer);
-
-    mainwindow->grabKeyboard();
-        AddLog(LOG_PRINTER,TextBuffer.data());
-}
-
-void Cm160::Refreshm160(qint8 data)
-{
-
-    QPainter painter;
-
-//if (posX==0) bells->play();
-
-// copy ce126buf to ce126display
-// The final paper image is 207 x 149 at (277,0) for the ce125
-
-// grab data char to byteArray
-    if ( (data == 0xff) || (data==0x0a)) return;
-
-    TextBuffer += data;
-
-    if (data == 0x0d){
-        top+=10;
-        posX=0;
-//        qWarning()<<"CR PRINTED";
-    }
-    else
-    {
-        painter.begin(m160buf);
-        int x = ((data>>4) & 0x0F)*6;
-        int y = (data & 0x0F) * 8;
-        painter.drawImage(	QPointF( margin + (7 * posX),top),
-                            *charTable,
-                            QRectF( x , y , 5,7));
-        posX++;
-        painter.end();
-    }
-
-    if (posX >= 40) {
-        posX=0;
-        top+=10;
-    }
-
-    painter.begin(m160display);
-
-    painter.drawImage(QRectF(0,MAX(149-top,0),330,MIN(top,149)),*m160buf,QRectF(0,MAX(0,top-149),340,MIN(top,149)));
-
-// Draw printer head
-//    painter.fillRect(QRect(0 , 147,407,2),QBrush(QColor(0,0,0)));
-//    painter.fillRect(QRect(21 + (7 * posX) , 147,14,2),QBrush(QColor(255,255,255)));
-
-    painter.end();
-
-    Refresh_Display = true;
-
-    paperWidget->setOffset(QPoint(0,top));
-    paperWidget->updated = true;
-
+    ask(mainwindow,
+        tr("This printer is a pure graphic printer\nSaving output as text is irrelevant"),
+        1);
 }
 
 
@@ -189,15 +100,8 @@ bool Cm160::init(void)
 //    if(pTIMER)	pTIMER->init();
 
     // Create Paper Image
-    // The final paper image is 207 x 149 at (277,0) for the ce125
-    m160buf	= new QImage(QSize(340, 1000),QImage::Format_ARGB32);
-    m160display= new QImage(QSize(340, 149),QImage::Format_ARGB32);
-
-
-//TODO Update the chartable with upd16343 char table
-    charTable = new QImage(P_RES(":/ext/ce126ptable.bmp"));
-
-//	bells	 = new QSound("ce.wav");
+    m160buf	= new QImage(QSize(margin+144+margin, 1000),QImage::Format_ARGB32);
+    m160display= new QImage(QSize(margin+144+margin, 180),QImage::Format_ARGB32);
 
 // Create a paper widget
 
@@ -210,7 +114,7 @@ bool Cm160::init(void)
 
     run_oldstate = -1;
 
-    TPIndex = pTIMER->initTP(1667);
+    TPIndex = pTIMER->initTP(1667/2);
 
     return true;
 }
@@ -238,6 +142,7 @@ bool Cm160::exit(void)
 
 
 bool Cm160::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
 
     H1 = pCONNECTOR->Get_pin(1);  // P10 H1
     H2 = pCONNECTOR->Get_pin(2);  // P11 H2
@@ -245,9 +150,9 @@ bool Cm160::Get_Connector(Cbus *_bus) {
     H4 = pCONNECTOR->Get_pin(4);  // P13 H4
 
     bool _prevMotor = Motor;
-    MotorP = pCONNECTOR->Get_pin(5);  // P14 M+
+    MotorP = !pCONNECTOR->Get_pin(5);  // P14 M+
     MotorM = pCONNECTOR->Get_pin(6);  // P41 M-
-    Motor = !MotorP;// && MotorM;
+    Motor = MotorP;// && MotorM;
     if (Motor && !_prevMotor) {
         pTIMER->resetTP(TPIndex);
     }
@@ -258,6 +163,8 @@ bool Cm160::Get_Connector(Cbus *_bus) {
 }
 
 bool Cm160::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     pCONNECTOR->Set_pin(7,TS);
     pCONNECTOR->Set_pin(8,RS);
 
@@ -271,8 +178,11 @@ bool Cm160::run(void)
 {
     static int count = 0;
     static bool _print = false;
+    static quint64 MotorCount=0;
+
     QPainter painter;
 
+    if (!pPC->Power) return true;
     Get_Connector();
 
     bool _prevTS = TS;
@@ -282,7 +192,9 @@ bool Cm160::run(void)
     }
     else {
         TS = false;
-        count=0;
+//        RS = false;
+//        _print = false;
+//        count=0;
         Set_Connector();
         pCONNECTOR_value = pCONNECTOR->Get_values();
         return true;
@@ -290,8 +202,9 @@ bool Cm160::run(void)
 
     if ( (TS != _prevTS))  {
         // increment count
-        count++;
-        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(1);
+        MotorCount++;
+        if (_print) count++;
+
     }
     else {
         Set_Connector();
@@ -299,23 +212,14 @@ bool Cm160::run(void)
         return true;
     }
 
-    if (!RS && !_print && (count == 100)) {
+    if ( !RS /*&& !_print*/ && ((MotorCount % 252)==0) ) {
         RS = true;
         _print = true;
         count=1;
         posX=0;
-
-    }
-    if (!RS && (count==253)) {
-        RS = true;
-        _print = true;
-        count=1;
-        posX=0;
+        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(1);
     }
 
-
-
-//    if (RS /*&& (count%2==0)*/)
     if (_print)
     {
         int _offset = -1;
@@ -323,14 +227,14 @@ bool Cm160::run(void)
         if (H2) _offset = 2;
         if (H3) _offset = 1;
         if (H4) _offset = 0;
-        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(4);
+//        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(4);
         if (_offset>=0) {
             int _x = posX+(_offset * 36);
             painter.begin(m160buf);
             painter.setPen(Qt::black);
             painter.drawPoint( margin + _x, top);
             qWarning()<<"drawPoint( "<<margin + _x<<", "<<top<<")";
-            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(5);
+//            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(5);
             painter.end();
         }
 
@@ -340,27 +244,58 @@ bool Cm160::run(void)
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(3);
         }
 
-        if (count==50) {
+        if (count==20) {
             RS = false;
         }
 
-        if (count==144) {
-            _print = false;
-            RS=false;
+//        if (count==144) {
+//            _print = false;
+//            RS=false;
+//            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
+////            posX=0;
+//            top++;
+//            m160buf = checkPaper(m160buf,top);
+
+//            painter.begin(m160display);
+//            painter.drawImage(QRectF(0,MAX(180-top,0),
+//                                     m160display->width(),MIN(top,180)),
+//                              *m160buf,
+//                              QRectF(0,MAX(0,top-180),
+//                                     m160display->width(),MIN(top,180)));
+//            painter.end();
+
+//            Refresh_Display = true;
+//            pPC->Refresh_Display = true;
+
+//            paperWidget->setOffset(QPoint(0,top));
+//            paperWidget->updated = true;
+
+//        }
+
+        if (count==252) {
+//            RS = true;
+//            _print = true;
+//            count=1;
+//            posX=0;
+//            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
 //            posX=0;
             top++;
             m160buf = checkPaper(m160buf,top);
 
             painter.begin(m160display);
-            painter.drawImage(QRectF(0,MAX(149-top,0),330,MIN(top,149)),*m160buf,QRectF(0,MAX(0,top-149),340,MIN(top,149)));
+            painter.drawImage(QRectF(0,MAX(180-top,0),
+                                     m160display->width(),MIN(top,180)),
+                              *m160buf,
+                              QRectF(0,MAX(0,top-180),
+                                     m160display->width(),MIN(top,180)));
             painter.end();
 
             Refresh_Display = true;
+            pPC->Refresh_Display = true;
 
             paperWidget->setOffset(QPoint(0,top));
             paperWidget->updated = true;
-
         }
     }
 

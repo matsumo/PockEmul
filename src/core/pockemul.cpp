@@ -317,6 +317,7 @@ int main(int argc, char *argv[])
 
     test();
 
+    qInstallMessageHandler(myMessageOutput);
     mainwindow->initCommandLine();
 
 qWarning()<<"okl";

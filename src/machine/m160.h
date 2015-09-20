@@ -27,16 +27,12 @@ public:
     virtual void clearPaper(void);
     virtual void SaveAsText(void);
 
-    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
-
-    //virtual void resizeEvent ( QResizeEvent * );
-
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
 
     QImage *m160buf;
     QImage *m160display;
 
-    void Refreshm160(qint8 data);
+
 #ifndef NO_SOUND
     QSound *bells;
 #endif
