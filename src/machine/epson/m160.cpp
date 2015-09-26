@@ -233,14 +233,14 @@ bool Cm160::run(void)
             painter.begin(m160buf);
             painter.setPen(Qt::black);
             painter.drawPoint( margin + _x, top);
-            qWarning()<<"drawPoint( "<<margin + _x<<", "<<top<<")";
+//            qWarning()<<"drawPoint( "<<margin + _x<<", "<<top<<")";
 //            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(5);
             painter.end();
         }
 
         if ((count-2)%4==0) {
             posX++;
-            qWarning()<<"posX:"<<posX<<" top="<<top<<"  count="<<count;
+//            qWarning()<<"posX:"<<posX<<" top="<<top<<"  count="<<count;
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(3);
         }
 

@@ -73,42 +73,42 @@ bool Chx20RC::run()
     pCONNECTOR->Set_pin(13,false);
     pCONNECTOR->Set_pin(14,false);
 
-    if (!PowerOn) return true;
+    if (PowerOn) {
 
-    if (PowerOn && ! prevPowerOn) {
-        Counter = 0;
-        qWarning()<<"Power ON";
-    }
+        if (PowerOn && ! prevPowerOn) {
+            Counter = 0;
+            qWarning()<<"Power ON";
+        }
 
-    if (!ClearCounter) {
-        Counter=0;
-//        qWarning()<<"Clear Counter";
-    }
+        if (ClearCounter) {
+            Counter=0;
+            qWarning()<<"Clear Counter";
+        }
 
-    if (prevShiftLoad && !ShiftLoad) {
-        Counter++;
-        qWarning()<<"Counter ++";
-    }
+        if (prevShiftLoad && !ShiftLoad) {
+            Counter++;
+            qWarning()<<"Counter ++:"<<Counter;
+        }
 
-    if (!ShiftLoad && (!prevClock && Clock)) {
-        ShiftRegister = mem[Counter];
-        ShiftRegisterOutput = ShiftRegister & 0x80;
-        qWarning()<<tr("Load Shift Register:%1").arg(ShiftRegister,2,16,QChar('0'))<<ShiftRegisterOutput;
+        if (!ShiftLoad && (!prevClock && Clock)) {
+            ShiftRegister = mem[Counter];
+            ShiftRegisterOutput = ShiftRegister & 0x80;
+            qWarning()<<tr("Load Shift Register:%1").arg(ShiftRegister,2,16,QChar('0'))<<ShiftRegisterOutput;
+        }
+        if (ShiftLoad && (prevClock && !Clock)) {
+            ShiftRegister <<= 1;
+            ShiftRegisterOutput = ShiftRegister & 0x80;
+            qWarning()<<"Shift Load : "<<ShiftRegisterOutput;
+        }
+        if (!ShiftRegisterClear) {
+            ShiftRegister = 0x00;
+        }
     }
-    if (ShiftLoad && (prevClock && !Clock)) {
-        ShiftRegister <<= 1;
-        ShiftRegisterOutput = ShiftRegister & 0x80;
-        qWarning()<<"Shift Load : "<<ShiftRegisterOutput;
-    }
-    if (!ShiftRegisterClear) {
-        ShiftRegister = 0x00;
-    }
-
-    prevClearCounter = pCONNECTOR->Get_pin(9);
-    prevPowerOn = pCONNECTOR->Get_pin(8);
-    prevShiftRegisterClear = pCONNECTOR->Get_pin(7);
-    prevClock = pCONNECTOR->Get_pin(4);
-    prevShiftLoad = pCONNECTOR->Get_pin(3);
+    prevClearCounter = ClearCounter;
+    prevPowerOn = PowerOn;
+    prevShiftRegisterClear = ShiftRegisterClear;
+    prevClock = Clock;
+    prevShiftLoad = ShiftLoad;
 
     pCONNECTOR->Set_pin(5,ShiftRegisterOutput);
 

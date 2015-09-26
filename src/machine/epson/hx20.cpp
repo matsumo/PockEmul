@@ -220,7 +220,7 @@ bool Chx20::Chk_Adr(UINT32 *d, UINT32 data)
 
     if(*d < 0x40) {
         out(*d,data,"Master");
-        return false;
+        return true;
     }
     else if(*d < 0x80) {
 //		d_rtc->write_io8(1, addr & 0x3f);
@@ -451,16 +451,16 @@ bool Chx20::Set_CN8(Cconnector *_conn) {
     _conn->Set_pin(8,pSlaveCPU->regs.port[3].wreg & 0x08);  // P43
     _conn->Set_pin(7,pSlaveCPU->regs.port[3].wreg & 0x04);  // P42
 
-    _conn->Set_pin(4,pSlaveCPU->regs.port[0].wreg & 0x10);  // P267
-    _conn->Set_pin(3,pSlaveCPU->regs.port[3].wreg & 0x02);  // P266
+    _conn->Set_pin(4,mem[0x26] & 0x80);  // P267
+    _conn->Set_pin(3,mem[0x26] & 0x40);  // P266
 
     return true;
 }
 bool Chx20::Get_CN8(Cconnector *_conn)
 {
-    pSlaveCPU->write_signal(SIG_MC6801_PORT_4, _conn->Get_pin(7)?0x40:0x00, 0x40);  // P46 DV0
-    pSlaveCPU->write_signal(SIG_MC6801_PORT_2, _conn->Get_pin(8)?0x01:0x00, 0x01);  // P20 DV1
-    pmc6301->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(5)?0x80:0x00, 0x80);  // P17 DV1
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_4, _conn->Get_pin(14)?0x40:0x00, 0x40);  // P46 DV0
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_2, _conn->Get_pin(12)?0x01:0x00, 0x01);  // P20 DV1
+    pmc6301->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(5)?0x80:0x00, 0x80);  // P17
 
     return true;
 }
