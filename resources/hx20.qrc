@@ -14,5 +14,6 @@
         <file>hx20/hx20_v11e.14e</file>
         <file>hx20/hx20_v11e.15e</file>
         <file>hx20/hx20.png</file>
+        <file>hx20/h20rc.png</file>
     </qresource>
 </RCC>

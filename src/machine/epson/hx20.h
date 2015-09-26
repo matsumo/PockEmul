@@ -39,6 +39,9 @@ public:
     bool Set_PrinterConnector(Cconnector *_conn);
     bool Get_PrinterConnector(Cconnector *_conn);
 
+    bool Set_CN8(Cconnector *_conn);
+    bool Get_CN8(Cconnector *_conn);
+
     void TurnON();
     void TurnOFF();
     bool SaveConfig(QXmlStreamWriter *xmlOut);
@@ -52,6 +55,8 @@ public:
 
     Cconnector	*pTAPECONNECTOR;	qint64 pTAPECONNECTOR_value;
     Cconnector	*pPRINTERCONNECTOR;	qint64 pPRINTERCONNECTOR_value;
+    Cconnector	*pCN8;	qint64 pCN8_value;
+
     void send_to_main(quint8 val);
     void send_to_slave(quint8 val);
 protected slots:

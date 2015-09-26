@@ -395,6 +395,7 @@ void MainWindowPockemul::initObjectTable() {
 
     objtable["JR-800"]= JR800;
     objtable["HX-20"]= HX20;
+    objtable["Epson H20RC"]= HX20RC;
 
     objtable["#BRAND#HEWLETT-PACKARD"]=0;
     objtable["#BRAND#CASIO"]=0;
@@ -591,6 +592,7 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
 
     case JR800 : pPC = new Cjr800;     pPC->setName("JR-800"); break;
     case HX20  : pPC = new Chx20;      pPC->setName("HX-20"); break;
+    case HX20RC  : pPC = new Chx20RC;      pPC->setName("Epson H20RC"); break;
 
 
         default			: return 0;

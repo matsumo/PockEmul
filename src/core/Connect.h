@@ -50,7 +50,8 @@ public:
         Panasonic_44,
         Panasonic_Capsule,
         hp41,
-        Custom
+        Custom,
+        Epson_CN8
     };
 
     enum ConnectorDir

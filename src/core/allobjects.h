@@ -95,7 +95,8 @@
 
 #include "jr800.h"
 
-#include "hx20.h"
+#include "epson/hx20.h"
+#include "epson/hx20rc.h"
 
 
 #endif // ALLOBJECTS_H
