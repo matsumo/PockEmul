@@ -248,38 +248,9 @@ bool Cm160::run(void)
             RS = false;
         }
 
-//        if (count==144) {
-//            _print = false;
-//            RS=false;
-//            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
-////            posX=0;
-//            top++;
-//            m160buf = checkPaper(m160buf,top);
-
-//            painter.begin(m160display);
-//            painter.drawImage(QRectF(0,MAX(180-top,0),
-//                                     m160display->width(),MIN(top,180)),
-//                              *m160buf,
-//                              QRectF(0,MAX(0,top-180),
-//                                     m160display->width(),MIN(top,180)));
-//            painter.end();
-
-//            Refresh_Display = true;
-//            pPC->Refresh_Display = true;
-
-//            paperWidget->setOffset(QPoint(0,top));
-//            paperWidget->updated = true;
-
-//        }
-
         if (count==252) {
-//            RS = true;
-//            _print = true;
-//            count=1;
-//            posX=0;
 //            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
             if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(6);
-//            posX=0;
             top++;
             m160buf = checkPaper(m160buf,top);
 
@@ -298,10 +269,6 @@ bool Cm160::run(void)
             paperWidget->updated = true;
         }
     }
-
-
-
-
 
     Set_Connector();
 

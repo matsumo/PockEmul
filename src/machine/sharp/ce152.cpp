@@ -158,7 +158,7 @@ bool Cce152::init(void)
     pTAPECONNECTOR	= new Cconnector(this,3,0,Cconnector::Jack,"Line in / Rec / Rmt",true,
                                      QPoint(0,150),Cconnector::WEST);	publish(pTAPECONNECTOR);
 
-    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
+    WatchPoint.add(&pTAPECONNECTOR_value,64,3,this,"Line In / Rec");
 
     if(pKEYB)	pKEYB->init();
     if(pTIMER)	pTIMER->init();

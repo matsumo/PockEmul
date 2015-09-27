@@ -154,7 +154,7 @@ bool Chx20::init(void)				// initialize
                                      QPoint(773,113),Cconnector::EAST);
     publish(pCN8);
 
-    WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
+    WatchPoint.add(&pTAPECONNECTOR_value,64,3,this,"Line In / Rec");
     WatchPoint.add(&pCN8_value,64,14,this,"Micro K7 / ROM Cartrifge Connector");
 //    WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
 
@@ -202,6 +202,10 @@ bool Chx20::run() {
         pM160->run();
         Get_PrinterConnector(pM160->pCONNECTOR);
     }
+    // Slave P34 -> Master P12
+    pmc6301->write_signal(SIG_MC6801_PORT_1,
+                          (pSlaveCPU->regs.port[2].wreg & 0x10)?0x04:0x00, 0x04);  // P34
+
 
     pTIMER->state = _tmpCount2;
 //    qWarning()<<"master:"<<masterCount<<"  slave:"<<slaveCount;
@@ -428,8 +432,8 @@ bool Chx20::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-//    pTAPECONNECTOR->Set_pin(3,true);       // RMT
-//    pTAPECONNECTOR->Set_pin(2,(((Cmc6800*)pCPU)->regs.port[0].wreg & 0x01) ? 0x00 : 0xff); // TAPE OUT
+    pTAPECONNECTOR->Set_pin(3,!(pSlaveCPU->regs.port[2].wreg & 0x01));     // P30 RMT
+    pTAPECONNECTOR->Set_pin(2,pSlaveCPU->regs.port[2].wreg & 0x08 ); // P33 TAPE OUT
 
     Set_CN8(pCN8);
 
@@ -480,6 +484,8 @@ bool Chx20::Set_PrinterConnector(Cconnector *_conn) {
 bool Chx20::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+    pSlaveCPU->write_signal(SIG_MC6801_PORT_3, pTAPECONNECTOR->Get_pin(1)?0x04:0x00, 0x04);  // P32 MT IN
 
     Get_CN8(pCN8);
 
