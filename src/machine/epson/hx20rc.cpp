@@ -2,6 +2,11 @@
 
 #include <QDebug>
 
+#include <QQmlEngine>
+#include <QQmlContext>
+#include <QQuickView>
+#include <QtQuickWidgets/QQuickWidget>
+
 #include "hx20rc.h"
 #include "Connect.h"
 #include "Keyb.h"
@@ -32,6 +37,8 @@ Chx20RC::Chx20RC(CPObject *parent ):CPObject(parent)
     ShiftRegisterClear=prevShiftRegisterClear=false;
     Clock=prevClock=false;
     ShiftLoad=prevShiftLoad=false;
+
+    EMView=0;
 }
 
 Chx20RC::~Chx20RC()
@@ -49,7 +56,6 @@ bool Chx20RC::init()
     publish(pCONNECTOR);
     WatchPoint.add(&pCONNECTOR_value,64,14,this,"Micro K7 / ROM Cartrifge Connector");
     if(pKEYB)	pKEYB->init();
-
 
     return true;
 }
@@ -156,4 +162,49 @@ bool Chx20RC::LoadSession_File(QXmlStreamReader *xmlIn)
     return true;
 }
 
+void Chx20RC::contextMenuEvent ( QContextMenuEvent * event )
+{
+    QMenu *menu= new QMenu(this);
 
+    BuildContextMenu(menu);
+
+    menu->addSeparator();
+
+    menu->addAction(tr("Show EPROM manager"),this,SLOT(ShowEM()));
+    menu->addAction(tr("Hide EPROM manager"),this,SLOT(HideEM()));
+
+    menu->popup(event->globalPos () );
+    event->accept();
+}
+
+void Chx20RC::mouseDoubleClickEvent(QMouseEvent *)
+{
+    ShowEM();
+}
+
+void Chx20RC::ShowEM(void) {
+
+    if(EMView==0) {
+        EMView = new QQuickWidget();
+        EMView->setSource(QUrl("qrc:/hx20rc.qml"));
+        EMView->setResizeMode(QQuickWidget::SizeRootObjectToView);
+        connect((QObject*) EMView->rootObject(), SIGNAL(close()), this,SLOT(closeQuick()));
+
+        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+        windowLayout->addWidget(EMView);
+        windowLayout->setMargin(0);
+    }
+    else {
+        EMView->show();
+    }
+
+    EMView->raise();
+}
+void Chx20RC::HideEM(void) {
+    if(EMView) EMView->hide();
+}
+
+void Chx20RC::closeQuick()
+{
+    if(EMView) EMView->hide();
+}

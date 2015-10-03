@@ -387,7 +387,7 @@ FORMS *= ui/about.ui \
     ui/cregsz80widget.ui \
     ui/uartconsole.ui \
     ui/cregshd61700widget.ui \
-    ui/dialogvkeyboard.ui \
+    ui/dialogvkeyboard.ui
 
 
 HEADERS *= \
@@ -1156,6 +1156,7 @@ OTHER_FILES += \
     cloud/PmlView2.qml \
     cloud/Test.qml \
     cloud/Main.qml \
+    cloud/hx20rc.qml \
     cloud/Launchmenu.qml \
     resources/keymap/pc1475.map
 

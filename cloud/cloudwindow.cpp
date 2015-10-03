@@ -55,7 +55,7 @@ extern bool soundEnabled;
 extern bool hiRes;
 extern QList<CPObject *> listpPObject;
 
-CloudWindow::CloudWindow(QWidget *parent)
+CloudWindow::CloudWindow(QWidget *parent,QString src)
     : QWidget(parent),cloud(this)
 {
 
@@ -67,7 +67,7 @@ CloudWindow::CloudWindow(QWidget *parent)
         cloudView = new QQuickWidget;
         cloudView->engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
         cloudView->rootContext()->setContextProperty("cloud", &cloud);
-        cloudView->setSource(QUrl("qrc:/Main.qml"));
+        cloudView->setSource(QUrl(src));
         cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
         cloud.object = (QObject*) cloudView->rootObject();
     }

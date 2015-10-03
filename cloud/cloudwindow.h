@@ -64,7 +64,7 @@ class CloudWindow : public QWidget
     Q_OBJECT
     
 public:
-    CloudWindow(QWidget *parent = 0);
+    CloudWindow(QWidget *parent = 0, QString src=QString("qrc:/Main.qml"));
     virtual QSize sizeHint() const;
 
     Cloud cloud;

@@ -5,6 +5,7 @@
 #include "pobject.h"
 #include "modelids.h"
 
+class QQuickWidget;
 
 class Chx20RC:public CPObject{
     Q_OBJECT
@@ -19,7 +20,13 @@ public:
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
-
+protected slots:
+    void contextMenuEvent ( QContextMenuEvent * );
+    void mouseDoubleClickEvent(QMouseEvent *);
+    void ShowEM(void);
+    void HideEM(void);
+private slots:
+    Q_INVOKABLE void closeQuick();
 private:
     bool ShiftRegisterOutput;
     bool ClearCounter,prevClearCounter;
@@ -30,6 +37,8 @@ private:
 
     quint64 Counter;
     quint8 ShiftRegister;
+
+    QQuickWidget *EMView;
 };
 
 #endif // HX20RC
