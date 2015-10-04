@@ -14,6 +14,24 @@
 #include "Log.h"
 #include "watchpoint.h"
 
+typedef struct
+    {
+        BYTE	name[8];
+        BYTE	ext[3];
+        BYTE	progType,dataType;
+        BYTE	dummy[3];
+        BYTE	start[4];
+        BYTE	end[4];
+        BYTE	creationDate[6];
+        BYTE	version[2];
+    }HX20CARTRIDGE_SLOT;
+
+typedef struct
+    {
+        HX20CARTRIDGE_SLOT	slot[32];
+        BYTE	mem[0x1800];
+    }HX20CARTRIDGE;
+
 Chx20RC::Chx20RC(CPObject *parent ):CPObject(parent)
 {
     setDXmm(42);
@@ -125,8 +143,28 @@ bool Chx20RC::run()
 
 bool Chx20RC::SaveSession_File(QXmlStreamWriter *xmlOut)
 {
+
     xmlOut->writeStartElement("session");
         xmlOut->writeAttribute("version", "2.0");
+
+        xmlOut->writeStartElement("slots");
+
+        for (int i=0; i< 32; i++) {
+            HX20CARTRIDGE_SLOT *slot = &(((HX20CARTRIDGE*) mem)->slot[i]);
+
+            xmlOut->writeStartElement("slotitem");
+            xmlOut->writeAttribute("id",QString("%1").arg(i));
+            xmlOut->writeAttribute("status",QString("%1").arg(slot->name[0],2,16,QChar('0')));
+            xmlOut->writeAttribute("name",QString(QByteArray((char*)slot->name,8)));
+            xmlOut->writeAttribute("ext",QString(QByteArray((char*)slot->ext,3)));
+            xmlOut->writeAttribute("progtype",QString("%1").arg(slot->progType,2,16,QChar('0')));
+            xmlOut->writeAttribute("datatype",QString("%1").arg(slot->dataType,2,16,QChar('0')));
+            xmlOut->writeAttribute("startadr",QString(QByteArray((char*)slot->start,4)));
+            xmlOut->writeAttribute("endadr",QString(QByteArray((char*)slot->end,4)));
+            xmlOut->writeAttribute("date",QString(QByteArray((char*)slot->creationDate,6)));
+            xmlOut->writeEndElement();  // slotitem
+        }
+        xmlOut->writeEndElement();  // slots
         xmlOut->writeStartElement("memory");
             for (int s=0; s<SlotList.size(); s++)                               // Save Memory
             {
@@ -144,8 +182,11 @@ bool Chx20RC::SaveSession_File(QXmlStreamWriter *xmlOut)
 bool Chx20RC::LoadSession_File(QXmlStreamReader *xmlIn)
 {
     if (xmlIn->name()=="session") {
-
-        if (xmlIn->readNextStartElement() && xmlIn->name() == "memory" ) {
+        xmlIn->readNextStartElement();
+        if ( xmlIn->name() == "slots" ) {
+            xmlIn->skipCurrentElement();
+        }
+        else if (xmlIn->name() == "memory" ) {
             AddLog(LOG_MASTER,"Load Memory");
             for (int s=0; s<SlotList.size(); s++)                               // Save Memory
             {
@@ -157,6 +198,7 @@ bool Chx20RC::LoadSession_File(QXmlStreamReader *xmlIn)
                 default: break;
                 }
             }
+            xmlIn->skipCurrentElement();
         }
     }
     return true;
@@ -183,7 +225,7 @@ void Chx20RC::mouseDoubleClickEvent(QMouseEvent *)
 }
 
 void Chx20RC::ShowEM(void) {
-
+qWarning()<<serializeEprom().left(5000);
     if(EMView==0) {
         EMView = new QQuickWidget();
         EMView->setSource(QUrl("qrc:/hx20rc.qml"));
@@ -198,6 +240,7 @@ void Chx20RC::ShowEM(void) {
         EMView->show();
     }
 
+
     EMView->raise();
 }
 void Chx20RC::HideEM(void) {
@@ -207,4 +250,32 @@ void Chx20RC::HideEM(void) {
 void Chx20RC::closeQuick()
 {
     if(EMView) EMView->hide();
+}
+
+QString Chx20RC::serializeEprom() {
+    QString s;
+    QXmlStreamWriter *xml = new QXmlStreamWriter(&s);
+
+    xml->writeStartElement("slots");
+
+    for (int i=0; i< 32; i++) {
+        HX20CARTRIDGE_SLOT *slot = &(((HX20CARTRIDGE*) mem)->slot[i]);
+
+        xml->writeStartElement("slotitem");
+        xml->writeAttribute("id",QString("%1").arg(i));
+        xml->writeAttribute("status",QString("%1").arg(slot->name[0],2,16,QChar('0')));
+        xml->writeAttribute("name",QString(QByteArray((char*)slot->name,8)));
+        xml->writeAttribute("ext",QString(QByteArray((char*)slot->ext,3)));
+        xml->writeAttribute("progtype",QString("%1").arg(slot->progType,2,16,QChar('0')));
+        xml->writeAttribute("datatype",QString("%1").arg(slot->dataType,2,16,QChar('0')));
+        xml->writeAttribute("startadr",QString(QByteArray((char*)slot->start,4)));
+        xml->writeAttribute("endadr",QString(QByteArray((char*)slot->end,4)));
+        xml->writeAttribute("date",QString(QByteArray((char*)slot->creationDate,6)));
+        xml->writeEndElement();  // slotitem
+    }
+    Mem_Save(xml,0);
+
+    xml->writeEndElement();  // slots
+
+    return s;
 }

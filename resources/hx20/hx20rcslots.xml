@@ -1,0 +1,13 @@
+<slots>
+    <slotitem>
+        <id></id>
+        <status></status>
+        <name></name>
+        <ext></ext>
+        <progtype></progtype>
+        <datatype></datatype>
+        <startadr></startadr>
+        <endadr></endadr>
+        <date></date>
+    </slotitem>
+</slots>

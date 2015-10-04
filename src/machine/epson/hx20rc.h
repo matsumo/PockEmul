@@ -20,6 +20,7 @@ public:
     virtual bool	LoadSession_File(QXmlStreamReader *xmlIn);
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
+    Q_INVOKABLE QString serializeEprom();
 protected slots:
     void contextMenuEvent ( QContextMenuEvent * );
     void mouseDoubleClickEvent(QMouseEvent *);
