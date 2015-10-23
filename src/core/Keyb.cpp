@@ -303,7 +303,8 @@ bool Ckeyb::exit(void)
         case TOPview: _view = "TOP"; break;
         case LEFTview: _view = "LEFT"; break;
         case RIGHTview: _view = "RIGHT"; break;
-        case BACKview: _view = "BACK"; break;
+        case BACKview:
+        case BACKviewREV: _view = "BACK"; break;
         case BOTTOMview: _view = "BOTTOM"; break;
         }
         attrs.insert( "view",_view);

@@ -8,7 +8,7 @@ Rectangle {
     width: 360
     height: 640
 
-    id: hx20rc
+    id: em
     signal sendWarning(string test)
     signal close
 
@@ -33,23 +33,24 @@ Rectangle {
 
     XmlListModel {
         id: xmlslotModel
-        source: "qrc:/hx20/hx20rcslots.xml"
+//        source: "qrc:/hx20/hx20rcslots.xml"
+        xml: hx20rc.serializeEprom()
         query: "/slots/slotitem"
-        XmlRole { name: "id"; query: "id/number()"; }
-        XmlRole { name: "status"; query: "status/string()" }
-        XmlRole { name: "name"; query: "name/string()" }
-        XmlRole { name: "ext"; query: "ext/string()" }
+        XmlRole { name: "id"; query: "@id/number()"; }
+        XmlRole { name: "status"; query: "@status/string()" }
+        XmlRole { name: "name"; query: "@name/string()" }
+        XmlRole { name: "ext"; query: "@ext/string()" }
 
             // 00 - BASIC   program
             // 01 - BASIC  data
             // 02 - machine code program
-        XmlRole { name: "progtype"; query: "progtype/number()" }
+        XmlRole { name: "progtype"; query: "@progtype/number()" }
             // 00 - binary file
             // FF - ASCII file
-        XmlRole { name: "datatype"; query: "progtype/number()" }
-        XmlRole { name: "startadr"; query: "startadr/string()" }
-        XmlRole { name: "endadr"; query: "endadr/string()" } // end adr +1 (4digit)
-        XmlRole { name: "date"; query: "date/string()" }    // creation date 6 digits
+        XmlRole { name: "datatype"; query: "@progtype/number()" }
+        XmlRole { name: "startadr"; query: "@startadr/string()" }
+        XmlRole { name: "endadr"; query: "@endadr/string()" } // end adr +1 (4digit)
+        XmlRole { name: "date"; query: "@date/string()" }    // creation date 6 digits
     }
 
     ListModel {
@@ -86,16 +87,16 @@ Rectangle {
     Row {
         Rectangle {
             id: slotView
-            width: 220; height: hx20rc.height
+            width: 220; height: em.height
             color: "#efefef"
 
             ListView {
                 id: slots
                 focus: true
                 anchors.fill: parent
-                model: slotModel
+                model: xmlslotModel
                 clip:true
-                header: refreshButtonDelegate
+//                header: refreshButtonDelegate
                 delegate: slotDelegate
                 highlight: Rectangle { color: "steelblue" }
                 highlightMoveVelocity: 9999999
@@ -109,8 +110,8 @@ Rectangle {
 
 //        ListView {
 //            id: list
-//            width: hx20rc.width - slotView.width;
-//            height: hx20rc.height
+//            width: em.width - slotView.width;
+//            height: em.height
 //            interactive: true;
 //            clip: true
 //            model: pmlModel
@@ -123,7 +124,7 @@ Rectangle {
         expand: false
         font.pointSize: 16
         onClicked: {
-            hx20rc.close();
+            em.close();
         }
     }
 

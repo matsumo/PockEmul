@@ -11,7 +11,7 @@
 class Ckeyb;
 
 enum Direction { TOPdir,LEFTdir, RIGHTdir, BOTTOMdir, NONEdir};
-enum View {FRONTview,TOPview,LEFTview,RIGHTview,BOTTOMview,BACKview};
+enum View {FRONTview,TOPview,LEFTview,RIGHTview,BOTTOMview,BACKview,BACKviewREV};
 
 class CViewObject: public MAINCLASS {
     Q_OBJECT

@@ -46,7 +46,7 @@ public:
     bool backdoorS2Open;
 
 
-    virtual void ComputeKey(KEYEVENT ke, int scancode);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
     virtual bool UpdateFinalImage();
     virtual bool InitDisplay(void);
     virtual void manageCardVisibility();

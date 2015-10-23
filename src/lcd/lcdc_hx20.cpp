@@ -4,7 +4,7 @@
 #include "common.h"
 #include "pcxxxx.h"
 #include "cpu.h"
-#include "hx20.h"
+#include "epson/hx20.h"
 #include "upd16434.h"
 
 

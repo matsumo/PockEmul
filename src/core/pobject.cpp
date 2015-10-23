@@ -848,10 +848,14 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
             }
             else
             {
-                setCursor(Qt::ArrowCursor);
+                setCursor(NONEdir != borderClick(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
             }
         }
+        else {
+            setCursor(NONEdir != borderClick(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
+        }
 #endif
+
 
         if ( (parentWidget() != mainwindow->centralwidget)
              && (parentWidget() != 0))

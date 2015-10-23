@@ -47,7 +47,7 @@ Chx20RC::Chx20RC(CPObject *parent ):CPObject(parent)
     InitMemValue = 0x00;
     memsize      = 0x8000;
     SlotList.clear();
-    SlotList.append(CSlot(32, 0x0000 , "" , ""        , CSlot::RAM , "ROM 32KB"));
+    SlotList.append(CSlot(32, 0x0000 , "" , ""        , CSlot::CUSTOM_ROM , "ROM 32KB"));
 
     ShiftRegisterOutput=false;
     ClearCounter=prevClearCounter=false;
@@ -181,18 +181,24 @@ bool Chx20RC::SaveSession_File(QXmlStreamWriter *xmlOut)
 
 bool Chx20RC::LoadSession_File(QXmlStreamReader *xmlIn)
 {
+    qWarning()<<"LoadSession_File";
     if (xmlIn->name()=="session") {
         xmlIn->readNextStartElement();
         if ( xmlIn->name() == "slots" ) {
+            qWarning()<<"slots";
             xmlIn->skipCurrentElement();
+            xmlIn->readNextStartElement();
         }
-        else if (xmlIn->name() == "memory" ) {
+        if (xmlIn->name() == "memory" ) {
             AddLog(LOG_MASTER,"Load Memory");
+
+            qWarning()<<"Load Memory";
             for (int s=0; s<SlotList.size(); s++)                               // Save Memory
             {
                 switch (SlotList[s].getType()) {
                 case CSlot::RAM:
                 case CSlot::CUSTOM_ROM:
+                    qWarning()<<"CUSTOM_ROM";
                     AddLog(LOG_MASTER,"    Load Slot"+SlotList[s].getLabel());
                     Mem_Load(xmlIn,s); break;
                 default: break;
@@ -224,10 +230,11 @@ void Chx20RC::mouseDoubleClickEvent(QMouseEvent *)
     ShowEM();
 }
 
-void Chx20RC::ShowEM(void) {
-qWarning()<<serializeEprom().left(5000);
+void Chx20RC::ShowEM(void)
+{
     if(EMView==0) {
         EMView = new QQuickWidget();
+        EMView->rootContext()->setContextProperty("hx20rc", this);
         EMView->setSource(QUrl("qrc:/hx20rc.qml"));
         EMView->setResizeMode(QQuickWidget::SizeRootObjectToView);
         connect((QObject*) EMView->rootObject(), SIGNAL(close()), this,SLOT(closeQuick()));
@@ -240,9 +247,9 @@ qWarning()<<serializeEprom().left(5000);
         EMView->show();
     }
 
-
     EMView->raise();
 }
+
 void Chx20RC::HideEM(void) {
     if(EMView) EMView->hide();
 }

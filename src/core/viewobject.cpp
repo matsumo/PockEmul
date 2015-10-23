@@ -195,11 +195,13 @@ void CViewObject::InitView(View v) {
     case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
     case RIGHTview: if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname); break;
     case BOTTOMview:if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname); break;
+    case BACKviewREV:
     case BACKview:  if (!BackFname.isEmpty()) {
             delete BackImage;
             BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
         }
         break;
+
     }
 }
 
@@ -261,6 +263,7 @@ QSize CViewObject::viewRect(View v) {
     switch (v) {
 
     case FRONTview:
+    case BACKviewREV:
     case BACKview: return QSize(this->getDX(),this->getDY());
     case TOPview:
     case BOTTOMview: return QSize(this->getDX(),this->getDZmm()*_ratio);
@@ -283,6 +286,7 @@ QImage * CViewObject::getViewImage(View v) {
     case RIGHTview: return RightImage;
     case BOTTOMview: return BottomImage;
     case BACKview: return BackImage;
+    case BACKviewREV: return BackImage;//new QImage(BackImage->mirrored(true,false));
     }
 
     return 0;
@@ -511,7 +515,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         break;
     case TOPview:
         switch (dir) {
-        case TOPdir: targetView = BACKview; break;
+        case TOPdir: targetView = BACKviewREV; break;
 //        case LEFTdir: targetView = LEFTview; break;
 //        case RIGHTdir: targetView = RIGHTview; break;
         case BOTTOMdir: targetView = FRONTview; break;
@@ -554,7 +558,15 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         default: break;
         }
         break;
-
+    case BACKviewREV:
+        switch (dir) {
+        case TOPdir: targetView = BOTTOMview; break;
+        case LEFTdir: targetView = LEFTview; break;
+        case RIGHTdir: targetView = RIGHTview; break;
+        case BOTTOMdir: targetView = TOPview; break;
+        default: break;
+        }
+        break;
     }
 
     if ( (targetView != currentView) && getViewImage(targetView) ) {
