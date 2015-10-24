@@ -19,8 +19,10 @@ SHARP_PACKAGE *= \
     PC1475 \
     PC1500 \
     PC1600 \
+    PC2500 \
     G850 \
     E500 \
+    CE126P
 
 CASIO_PACKAGE *= \
     CASIO_ALL
@@ -110,7 +112,7 @@ PROJECT_MODULE += \
 
 contains(PROJECT_TYPE,ANDROID) {
 QT +=  androidextras multimedia
-
+DEFINES += NO_SOUND
 PROJECT_MODULE += \
     M_EMB_QRC \
     M_CLOUD \
@@ -209,6 +211,11 @@ PROJECT_PACKAGE *= SC61860
 contains(PROJECT_PACKAGE,PC1280) {
 PROJECT_PACKAGE *= SC61860
 PROJECT_PACKAGE *= PC1360
+}
+# PC2500
+contains(PROJECT_PACKAGE,PC2500) {
+PROJECT_PACKAGE *= PC1350
+PROJECT_PACKAGE *= SC61860
 }
 # PC1360
 contains(PROJECT_PACKAGE,PC1360) {
@@ -376,6 +383,17 @@ RESOURCES *= resources/pc1360.qrc
 OTHER_FILES *=  resources/keymap/pc1360.map \
 }
 
+# PC2500
+contains(PROJECT_PACKAGE,PC2500) {
+DEFINES *= P_PC2500
+HEADERS *= \
+    src/machine/sharp/pc2500.h \
+    src/core/Keyb2500.h
+SOURCES *= src/machine/sharp/pc2500.cpp
+RESOURCES *= resources/pc2500.qrc
+OTHER_FILES *= resources/keymap/pc2500.map
+}
+
 # PC1401
 contains(PROJECT_PACKAGE,PC1401) {
 DEFINES *= P_PC1401
@@ -494,6 +512,29 @@ RESOURCES *= \
 OTHER_FILES *= \
     resources/keymap/g850v.map
 }
+
+# CE126P and others
+contains(PROJECT_PACKAGE,CE126P) {
+DEFINES *= P_CE126P
+HEADERS *= \
+    src/machine/sharp/ce125.h \
+    src/machine/sharp/Ce126.h \
+    src/machine/sharp/ce120p.h
+SOURCES *= \
+    src/machine/sharp/Ce126.cpp \
+    src/machine/sharp/ce125.cpp \
+    src/machine/sharp/ce120p.cpp
+RESOURCES *= resources/ce126p.qrc
+OTHER_FILES *= \
+    resources/keymap/ce125tape.map \
+    resources/keymap/ce126.map \
+    resources/keymap/ce125.map \
+    resources/keymap/ce129.map \
+    resources/keymap/ce123.map \
+    resources/keymap/ce120.map \
+    resources/keymap/263591.map
+}
+
 
 # SC61860
 contains(PROJECT_PACKAGE,SC61860) {
@@ -796,7 +837,6 @@ HEADERS *= \
     src/core/Inter.h \
     src/core/Keyb.h \
     src/core/Keyb1450.h \
-    src/core/Keyb2500.h \
     src/core/keybce150.h \
     src/core/keybce152.h \
     src/core/Log.h \
@@ -884,10 +924,7 @@ HEADERS *= \
 HEADERS *= \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
-    src/machine/sharp/pc2500.h \
     src/machine/sharp/ce122.h \
-    src/machine/sharp/ce125.h \
-    src/machine/sharp/Ce126.h \
     src/machine/sharp/ce150.h \
     src/machine/sharp/ce152.h \
     src/machine/sharp/ce140p.h \
@@ -970,7 +1007,6 @@ RESOURCES +=  \
     resources/pockemul.qrc \
     resources/ce2xxx.qrc \
     resources/ext.qrc \
-    resources/pc2500.qrc \
     resources/pc1460.qrc \
     resources/ext2.qrc \
     resources/pc2001.qrc \
@@ -1046,13 +1082,9 @@ SOURCES *=  \
     src/machine/bus.cpp \
     src/machine/cprinter.cpp \
     src/machine/paperwidget.cpp \
-    src/machine/sharp/pc2500.cpp \
-    src/machine/sharp/Ce126.cpp \
     src/machine/sharp/ce140p.cpp \
-    src/machine/sharp/ce125.cpp \
     src/machine/sharp/ce150.cpp \
     src/machine/sharp/ce152.cpp \
-    src/machine/sharp/ce120p.cpp \
     src/machine/sharp/ce1560.cpp \
     src/machine/sharp/ce162e.cpp \
     src/machine/sharp/ce153.cpp \
@@ -1135,15 +1167,7 @@ OTHER_FILES += \
     resources/pockemul/config.xml \
     resources/pockemul/configExt.xml \
     resources/keymap/trspc2.map \
-    resources/keymap/pc2500.map \
     resources/keymap/ce150.map \
-    resources/keymap/ce125tape.map \
-    resources/keymap/ce126.map \
-    resources/keymap/ce125.map \
-    resources/keymap/ce129.map \
-    resources/keymap/ce123.map \
-    resources/keymap/ce120.map \
-    resources/keymap/263591.map \
     resources/keymap/ce140p.map \
     resources/keymap/x07.map \
     resources/keymap/e500.map \
@@ -1292,7 +1316,6 @@ HEADERS += \
     resources/lcc/model/PC-1350/stdio.h \
     src/core/lcc/cstdlib.h \
     resources/lcc/model/PC-1350/graph.h \
-    src/machine/sharp/ce120p.h \
     qcodeedit/qreliablefilewatch.h \
     qcodeedit/qpanellayout.h \
     qcodeedit/qlinemarksinfocenter.h \
@@ -1560,6 +1583,8 @@ OTHER_FILES *= \
 
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
+
+RESOURCES += \
 
 
 

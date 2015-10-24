@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ext/ce-120p.png</file>
+        <file>ext/ce-125.png</file>
+        <file>ext/ce-125eject.jpg</file>
+        <file>ext/ce-125eject.png</file>
+        <file>ext/ce-125load.jpg</file>
+        <file>ext/ce-125load.png</file>
+        <file>ext/ce-125play.jpg</file>
+        <file>ext/ce-125play.png</file>
+        <file>ext/ce-125record.png</file>
+        <file>ext/ce-125tape.jpg</file>
+        <file>ext/ce-125tape.png</file>
+        <file>ext/ce-126p.png</file>
+        <file>ext/ce126ptable.bmp</file>
+        <file>ext/mp-220.png</file>
+        <file>ext/ce-123p.png</file>
+        <file>ext/ce-129p.png</file>
+    </qresource>
+</RCC>

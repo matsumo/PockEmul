@@ -310,8 +310,10 @@ void MainWindowPockemul::initObjectTable() {
 #ifdef P_PC1600
     objtable["PC-1600"]=PC1600;
 #endif
+#ifdef P_PC2500
     objtable["PC-2500"]=PC2500;
-
+#endif
+#ifdef P_CE126P
     objtable["CE-122"]=CE122;
     objtable["CE-125"]=CE125;
     objtable["MP-220"]=MP220;
@@ -319,6 +321,8 @@ void MainWindowPockemul::initObjectTable() {
     objtable["CE-126P"]=CE126P;
     objtable["CE-123P"]=CE123P;
     objtable["CE-129P"]=CE129P;
+#endif
+
     objtable["CE-140P"]=CE140P;
     objtable["CE-140F"]=CE140F;
     objtable["CE-150"]= CE150;
@@ -526,10 +530,13 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case TandyPC2:pPC = new Ctrspc2;	pPC->setName("Tandy PC-2");break;
 #endif
 #ifdef P_PC1600
-    case PC1600 : pPC = new Cpc1600;	pPC->setName("PC-1600");break;
+    case PC1600 : pPC = new Cpc1600;	pPC->setName("PC-1600");break;       
+    case CE1600P: pPC = new Cce1600p;	pPC->setName("CE-1600P");break;
+    case CE1600F: pPC = new Cce1600f;	pPC->setName("CE-1600F");break;
 #endif
+#ifdef P_PC2500
     case PC2500 : pPC = new Cpc2500;	pPC->setName("PC-2500");break;
-
+#endif
     case CE122  : pPC = new Cce122;		pPC->setName("CE-122");break;
     case CE125  : pPC = new Cce125;		pPC->setName("CE-125");break;
     case MP220  : pPC = new Cmp220;     pPC->setName("MP-220");break;
@@ -566,9 +573,6 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
     case POTAR      : pPC = new Cpotar;	pPC->setName("Potar");break;
     case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
-
-    case CE1600P: pPC = new Cce1600p;	pPC->setName("CE-1600P");break;
-    case CE1600F: pPC = new Cce1600f;	pPC->setName("CE-1600F");break;
 
     case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
     case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;

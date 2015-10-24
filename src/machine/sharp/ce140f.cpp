@@ -50,7 +50,7 @@ Cce140f::Cce140f(CPObject *parent):CPObject(parent)
     c = 0;
     busyLed = false;
 
-    pce1600f = new Cce1600f(this);
+//    pce1600f = new Cce1600f(this);
 }
 
 Cce140f::~Cce140f() {

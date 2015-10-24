@@ -90,9 +90,9 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     dialogVKeyboard = 0;
     Power = false;
     audioBuff.clear();
-
+#ifndef NO_SOUND
     m_audioOutput = 0;
-
+#endif
     contextMenu=menupocket=menuext=menuconfig=menucpuspeed=menuAudioVolume=menulcd=menulink=menuunlink=menuweblink=menuDocument=0;
     ioFreq = 0;
     off =true;
@@ -1277,7 +1277,7 @@ void CPObject::BuildContextMenu(QMenu * menu)
         connect(menulcd, SIGNAL(triggered(QAction*)), this, SLOT(slotContrast(QAction*)));
 
     }
-
+#ifndef NO_SOUND
     if (m_audioOutput )
     {
         menuAudioVolume = menuconfig->addMenu(tr("Sound volume"));
@@ -1309,7 +1309,7 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
         connect(menuAudioVolume, SIGNAL(triggered(QAction*)), this, SLOT(slotAudioVolume(QAction*)));
     }
-
+#endif
     if (pKEYB) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
@@ -1534,11 +1534,13 @@ void CPObject::slotCpu(QAction* action) {
 }
 
 void CPObject::slotAudioVolume(QAction * action) {
+#ifndef NO_SOUND
     if (action->text() == tr("Mute")) m_audioOutput->setVolume(0);
     if (action->text() == tr("25%")) m_audioOutput->setVolume(0.25);
     if (action->text() == tr("50%")) m_audioOutput->setVolume(0.5);
     if (action->text() == tr("75%")) m_audioOutput->setVolume(0.75);
     if (action->text() == tr("100%")) m_audioOutput->setVolume(1);
+#endif
 }
 
 void CPObject::slotContrast(QAction * action) {

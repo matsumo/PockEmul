@@ -98,7 +98,7 @@ qWarning()<<"EJECT";
 
 Cmp220::Cmp220(CPObject *parent):Cce125(parent)
 {
-    BackGroundFname	= P_RES(":/ext/mp-220.jpg");
+    BackGroundFname	= P_RES(":/ext/mp-220.png");
     setcfgfname("mp220");
 }
 

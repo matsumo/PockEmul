@@ -589,7 +589,7 @@ bool Cce126::run(void)
 
 Cce123::Cce123()
 {								//[constructor]
-    BackGroundFname	= P_RES(":/ext/ce-123p.jpg");
+    BackGroundFname	= P_RES(":/ext/ce-123p.png");
     setcfgfname("ce123p");
     setDX(708);
     setDY(566);
@@ -608,7 +608,7 @@ bool Cce123::init(void) {
 
 Cce129::Cce129()
 {								//[constructor]
-    BackGroundFname	= P_RES(":/ext/ce-129p.jpg");
+    BackGroundFname	= P_RES(":/ext/ce-129p.png");
     setcfgfname("ce129p");
     setDX(708);
     setDY(566);
