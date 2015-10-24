@@ -1,51 +1,4 @@
-
-SHARP_PACKAGE *= \
-    PC1211 \
-    PC1245 \
-    PC1250 \
-    PC1251 \
-    PC1253 \
-    PC1255 \
-    PC1260 \
-    PC1280 \
-    PC1350 \
-    PC1360 \
-    PC1401 \
-    PC1402 \
-    PC1403 \
-    PC1421 \
-    PC1425 \
-    PC1450 \
-    PC1475 \
-    PC1500 \
-    PC1600 \
-    PC2500 \
-    G850 \
-    E500 \
-    CE126P
-
-CASIO_PACKAGE *= \
-    CASIO_ALL
-
-TI_PACKAGE *= \
-    TI_ALL \
-
-HP_PACKAGE *= \
-    HP_ALL \
-
-OTHER_PACKAGE *= \
-    JR800 \
-    HX20 \
-    PANASONIC \
-
-
-PROJECT_PACKAGE *= \
-    $$SHARP_PACKAGE \
-    $$CASIO_PACKAGE \
-    $$TI_PACKAGE \
-    $$HP_PACKAGE \
-    $$OTHER_PACKAGE \
-
+include(package.pri)
 
 TEMPLATE = app
 
@@ -251,6 +204,10 @@ contains(PROJECT_PACKAGE,PC1401) {
 PROJECT_PACKAGE *= SC61860
 }
 
+contains(PROJECT_PACKAGE,EXTPC1500) {
+PROJECT_PACKAGE *= PC1500
+}
+
 # PC1500
 contains(PROJECT_PACKAGE,PC1500) {
 PROJECT_PACKAGE *= LH5801
@@ -270,7 +227,11 @@ contains(PROJECT_PACKAGE,HX20) {
 #PROJECT_PACKAGE *= UPD16434
 PROJECT_PACKAGE *= MC6800
 }
-
+# PC2001 and Clones
+contains(PROJECT_PACKAGE,PC2001) {
+#PROJECT_PACKAGE *= HD44102
+PROJECT_PACKAGE *= UPD7907
+}
 contains(PROJECT_PACKAGE,PANASONIC) {
 #PROJECT_PACKAGE *= UPD16434
 PROJECT_PACKAGE *= M6502
@@ -476,6 +437,30 @@ SOURCES *= \
 RESOURCES *= resources/pc1500.qrc
 OTHER_FILES *=  resources/keymap/pc1500.map
 }
+# EXTPC1500
+contains(PROJECT_PACKAGE,EXTPC1500) {
+DEFINES *= P_EXTPC1500
+HEADERS *= \
+    src/machine/sharp/cemem.h \
+    src/core/keybce150.h \
+    src/machine/sharp/ce150.h \
+    src/machine/sharp/ce1560.h \
+    src/machine/sharp/ce153.h \
+    src/machine/sharp/ce162e.h \
+    src/lcd/Lcdc_ce1560.h
+SOURCES *= \
+    src/machine/sharp/cemem.cpp \
+    src/machine/sharp/ce150.cpp \
+    src/machine/sharp/ce1560.cpp \
+    src/lcd/Lcdc_ce1560.cpp \
+    src/machine/sharp/ce162e.cpp \
+    src/machine/sharp/ce153.cpp
+RESOURCES *= \
+    resources/cemem.qrc \
+OTHER_FILES *= \
+    resources/keymap/ce150.map \
+    resources/keymap/ce1560.map
+}
 
 # PC1600
 contains(PROJECT_PACKAGE,PC1600) {
@@ -519,13 +504,16 @@ DEFINES *= P_CE126P
 HEADERS *= \
     src/machine/sharp/ce125.h \
     src/machine/sharp/Ce126.h \
-    src/machine/sharp/ce120p.h
+    src/machine/sharp/ce120p.h \
+    src/machine/sharp/ce122.h
 SOURCES *= \
     src/machine/sharp/Ce126.cpp \
     src/machine/sharp/ce125.cpp \
-    src/machine/sharp/ce120p.cpp
+    src/machine/sharp/ce120p.cpp \
+    src/machine/sharp/ce122.cpp
 RESOURCES *= resources/ce126p.qrc
 OTHER_FILES *= \
+    resources/keymap/ce122.map \
     resources/keymap/ce125tape.map \
     resources/keymap/ce126.map \
     resources/keymap/ce125.map \
@@ -541,7 +529,8 @@ contains(PROJECT_PACKAGE,SC61860) {
 DEFINES *= P_SC61860
 FORMS *= ui/cregssc61860widget.ui
 HEADERS *= src/cpu/sc61860.h \
-           src/cpu/sc61860d.h
+           src/cpu/sc61860d.h \
+           ui/cregssc61860widget.h
 SOURCES *= src/cpu/sc61860.cpp \
            src/cpu/sc61860d.cpp \
            ui/cregssc61860widget.cpp
@@ -615,6 +604,18 @@ SOURCES *= \
     src/cpu/m6502/m6502_dasm.cpp
 }
 
+# UPD7907
+contains(PROJECT_PACKAGE,UPD7907) {
+DEFINES *= P_UPD7907
+FORMS *= ui/cregsz80widget.ui
+HEADERS *= \
+    src/cpu/upd7907/upd7907.h \
+    src/cpu/upd7907/upd7907d.h
+SOURCES *= \
+    src/cpu/upd7907/upd7907d.cpp \
+    src/cpu/upd7907/upd7907.cpp
+}
+
 # JR800
 contains(PROJECT_PACKAGE,JR800) {
 DEFINES *= P_JR800
@@ -680,6 +681,43 @@ OTHER_FILES *= \
     resources/keymap/rlp4002.map \
     resources/keymap/rlp1002.map \
     resources/keymap/rlp1005.map
+}
+
+# PC2001 and clones
+contains(PROJECT_PACKAGE,PC2001) {
+DEFINES *= P_PC2001
+HEADERS *= \
+    src/machine/pc2001.h \
+    src/machine/pc2021.h \
+    src/machine/tpc8300.h \
+    src/machine/tp83.h \
+    src/machine/general/lbc1100.h \
+    src/machine/general/cl1000.h \
+    src/lcd/Lcdc_lbc1100.h \
+    src/lcd/Lcdc_tpc8300.h \
+    src/lcd/Lcdc_pc2001.h
+SOURCES *= \
+    src/machine/pc2001.cpp \
+    src/machine/pc2021.cpp \
+    src/machine/tpc8300.cpp \
+    src/machine/tp83.cpp \
+    src/machine/general/lbc1100.cpp \
+    src/machine/general/cl1000.cpp \
+    src/lcd/Lcdc_pc2001.cpp \
+    src/lcd/Lcdc_lbc1100.cpp \
+    src/lcd/Lcdc_tpc8300.cpp
+RESOURCES *= \
+    resources/pc2001.qrc \
+    resources/lbc1100.qrc \
+    resources/tpc8300.qrc
+OTHER_FILES *= \
+    resources/keymap/pc2001.map \
+    resources/keymap/pc2021.map \
+    resources/keymap/pc2081.map \
+    resources/keymap/tpc8300.map \
+    resources/keymap/tp83.map \
+    resources/keymap/lbc1100.map \
+    resources/keymap/cl1000.map \
 }
 
 # HP_ALL
@@ -837,7 +875,6 @@ HEADERS *= \
     src/core/Inter.h \
     src/core/Keyb.h \
     src/core/Keyb1450.h \
-    src/core/keybce150.h \
     src/core/keybce152.h \
     src/core/Log.h \
     src/core/analog.h \
@@ -876,12 +913,9 @@ HEADERS *= \
     src/core/breakpoint.h \
     src/core/watchpoint.h \
     src/core/launchbuttonwidget.h \
-    src/cpu/upd7907/upd7907d.h \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
-    src/machine/sharp/cemem.h \
     src/machine/extslot.h \
-    cloud/pocketimageprovider.h \
 
 
 
@@ -908,7 +942,6 @@ HEADERS *= \
     src/cpu/i80x86.h \
     src/cpu/hd66108.h \
     src/cpu/upd16434.h \
-    src/cpu/upd7907/upd7907.h \
     src/cpu/i80L188EB.h \
     src/cpu/pit8253.h \
     src/cpu/s6b0108.h \
@@ -924,24 +957,13 @@ HEADERS *= \
 HEADERS *= \
     src/machine/pcxxxx.h \
     src/machine/bus.h \
-    src/machine/sharp/ce122.h \
-    src/machine/sharp/ce150.h \
     src/machine/sharp/ce152.h \
     src/machine/sharp/ce140p.h \
     src/machine/sharp/ce140f.h \
-    src/machine/sharp/ce1560.h \
-    src/machine/sharp/ce162e.h \
-    src/machine/sharp/ce153.h \
     src/machine/sharp/ce2xxx.h \
     src/machine/cx07char.h \
-    src/machine/pc2001.h \
-    src/machine/pc2021.h \
     src/machine/printerctronics.h \
-    src/machine/general/lbc1100.h \
-    src/machine/general/cl1000.h \
     src/machine/cesimu.h \
-    src/machine/tpc8300.h \
-    src/machine/tp83.h \
     src/machine/postit.h \
     src/machine/paperwidget.h \
     src/machine/cprinter.h \
@@ -957,17 +979,12 @@ HEADERS *= \
     src/lcd/Lcdc.h \
     src/lcd/Lcdc_x07.h \
     src/lcd/Lcdc_symb.h \
-    src/lcd/Lcdc_lbc1100.h \
-    src/lcd/Lcdc_tpc8300.h \
-    src/lcd/Lcdc_pc2001.h \
-    src/lcd/Lcdc_ce1560.h \
     src/lcd/Lcdc_symb2x.h \
 
 
 HEADERS *= \
     qcodemodel2/qcodenode.h \
     ui/dialogdasm.h \
-    ui/cregssc61860widget.h \
     ui/cregcpu.h \
     ui/cregsz80widget.h \
     ui/uartconsole.h \
@@ -1009,11 +1026,7 @@ RESOURCES +=  \
     resources/ext.qrc \
     resources/pc1460.qrc \
     resources/ext2.qrc \
-    resources/pc2001.qrc \
-    resources/lbc1100.qrc \
-    resources/tpc8300.qrc \
     resources/x07.qrc \
-    resources/cemem.qrc \
 
 
 }
@@ -1070,9 +1083,7 @@ SOURCES *=  \
     pictureflow/fluidlauncher.cpp \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
-    src/machine/sharp/cemem.cpp \
     src/machine/extslot.cpp \
-    cloud/pocketimageprovider.cpp \
 
 
 
@@ -1083,29 +1094,18 @@ SOURCES *=  \
     src/machine/cprinter.cpp \
     src/machine/paperwidget.cpp \
     src/machine/sharp/ce140p.cpp \
-    src/machine/sharp/ce150.cpp \
     src/machine/sharp/ce152.cpp \
-    src/machine/sharp/ce1560.cpp \
-    src/machine/sharp/ce162e.cpp \
-    src/machine/sharp/ce153.cpp \
-    src/machine/sharp/ce122.cpp \
     src/machine/sharp/ce2xxx.cpp \
     src/machine/sharp/ce140f.cpp \
     src/machine/printerctronics.cpp \
-    src/machine/general/lbc1100.cpp \
-    src/machine/general/cl1000.cpp \
     src/machine/sio.cpp \
     src/machine/cx07.cpp \
     src/machine/cx710.cpp \
-    src/machine/pc2001.cpp \
-    src/machine/pc2021.cpp \
     src/machine/cesimu.cpp \
     src/machine/postit.cpp \
     src/machine/potar.cpp \
     src/machine/cmotor.cpp \
     src/machine/ce515p.cpp \
-    src/machine/tpc8300.cpp \
-    src/machine/tp83.cpp \
     src/machine/ccable.cpp \
     qcodemodel2/qcodenode.cpp \
 
@@ -1122,8 +1122,6 @@ SOURCES *=  \
     src/cpu/i80x86.cpp \
     src/cpu/i80x86_dasm.cpp \
     src/cpu/i80L188EB.cpp \
-    src/cpu/upd7907/upd7907d.cpp \
-    src/cpu/upd7907/upd7907.cpp \
     src/cpu/pd1990ac.cpp \
     src/cpu/lh5810.cpp \
     src/cpu/ct6834.cpp \
@@ -1150,10 +1148,6 @@ SOURCES *=  \
 SOURCES *=  \
     src/lcd/Lcdc.cpp \
     src/lcd/Lcdc_x07.cpp \
-    src/lcd/Lcdc_pc2001.cpp \
-    src/lcd/Lcdc_lbc1100.cpp \
-    src/lcd/Lcdc_tpc8300.cpp \
-    src/lcd/Lcdc_ce1560.cpp \
 
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
@@ -1167,25 +1161,15 @@ OTHER_FILES += \
     resources/pockemul/config.xml \
     resources/pockemul/configExt.xml \
     resources/keymap/trspc2.map \
-    resources/keymap/ce150.map \
     resources/keymap/ce140p.map \
     resources/keymap/x07.map \
     resources/keymap/e500.map \
     resources/keymap/x710.map \
     resources/keymap/pc1260.map \
     resources/keymap/pc1211.map \
-    resources/keymap/ce122.map \
-    resources/keymap/pc2001.map \
-    resources/keymap/pc2021.map \
     resources/keymap/ce127r.map \
     resources/keymap/ce152.map \
-    resources/keymap/pc2081.map \
-    resources/keymap/lbc1100.map \
-    resources/keymap/cl1000.map \
     resources/pockemul/weblinks.xml \
-    resources/keymap/tpc8300.map \
-    resources/keymap/tp83.map \
-    resources/keymap/ce1560.map \
     resources/keymap/ce140f.map \
     resources/keymap/pc1253.map \
     logitheque/serial1251.qs \
@@ -1524,12 +1508,15 @@ RESOURCES +=  \
 
 HEADERS+= \
     cloud/cloudwindow.h \
-    cloud/cloudimageprovider.h
+    cloud/cloudimageprovider.h \
+    cloud/pocketimageprovider.h \
 
 
 SOURCES+= \
     cloud/cloudwindow.cpp \
-    cloud/cloudimageprovider.cpp
+    cloud/cloudimageprovider.cpp \
+    cloud/pocketimageprovider.cpp \
+
 
 OTHER_FILES *= \
     cloud/content/ScrollBar.qml \
@@ -1585,6 +1572,9 @@ OTHER_FILES *= \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 RESOURCES += \
+
+DISTFILES += \
+    package.pri
 
 
 

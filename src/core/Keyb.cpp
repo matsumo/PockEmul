@@ -80,7 +80,10 @@ int Ckeyb::KeyClick(QPoint pts)
     int smallerDistance = 99999;
     for (int i=0;i<Keys.size();i++)
     {
-        if (Keys.at(i).view != pPC->currentView) continue;
+        View _curView = pPC->currentView;
+        if (_curView == BACKviewREV) _curView = BACKview;
+
+        if (Keys.at(i).view != _curView) continue;
         if (!(Keys.at(i).enabled)) continue;
         QRect r = Keys.at(i).Rect;
             r.setCoords(r.x()*mainwindow->zoom/100,r.y()*mainwindow->zoom/100,(r.x()+r.width())*mainwindow->zoom/100,(r.y()+r.height())*mainwindow->zoom/100);

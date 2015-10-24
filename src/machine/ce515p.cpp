@@ -48,8 +48,8 @@ Cce515p::Cce515p(CPObject *parent):Cprinter(parent)
     setDY(320);
     //pCONNECTOR	= new Cconnector(this,5,"Internal connector 5 pins",true);	publish(pCONNECTOR);
     pTIMER		= new Ctimer(this);
-    KeyMap		= KeyMapce150;
-    KeyMapLenght= KeyMapce150Lenght;
+    KeyMap		= 0;
+    KeyMapLenght= 0;
     pKEYB		= new Ckeyb(this,"ce150.map",0);
 
     Print_Mode = 0;

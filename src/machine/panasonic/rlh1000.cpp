@@ -668,7 +668,7 @@ void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     }
 
     // Manage backdoor click
-    if ((KEY(0x241)||KEY(0x242)) && (currentView==BACKview)) {
+    if ((KEY(0x241)||KEY(0x242)) && ((currentView==BACKview)||(currentView==BACKviewREV))) {
         pKEYB->keyPressedList.removeAll(0x241);
         pKEYB->keyPressedList.removeAll(0x242);
         backdoorOpen = !backdoorOpen;
@@ -893,7 +893,7 @@ bool Crlh1000::UpdateFinalImage(void) {
         if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview),BackFname);
     }
 
-    if ((currentView == BACKview)) {
+    if (((currentView==BACKview)||(currentView==BACKviewREV))) {
         slotChanged = false;
         QPainter painter;
         painter.begin(BackImage);

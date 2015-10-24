@@ -14,8 +14,8 @@
 #define PEN_DOWN 1
 
 
-extern TransMap KeyMapce150[];
-extern int KeyMapce150Lenght;
+//extern TransMap KeyMapce150[];
+//extern int KeyMapce150Lenght;
 
 enum eMODE {GRAPH,TEXT};
 
