@@ -369,9 +369,9 @@ void MainWindowPockemul::initObjectTable() {
     objtable["CE-150"]= CE150;
     objtable["CE-153"]= CE153;
     objtable["CE-162E"]= CE162E;
+    objtable["CE-1560"]= CE1560;
 #endif
-    objtable["Canon X-07"]=X07;
-    objtable["Canon X-710"]=X710;
+
 #ifdef P_E500
     objtable["#BRAND#SHARP"]=0;
     objtable["#BRAND#SHARP_NEWGEN"]=0;
@@ -427,7 +427,6 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Panasonic RL-P1005"]=RLP1005;
 #endif
 
-    objtable["Post-it"]=POSTIT;
 #ifdef P_HP_ALL
     objtable["#BRAND#HEWLETT-PACKARD"]=0;
     objtable["HP-41"]=HP41;
@@ -438,7 +437,6 @@ void MainWindowPockemul::initObjectTable() {
     objtable["HP82143A"]=HP82143A;
 #endif
 
-    objtable["CE-1560"]= CE1560;
 
 #ifdef P_TI_ALL
     objtable["#BRAND#TEXAS INSTRUMENTS"]=0;
@@ -461,9 +459,14 @@ void MainWindowPockemul::initObjectTable() {
     objtable["HX-20"]= HX20;
     objtable["Epson H20RC"]= HX20RC;
 #endif
-
-
+#ifdef P_X07
     objtable["#BRAND#OTHER"]=0;
+    objtable["Canon X-07"]=X07;
+    objtable["Canon X-710"]=X710;
+#endif
+
+
+    objtable["Post-it"]=POSTIT;
 
 }
 
@@ -588,13 +591,16 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CE160 : pPC = new Ccemem(0,CE160); pPC->setName("CE-160");break;
     case CE163 : pPC = new Ccemem(0,CE163); pPC->setName("CE-163");break;
 #endif
+
     case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
     case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
     case POTAR      : pPC = new Cpotar;	pPC->setName("Potar");break;
     case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
 
+#ifdef P_X07
     case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
     case X710   : pPC = new Cx710;      pPC->setName("Canon X-710"); break;
+#endif
 
 #ifdef P_E500
     case E500   : pPC = new Ce500;      pPC->setName("PC-E500"); break;

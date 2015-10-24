@@ -456,7 +456,7 @@ SOURCES *= \
     src/machine/sharp/ce162e.cpp \
     src/machine/sharp/ce153.cpp
 RESOURCES *= \
-    resources/cemem.qrc \
+    resources/cemem.qrc
 OTHER_FILES *= \
     resources/keymap/ce150.map \
     resources/keymap/ce1560.map
@@ -642,6 +642,25 @@ RESOURCES *= resources/hx20.qrc
 OTHER_FILES *= cloud/hx20rc.qml  \
              resources/keymap/hx20.map \
              resources/hx20/hx20rcslots.xml
+}
+
+# X07
+contains(PROJECT_PACKAGE,X07) {
+DEFINES *= P_X07
+HEADERS *= \
+    src/machine/cx07char.h \
+    src/machine/cx07.h \
+    src/machine/cx710.h \
+    src/lcd/Lcdc_x07.h
+SOURCES *= \
+    src/machine/cx07.cpp \
+    src/machine/cx710.cpp \
+    src/lcd/Lcdc_x07.cpp
+RESOURCES *= \
+    resources/x07.qrc
+OTHER_FILES *= \
+    resources/keymap/x07.map \
+    resources/keymap/x710.map
 }
 
 # PANASONIC
@@ -961,7 +980,6 @@ HEADERS *= \
     src/machine/sharp/ce140p.h \
     src/machine/sharp/ce140f.h \
     src/machine/sharp/ce2xxx.h \
-    src/machine/cx07char.h \
     src/machine/printerctronics.h \
     src/machine/cesimu.h \
     src/machine/postit.h \
@@ -971,13 +989,10 @@ HEADERS *= \
     src/machine/potar.h \
     src/machine/cmotor.h \
     src/machine/ce515p.h \
-    src/machine/cx07.h \
-    src/machine/cx710.h \
     src/machine/ccable.h \
 
 HEADERS *= \
     src/lcd/Lcdc.h \
-    src/lcd/Lcdc_x07.h \
     src/lcd/Lcdc_symb.h \
     src/lcd/Lcdc_symb2x.h \
 
@@ -1026,7 +1041,6 @@ RESOURCES +=  \
     resources/ext.qrc \
     resources/pc1460.qrc \
     resources/ext2.qrc \
-    resources/x07.qrc \
 
 
 }
@@ -1099,8 +1113,6 @@ SOURCES *=  \
     src/machine/sharp/ce140f.cpp \
     src/machine/printerctronics.cpp \
     src/machine/sio.cpp \
-    src/machine/cx07.cpp \
-    src/machine/cx710.cpp \
     src/machine/cesimu.cpp \
     src/machine/postit.cpp \
     src/machine/potar.cpp \
@@ -1147,7 +1159,6 @@ SOURCES *=  \
 
 SOURCES *=  \
     src/lcd/Lcdc.cpp \
-    src/lcd/Lcdc_x07.cpp \
 
 
 greaterThan(QT_MAJOR_VERSION, 4): SOURCES += \
@@ -1162,9 +1173,7 @@ OTHER_FILES += \
     resources/pockemul/configExt.xml \
     resources/keymap/trspc2.map \
     resources/keymap/ce140p.map \
-    resources/keymap/x07.map \
     resources/keymap/e500.map \
-    resources/keymap/x710.map \
     resources/keymap/pc1260.map \
     resources/keymap/pc1211.map \
     resources/keymap/ce127r.map \

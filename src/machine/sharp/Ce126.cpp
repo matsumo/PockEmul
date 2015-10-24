@@ -628,7 +628,7 @@ bool Cce129::init(void) {
 }
 C263591::C263591()
 {								//[constructor]
-    BackGroundFname	= P_RES(":/ext/26-3591.jpg");
+    BackGroundFname	= P_RES(":/ext/26-3591.png");
     setcfgfname("263591");
     setDX(854);
     setDY(349);

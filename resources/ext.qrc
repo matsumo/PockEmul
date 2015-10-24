@@ -1,6 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>ext/26-3591.jpg</file>
         <file>ext/cable.png</file>
         <file>ext/ce-150pen.bmp</file>
         <file>ext/ce-150pen.png</file>

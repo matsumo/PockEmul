@@ -6,7 +6,7 @@
    <example brand="SHARP" idpocket="CE-127R" filename="./" name="Sharp ce-127r" image=":/ext/ce-127r.png" connectortype="Jack_3" conngender="female"/>
     <example brand="SHARP" idpocket="CE-125" filename="./" name="Sharp ce-125" image=":/ext/ce-125.png" connectortype="Sharp_11" conngender="male"/>
     <example idpocket="MP-220" filename="./" name="Seiko MP-220" image=":/ext/mp-220.png" connectortype="Sharp_11" conngender="male"/>
-     <example idpocket="26-3591" filename="./" name="Tandy 26-3591" image=":/ext/26-3591.jpg" connectortype="Sharp_11" conngender="male"/>
+     <example idpocket="26-3591" filename="./" name="Tandy 26-3591" image=":/ext/26-3591.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-126P" filename="./" name="Sharp ce-126p" image=":/ext/ce-126p.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-123P" filename="./" name="Sharp ce-123p" image=":/ext/ce-123p.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="SHARP" idpocket="CE-129P" filename="./" name="Sharp ce-129p" image=":/ext/ce-129p.png" connectortype="Sharp_11" conngender="male"/>

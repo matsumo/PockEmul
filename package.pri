@@ -18,6 +18,7 @@ SHARP_PACKAGE *= \
     PC1450 \
     PC1475 \
     PC1500 \
+    EXTPC1500 \
     PC1600 \
     PC2500 \
     G850 \
@@ -38,11 +39,12 @@ OTHER_PACKAGE *= \
     HX20 \
     PANASONIC \
     PC2001 \
+    X07 \
 
 
 PROJECT_PACKAGE *= \
-#    $$SHARP_PACKAGE \
-#    $$CASIO_PACKAGE \
-#    $$TI_PACKAGE \
+    $$SHARP_PACKAGE \
+    $$CASIO_PACKAGE \
+    $$TI_PACKAGE \
     $$HP_PACKAGE \
-#    $$OTHER_PACKAGE \
+    $$OTHER_PACKAGE \
