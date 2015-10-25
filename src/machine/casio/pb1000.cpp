@@ -26,6 +26,8 @@
 #define PD_STR 0x04	// transfer direction strobe: 1=write, 0=read
 #define PD_ACK 0x01	// transfer direction acknowledge
 
+extern int ask(QWidget *parent,QString msg,int nbButton);
+
 Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 910000/1);
@@ -73,7 +75,7 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
 //    shift=fct = false;
 
     closed = false;
-    flipping = true;
+    flipping = false;
     m_angle = 180;
     m_zoom = 1;
 
@@ -572,9 +574,16 @@ UINT8 Cpb1000::lcdDataRead() {
 
 
 void Cpb1000::TurnCLOSE(void) {
-    return;
+//    return;
 
-    // FIXME: Upgrade animation function (look PC-1280)
+    // if connected then refuse to close
+    if (!closed && pCONNECTOR->isLinked()) {
+
+        ask(this,
+            "You cannot close the pocket. Unlinked it and try again.",
+            1);
+        return;
+    }
     // Animate close
     closed = !closed;
 

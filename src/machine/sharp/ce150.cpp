@@ -152,7 +152,10 @@ bool Cce150::init(void)
 
     rmt = false;
 
-    return(1);
+    initsound();
+    Refresh_Display = true;
+
+    return true;
 
 }
 
@@ -407,14 +410,13 @@ void Cce150::PlayClac() {
     // Check is pen up/down status change to play the CLAC
 
 #ifndef NO_SOUND
-
-        if (soundEnabled) {
+//            clac->play();
             if (getfrequency()>0) {
                 fillSoundBuffer(0xFF);
                 fillSoundBuffer(0x00);
             }
             else {
-                //                int ps = m_audioOutput->periodSize();
+//                int ps = m_audioOutput->periodSize();
                 mainwindow->audioMutex.lock();
                 QByteArray buff;
                 buff.append(0xFF);
@@ -422,7 +424,6 @@ void Cce150::PlayClac() {
                 m_output->write(buff.constData(),2);
                 mainwindow->audioMutex.unlock();
             }
-        }
 #endif
 
 }

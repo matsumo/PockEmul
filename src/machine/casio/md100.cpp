@@ -24,6 +24,7 @@
 #include "Log.h"
 #include "dialoganalog.h"
 
+extern QString workDir;
 
 Cmd100::Cmd100(CPObject *parent):CPObject(parent)
 {								//[constructor]
@@ -170,8 +171,15 @@ void Cmd100::contextMenuEvent ( QContextMenuEvent * event )
 }
 
 void Cmd100::definePath(void){
-   QString fn = QFileDialog::getSaveFileName(this, tr("Choose a Disk File"),"",
-                                             tr("Disk Images (*.pdk)"),0,QFileDialog::DontConfirmOverwrite);
+    QDir dir;
+    dir.mkpath(workDir+"/sessions/");
+    dir.setPath(workDir+"/sessions/");
+
+   QString fn = QFileDialog::getSaveFileName(
+               this,
+               tr("Choose a Disk File"),
+               dir.path(),
+               tr("Disk Images (*.pdk)"),0,QFileDialog::DontConfirmOverwrite);
    if (!fn.isEmpty()) {
        FddClose();
        fdd.filename = fn;

@@ -1445,15 +1445,12 @@ void CPObject::remove(Cconnector* newConn)
 
 void CPObject::slotExit(void)
 {
-
 	toDestroy = true;
 }
 
 bool CPObject::InitDisplay(void)
 {
     CViewObject::InitDisplay();
-
-
 
     delete BackgroundImage;
     BackgroundImage = new QImage(*BackgroundImageBackup);
@@ -1472,14 +1469,10 @@ bool CPObject::UpdateFinalImage(void)
 	QPainter painter;
 	if ( (BackgroundImage) )
 	{
-#if 0
-        painter.begin(FinalImage);
-        painter.drawImage(QPoint(0,0),*BackgroundImage);
-        painter.end();
-#else
+
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
-#endif
+
         if (dialogkeylist)
         {
             InitView(currentView);
@@ -1488,7 +1481,8 @@ bool CPObject::UpdateFinalImage(void)
             case LEFTview: painter.begin(LeftImage); break;
             case RIGHTview: painter.begin(RightImage); break;
             case BOTTOMview: painter.begin(BottomImage); break;
-            case BACKview: painter.begin(BackImage); break;
+            case BACKview:
+            case BACKviewREV: painter.begin(BackImage); break;
             default: painter.begin(FinalImage); break;
             }
             painter.setPen(QPen(Qt::red));

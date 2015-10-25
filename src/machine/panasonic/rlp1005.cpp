@@ -147,7 +147,7 @@ bool Crlp1005::run(void)
         bus.setData(0x00);
         bus.setFunc(BUS_READDATA);
         pCONNECTOR->Set_values(bus.toUInt64());
-        if (pPC->pTIMER->pPC->fp_log) fprintf(pPC->pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
+        if (pTIMER->pPC->fp_log) fprintf(pTIMER->pPC->fp_log,"RL-P1004A BUS_QUERY\n");
         return true;
     }
     if ( (bus.getFunc()==BUS_LINE1) && !bus.isWrite() ) {

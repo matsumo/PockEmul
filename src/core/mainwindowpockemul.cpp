@@ -361,6 +361,8 @@ void MainWindowPockemul::initObjectTable() {
     objtable["CE-2H16M"]=CE2H16M;
     objtable["CE-2H32M"]=CE2H32M;
     objtable["CE-2H64M"]=CE2H64M;
+    objtable["Post-it"]=POSTIT;
+
 #ifdef P_EXTPC1500
     objtable["CE-151"]=CE151;
     objtable["CE-155"]=CE155;
@@ -466,7 +468,6 @@ void MainWindowPockemul::initObjectTable() {
 #endif
 
 
-    objtable["Post-it"]=POSTIT;
 
 }
 
@@ -565,17 +566,23 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CE123P : pPC = new Cce123;		pPC->setName("CE-123P");break;
     case CE129P : pPC = new Cce129;		pPC->setName("CE-129P");break;
 #endif
+
+#ifdef P_EXTPC1500
+    case CE1560 : pPC = new Cce1560;    pPC->setName("CE-1560");break;
+    case CE150  : pPC = new Cce150;		pPC->setName("CE-150");break;
+    case CE153  : pPC = new Cce153;		pPC->setName("CE-153");break;
+    case CE162E : pPC = new Cce162e;	pPC->setName("CE-162E");break;
+    case CE151 : pPC = new Ccemem(0,CE151); pPC->setName("CE-151");break;
+    case CE155 : pPC = new Ccemem(0,CE155); pPC->setName("CE-155");break;
+    case CE160 : pPC = new Ccemem(0,CE160); pPC->setName("CE-160");break;
+    case CE163 : pPC = new Ccemem(0,CE163); pPC->setName("CE-163");break;
+#endif
+
     case CE140P : pPC = new Cce140p;	pPC->setName("CE-140P");break;
     case CE140F : pPC = new Cce140f;	pPC->setName("CE-140F");break;
     case CE152  : pPC = new Cce152;		pPC->setName("CE-152");break;
     case CE127R : pPC = new Cce127r;	pPC->setName("CE-127R");break;
 
-#ifdef EXTPC1500
-    case CE1560 : pPC = new Cce1560;    pPC->setName("CE-1560");break;
-    case CE150  : pPC = new Cce150;		pPC->setName("CE-150");break;
-    case CE153  : pPC = new Cce153;		pPC->setName("CE-153");break;
-    case CE162E : pPC = new Cce162e;	pPC->setName("CE-162E");break;
-#endif
     case CE201M : pPC = new Cce2xxx(0,CE201M); pPC->setName("CE-201M");break;
     case CE202M : pPC = new Cce2xxx(0,CE202M); pPC->setName("CE-202M");break;
     case CE203M : pPC = new Cce2xxx(0,CE203M); pPC->setName("CE-203M");break;
@@ -585,17 +592,13 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
     case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
     case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
-#ifdef EXTPC1500
-    case CE151 : pPC = new Ccemem(0,CE151); pPC->setName("CE-151");break;
-    case CE155 : pPC = new Ccemem(0,CE155); pPC->setName("CE-155");break;
-    case CE160 : pPC = new Ccemem(0,CE160); pPC->setName("CE-160");break;
-    case CE163 : pPC = new Ccemem(0,CE163); pPC->setName("CE-163");break;
-#endif
 
     case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
     case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
     case POTAR      : pPC = new Cpotar;	pPC->setName("Potar");break;
     case Simulator  : pPC = new Ccesimu;pPC->setName("Simulator");break;
+
+    case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
 
 #ifdef P_X07
     case X07    : pPC = new Cx07;       pPC->setName("Canon X-07"); break;
@@ -650,8 +653,6 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case RLP2001: pPC = new Crlp2001;      pPC->setName("Panasonic RL-P2001"); break;
     case RLP1005: pPC = new Crlp1005;      pPC->setName("Panasonic RL-P1005"); break;
 #endif
-
-    case POSTIT : pPC = new Cpostit;      pPC->setName("Post-it"); break;
 
 #ifdef P_HP_ALL
     case HP41 : pPC = new Chp41;      pPC->setName("HP-41"); break;
@@ -1480,7 +1481,7 @@ void MainWindowPockemul::updateFrameTimer()
 #endif
         if ( CurrentpPC->Refresh_Display) {
             //                    qWarning()<<"main1:"<<mainwindow->rawclk;
-            CurrentpPC->UpdateFinalImage();
+//            CurrentpPC->UpdateFinalImage();
             CurrentpPC->update();
             emit CurrentpPC->updatedPObject(CurrentpPC);
             //                    qWarning()<<"main2:"<<mainwindow->rawclk;
