@@ -1,5 +1,4 @@
 //TODO  Save session needs to be checked
-//TODO  resize screen to avoid aliasing
 #include <QtGui>
 
 #include "common.h"
@@ -347,9 +346,7 @@ void Cpc1280::renderAnimation()
 
 void Cpc1280::TurnCLOSE(void) {
     // IF CONNECTED to printer , exit
-    QList<CPObject *> ConList;
-    mainwindow->pdirectLink->findAllObj(this,&ConList);
-    if (!ConList.isEmpty()) return;
+    if (pCONNECTOR->isLinked()) return;
 
     if (flipping) return;
     // Animate close

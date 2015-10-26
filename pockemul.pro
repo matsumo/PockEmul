@@ -273,7 +273,6 @@ RESOURCES *= resources/pc1245.qrc
 contains(PROJECT_PACKAGE,PC1250) {
 DEFINES *= P_PC1250
 HEADERS *= src/machine/sharp/pc1250.h \
-           src/core/Keyb1250.h \
            src/lcd/Lcdc_pc1250.h
 SOURCES *= src/machine/sharp/pc1250.cpp \
            src/lcd/Lcdc_pc1250.cpp
@@ -284,8 +283,7 @@ OTHER_FILES *=  resources/keymap/pc1250.map \
 # PC1251
 contains(PROJECT_PACKAGE,PC1251) {
 DEFINES *= P_PC1251
-HEADERS *= src/machine/sharp/pc1251.h \
-           src/core/Keyb1251.h
+HEADERS *= src/machine/sharp/pc1251.h
 SOURCES *= src/machine/sharp/pc1251.cpp
 RESOURCES *= resources/pc1251.qrc
 }

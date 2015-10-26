@@ -312,7 +312,7 @@ UINT8 Cz1::in(UINT8 Port,QString)
     return 0;
 }
 
-UINT8 Cz1::in8(UINT16 Port)
+UINT8 Cz1::in8(UINT16 Port,QString sender)
 {
     UINT16 v=0;
 
@@ -422,7 +422,7 @@ UINT8 Cz1::out(UINT8 Port, UINT8 x, QString sender)
 
     return 0;
 }
-UINT8 Cz1::out8(UINT16 Port, UINT8 x)
+UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
 {
     switch(Port) {
     case 0x0002:
@@ -563,7 +563,7 @@ UINT8 Cz1::out8(UINT16 Port, UINT8 x)
 }
 
 
-UINT16 Cz1::in16(UINT16 address)
+UINT16 Cz1::in16(UINT16 address,QString sender)
 {
     switch (address) {
     case 0x36 : return 0x1000; break;
@@ -574,7 +574,7 @@ UINT16 Cz1::in16(UINT16 address)
     return 0;
 }
 
-UINT16 Cz1::out16(UINT16 Port, UINT16 x)
+UINT16 Cz1::out16(UINT16 Port,UINT16 x,QString sender)
 {
 
     switch (Port) {
