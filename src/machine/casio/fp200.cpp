@@ -218,7 +218,7 @@ UINT8 Cfp200::out(UINT8 Port, UINT8 Value, QString sender)
     return 0;
 }
 
-UINT8 Cfp200::in8(UINT16 Port)
+UINT8 Cfp200::in8(UINT16 Port,QString sender)
 {
     Q_UNUSED(Port)
 
@@ -227,7 +227,7 @@ UINT8 Cfp200::in8(UINT16 Port)
 
 
 
-UINT8 Cfp200::out8(UINT16 Port, UINT8 x)
+UINT8 Cfp200::out8(UINT16 Port,UINT8 x,QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
@@ -235,14 +235,14 @@ UINT8 Cfp200::out8(UINT16 Port, UINT8 x)
     return 0;
 }
 
-UINT16 Cfp200::in16(UINT16 Port)
+UINT16 Cfp200::in16(UINT16 Port,QString sender)
 {
     Q_UNUSED(Port)
 
     return 0;
 }
 
-UINT16 Cfp200::out16(UINT16 Port, UINT16 x)
+UINT16 Cfp200::out16(UINT16 Port, UINT16 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
