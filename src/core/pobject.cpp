@@ -676,7 +676,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
         }
     }
     else {
-        mainwindow->doZoom(pos,1/mainwindow->zoom);
+        mainwindow->doZoom(pos,1.0/mainwindow->zoom);
     }
 
 }
