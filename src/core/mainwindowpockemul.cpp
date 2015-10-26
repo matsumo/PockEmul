@@ -1453,7 +1453,7 @@ void MainWindowPockemul::updateFrameTimer()
 
 
                     if (CurrentpPC->isActiveWindow())
-                        mainwindow->setWindowTitle(QString("  Zoom=%1%  Pockemul:%2%  - %3 fps").arg(int(zoom)).arg(rate).arg(int(nbframe*1000.0/deltaTime)));
+                        mainwindow->setWindowTitle(QString("  Zoom=%1%  Pockemul:%2%  - %3 fps").arg(int(zoom*100)).arg(rate).arg(int(nbframe*1000.0/deltaTime)));
                     nbframe = 0;
                     str.setNum((int)rate);
                     str = ": "+str+tr("% original speed");

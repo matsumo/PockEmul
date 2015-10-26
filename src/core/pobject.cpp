@@ -664,10 +664,10 @@ void CPObject::slotDoubleClick(QPoint pos) {
     if (mainwindow->zoom <= 1) {
         // Compute global rect
         QRectF rs = RectWithLinked();
-        int rw= mainwindow->centralwidget->rect().width()/rs.width();
-        int rh= mainwindow->centralwidget->rect().height()/rs.height();
-        int r = MIN(rw,rh);
-        if (r>100) {
+        float rw= mainwindow->centralwidget->rect().width()/rs.width();
+        float rh= mainwindow->centralwidget->rect().height()/rs.height();
+        float r = MIN(rw,rh);
+        if (r>1) {
             mainwindow->doZoom(pos,r/mainwindow->zoom);
             //move to upper left
             // Fetch all_object and move them
@@ -676,7 +676,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
         }
     }
     else {
-        mainwindow->doZoom(pos,mainwindow->zoom);
+        mainwindow->doZoom(pos,1/mainwindow->zoom);
     }
 
 }
