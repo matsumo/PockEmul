@@ -179,13 +179,13 @@ void CPObject::createShortcut() {
 
 void CPObject::maximizeWidth()
 {
-    if (mainwindow->zoom <= 100) {
+    if (mainwindow->zoom <= 1) {
         // Compute global rect
         QRectF rs = RectWithLinked();
-        float rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
-        float rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
+        float rw= mainwindow->centralwidget->rect().width()/rs.width();
+        float rh= mainwindow->centralwidget->rect().height()/rs.height();
         int r = MAX(rw,rh);
-        if (r>100) {
+        if (r>1) {
             mainwindow->doZoom(QPoint(0,0),1,r-mainwindow->zoom);
             //move to upper left
             // Fetch all_object and move them
@@ -197,7 +197,7 @@ void CPObject::maximizeWidth()
         }
     }
     else {
-        mainwindow->doZoom(QPoint(0,0),-1,mainwindow->zoom-100);
+        mainwindow->doZoom(QPoint(0,0),-1,mainwindow->zoom-1);
         fullscreenMode = false;
         ungrabGesture(Qt::SwipeGesture);
 //        qWarning()<<"unGrab Gesture SwipeGesture";
@@ -206,11 +206,11 @@ void CPObject::maximizeWidth()
 
 void CPObject::maximizeHeight()
 {
-    if (mainwindow->zoom <= 100) {
+    if (mainwindow->zoom <= 1) {
         // Compute global rect
         QRectF rs = RectWithLinked();
-        int rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
-        int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
+        int rw= mainwindow->centralwidget->rect().width()/rs.width();
+        int rh= mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);
         if (r>100) {
             mainwindow->doZoom(QPoint(0,0),1,r-mainwindow->zoom);
@@ -222,7 +222,7 @@ void CPObject::maximizeHeight()
         }
     }
     else {
-        mainwindow->doZoom(QPoint(0,0),-1,mainwindow->zoom-100);
+        mainwindow->doZoom(QPoint(0,0),-1,mainwindow->zoom-1);
         fullscreenMode = false;
     }
 }
@@ -383,14 +383,14 @@ bool CPObject::run(void){
 //                if (x<0) {
 //                    // move left
 //                    if (posx()<50) {
-//                        MoveWithLinked(QPoint(10,0));//centralwidget->rect().width() - CurrentpPC->width()*zoom/100,0));
+//                        MoveWithLinked(QPoint(10,0));//centralwidget->rect().width() - CurrentpPC->width()*zoom,0));
 //                        update();
 //                    }
 //                }
 //                else {
 //                    // move right
 //                    if ((posx()+width()) > mainwindow->centralWidget()->rect().width()) {
-//                        MoveWithLinked(QPoint( -10,0));//CurrentpPC->width()*zoom/100 - centralwidget->rect().width(),0));
+//                        MoveWithLinked(QPoint( -10,0));//CurrentpPC->width()*zoom - centralwidget->rect().width(),0));
 //                        update();
 //                    }
 //                }
@@ -550,8 +550,8 @@ void CPObject::SwitchFrontBack(QPoint point) {
 
         QPropertyAnimation *animation = new QPropertyAnimation(this, "geometry");
         animation->setDuration(1000);
-        animation->setStartValue(QRect(posx(),posy(),getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100));
-        animation->setEndValue(QRect(newposx,newposy,getDX()*mainwindow->zoom/100/4,getDY()*mainwindow->zoom/100/4));
+        animation->setStartValue(QRect(posx(),posy(),getDX()*mainwindow->zoom,getDY()*mainwindow->zoom));
+        animation->setEndValue(QRect(newposx,newposy,getDX()*mainwindow->zoom/4,getDY()*mainwindow->zoom/4));
         animation->setEasingCurve(QEasingCurve::OutBounce);
         animation->start();
         this->setPosX(newposx);
@@ -570,7 +570,7 @@ void CPObject::SwitchFrontBack(QPoint point) {
 //        animation->setEndValue(QRect(newposx,newposy,Pc_DX,Pc_DY));
 //        animation->setEasingCurve(QEasingCurve::OutBounce);
 //        animation->start();
-        setGeometry(newposx,newposy,getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
+        setGeometry(newposx,newposy,getDX()*mainwindow->zoom,getDY()*mainwindow->zoom);
         this->setPosX(newposx);
         this->setPosY(newposy);
 //            QPoint newpos = pos() - mainwindow->pos();
@@ -661,11 +661,11 @@ void CPObject::slotDoubleClick(QPoint pos) {
     }
 
 
-    if (mainwindow->zoom <= 100) {
+    if (mainwindow->zoom <= 1) {
         // Compute global rect
         QRectF rs = RectWithLinked();
-        int rw= 100*mainwindow->centralwidget->rect().width()/rs.width();
-        int rh= 100*mainwindow->centralwidget->rect().height()/rs.height();
+        int rw= mainwindow->centralwidget->rect().width()/rs.width();
+        int rh= mainwindow->centralwidget->rect().height()/rs.height();
         int r = MIN(rw,rh);
         if (r>100) {
             mainwindow->doZoom(pos,r/mainwindow->zoom);
@@ -676,7 +676,7 @@ void CPObject::slotDoubleClick(QPoint pos) {
         }
     }
     else {
-        mainwindow->doZoom(pos,100/mainwindow->zoom);
+        mainwindow->doZoom(pos,mainwindow->zoom);
     }
 
 }
@@ -876,7 +876,7 @@ QList<Cconnector *> CPObject::nearConnectors(Cconnector *refConnector,qint8 snap
             Cconnector *c = ConnList.at(i);
             // ATTENTION : POSITIONN DE L'OBJECT + SNAP !!!!!!
             CPObject *p = refConnector->Parent;
-            qreal range = QLineF(p->pos()+refConnector->getSnap()*mainwindow->zoom/100,this->pos()+c->getSnap()*mainwindow->zoom/100).length();
+            qreal range = QLineF(p->pos()+refConnector->getSnap()*mainwindow->zoom,this->pos()+c->getSnap()*mainwindow->zoom).length();
             if (range < snaprange) {
                 retList.append(ConnList.at(i));
             }
@@ -918,7 +918,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
                             // The user clicked the Yes button or pressed Enter
                             // Connect
 
-                            MoveWithLinkedRel(listpPObject.at(k)->pos() + listpPObject.at(k)->ConnList.at(c)->getSnap()*mainwindow->zoom/100 - pos() - nearList.at(r)->getSnap()*mainwindow->zoom/100);
+                            MoveWithLinkedRel(listpPObject.at(k)->pos() + listpPObject.at(k)->ConnList.at(c)->getSnap()*mainwindow->zoom - pos() - nearList.at(r)->getSnap()*mainwindow->zoom);
                             mainwindow->pdirectLink->addLink(listpPObject.at(k)->ConnList.at(c),nearList.at(r),true);
                             QList<CPObject *> list;
                             listpPObject.at(k)->manageStackPos(&list);
@@ -1457,7 +1457,7 @@ bool CPObject::InitDisplay(void)
     delete FinalImage;
     FinalImage = new QImage(*BackgroundImageBackup);
 
-    mask = QPixmap(BackGroundFname).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
+    mask = QPixmap(BackGroundFname).scaled(getDX()*mainwindow->zoom,getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
 	return(1);

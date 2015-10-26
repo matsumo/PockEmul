@@ -309,8 +309,8 @@ void Cpc1280::renderAnimation()
 
         if (FinalImage)
         {
-//            int w = getDX()*internalImageRatio;// * mainwindow->zoom/100.0;//this->width();
-//            int h = getDY()*internalImageRatio;// * mainwindow->zoom/100.0;//this->height();
+//            int w = getDX()*internalImageRatio;// * mainwindow->zoom;//this->width();
+//            int h = getDY()*internalImageRatio;// * mainwindow->zoom;//this->height();
             int w = AnimatedImage->width();
             int h = AnimatedImage->height();
             painter.translate(w/2 ,(h*RATIO)*(1+m_angle/180.0));
@@ -377,7 +377,8 @@ void Cpc1280::TurnCLOSE(void) {
          animation2->setKeyValueAt(0.5,.55);
          animation2->setKeyValueAt(1,1.0);
 //         clearMask();
-         _s = QSize(this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+         _s = QSize(this->getDX()*mainwindow->zoom,
+                    this->getDY()*mainwindow->zoom);
 //         delete AnimatedImage;
 //         AnimatedImage = new QImage(FinalImage);
      }
@@ -390,11 +391,13 @@ void Cpc1280::TurnCLOSE(void) {
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
 //     flipping = true;
 //     delete AnimatedImage;
-//     AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
+//     AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
      flipping = true;
      emit updatedPObject(this);
-     changeGeometry(this->posx(),this->posy(),
-                    _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
+     changeGeometry(this->posx(),
+                    this->posy(),
+                    _s.width()*mainwindow->zoom,
+                    _s.height()*mainwindow->zoom);
      group->start();
 
 }
@@ -412,9 +415,15 @@ void Cpc1280::endAnimation()
 {
     flipping = false;
     if (closed) {
-        setGeometry(posx(),posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+        setGeometry(posx(),
+                    posy(),
+                    this->getDX()*mainwindow->zoom,
+                    this->getDY()*mainwindow->zoom);
     }
     else {
-        changeGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+        changeGeometry(this->posx(),
+                       this->posy(),
+                       this->getDX()*mainwindow->zoom,
+                       this->getDY()*mainwindow->zoom);
     }
 }

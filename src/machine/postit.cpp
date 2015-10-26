@@ -120,8 +120,8 @@ bool Cpostit::UpdateFinalImage()
 
 void Cpostit::paintEvent(QPaintEvent *event)
 {
-    float coeffx = getDX()*mainwindow->zoom/100/150.0;
-    float coeffy = getDY()*mainwindow->zoom/100/150.0;
+    float coeffx = getDX()*mainwindow->zoom/150.0;
+    float coeffy = getDY()*mainwindow->zoom/150.0;
 //    qWarning()<<"new margin:"<<newmargin<<"dx="<<getDX();
     mainLayout->setContentsMargins(0,0,1*coeffx,11*coeffy);
     HBL->setContentsMargins(coeffx*10,coeffy*20,coeffx*10,coeffy*0);

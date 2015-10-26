@@ -102,7 +102,7 @@ void Cconnector::setType(Cconnector::ConnectorType type)
 }
 
 QPointF Cconnector::pos() {
-    return Parent->pos() + snap*mainwindow->zoom/100;
+    return Parent->pos() + snap*mainwindow->zoom;
 }
 
 bool Cconnector::isLinked() {

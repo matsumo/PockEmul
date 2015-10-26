@@ -279,7 +279,8 @@ void CrlExt::Rotate()
     pCONNECTOR->setSnap(rotate?QPoint(34,72):QPoint(406,72));
 
     pCONNECTOR->setDir(rotate?Cconnector::WEST:Cconnector::EAST);
-    mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
+    mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom,
+                                                             getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
     update();

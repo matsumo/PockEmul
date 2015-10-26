@@ -576,10 +576,10 @@ void Cti59::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 void Cti59::wheelEvent(QWheelEvent *event)
 {
     QRect _r = pKEYB->getKey(0x241).Rect;
-    _r.setCoords(_r.x()*mainwindow->zoom/100,
-                 _r.y()*mainwindow->zoom/100,
-                 (_r.x()+_r.width())*mainwindow->zoom/100,
-                 (_r.y()+_r.height())*mainwindow->zoom/100);
+    _r.setCoords(_r.x()*mainwindow->zoom,
+                 _r.y()*mainwindow->zoom,
+                 (_r.x()+_r.width())*mainwindow->zoom,
+                 (_r.y()+_r.height())*mainwindow->zoom);
 
 //qWarning()<<_cardRect<<event->pos();
     if (_r.contains(event->pos())) {

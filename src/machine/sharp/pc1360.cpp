@@ -443,8 +443,8 @@ void Cpc1360::linkObject(QString item,CPObject *pPC)
         _rect = pKEYB->getKey(0x242).Rect;
     }
     mainwindow->pdirectLink->addLink(_conn,pPC->ConnList.at(0),true);
-    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom/100);
-    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom/100);
+    pPC->setPosX(posx()+_rect.left()*mainwindow->zoom);
+    pPC->setPosY(posy()+_rect.top()*mainwindow->zoom);
     pPC->raise();
     if (currentSlot==1) {
         pPC->setRotation(180);

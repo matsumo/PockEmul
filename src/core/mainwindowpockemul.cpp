@@ -107,7 +107,7 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     windowide = 0;
 #endif
     scaleFactor = 1;
-    zoom = 100;
+    zoom = 1;
     saveAll = ASK;
     openGlFlag = false;
     startKeyDrag = false;
@@ -684,8 +684,8 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     }
     qWarning()<<"init";
     AddLog(LOG_MASTER,"OK1");
-    int dx = pPC->getDX()*mainwindow->zoom/100;
-    int dy = pPC->getDY()*mainwindow->zoom/100;
+    int dx = pPC->getDX()*mainwindow->zoom;
+    int dy = pPC->getDY()*mainwindow->zoom;
 #ifdef AVOID
     Avoid::Rectangle rectangle(Avoid::Point(-10.0, -10.0), Avoid::Point(dx+20, dy+20));
     mainwindow->shapeRefList[pPC] = new Avoid::ShapeRef(mainwindow->router, rectangle);
@@ -929,7 +929,7 @@ bool MainWindowPockemul::Close_All() {
 }
 
 void MainWindowPockemul::resetZoom() {
-    zoom = 100;
+    zoom = 1;
     update();
 }
 
@@ -1006,7 +1006,8 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
     if (xml->readNextStartElement()) {
         if (xml->name() == "pml" && xml->attributes().value("version") == "1.0") {
             zoom = xml->attributes().value("zoom").toString().toFloat();
-            if (zoom==0)zoom=100;
+            if (zoom==0)zoom=1;
+            if (zoom>=10)zoom/=100;
             while (!xml->atEnd()) {
                 while (xml->readNextStartElement()) {
                     QString eltname = xml->name().toString();
@@ -1047,9 +1048,12 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                                     locPC->setDY(height);
                                 }
                                 if (locPC->Front) {
-//                                    locPC->setGeometry(posX.toFloat(),posY.toFloat(),locPC->getDX()*zoom/100,locPC->getDY()*zoom/100);
-//                                    locPC->setMask(locPC->mask.scaled(locPC->getDX()*zoom/100,locPC->getDY()*zoom/100).mask());
-                                    locPC->changeGeometry(posX,posY,locPC->getDX()*zoom/100,locPC->getDY()*zoom/100);
+//                                    locPC->setGeometry(posX.toFloat(),posY.toFloat(),locPC->getDX()*zoom,locPC->getDY()*zoom);
+//                                    locPC->setMask(locPC->mask.scaled(locPC->getDX()*zoom,locPC->getDY()*zoom).mask());
+                                    locPC->changeGeometry(posX,
+                                                          posY,
+                                                          locPC->getDX()*zoom,
+                                                          locPC->getDY()*zoom);
                                 }
                                 else {
                                     locPC->setGeometry(posX,posY,locPC->getDX()/4,locPC->getDY()/4);
@@ -1313,8 +1317,8 @@ void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
 
         locpc->changeGeometry(newposx,
                               newposy,
-                              locpc->currentViewRect().width()*zoom/100/(locpc->Front?1:4),
-                              locpc->currentViewRect().height()*zoom/100/(locpc->Front?1:4));
+                              locpc->currentViewRect().width()*zoom/(locpc->Front?1:4),
+                              locpc->currentViewRect().height()*zoom/(locpc->Front?1:4));
     }
 }
 

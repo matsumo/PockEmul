@@ -335,7 +335,8 @@ bool Crlp2001::InitDisplay(void)
 
     pCONNECTOR->setDir(rotate?Cconnector::EAST:Cconnector::WEST);
 
-    mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
+    mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom,
+                                                             getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
     return true;

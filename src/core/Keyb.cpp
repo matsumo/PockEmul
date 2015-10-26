@@ -86,7 +86,10 @@ int Ckeyb::KeyClick(QPoint pts)
         if (Keys.at(i).view != _curView) continue;
         if (!(Keys.at(i).enabled)) continue;
         QRect r = Keys.at(i).Rect;
-            r.setCoords(r.x()*mainwindow->zoom/100,r.y()*mainwindow->zoom/100,(r.x()+r.width())*mainwindow->zoom/100,(r.y()+r.height())*mainwindow->zoom/100);
+            r.setCoords(r.x()*mainwindow->zoom,
+                        r.y()*mainwindow->zoom,
+                        (r.x()+r.width())*mainwindow->zoom,
+                        (r.y()+r.height())*mainwindow->zoom);
             int tmpDistance = 0;
             if ( r.contains(pts) ) {
                 tmpDistance = 0;
@@ -109,8 +112,8 @@ int Ckeyb::KeyClick(QPoint pts)
             }
 
     }
-//    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom/100);
-    if ((smallerDistance < (30*mainwindow->zoom/100)) && (nearestIndex>=0)) {
+//    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom);
+    if ((smallerDistance < (30*mainwindow->zoom)) && (nearestIndex>=0)) {
         if (!pPC->closed) {
 //            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
             return Keys.at(nearestIndex).ScanCode;

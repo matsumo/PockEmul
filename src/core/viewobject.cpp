@@ -389,15 +389,18 @@ void CViewObject::renderAnimation()
 
 
         AnimatedImage->fill(Qt::transparent);
+        qWarning()<<"AnimatedImage"<<AnimatedImage;
         if (FinalImage)
         {
-            int w = viewRect(animationView1).width() * mainwindow->zoom/100.0;//this->width();
-            int h = viewRect(animationView1).height() * mainwindow->zoom/100.0;//this->height();
-            int wt = viewRect(animationView2).width() * mainwindow->zoom/100.0;
-            int ht = viewRect(animationView2).height()* mainwindow->zoom/100.0;
+            int w = viewRect(animationView1).width() * mainwindow->zoom;//this->width();
+            int h = viewRect(animationView1).height() * mainwindow->zoom;//this->height();
+            int wt = viewRect(animationView2).width() * mainwindow->zoom;
+            int ht = viewRect(animationView2).height()* mainwindow->zoom;
 //            qWarning()<<"angle:"<<m_angle;
             painter.begin(AnimatedImage);
-            painter.setCompositionMode(QPainter::CompositionMode_Source);
+            painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+//            AnimatedImage->fill(Qt::transparent);
+
             QTransform matrix,matrix2;
             matrix.scale(m_zoom,m_zoom);
 
@@ -413,7 +416,8 @@ void CViewObject::renderAnimation()
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
-                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+//                AnimatedImage->fill(Qt::transparent);
                 painter.translate(w/2 ,ht * m_angle/90);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
@@ -434,7 +438,8 @@ void CViewObject::renderAnimation()
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
-                painter.setCompositionMode(QPainter::CompositionMode_Source);
+                painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
+//                AnimatedImage->fill(Qt::transparent);
                 painter.translate(wt*m_angle/90,h/2);
                 painter.setTransform(matrix,true);
                 matrix2.reset();
@@ -464,7 +469,10 @@ void CViewObject::endAnimation(){
     flipping = false;
 
 //    qWarning()<<"endAnimation";
-    changeGeometry(this->posx(),this->posy(),viewRect(currentView).width()*mainwindow->zoom/100.0,viewRect(currentView).height()*mainwindow->zoom/100.0);
+    changeGeometry(this->posx(),
+                   this->posy(),
+                   viewRect(currentView).width()*mainwindow->zoom,
+                   viewRect(currentView).height()*mainwindow->zoom);
     PostFlip();
     Refresh_Display = true;
 }
@@ -572,11 +580,11 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
     if ( (targetView != currentView) && getViewImage(targetView) ) {
         QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
         delete AnimatedImage;
-        AnimatedImage = new QImage(_s*mainwindow->zoom/100.0,QImage::Format_ARGB32);
+        AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
 
 //        emit updatedPObject(this);
 //        changeGeometry(this->posx(),this->posy(),
-//                       _s.width()*mainwindow->zoom/100.0,_s.height()*mainwindow->zoom/100.0);
+//                       _s.width()*mainwindow->zoom,_s.height()*mainwindow->zoom);
 //        Refresh_Display = true;
         flip(dir);
     }

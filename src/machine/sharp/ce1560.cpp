@@ -430,9 +430,12 @@ bool Cce1560::UpdateFinalImage(void) {
 
     QImage screenImage = FinalImage->copy(60*internalImageRatio,0,(getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2).mirrored(false,true);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
-    painter.fillRect(60*internalImageRatio,0,(getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2,Qt::transparent);
+    painter.fillRect(60*internalImageRatio,0,
+                     (getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2,
+                     Qt::transparent);
 
-    painter.translate((getDX()+60*internalImageRatio)/2,getDY()*internalImageRatio/2);
+    painter.translate((getDX()+60*internalImageRatio)/2,
+                      getDY()*internalImageRatio/2);
 
     QTransform matrix;
     matrix.scale(m_zoom,m_zoom);
@@ -446,11 +449,12 @@ bool Cce1560::UpdateFinalImage(void) {
     painter.setTransform(matrix2,true);
 
     if (m_screenAngle<=90)
-        screenImage = coverImage;//.copy(60*internalImageRatio,0,692*internalImageRatio,getDY()*internalImageRatio/2);
+        screenImage = coverImage;
 
     painter.drawImage(-getDX()/2+60*internalImageRatio/2,0,screenImage);
     painter.end();
-    mask = QPixmap::fromImage(*FinalImage).scaled(getDX()*mainwindow->zoom/100,getDY()*mainwindow->zoom/100);
+    mask = QPixmap::fromImage(*FinalImage).scaled(getDX()*mainwindow->zoom,
+                                                  getDY()*mainwindow->zoom);
 
     setMask(mask.mask());
 
@@ -486,17 +490,19 @@ bool Cce1560::UpdateFinalImage(void) {
 bool Cce1560::InitDisplay()
 {
     CpcXXXX::InitDisplay();
-    coverImage = QImage(P_RES(":/pc1500/ce1560_cover.png")).scaled((getDX()-60)*internalImageRatio,getDY()*internalImageRatio/2);
-qWarning()<<coverImage.size();
+    coverImage = QImage(P_RES(":/pc1500/ce1560_cover.png")).
+            scaled((getDX()-60)*internalImageRatio,
+                   getDY()*internalImageRatio/2);
+//qWarning()<<coverImage.size();
     return true;
 }
 
 void Cce1560::animateScreen() {
 //    qWarning()<<"ANIMATE";
     QPropertyAnimation *animation1 = new QPropertyAnimation(this, "screenangle");
-    QPropertyAnimation *animation2 = new QPropertyAnimation(this, "zoom");
+//    QPropertyAnimation *animation2 = new QPropertyAnimation(this, "zoom");
      animation1->setDuration(1500);
-     animation2->setDuration(1500);
+//     animation2->setDuration(1500);
      if (!screenOpen) {
          animation1->setStartValue(m_screenAngle);
          animation1->setEndValue(0);
@@ -513,13 +519,16 @@ void Cce1560::animateScreen() {
 //         animation2->setKeyValueAt(0.5,.55);
 //         animation2->setKeyValueAt(1,1.0);
          clearMask();
-         setGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+         setGeometry(this->posx(),
+                     this->posy(),
+                     this->getDX()*mainwindow->zoom,
+                     this->getDY()*mainwindow->zoom);
 
      }
 
      QParallelAnimationGroup *group = new QParallelAnimationGroup;
      group->addAnimation(animation1);
-     group->addAnimation(animation2);
+//     group->addAnimation(animation2);
 
      connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(updateAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endscreenAnimation()));
@@ -542,5 +551,4 @@ void Cce1560::endscreenAnimation()
 void Cce1560::updateAnimation()
 {
     Refresh_Display = true;
-    update();
 }

@@ -329,8 +329,8 @@ void Cpb1000::paintEvent(QPaintEvent *event)
 
         if (FinalImage)
         {
-            int w = getDX() * mainwindow->zoom/100.0;//this->width();
-            int h = getDY() * mainwindow->zoom/100.0;//this->height();
+            int w = getDX() * mainwindow->zoom;//this->width();
+            int h = getDY() * mainwindow->zoom;//this->height();
 
             painter.translate(w/2,h*RATIO);
 
@@ -605,7 +605,10 @@ void Cpb1000::TurnCLOSE(void) {
          animation2->setKeyValueAt(0,1.0);
          animation2->setKeyValueAt(0.5,.55);
          animation2->setKeyValueAt(1,1.0);
-         changeGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*mainwindow->zoom/100.0);
+         changeGeometry(this->posx(),
+                        this->posy(),
+                        this->getDX()*mainwindow->zoom,
+                        this->getDY()*mainwindow->zoom);
      }
 
      QParallelAnimationGroup *group = new QParallelAnimationGroup;
@@ -632,7 +635,10 @@ void Cpb1000::endAnimation()
 {
     flipping = false;
     if (closed) {
-        setGeometry(this->posx(),this->posy(),this->getDX()*mainwindow->zoom/100.0,this->getDY()*RATIO*mainwindow->zoom/100.0);
+        setGeometry(this->posx(),
+                    this->posy(),
+                    this->getDX()*mainwindow->zoom,
+                    this->getDY()*RATIO*mainwindow->zoom);
     }
 
 }

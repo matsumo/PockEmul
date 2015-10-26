@@ -128,7 +128,7 @@ bool Cce153::run(void)
 }
 
 void Cce153::mouseDoubleClickEvent(QMouseEvent *event) {
-    float _zoom = mainwindow->zoom/100;
+    float _zoom = mainwindow->zoom;
     QPoint pts(event->x() , event->y());
     QRect kbdZone(118*_zoom,170*_zoom,636*_zoom,382*_zoom);
 
@@ -152,7 +152,7 @@ void Cce153::mouseMoveEvent(QMouseEvent *event) {
         return;
     }
 
-    float _zoom = mainwindow->zoom/100;
+    float _zoom = mainwindow->zoom;
     QPoint pts(event->x() , event->y());
     QRect kbdZone(118*_zoom,170*_zoom,636*_zoom,382*_zoom);
 
@@ -175,7 +175,7 @@ void Cce153::mouseMoveEvent(QMouseEvent *event) {
 
 void Cce153::mousePressEvent(QMouseEvent *event)
 {
-    float _zoom = mainwindow->zoom/100;
+    float _zoom = mainwindow->zoom;
     QPoint pts(event->x() , event->y());
     QRect kbdZone(118*_zoom,170*_zoom,636*_zoom,382*_zoom);
 

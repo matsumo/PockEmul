@@ -811,8 +811,8 @@ void Cpc15XX::linkObject(QString item,CPObject *pPC)
     QRect _rect = pKEYB->getKey(0x241).Rect;
 
     mainwindow->pdirectLink->addLink(pMEMCONNECTOR,pPC->ConnList.at(0),true);
-    float _x = posx()+_rect.left()*mainwindow->zoom/100;
-    float _y = posy()+_rect.top()*mainwindow->zoom/100;
+    float _x = posx()+_rect.left()*mainwindow->zoom;
+    float _y = posy()+_rect.top()*mainwindow->zoom;
 
     pPC->setRotation(90);
     float _w = pPC->getDY();
