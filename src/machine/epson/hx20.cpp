@@ -104,8 +104,11 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
                                    QRect(420,90,290,90),
                                    QRect());
 
-    pCPU		= new Cmc6800(this);  pmc6301 = (Cmc6800*)pCPU; pmc6301->setObjectName("Master");
-    pSlaveCPU	= new Cmc6800(this,7,P_RES(":/hx20/hd6301v1.6d")); pSlaveCPU->setObjectName("Slave");
+    pMasterCPU	= new Cmc6800(this);
+    pMasterCPU->setObjectName("Master");
+    pSlaveCPU	= new Cmc6800(this,7,P_RES(":/hx20/hd6301v1.6d"));
+    pSlaveCPU->setObjectName("Slave");
+    pCPU = (CCPU*)pMasterCPU;
 
     for (int i=0;i<6;i++) {
         upd16434[i]  = new CUPD16434(this,i);
@@ -188,7 +191,7 @@ bool Chx20::run() {
 
 
     quint64 _tmpCount = pTIMER->state;
-    run(pmc6301);
+    run(pMasterCPU);
     quint64 _tmpCount2 = pTIMER->state;
     masterCount += _tmpCount2 - _tmpCount;
 
@@ -203,7 +206,7 @@ bool Chx20::run() {
         Get_PrinterConnector(pM160->pCONNECTOR);
     }
     // Slave P34 -> Master P12
-    pmc6301->write_signal(SIG_MC6801_PORT_1,
+    pMasterCPU->write_signal(SIG_MC6801_PORT_1,
                           (pSlaveCPU->regs.port[2].wreg & 0x10)?0x04:0x00, 0x04);  // P34
 
 
@@ -339,7 +342,7 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
     if (sender == "Slave") {
         switch(addr) {
         case 0x01: // send to master
-            pmc6301->recv_buffer.append(data);
+            pMasterCPU->recv_buffer.append(data);
             if(pSlaveCPU->logsw) fprintf(pSlaveCPU->fp_log,"\nSEND TO MASTER\n");
             break;
         }
@@ -363,9 +366,9 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
             if(pKEYB->Get_KS() != data) {
                 pKEYB->Set_KS(data);
                 if((int_status & INT_KEYBOARD) && (int_status &= ~INT_KEYBOARD) == 0) {
-                    pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
+                    pMasterCPU->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
                 }
-                pmc6301->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
+                pMasterCPU->write_signal(SIG_MC6801_PORT_1, 0x20, 0x20);
                 //            qWarning()<<"strobe:"<<data;
                 key_data = getKey();
             }
@@ -464,7 +467,7 @@ bool Chx20::Get_CN8(Cconnector *_conn)
 {
     pSlaveCPU->write_signal(SIG_MC6801_PORT_4, _conn->Get_pin(14)?0x40:0x00, 0x40);  // P46 DV0
     pSlaveCPU->write_signal(SIG_MC6801_PORT_2, _conn->Get_pin(12)?0x01:0x00, 0x01);  // P20 DV1
-    pmc6301->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(5)?0x80:0x00, 0x80);  // P17
+    pMasterCPU->write_signal(SIG_MC6801_PORT_1, _conn->Get_pin(5)?0x80:0x00, 0x80);  // P17
 
     return true;
 }
@@ -525,8 +528,8 @@ void Chx20::Reset()
 
     if (pM160) pM160->Reset();
 
-    pmc6301->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
-    pmc6301->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
+    pMasterCPU->write_signal(SIG_MC6801_PORT_1, 0x78, 0xff);
+    pMasterCPU->write_signal(SIG_MC6801_PORT_2, 0x9e, 0xff);
 
     pSlaveCPU->Reset();
 }
@@ -558,9 +561,9 @@ void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         // raise key interrupt
         if(!(int_status & INT_KEYBOARD)) {
             int_status |= INT_KEYBOARD;
-            pmc6301->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
+            pMasterCPU->write_signal(SIG_CPU_IRQ, int_status ? 1 : 0, 1);
         }
-        pmc6301->write_signal(SIG_MC6801_PORT_1, 0, 0x20);
+        pMasterCPU->write_signal(SIG_MC6801_PORT_1, 0, 0x20);
     }
 }
 
@@ -696,7 +699,7 @@ UINT16 Chx20::getKey()
 
 void Chx20::send_to_main(quint8 val)
 {
-    pmc6301->recv_buffer.append(val);
+    pMasterCPU->recv_buffer.append(val);
 }
 
 void Chx20::send_to_slave(quint8 val)

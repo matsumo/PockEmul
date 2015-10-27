@@ -71,7 +71,7 @@ private:
     int key_intmask;
     UINT16 key_data;
 
-    Cmc6800 *pmc6301,*pSlaveCPU;
+    Cmc6800 *pMasterCPU,*pSlaveCPU;
 
     bool special_cmd_masked;
     bool targetSlave;

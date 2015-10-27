@@ -1,6 +1,7 @@
 
 
 #include <QDebug>
+#include <QBitmap>
 
 #include "cemem.h"
 #include "Connect.h"
@@ -94,6 +95,27 @@ bool Ccemem::init()
 
 bool Ccemem::exit()
 {
+    return true;
+}
+bool Ccemem::InitDisplay(void)
+{
+
+//    CPObject::InitDisplay();
+
+    delete BackgroundImageBackup;
+    BackgroundImageBackup = CreateImage(QSize(getDX(), getDY()),BackGroundFname,false,false,90);
+    delete BackgroundImage;
+    BackgroundImage = new QImage(*BackgroundImageBackup);
+    delete FinalImage;
+    FinalImage = new QImage(*BackgroundImageBackup);
+
+//    pCONNECTOR->setSnap(rotate?QPoint(406,72):QPoint(34,72));
+
+    pCONNECTOR->setDir(Cconnector::EAST);
+    mask = QPixmap::fromImage(*BackgroundImageBackup).scaled(getDX()*mainwindow->zoom,
+                                                             getDY()*mainwindow->zoom);
+    setMask(mask.mask());
+
     return true;
 }
 

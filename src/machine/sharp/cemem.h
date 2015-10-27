@@ -21,6 +21,7 @@ public:
 
     Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
     CbusPc1500 *bus1500;
+    virtual bool InitDisplay();
 private:
     Models model;
 };

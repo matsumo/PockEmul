@@ -389,7 +389,7 @@ void CViewObject::renderAnimation()
 
 
         AnimatedImage->fill(Qt::transparent);
-        qWarning()<<"AnimatedImage"<<AnimatedImage;
+//        qWarning()<<"AnimatedImage"<<AnimatedImage;
         if (FinalImage)
         {
             int w = viewRect(animationView1).width() * mainwindow->zoom;//this->width();

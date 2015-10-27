@@ -163,6 +163,8 @@ UINT8 Cfp200::in(UINT8 Port,QString)
 
 UINT8 Cfp200::out(UINT8 Port, UINT8 Value, QString sender)
 {
+    Q_UNUSED(sender)
+
     Clcdc_fp200 *pLcd = (Clcdc_fp200*)pLCDC;
 
     if (SOD)
@@ -221,6 +223,7 @@ UINT8 Cfp200::out(UINT8 Port, UINT8 Value, QString sender)
 UINT8 Cfp200::in8(UINT16 Port,QString sender)
 {
     Q_UNUSED(Port)
+    Q_UNUSED(sender)
 
     return 0;
 }
@@ -231,6 +234,7 @@ UINT8 Cfp200::out8(UINT16 Port,UINT8 x,QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
+    Q_UNUSED(sender)
 
     return 0;
 }
@@ -238,6 +242,7 @@ UINT8 Cfp200::out8(UINT16 Port,UINT8 x,QString sender)
 UINT16 Cfp200::in16(UINT16 Port,QString sender)
 {
     Q_UNUSED(Port)
+    Q_UNUSED(sender)
 
     return 0;
 }
@@ -246,6 +251,7 @@ UINT16 Cfp200::out16(UINT16 Port, UINT16 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
+    Q_UNUSED(sender)
 
     return 0;
 }
@@ -539,6 +545,8 @@ quint16 Cfp200::getKey()
 //}
 
 bool Cfp200::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     Get_MainConnector();
     Get_CentConnector();
     Get_SIOConnector();
@@ -546,6 +554,8 @@ bool Cfp200::Get_Connector(Cbus *_bus) {
     return true;
 }
 bool Cfp200::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     Set_SIOConnector();
     Set_CentConnecor();
     Set_MainConnector();

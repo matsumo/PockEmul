@@ -22,17 +22,15 @@ public:
     virtual UINT8 in(UINT8 address,QString sender=QString());
     virtual UINT8 out(UINT8 address,UINT8 value,QString sender=QString());
     virtual UINT8 in8(UINT16 Port, QString sender=QString());
-    virtual UINT8 out8(UINT16 address, UINT8 x, QString sender=QString());
+    virtual UINT8 out8(UINT16 Port, UINT8 x, QString sender=QString());
     virtual UINT16 in16(UINT16 Port, QString sender=QString());
     virtual UINT16 out16(UINT16 Port, UINT16 value, QString sender=QString());
 
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
-    bool init();
-
+    virtual bool init();
     virtual bool run();
-
     virtual void Reset();
 
     void TurnON();
@@ -42,9 +40,8 @@ public:
 
     virtual void    ExtChanged(void);
 
-//    UINT16 getKey();
-
-    Cconnector *pCENTCONNECTOR;    qint64      pCENTCONNECTOR_value;
+    Cconnector *pCENTCONNECTOR;
+    qint64      pCENTCONNECTOR_value;
 
     Ci8085 *i85cpu;
 //    Cuart    *pUART;
