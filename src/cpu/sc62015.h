@@ -148,9 +148,7 @@ public:
 
     void compute_xout();
 private:
-    bool Mem_Load(BYTE s);
     bool EMS_Load(void);
-	void Mem_Save(BYTE s);
 	void EMS_Save(void);
 
     bool	div500;

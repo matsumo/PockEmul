@@ -106,17 +106,17 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
 
 void	Cpc1350::initExtension(void)
 {
-	// initialise ext_MemSlot1
-	ext_MemSlot1 = new CExtensionArray("Memory Slot 1","Add memory credit card");
-    ext_MemSlot1->setAvailable(ID_CE201M,true);		ext_MemSlot1->setChecked(ID_CE202M,true);
-	ext_MemSlot1->setAvailable(ID_CE202M,true);
-	ext_MemSlot1->setAvailable(ID_CE203M,true);
+//	// initialise ext_MemSlot1
+//	ext_MemSlot1 = new CExtensionArray("Memory Slot 1","Add memory credit card");
+//    ext_MemSlot1->setAvailable(ID_CE201M,true);		ext_MemSlot1->setChecked(ID_CE202M,true);
+//	ext_MemSlot1->setAvailable(ID_CE202M,true);
+//	ext_MemSlot1->setAvailable(ID_CE203M,true);
 	
-	addExtMenu(ext_MemSlot1);
+//	addExtMenu(ext_MemSlot1);
 
-    extensionArray[0] = ext_11pins;
-    extensionArray[1] = ext_MemSlot1;
-    extensionArray[2] = ext_Serial;
+//    extensionArray[0] = ext_11pins;
+//    extensionArray[1] = ext_MemSlot1;
+//    extensionArray[2] = ext_Serial;
 }
 
 bool Cpc13XX::CheckUpdateExtension(CExtension *ext)

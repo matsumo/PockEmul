@@ -6,5 +6,7 @@
         <file>e500/pc-e500s.png</file>
         <file>e500/s3-8.3-E500S.rom</file>
         <file>e500/s3ext-8.3-E500S.rom</file>
+        <file>e500/pc-e500Back.png</file>
+        <file>e500/pc-e500Left.png</file>
     </qresource>
 </RCC>

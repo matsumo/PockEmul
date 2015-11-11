@@ -2942,45 +2942,7 @@ void Csc62015::Step_sc62015_(void)
     OpExec(pPC->Get_PC(t));
 	Reset_Pre();
 }
-/*---------------------------------------------------------------------------*/
-/*****************************************************************************/
-/* Load Memory from file													 */
-/*  ENTRY :BYTE s=Slot No.(SLOT1-3)											 */
-/*  RETURN:1:success, 0:error												 */
-/*****************************************************************************/
-bool Csc62015::Mem_Load(BYTE s)
-{
-#if 0
-    bool r=0;
-	FILE *fp;
-/*	char *MacName[]={"???","E500","E500","E500"
-					,"1480U","???","1490U","E550(E500)"
-					,"E650?","U6000?"};*/
-	printf(" SLOT%c:Loading...",0x31+s);
-	if((fp=fopen(SlotName[s],"rb"))!=NULL){
-		if(s==SLOT3){
-			fread(&mem[SlotAdr[s]],1024,SlotSize[s],fp);
-/*			printf("PC-%s(Ver.%d.%d)",MacName[mem[0xffff0]&15]
-				,mem[0xffff0],mem[0xffff1]);*/
-			printf("[ROM Ver.%d.%d]",mem[0xffff0],mem[0xffff1]);
-			if(mem[0xffff0]>7){
-				e6=1;							// E650&U6000mode
-				emsmode=(emsmode&16)+(emsmode&7)<4?0:4;
-				fread(&mem[SlotAdr[SLOT3EXT]],1024,SlotSize[SLOT3EXT],fp);
-			}
-			printf("success.\n"); r=1;
-		}else{
-			if(check_filesize(fp,SlotSize[s],UNIT_KB)){
-				fread(&mem[SlotAdr[s]],1024,SlotSize[s],fp);
-				printf("success.\n"); r=1;
-			}else printf("skipped.\n");
-		}
-		fclose(fp);
-	}else printf("file not found(%s).\n",SlotName[s]);
-	return(r);
-#endif
-    return true;
-}
+
 /*****************************************************************************/
 /* Load EMS from file														 */
 /*  ENTRY :none																 */
@@ -3026,23 +2988,7 @@ bool Csc62015::EMS_Load(void)
 #endif
     return true;
 }
-/*****************************************************************************/
-/* Save Memory to file														 */
-/*  ENTRY :BYTE s=Slot No.(SLOT1-3)											 */
-/*  RETURN:none																 */
-/*****************************************************************************/
-void Csc62015::Mem_Save(BYTE s)
-{
-#if 0
-	FILE *fp;
-	printf(" SLOT%c:Saving...",0x31+s);
-	if((fp=fopen(SlotName[s],"wb"))!=NULL){
-		fwrite(&mem[SlotAdr[s]],1024,SlotSize[s],fp);
-		fclose(fp);
-		printf("done.\n");
-	}else printf("file cannot open.\n");
-#endif
-}
+
 /*****************************************************************************/
 /* Save EMS to file															 */
 /*  ENTRY :none																 */
@@ -3089,7 +3035,7 @@ void Csc62015::EMS_Save(void)
 bool Csc62015::init(void)
 {
     Check_Log();
-
+//    Reset();
 	return(1);
 }
 
@@ -3116,9 +3062,7 @@ void Csc62015::Reset(void) {
 /*****************************************************************************/
 bool Csc62015::exit(void)
 {
-	Mem_Save(SLOT1);
-	Mem_Save(SLOT2);
-//	Mem_Save(SLOT3);
+
 	if(emsmode>0&&emsmode<8) EMS_Save();
 	if(logsw) fclose(fp_log);							//close log file
 

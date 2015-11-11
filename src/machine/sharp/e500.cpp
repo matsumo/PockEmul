@@ -74,6 +74,10 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
                                  QRect(72,99,348,60),
                                  QRect(72,79,348,20));
 
+
+    LeftFname	= P_RES(":/e500/pc-e500Left.png");
+    BackFname	= P_RES(":/e500/pc-e500Back.png");
+
     model = mod;
     switch (mod) {
     case E500:
@@ -457,6 +461,10 @@ BYTE Ce500::disp(qint8 cmd,UINT32 data)
 
 void Ce500::MemMirror(UINT32 *d) {
 
+    if ((*d>=0x40000) && (*d<=0x7FFFF)) {
+
+    }
+    else
     if ((*d>=0x40000) && (*d<=0x7FFFF) &&
         (ext_MemSlot1->ExtArray[ID_CE210M]->IsChecked ||
          ext_MemSlot1->ExtArray[ID_CE211M]->IsChecked ||
@@ -517,7 +525,7 @@ bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
             return false; //(1-(*d&1));			/* LCDC (0200x) */
         }
         else {
-            qWarning()<<"write:"<<*d<<data;
+            qWarning()<<tr("write:%1 %2").arg(*d,5,16,QChar('0')).arg(data,2,16,QChar('0'));
         }
         return false;
     }
@@ -530,7 +538,7 @@ bool Ce500::Chk_Adr(UINT32 *d,UINT32 data)
 //        default: return 0;
 //        }
     }
-    if ( (*d>=0x40000) && (*d<=0x4FFFF)) return true;
+    if ( (*d>=0x40000) && (*d<=0x7FFFF)) return true;
     if ( (*d>=0x80000) && (*d<=0xBFFFF)) return true;
 
     return false;
@@ -620,7 +628,7 @@ void Ce500::TurnON()
         else hardreset = false;
 
         if (pLCDC) pLCDC->TurnON();
-//        this->Reset();
+        this->Reset();
         off = 0;
         Power = true;
         PowerSwitch = PS_RUN;
