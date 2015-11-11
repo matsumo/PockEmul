@@ -63,6 +63,7 @@ private:
     QImage coverImage;
 
     bool inhibitSwitch;
+    bool resetSwitch;
     int  ramDiskPg;
     int  firmwarePg;
     int  rom8000Pg;

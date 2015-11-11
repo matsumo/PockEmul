@@ -43,10 +43,17 @@ public:
     virtual void manageCardVisibility();
     virtual void PostFlip();
     void animateBackDoorS1(bool _open);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
+    virtual bool UpdateFinalImage();
+    virtual bool InitDisplay(void);
+
 public slots:
     void endbackdoorAnimation();
     void linkObject(QString item, CPObject *pPC);
 protected:
+
+    QImage *backDoorImage;
+    QImage BackImageBackup;
 
     int currentSlot;
     BYTE cnt;
@@ -70,6 +77,9 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual bool	run(void);				// emulator main
+
+    virtual bool	LoadSession_File(QXmlStreamReader *);
+    virtual void TurnON(void);
 
     Cpc1350(CPObject *parent = 0);
 

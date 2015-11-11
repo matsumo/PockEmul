@@ -2963,9 +2963,13 @@ UINT32 CSC61860::get_mem(UINT32 adr,int size)
 {
 	switch(size)
 	{
+    case 8:
     case SIZE_8 :return(pPC->Get_PC(adr));
+    case 16:
     case SIZE_16:return(pPC->Get_PC(adr)+(pPC->Get_PC(adr+1)<<8));
+    case 20:
     case SIZE_20:return((pPC->Get_PC(adr)+(pPC->Get_PC(adr+1)<<8)+(pPC->Get_PC(adr+2)<<16))&MASK_20);
+    case 24:
     case SIZE_24:return((pPC->Get_PC(adr)+(pPC->Get_PC(adr+1)<<8)+(pPC->Get_PC(adr+2)<<16))&MASK_24);
 	}
 	return(0);
@@ -2979,19 +2983,23 @@ void CSC61860::set_mem(UINT32 adr,int size,UINT32 data)
 {
 	switch(size)
 	{
-	case SIZE_8 :
+    case 8:
+    case SIZE_8 :
 		pPC->Set_8(adr , (BYTE) data);
 		break;
-	case SIZE_16:
+    case 16:
+    case SIZE_16:
 		pPC->Set_8(adr , (BYTE) data);
 		pPC->Set_8(adr+1 , (BYTE) (data>>8));
 		break;
-	case SIZE_20:
+    case 20:
+    case SIZE_20:
 		pPC->Set_8(adr , (BYTE) data);
 		pPC->Set_8(adr+1 , (BYTE) (data>>8));
 		pPC->Set_8(adr+2 , (BYTE) ((data>>16)&MASK_4));
 		break;
-	case SIZE_24:
+    case 24:
+    case SIZE_24:
 		pPC->Set_8(adr , (BYTE) data);
 		pPC->Set_8(adr+1 , (BYTE) (data>>8));
 		pPC->Set_8(adr+2 , (BYTE) (data>>16));

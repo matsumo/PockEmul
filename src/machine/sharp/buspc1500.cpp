@@ -3,6 +3,7 @@
 CbusPc1500::CbusPc1500()
 {
     inhibit = false;
+    reset = false;
 }
 
 quint64 CbusPc1500::toUInt64() const
@@ -19,8 +20,9 @@ quint64 CbusPc1500::toUInt64() const
     serialized |= ((cmtIn?1:0) << 7);
     serialized |= ((cmtOut?1:0) << 8);
     serialized |= ((pt?1:0) << 9);
-    serialized |= ((quint64)addr & 0xffff)<<10;
-    serialized |= ((quint64)data & 0xff) << 26;
+    serialized |= ((reset?1:0) << 10);
+    serialized |= ((quint64)addr & 0xffff)<<11;
+    serialized |= ((quint64)data & 0xff) << 27;
 
     return serialized;
 }
@@ -37,9 +39,10 @@ void CbusPc1500::fromUInt64(quint64 val)
     cmtIn     = (val >> 7) &0x01;
     cmtOut    = (val >> 8) &0x01;
     pt        = (val >> 9) &0x01;
+    reset     = (val >> 10) &0x01;
 
-    addr = (val>>10) & 0xffff;     // 16 bits
-    data = (val >>26) & 0xff;     // 8 bits
+    addr = (val>>11) & 0xffff;     // 16 bits
+    data = (val >>27) & 0xff;     // 8 bits
 }
 
 void CbusPc1500::setAddr(quint32 val)
@@ -65,6 +68,7 @@ QString CbusPc1500::toLog() const
     ret += QString(" PT:%1").arg(pt);
     ret += QString(" PU:%1").arg(pu);
     ret += QString(" PV:%1").arg(pv);
+    ret += QString(" RESET:%1").arg(reset);
     return ret;
 }
 

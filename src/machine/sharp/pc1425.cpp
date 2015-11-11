@@ -10,7 +10,14 @@ Cpc1425::Cpc1425(CPObject *parent) : Cpc1403(parent)
     SessionHeader	= "PC1425PKM";
     Initial_Session_Fname ="pc1425.pkm";
 
+    setDZmm(16);
+
     BackGroundFname	= P_RES(":/pc1425/pc1425.png");
+
+    RightFname = P_RES(":/pc1350/pc1350Right.png");
+    LeftFname  = P_RES(":/pc1350/pc1350Left.png");
+    TopFname   = P_RES(":/pc1350/pc1350Top.png");
+    BottomFname= P_RES(":/pc1350/pc1350Bottom.png");
 
     SlotList.clear();
     SlotList.append(CSlot(8 , 0x0000 ,	P_RES(":/pc1425/cpu-1425.bin")	, "" , CSlot::ROM , "CPU ROM"));
@@ -33,12 +40,14 @@ Cpc1425::Cpc1425(CPObject *parent) : Cpc1403(parent)
 bool Cpc1425::Chk_Adr(UINT32 *d,UINT32 data)
 {
 
-    if ( (*d>=0x8000) && (*d<=0xdFFF) )	{ return(1); }
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ return(1); }
     return (Cpc1403::Chk_Adr(d,data));
 }
 
 bool Cpc1425::Chk_Adr_R(UINT32 *d,UINT32 *data)
 {
+    if ( (*d>=0x8000) && (*d<=0xFFFF) )	{ return(1); }
+
     return(Cpc1403::Chk_Adr_R(d,data));
 }
 

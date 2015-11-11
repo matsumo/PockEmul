@@ -372,6 +372,8 @@ quint64 CPObject::runRange(quint64 step) {
 }
 
 bool CPObject::run(void){
+
+
 //    if (fullscreenMode) {
 //        if (QSensorReading *reading = mainwindow->sensor->reading()) {
 //            qreal x = reading->property("x").value<qreal>();
@@ -1830,6 +1832,11 @@ void CPObject::readBus(Cbus *bus,UINT32 *d,UINT32 *data) {
 //    qWarning()<<"ReadBus after manage:"<<bus->toLog();
     *data = bus->getData();
     bus->setEnable(false);
-
     busMutex.unlock();
+
+//    if (bus->getRESET()) {
+//        qWarning()<<"RESET";
+//        Reset();
+//    }
+
 }

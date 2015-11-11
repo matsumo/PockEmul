@@ -752,11 +752,11 @@ void Cdebug_lh5801::injectReg(Parser *p)
     p->symbols_ ["YL"]=	_lh->lh5801.y.b.l;
     p->symbols_ ["YH"]=	_lh->lh5801.y.b.h;
     p->symbols_ ["T"]=	_lh->lh5801.t;
-    p->symbols_ ["F_C"]=_lh->lh5801.t & 0x01;
-    p->symbols_ ["F_IE"]=_lh->lh5801.t & 0x02;
-    p->symbols_ ["F_Z"]=_lh->lh5801.t & 0x04;
-    p->symbols_ ["F_V"]=_lh->lh5801.t & 0x08;
-    p->symbols_ ["F_H"]=_lh->lh5801.t & 0x10;
+    p->symbols_ ["F_C"]=_lh->lh5801.t & 0x01 ? 1 : 0;
+    p->symbols_ ["F_IE"]=_lh->lh5801.t& 0x02 ? 1 : 0;
+    p->symbols_ ["F_Z"]=_lh->lh5801.t & 0x04 ? 1 : 0;
+    p->symbols_ ["F_V"]=_lh->lh5801.t & 0x08 ? 1 : 0;
+    p->symbols_ ["F_H"]=_lh->lh5801.t & 0x10 ? 1 : 0;
 
 }
 

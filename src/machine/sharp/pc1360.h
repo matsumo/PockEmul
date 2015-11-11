@@ -34,7 +34,6 @@ public:
 
     virtual void PreFlip(Direction dir,View targetView);
 
-
     virtual void TurnON(void);
 
     Cconnector	*pS2CONNECTOR;		qint64 pS2CONNECTOR_value;
@@ -54,8 +53,6 @@ public slots:
     void linkObject(QString item, CPObject *pPC);
     void endbackdoorAnimation(void);
 private:
-    QImage *backDoorImage;
-    QImage BackImageBackup;
 
 
     void setbackdoorS2Angle(int value);

@@ -27,6 +27,9 @@ public:
     bool getINT() const { return interrupt; }
     void setINT(bool val) { interrupt = val; }
 
+    bool getRESET() const { return reset; }
+    void setRESET(bool val) { reset = val; }
+
     bool isWrite() const { return writeMode; }
     void setWrite(bool val) { writeMode = val; }
 
@@ -42,6 +45,7 @@ protected:
     bool    enable;
     bool    interrupt;
     bool    writeMode;
+    bool    reset;
 
 };
 

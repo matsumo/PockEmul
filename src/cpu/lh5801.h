@@ -62,7 +62,7 @@ public:
 	bool	init(void);						//initialize
 	bool	exit(void);						//end
     virtual void	step(void);						//step SC61860
-	void	Reset(void);
+    virtual void	Reset(void);
 
 	void	Load_Internal(QFile *file);
 	void	save_internal(QFile *file);
@@ -157,6 +157,7 @@ private:
 
 	qint64	step_Previous_State;
 
+    void internalReset();
 };
 
 #endif

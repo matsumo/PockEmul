@@ -22,6 +22,11 @@
 #include "watchpoint.h"
 #include "clink.h"
 
+#include "fluidlauncher.h"
+
+#include "modelids.h"
+#include "sharp/ce2xxx.h"
+
 Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 768000/3);
@@ -39,10 +44,13 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     TopFname   = P_RES(":/pc1350/pc1350Top.png");
     BottomFname= P_RES(":/pc1350/pc1350Bottom.png");
 
+    BackFname   = P_RES(":/pc1350/pc1350Back.png");
+
     cnt=0;
 
     busS1 = new Cbus("RAM Bus S1");
     backdoorS1Open = false;
+    m_backdoorS1Angle = 0;
     pS1CONNECTOR = 0;
 }
 
@@ -233,6 +241,11 @@ bool Cpc1350::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
+    if (_bus == busS1) {
+        pS1CONNECTOR->Set_values(busS1->toUInt64());
+        return true;
+    }
+
 #if 1
 	// MANAGE STANDARD CONNECTOR
 	pCONNECTOR->Set_pin(PIN_MT_OUT2	,0);
@@ -258,6 +271,12 @@ bool Cpc1350::Set_Connector(Cbus *_bus)
 bool Cpc1350::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+    if (_bus == busS1) {
+        busS1->fromUInt64(pS1CONNECTOR->Get_values());
+        busS1->setEnable(false);
+        return true;
+    }
 
 	// MANAGE STANDARD CONNECTOR
 	Set_Port_Bit(PORT_B,8,pCONNECTOR->Get_pin(PIN_D_IN));	// DIN	:	IB8
@@ -339,15 +358,17 @@ if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
 		return(1);
 	}
 
-	if ( (*d>=0x2000) && (*d<=0x3FFF) && EXTENSION_CE201M_CHECK ) { *d+=0x2000;	return(1);}										// 8Kb Ram Card Image
-	if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return( EXTENSION_CE202M_CHECK | EXTENSION_CE203M_CHECK); }							// 16K
-	if ( (*d>=0x4000) && (*d<=0x5FFF) )	{ return( EXTENSION_CE201M_CHECK | EXTENSION_CE202M_CHECK | EXTENSION_CE203M_CHECK); }	// 32K
+
+
+//	if ( (*d>=0x2000) && (*d<=0x3FFF) && EXTENSION_CE201M_CHECK ) { *d+=0x2000;	return(1);}										// 8Kb Ram Card Image
+//	if ( (*d>=0x2000) && (*d<=0x3FFF) )	{ return( EXTENSION_CE202M_CHECK | EXTENSION_CE203M_CHECK); }							// 16K
+//	if ( (*d>=0x4000) && (*d<=0x5FFF) )	{ return( EXTENSION_CE201M_CHECK | EXTENSION_CE202M_CHECK | EXTENSION_CE203M_CHECK); }	// 32K
 	if ( (*d>=0x6000) && (*d<=0x7FFF) ) return(1);																				// Internal RAM area(6000-8000)
 
-//    if ( (*d>=0x2000) && (*d<=0x5FFF)) {
-//        UINT32 _addr = *d &0xDFFF;
-//        writeBus(busS1 ,&_addr,data);
-//    }
+    if ( (*d>=0x2000) && (*d<=0x5FFF)) {
+        UINT32 _addr = *d - 0x2000;
+        writeBus(busS1 ,&_addr,data);
+    }
 
 	return(0);
 
@@ -356,12 +377,18 @@ if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
 bool Cpc1350::Chk_Adr_R(UINT32 *d,UINT32 *data) {
     Q_UNUSED(data)
 
-if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
+    if ( (*d>=0x6f00) && (*d<=0x6fff) )	{
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"LECTURE [%04x]=%02x (%c)\n",*d,mem[*d],mem[*d]);
     }
 
-//    UINT32 _addr = *d &0x7FFF;
-//    readBus(busS1 ,&_addr,data);
+// Manage ram bank
+    if ( (*d>=0x2000) && (*d<=0x5FFF) )	{
+
+        UINT32 _addr = *d - 0x2000;
+
+        readBus(busS1 ,&_addr,data);
+        return false;
+    }
 
     return(1);
 }
@@ -372,7 +399,7 @@ void Cpc13XX::PostFlip()
 }
 
 void Cpc13XX::manageCardVisibility() {
-    if (currentView == BACKview) {
+    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
         // show memory cards
         CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
         if (S1PC){
@@ -397,7 +424,7 @@ void Cpc13XX::animateBackDoorS1(bool _open) {
      animation1->setDuration(1500);
      if (backdoorS1Open) {
          animation1->setStartValue(m_backdoorS1Angle);
-         animation1->setEndValue(70);
+         animation1->setEndValue(80);
      }
      else {
          manageCardVisibility();
@@ -443,4 +470,133 @@ void Cpc13XX::linkObject(QString item,CPObject *pPC)
 
 void Cpc13XX::setbackdoorS1Angle(int value) {
     this->m_backdoorS1Angle = value;
+}
+
+
+
+extern int ask(QWidget *parent,QString msg,int nbButton);
+#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
+                  pKEYB->keyPressedList.contains(c) || \
+                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+
+    // Manage left connector click
+    if ((currentView==LEFTview) && KEY(0x240) ) {
+        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                     FluidLauncher::PictureFlowType,QString(),
+                                     "Sharp_11");
+        launcher->show();
+    }
+
+    if ((currentView==BACKview) || (currentView==BACKviewREV)) {
+        if ( KEY(0x241) && backdoorS1Open) {
+            if (!pS1CONNECTOR->isLinked()) {
+                pKEYB->keyPressedList.removeAll(0x241);
+                FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                            QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                            FluidLauncher::PictureFlowType,QString(),
+                                                            "Sharp_35w");
+                connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+                currentSlot = 1;
+                launcher->show();
+            }
+            else {
+                // unlink card
+            }
+        }
+        if (KEY(0x243)) {
+            // open S1
+            pKEYB->keyPressedList.removeAll(0x243);
+
+            animateBackDoorS1(true);
+
+        }
+        if (KEY(0x244)) {
+            // close S1
+            pKEYB->keyPressedList.removeAll(0x244);
+
+            animateBackDoorS1(false);
+
+        }
+
+    }
+}
+
+bool Cpc13XX::UpdateFinalImage(void) {
+//    qWarning()<<"UpdateFinalImage";
+    // Draw backdoor when not in frontview
+    if (!flipping && (currentView != FRONTview) ) {
+//        InitView(BACKview);
+        delete BackImage;
+        BackImage = new QImage(BackImageBackup);
+    }
+
+    CpcXXXX::UpdateFinalImage();
+
+    if ((currentView != FRONTview) ) {
+        QPainter painter;
+        painter.begin(BackImage);
+        painter.translate(19*internalImageRatio,30*internalImageRatio+backDoorImage->height()/2);
+        QTransform matrix2;
+        matrix2.rotate(m_backdoorS1Angle, Qt::YAxis);
+        float sx = 0.55;
+        if (m_backdoorS1Angle<45)
+            sx = 1 - (float)m_backdoorS1Angle/100;
+        else
+            sx = .55 - (float)(m_backdoorS1Angle-45)/200;
+
+        matrix2.scale(sx,1);
+        painter.setTransform(matrix2,true);
+        painter.drawImage(0,-backDoorImage->height()/2,*backDoorImage);
+        painter.end();
+    }
+
+    return true;
+}
+
+bool Cpc13XX::InitDisplay()
+{
+    CpcXXXX::InitDisplay();
+    backDoorImage = new QImage(QImage(QString(P_RES(":/pc1350/backdoor.png"))).scaled(354*internalImageRatio,192*internalImageRatio));
+
+    BackImageBackup = BackImage->copy();
+    return true;
+}
+
+void Cpc1350::TurnON()
+{
+    // Check if there is a memory card connected to the PS1Connnector before turning ON
+    CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+    if (!S1PC){
+        // If not, ask for connecting the default 16Ko card.
+//        int result = ask(this,"No memory card in SLOT 1. Do you want to add a 16Ko RAM Card ?",2);
+//        if (result == 1)
+        {
+            // Create ram card PObject
+            CPObject *cardPC = mainwindow->LoadPocket(CE202M);
+            // link the memory card to PS1Connector
+            // and move memory card to correct coordinates
+            currentSlot = 1;
+            linkObject("",cardPC);
+
+            // Hide memory card
+            cardPC->hideObject();
+            memcpy((char*) cardPC->mem,(char*) &mem[0x2000],0x4000);
+        }
+    }
+
+    Cpc13XX::TurnON();
+}
+
+bool Cpc1350::LoadSession_File(QXmlStreamReader *xmlIn) {
+
+    CpcXXXX::LoadSession_File(xmlIn);
+
+
+
+    return true;
 }

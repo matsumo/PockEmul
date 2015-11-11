@@ -65,7 +65,6 @@ Cpc1360::Cpc1360(CPObject *parent)	: Cpc13XX(parent)
     backdoorS2Open = false;
     backdoorS1Open = false;
     backdoorFlipping = false;
-    m_backdoorS1Angle = 0;
     m_backdoorS2Angle = 0;
 }
 
@@ -87,7 +86,7 @@ bool Cpc1360::init()
 
 void Cpc1360::TurnON()
 {
-    // Check if there is a memory cartd connected to the PS1Connnector before turning ON
+    // Check if there is a memory card connected to the PS1Connnector before turning ON
     CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
     if (!S1PC){
         // If not, ask for connecting the default 8Ko card.
@@ -141,7 +140,7 @@ void Cpc1360::PreFlip(Direction dir, View targetView)
 void Cpc1360::manageCardVisibility() {
     Cpc13XX::manageCardVisibility();
 
-    if (currentView == BACKview) {
+    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
         // show memory cards
         CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
         if (S2PC) {
@@ -365,68 +364,63 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         launcher->show();
     }
 
-    if ((currentView==BACKview) &&
-            KEY(0x241) &&
-            backdoorS1Open) {
-        if (!pS1CONNECTOR->isLinked()) {
-            pKEYB->keyPressedList.removeAll(0x241);
-            FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                                        QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                                        FluidLauncher::PictureFlowType,QString(),
-                                                        "Sharp_35");
-            connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
-            currentSlot = 1;
-            launcher->show();
+    if ((currentView==BACKview) || (currentView==BACKviewREV)) {
+        if ( KEY(0x241) && backdoorS1Open) {
+            if (!pS1CONNECTOR->isLinked()) {
+                pKEYB->keyPressedList.removeAll(0x241);
+                FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                            QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                            FluidLauncher::PictureFlowType,QString(),
+                                                            "Sharp_35");
+                connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+                currentSlot = 1;
+                launcher->show();
+            }
+            else {
+                // unlink card
+            }
         }
-        else {
-            // unlink card
+        if (KEY(0x242) && backdoorS2Open) {
+            if (!pS2CONNECTOR->isLinked()) {
+                pKEYB->keyPressedList.removeAll(0x242);
+                FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                                            QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                                            FluidLauncher::PictureFlowType,QString(),
+                                                            "Sharp_35");
+                connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
+                currentSlot = 2;
+                launcher->show();
+            }
+            else {
+                // unlink card
+            }
         }
-    }
-    if ((currentView==BACKview) &&
-            KEY(0x242) &&
-            backdoorS2Open) {
-        if (!pS2CONNECTOR->isLinked()) {
-            pKEYB->keyPressedList.removeAll(0x242);
-            FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                                        QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                                        FluidLauncher::PictureFlowType,QString(),
-                                                        "Sharp_35");
-            connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(linkObject(QString,CPObject *)));
-            currentSlot = 2;
-            launcher->show();
+        if (KEY(0x243)) {
+            // open S1 & close S2
+            pKEYB->keyPressedList.removeAll(0x243);
+
+            animateBackDoorS1(true);
+            animateBackDoorS2(false);
+
         }
-        else {
-            // unlink card
+        if (KEY(0x244)) {
+            // close S1 & close S2
+            pKEYB->keyPressedList.removeAll(0x244);
+
+            animateBackDoorS1(false);
+            animateBackDoorS2(false);
+
         }
-    }
-    if ((currentView==BACKview) &&
-            KEY(0x243)) {
-        // open S1 & close S2
-        pKEYB->keyPressedList.removeAll(0x243);
+        if (KEY(0x245)) {
+            // close S1 & open S2
+            pKEYB->keyPressedList.removeAll(0x245);
 
-        animateBackDoorS1(true);
-        animateBackDoorS2(false);
+            animateBackDoorS1(false);
+            animateBackDoorS2(true);
 
-    }
-    if ((currentView==BACKview) &&
-            KEY(0x244)) {
-        // close S1 & close S2
-        pKEYB->keyPressedList.removeAll(0x244);
-
-        animateBackDoorS1(false);
-        animateBackDoorS2(false);
+        }
 
     }
-    if ((currentView==BACKview) &&
-            KEY(0x245)) {
-        // close S1 & open S2
-        pKEYB->keyPressedList.removeAll(0x245);
-
-        animateBackDoorS1(false);
-        animateBackDoorS2(true);
-
-    }
-
 }
 
 void Cpc1360::linkObject(QString item,CPObject *pPC)
@@ -461,7 +455,7 @@ bool Cpc1360::UpdateFinalImage(void) {
         BackImage = new QImage(BackImageBackup);
     }
 
-    Cpc13XX::UpdateFinalImage();
+    CpcXXXX::UpdateFinalImage();
 
     if ((currentView != FRONTview) ) {
         QPainter painter;

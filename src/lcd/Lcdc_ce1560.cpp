@@ -70,7 +70,7 @@ void Clcdc_ce1560::disp(void)
     ((Cce1560 *)pPC)->ps6b0108[1]->updated = false;
     ((Cce1560 *)pPC)->ps6b0108[2]->updated = false;
 
-    Refresh = true;
+//    Refresh = true;
     QPainter painter(LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
 
@@ -90,6 +90,7 @@ void Clcdc_ce1560::disp(void)
                             int _col = ((data>>b)&0x01);
                             if (pixels[_x][y] != _col)
                             {
+                                Refresh = true;
                                 drawPixel(&painter,_x, y,_col ? Color_On : Color_Off );
                                 pixels[_x][y] = _col;
                             }
@@ -104,6 +105,7 @@ void Clcdc_ce1560::disp(void)
                 for (int j=0;j<64;j++) {
                     int _x = _m*64+i;
                     if (pixels[_x][j]!=0) {
+                        Refresh = true;
                         drawPixel(&painter,_x, j,Color_Off );
                         pixels[_x][j] = 0;
                     }

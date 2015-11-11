@@ -78,6 +78,7 @@ Cce1560::Cce1560(CPObject *parent):CpcXXXX(parent)
     m_screenAngle = 180;
 
     inhibitSwitch = false;
+    resetSwitch = false;
     ramDiskPg = 0;
     firmwarePg= 0;
     rom8000Pg= 0;
@@ -119,6 +120,11 @@ bool Cce1560::run(void)
     bus->fromUInt64(pCONNECTOR->Get_values());
 
     bus->setINHIBIT(inhibitSwitch);
+    if (resetSwitch && (pTIMER->msElapsedId(9)>5)) {
+        resetSwitch = false;
+        qWarning()<<"RESET Down";
+    }
+    bus->setRESET(resetSwitch);
 
     pTAPECONNECTOR->Set_pin(3,true);//(rmtSwitch ? SEL1:true));       // RMT
     pTAPECONNECTOR->Set_pin(2,bus->isCMTOUT());    // Out
@@ -294,6 +300,7 @@ bool Cce1560::run(void)
     }
 
     bus->setINHIBIT(inhibitSwitch);
+    bus->setRESET(resetSwitch);
     bus->setEnable(false);
     pCONNECTOR->Set_values(bus->toUInt64());
 
@@ -362,6 +369,9 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
     if (screenOpen && KEY(0x242)) {
         inhibitSwitch = false;
+        resetSwitch = true;
+        qWarning()<<"RESET Up";
+        bool _b = pTIMER->resetTimer(9);
         qWarning()<<"INHIBIT FALSE";
         pKEYB->keyPressedList.removeAll(0x242);
         Refresh_Display = true;
@@ -369,7 +379,10 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     }
     if (screenOpen && KEY(0x243)) {
         inhibitSwitch = true;
-        qWarning()<<"INHIBIT TRUE";
+        resetSwitch = true;
+        qWarning()<<"RESET Up";
+        bool _b = pTIMER->resetTimer(9);
+        qWarning()<<"INHIBIT TRUE"<<_b;
         pKEYB->keyPressedList.removeAll(0x243);
         Refresh_Display = true;
         update();

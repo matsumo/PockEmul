@@ -256,6 +256,11 @@ bool Cpc15XX::init(void)				// initialize
 bool Cpc15XX::run(void) 
 {
 
+    if (bus->getRESET()) {
+//            qWarning()<<"RESET";
+        Reset();
+    }
+
     //TODO NEED TO USE IMEMSIZE instead
     if (dialogdasm)
         dialogdasm->imem=false;

@@ -3018,9 +3018,13 @@ INLINE UINT32	CZ80::get_mem(UINT32 adr,int size)
 {
     switch(size)
     {
+    case 8:
     case SIZE_8 :return( z80read8(&z80,adr));
+    case 16:
     case SIZE_16:return( z80read8(&z80,adr+1)+(z80read8(&z80,adr)<<8));
+    case 20:
     case SIZE_20:return((z80read8(&z80,adr+2)+(z80read8(&z80,adr+1)<<8)+(z80read8(&z80,adr)<<16))&MASK_20);
+    case 24:
     case SIZE_24:return((z80read8(&z80,adr+2)+(z80read8(&z80,adr+1)<<8)+(z80read8(&z80,adr)<<16))&MASK_24);
     }
     return(0);
@@ -3030,9 +3034,11 @@ INLINE void	CZ80::set_mem(UINT32 adr,int size,UINT32 data)
 {
     switch(size)
     {
+    case 8:
     case SIZE_8 :
         z80write8(&z80, adr, (BYTE) data);
         break;
+    case 16:
     case SIZE_16:
         z80write8(&z80, adr, (BYTE) (data>>8));
         z80write8(&z80, adr+1, (BYTE) data);

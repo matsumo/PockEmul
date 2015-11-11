@@ -74,6 +74,7 @@ DialogDasm::DialogDasm(QWidget *parent) :
 
     }
 //    this->show();
+
     this->resize(545,490);
     regwidget->show();
 
@@ -82,6 +83,7 @@ DialogDasm::DialogDasm(QWidget *parent) :
     load();
     // Load breakpoints
     refreshBreakPoints();
+
 
 }
 
@@ -173,6 +175,9 @@ void DialogDasm::ManualDasm() {
 void DialogDasm::RefreshDasm()
 {
     show();
+    imemHexEditor->resize( ui->imemframe->size());
+//    memHexEditor->resize(ui->memframe->size());
+    if (regwidget) regwidget->resize(ui->regframe->size());
     if ( pPC->pCPU->pDEBUG->debugged)
     {
         QString	text;

@@ -124,6 +124,8 @@ void CLH5801::step(void)
 
     quint64	Current_State;
 
+    if (resetFlag) internalReset();
+
     if (Is_Timer_Reached) { lh5801.IR1=1; Is_Timer_Reached = false; }
 
 	if (lh5801.IR0)
@@ -230,10 +232,14 @@ UINT32	CLH5801::get_mem(UINT32 adr,int size)
 {
 	switch(size)
 	{
+    case 8:
 	case SIZE_8 :return( cpu_readmem(adr));
-	case SIZE_16:return( cpu_readmem(adr+1)+(cpu_readmem(adr)<<8));
-	case SIZE_20:return((cpu_readmem(adr+2)+(cpu_readmem(adr+1)<<8)+(cpu_readmem(adr)<<16))&MASK_20);
-	case SIZE_24:return((cpu_readmem(adr+2)+(cpu_readmem(adr+1)<<8)+(cpu_readmem(adr)<<16))&MASK_24);
+    case 16:
+    case SIZE_16:return( cpu_readmem(adr+1)+(cpu_readmem(adr)<<8));
+    case 20:
+    case SIZE_20:return((cpu_readmem(adr+2)+(cpu_readmem(adr+1)<<8)+(cpu_readmem(adr)<<16))&MASK_20);
+    case 24:
+    case SIZE_24:return((cpu_readmem(adr+2)+(cpu_readmem(adr+1)<<8)+(cpu_readmem(adr)<<16))&MASK_24);
 	}
 	return(0);
 }
@@ -242,7 +248,8 @@ void	CLH5801::set_mem(UINT32 adr,int size,UINT32 data)
 {
 	switch(size)
 	{
-	case SIZE_8 :
+    case 8:
+    case SIZE_8 :
 		cpu_writemem( adr, (BYTE) data);
 		break;
 	//case SIZE_16:
@@ -287,23 +294,31 @@ INLINE void CLH5801::change_pc(UINT16 addr)
 
 void CLH5801::Reset(void)
 {
+    resetFlag = true;
+}
+
+void CLH5801::internalReset(void)
+{
+    resetFlag = true;
     memset(imem,0,imemsize);
-	P	= (UINT16) get_mem(0xFFFE,SIZE_16);
-	lh5801.HLT=lh5801.IR0=lh5801.IR1=lh5801.IR2=0;
-	S	= 0;
-	U	= 0;
-	UL	= 0;
-	UH	= 0;
-	X	= 0;
-	XL	= 0;
-	XH	= 0;
-	Y	= 0;
-	YL	= 0;
-	YH	= 0;
-	lh5801.tm=0; //9 bit
-	lh5801.t=lh5801.a=lh5801.dp=lh5801.pu=lh5801.pv=0;
-	lh5801.bf=1;
+    P	= (UINT16) get_mem(0xFFFE,SIZE_16);
+    lh5801.HLT=lh5801.IR0=lh5801.IR1=lh5801.IR2=0;
+    S	= 0;
+    U	= 0;
+    UL	= 0;
+    UH	= 0;
+    X	= 0;
+    XL	= 0;
+    XH	= 0;
+    Y	= 0;
+    YL	= 0;
+    YH	= 0;
+    lh5801.tm=0; //9 bit
+    lh5801.t=lh5801.a=lh5801.dp=lh5801.pu=lh5801.pv=0;
+    lh5801.bf=1;
     CallSubLevel = 0;
+
+    resetFlag = false;
 }
 
 INLINE void CLH5801::AddState(UINT8 n)
@@ -546,15 +561,6 @@ INLINE void CLH5801::LOP(void)
 
 	AddState(8);
 
-#if 0 // Since i need perfect synchronization with connected material , this hack is no more acceptable
-	// HACK SKIP LOP-2 opcode
-	if (LOP_SKIP_sw && (t == 2))
-	{
-		AddState((UINT8)(UL*3) );		// Need for Tape Synchro
-		UL = 0xff; return;
-	}
-#endif
-
 	if (UL--) {
 		AddState(3);
 		P -= t;
@@ -781,6 +787,7 @@ INLINE void CLH5801::instruction_fd(void)
 	case 0xef:	adr=ME1(readop_word());ADD_MEM(adr, cpu_readop(P++)); 
 																AddState(23);	break;
 	default:
+        if (!resetFlag) {
 				AddLog(LOG_MASTER,tr("lh5801 illegal opcode at %1  fd%2").arg((P-2),4,16,QChar('0')).arg((int)oper,2,16,QChar('0')));
                 qWarning()<<tr("lh5801 illegal opcode at %1  fd%2").arg((P-2),4,16,QChar('0')).arg((int)oper,2,16,QChar('0'));
                 pPC->BreakSubLevel = 99999;
@@ -788,6 +795,7 @@ INLINE void CLH5801::instruction_fd(void)
                 pPC->DasmFlag = false;
                 pPC->pBreakpointManager->breakMsg=tr("ill op at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0'));
                 emit showDasm();
+        }
                 break;
 	}
 }
@@ -1007,14 +1015,16 @@ INLINE void CLH5801::instruction(void)
 	case 0xf0: case 0xf2: case 0xf4: case 0xf6: 
 				VECTOR(1, oper);						AddState(4);/**/	break;
 	default:
-		AddLog(LOG_MASTER,tr("lh5801 illegal opcode at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0')));
-        qWarning()<<tr("lh5801 illegal opcode at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0'));
+        if (!resetFlag) {
+            AddLog(LOG_MASTER,tr("lh5801 illegal opcode at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0')));
+            qWarning()<<tr("lh5801 illegal opcode at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0'));
 
-        pPC->BreakSubLevel = 99999;
-        pPC->DasmStep = true;
-        pPC->DasmFlag = false;
-        pPC->pBreakpointManager->breakMsg=tr("ill op at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0'));
-        emit showDasm();
+            pPC->BreakSubLevel = 99999;
+            pPC->DasmStep = true;
+            pPC->DasmFlag = false;
+            pPC->pBreakpointManager->breakMsg=tr("ill op at %1 %2").arg(P-1,4,16,QChar('0')).arg(oper,4,16,QChar('0'));
+            emit showDasm();
+        }
         break;
 	}
 

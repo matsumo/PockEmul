@@ -7,5 +7,7 @@
         <file>pc1350/pc1350Left.png</file>
         <file>pc1350/pc1350Bottom.png</file>
         <file>pc1350/pc1350Top.png</file>
+        <file>pc1350/pc1350Back.png</file>
+        <file>pc1350/backdoor.png</file>
     </qresource>
 </RCC>
