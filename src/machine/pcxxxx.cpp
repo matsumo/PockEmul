@@ -97,7 +97,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 //#define TRANSFORM Qt::FastTransformation
 #endif
 
-    //    qWarning()<<"UpdateFinalImage";
+//        qWarning()<<"UpdateFinalImage";
 
     // Paint FinalImage
     QRect                        destRect,srcRect;

@@ -1485,7 +1485,7 @@ void MainWindowPockemul::updateFrameTimer()
 #endif
         if ( CurrentpPC->Refresh_Display) {
             //                    qWarning()<<"main1:"<<mainwindow->rawclk;
-//            CurrentpPC->UpdateFinalImage();
+            CurrentpPC->UpdateFinalImage();
             CurrentpPC->update();
             emit CurrentpPC->updatedPObject(CurrentpPC);
             //                    qWarning()<<"main2:"<<mainwindow->rawclk;

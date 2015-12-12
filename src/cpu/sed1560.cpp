@@ -22,7 +22,7 @@ CSED1560::CSED1560(CpcXXXX *parent)
     info.PgAdrReg = 0;
     info.busy = info.ADC = info.reset = false;
     updated = true;
-    info.ReadModifyWrite = true;
+    info.ReadModifyWrite = false;
     info.allPtsOn = false;
     info.reverse = false;
     info.ElectCtrl = 0x0f;
@@ -88,6 +88,7 @@ void CSED1560::set8(qint16 adr,BYTE val)
 
 BYTE CSED1560::instruction(qint16 cmd)
 {
+    static BYTE _ColAdrReg;
 //    updated = true;
     if (pPC->pCPU->fp_log)fprintf(pPC->pCPU->fp_log,"SED1560 CMD: %04x\n",cmd);
 
@@ -97,11 +98,19 @@ BYTE CSED1560::instruction(qint16 cmd)
     else
     if ((cmd & MASK_read) == MASK_read ) { return cmd_read(cmd); }
     else
-    if ((cmd & MASK_End) == MASK_End ) { info.ReadModifyWrite = false; }
+    if ((cmd & MASK_End) == MASK_End ) {
+        // restore column adr
+        info.ColAdrReg = _ColAdrReg;
+        info.ReadModifyWrite = false;
+    }
     else
     if ((cmd & MASK_Reset) == MASK_Reset ) { cmd_Reset(cmd); }
     else
-    if ((cmd & MASK_ReadModWrt) == MASK_ReadModWrt ) { info.ReadModifyWrite = true;  }
+    if ((cmd & MASK_ReadModWrt) == MASK_ReadModWrt ) {
+        // store column adr
+        _ColAdrReg = info.ColAdrReg;
+        info.ReadModifyWrite = true;
+    }
     else
     if ((cmd & MASK_OutStatusRegSet) == MASK_OutStatusRegSet ) { cmd_OutStatusRegSet(cmd); }
     else
@@ -117,9 +126,9 @@ BYTE CSED1560::instruction(qint16 cmd)
     else
     if ((cmd & MASK_AllIndic) == MASK_AllIndic ) { cmd_AllIndic(cmd); }
     else
-    if ((cmd & MASK_ElecCtrlReg) == MASK_ElecCtrlReg ) { cmd_ElecCtrlReg(cmd); }
-    else
     if ((cmd & MASK_ADCSel) == MASK_ADCSel ) { cmd_ADCSel(cmd); }
+    else
+    if ((cmd & MASK_ElecCtrlReg) == MASK_ElecCtrlReg ) { cmd_ElecCtrlReg(cmd); }
     else
     if ((cmd & MASK_displaySL) == MASK_displaySL ) { cmd_displaySL(cmd); }
     else
@@ -134,9 +143,13 @@ BYTE CSED1560::instruction(qint16 cmd)
     if ((cmd & MASK_ColAdrLo) == MASK_ColAdrLo ) { cmd_ColAdrLo(cmd); }
     else
     if ((cmd & MASK_status) == MASK_status ) { return cmd_status(cmd); }
+    else {
+        qWarning()<<tr("SED1560 Unknown CMD:%1").arg(cmd,4,16,QChar('0'));
+    }
 
     return 0;
 }
+
 void CSED1560::cmd_ElecCtrlReg(qint16 cmd) {
     info.ElectCtrl = cmd & 0x1f;
     pPC->pLCDC->Color_Off.setAlphaF( info.ElectCtrl * 5.0f / 100);
@@ -226,6 +239,7 @@ void CSED1560::cmd_displaySL(qint16 cmd)
 void CSED1560::cmd_setPgAdr(qint16 cmd)
 {
     BYTE newPgAdr = cmd & 0x0f;
+    if (newPgAdr > 0x08) newPgAdr = 0x08;
     if (newPgAdr != info.PgAdrReg) {
         info.PgAdrReg = newPgAdr;
         updated = true;
@@ -234,6 +248,8 @@ void CSED1560::cmd_setPgAdr(qint16 cmd)
 }
 
 void CSED1560::cmd_ColAdrHi(qint16 cmd) {
+    if (info.ReadModifyWrite) return;
+
     BYTE newColAdrHi = (cmd & 0x0f);
     if (newColAdrHi != (info.ColAdrReg >> 4)) {
         info.ColAdrReg = (newColAdrHi<<4) | (info.ColAdrReg & 0x0f);
@@ -243,6 +259,8 @@ void CSED1560::cmd_ColAdrHi(qint16 cmd) {
 }
 
 void CSED1560::cmd_ColAdrLo(qint16 cmd) {
+    if (info.ReadModifyWrite) return;
+
     BYTE newColAdrLo = (cmd & 0x0f);
     if (newColAdrLo != (info.ColAdrReg & 0x0f)) {
         info.ColAdrReg = (info.ColAdrReg & 0xf0) | newColAdrLo ;
@@ -269,7 +287,8 @@ void CSED1560::cmd_write(qint16 cmd)
 //    if ((pPC->fp_log) && (cmd & 0xff)) fprintf(pPC->fp_log,"LCD Write:x=%02x y=%02x val=%02x\n",Xadr,Yadr,cmd & 0xff);
     set8( info.ColAdrReg  + info.PgAdrReg * 0xa6 , (cmd & 0xff));
 
-    if (info.ReadModifyWrite) {
+//    if (info.ReadModifyWrite)
+    {
         info.ColAdrReg++;
     }
 
@@ -284,11 +303,22 @@ BYTE CSED1560::cmd_read(qint16 cmd)
 {
     Q_UNUSED(cmd)
 
-    BYTE value = get8( info.ColAdrReg  + info.PgAdrReg * 0xa6 );
-//    AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
-    if (!info.ReadModifyWrite) {
-        info.ColAdrReg++;
+    BYTE value = 0xff;
+    if (info.ColAdrReg ==0) {
+        value = 0x10;
+        if (!info.ReadModifyWrite) { info.ColAdrReg++; }
     }
+    else
+    if (info.PgAdrReg >=8) {
+        value = 0xff;
+    }
+    else
+    if (info.ColAdrReg < 165) {
+        qint16 _adr = info.ColAdrReg  + info.PgAdrReg * 0xa6;
+        value = get8( _adr -1 );
+        if (!info.ReadModifyWrite) { info.ColAdrReg++; }
+    }
+//    AddLog(LOG_TEMP,tr("HD61102 READ CMD : x=%1   Y=%2  v=%3").arg(info.Xadr).arg(info.Yadr).arg(value,2,16,QChar('0')));
 
     if (info.ColAdrReg > 0xa6) {
         info.ColAdrReg = 0xa6;

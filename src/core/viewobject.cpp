@@ -523,7 +523,7 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
         break;
     case TOPview:
         switch (dir) {
-        case TOPdir: targetView = BACKviewREV; break;
+        case TOPdir: targetView = BACKview; break;; //BACKviewREV; break;
 //        case LEFTdir: targetView = LEFTview; break;
 //        case RIGHTdir: targetView = RIGHTview; break;
         case BOTTOMdir: targetView = FRONTview; break;
