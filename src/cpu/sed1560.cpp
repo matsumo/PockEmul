@@ -25,8 +25,8 @@ CSED1560::CSED1560(CpcXXXX *parent)
     info.ReadModifyWrite = false;
     info.allPtsOn = false;
     info.reverse = false;
-    info.ElectCtrl = 0x0f;
-    cmd_ElecCtrlReg(0x0f);
+    info.ElectCtrl = 0x03;
+    cmd_ElecCtrlReg(info.ElectCtrl);
 }
 
 CSED1560::~CSED1560() {
@@ -35,7 +35,7 @@ CSED1560::~CSED1560() {
 
 BYTE CSED1560::get8(qint16 adr)
 {
-    if (info.allPtsOn) return 0xff;
+//    if ((adr >= (info.PgAdrReg*0xA6)) & info.allPtsOn) return 0xff;
 
     if (adr >= IMEMSIZE)
     {
@@ -155,7 +155,7 @@ void CSED1560::cmd_ElecCtrlReg(qint16 cmd) {
     pPC->pLCDC->Color_Off.setAlphaF( info.ElectCtrl * 5.0f / 100);
 
     pPC->pLCDC->forceRedraw();
-//    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
+    qWarning()<<"cmd_ElecCtrlReg:"<<info.ElectCtrl;
 }
 
 void CSED1560::cmd_OutStatusRegSet(qint16 cmd) {

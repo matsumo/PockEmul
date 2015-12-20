@@ -191,6 +191,15 @@
          </item>
          <item>
           <property name="text">
+           <string>PC-G850</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/g850v.qrc">
+            <normaloff>:/G850V/g850v.png</normaloff>:/G850V/g850v.png</iconset>
+          </property>
+         </item>
+         <item>
+          <property name="text">
            <string>PC-1350</string>
           </property>
           <property name="icon">
@@ -689,6 +698,15 @@
             <normaloff>:/pc1475/pc1475.jpg</normaloff>:/pc1475/pc1475.jpg</iconset>
           </property>
          </item>
+         <item>
+          <property name="text">
+           <string>PC-G850</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/g850v.qrc">
+            <normaloff>:/G850V/g850v.png</normaloff>:/G850V/g850v.png</iconset>
+          </property>
+         </item>
         </widget>
        </item>
        <item>
@@ -773,6 +791,7 @@
   </action>
  </widget>
  <resources>
+  <include location="../resources/g850v.qrc"/>
   <include location="../resources/pc1250.qrc"/>
   <include location="../resources/pc1251.qrc"/>
   <include location="../resources/pc1350.qrc"/>

@@ -25,7 +25,7 @@
 #   define Z80_LITTLEENDIAN	1
 #endif
 
-
+  
 
 /* z80exec()‚Ì–ß‚è’l */
 #define Z80_RUN	0	/* “®ì’† */

@@ -194,7 +194,7 @@ void Cg850v::Reset()
     ((CZ80*)pCPU)->z80.r.im = 1;
     mem[0x790d] = 0;
 
-    mem[0x779c] = (mem[0x779c] >= 0x07 && mem[0x779c] <= 0x1f ? mem[0x779c]: 0x0f);
+//    mem[0x779c] = (mem[0x779c] >= 0x07 && mem[0x779c] <= 0x1f ? mem[0x779c]: 0x0f);
     out( 0x40, 0x24);
     out( 0x40, mem[0x790d] + 0x40);
     out( 0x40, mem[0x779c] + 0x80);
@@ -352,6 +352,8 @@ UINT8 Cg850v::in(UINT8 address,QString)
 
 UINT8 Cg850v::out(UINT8 address, UINT8 value, QString sender)
 {
+    Q_UNUSED(sender)
+
     switch(address) {
     case 0x11: ks1 = value;
         if(value & 0x10) interruptType |= 0x01;
@@ -439,6 +441,8 @@ bool Cg850v::run()
     }
 
 #endif
+
+    fillSoundBuffer(pCONNECTOR->Get_pin(PIN_MT_OUT1)?0xff:0x00);
 
     return true;
 }
