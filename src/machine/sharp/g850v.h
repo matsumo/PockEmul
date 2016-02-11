@@ -38,6 +38,7 @@ public:
     virtual bool Set_Connector(Cbus *_bus = 0);
     virtual bool Get_Connector(Cbus *_bus = 0);
     BYTE        getKey(void);
+    virtual int     mapKey(QKeyEvent *event);
 
     virtual bool	init(void);				// initialize
 

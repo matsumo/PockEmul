@@ -78,7 +78,7 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
 extern QString workDir;
 
-#define NBFRAMEPERSEC		30
+#define NBFRAMEPERSEC		60
 #define FRAMERATE			(1000/NBFRAMEPERSEC)
 #define TIMER_RES			1
 

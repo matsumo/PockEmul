@@ -476,6 +476,23 @@ bool Cg850v::CompleteDisplay()
     return true;
 }
 
+int Cg850v::mapKey(QKeyEvent *event)
+{
+    int key = CpcXXXX::mapKey(event);
+
+#if 1
+    switch (key) {
+    case K_UA: return '2';
+//    case K_DA: return '2';
+    case K_LA: return '0';
+    case K_RA: return '1';
+//    case ' ': return K_RET;
+    }
+#endif
+
+    return key;
+}
+
 //#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
