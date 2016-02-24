@@ -617,10 +617,8 @@ SOURCES *= \
 # JR800
 contains(PROJECT_PACKAGE,JR800) {
 DEFINES *= P_JR800
-HEADERS *= src/machine/jr800.h \
-           src/lcd/lcdc_jr800.h
-SOURCES *= src/machine/jr800.cpp \
-           src/lcd/lcdc_jr800.cpp
+HEADERS *= src/machine/jr800.h
+SOURCES *= src/machine/jr800.cpp
 RESOURCES *= resources/jr800.qrc
 OTHER_FILES *=
     resources/keymap/jr800.map
@@ -630,12 +628,10 @@ contains(PROJECT_PACKAGE,HX20) {
 DEFINES *= P_HX20
 HEADERS *= src/machine/epson/hx20.h \
            src/machine/epson/hx20rc.h \
-           src/machine/epson/m160.h \
-           src/lcd/lcdc_hx20.h
+           src/machine/epson/m160.h
 SOURCES *= src/machine/epson/hx20.cpp \
            src/machine/epson/hx20rc.cpp \
-           src/machine/epson/m160.cpp \
-           src/lcd/lcdc_hx20.cpp
+           src/machine/epson/m160.cpp
 RESOURCES *= resources/hx20.qrc
 OTHER_FILES *= cloud/hx20rc.qml  \
              resources/keymap/hx20.map \
@@ -785,7 +781,6 @@ HEADERS *= src/cpu/ti57cpu.h \
            src/machine/ti/cc40.h \
            src/machine/ti/ti74.h \
            src/lcd/Lcdc_ti57.h \
-           src/lcd/lcdc_ti59.h \
            src/lcd/Lcdc_ti74.h \
            src/lcd/Lcdc_cc40.h
 SOURCES *= src/cpu/ti57cpu.cpp \
@@ -798,7 +793,6 @@ SOURCES *= src/cpu/ti57cpu.cpp \
            src/machine/ti/cc40.cpp \
            src/machine/ti/ti74.cpp \
            src/lcd/Lcdc_ti57.cpp \
-           src/lcd/lcdc_ti59.cpp \
            src/lcd/Lcdc_ti74.cpp \
            src/lcd/Lcdc_cc40.cpp
 RESOURCES *= resources/cc40.qrc \
@@ -933,6 +927,9 @@ HEADERS *= \
     src/cpu/z80_dasm.h \
     src/core/pobjectInterface.h \
     src/machine/extslot.h \
+    src/lcd/Lcdc_hx20.h \
+    src/lcd/Lcdc_ti59.h \
+    src/lcd/Lcdc_jr800.h
 
 
 
@@ -1096,6 +1093,9 @@ SOURCES *=  \
     pictureflow/launcher.cpp \
     pictureflow/slideshow.cpp \
     src/machine/extslot.cpp \
+    src/lcd/Lcdc_hx20.cpp \
+    src/lcd/Lcdc_jr800.cpp \
+    src/lcd/Lcdc_ti59.cpp
 
 
 

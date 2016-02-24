@@ -11,7 +11,7 @@
 
 #include "ti59.h"
 #include "tmc0501.h"
-#include "lcdc_ti59.h"
+#include "Lcdc_ti59.h"
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"

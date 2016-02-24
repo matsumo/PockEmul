@@ -9,7 +9,7 @@
 #include "Log.h"
 #include "Keyb.h"
 #include "Inter.h"
-#include "lcdc_hx20.h"
+#include "Lcdc_hx20.h"
 #include "Connect.h"
 #include "watchpoint.h"
 #include "upd16434.h"
