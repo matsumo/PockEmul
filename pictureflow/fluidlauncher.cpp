@@ -283,14 +283,19 @@ qWarning()<<"After PopulatePictureFlow";
 
      for (int i = 0; i < list.size(); ++i) {
          QFileInfo fileInfo = list.at(i);
-         QImage *img = new QImage();
+         QImage *img = 0;
 
          if (fileInfo.isFile()) {
              img = new QImage(ExtractImage(fileInfo));
          }
          else if (fileInfo.isDir()) {
+             img = new QImage();
              img->load(":/core/folder.png");
          }
+         else {
+             img = new QImage();
+         }
+
 
          QStringList sl;
          if (fileInfo.isDir()) sl.append("Dir");
