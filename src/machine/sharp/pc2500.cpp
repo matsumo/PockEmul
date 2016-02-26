@@ -62,6 +62,7 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
     setDX(960);
     setDY(673);
 
+
     printMode = false;
     capslock = false;
     pce515p->margin = 10;
@@ -88,6 +89,20 @@ bool Cpc2500::init(void) {
     return true;
 }
 
+void	Cpc2500::initExtension(void)
+{
+    // initialise ext_MemSlot1
+    ext_MemSlot1 = new CExtensionArray("Memory Slot 1","Add memory credit card");
+    ext_MemSlot1->setAvailable(ID_CE201M,true);		ext_MemSlot1->setChecked(ID_CE202M,true);
+    ext_MemSlot1->setAvailable(ID_CE202M,true);
+    ext_MemSlot1->setAvailable(ID_CE203M,true);
+
+    addExtMenu(ext_MemSlot1);
+
+    extensionArray[0] = ext_11pins;
+    extensionArray[1] = ext_MemSlot1;
+    extensionArray[2] = ext_Serial;
+}
 
 void Cpc2500::contextMenuEvent(QContextMenuEvent *e)
 {
@@ -350,3 +365,4 @@ bool Cpc2500::Get_Connector(Cbus *_bus)
     // PAK
     return(1);
 }
+

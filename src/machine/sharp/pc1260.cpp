@@ -27,6 +27,7 @@ Cpc1260::Cpc1260(CPObject *parent)	: Cpc1250(parent)
                                              QRect(79,37,312,32),
                                              QRect(53,37,288,33));
     pKEYB->fn_KeyMap = "pc1260.map";
+
 }
 
 BYTE	Cpc1260::Get_PortB(void)

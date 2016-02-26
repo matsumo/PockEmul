@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc2500</model>
 <Keyboard>
+    <KEY description="S1" height="0" left="0" masterscancode="0x00" modifier="" scancode="0x241" top="0" view="LEFT" width="0"/>
     <KEY description="-" height="45" left="641" scancode="0x2d" top="358" width="45"/>
     <KEY description="*" height="40" left="898" scancode="0x2a" top="544" width="38"/>
     <KEY description="," height="45" left="533" scancode="0x2c" top="542" width="45"/>
