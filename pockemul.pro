@@ -23,7 +23,9 @@ QT += \
 #    opengl \
     xml \
 #    multimedia \
-    script declarative sensors \
+    script \
+#    declarative \
+    sensors \
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets quickwidgets
 

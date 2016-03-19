@@ -2,7 +2,7 @@
 #define CLOUDIMAGEPROVIDER_H
 
 
-#include <QtDeclarative/QDeclarativeImageProvider>
+//#include <QtDeclarative/QDeclarativeImageProvider>
 #include <QQuickImageProvider>
 #include <QMap>
 #include <QNetworkReply>
