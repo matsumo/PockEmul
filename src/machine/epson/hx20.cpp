@@ -419,10 +419,11 @@ UINT8 Chx20::out(UINT8 addr, UINT8 data, QString sender)
     return data;
 }
 
-UINT16 Chx20::out16(UINT16 address, UINT16 value)
+UINT16 Chx20::out16(UINT16 address, UINT16 value, QString sender)
 {
     Q_UNUSED(address)
     Q_UNUSED(value)
+    Q_UNUSED(sender)
 
 //    if (address == UPD7907_PORTE) {
 //        kstrobe = value;

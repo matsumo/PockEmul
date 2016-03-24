@@ -52,6 +52,7 @@ Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
     backdoorS1Open = false;
     m_backdoorS1Angle = 0;
     pS1CONNECTOR = 0;
+    backDoorImage=0;
 }
 
 Cpc13XX::~Cpc13XX()

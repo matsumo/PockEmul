@@ -96,7 +96,7 @@ BYTE	Cpc1253::Get_PortA(void)
 
     if (IO_B & 0x1) {
         if (KEY('R'))			data|=0x01;
-//        if (KEY(K_IN))			data|=0x02;
+        if (KEY(K_IN))			data|=0x02;
         if (KEY('J'))			data|=0x04;   // FUNC
         if (KEY('A'))			data|=0x08; // FUNC
         if (KEY(K_CM))			data|=0x10;
@@ -109,7 +109,7 @@ BYTE	Cpc1253::Get_PortA(void)
         if (KEY('7'))			data|=0x08;
     }
     if (IO_A & 1) {
-//        if (KEY(K_OUT))			data|=0x02;
+        if (KEY(K_OUT))			data|=0x02;
         if (KEY('K'))			data|=0x04; // FUNC
         if (KEY('B'))			data|=0x08; // FUNC
         if (KEY(K_CLR))			data|=0x10;

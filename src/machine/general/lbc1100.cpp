@@ -257,7 +257,7 @@ UINT8 Clbc1100::out(UINT8 Port, UINT8 x, QString sender)
     return 0;
 }
 
-UINT16 Clbc1100::out16(UINT16 address, UINT16 value)
+UINT16 Clbc1100::out16(UINT16 address, UINT16 value, QString sender)
 {
     if (address == UPD7907_PORTE) {
         kstrobe = value;

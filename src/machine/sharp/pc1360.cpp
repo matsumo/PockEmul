@@ -498,6 +498,7 @@ bool Cpc1360::UpdateFinalImage(void) {
 bool Cpc1360::InitDisplay()
 {
     Cpc13XX::InitDisplay();
+    delete backDoorImage;
     backDoorImage = new QImage(QImage(QString(P_RES(":/pc1360/backdoor.png"))).scaled(227*internalImageRatio,192*internalImageRatio));
 
     BackImageBackup = BackImage->copy();

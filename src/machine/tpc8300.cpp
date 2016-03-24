@@ -224,7 +224,7 @@ UINT8 Ctpc8300::out(UINT8 Port, UINT8 x, QString sender)
     return 0;
 }
 
-UINT16 Ctpc8300::out16(UINT16 address, UINT16 value)
+UINT16 Ctpc8300::out16(UINT16 address, UINT16 value, QString sender)
 {
     if (address == UPD7907_PORTE) {
         kstrobe = value;
@@ -405,14 +405,14 @@ UINT16 Ctpc8300::getKey()
 //            if (KEY(K_F5))			data|=0x10;
 //            if (KEY(K_F6))			data|=0x20;
         }
-        if (ks&0x1000) {
-            if (KEY(K_F1))			data|=0x01;
-            if (KEY(K_F2))			data|=0x02;
-            if (pKEYB->isShift)     data|=0x04;
-            if (KEY(K_F4))		data|=0x08;
-            if (KEY(K_F5))			data|=0x10;
-            if (KEY(K_F6))			data|=0x20;
-        }
+//        if (ks&0x1000) {
+//            if (KEY(K_F1))			data|=0x01;
+//            if (KEY(K_F2))			data|=0x02;
+//            if (pKEYB->isShift)     data|=0x04;
+//            if (KEY(K_F4))		data|=0x08;
+//            if (KEY(K_F5))			data|=0x10;
+//            if (KEY(K_F6))			data|=0x20;
+//        }
         if (ks&0x2000) {
 ////            if (KEY(K_F5))			data|=0x01;
 //            if (KEY(K_INS))			data|=0x02;

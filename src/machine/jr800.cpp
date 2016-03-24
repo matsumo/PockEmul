@@ -255,7 +255,7 @@ UINT8 Cjr800::out(UINT8 Port, UINT8 x, QString sender)
     return 0;
 }
 
-UINT16 Cjr800::out16(UINT16 address, UINT16 value)
+UINT16 Cjr800::out16(UINT16 address, UINT16 value, QString sender)
 {
     Q_UNUSED(address)
     Q_UNUSED(value)

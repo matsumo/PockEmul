@@ -24,6 +24,7 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
     BackGroundFname	= P_RES(":/pc1280/pc-1280.png");
     back = new QImage(P_RES(":/pc1280/pc-1280back.png"));
     LeftFname = RightFname = TopFname = BottomFname = BackFname = "";
+    BackFname   = P_RES(":/pc1350/pc1350Back.png");
 
     memsize			= 0x40000;
 
@@ -86,8 +87,14 @@ bool Cpc1280::InitDisplay()
 {
     Cpc13XX::InitDisplay();
 
+    delete backDoorImage;
+    backDoorImage = new QImage(QImage(QString(P_RES(":/pc1360/backdoor.png"))).scaled(227*internalImageRatio,192*internalImageRatio));
+
+    BackImageBackup = BackImage->copy();
     return true;
 }
+
+
 
 void Cpc1280::initExtension(void)
 {
@@ -174,12 +181,8 @@ bool Cpc1280::Chk_Adr(UINT32 *d,UINT32 data)
         if ( (*d>=0x37800) && (*d<=0x37FFF) )	ret=(S1_EXTENSION_CE2H64M_CHECK | S1_EXTENSION_CE2H32M_CHECK | S1_EXTENSION_CE2H16M_CHECK | S1_EXTENSION_CE212M_CHECK | S1_EXTENSION_CE211M_CHECK | S1_EXTENSION_CE210M_CHECK);
         if ( (*d>=0x38000) && (*d<=0x3FFFF) )	ret=(S1_EXTENSION_CE2H64M_CHECK);
         if (pCPU->fp_log) fprintf(pCPU->fp_log,"BANK (%i) ECRITURE [%04x](%05x)=%02x (%c) : %s\n",RamBank,od,*d,data,data,ret?"OK":"NO");
+
         return (ret);
-//        if ( (*d>=0x38000) && (*d<=0x3BFFF) )	return(S2_EXTENSION_CE2H32M_CHECK);
-//        if ( (*d>=0x3C000) && (*d<=0x3DFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK);
-//        if ( (*d>=0x3E000) && (*d<=0x3EFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK);
-//        if ( (*d>=0x3F000) && (*d<=0x3F7FF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK | S2_EXTENSION_CE211M_CHECK);
-//        if ( (*d>=0x3F800) && (*d<=0x3FFFF) )	return(S2_EXTENSION_CE2H32M_CHECK | S2_EXTENSION_CE2H16M_CHECK | S2_EXTENSION_CE212M_CHECK | S2_EXTENSION_CE211M_CHECK | S2_EXTENSION_CE210M_CHECK);
 
     }
 
@@ -211,6 +214,11 @@ bool Cpc1280::Chk_Adr_R(UINT32 *d,UINT32 *data)
 bool Cpc1280::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+//    if (_bus == busS1) {
+//        pS1CONNECTOR->Set_values(busS1->toUInt64());
+//        return true;
+//    }
 
     int port1 = Get_8(0x3800);
     int port2 = Get_8(0x3A00);
