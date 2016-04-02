@@ -21,8 +21,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data) {Q_UNUSED(d) Q_UNUSED(data) return true;}
     virtual bool	Chk_Adr_R(UINT32 *d,UINT32 *data) {Q_UNUSED(d) Q_UNUSED(data)return true;}
-    virtual UINT8 in(UINT8 adr,QString sender=QString()) {Q_UNUSED(adr) return 0;}
-    virtual UINT8 out(UINT8 adr,UINT8 val,QString sender=QString()) {Q_UNUSED(adr) Q_UNUSED(val) return 0;}
+    virtual UINT8 in(UINT8 adr,QString sender=QString()) {Q_UNUSED(adr) Q_UNUSED(sender); return 0;}
+    virtual UINT8 out(UINT8 adr,UINT8 val,QString sender=QString()) {Q_UNUSED(adr) Q_UNUSED(val) Q_UNUSED(sender); return 0;}
     void afficheChar(quint8 c);
 
     Clcdc_pc1211* pLCDC1211;

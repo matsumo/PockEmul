@@ -37,8 +37,8 @@ public:
 	bool	Mem_Mirror(UINT32 *d);
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-    UINT8 in(UINT8 ,QString sender=QString()){return(1);}
-    UINT8 out(UINT8 ,UINT8,QString sender=QString() ){return(1);}
+    UINT8 in(UINT8 ,QString sender=QString()){ Q_UNUSED(sender); return(1);}
+    UINT8 out(UINT8 ,UINT8,QString sender=QString() ){ Q_UNUSED(sender); return(1);}
 
 
 	virtual bool	LoadExtra(QFile *);

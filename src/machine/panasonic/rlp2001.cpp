@@ -158,6 +158,9 @@ bool Crlp2001::run(void)
 //                qWarning()<<"Write video:"<<(adr-0x3000)<<"="<<QString("%1").arg(bus.getData(),2,16,QChar('0'));
 //                pMC6847->draw_screen();
                 screenUpdated = true;
+                pMC6847->draw_screen();
+                screenUpdated = false;
+                Refresh_Display = true;
             }
             INTrequest = true;
 

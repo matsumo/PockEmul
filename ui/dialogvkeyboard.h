@@ -30,12 +30,14 @@ public:
 private slots:
     void InsertKeySlot(QListWidgetItem*);
     void senData();
+    void cancel();
 
 private:
     Ui::DialogVKeyboard *ui;
     CPObject *pPC;
     QHash<QString, CKey *> dict;
     QList<int> final;
+    bool sending;
 };
 
 #endif // DIALOGVKEYBOARD_H

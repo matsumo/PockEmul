@@ -42,6 +42,7 @@ Cpc1251H::Cpc1251H(CPObject *parent)	: Cpc1250(parent)
     Initial_Session_Fname ="pc1251h.pkm";
 
     BackGroundFname	= ":/pc1251/pc1251h.png";
+
 }
 
 bool Cpc1251H::Chk_Adr(UINT32 *d,UINT32 data)

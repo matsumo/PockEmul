@@ -25,8 +25,11 @@ DialogVKeyboard::DialogVKeyboard(QWidget *parent) :
 
     connect(ui->keylistWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(InsertKeySlot(QListWidgetItem*)));
     connect(ui->SendPB,SIGNAL(clicked()),this,SLOT(senData()));
+    connect(ui->CancelPB,SIGNAL(clicked()),this,SLOT(cancel()));
 
     configWait(pPC->getcfgfname());
+
+    sending=false;
 
 }
 
@@ -133,6 +136,11 @@ void DialogVKeyboard::changeCRWait(int v) {
     update();
 }
 
+void DialogVKeyboard::cancel()
+{
+    sending = false;
+}
+
 void DialogVKeyboard::senData()
 {
 
@@ -180,7 +188,11 @@ void DialogVKeyboard::senData()
 
     quint64 refstate ;
 
+    sending = true;
     for (int i=0;i<final.size();i++) {
+
+        if (!sending) break;
+
         int b = final.at(i);
 
         int c = convertKeyCode(b);
@@ -213,6 +225,7 @@ void DialogVKeyboard::senData()
         do{QCoreApplication::processEvents(QEventLoop::AllEvents, 1);} while (pPC->pTIMER->msElapsed(refstate)<charWait);
 
     }
+    sending = false;
 }
 
 int DialogVKeyboard::convertKeyCode(int c) {

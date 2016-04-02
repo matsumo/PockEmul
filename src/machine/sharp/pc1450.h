@@ -20,8 +20,8 @@ public:
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);
-    UINT8	in(UINT8 adr,QString sender=QString()){ Q_UNUSED(adr) return(1);}
-    UINT8 out(UINT8 adr,UINT8 val,QString sender=QString()){ Q_UNUSED(adr) Q_UNUSED(val) return(1);}
+    UINT8	in(UINT8 adr,QString sender=QString()){ Q_UNUSED(adr) Q_UNUSED(sender); return(1);}
+    UINT8 out(UINT8 adr,UINT8 val,QString sender=QString()){ Q_UNUSED(adr) Q_UNUSED(val) Q_UNUSED(sender); return(1);}
 	
 
     Cpc1450(CPObject *parent = 0);

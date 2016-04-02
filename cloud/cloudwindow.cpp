@@ -26,10 +26,6 @@
 #include <QSettings>
 #include <QCryptographicHash>
 
-//#include <QDeclarativeView>
-//#include <QDeclarativeContext>
-//#include <QDeclarativeEngine>
-
 #include <QQmlEngine>
 #include <QQmlContext>
 #include <QQuickView>
@@ -68,7 +64,7 @@ CloudWindow::CloudWindow(QWidget *parent,QString src)
         cloudView->engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
         cloudView->rootContext()->setContextProperty("cloud", &cloud);
         cloudView->setSource(QUrl(src));
-        cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
+        cloudView->setResizeMode(QQuickWidget::SizeRootObjectToView);
         cloud.object = (QObject*) cloudView->rootObject();
     }
 
