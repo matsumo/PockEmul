@@ -15,6 +15,8 @@
 #include "cx07char.h"
 #include "Keyb.h"
 
+#define KEY(a) (Clavier.contains(a) || Clavier.contains(TOUPPER(a)))
+
 
 CT6834::CT6834(CPObject *parent)	: CPObject(parent)
 {
@@ -1010,7 +1012,6 @@ void CT6834::setRamVideo(int x, int y,UINT8 val)
     }
 }
 
-#define KEY(a) (Clavier.contains(a) || Clavier.contains(TOUPPER(a)))
 
 quint8 CT6834::getKey(quint16 strobe) {
     quint8 data = 0;

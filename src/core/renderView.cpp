@@ -174,6 +174,11 @@ bool CrenderView::keyAt(QString Id, int x, int y)
     return false;
 }
 
+double CrenderView::getZoom()
+{
+    return mainwindow->zoom;
+}
+
 void CrenderView::unclick(QString Id, int x, int y)
 {
 //    qWarning()<<"unclick:"<<Id<<x<<y;

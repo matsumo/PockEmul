@@ -101,7 +101,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     hardresetAt = 0;
     hardreset = false;
 
-    grabGesture(Qt::TapAndHoldGesture);
+//    grabGesture(Qt::TapAndHoldGesture);
 
     // ERROR MESSAGE
     connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
@@ -192,14 +192,14 @@ void CPObject::maximizeWidth()
             rs = RectWithLinked();
             mainwindow->MoveAll(- rs.topLeft());
             fullscreenMode = true;
-            grabGesture(Qt::SwipeGesture);
+//            grabGesture(Qt::SwipeGesture);
 //            qWarning()<<"GrabGesture SwipeGesture";
         }
     }
     else {
         mainwindow->doZoom(QPoint(0,0),-1,mainwindow->zoom-1);
         fullscreenMode = false;
-        ungrabGesture(Qt::SwipeGesture);
+//        ungrabGesture(Qt::SwipeGesture);
 //        qWarning()<<"unGrab Gesture SwipeGesture";
     }
 }
@@ -586,32 +586,33 @@ void CPObject::SwitchFrontBack(QPoint point) {
 bool CPObject::event(QEvent *event)
  {
 
-     if (event->type() == QEvent::Gesture) {
-         if (QGesture *swipe = (static_cast<QGestureEvent*>(event))->gesture(Qt::SwipeGesture)) {
-             swipeTriggered(static_cast<QSwipeGesture *>(swipe));
-             event->accept();
-         }
-         else {
-             if (QGesture *tap = (static_cast<QGestureEvent*>(event))->gesture(Qt::TapAndHoldGesture)) {
-                 const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
-                 //             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
-                 if (tap->state() == Qt::GestureStarted) {
-                     QContextMenuEvent *cme = new QContextMenuEvent(
-                                 QContextMenuEvent::Mouse,
-                                 pos,
-                                 (pos));
-                     //contextMenuEvent(cme);
-                     QApplication::sendEvent(this,cme);
+//     if (event->type() == QEvent::Gesture) {
+////         if (QGesture *swipe = (static_cast<QGestureEvent*>(event))->gesture(Qt::SwipeGesture)) {
+////             swipeTriggered(static_cast<QSwipeGesture *>(swipe));
+////             event->accept();
+////         }
+////         else
+//         {
+//             if (QGesture *tap = (static_cast<QGestureEvent*>(event))->gesture(Qt::TapAndHoldGesture)) {
+//                 const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
+//                 //             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
+//                 if (tap->state() == Qt::GestureStarted) {
+//                     QContextMenuEvent *cme = new QContextMenuEvent(
+//                                 QContextMenuEvent::Mouse,
+//                                 pos,
+//                                 (pos));
+//                     //contextMenuEvent(cme);
+//                     QApplication::sendEvent(this,cme);
 
-                     setCursor(Qt::ArrowCursor);
+//                     setCursor(Qt::ArrowCursor);
 
-                     event->accept();
-                 }
-             }
-         }
-         event->accept();
-         return true;
-     }
+//                     event->accept();
+//                 }
+//             }
+//         }
+//         event->accept();
+//         return true;
+//     }
      return QWidget::event(event);
  }
 
@@ -636,7 +637,7 @@ void CPObject::swipeTriggered(QSwipeGesture *gesture)
 }
 
 void CPObject::wheelEvent(QWheelEvent *event) {
-
+qWarning()<<"Weel";
     QPoint point;
     if (Parent) {
         point = event->pos();
@@ -727,7 +728,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 //        qWarning()<<"ok"
 ;        pKEYB->LastKey = pKEYB->KeyClick(pts);
         if (pKEYB->LastKey != 0)  {
-            ungrabGesture(Qt::TapAndHoldGesture);
+//            ungrabGesture(Qt::TapAndHoldGesture);
 //            qWarning()<<"lastKey="<<pKEYB->LastKey;
         }
 
@@ -739,12 +740,17 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         case K_OF :
             Vibrate();
             slotPower();
-            grabGesture(Qt::TapAndHoldGesture);
+//            grabGesture(Qt::TapAndHoldGesture);
             return;
             break;
         case K_BRK :
         case K_POW_ON :qWarning()<<"GOGO"; Vibrate();TurnON(); break;
-        case K_POW_OFF: Vibrate();Power = false;TurnOFF();grabGesture(Qt::TapAndHoldGesture);return;break;
+        case K_POW_OFF: Vibrate();
+            Power = false;
+            TurnOFF();
+//            grabGesture(Qt::TapAndHoldGesture);
+            return;
+            break;
         case K_CLOSE: Vibrate();TurnCLOSE();break;
         }
 
@@ -755,7 +761,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
             Vibrate();
         }
 
-        grabGesture(Qt::TapAndHoldGesture);
+//        grabGesture(Qt::TapAndHoldGesture);
         if (pKEYB->LastKey != 0) {
             event->accept();
             return;

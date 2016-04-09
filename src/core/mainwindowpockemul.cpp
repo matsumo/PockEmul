@@ -151,8 +151,8 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
 #endif
 
 
-    grabGesture(Qt::PanGesture);
-    grabGesture(Qt::PinchGesture);
+//    grabGesture(Qt::PanGesture);
+//    grabGesture(Qt::PinchGesture);
 
     initObjectTable();
 #ifdef AVOID
@@ -167,15 +167,15 @@ server = new ServeurTcp(this);
 
 #if QT_VERSION >= 0x050000
 // Create a QSensorGestureManager
-    QSensorGestureManager gestureManager;
+//    QSensorGestureManager gestureManager;
 
 // Get a list of known recognizers
 //    QStringList recognizersList = gestureManager.gestureIds();
 
 // Create a QSensorGeture object for each of those gesture recognizers
-        QSensorGesture *gesture = new QSensorGesture( gestureManager.gestureIds(), this);
+//        QSensorGesture *gesture = new QSensorGesture( gestureManager.gestureIds(), this);
 // Connect the known signals up.
-        connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
+//        connect(gesture, SIGNAL(detected(QString)), this, SLOT(gestureDetected(QString)));
 
 //        cloud = new CloudWindow(this);
 //        cloud->hide();
@@ -1335,8 +1335,8 @@ void MainWindowPockemul::wheelEvent(QWheelEvent *event) {
 bool MainWindowPockemul::event(QEvent *event)
  {
 //    qWarning()<<"MainWindowPockemul::event "<<event->type();
-     if (event->type() == QEvent::Gesture)
-         return gestureEvent(static_cast<QGestureEvent*>(event));
+//     if (event->type() == QEvent::Gesture)
+//         return gestureEvent(static_cast<QGestureEvent*>(event));
      return QWidget::event(event);
  }
 
@@ -1346,12 +1346,13 @@ bool MainWindowPockemul::gestureEvent(QGestureEvent *event)
 
 //    if (QGesture *pan = event->gesture(Qt::PanGesture))
 //        panTriggered(static_cast<QPanGesture *>(pan));
-    if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
-        startPosDrag = false;
-        event->accept();
-        pinchTriggered(static_cast<QPinchGesture *>(pinch));
 
-    }
+//    if (QGesture *pinch = event->gesture(Qt::PinchGesture)) {
+//        startPosDrag = false;
+//        event->accept();
+//        pinchTriggered(static_cast<QPinchGesture *>(pinch));
+
+//    }
     return true;
 }
 

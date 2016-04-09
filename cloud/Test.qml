@@ -95,7 +95,8 @@ Rectangle {
         pinch.minimumScale: 0.1
         pinch.maximumScale: 10
         onPinchUpdated: {
-            setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
+            console.warn("pinch master");
+            setZoom(pinch.center.x,pinch.center.y,pinch.scale/pinch.previousScale);
             previousScale=pinch.scale;
         }
 
@@ -105,6 +106,7 @@ Rectangle {
             anchors.fill: parent
             onWheel: {
                 //                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
+                console.warn("wheel");
                 setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12>0 ? 1.1 : .9);
             }
             onPressed: {
@@ -172,6 +174,24 @@ Rectangle {
                 smooth: true
                 mipmap: true
                 antialiasing: true
+            }
+
+            PinchArea {
+                property real previousScale: 1
+                enabled: false
+                anchors.fill: parent
+                pinch.target: photoFrame
+                pinch.minimumRotation: -360
+                pinch.maximumRotation: 360
+                pinch.minimumScale: 0.1
+                pinch.maximumScale: 10
+                onPinchStarted: previousScale=1;
+                onPinchUpdated: {
+                    console.warn("pinch");
+                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
+                    previousScale=pinch.scale;
+//                    photoFrame.rotation = pinch.rotation
+                }
             }
 
             MultiPointTouchArea {
@@ -285,21 +305,7 @@ Rectangle {
 
             }
 
-            PinchArea {
-                property real previousScale: 1
-                anchors.fill: parent
-                pinch.target: photoFrame
-                pinch.minimumRotation: -360
-                pinch.maximumRotation: 360
-                pinch.minimumScale: 0.1
-                pinch.maximumScale: 10
-                onPinchStarted: previousScale=0;
-                onPinchUpdated: {
-                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
-                    previousScale=pinch.scale;
-//                    photoFrame.rotation = pinch.rotation
-                }
-            }
+
         }
 
     }

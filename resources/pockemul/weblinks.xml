@@ -136,6 +136,8 @@
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/canon/x-07_e.html"/>
         <url desc="Silicium (fr)" link="http://www.silicium.org/oldskool/calc/x07/index.htm"/>
         <document desc="BASIC reference (fr)" link="http://pockemul.free.fr/Documents/userguide/X07/CarteReferenceBasicX-07.pdf"/>
+        <document desc="Guide de l'utilisateur (fr)" link="http://pockemul.free.fr/Documents/userguide/X07/x-07_guide_utilisateur.pdf"/>
+        <document desc="Introduction BASIC (fr)" link="http://pockemul.free.fr/Documents/userguide/X07/X-07_Introduction_BASIC.pdf"/>
     </model>
     <model value="pb1000">
         <url desc="The original emulator" link="http://www.pisi.com.pl/piotr433/pb1000ee.htm"/>

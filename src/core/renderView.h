@@ -20,6 +20,8 @@ public:
 
 
     Q_INVOKABLE bool keyAt(QString Id, int x, int y);
+    Q_INVOKABLE double getZoom();
+
 public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();
