@@ -1011,7 +1011,7 @@ void PictureFlowPrivate::recalc(int ww, int wh)
   singlePressThreshold = ww / 15;
 //  qDebug() << "singlePressThreshold now set to " << singlePressThreshold;
 
-  pixelsToMovePerSlide = ww / 3;
+  pixelsToMovePerSlide = ww / 10;
 //  qDebug() << "pixelsToMovePerSlide now set to " << pixelsToMovePerSlide;
 
   itilt = 80 * IANGLE_MAX / 360;  // approx. 80 degrees tilted
@@ -1356,7 +1356,7 @@ void PictureFlow::exitSlot(){
 }
 
 #define SPEED_LOWER_THRESHOLD 10
-#define SPEED_UPPER_LIMIT 40
+#define SPEED_UPPER_LIMIT 60
 
 void PictureFlow::mouseMoveEvent(QMouseEvent* event)
 {

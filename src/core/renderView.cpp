@@ -128,7 +128,7 @@ void CrenderView::moveallpocket(int x, int y)
 
 void CrenderView::contextMenu(QString Id, int x, int y)
 {
-    qWarning()<<"contextMenu"<<x<<y;
+//    qWarning()<<"contextMenu"<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
     QContextMenuEvent *cme = new QContextMenuEvent(
@@ -156,9 +156,9 @@ void CrenderView::click(QString Id, int x, int y)
 //    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
     {
         // Send thee MouseButtonPress event
-        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-        QApplication::sendEvent(pc, e);
-        delete e;
+        QMouseEvent event(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QApplication::sendEvent(pc, &event);
+
         return;
     }
 }
@@ -177,13 +177,18 @@ bool CrenderView::keyAt(QString Id, int x, int y)
 void CrenderView::unclick(QString Id, int x, int y)
 {
 //    qWarning()<<"unclick:"<<Id<<x<<y;
+
+    QEventLoop eventLoop;
+    QTimer::singleShot (100, &eventLoop, SLOT (quit ()));
+    eventLoop.exec ();
+
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
 
     // Send thee MouseButtonRelease event
-    QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-    QApplication::sendEvent(pc, e);
-    delete e;
+    QMouseEvent event(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+    QApplication::sendEvent(pc, &event);
+
     return;
 
 }
@@ -194,9 +199,9 @@ void CrenderView::dblclick(QString Id, int x, int y)
     QPoint pts(x , y);
 
     // Send thee MouseButtonPress event
-    QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonDblClick, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-    QApplication::sendEvent(pc, e);
-    delete e;
+    QMouseEvent event(QEvent::MouseButtonDblClick, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+    QApplication::sendEvent(pc, &event);
+
     return;
 
 }

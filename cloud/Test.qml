@@ -98,6 +98,7 @@ Rectangle {
             setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
             previousScale=pinch.scale;
         }
+
         MouseArea {
             property bool isdrag: false;
             hoverEnabled: false
@@ -107,14 +108,20 @@ Rectangle {
                 setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12>0 ? 1.1 : .9);
             }
             onPressed: {
+//                console.warn("pressed MASTER");
                 prevX = mouseX;
                 prevY = mouseY;
-                isdrag=true;
+                this.isdrag=true;
             }
-            onReleased: isdrag=false;
+            onReleased: {
+//                console.warn("release MASTER");
+                isdrag=false;
+            }
             onPositionChanged: {
+
                 if (isdrag) {
                     sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+//                    console.warn("move MASTER:",mouseX-prevX,mouseY-prevY);
                     prevX = mouseX;
                     prevY = mouseY;
                 }
@@ -145,7 +152,9 @@ Rectangle {
             height: _height
             visible: _visible
             rotation: _rotation
+
             onRotationChanged: sendRotPocket(idpocket,rotation)
+
             Keys.onPressed: {
                 sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                 event.accepted = true;
@@ -164,75 +173,93 @@ Rectangle {
                 mipmap: true
                 antialiasing: true
             }
-            PinchArea {
-                property real previousScale: 1
+
+            MultiPointTouchArea {
+                enabled: true;
+                mouseEnabled: true;
                 anchors.fill: parent
-                pinch.target: photoFrame
-                pinch.minimumRotation: -360
-                pinch.maximumRotation: 360
-                pinch.minimumScale: 0.1
-                pinch.maximumScale: 10
-                onPinchUpdated: {
-                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
-                    previousScale=pinch.scale;
-//                    photoFrame.rotation = pinch.rotation
+//                minimumTouchPoints: 1
+//                maximumTouchPoints: 2
+//                touchPoints: [
+//                    TouchPoint { id: point1 },
+//                    TouchPoint { id: point2 }
+//                ]
+                onPressed: {
+                    for (var touch in touchPoints) {
+//                        console.warn("Multitouch pressed touch", touchPoints[touch].pointId, "at", touchPoints[touch].x, ",", touchPoints[touch].y)
+                        sendClick(idpocket,touchPoints[touch].x,touchPoints[touch].y);
+                    }
                 }
+                onReleased: {
+
+//                    console.warn("touchPoints count:",touchPoints.length);
+                    for (var touch in touchPoints) {
+//                        console.warn("Multitouch released touch", touchPoints[touch].pointId, "at", touchPoints[touch].x, ",", touchPoints[touch].y)
+                        var tx = touchPoints[touch].x;
+                        var ty = touchPoints[touch].y;
+                        sendUnClick(idpocket,tx,ty);
+                    }
+
+                }
+
+
+
                 MouseArea {
                     property bool isdrag: false;
+                    property point previousPosition: Qt.point(1, 1);
 
                     id: dragArea
+                    enabled: true;
                     hoverEnabled: true;
-                    preventStealing:true
+                    preventStealing: true
                     acceptedButtons: Qt.LeftButton | Qt.RightButton
                     anchors.fill: parent
                     propagateComposedEvents: false
-                    drag.target: photoFrame
+
                     onPressAndHold: {
-                        if (mouse.button == Qt.LeftButton) {
-                            sendContextMenu(idpocket,mouse.x,mouse.y);
+                        if (!isdrag) {
+                            if (!main.keyAt(idpocket,mouse.x,mouse.y) && (mouse.button === Qt.LeftButton)) {
+                                sendContextMenu(idpocket,mouse.x,mouse.y);
+                            }
                         }
-                        isdrag=false;
                     }
+
                     onPressed: {
-                        drag.maximumX = 65536; //renderArea.width;
-                        drag.minimumX = -65536; //0;
-                        drag.maximumY = 65536; //renderArea.height;
-                        drag.minimumY = -65536; //0;
+//                        console.warn("clik");
+                        previousPosition = Qt.point(mouse.x, mouse.y);
                         photoFrame.focus = true;
-                        if (mouse.button == Qt.RightButton) {
-//                            console.log("drag active:"+drag.active);
-                            drag.maximumX = photoFrame.x;
-                            drag.minimumX = photoFrame.x;
-                            drag.maximumY = photoFrame.y;
-                            drag.minimumY = photoFrame.y;
+                        if (mouse.button === Qt.RightButton) {
                             sendContextMenu(idpocket,mouse.x,mouse.y);
                             isdrag=false;
                         }
-                        if (mouse.button == Qt.LeftButton) {
-                            isdrag=true;
-//                            console.log("isdrag true");
+                        if (mouse.button === Qt.LeftButton) {
+                            if (!main.keyAt(idpocket,mouse.x,mouse.y)) {
+                                isdrag=true;
+                            }
                             sendClick(idpocket,mouse.x,mouse.y);
                         }
                         mouse.accepted=true;
                     }
+
                     onReleased: {
                         isdrag=false;
                         sendUnClick(idpocket,mouseX,mouseY);
-                    }
-                    onDoubleClicked: sendDblClick(idpocket,mouseX,mouseY);
-                    onPositionChanged: {
+                        mouse.accepted=true;
 
-//                        console.log("move isdrag active:"+drag.active+" isdrag:"+isdrag);
+                    }
+
+                    onDoubleClicked: {
+                        isdrag = false;
+                        sendDblClick(idpocket,mouseX,mouseY);
+                    }
+
+                    onPositionChanged: {
                         if (isdrag) {
-                            sendMovePocket(idpocket,photoFrame.x,photoFrame.y);
-//                          console.log("diff:" +(_tmpX-prevX) +" "+(_tmpY-prevY));
+                            var dx = mouse.x - previousPosition.x
+                            var dy = mouse.y - previousPosition.y
+                            sendMovePocket(idpocket,photoFrame.x+dx,photoFrame.y+dy);
                         }
                         else {
-//                            console.log("drag cancel");
-                            drag.maximumX = photoFrame.x;
-                            drag.minimumX = photoFrame.x;
-                            drag.maximumY = photoFrame.y;
-                            drag.minimumY = photoFrame.y;
                             if (main.keyAt(idpocket,mouse.x,mouse.y)) {
                                 cursorShape = Qt.PointingHandCursor;
                             }
@@ -240,10 +267,11 @@ Rectangle {
                                 cursorShape = Qt.ArrowCursor;
                             }
                         }
+                        mouse.accepted=true;
 
                     }
-//                    onEntered: photoFrame.border.color = "red";
-//                    onExited: photoFrame.border.color = "black";
+    //                    onEntered: photoFrame.border.color = "red";
+    //                    onExited: photoFrame.border.color = "black";
                     onWheel: {
                         wheel.accepted = false;
                         if (wheel.modifiers & Qt.ControlModifier) {
@@ -254,8 +282,26 @@ Rectangle {
                         }
                     }
                 }
+
+            }
+
+            PinchArea {
+                property real previousScale: 1
+                anchors.fill: parent
+                pinch.target: photoFrame
+                pinch.minimumRotation: -360
+                pinch.maximumRotation: 360
+                pinch.minimumScale: 0.1
+                pinch.maximumScale: 10
+                onPinchStarted: previousScale=0;
+                onPinchUpdated: {
+                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale/previousScale);
+                    previousScale=pinch.scale;
+//                    photoFrame.rotation = pinch.rotation
+                }
             }
         }
+
     }
 
     Launchmenu {
@@ -320,10 +366,10 @@ Rectangle {
 
         var index = getIndex(_pocketId);
 
-    //    console.log("found index:"+index);
+//        console.warn("found index:"+index);
         if (index !== -1) {
 
-//            console.log("object moved from ("+renderArea.xmlThumbModel.get(index)._left+","+renderArea.xmlThumbModel.get(index)._top+") to ("+_left+","+_top+")");
+//            console.warn("object moved from ("+renderArea.xmlThumbModel.get(index)._left+","+renderArea.xmlThumbModel.get(index)._top+") to ("+_left+","+_top+")");
             renderArea.xmlThumbModel.get(index)._left = _left;
             renderArea.xmlThumbModel.get(index)._top = _top;
         }

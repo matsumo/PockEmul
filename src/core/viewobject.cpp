@@ -58,13 +58,13 @@ void CViewObject::setPosX(float val)
 {
     PosX = val;
     move(QPoint(PosX,PosY));
-    emit movePObject(this,QPoint(PosX,PosY));
+    emit movePObject(this,QPointF(PosX,PosY));
 }
 void CViewObject::setPosY(float val)
 {
     PosY = val;
     move(QPoint(PosX,PosY));
-    emit movePObject(this,QPoint(PosX,PosY));
+    emit movePObject(this,QPointF(PosX,PosY));
 }
 void CViewObject::MoveRel(QPointF p)
 {
@@ -84,7 +84,7 @@ void CViewObject::MoveAbs(QPointF p)
     PosX = p.x();
     PosY = p.y();
     move(QPoint(PosX,PosY));
-    emit movePObject(this,QPoint(PosX,PosY));
+    emit movePObject(this,QPointF(PosX,PosY));
 #ifdef AVOID
     mainwindow->router->moveShape(mainwindow->shapeRefList[this],p.x(),p.y());
     mainwindow->router->processTransaction();

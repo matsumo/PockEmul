@@ -1304,7 +1304,7 @@ void MainWindowPockemul::updateTimer()
 void MainWindowPockemul::doZoom(QPoint point,float delta,int step) {
     Q_UNUSED(step)
 
-//    qWarning()<<"zoom:"<<delta;
+    qWarning()<<"zoom:"<<delta;
     zoom *= delta;
 
     for (int i=0;i<listpPObject.size();i++) {

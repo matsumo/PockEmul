@@ -656,9 +656,9 @@ void CPObject::slotDoubleClick(QPoint pos) {
     if ((pKEYB) &&(pKEYB->KeyClick(pos))) {
 //        qWarning()<<"keyclick";
         // Send thee mouseclick event twice
-        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-        QApplication::sendEvent(this, e);
-        delete e;
+        QMouseEvent event(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QApplication::sendEvent(this, &event);
+
         return;
     }
 
