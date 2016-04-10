@@ -182,6 +182,13 @@ bool seg1, seg2, seg3, seg4, seg5, seg6, seg7;
     painter->translate(rect.left(),0);
     QPolygon poly;
 
+    // Brush
+        QBrush brush;
+        brush.setColor(painter->pen().color());
+        brush.setStyle(Qt::SolidPattern);
+
+        painter->setBrush(brush);
+
     ///////////////////////////////////////////////////
     ///    0---------------------------1
     //        3--------------------2
@@ -234,9 +241,9 @@ bool seg1, seg2, seg3, seg4, seg5, seg6, seg7;
 
     poly.clear();
     poly << QPoint(0,gap)
-         << QPoint(0,vhalf)
-         << QPoint(width,vhalf - (width/2))
-         << QPoint( width, width + gap);
+         << QPoint(0,vhalf-gap)
+         << QPoint(width,vhalf-gap - (width/2))
+         << QPoint(width, width + gap);
 
     if(seg4)
         painter->drawPolygon(poly);
@@ -245,7 +252,7 @@ bool seg1, seg2, seg3, seg4, seg5, seg6, seg7;
     poly << QPoint(0,vhalf + gap + gap)
          << QPoint(0,vhalf + vhalf -  gap)
          << QPoint(width,vhalf - (width/2) + vhalf -  gap - width/2)
-         << QPoint( width, width + gap + vhalf - width/2 + gap);
+         << QPoint(width, width + gap + vhalf - width/2 + gap);
 
     if(seg5)
         painter->drawPolygon(poly);

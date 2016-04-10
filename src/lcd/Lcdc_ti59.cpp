@@ -22,6 +22,9 @@ Clcdc_ti59::Clcdc_ti59(CPObject *parent, QRect _lcdRect, QRect _symbRect, QStrin
     connect(blinkTimer,SIGNAL(timeout()),this,SLOT(blink()));
     blinkState = false;
 
+    internalSize = QSize(220,40);
+    pixelSize = 5;
+    pixelGap = 0;
 }
 
 void Clcdc_ti59::disp(void)
@@ -72,6 +75,7 @@ void Clcdc_ti59::disp(void)
     if (!error || blinkState) {
         //        qWarning()<<"print text";
         painter.setPen(QColor(255,0,0));
+        painter.setBrush(Qt::SolidPattern);
 #if 0
         painter.drawText(LcdImage->rect(),Qt::AlignCenter,s);
 #else
@@ -85,15 +89,15 @@ void Clcdc_ti59::disp(void)
             if (s.at(i) == ' ') pos+=charSpace;
 
             if (code == 99) {
-                QRect rect(pos- charSpace + 10,12,1,1);
+                QRect rect((pos- charSpace + 10)*pixelSize,12*pixelSize,1*pixelSize,1*pixelSize);
                 painter.drawRect(rect);
             }
             else
                 if (code >=0) {
 
-                    QRect rect(pos,0,8,13);
+                    QRect rect(pos*pixelSize,0,8*pixelSize,13*pixelSize);
 
-                    Clcd7::draw(code,&painter,rect,1,0);
+                    Clcd7::draw(code,&painter,rect,8,2);
                     pos += charSpace;
                 }
         }
