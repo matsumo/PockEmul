@@ -119,6 +119,11 @@ Rectangle {
 //                console.warn("release MASTER");
                 isdrag=false;
             }
+            onDoubleClicked: {
+                for (var i=0; i<repeater.count;i++) {
+                    repeater.itemAt(i).touchEnabled = !repeater.itemAt(i).touchEnabled;
+                }
+            }
             onPositionChanged: {
 
                 if (isdrag) {
@@ -143,6 +148,8 @@ Rectangle {
         Rectangle {
             id: photoFrame
             color: "transparent"
+
+            property bool touchEnabled : true
 
             border.width: 0
 //            smooth: true
@@ -176,26 +183,27 @@ Rectangle {
                 antialiasing: true
             }
 
-            PinchArea {
-                property real previousScale: 1
-                enabled: false
-                anchors.fill: parent
-                pinch.target: photoFrame
-                pinch.minimumRotation: -360
-                pinch.maximumRotation: 360
-                pinch.minimumScale: 0.1
-                pinch.maximumScale: 10
-                onPinchStarted: previousScale=1;
-                onPinchUpdated: {
-                    console.warn("pinch");
-                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
-                    previousScale=pinch.scale;
-//                    photoFrame.rotation = pinch.rotation
-                }
-            }
+//            PinchArea {
+//                property real previousScale: 1
+//                enabled: false
+//                anchors.fill: parent
+//                pinch.target: photoFrame
+//                pinch.minimumRotation: -360
+//                pinch.maximumRotation: 360
+//                pinch.minimumScale: 0.1
+//                pinch.maximumScale: 10
+//                onPinchStarted: previousScale=1;
+//                onPinchUpdated: {
+//                    console.warn("pinch");
+//                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
+//                    previousScale=pinch.scale;
+////                    photoFrame.rotation = pinch.rotation
+//                }
+//            }
 
             MultiPointTouchArea {
-                enabled: true;
+                id: pocketTouchArea
+                enabled: parent.touchEnabled
                 mouseEnabled: true;
                 anchors.fill: parent
 //                minimumTouchPoints: 1

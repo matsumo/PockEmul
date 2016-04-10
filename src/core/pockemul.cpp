@@ -201,10 +201,25 @@ int main(int argc, char *argv[])
 
     qWarning()<<QGuiApplication::primaryScreen()->physicalDotsPerInch();
 
-    float ratio = MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150);
+    int v_pos = 12;
+    float ratio = Cloud::getValueFor("hiResRatio","0").toFloat();
+    if (0==ratio) {
+        // max 8*50*ratio+2*v_pos = height
+        float _minSize =  MIN(QGuiApplication::primaryScreen()->size().width(),QGuiApplication::primaryScreen()->size().height());
+        float _maxRatio = (_minSize - 2*v_pos)/400.0;
+
+        ratio = MIN(_maxRatio,
+                    MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150)
+                    );
+
+        Cloud::saveValueFor("hiResRatio",QString("%1").arg(ratio));
+    }
     int iconSize = 48*ratio;
     int v_inter = 50*ratio;
-    int v_pos = 12;
+
+
+    qWarning()<<"ratio:"<<ratio<<"  iconSize:"<<iconSize<<"  inter:"<<v_inter;
+
     launch1 = new LaunchButtonWidget(mainwindow->centralwidget,
                                                 LaunchButtonWidget::PictureFlow,
                                                 QStringList()<<P_RES(":/pockemul/config.xml"),

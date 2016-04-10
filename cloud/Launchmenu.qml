@@ -4,7 +4,7 @@ Rectangle {
     id:menu
     x:5
 //    z: -9999999
-    property int iconsize: 48
+    property int iconsize: 48 * cloud.getValueFor("hiResRatio","1")
 
     Image {
         id:newPocket

@@ -38,6 +38,7 @@ Rectangle {
         SettingsDelegate { id: labelAppSettings; name: "labelAppSettings"; labelString: "Application Settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: soundEnabled; name: "soundEnabled"; labelString: "Enable sound"; type: "checkbox"; defaultText: "on"}
         SettingsDelegate { id: hiRes; name: "hiRes"; labelString: "Enable High Resolution"; type: "checkbox"; defaultText: "on"}
+        SettingsDelegate { id: hiResRatio; name: "hiResRatio"; labelString: "Scale icons"; type: "input"; defaultText: "0"}
 
         SettingsDelegate { id: labelServer; name: "labelServer"; labelString: "Telnet Server settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: telnetPort; name: "telnetPort"; labelString: "Telnet Server port"; type: "input"; defaultText: "4000"}
