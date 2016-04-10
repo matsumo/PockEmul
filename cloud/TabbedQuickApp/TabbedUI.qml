@@ -64,6 +64,7 @@ Rectangle {
 	Rectangle {
 	    height: tabs.height
 	    width: tabs.width / tabsModel.count
+        property int margin : tabs.height / 16
 
 	    color: "transparent"
 
@@ -71,13 +72,16 @@ Rectangle {
 		source: tabsModel.children[index].icon
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.top: parent.top
-		anchors.topMargin: 4
-	    }
+        anchors.topMargin: margin
+        height: (parent.height - 2*margin)/2
+        width: (parent.height - 2*margin)/2
+        }
 
 	    Text {
 		anchors.horizontalCenter: parent.horizontalCenter
 		anchors.bottom: parent.bottom
-		anchors.bottomMargin: 4
+        anchors.bottomMargin: margin
+        height: (parent.height - 2*margin)/2
 		color: "white"
 		text: tabsModel.children[index].name
         renderType: Text.NativeRendering

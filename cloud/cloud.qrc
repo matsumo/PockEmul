@@ -51,5 +51,6 @@
         <file>Launchmenu.qml</file>
         <file>hx20rc.qml</file>
         <file>content/About.qml</file>
+        <file>TabbedQuickApp/pics/white-about-256.png</file>
     </qresource>
 </RCC>

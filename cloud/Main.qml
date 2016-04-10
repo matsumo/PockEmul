@@ -85,7 +85,7 @@ Rectangle {
             }
         }
         Tab {name: "About"
-            icon: "pics/settings-white.png"
+            icon: "pics/white-about-256.png"
 
             About {
                 anchors.fill: parent
@@ -105,7 +105,7 @@ Rectangle {
 
     TabbedUI {
         id: tabbedui
-        tabsHeight: 72
+        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
         quitIndex: 4

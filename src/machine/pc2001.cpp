@@ -211,7 +211,7 @@ UINT8 Cpc2001::out(UINT8 Port, UINT8 x, QString sender)
     Q_UNUSED(Port)
     Q_UNUSED(x)
 
-    qWarning()<<"Write port :"<<Port<<x;
+//    qWarning()<<"Write port :"<<Port<<x;
     return 0;
 }
 
