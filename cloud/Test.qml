@@ -245,10 +245,9 @@ Rectangle {
                     propagateComposedEvents: false
 
                     onPressAndHold: {
-                        if (!isdrag) {
-                            if (!main.keyAt(idpocket,mouse.x,mouse.y) && (mouse.button === Qt.LeftButton)) {
-                                sendContextMenu(idpocket,mouse.x,mouse.y);
-                            }
+                        isdrag=false;
+                        if (!main.keyAt(idpocket,mouse.x,mouse.y) && (mouse.button === Qt.LeftButton)) {
+                            sendContextMenu(idpocket,mouse.x,mouse.y);
                         }
                     }
 

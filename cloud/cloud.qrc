@@ -50,5 +50,6 @@
         <file>Test.qml</file>
         <file>Launchmenu.qml</file>
         <file>hx20rc.qml</file>
+        <file>content/About.qml</file>
     </qresource>
 </RCC>

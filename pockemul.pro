@@ -1569,6 +1569,7 @@ OTHER_FILES *= \
     cloud/content/Message.qml \
     cloud/content/NewsDelegate2.qml \
     cloud/content/Actions.qml \
+    cloud/content/About.qml \
     cloud/PmlView.qml \
     cloud/PmlView2.qml \
     cloud/Test.qml \
@@ -1583,7 +1584,8 @@ ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 RESOURCES += \
 
 DISTFILES += \
-    package.pri
+    package.pri \
+    resources/pockemul/about.html
 
 
 

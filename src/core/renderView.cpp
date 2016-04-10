@@ -179,6 +179,15 @@ double CrenderView::getZoom()
     return mainwindow->zoom;
 }
 
+QString CrenderView::getReleaseNotes(QString _fn)
+{
+    QFile _file(_fn);
+    _file.open( QIODevice::ReadOnly);
+    QString _notes = _file.readAll();
+
+    return _notes;
+}
+
 void CrenderView::unclick(QString Id, int x, int y)
 {
 //    qWarning()<<"unclick:"<<Id<<x<<y;

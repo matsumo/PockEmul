@@ -21,6 +21,7 @@ public:
 
     Q_INVOKABLE bool keyAt(QString Id, int x, int y);
     Q_INVOKABLE double getZoom();
+    Q_INVOKABLE QString getReleaseNotes(QString _fn);
 
 public slots:
     Q_INVOKABLE void newpocketSlot();

@@ -84,6 +84,14 @@ Rectangle {
                 anchors.fill: parent
             }
         }
+        Tab {name: "About"
+            icon: "pics/settings-white.png"
+
+            About {
+                anchors.fill: parent
+                fileName: ":/pockemul/release_notes.html"
+            }
+        }
 
         Tab {
             name: ""
@@ -100,7 +108,7 @@ Rectangle {
         tabsHeight: 72
         tabIndex: 0
         tabsModel: tabsModel
-        quitIndex: 3
+        quitIndex: 4
         onClose: rootCloud.close();
 
     }
