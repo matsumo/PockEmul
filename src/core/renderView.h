@@ -27,6 +27,7 @@ public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();
     Q_INVOKABLE void loadSlot();
+    Q_INVOKABLE void saveSlot();
     Q_INVOKABLE void bookcaseSlot();
 
     Q_INVOKABLE void warning(QString msg);

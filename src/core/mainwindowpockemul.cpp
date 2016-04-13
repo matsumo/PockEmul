@@ -72,7 +72,7 @@ PockEmul is a Sharp Pocket Computer Emulator.
 #include "allobjects.h"
 
 extern MainWindowPockemul* mainwindow;
-extern QQuickWidget* view;
+extern CrenderView* view;
 extern DownloadManager *downloadManager;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 extern QString m_getArgs();
@@ -1158,7 +1158,10 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     qWarning()<<view;
 //    view->rootObject()->window()->grabWindow().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
     if (view) {
-        view->grabFramebuffer().scaled(QSize(600,600),Qt::KeepAspectRatio,Qt::SmoothTransformation).save(&buffer, "JPG");
+        view->grabFramebuffer().scaled(QSize(600,600),
+                                       Qt::KeepAspectRatio,
+                                       Qt::SmoothTransformation).save(&buffer, "JPG");
+
         qWarning()<<"ok2";
     }
     else {
@@ -1648,7 +1651,7 @@ void MainWindowPockemul::initCommandLine(void) {
 
        cmdline->addOption('l',"load","Load a .pml session file");
        cmdline->addOption('r',"run","Run a pocket");
-       cmdline->addSwitch('g',"gl","use avanced openGl");
+       cmdline->addSwitch('g',"nogl","don't use avanced openGl");
        cmdline->addSwitch('v', "version", "show current version");
        cmdline->addSwitch('w', "warning", "show warning messages");
 
@@ -1675,8 +1678,8 @@ extern LaunchButtonWidget *launch1,*launch2,*dev,*save,*load,*cloudButton,*bookc
 void MainWindowPockemul::switchFound(const QString & name)
 {
   qDebug() << "Switch:" << name;
-  if (name == "gl") {
-      openGlFlag = true;
+  if (name == "nogl") {
+      openGlFlag = false;
   }
 
   if (name == "warning") {

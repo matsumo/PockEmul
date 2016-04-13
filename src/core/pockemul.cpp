@@ -323,9 +323,9 @@ int main(int argc, char *argv[])
 
     splash.close();
 
+    mainwindow->openGlFlag=true;
 #ifdef Q_OS_ANDROID
     mainwindow->showFullScreen();
-    mainwindow->openGlFlag=true;
 #else
     mainwindow->show();
 #endif

@@ -28,7 +28,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     rootContext()->setContextProperty("cloud", &cloud);
     rootContext()->setContextProperty("main", this);
     setSource(QUrl("qrc:/Test.qml"));
-    setResizeMode(QQuickWidget::SizeRootObjectToView);//QQuickWidget::SizeRootObjectToView);
+    setResizeMode(QQuickWidget::SizeRootObjectToView);
 //    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
     cloud.object = (QObject*) rootObject();
 
@@ -47,7 +47,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
     QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
     QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
-    QObject::connect(cloud.object, SIGNAL(sendSave()), mainwindow,SLOT(saveassession()));
+    QObject::connect(cloud.object, SIGNAL(sendSave()), this, SLOT(saveSlot()));
     QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(loadSlot()));
     QObject::connect(cloud.object, SIGNAL(sendBook()), this, SLOT(bookcaseSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
@@ -76,6 +76,11 @@ extern LaunchButtonWidget* load;
 void CrenderView::loadSlot()
 {
     load->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
+}
+
+void CrenderView::saveSlot()
+{
+    mainwindow->saveassession();
 }
 
 extern LaunchButtonWidget* bookcase;

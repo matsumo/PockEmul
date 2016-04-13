@@ -132,9 +132,9 @@ QString Cloud::save()
 //    hide();
 //    mainwindow->repaint();
 
-    parent->hide();
+//    parent->hide();
     QString s = mainwindow->saveassessionString().remove(0,1);
-    parent->show();
+//    parent->show();
 //    qWarning()<<"session saved";
 //    qWarning()<<s.left(500);
 //    qWarning()<<"session saved";
@@ -272,6 +272,8 @@ void Cloud::downloadFinished2()
     }
 
     m_reply->deleteLater();
+    QMetaObject::invokeMethod(object, "hideWorkingScreen");
+
     emit downloadEnd();
 //    this->hide();
 
@@ -286,6 +288,9 @@ void Cloud::showFileDialog()
 void Cloud::getPML(int id,int version,QString auth_token) {
     QNetworkAccessManager *mgr = new QNetworkAccessManager();
     QString url;
+
+    QMetaObject::invokeMethod(object, "showWorkingScreen");
+
     if (version==0) {
         QString apikey = getValueFor("apikey","");
         QString server = getValueFor("serverURL","http://pockemul.dscloud.me/pocketcloud/")+"getPML";

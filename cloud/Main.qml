@@ -22,8 +22,6 @@ Rectangle {
     property color backGroundColor: "white"
     property color textColor : "black"
     property color inputBorderColor: "black"
-    property color buttonBorderColor: "orange"
-    property color textButtonColor: "black"
 
     property string auth_token: ""
 

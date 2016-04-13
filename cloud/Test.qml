@@ -41,6 +41,7 @@ import QtQuick 2.3
 import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
+import "content"
 import "."
 
 
@@ -333,11 +334,47 @@ Rectangle {
         visible: false;
     }
 
-    Component.onCompleted: {
-        thecloud.close.connect(cloudHide)
+    Rectangle {
+        id: workingScreen
+        visible: false;
+        anchors.fill: parent
+        z: -9999
+        color: "black"
+        Column {
+            BusyIndicator {
+                id: working
+                width: 200
+                height: 200
+            }
+            TextButton {
+                text: "Cancel"
+                expand: false
+                font.pointSize: 16
+                onClicked: {
+                    if (cloud.askDialog("Do you really want to cancel ?",2)==2) return;
+                    hideWorkingScreen();
+                }
+            }
+        }
     }
+
+    function showWorkingScreen() {
+        console.log("show busy");
+        workingScreen.z=9999;
+        workingScreen.visible=true;
+    }
+    function hideWorkingScreen() {
+        workingScreen.z=-9999;
+        workingScreen.visible=false;
+    }
+
+    Component.onCompleted: {
+        thecloud.close.connect(cloudHide);
+//        showWorkingScreen();
+    }
+
     function cloudHide() {
-        console.log("Hide");
+        console.log("Hide test");
         thecloud.visible = false;
         scene.visible = true;
         menu.visible = true;

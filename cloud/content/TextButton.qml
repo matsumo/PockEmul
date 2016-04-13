@@ -1,4 +1,5 @@
 import QtQuick 2.0
+import ".."
 
 Rectangle {
     id: container
@@ -12,7 +13,7 @@ Rectangle {
 
     width: expand ? Math.max(label.width + 20 , parent.width) : label.width + 20 ;
     height: label.height + 6
-    border.color: rootCloud.buttonBorderColor
+    border.color: Style.buttonBorderColor
     radius: 5
 
     MouseArea {
@@ -23,7 +24,7 @@ Rectangle {
 
     Text {
         id: label
-        color: rootCloud.textButtonColor
+        color: Style.textButtonColor
         anchors.centerIn: parent
         renderType: Text.NativeRendering
     }

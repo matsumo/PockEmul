@@ -52,5 +52,7 @@
         <file>hx20rc.qml</file>
         <file>content/About.qml</file>
         <file>TabbedQuickApp/pics/white-about-256.png</file>
+        <file>Style.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>
