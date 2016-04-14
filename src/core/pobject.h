@@ -234,6 +234,8 @@ public:
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);
 
 
+    void maximize(QPoint pos);
+    void minimize(QPoint pos);
 signals:
     void msgError(QString);
     void stackPosChanged();

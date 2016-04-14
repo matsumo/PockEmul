@@ -16,6 +16,8 @@ Column {
             if (cloud.askDialog("Do you confirm your upload ?",2)==2) return;
             save_pml("un titre provisoire","une description provisoire");
             cloudShow();
+            renderArea.showWorkingScreen();
+
         }
     }
 

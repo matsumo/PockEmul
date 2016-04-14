@@ -322,9 +322,11 @@ Item {
 
                 var xml = cloud.save();
                 cloudShow();
+                renderArea.showWorkingScreen();
 //                console.log('url:'+url);
                 requestPost(url, xml , function (o) {
 
+                    renderArea.hideWorkingScreen();
                     if (o.readyState == 4 ) {
                         if (o.status==200) {
                             var obj = JSON.parse(o.responseText);
@@ -362,8 +364,12 @@ Item {
                 console.log('url:'+url);
                 //                if (cloud.askMsg("Are you sure ?",2) == 1)
                 {
+                    renderArea.showWorkingScreen();
+
                     // update data
                     requestPost(url, "",function (o) {
+                        renderArea.hideWorkingScreen();
+
                         if (o.readyState == 4) {
                             //                        console.log("status:"+o.status);
                             if (o.status==200) {
@@ -429,6 +435,8 @@ Item {
                                function(){xmlpmlModel.reload();},
                                function(){}
                                );
+                renderArea.showWorkingScreen();
+
             }
         }
 

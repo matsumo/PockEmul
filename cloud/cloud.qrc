@@ -54,5 +54,13 @@
         <file>TabbedQuickApp/pics/white-about-256.png</file>
         <file>Style.qml</file>
         <file>qmldir</file>
+        <file>content/ContextMenu.qml</file>
+        <file>content/images/info.png</file>
+        <file>content/images/zoom_in.png</file>
+        <file>content/images/zoom_out.png</file>
+        <file>content/images/zoom-in-xxl.png</file>
+        <file>content/images/zoom-out-xxl.png</file>
+        <file>content/images/context-menu.png</file>
+        <file>content/images/readingblackhi.png</file>
     </qresource>
 </RCC>

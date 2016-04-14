@@ -144,7 +144,10 @@ Rectangle {
                 '&password='+encodeURIComponent(password)+
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
         console.log('url:'+url);
+        renderArea.showWorkingScreen();
+
         requestGet(url, function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {
@@ -204,7 +207,9 @@ Rectangle {
                 '&auth_token='+auth_token;
         var xml = cloud.save();
         console.log('url:'+url);
+
         requestPost(url, xml , function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {
@@ -229,7 +234,10 @@ Rectangle {
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                 '&auth_token='+auth_token;
         console.log('url:'+url);
+        renderArea.showWorkingScreen();
+
         requestPost(url, "" , function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {
@@ -255,7 +263,10 @@ Rectangle {
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                 '&auth_token='+auth_token;
         console.log('url:'+url);
+        renderArea.showWorkingScreen();
+
         requestPost(url, "" , function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {
@@ -281,7 +292,9 @@ Rectangle {
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                 '&auth_token='+auth_token;
         console.log('url:'+url);
+
         requestPost(url, "" , function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {
@@ -308,7 +321,10 @@ Rectangle {
                 '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
                 '&auth_token='+auth_token;
         console.log('url:'+url);
+        renderArea.showWorkingScreen();
+
         requestPost(url, "" , function (o) {
+            renderArea.hideWorkingScreen();
 
             if (o.readyState == 4 ) {
                 if (o.status==200) {

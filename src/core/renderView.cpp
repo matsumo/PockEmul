@@ -43,6 +43,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
     QObject::connect(cloud.object, SIGNAL(setZoom(int,int,double)), this, SLOT(setzoom(int,int,double)));
     QObject::connect(cloud.object, SIGNAL(sendRotPocket(QString,int)), this, SLOT(rotpocket(QString,int)));
+    QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
+    QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
 
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
     QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
@@ -129,6 +131,18 @@ void CrenderView::moveallpocket(int x, int y)
 //    qWarning()<<"moveallpocket:"<<x<<y;
     QPointF pts(x , y);
     mainwindow->MoveAll(pts);
+}
+
+void CrenderView::maximize(QString Id)
+{
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    pc->maximize(pc->RectWithLinked().center().toPoint());
+}
+
+void CrenderView::minimize(QString Id)
+{
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+    pc->minimize(pc->RectWithLinked().center().toPoint());
 }
 
 void CrenderView::contextMenu(QString Id, int x, int y)

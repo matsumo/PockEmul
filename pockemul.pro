@@ -1570,6 +1570,7 @@ OTHER_FILES *= \
     cloud/content/NewsDelegate2.qml \
     cloud/content/Actions.qml \
     cloud/content/About.qml \
+    cloud/content/ContextMenu.qml \
     cloud/PmlView.qml \
     cloud/PmlView2.qml \
     cloud/Test.qml \

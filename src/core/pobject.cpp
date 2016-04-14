@@ -653,6 +653,27 @@ qWarning()<<"Weel";
 
 }
 
+void CPObject::maximize(QPoint pos) {
+
+    // Compute global rect
+    QRectF rs = RectWithLinked();
+    float rw= mainwindow->centralwidget->rect().width()/rs.width();
+    float rh= mainwindow->centralwidget->rect().height()/rs.height();
+    float r = MIN(rw,rh);
+    if (r>1) {
+        mainwindow->doZoom(pos,r/mainwindow->zoom);
+        //move to upper left
+        // Fetch all_object and move them
+        rs = RectWithLinked();
+        mainwindow->MoveAll(- rs.topLeft());
+    }
+}
+
+void CPObject::minimize(QPoint pos) {
+
+    mainwindow->doZoom(pos,1.0/mainwindow->zoom);
+}
+
 void CPObject::slotDoubleClick(QPoint pos) {
     if ((pKEYB) &&(pKEYB->KeyClick(pos))) {
 //        qWarning()<<"keyclick";
