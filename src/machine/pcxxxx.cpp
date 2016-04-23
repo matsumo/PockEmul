@@ -23,6 +23,7 @@
 #include "xmlwriter.h"
 #include "ui/cregcpu.h"
 #include "breakpoint.h"
+#include "overlay.h"
 
 #define		bREAD				0
 
@@ -133,9 +134,11 @@ bool CpcXXXX::UpdateFinalImage(void)
             painter.drawImage(QRect(x,y,z,t),pLCDC->LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
 
         }
-        painter.end();
 
         if (pLCDC) pLCDC->Refresh = false;
+
+        painter.end();
+
     }
 
 

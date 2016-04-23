@@ -31,6 +31,7 @@ class DialogDasm;
 class DialogVKeyboard;
 class QSwipeGesture;
 class Cbus;
+class COverlay;
 
 #include "slot.h"
 #include "viewobject.h"
@@ -270,6 +271,7 @@ public slots:
     void Postit();
     void VirtualKeyboard();
     void RefreshDisplay();
+    void Overlay(QAction *action);
 
 
     void createShortcut();
@@ -297,6 +299,10 @@ private:
 
     quint64 resetAt,hardresetAt;
 
+protected:
+    // Overlay image
+    QList<COverlay*> overlays;
+    int currentOverlay;
 };
 
 

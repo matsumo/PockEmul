@@ -38,6 +38,8 @@
 #include "cloud/cloudwindow.h"
 
 #include "bus.h"
+#include "overlay.h"
+
 
 extern QList<CPObject *> listpPObject; 
 FILE	*fp_tmp=NULL;
@@ -63,6 +65,8 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 
     flipping = false;
     currentView = FRONTview;
+
+    currentOverlay = -1;
 
     extensionArray[0] = 0;
     extensionArray[1] = 0;
@@ -1077,6 +1081,12 @@ void CPObject::RefreshDisplay()
     update();
 }
 
+void CPObject::Overlay(QAction * action)
+{
+    currentOverlay = action->data().toInt();
+    Refresh_Display = true;
+}
+
 void CPObject::paintEvent(QPaintEvent *event)
 {
 #ifdef Q_OS_ANDROID
@@ -1243,6 +1253,7 @@ void CPObject::contextMenuEvent ( QContextMenuEvent * event )
     contextMenu = new QMenu(this);
     BuildContextMenu(contextMenu);
 
+//    contextMenu->setStyleSheet("QMenu { font-size:36px; color:white; left: 20px; background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #cccccc, stop: 1 #333333);}");
     contextMenu->popup(event->globalPos () );
     event->accept();
 }
@@ -1353,7 +1364,21 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
     menu->addAction(tr("New Post-it"),this,SLOT(Postit()));
 
+    QMenu *menuOverlay = menu->addMenu(tr("Overlays"));
+
+    menuOverlay->addAction("None")->setData(-1);
+    menuOverlay->addSeparator();
+    for (int i=0;i<overlays.count();i++) {
+        menuOverlay->addAction(overlays[i]->Title)->setData(i);
+
+    }
+//    menuOverlay->addSeparator();
+//    QAction *_act = menuOverlay->addAction("Load from file...");
+
+    connect(menuOverlay, SIGNAL(triggered(QAction*)), this, SLOT(Overlay(QAction*)));
     menuconfig->addSeparator();
+
+
     computeLinkMenu(menuconfig);
     computeUnLinkMenu(menuconfig);
     menu->addSeparator();
@@ -1501,6 +1526,20 @@ bool CPObject::UpdateFinalImage(void)
 
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
+
+        // Draw Overlay
+        if ( (currentOverlay >=0) && (currentOverlay < overlays.count()) ) {
+            painter.begin(FinalImage);
+
+            int x = overlays[currentOverlay]->overlayRect.x() * internalImageRatio;
+            int y = overlays[currentOverlay]->overlayRect.y() * internalImageRatio;
+            int z	= (int) (overlays[currentOverlay]->overlayRect.width()  * internalImageRatio);
+            int t	= (int) (overlays[currentOverlay]->overlayRect.height() * internalImageRatio);
+            painter.drawImage(QRect(x,y,z,t),
+                              overlays[currentOverlay]->overlayImage.scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
+            painter.end();
+        }
+
 
         if (dialogkeylist)
         {

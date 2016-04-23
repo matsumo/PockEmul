@@ -38,5 +38,8 @@
         <file>rlh1000/rlp1002.bin</file>
         <file>rlh1000/rlp1005.bin</file>
         <file>rlh1000/rlp1005.png</file>
+        <file>rlh1000/modimg/scientificcalculator.png</file>
+        <file>rlh1000/ScientificCalculator.bin</file>
+        <file>rlh1000/ScientificCalculator-Overlay.png</file>
     </qresource>
 </RCC>

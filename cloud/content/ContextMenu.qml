@@ -40,8 +40,9 @@
 
 import QtQuick 2.5
 import QtGraphicalEffects 1.0
-import QtQuick.Controls 1.1
+import QtQuick.Controls 1.4
 import QtQuick.Extras 1.4
+import QtQuick.Controls.Styles 1.4
 
 //    property Component mouseArea
 
@@ -52,11 +53,12 @@ import QtQuick.Extras 1.4
 
 
 PieMenu {
-    signal selectedOption(int option,int idpocket, point mousePt, int buttons);
+    signal selectedOption(string option,int idpocket, point mousePt, int buttons);
 
     property int idpocket: 0;
     property point mousePt;
     property int buttons: 0
+    property string path: ""
 
     id: pieMenu
     triggerMode: TriggerMode.TriggerOnClick
@@ -68,29 +70,75 @@ PieMenu {
     MenuItem {
         text: "Zoom In"
         onTriggered: {
-            selectedOption(1,idpocket,mousePt,buttons);
+            selectedOption(text,idpocket,mousePt,buttons);
         }
         iconSource: "images/zoom-in-xxl.png"
     }
     MenuItem {
         text: "Zoom Out"
         onTriggered: {
-            selectedOption(2,idpocket,mousePt,buttons);
+            selectedOption(text,idpocket,mousePt,buttons);
         }
         iconSource: "images/zoom-out-xxl.png"
     }
     MenuItem {
-        text: "Info"
+        text: "Pinch"
         onTriggered: {
-            selectedOption(3,idpocket,mousePt,buttons);
+            selectedOption(text,idpocket,mousePt,buttons);
         }
-        iconSource: "images/context-menu.png"
+        iconSource: "images/pinch.png"
     }
     MenuItem {
         text: "Info"
         onTriggered: {
-            selectedOption(3,idpocket,mousePt,buttons);
+            selectedOption(text,idpocket,mousePt,buttons);
         }
-        iconSource: "images/readingblackhi.png"
+        iconSource: "images/context-menu.png"
     }
+//    MenuItem {
+//        text: "BookCase"
+//        onTriggered: {
+////            selectedOption(3,idpocket,mousePt,buttons);
+//            while( menuItems.length >0) {
+//                removeItem(menuItems[0]);
+//            }
+//            var i= addItem("TOTO");
+//            i.iconSource = "images/zoom-out-xxl.png";
+//            pieMenu.popup();
+//        }
+//        iconSource: "images/readingblackhi.png"
+//    }
+
+
+
+//    style: PieMenuStyle {
+//        id:styletest
+//        shadowRadius: 0
+
+//        menuItem: Item {
+//            id: item
+//            rotation: -90+sectionCenterAngle(styleData.index)
+//            Rectangle {
+//                width: parent.height * 0.2
+//                height: width
+//                anchors.right: parent.right
+//                anchors.verticalCenter: parent.verticalCenter
+//                Column {
+//                    Image {
+//                        id: name
+//                        source: control.menuItems[styleData.index].iconSource
+//                    }
+//                    Text {
+//                        id: textItem
+//                        text: control.menuItems[styleData.index].text
+//                        anchors.centerIn: parent
+//                        //                    color: control.currentIndex === styleData.index ? "red" : "white"
+//                        rotation: 90
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
+
+

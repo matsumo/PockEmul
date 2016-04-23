@@ -13,7 +13,7 @@
 #include "ui/dialogdasm.h"
 #include "clink.h"
 #include "watchpoint.h"
-
+#include "overlay.h"
 
 
 Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
@@ -123,6 +123,11 @@ bool Crlh1000::init(void)				// initialize
             pKEYB->Keys[capsuleKeyIndex+2].enabled = backdoorOpen;
         }
     }
+
+    overlays << new COverlay("Scientific Calculator",
+                    QImage(P_RES(":/rlh1000/ScientificCalculator-Overlay.png")),
+                    pKEYB->getKey(K_OVERLAY).Rect);
+
 
     return true;
 }
@@ -578,6 +583,7 @@ UINT8 Crlh1000::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
+    Q_UNUSED(sender)
 
     return 0;
 }
@@ -585,6 +591,8 @@ UINT8 Crlh1000::out(UINT8 Port, UINT8 x, QString sender)
 
 bool Crlh1000::Set_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
+
     // transfert busValue to Connector
     pCONNECTOR->Set_values(bus->toUInt64());
     return true;
@@ -592,6 +600,7 @@ bool Crlh1000::Set_Connector(Cbus *_bus)
 
 bool Crlh1000::Get_Connector(Cbus *_bus)
 {
+    Q_UNUSED(_bus)
 
     bus->fromUInt64(pCONNECTOR->Get_values());
 
@@ -656,6 +665,8 @@ void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
+
 
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
@@ -732,10 +743,15 @@ void Crlh1000::addModule(QString item,CPObject *pPC)
     int _res = 0;
     CSlot::SlotType customModule = CSlot::ROM;
     QString moduleName;
-    if (item=="SNAPBASIC") moduleName = P_RES(":/rlh1000/SnapBasic.bin");
-    if (item=="SNAPFORTH") moduleName = P_RES(":/rlh1000/SnapForth.bin");
-    if (item=="MSBASIC")   moduleName = P_RES(":/rlh1000/HHCbasic.bin");
-    if (item=="PORTACALC") moduleName = P_RES(":/rlh1000/Portacalc.bin");
+    if (item=="SNAPBASIC")  moduleName = P_RES(":/rlh1000/SnapBasic.bin");
+    if (item=="SNAPFORTH")  moduleName = P_RES(":/rlh1000/SnapForth.bin");
+    if (item=="MSBASIC")    moduleName = P_RES(":/rlh1000/HHCbasic.bin");
+    if (item=="PORTACALC")  moduleName = P_RES(":/rlh1000/Portacalc.bin");
+    if (item=="SCICALC") {
+        moduleName = P_RES(":/rlh1000/ScientificCalculator.bin");
+
+        currentOverlay=0;
+    }
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,

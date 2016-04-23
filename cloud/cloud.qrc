@@ -62,5 +62,6 @@
         <file>content/images/zoom-out-xxl.png</file>
         <file>content/images/context-menu.png</file>
         <file>content/images/readingblackhi.png</file>
+        <file>content/images/pinch.png</file>
     </qresource>
 </RCC>

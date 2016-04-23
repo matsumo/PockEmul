@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>rlh1000</model>
 <Keyboard>
+    <KEY description="Overlay" height="170" left="70" scancode="0x265" top="130" width="670" view="FRONT"/>
     <KEY description="Left Connector" height="235" left="32" scancode="0x240" top="52" width="30" view="LEFT"/>
     <KEY description="Back Door" height="46" left="555" scancode="0x241" top="76" width="36" view="BACK"/>
     <KEY description="Back Door main" height="145" left="192" scancode="0x242" top="25" width="365" view="BACK"/>

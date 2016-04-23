@@ -258,6 +258,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_RUN       0x23D
 #define K_FN        0x23E
 #define K_GSB       0x23F
+#define K_SHARP11PINS    0x240
 #define K_XY        0x241
 
 #define K_SHIFT_DOWN_MOD 0x210
@@ -265,7 +266,6 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_CTRL_DOWN_MOD  0x212
 #define K_CTRL_UP_MOD  0x213
 
-#define K_SHARP11PINS    0x240
 
 // FX-8000G
 #define K_ALPHA       0x250
@@ -287,7 +287,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_PAUSE 0x262
 #define K_NUM 0x263
 #define K_SCREEN 0x264
-
+#define K_OVERLAY 0x265
 
 class CPObject;
 class CpcXXXX;

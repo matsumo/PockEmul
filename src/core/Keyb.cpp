@@ -10,8 +10,8 @@
 #include "Inter.h"
 #include "Keyb.h"
 
+extern QString workDir;
 
-//extern CPocketThread* PcThread;
 INLINE BYTE bit(int ii)
 {
     BYTE jj;
@@ -231,7 +231,7 @@ bool Ckeyb::init(void)
     isShift = false;
     isCtrl = false;
     LastKey = 0;
-	QFile file( fn_KeyMap );
+    QFile file( workDir+"sessions/"+fn_KeyMap );
 	QXmlInputSource source(&file);
 
 	QXmlSimpleReader reader;
@@ -280,7 +280,7 @@ bool Ckeyb::exit(void)
     if (ret == QMessageBox::Discard) return true;
 
 	// save the XML definition file
-    QFile file(fn_KeyMap);
+    QFile file(workDir+"sessions/"+fn_KeyMap);
 
     file.open( QIODevice::WriteOnly);
     XmlWriter xw( &file );
@@ -319,6 +319,8 @@ bool Ckeyb::exit(void)
 
     xw.writeCloseTag( "Keyboard" );
     xw.writeRaw( "</KEYBMAP>" );
+
+    file.close();
 
 	return true;
 }

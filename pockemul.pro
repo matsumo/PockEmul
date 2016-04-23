@@ -931,7 +931,8 @@ HEADERS *= \
     src/machine/extslot.h \
     src/lcd/Lcdc_hx20.h \
     src/lcd/Lcdc_ti59.h \
-    src/lcd/Lcdc_jr800.h
+    src/lcd/Lcdc_jr800.h \
+    src/core/overlay.h
 
 
 
@@ -1097,7 +1098,8 @@ SOURCES *=  \
     src/machine/extslot.cpp \
     src/lcd/Lcdc_hx20.cpp \
     src/lcd/Lcdc_jr800.cpp \
-    src/lcd/Lcdc_ti59.cpp
+    src/lcd/Lcdc_ti59.cpp \
+    src/core/overlay.cpp
 
 
 

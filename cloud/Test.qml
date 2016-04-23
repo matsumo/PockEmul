@@ -389,17 +389,23 @@ Rectangle {
 
     function manageContextResponse(option,idpocket, mousePt, buttons) {
         console.log("option:",option);
-        if (option===1) {
+        if (option==="Zoom In") {
             // zoom
             maximize(idpocket);
 
         }
-        else if (option===2) {
+        else if (option==="Zoom Out") {
             // zoom
             minimize(idpocket);
         }
-        else if (option===3) {
+        else if (option==="Info") {
             sendContextMenu(idpocket,mousePt.x,mousePt.y);
+        }
+        else if (option==="Pinch") {
+            var ind = getIndex(idpocket);
+//            console.log("pinch:",idpocket,ind);
+            repeater.itemAt(ind).touchEnabled = !repeater.itemAt(ind).touchEnabled;
+
         }
 
     }
@@ -521,7 +527,8 @@ Rectangle {
 
     function getIndex(id) {
         for (var i=0; i<renderArea.xmlThumbModel.count;i++) {
-            if (renderArea.xmlThumbModel.get(i).idpocket === id) {
+//            console.log("get:",id,renderArea.xmlThumbModel.get(i).idpocket);
+            if (renderArea.xmlThumbModel.get(i).idpocket == id) {
                 return i;
             }
         }
