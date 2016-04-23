@@ -1,4 +1,5 @@
 include(package.pri)
+include(QZXing/QZXing.pri)
 
 TEMPLATE = app
 
@@ -1577,7 +1578,8 @@ OTHER_FILES *= \
     cloud/PmlView2.qml \
     cloud/Test.qml \
     cloud/Main.qml \
-    cloud/Launchmenu.qml
+    cloud/Launchmenu.qml \
+    cloud/content/Camera.qml
 
 }
 

@@ -63,5 +63,6 @@
         <file>content/images/context-menu.png</file>
         <file>content/images/readingblackhi.png</file>
         <file>content/images/pinch.png</file>
+        <file>content/Camera.qml</file>
     </qresource>
 </RCC>

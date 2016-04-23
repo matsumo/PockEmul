@@ -201,6 +201,7 @@
        <document desc="SnapBASIC Vol II (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapBASIC_vol2.pdf"/>
        <document desc="SnapFORTH Vol I Tutorial (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_I_Tutorial.pdf"/>
        <document desc="SnapFORTH Vol II Reference Guide (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/SnapFORTH_Volume_II_Reference_Guide.pdf"/>
+       <document desc="Scientific Calculator (en)" link="http://pockemul.free.fr/Documents/userguide/panasonic/HHC_Scientific_Calculator.pdf"/>
     </model>
     <model value="cc40">
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/texas/cc-40_e.html"/>

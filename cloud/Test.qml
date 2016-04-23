@@ -398,7 +398,7 @@ Rectangle {
             // zoom
             minimize(idpocket);
         }
-        else if (option==="Info") {
+        else if (option==="Menu") {
             sendContextMenu(idpocket,mousePt.x,mousePt.y);
         }
         else if (option==="Pinch") {

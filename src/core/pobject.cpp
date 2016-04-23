@@ -711,6 +711,8 @@ void CPObject::slotDoubleClick(QPoint pos) {
 
 void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    CViewObject::mouseDoubleClickEvent(event);
+
     QPoint pts(event->x() , event->y());
     slotDoubleClick(pts);
 }

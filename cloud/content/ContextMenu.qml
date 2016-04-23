@@ -88,13 +88,21 @@ PieMenu {
         }
         iconSource: "images/pinch.png"
     }
+//    MenuItem {
+//        text: "Info"
+//        onTriggered: {
+//            selectedOption(text,idpocket,mousePt,buttons);
+//        }
+//        iconSource: "images/info.png"
+//    }
     MenuItem {
-        text: "Info"
+        text: "Menu"
         onTriggered: {
             selectedOption(text,idpocket,mousePt,buttons);
         }
         iconSource: "images/context-menu.png"
     }
+
 //    MenuItem {
 //        text: "BookCase"
 //        onTriggered: {

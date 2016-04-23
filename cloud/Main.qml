@@ -99,6 +99,14 @@ Rectangle {
                 onClicked: close();
             }
         }
+
+        Tab {name: "Test"
+            icon: "pics/white-about-256.png"
+
+            Camera {
+                anchors.fill: parent
+            }
+        }
     }
 
     TabbedUI {
