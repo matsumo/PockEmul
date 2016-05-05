@@ -196,6 +196,9 @@ void MainWindowPockemul::checkReading() {
     qWarning()<<_rot->x()<<_rot->y()<<_rot->z();
 }
 MainWindowPockemul::~MainWindowPockemul() {
+
+
+
     delete PcThread;
     delete dialoglog;
     delete dialoganalogic;
@@ -1607,6 +1610,8 @@ void MainWindowPockemul::DestroySlot( CPObject *pObject)
 void MainWindowPockemul::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event)
+
+    Cloud::saveValueFor("geometry",QString(saveGeometry().toHex()));
     if (Close_All()){
         QMainWindow::closeEvent(event);
         event->accept();

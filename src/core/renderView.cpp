@@ -11,6 +11,7 @@
 #include "launchbuttonwidget.h"
 #include "dialogkeylist.h"
 #include "Keyb.h"
+#include "QZXing.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -19,9 +20,12 @@ extern bool soundEnabled;
 extern bool hiRes;
 extern QList<CPObject *> listpPObject;
 
+using namespace zxing;
+
 CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
+
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 
@@ -196,6 +200,26 @@ bool CrenderView::keyAt(QString Id, int x, int y)
 double CrenderView::getZoom()
 {
     return mainwindow->zoom;
+}
+
+void CrenderView::test()
+{
+    QZXing decoder;
+    try {
+        qWarning()<<"throw";
+        throw std::runtime_error("Gak!");
+        qWarning()<<"throw2";
+    }
+    catch (const std::exception &e) {
+        qWarning()<<"CATCHED:"<<e.what();
+    }
+
+    return;
+    decoder.setDecoder( QZXing::DecoderFormat_QR_CODE );
+    QImage img("C:/Users/Remy/Pictures/remy.jpg");
+    QString res = decoder.decodeImage(img);
+    qWarning()<<res;
+
 }
 
 QString CrenderView::getReleaseNotes(QString _fn)

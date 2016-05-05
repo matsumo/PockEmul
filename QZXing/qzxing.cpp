@@ -222,12 +222,12 @@ QString QZXing::decodeImage(QImage &image, int maxWidth, int maxHeight, bool smo
         emit decodingFinished(true);
         return string;
     }
-    catch(zxing::Exception &e)
+    catch(const zxing::ReaderException &e)
     {
         emit error(QString(e.what()));
         emit decodingFinished(false);
         processingTime = t.elapsed();
-        return "";
+        return "MERDE";
     }
 }
 
@@ -273,6 +273,7 @@ QString QZXing::decodeSubImageQML(const QUrl &imageUrl,
 {
     QString imagePath = imageUrl.path();
     imagePath = imagePath.trimmed();
+    qWarning()<<imagePath;
     QFile file(imagePath);
     if (!file.exists()) {
         qDebug() << "[decodeSubImageQML()] The file" << file.fileName() << "does not exist.";

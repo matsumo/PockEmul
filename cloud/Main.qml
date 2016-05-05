@@ -100,13 +100,13 @@ Rectangle {
             }
         }
 
-        Tab {name: "Test"
-            icon: "pics/white-about-256.png"
-
-            Camera {
-                anchors.fill: parent
-            }
-        }
+//        Tab {
+//            name: "Test"
+//            icon: "pics/white-about-256.png"
+//            Camera {
+//                anchors.fill: parent
+//            }
+//        }
     }
 
     TabbedUI {

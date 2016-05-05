@@ -3,7 +3,7 @@ include(QZXing/QZXing.pri)
 
 TEMPLATE = app
 
-QMAKE_CXXFLAGS += -fsigned-char
+QMAKE_CXXFLAGS += -fsigned-char -fexceptions
 
 #DEFINES += GL
 

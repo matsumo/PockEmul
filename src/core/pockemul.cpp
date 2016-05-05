@@ -27,7 +27,7 @@
 //QTM_USE_NAMESPACE
 
 #include "version.h"
-
+#include "QZXing.h"
 
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
@@ -89,13 +89,56 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 //        abort();
 //    }
 }
+#define WM_TABLET_DEFBASE                    0x02C0
+#define WM_TABLET_QUERYSYSTEMGESTURESTATUS   (WM_TABLET_DEFBASE + 12)
+
+#define DISABLE_PRESSANDHOLD        0x00000001
+#define DISABLE_PENTAPFEEDBACK      0x00000008
+#define DISABLE_PENBARRELFEEDBACK   0x00000010
+#define DISABLE_TOUCHUIFORCEON      0x00000100
+#define DISABLE_TOUCHUIFORCEOFF     0x00000200
+#define DISABLE_TOUCHSWITCH         0x00008000
+#define DISABLE_FLICKS              0x00010000
+#define ENABLE_FLICKSONCONTEXT      0x00020000
+#define ENABLE_FLICKLEARNINGMODE    0x00040000
+#define DISABLE_SMOOTHSCROLLING     0x00080000
+#define DISABLE_FLICKFALLBACKKEYS   0x00100000
+#define ENABLE_MULTITOUCHDATA       0x01000000
+
+class MyMSGEventFilter : public QAbstractNativeEventFilter
+{
+public:
+    virtual bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+    {
+        if ( (eventType == "windows_generic_MSG") || (eventType == "windows_dispatcher_MSG") ) {
+            MSG* msg = static_cast<MSG *>(message);
+            if (msg->message==WM_TABLET_QUERYSYSTEMGESTURESTATUS) {
+                *result = DISABLE_PRESSANDHOLD ;
+                return true;
+            }
+        }
+        return false;
+    }
+};
 
 int main(int argc, char *argv[])
 {
 
-//    qInstallMessageHandler(myMessageOutput);
+//    try {
+//        qWarning()<<"throw";
+//    }
+//    catch (...) {
+//        qWarning()<<"CATCHED:";
+//    }
+
+//    return 0;
+
+    //    qInstallMessageHandler(myMessageOutput);
 
     QApplication *app = new QApplication(argc, argv);
+
+    app->installNativeEventFilter(new MyMSGEventFilter());
+
      app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 #if QT_VERSION >= 0x050000
 #ifdef Q_OS_ANDROID
@@ -113,6 +156,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("PockEmul");
     QCoreApplication::setApplicationVersion(POCKEMUL_VERSION);
 
+    QZXing::registerQMLTypes();
 
 
 
@@ -184,8 +228,9 @@ int main(int argc, char *argv[])
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
+    qWarning()<<Cloud::getValueFor("geometry").toLatin1();
+     qWarning()<<"restore:"<<mainwindow->restoreGeometry(QByteArray::fromHex(Cloud::getValueFor("geometry").toLatin1()));
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
-
 
 #ifdef EMSCRIPTEN
     mainwindow->setWindowTitle("PockEmul Online");

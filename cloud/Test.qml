@@ -235,6 +235,7 @@ Rectangle {
 
 
 
+
                     MouseArea {
                         property bool isdrag: false;
                         property point previousPosition: Qt.point(1, 1);
