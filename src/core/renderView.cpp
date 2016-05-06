@@ -235,9 +235,9 @@ void CrenderView::unclick(QString Id, int x, int y)
 {
 //    qWarning()<<"unclick:"<<Id<<x<<y;
 
-    QEventLoop eventLoop;
-    QTimer::singleShot (100, &eventLoop, SLOT (quit ()));
-    eventLoop.exec ();
+//    QEventLoop eventLoop;
+//    QTimer::singleShot (100, &eventLoop, SLOT (quit ()));
+//    eventLoop.exec ();
 
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);

@@ -285,7 +285,7 @@ static unsigned Dasm680x (int subtype, char *buf, unsigned pc, const UINT8 *opro
 quint32 Cdebug_mc6800::DisAsm_1(quint32 pc)
 {
     unsigned short old_pc;
-    int i, j;
+    int  j;
     char data[1024];
     char str[1024];
 

@@ -41,14 +41,27 @@
 #include "overlay.h"
 
 
-extern QList<CPObject *> listpPObject; 
-FILE	*fp_tmp=NULL;
+extern QList<CPObject *> listpPObject;  /**< TODO: describe */
+FILE	*fp_tmp=NULL; /**< TODO: describe */
 
 
-extern MainWindowPockemul* mainwindow;
+extern MainWindowPockemul* mainwindow; /**< TODO: describe */
+/**
+ * @brief
+ *
+ * @param parent
+ * @param msg
+ * @param nbButton
+ * @return int
+ */
 extern int ask(QWidget *parent,QString msg,int nbButton);
-extern bool soundEnabled;
+extern bool soundEnabled; /**< TODO: describe */
 
+/**
+ * @brief Base emulated object.
+ *
+ * @param parent
+ */
 CPObject::CPObject(CPObject *parent):CViewObject(parent)
 {
     pPC = (CpcXXXX*) parent;
@@ -113,6 +126,10 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 }
 
 
+/**
+ * @brief
+ *
+ */
 CPObject::~CPObject()
 {
     if (dialogdasm) delete dialogdasm;
@@ -140,6 +157,12 @@ CPObject::~CPObject()
 
 
 
+/**
+ * @brief serialize an emulated object to a QXmlStreamWriter
+ *
+ * @param xml
+ * @param id
+ */
 void CPObject::serialize(QXmlStreamWriter *xml,int id) {
     xml->writeStartElement("object");
         xml->writeAttribute("name", getName());
@@ -160,6 +183,11 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
 }
 
 
+/**
+ * @brief Return the enclosure Rect for the current emulated object, included all linked objects.
+ *
+ * @return QRectF
+ */
 QRectF CPObject::RectWithLinked(void) {
     QRectF r(rect());
     // Search all conected objects then compute resulted rect
@@ -173,14 +201,28 @@ QRectF CPObject::RectWithLinked(void) {
     return r;
 }
 
+/**
+ * @brief
+ *
+ * @param name
+ * @param param
+ */
 extern void m_addShortcut(QString name,QString param);
 
+/**
+ * @brief
+ *
+ */
 void CPObject::createShortcut() {
 #ifdef Q_OS_ANDROID
     m_addShortcut(getName(),"-r \""+getName()+"\"");
 #endif
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::maximizeWidth()
 {
     if (mainwindow->zoom <= 1) {
@@ -208,6 +250,10 @@ void CPObject::maximizeWidth()
     }
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::maximizeHeight()
 {
     if (mainwindow->zoom <= 1) {
@@ -231,6 +277,12 @@ void CPObject::maximizeHeight()
     }
 }
 
+/**
+ * @brief Find recursively all connected object for a specific object.
+ *
+ * @param search the object to start the search from.
+ * @param liste a list of all linked objects.
+ */
 void CPObject::FindAllLinked(CPObject * search, QList<CPObject *> * liste) {
     int _size = liste->size();
 #ifdef AVOID
@@ -246,6 +298,11 @@ void CPObject::FindAllLinked(CPObject * search, QList<CPObject *> * liste) {
     }
 }
 
+/**
+ * @brief Move the object with all linked to a an absolute position
+ *
+ * @param p the destination position
+ */
 void CPObject::MoveWithLinkedAbs(QPointF p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
@@ -268,6 +325,11 @@ void CPObject::MoveWithLinkedAbs(QPointF p) {
     //    }
 }
 
+/**
+ * @brief
+ *
+ * @param p
+ */
 void CPObject::MoveWithLinkedRel(QPointF p) {
     // Search all conected objects then move them
     QList<CPObject *> ConList;
@@ -289,6 +351,16 @@ void CPObject::MoveWithLinkedRel(QPointF p) {
     //    }
 }
 
+/**
+ * @brief Set the fequency of the emulated object.
+ *
+ * PockEmul execute the funtion run() at the defined frequency.
+ * Set the value to 0 for a passive object. The function run()  of a passive object will be executed
+ * after the run() function of the master object.
+ *
+ * @param f Frequency in Hz
+ * @sa getfrequency
+ */
 void CPObject::setfrequency(int f)
 {
     frequency = f;
@@ -299,6 +371,11 @@ void CPObject::setfrequency(int f)
 
 
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::init()
 {
     startKeyDrag = false;
@@ -322,6 +399,11 @@ bool CPObject::init()
         return true;
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::exit()
 {
     if (pKEYB)	pKEYB->exit();
@@ -334,6 +416,12 @@ bool CPObject::exit()
 	return true;
 }
 
+/**
+ * @brief
+ *
+ * @param step
+ * @return quint64
+ */
 quint64 CPObject::runRange(quint64 step) {
     if (pTIMER) {
 
@@ -375,6 +463,11 @@ quint64 CPObject::runRange(quint64 step) {
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::run(void){
 
 
@@ -426,6 +519,11 @@ bool CPObject::run(void){
 #define BUFFLEN 500
 
 #ifndef NO_SOUND
+/**
+ * @brief
+ *
+ * @param state
+ */
 void CPObject::audioStateChanged(QAudio::State state)
 {
     if (state == QAudio::IdleState) {
@@ -435,6 +533,11 @@ void CPObject::audioStateChanged(QAudio::State state)
 //    qWarning() << "state = " << state;
 }
 #endif
+/**
+ * @brief
+ *
+ * @return int
+ */
 int CPObject::initsound()
 {
     int DataFrequencyHz = 8000;
@@ -468,6 +571,11 @@ int CPObject::initsound()
     return 1;
 }
 
+/**
+ * @brief
+ *
+ * @return int
+ */
 int CPObject::exitsound()
 {
     return 1;
@@ -475,6 +583,11 @@ int CPObject::exitsound()
 
 
 //FIXME: The piezo doesn't produce sounf for frequency < 1Khz
+/**
+ * @brief
+ *
+ * @param val
+ */
 void CPObject::fillSoundBuffer(BYTE val)
 {
     if (!soundEnabled) return;
@@ -547,6 +660,11 @@ void CPObject::fillSoundBuffer(BYTE val)
 
 
 
+/**
+ * @brief
+ *
+ * @param point
+ */
 void CPObject::SwitchFrontBack(QPoint point) {
     if (Front)
     {
@@ -587,6 +705,12 @@ void CPObject::SwitchFrontBack(QPoint point) {
     Front = ! Front;
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ * @return bool
+ */
 bool CPObject::event(QEvent *event)
  {
 
@@ -620,6 +744,11 @@ bool CPObject::event(QEvent *event)
      return QWidget::event(event);
  }
 
+/**
+ * @brief
+ *
+ * @param gesture
+ */
 void CPObject::swipeTriggered(QSwipeGesture *gesture)
 {
     qWarning()<<"SWIPE:";
@@ -640,6 +769,11 @@ void CPObject::swipeTriggered(QSwipeGesture *gesture)
     }
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::wheelEvent(QWheelEvent *event) {
 qWarning()<<"Weel";
     QPoint point;
@@ -657,6 +791,11 @@ qWarning()<<"Weel";
 
 }
 
+/**
+ * @brief
+ *
+ * @param pos
+ */
 void CPObject::maximize(QPoint pos) {
 
     // Compute global rect
@@ -673,11 +812,21 @@ void CPObject::maximize(QPoint pos) {
     }
 }
 
+/**
+ * @brief
+ *
+ * @param pos
+ */
 void CPObject::minimize(QPoint pos) {
 
     mainwindow->doZoom(pos,1.0/mainwindow->zoom);
 }
 
+/**
+ * @brief
+ *
+ * @param pos
+ */
 void CPObject::slotDoubleClick(QPoint pos) {
     if ((pKEYB) &&(pKEYB->KeyClick(pos))) {
 //        qWarning()<<"keyclick";
@@ -709,6 +858,11 @@ void CPObject::slotDoubleClick(QPoint pos) {
 
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
 {
     CViewObject::mouseDoubleClickEvent(event);
@@ -718,7 +872,16 @@ void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
 }
 
 
+/**
+ * @brief
+ *
+ */
 extern void Vibrate();
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::mousePressEvent(QMouseEvent *event)
 {
 //    qWarning()<<"CPObject::mousePressEvent"<<event;
@@ -735,30 +898,13 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
     QPoint pts(event->x() , event->y());
 
-//    if (dialogkeylist)
-//    {
-//        // look keyFound
-//        if ( dialogkeylist->keyIter->Rect.contains(pts) )
-//        {
-//            // keydef found start drag mode
-//            // Change mouse pointer
-//            qWarning()<<"startKeyDrag";
-//            setCursor(Qt::SizeAllCursor);
-//            startKeyDrag = true;
-//            KeyDrag = event->globalPos();
-//            return;
-//        }
-//    }
-
     if (pKEYB)
     {
-//        qWarning()<<"ok"
-;        pKEYB->LastKey = pKEYB->KeyClick(pts);
+        pKEYB->LastKey = pKEYB->KeyClick(pts);
         if (pKEYB->LastKey != 0)  {
 //            ungrabGesture(Qt::TapAndHoldGesture);
 //            qWarning()<<"lastKey="<<pKEYB->LastKey;
         }
-
 
         pKEYB->lastMousePressedKey = pKEYB->LastKey;
         if (pKEYB->LastKey) pKEYB->keyPressedList.append(pKEYB->LastKey);
@@ -767,7 +913,6 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         case K_OF :
             Vibrate();
             slotPower();
-//            grabGesture(Qt::TapAndHoldGesture);
             return;
             break;
         case K_BRK :
@@ -775,12 +920,10 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         case K_POW_OFF: Vibrate();
             Power = false;
             TurnOFF();
-//            grabGesture(Qt::TapAndHoldGesture);
             return;
             break;
         case K_CLOSE: Vibrate();TurnCLOSE();break;
         }
-
 
         if (pKEYB->LastKey != 0)
         {
@@ -788,7 +931,6 @@ void CPObject::mousePressEvent(QMouseEvent *event)
             Vibrate();
         }
 
-//        grabGesture(Qt::TapAndHoldGesture);
         if (pKEYB->LastKey != 0) {
             event->accept();
             return;
@@ -796,8 +938,6 @@ void CPObject::mousePressEvent(QMouseEvent *event)
     }
 
     // NO KEY CLICK Global pobject drag mode
-
-//    _gestureHandler->handleEvent( event );
 
     // raise all connected object and then manage Z-order between them
     raise();
@@ -830,6 +970,11 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 }
 
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::mouseMoveEvent( QMouseEvent * event )
 {
 //    if (!fullscreenMode)
@@ -902,6 +1047,13 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
 
 #define SNAPRANGE 20
 
+/**
+ * @brief Search all connector near a specific connector
+ *
+ * @param refConnector The base connector
+ * @param snaprange
+ * @return QList<Cconnector *> List of all connectors near the refConnector.
+ */
 QList<Cconnector *> CPObject::nearConnectors(Cconnector *refConnector,qint8 snaprange) {
     // Compare snap between the refConnector and all free object connectors
     QList<Cconnector *> retList;
@@ -920,13 +1072,17 @@ QList<Cconnector *> CPObject::nearConnectors(Cconnector *refConnector,qint8 snap
     return retList;
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::mouseReleaseEvent(QMouseEvent *event)
 {
-//    _gestureHandler->handleEvent( event );
+
     // if a connector is free
     // if an object with free connector is "near"
     // propose to autolink
-
 
     // Fetch all object
     for (int k = 0; k < listpPObject.size(); k++)
@@ -971,8 +1127,10 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     startPosDrag = false;
     setCursor(Qt::ArrowCursor);
     if (pKEYB) {
-        pKEYB->keyPressedList.removeAll(pKEYB->lastMousePressedKey);
-        ComputeKey(KEY_RELEASED,pKEYB->lastMousePressedKey,event);
+        QPoint pts(event->x() , event->y());
+        int _releasedKey = pKEYB->KeyClick(pts);
+        pKEYB->keyPressedList.removeAll(_releasedKey); //pKEYB->lastMousePressedKey);
+        ComputeKey(KEY_RELEASED,_releasedKey,event);
         pKEYB->lastMousePressedKey = 0;
         pKEYB->LastKey = 0;
     }
@@ -985,10 +1143,18 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     event->accept();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::raise() {
     QWidget::raise();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::TurnCLOSE()
 {
 
@@ -998,6 +1164,11 @@ void CPObject::TurnCLOSE()
 //       If we want to be independent from QWidget, need to implement
 //       stackUnder function
 
+/**
+ * @brief
+ *
+ * @param l
+ */
 void CPObject::manageStackPos(QList<CPObject *> *l) {
     // fetch connectors connected
     // for each connector
@@ -1048,6 +1219,12 @@ void CPObject::manageStackPos(QList<CPObject *> *l) {
 
 }
 
+/**
+ * @brief
+ *
+ * @param xmlOut
+ * @return bool
+ */
 bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut)
 {
     Q_UNUSED(xmlOut)
@@ -1055,6 +1232,12 @@ bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut)
     return true;
 }
 
+/**
+ * @brief
+ *
+ * @param
+ * @return bool
+ */
 bool CPObject::LoadSession_File(QXmlStreamReader *)
 {
     return true;
@@ -1063,10 +1246,18 @@ bool CPObject::LoadSession_File(QXmlStreamReader *)
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
+/**
+ * @brief
+ *
+ * @param ke
+ * @param scancode
+ * @param event
+ */
 void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
     if (KEY(K_SHARP11PINS)) {
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
@@ -1077,18 +1268,32 @@ void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *even
     }
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::RefreshDisplay()
 {
     Refresh_Display = true;
     update();
 }
 
+/**
+ * @brief
+ *
+ * @param action
+ */
 void CPObject::Overlay(QAction * action)
 {
     currentOverlay = action->data().toInt();
     Refresh_Display = true;
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::paintEvent(QPaintEvent *event)
 {
 #ifdef Q_OS_ANDROID
@@ -1131,6 +1336,11 @@ void CPObject::paintEvent(QPaintEvent *event)
 
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::keyReleaseEvent(QKeyEvent * event )
 {
 //    if (event->isAutoRepeat()) return;
@@ -1147,12 +1357,26 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
 
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::TurnON() {
 
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::TurnOFF() {}
 
+/**
+ * @brief
+ *
+ * @param event
+ * @return int
+ */
 int CPObject::mapKey(QKeyEvent * event) {
     int key = 0;
 //    if ( (event->key() & 0x2000000) == 0x2000000 ) pKEYB->isShift = true;
@@ -1213,6 +1437,11 @@ int CPObject::mapKey(QKeyEvent * event) {
     return key;
 }
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::keyPressEvent (QKeyEvent * event )
 {
 
@@ -1236,16 +1465,31 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     }
 }
 
+/**
+ * @brief
+ *
+ * @param
+ */
 void CPObject::focusInEvent ( QFocusEvent *  )
 {
 
 }
 
+/**
+ * @brief
+ *
+ * @param
+ */
 void CPObject::focusOutEvent (QFocusEvent *)
 {
 }
 
 
+/**
+ * @brief
+ *
+ * @param event
+ */
 void CPObject::contextMenuEvent ( QContextMenuEvent * event )
 {
 //    qWarning()<<"contextMenuEvent";
@@ -1260,6 +1504,11 @@ void CPObject::contextMenuEvent ( QContextMenuEvent * event )
     event->accept();
 }
 
+/**
+ * @brief Build the contect menu.
+ *
+ * @param menu The context menu is built inside the QMenu pointed by menu
+ */
 void CPObject::BuildContextMenu(QMenu * menu)
 {
     Vibrate();
@@ -1390,6 +1639,13 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
 }
 
+/**
+ * @brief Build the WebLinks menu based on the weblinks.xml file
+ *
+ * @param menu
+ *
+ * @todo Add the capability to fetch a personal weblink.xml file.
+ */
 void CPObject::computeWebLinksMenu(QMenu * menu) {
 
     menuweblink = menu->addMenu(tr("Web Links"));
@@ -1411,6 +1667,7 @@ void CPObject::computeWebLinksMenu(QMenu * menu) {
 
     QFile fileRes(P_RES(":/pockemul/weblinks.xml"));
  #endif
+
     QXmlInputSource sourceRes(&fileRes);
     QXmlSimpleReader reader;
     reader.setContentHandler( new WebLinksParser(this) );
@@ -1421,6 +1678,13 @@ void CPObject::computeWebLinksMenu(QMenu * menu) {
 
 }
 
+/**
+ * @brief
+ *
+ * @param type
+ * @param desc
+ * @param link
+ */
 void CPObject::insertLinkAction(LINKTYPE type,QString desc,QString link) {
 
     if (type == WEBLINK) {
@@ -1437,6 +1701,11 @@ void CPObject::insertLinkAction(LINKTYPE type,QString desc,QString link) {
     }
 }
 
+/**
+ * @brief
+ *
+ * @param menu
+ */
 void CPObject::computeLinkMenu(QMenu * menu)
 {
     menulink = menu->addMenu(tr("Link"));
@@ -1468,6 +1737,11 @@ void CPObject::computeLinkMenu(QMenu * menu)
 	}	
 }
 
+/**
+ * @brief
+ *
+ * @param menu
+ */
 void CPObject::computeUnLinkMenu(QMenu * menu)
 {
     menuunlink = menu->addMenu(tr("Remove Link"));
@@ -1488,22 +1762,45 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
 
 
 
+/**
+ * @brief Register the connector in the Global Connector Management System
+ *
+ * @param newConn
+ *
+ * @sa remove
+ */
 void CPObject::publish(Cconnector* newConn)
 {
 	ConnList.append(newConn);
 
 }
+/**
+ * @brief Remove a connector from the Global Connector Management System
+ *
+ * @param newConn
+ *
+ * @sa publish
+ */
 void CPObject::remove(Cconnector* newConn)
 {
     ConnList.removeAt(ConnList.indexOf(newConn));
 }
 
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotExit(void)
 {
 	toDestroy = true;
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::InitDisplay(void)
 {
     CViewObject::InitDisplay();
@@ -1519,6 +1816,11 @@ bool CPObject::InitDisplay(void)
 	return(1);
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::UpdateFinalImage(void)
 {
 
@@ -1578,17 +1880,31 @@ bool CPObject::UpdateFinalImage(void)
     return true;
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::KeyList()
 {
         dialogkeylist = new DialogKeyList(this);
         dialogkeylist->show();
 }
 
+/**
+ * @brief
+ *
+ * @param newspeed
+ */
 void CPObject::setCpu(int newspeed)
 {
 	pTIMER->SetCPUspeed(newspeed);
 }
 
+/**
+ * @brief
+ *
+ * @param action
+ */
 void CPObject::slotCpu(QAction* action) {
     if (action->text() == tr("100%")) setCpu(1);
     if (action->text() == tr("200%")) setCpu(2);
@@ -1597,6 +1913,11 @@ void CPObject::slotCpu(QAction* action) {
     if (action->text() == tr("Maximum")) setCpu(1000);
 }
 
+/**
+ * @brief
+ *
+ * @param action
+ */
 void CPObject::slotAudioVolume(QAction * action) {
 #ifndef NO_SOUND
     if (action->text() == tr("Mute")) m_audioOutput->setVolume(0);
@@ -1607,6 +1928,11 @@ void CPObject::slotAudioVolume(QAction * action) {
 #endif
 }
 
+/**
+ * @brief
+ *
+ * @param action
+ */
 void CPObject::slotContrast(QAction * action) {
     if (action->text() == tr("0")) pLCDC->Contrast(0);
     if (action->text() == tr("1")) pLCDC->Contrast(1);
@@ -1615,6 +1941,10 @@ void CPObject::slotContrast(QAction * action) {
     if (action->text() == tr("4")) pLCDC->Contrast(4);
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotPower()
 { 
     qWarning()<<"Slot POWER"<<Power;
@@ -1628,21 +1958,37 @@ void CPObject::slotPower()
     pKEYB->LastKey = 0;
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotResetNow() {
     resetAt = pTIMER->state;
 
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotReset() {
     resetAt = (pTIMER->CPUSpeed * getfrequency())*5 + pTIMER->state;
 
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotHardReset() {
     hardresetAt = (pTIMER->CPUSpeed * getfrequency())*5 + pTIMER->state;
 
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotDetach()
 {
     if (parentWidget()==0) {
@@ -1654,43 +2000,77 @@ void CPObject::slotDetach()
     show();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotLoadSession()
 {
     ((CpcXXXX *)this)->LoadSession();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::slotSaveSession()
 {
     ((CpcXXXX *)this)->SaveSession();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::Dump()
 {
 	dialogdump = new DialogDump(this);
 	dialogdump->show();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::Dasm()
 {
     if (dialogdasm) dialogdasm->show();
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::Postit()
 {
     mainwindow->LoadPocket("Post-it");
 }
 
+/**
+ * @brief
+ *
+ */
 void CPObject::VirtualKeyboard()
 {
     dialogVKeyboard = new DialogVKeyboard(this);
     dialogVKeyboard->show();
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::getdisp_onRaised()
 {
     return disp_onRaised;
 }
 
+/**
+ * @brief
+ *
+ * @param v
+ */
 void CPObject::setDisp_on(bool v)
 {
 
@@ -1708,6 +2088,11 @@ void CPObject::setDisp_on(bool v)
     disp_on = v;
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool CPObject::getDisp_on()
 {
     return disp_on;
@@ -1721,12 +2106,25 @@ bool CPObject::getDisp_on()
 //  ENTRY :BYTE s=Slot No.(SLOT1-3)			//
 //  RETURN:none								//
 //////////////////////////////////////////////
+/**
+ * @brief
+ *
+ * @param file
+ * @param s
+ */
 void CPObject::Mem_Save(QFile *file,BYTE s)
 {
     QDataStream out(file);
     out.writeRawData( (char *) &mem[SlotList[s].getAdr()],SlotList[s].getSize() * 1024 );
 }
 
+/**
+ * @brief
+ *
+ * @param xmlOut
+ * @param s
+ * @param dumphex
+ */
 void CPObject::Mem_Save(QXmlStreamWriter *xmlOut,BYTE s,bool dumphex)
 {
     xmlOut->writeStartElement("bank");
@@ -1755,6 +2153,11 @@ void CPObject::Mem_Save(QXmlStreamWriter *xmlOut,BYTE s,bool dumphex)
     xmlOut->writeEndElement();
 }
 
+/**
+ * @brief
+ *
+ * @param s
+ */
 void CPObject::Mem_Save(BYTE s)
 {
     QFile file( SlotList[s].getFileName() );
@@ -1772,12 +2175,24 @@ void CPObject::Mem_Save(BYTE s)
 //  ENTRY :BYTE s=Slot No.(SLOT1-3)			//
 //  RETURN:1:success, 0:error				//
 //////////////////////////////////////////////
+/**
+ * @brief
+ *
+ * @param file
+ * @param s
+ */
 void CPObject::Mem_Load(QFile *file,BYTE s)
 {
     QDataStream in(file);
     in.readRawData ((char *) &mem[SlotList[s].getAdr()],SlotList[s].getSize() * 1024 );
 }
 
+/**
+ * @brief
+ *
+ * @param xmlIn
+ * @param s
+ */
 void CPObject::Mem_Load(QXmlStreamReader *xmlIn,BYTE s)
 {
     if (xmlIn->readNextStartElement()) {
@@ -1812,6 +2227,12 @@ void CPObject::Mem_Load(QXmlStreamReader *xmlIn,BYTE s)
     }
 }
 
+/**
+ * @brief
+ *
+ * @param s
+ * @return bool
+ */
 bool CPObject::Mem_Load(BYTE s)
 {
     QFile file;
@@ -1848,6 +2269,13 @@ bool CPObject::Mem_Load(BYTE s)
     return false;
 }
 
+/**
+ * @brief
+ *
+ * @param adr
+ * @param data
+ * @return bool
+ */
 bool CPObject::Mem_Load(qint32 adr, QByteArray data ) {
 
     QDataStream in(data);
@@ -1856,6 +2284,11 @@ bool CPObject::Mem_Load(qint32 adr, QByteArray data ) {
     return true;
 }
 
+/**
+ * @brief
+ *
+ * @param _bus
+ */
 void CPObject::manageBus(Cbus *_bus) {
 
     // write connector
@@ -1875,6 +2308,13 @@ void CPObject::manageBus(Cbus *_bus) {
 }
 
 
+/**
+ * @brief
+ *
+ * @param bus
+ * @param d
+ * @param data
+ */
 void CPObject::writeBus(Cbus *bus, UINT32 *d, UINT32 data) {
     busMutex.lock();
 
@@ -1888,6 +2328,13 @@ void CPObject::writeBus(Cbus *bus, UINT32 *d, UINT32 data) {
     busMutex.unlock();
 }
 
+/**
+ * @brief
+ *
+ * @param bus
+ * @param d
+ * @param data
+ */
 void CPObject::readBus(Cbus *bus,UINT32 *d,UINT32 *data) {
     busMutex.lock();
 

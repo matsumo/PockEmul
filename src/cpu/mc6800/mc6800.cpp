@@ -220,7 +220,7 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
         // port2 data register
         _data = (regs.port[1].rreg & ~regs.port[1].ddr) | (regs.port[1].wreg & regs.port[1].ddr);
 //        _data = 0x02;
-//        qWarning()<<tr("Read Port 1:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+        qWarning()<<tr("Read Port 1:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
         return _data;
     case 0x04:
         // port3 data direction register (write only???)
@@ -238,10 +238,14 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
             regs.port[2].latched = false;
             return (regs.port[2].latched_data & ~regs.port[2].ddr) | (regs.port[2].wreg & regs.port[2].ddr);
         }
-        return (regs.port[2].rreg & ~regs.port[2].ddr) | (regs.port[2].wreg & regs.port[2].ddr);
+        _data = (regs.port[2].rreg & ~regs.port[2].ddr) | (regs.port[2].wreg & regs.port[2].ddr);
+        qWarning()<<tr("Read Port 2:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+        return _data;
     case 0x07:
         // port4 data register
-        return (regs.port[3].rreg & ~regs.port[3].ddr) | (regs.port[3].wreg & regs.port[3].ddr);
+        _data = (regs.port[3].rreg & ~regs.port[3].ddr) | (regs.port[3].wreg & regs.port[3].ddr);
+        qWarning()<<tr("Read Port 3:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+        return _data;
     case 0x08:
         // timer control register
         regs.pending_tcsr = 0;
@@ -362,14 +366,14 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
     case 0x04:
         // port3 data direction register
        regs. port[2].ddr = data;
-       qWarning()<<objectName()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
+       qWarning()<<objectName()<<tr("Write Port 2 dir:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
                <<"="<<(regs.port[2].rreg!=0?QChar(regs.port[2].rreg):' ');
 
         break;
     case 0x05:
         // port4 data direction register
         regs.port[3].ddr = data;
-        qWarning()<<objectName()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
+        qWarning()<<objectName()<<tr("Write Port 3 dir:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
                 <<"="<<(regs.port[3].rreg!=0?QChar(regs.port[3].rreg):' ');
 
         break;
@@ -382,7 +386,8 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
         if(regs.port[2].wreg != data || regs.port[2].first_write) {
             write_signals(&regs.port[2].outputs, data);
             regs.port[2].wreg = data;
-//            qWarning()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))<<"="<<QChar(regs.port[2].rreg);
+            qWarning()<<objectName()<<tr("Write Port 2:%1").arg(regs.port[2].rreg,2,16,QChar('0'))
+                    <<"="<<(regs.port[2].rreg!=0?QChar(regs.port[2].rreg):' ');
             regs.port[2].first_write = false;
         }
         break;
@@ -391,7 +396,8 @@ void Cmc6800::mc6801_io_w(UINT32 offset, UINT32 data)
         if(regs.port[3].wreg != data || regs.port[3].first_write) {
             write_signals(&regs.port[3].outputs, data);
             regs.port[3].wreg = data;
-//            qWarning()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))<<"="<<QChar(regs.port[3].rreg);
+            qWarning()<<objectName()<<tr("Write Port 3:%1").arg(regs.port[3].rreg,2,16,QChar('0'))
+                    <<"="<<(regs.port[3].rreg!=0?QChar(regs.port[3].rreg):' ');
             regs.port[3].first_write = false;
         }
         break;
@@ -3930,6 +3936,31 @@ UINT32	Cmc6800::get_mem(UINT32 adr,int size)
     }
     return(0);
 }
+
+void Cmc6800::set_mem(UINT32 adr, int size, UINT32 data)
+{
+    switch(size)
+    {
+    case SIZE_8 :
+        WM(adr , (BYTE) data);
+        break;
+    case SIZE_16:
+        WM(adr+1 , (BYTE) data);
+        WM(adr   , (BYTE) (data>>8));
+        break;
+    case SIZE_20:
+        WM(adr+2 , (BYTE) data);
+        WM(adr+1 , (BYTE) (data>>8));
+        WM(adr   , (BYTE) ((data>>16)&MASK_4));
+        break;
+    case SIZE_24:
+        WM(adr+2 , (BYTE) data);
+        WM(adr+1 , (BYTE) (data>>8));
+        WM(adr   , (BYTE) (data>>16));
+        break;
+    }
+}
+
 void Cmc6800::Regs_Info(UINT8 Type)
 {
     sprintf(Regs_String,"");

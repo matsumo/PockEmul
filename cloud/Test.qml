@@ -217,17 +217,17 @@ Rectangle {
                     //                ]
                     onPressed: {
                         for (var touch in touchPoints) {
-                            //                        console.warn("Multitouch pressed touch", touchPoints[touch].pointId, "at", touchPoints[touch].x, ",", touchPoints[touch].y)
-                            sendClick(idpocket,touchPoints[touch].x,touchPoints[touch].y);
+                            console.warn("Multitouch pressed touch", touchPoints[touch].pointId, "at", touchPoints[touch].startX, ",", touchPoints[touch].startY)
+                            sendClick(idpocket,touchPoints[touch].startX,touchPoints[touch].startY);
                         }
                     }
                     onReleased: {
 
                         //                    console.warn("touchPoints count:",touchPoints.length);
                         for (var touch in touchPoints) {
-                            //                        console.warn("Multitouch released touch", touchPoints[touch].pointId, "at", touchPoints[touch].x, ",", touchPoints[touch].y)
-                            var tx = touchPoints[touch].x;
-                            var ty = touchPoints[touch].y;
+                            console.warn("Multitouch released touch", touchPoints[touch].pointId, "at", touchPoints[touch].startX, ",", touchPoints[touch].startY)
+                            var tx = touchPoints[touch].startX;
+                            var ty = touchPoints[touch].StartY;
                             sendUnClick(idpocket,tx,ty);
                         }
 
@@ -267,6 +267,7 @@ Rectangle {
                                 if (!main.keyAt(idpocket,mouse.x,mouse.y)) {
                                     isdrag=true;
                                 }
+
                                 sendClick(idpocket,mouse.x,mouse.y);
                             }
                             mouse.accepted=true;
@@ -274,7 +275,8 @@ Rectangle {
 
                         onReleased: {
                             isdrag=false;
-                            sendUnClick(idpocket,mouseX,mouseY);
+//                            sendUnClick(idpocket,mouseX,mouseY);
+                            sendUnClick(idpocket,previousPosition.x,previousPosition.y);
                             mouse.accepted=true;
 
                         }

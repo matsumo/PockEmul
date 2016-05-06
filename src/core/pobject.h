@@ -119,10 +119,16 @@ public:
 
 
 
+    /**
+     * @brief Return the frequency of the emulated object
+     *
+     * @return int freq Hz
+     *
+     * @sa setfrequency
+     */
     int		getfrequency() { return frequency; }
+
     void	setfrequency(int f);
-
-
 
 	QList<Cconnector*> ConnList;
 	void publish(Cconnector* newConn);

@@ -471,7 +471,8 @@ public:
 
 
     void write_signals(outputs_t *items, UINT32 data);
-    virtual UINT32 get_mem(UINT32 adr, int size);
+    virtual UINT32  get_mem(UINT32 adr, int size);
+    virtual	void	set_mem(UINT32 adr,int size,UINT32 data);	//set memory
 };
 
 

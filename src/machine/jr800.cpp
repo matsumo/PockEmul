@@ -14,7 +14,11 @@
 #include "watchpoint.h"
 #include "hd44102.h"
 
-
+/**
+ * @brief
+ *
+ * @param parent
+ */
 Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 4915200/4);
@@ -63,10 +67,19 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     ioFreq = 0;
 }
 
+/**
+ * @brief
+ *
+ */
 Cjr800::~Cjr800() {
 
 }
 
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool Cjr800::init(void)				// initialize
 {
 
@@ -75,6 +88,11 @@ bool Cjr800::init(void)				// initialize
 //    pCPU->logsw = true;
 //    if (!fp_log) fp_log=fopen("jr800.log","wt");	// Open log file
 #endif
+
+    for (int i=0;i<8;i++) {
+        hd44102[i]->init();
+    }
+
     CpcXXXX::init();
 
     pTIMER->resetTimer(1);
@@ -88,9 +106,6 @@ bool Cjr800::init(void)				// initialize
     WatchPoint.add(&pTAPECONNECTOR_value,64,2,this,"Line In / Rec");
     WatchPoint.add(&pPRINTERCONNECTOR_value,64,9,this,"Printer");
 
-    for (int i=0;i<8;i++) {
-        hd44102[i]->init();
-    }
 
     // Just to be sure, in case of an old saved session
     ((Cmc6800*)pCPU)->regs.opmode = 4;
@@ -98,24 +113,53 @@ bool Cjr800::init(void)				// initialize
     return true;
 }
 
+// PORT 0:
+//    bit 0 : TAPE OUT
+//    bit 1 : TAPE IN ??
+//    bit 2 :
+//    bit 3 : Audio out enable ?
+//    bit 4 : Audio out
+//    bit 5 : Auto off when 1. CPU halt ? PC in F159
+//    bit 6 :
+//    bit 7 : Audio out enable ?
+
+
+/**
+ * @brief
+ *
+ * @return bool
+ */
 bool Cjr800::run() {
 
     CpcXXXX::run();
 
     BYTE _soundData = 0;
-    if((((Cmc6800*)pCPU)->regs.port[0].wreg & 0x08)) {
-        _soundData = (((Cmc6800*)pCPU)->regs.port[0].wreg & 0x10) ? 0xff : 0x00;
-//        qWarning()<<_soundData;
+
+// Temporary direct access to port 0 to avois constant warning during port 0 analyse
+#if 1
+    if( READ_BIT(((Cmc6800*)pCPU)->regs.port[0].wreg,7)) {
+        _soundData = READ_BIT(((Cmc6800*)pCPU)->regs.port[0].wreg , 4) ? 0xff : 0x00;
         fillSoundBuffer(_soundData);
     }
-
-
+#else
+    if (BIT(pCPU->get_mem(0x02,SIZE_8),7)) {
+        _soundData = BIT(pCPU->get_mem(0x02,SIZE_8) , 4) ? 0xff : 0x00;
+        fillSoundBuffer(_soundData);
+    }
+#endif
 
     pTAPECONNECTOR_value   = pTAPECONNECTOR->Get_values();
     pPRINTERCONNECTOR_value = pPRINTERCONNECTOR->Get_values();
     return true;
 }
 
+/**
+ * @brief
+ *
+ * @param d
+ * @param data
+ * @return bool
+ */
 bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
 {
     Q_UNUSED(data)
@@ -166,10 +210,17 @@ bool Cjr800::Chk_Adr(UINT32 *d, UINT32 data)
     if ((*d>=0x6000) && (*d<=0x7FFF)) {
         return true; /* Extended RAM */
     }
-    qWarning()<<"ERR:"<<tr("%1").arg(*d,4,16,QChar('0'));
+    qWarning()<<"ERR WRITE :"<<tr("[%1]=%2").arg(*d,4,16,QChar('0')).arg(data,2,16,QChar('0'));
     return false;
 }
 
+/**
+ * @brief
+ *
+ * @param d
+ * @param data
+ * @return bool
+ */
 bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
     Q_UNUSED(d)
@@ -224,55 +275,87 @@ bool Cjr800::Chk_Adr_R(UINT32 *d, UINT32 *data)
         return false;
     }
 
-    //    if (*d==0x0DFF) {
-//        *data = 0x10;
-////        qWarning()<<"OK";
-//        return false;
-//    }
+    if ((*d>=0x2000) && (*d<=0x5FFF)) {
+        return true; /* RAM */
+    }
+    if ((*d>=0x6000) && (*d<=0x7FFF)) {
+        return true; /* Extended RAM */
+    }
 
-    if ((*d>=0xC000) & (*d<=0xEFFF)) return true;  // Extended ROM
+    if ((*d>=0x8000) & (*d<=0xFFFF)) return true;  // ROM
+
+    qWarning()<<"ERR UnCatched Read :"<<tr("%1").arg(*d,4,16,QChar('0'));
 
     return true;
 }
 
-UINT8 Cjr800::in(UINT8 Port,QString)
+/**
+ * @brief
+ *
+ * @param Port
+ * @param sender
+ * @return UINT8
+ */
+UINT8 Cjr800::in(UINT8 Port,QString sender)
 {
     Q_UNUSED(Port)
 
+    qWarning()<<sender<<tr(": in [%1]").arg(Port,2,16,QChar('0'));
+
 //    switch (Port) {
 //    case 0x01 : return portB  | (pTAPECONNECTOR->Get_pin(1) ? 0x80 : 0x00); break;
-//    case 0x02 : return (getKey() & 0x3F); break;
 //    }
 
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param Port
+ * @param x
+ * @param sender
+ * @return UINT8
+ */
 UINT8 Cjr800::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
+    Q_UNUSED(sender)
 
+    qWarning()<<sender<<tr(": out [%1]=%2").arg(Port,2,16,QChar('0')).arg(x,2,16,QChar('0'));
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param address
+ * @param value
+ * @param sender
+ * @return UINT16
+ */
 UINT16 Cjr800::out16(UINT16 address, UINT16 value, QString sender)
 {
     Q_UNUSED(address)
     Q_UNUSED(value)
-
-//    if (address == UPD7907_PORTE) {
-//        kstrobe = value;
-//    }
+    Q_UNUSED(sender)
 
     return 0;
 }
 
+/**
+ * @brief
+ *
+ * @param _bus
+ * @return bool
+ */
 bool Cjr800::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
     pTAPECONNECTOR->Set_pin(3,true);       // RMT
-    pTAPECONNECTOR->Set_pin(2,(((Cmc6800*)pCPU)->regs.port[0].wreg & 0x01) ? 0x00 : 0xff); // TAPE OUT
+    pTAPECONNECTOR->Set_pin(2,READ_BIT(pCPU->get_mem(0x02,SIZE_8) , 0) ? 0x00 : 0xff); // TAPE OUT
 
 //    if (sendToPrinter>0) {
 //        pPRINTERCONNECTOR->Set_values(sendToPrinter);
@@ -284,9 +367,20 @@ bool Cjr800::Set_Connector(Cbus *_bus)
     return true;
 }
 
+/**
+ * @brief
+ *
+ * @param _bus
+ * @return bool
+ */
 bool Cjr800::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
+
+    // TAPE IN
+    UINT8 _data = pCPU->get_mem(0x02,SIZE_8);
+    PUT_BIT(_data,2,pTAPECONNECTOR->Get_pin(1));
+    pCPU->set_mem(0x02,SIZE_8,_data);
 
 //    if (pPRINTERCONNECTOR->Get_pin(9)) {
 //        sendToPrinter = 0;
@@ -295,6 +389,10 @@ bool Cjr800::Get_Connector(Cbus *_bus)
     return true;
 }
 
+/**
+ * @brief
+ *
+ */
 void Cjr800::TurnOFF(void) {
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
@@ -303,6 +401,10 @@ void Cjr800::TurnOFF(void) {
 
 }
 
+/**
+ * @brief
+ *
+ */
 void Cjr800::TurnON(void){
     CpcXXXX::TurnON();
 //    upd7907->Reset();
@@ -310,6 +412,10 @@ void Cjr800::TurnON(void){
 //qWarning()<<"LCD ON:"<<pLCDC->On;
 }
 
+/**
+ * @brief
+ *
+ */
 void Cjr800::Reset()
 {
     CpcXXXX::Reset();
@@ -319,12 +425,24 @@ void Cjr800::Reset()
 
 }
 
+/**
+ * @brief
+ *
+ * @param xmlIn
+ * @return bool
+ */
 bool Cjr800::LoadConfig(QXmlStreamReader *xmlIn)
 {
     for (int i=0;i<8;i++) hd44102[i]->Load_Internal(xmlIn);
     return true;
 }
 
+/**
+ * @brief
+ *
+ * @param xmlOut
+ * @return bool
+ */
 bool Cjr800::SaveConfig(QXmlStreamWriter *xmlOut)
 {
     for (int i=0;i<8;i++) hd44102[i]->save_internal(xmlOut);
@@ -335,6 +453,11 @@ bool Cjr800::SaveConfig(QXmlStreamWriter *xmlOut)
 
 #define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
+/**
+ * @brief
+ *
+ * @return UINT16
+ */
 UINT16 Cjr800::getKey()
 {
 

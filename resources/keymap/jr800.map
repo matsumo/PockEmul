@@ -32,6 +32,7 @@
     <KEY description="Brk" height="32" left="603" masterscancode="0x00" modifier="" scancode="0x03" top="304" view="FRONT" width="32"/>
     <KEY description="Rigth Arrow" height="32" left="789" masterscancode="0x00" modifier="" scancode="0x07" top="257" view="FRONT" width="32"/>
     <KEY description="Shift" height="32" left="38" masterscancode="0x00" modifier="" scancode="0x11" top="446" view="FRONT" width="58"/>
+    <KEY description="Ctrl" height="32" left="38" masterscancode="0x00" modifier="" scancode="0xd5" top="398" view="FRONT" width="32"/>
     <KEY description="Space" height="32" left="565" masterscancode="0x00" modifier="" scancode="0x20" top="444" view="FRONT" width="58"/>
     <KEY description="Up Arrow" height="32" left="739" masterscancode="0x00" modifier="" scancode="0x05" top="255" view="FRONT" width="32"/>
     <KEY description="0" height="32" left="504" masterscancode="0x00" modifier="" scancode="0x30" top="303" view="FRONT" width="32"/>
