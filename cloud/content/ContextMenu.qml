@@ -62,7 +62,7 @@ PieMenu {
 
     id: pieMenu
     triggerMode: TriggerMode.TriggerOnClick
-    width: 300; // Math.min(controlBoundsItem.width, controlBoundsItem.height) * 0.5
+    width: 300 * cloud.getValueFor("hiResRatio","1"); // Math.min(controlBoundsItem.width, controlBoundsItem.height) * 0.5
     height: width
 
     //            style: Qt.createComponent(customizerItem.currentStylePath)

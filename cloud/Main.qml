@@ -71,6 +71,23 @@ Rectangle {
 
         Tab {name: "Action"
             icon: "pics/action-white.png"
+//            StackView {
+//                 id: stackView
+//                 initialItem: mainView
+//                 anchors.fill: parent
+//             }
+//            NavigationDrawer {
+//                id: drawer
+//                anchors.top: newprivateSearchItem.bottom
+//                anchors.bottom: parent.bottom
+
+//                position: Qt.LeftEdge
+//                visualParent: stackView
+
+//                    Text{text:"toto"}
+
+//            }
+
             Actions {}
         }
         Tab {name: "Settings"

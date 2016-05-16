@@ -1297,7 +1297,8 @@ void CPObject::Overlay(QAction * action)
 void CPObject::paintEvent(QPaintEvent *event)
 {
 #ifdef Q_OS_ANDROID
-#define TRANSFORM Qt::FastTransformation
+#define TRANSFORM Qt::SmoothTransformation
+//#define TRANSFORM Qt::FastTransformation
 #else
 #define TRANSFORM Qt::SmoothTransformation
 #endif
@@ -1729,7 +1730,7 @@ void CPObject::computeLinkMenu(QMenu * menu)
                         if (menuAllPc==0)
                             menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
                         QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
-                        actionDistConn->setData(tr("%1:%2").arg((long)ConnList.at(i)).arg((long)listpPObject.at(j)->ConnList.at(k)));
+                        actionDistConn->setData(tr("%1:%2").arg((qlonglong)ConnList.at(i)).arg((qlonglong)listpPObject.at(j)->ConnList.at(k)));
                     }
                 }
             }
@@ -1747,14 +1748,14 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
     menuunlink = menu->addMenu(tr("Remove Link"));
     if(ConnList.size()>1) {
         QAction * actionLocAllConn = menuunlink->addAction("All");
-        actionLocAllConn->setData(tr("A%1").arg((long)this));
+        actionLocAllConn->setData(tr("A%1").arg((qlonglong)this));
         menuunlink->addSeparator();
     //connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLinkAll( QAction *)));
     }
 	for (int i = 0;i < ConnList.size(); i++)
  	{
         QAction * actionLocConn = menuunlink->addAction(ConnList.at(i)->Desc);
-        actionLocConn->setData(tr("C%1").arg((long)ConnList.at(i)));
+        actionLocConn->setData(tr("C%1").arg((qlonglong)ConnList.at(i)));
         connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));
 	}	
 }

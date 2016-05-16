@@ -307,8 +307,8 @@ void CViewObject::flip(Direction dir) {
 
     QPropertyAnimation *animation1 = new QPropertyAnimation(this, "angle");
     QPropertyAnimation *animation2 = new QPropertyAnimation(this, "zoom");
-     animation1->setDuration(500);
-     animation2->setDuration(500);
+     animation1->setDuration(1000);
+     animation2->setDuration(1000);
 
      switch (currentFlipDir) {
      case TOPdir:

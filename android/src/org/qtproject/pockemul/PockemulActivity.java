@@ -159,16 +159,16 @@ public class PockemulActivity extends QtActivity {
         catch (InterruptedException e)
         {
         }
-        Vibrate();
+//        Vibrate();
         return pressedButtonID;
     }
 
-    public static void Vibrate()
+    public static void Vibrate(int nb)
     {
         // Get instance of the Vibrator
          Vibrator vibrator = (Vibrator) m_instance.getSystemService(Context.VIBRATOR_SERVICE);
-         // Vibrate for 50 milliseconds
-         vibrator.vibrate(20);
+         // Vibrate for nb milliseconds
+         vibrator.vibrate(nb);
     }
 
     public static void openURL(String url)

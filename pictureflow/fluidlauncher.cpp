@@ -343,8 +343,13 @@ qWarning()<<"After PopulatePictureFlow";
 
 //         qWarning()<<"Before reading image:";
          QImage *img = filteredList.at(i)->getImage();
+
 //         qWarning()<<"After reading image:";
+#ifdef Q_OS_ANDROID
+         pictureFlowWidget->setSlide(i, (img->scaled(400,300,Qt::KeepAspectRatio)));
+#else
          pictureFlowWidget->setSlide(i, *img);
+#endif
          pictureFlowWidget->setSlideCaption(i, filteredList[i]->getCaption());
          pictureFlowWidget->setSlideDescription(i,filteredList[i]->getDescription());
          delete img;

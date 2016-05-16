@@ -52,8 +52,8 @@ Rectangle {
     signal sendKeyPressed(string id,int key, int mod,int scancode)
     signal sendKeyReleased(string id,int key, int mod,int scancode)
     signal sendContextMenu(string id,int x,int y)
-    signal sendClick(string id,int x,int y)
-    signal sendUnClick(string id,int x,int y)
+    signal sendClick(string pocketid,int touchid,int x,int y)
+    signal sendUnClick(string pocketid,int touchid,int x,int y)
     signal sendDblClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)
     signal sendMoveAllPocket(int x,int y)
@@ -63,6 +63,7 @@ Rectangle {
     signal minimize(string id)
 
     signal sendNewPocket();
+    signal sendLoadPocket(string id);
     signal sendNewExt();
     signal sendDev();
     signal sendSave();
@@ -209,31 +210,25 @@ Rectangle {
                     enabled: parent.touchEnabled
                     mouseEnabled: true;
                     anchors.fill: parent
-                    //                minimumTouchPoints: 1
-                    //                maximumTouchPoints: 2
-                    //                touchPoints: [
-                    //                    TouchPoint { id: point1 },
-                    //                    TouchPoint { id: point2 }
-                    //                ]
                     onPressed: {
-                        for (var touch in touchPoints) {
-                            console.warn("Multitouch pressed touch", touchPoints[touch].pointId, "at", touchPoints[touch].startX, ",", touchPoints[touch].startY)
-                            sendClick(idpocket,touchPoints[touch].startX,touchPoints[touch].startY);
+                        for (var i=0;i<touchPoints.length;i++) {
+                            console.warn("Multitouch pressed touch", touchPoints[i].pointId, "at", touchPoints[i].x, ",", touchPoints[i].y)
+                            sendClick(idpocket,touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y);
                         }
                     }
                     onReleased: {
 
                         //                    console.warn("touchPoints count:",touchPoints.length);
-                        for (var touch in touchPoints) {
-                            console.warn("Multitouch released touch", touchPoints[touch].pointId, "at", touchPoints[touch].startX, ",", touchPoints[touch].startY)
-                            var tx = touchPoints[touch].startX;
-                            var ty = touchPoints[touch].StartY;
-                            sendUnClick(idpocket,tx,ty);
+                        for (var i=0;i< touchPoints.length;i++) {
+                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", touchPoints[i].startX, ",", touchPoints[i].startY)
+                            var tx = touchPoints[i].x;
+                            var ty = touchPoints[i].y;
+                            sendUnClick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
 
-                    }
+                   }
 
-
+//                    onGestureStarted:  gesture.cancel();
 
 
                     MouseArea {
@@ -260,15 +255,20 @@ Rectangle {
                             previousPosition = Qt.point(mouse.x, mouse.y);
                             photoFrame.focus = true;
                             if (mouse.button === Qt.RightButton) {
-                                sendContextMenu(idpocket,mouse.x,mouse.y);
-                                isdrag=false;
+                                if (!main.keyAt(idpocket,mouse.x,mouse.y)) {
+                                    isdrag=false;
+                                    sendContextMenu(idpocket,mouse.x,mouse.y);
+                                }
+                                else {
+                                    isdrag=true;
+                                }
                             }
                             if (mouse.button === Qt.LeftButton) {
                                 if (!main.keyAt(idpocket,mouse.x,mouse.y)) {
                                     isdrag=true;
                                 }
 
-                                sendClick(idpocket,mouse.x,mouse.y);
+                                sendClick(idpocket,0,mouse.x,mouse.y);
                             }
                             mouse.accepted=true;
                         }
@@ -276,7 +276,7 @@ Rectangle {
                         onReleased: {
                             isdrag=false;
 //                            sendUnClick(idpocket,mouseX,mouseY);
-                            sendUnClick(idpocket,previousPosition.x,previousPosition.y);
+                            sendUnClick(idpocket,0,previousPosition.x,previousPosition.y);
                             mouse.accepted=true;
 
                         }
@@ -288,7 +288,7 @@ Rectangle {
                             }
                             else {
                                 contextMenu.idpocket = idpocket;
-                                contextMenu.width = Math.max(300,image.width/2);
+                                contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
                                 contextMenu.mousePt = Qt.point(mouse.x,mouse.y);
                                 contextMenu.buttons = mouse.buttons;
                                 contextMenu.popup(photoFrame.x+mouseX, photoFrame.y+mouseY);
@@ -336,6 +336,13 @@ Rectangle {
         Launchmenu {
             id:menu
             z: mainpinch.z+1
+        }
+
+        ShowRoom {
+            id: showroom
+            z: 9999
+            visible: false
+            anchors.fill: parent
         }
 
     }

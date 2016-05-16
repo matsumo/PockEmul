@@ -1,5 +1,6 @@
 //TODO: replace all sprintf calls by snprintf. It's safer.
 
+
 #include <QApplication>
 #include <QtPlugin>
 #include <QDebug>
@@ -8,6 +9,9 @@
 #include <QScreen>
 #include <QWidget>
 
+#ifdef Q_OS_WIN
+#include <windowsx.h>
+#endif
 
 #include "launchbuttonwidget.h"
 #include "mainwindowpockemul.h"
@@ -23,11 +27,16 @@
 #endif
 
 #include "downloadmanager.h"
+#include "Keyb.h"
 
 //QTM_USE_NAMESPACE
 
 #include "version.h"
 #include "QZXing.h"
+
+#include "vibrator.h"
+Vibrator vibrate;
+int vibDelay;
 
 #ifdef Q_OS_ANDROID
 #include <QAndroidJniObject>
@@ -60,6 +69,9 @@ bool syncEnabled=true;
 QString appDir;
 QString workDir;
 
+class CPObject;
+extern QList<CPObject *> listpPObject;
+
 void test();
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
@@ -89,6 +101,10 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
 //        abort();
 //    }
 }
+
+
+#ifdef Q_OS_WIN
+
 #define WM_TABLET_DEFBASE                    0x02C0
 #define WM_TABLET_QUERYSYSTEMGESTURESTATUS   (WM_TABLET_DEFBASE + 12)
 
@@ -113,13 +129,24 @@ public:
         if ( (eventType == "windows_generic_MSG") || (eventType == "windows_dispatcher_MSG") ) {
             MSG* msg = static_cast<MSG *>(message);
             if (msg->message==WM_TABLET_QUERYSYSTEMGESTURESTATUS) {
-                *result = DISABLE_PRESSANDHOLD ;
+                // check if keyAt
+                int  x = GET_X_LPARAM(msg->lParam);
+                int  y = GET_Y_LPARAM(msg->lParam);
+                qWarning()<<x<<y;
+                for (int i =0;i < listpPObject.count();i++) {
+                    if (listpPObject[i]->pKEYB) {
+                        if (listpPObject[i]->pKEYB->KeyClick(listpPObject[i]->mapFromGlobal(QPoint(x,y)))) {
+                            *result = DISABLE_PRESSANDHOLD;
+                        }
+                    }
+                }
                 return true;
             }
         }
         return false;
     }
 };
+#endif
 
 int main(int argc, char *argv[])
 {
@@ -137,9 +164,11 @@ int main(int argc, char *argv[])
 
     QApplication *app = new QApplication(argc, argv);
 
+#ifdef Q_OS_WIN
     app->installNativeEventFilter(new MyMSGEventFilter());
+#endif
 
-     app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
+    app->setAttribute(Qt::AA_DontCreateNativeWidgetSiblings);
 #if QT_VERSION >= 0x050000
 #ifdef Q_OS_ANDROID
      app->setAttribute(Qt::AA_SynthesizeMouseForUnhandledTouchEvents,true);
@@ -174,6 +203,7 @@ int main(int argc, char *argv[])
     }
 
     workDir = QDir::homePath()+"/pockemul/";
+    vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
 #ifdef Q_OS_ANDROID
 //    QFont f = app.font();
@@ -390,7 +420,7 @@ qWarning()<<"okl";
         windowLayout->setMargin(0);
     }
     else {
-        qWarning()<<"full opengl";
+        qWarning()<<"no opengl";
         launch1->show();
         launch2->show();
         dev->show();
@@ -407,15 +437,13 @@ qWarning()<<"okl";
     }
     if (!mainwindow->runPocket.isEmpty()) {
         CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);
-
-//        mainwindow->setCentralWidget(pPC);
-//         mainwindow->centralwidget = pPC;
-        pPC->slotDoubleClick(QPoint(0,0));
+//        pPC->slotDoubleClick(QPoint(0,0));
   #ifdef Q_OS_ANDROID
-        if (pPC->getDX()> pPC->getDY())
-            pPC->maximizeWidth();
-        else
-            pPC->maximizeHeight();
+        pPC->maximize(pPC->RectWithLinked().center().toPoint());
+//        if (pPC->getDX()> pPC->getDY())
+//            pPC->maximizeWidth();
+//        else
+//            pPC->maximizeHeight();
   #else
         Q_UNUSED(pPC)
   #endif
@@ -447,6 +475,18 @@ QString m_getArgs() {
     return QString("");
 }
 
+
+void Vibrate() {
+#ifdef Q_OS_ANDROID
+    qWarning() << "Vibrate";
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                        "Vibrate",
+                                        "(I)V",vibDelay);
+
+//    vibrate.vibrate(vibDelay);
+#endif
+}
+
 int ask(QWidget *parent, QString msg, int nbButton) {
     qWarning() << "Ask";
 #ifdef Q_OS_ANDROID
@@ -457,6 +497,8 @@ int ask(QWidget *parent, QString msg, int nbButton) {
                                         nbButton);
 
         qWarning()<<res;
+
+        Vibrate();
 
         return res;
 #else
@@ -484,15 +526,6 @@ int ask(QWidget *parent, QString msg, int nbButton) {
     return 0;
 }
 
-void Vibrate() {
-#ifdef Q_OS_ANDROID
-    qWarning() << "Vibrate";
-    QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
-                                        "Vibrate",
-                                        "()V");
-
-#endif
-}
 
 void m_openURL(QUrl url) {
 #ifdef Q_OS_ANDROID

@@ -3,7 +3,11 @@
 
 #include <QQuickWidget>
 #include <QQuickView>
+#include <QMutex>
+
 #include "cloud/cloudwindow.h"
+#include "vibrator.h"
+
 class CPObject;
 class CViewObject;
 
@@ -17,7 +21,7 @@ public:
 //    QObject *object;
     QWidget * parent;
     Cloud cloud;
-
+    Vibrator vibrator;
 
     Q_INVOKABLE bool keyAt(QString Id, int x, int y);
     Q_INVOKABLE double getZoom();
@@ -36,8 +40,8 @@ public slots:
     Q_INVOKABLE void keyreleased(QString Id, int k, int m, int scan);
     Q_INVOKABLE void contextMenu(QString Id, int x, int y);
     Q_INVOKABLE void rotpocket(QString Id, int x);
-    Q_INVOKABLE void click(QString Id, int x, int y);
-    Q_INVOKABLE void unclick(QString Id, int x, int y);
+    Q_INVOKABLE void click(QString Id, int touchId, int x, int y);
+    Q_INVOKABLE void unclick(QString Id, int touchId, int x, int y);
     Q_INVOKABLE void dblclick(QString Id, int x, int y);
     Q_INVOKABLE void setzoom(int x, int y, double z);
     Q_INVOKABLE void movepocket(QString Id, int x, int y);
@@ -55,8 +59,11 @@ public slots:
     void cloudClose();
     void rotPObject(CViewObject *pObject,int angle);
 
+    void LoadPocket(QString id);
+private:
+     QMap<int,QPoint> mapTouch;
 
-
+     QMutex lockClick;
 };
 
 #endif // RENDERVIEW_H

@@ -327,6 +327,7 @@ QString Cloud::getValueFor(const QString &objectName, const QString &defaultValu
     return settings.value(objectName).toString();
 }
 
+extern int vibDelay;
 void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
 {
     QSettings settings(workDir+"config.ini",QSettings::IniFormat);
@@ -336,6 +337,9 @@ void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
     if (objectName == "syncEnabled") syncEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "soundEnabled") soundEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "hiRes") hiRes =  (inputValue=="on") ? true : false;
+    if (objectName == "vibDelay") {
+        vibDelay = (inputValue.toInt());
+    }
 }
 
 QByteArray Cloud::generateKey(QString username,QString password) {

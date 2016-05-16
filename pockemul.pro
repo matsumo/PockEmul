@@ -933,7 +933,8 @@ HEADERS *= \
     src/lcd/Lcdc_hx20.h \
     src/lcd/Lcdc_ti59.h \
     src/lcd/Lcdc_jr800.h \
-    src/core/overlay.h
+    src/core/overlay.h \
+    src/core/vibrator.h
 
 
 
@@ -1100,7 +1101,8 @@ SOURCES *=  \
     src/lcd/Lcdc_hx20.cpp \
     src/lcd/Lcdc_jr800.cpp \
     src/lcd/Lcdc_ti59.cpp \
-    src/core/overlay.cpp
+    src/core/overlay.cpp \
+    src/core/vibrator.cpp
 
 
 
@@ -1564,6 +1566,8 @@ OTHER_FILES *= \
     cloud/content/Edit.qml \
     cloud/content/ComboBox.qml \
     cloud/content/Switch.qml \
+    cloud/content/Switch2.qml \
+    cloud/content/SettingsView.qml \
     cloud/content/knob.svg \
     cloud/content/counter.js \
     cloud/content/SortListModel.qml \
@@ -1579,7 +1583,14 @@ OTHER_FILES *= \
     cloud/Test.qml \
     cloud/Main.qml \
     cloud/Launchmenu.qml \
-    cloud/content/Camera.qml
+    cloud/content/Camera.qml \
+    cloud/content/BackGround.qml \
+    cloud/content/MainView.qml \
+    cloud/content/ShowRoom.qml \
+    cloud/content/DetailsView.qml \
+    cloud/content/Button.qml \
+    cloud/content/DelegateItem.qml \
+    cloud/content/PObjectsModel.qml \
 
 }
 

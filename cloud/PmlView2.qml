@@ -70,6 +70,8 @@ Rectangle {
         populatePMLModel(searchText)
     }
 
+
+
     ListModel {
         id: categoryModel
     }

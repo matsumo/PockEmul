@@ -12,6 +12,7 @@
 #include "dialogkeylist.h"
 #include "Keyb.h"
 #include "QZXing.h"
+#include "vibrator.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -29,6 +30,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 
+    rootContext()->setContextProperty("Vibrator", &vibrator);
     rootContext()->setContextProperty("cloud", &cloud);
     rootContext()->setContextProperty("main", this);
     setSource(QUrl("qrc:/Test.qml"));
@@ -40,8 +42,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
-    QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int)), this, SLOT(click(QString,int,int)));
-    QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int)), this, SLOT(unclick(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int,int)), this, SLOT(click(QString,int,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int,int)), this, SLOT(unclick(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendDblClick(QString,int,int)), this, SLOT(dblclick(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
@@ -50,6 +52,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
     QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
 
+    QObject::connect(cloud.object, SIGNAL(sendLoadPocket(QString)), this, SLOT(LoadPocket(QString)));
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
     QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
     QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
@@ -62,6 +65,9 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
     connect(mainwindow,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 
+}
+void CrenderView::LoadPocket(QString id) {
+    mainwindow->LoadPocket(id);
 }
 
 extern LaunchButtonWidget* launch1;
@@ -103,7 +109,7 @@ void CrenderView::keypressed(QString Id, int k,int m,int scan)
 {
     Q_UNUSED(scan)
 
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent *e=new QKeyEvent( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
@@ -114,7 +120,7 @@ void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 {
     Q_UNUSED(scan)
 
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent *e=new QKeyEvent( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
@@ -124,7 +130,7 @@ void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 void CrenderView::movepocket(QString Id, int x, int y)
 {
 //    qWarning()<<"movepocket:"<<Id<<x<<y;
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     QPointF pts(x , y);
 
     pc->MoveWithLinkedAbs(pts);
@@ -139,20 +145,20 @@ void CrenderView::moveallpocket(int x, int y)
 
 void CrenderView::maximize(QString Id)
 {
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     pc->maximize(pc->RectWithLinked().center().toPoint());
 }
 
 void CrenderView::minimize(QString Id)
 {
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     pc->minimize(pc->RectWithLinked().center().toPoint());
 }
 
 void CrenderView::contextMenu(QString Id, int x, int y)
 {
 //    qWarning()<<"contextMenu"<<x<<y;
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     QPoint pts(x , y);
     QContextMenuEvent *cme = new QContextMenuEvent(
                 QContextMenuEvent::Mouse,
@@ -166,30 +172,61 @@ void CrenderView::contextMenu(QString Id, int x, int y)
 
 void CrenderView::rotpocket(QString Id, int x)
 {
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     pc->setRotation(x);
 }
 
-void CrenderView::click(QString Id, int x, int y)
+void CrenderView::click(QString Id, int touchId,int x, int y)
 {
+
+    lockClick.lock();
+
 //    qWarning()<<"click:"<<Id<<x<<y;
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     QPoint pts(x , y);
 
-//    if ((pc->pKEYB) &&(pc->pKEYB->KeyClick(pts)))
-    {
-        // Send thee MouseButtonPress event
-        QMouseEvent event(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-        QApplication::sendEvent(pc, &event);
+    mapTouch[touchId] = QPoint(x,y);
 
-        return;
-    }
+    // Send thee MouseButtonPress event
+    QMouseEvent event(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+
+    QApplication::sendEvent(pc, &event);
+
+    lockClick.unlock();
+
+    return;
+}
+
+void CrenderView::unclick(QString Id, int touchId,int x, int y)
+{
+//    qWarning()<<"unclick:"<<Id<<x<<y;
+
+
+    QEventLoop eventLoop;
+    QTimer::singleShot (50, &eventLoop, SLOT (quit ()));
+    eventLoop.exec ();
+
+    lockClick.lock();
+
+    CPObject *pc = ((CPObject*)Id.toLongLong());
+    //QPoint pts(x , y);
+
+    QPoint pts = mapTouch[touchId];
+    mapTouch.remove(touchId);
+    // Send thee MouseButtonRelease event
+    QMouseEvent event(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+    QApplication::sendEvent(pc, &event);
+
+    lockClick.unlock();
+
+    return;
+
 }
 
 bool CrenderView::keyAt(QString Id, int x, int y)
 {
 //    qWarning()<<"click:"<<Id<<x<<y;
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     QPoint pts(x , y);
 
     if (pc->pKEYB) return pc->pKEYB->KeyClick(pts);
@@ -231,28 +268,10 @@ QString CrenderView::getReleaseNotes(QString _fn)
     return _notes;
 }
 
-void CrenderView::unclick(QString Id, int x, int y)
-{
-//    qWarning()<<"unclick:"<<Id<<x<<y;
-
-//    QEventLoop eventLoop;
-//    QTimer::singleShot (100, &eventLoop, SLOT (quit ()));
-//    eventLoop.exec ();
-
-    CPObject *pc = ((CPObject*)Id.toULongLong());
-    QPoint pts(x , y);
-
-    // Send thee MouseButtonRelease event
-    QMouseEvent event(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-    QApplication::sendEvent(pc, &event);
-
-    return;
-
-}
 void CrenderView::dblclick(QString Id, int x, int y)
 {
 
-    CPObject *pc = ((CPObject*)Id.toULongLong());
+    CPObject *pc = ((CPObject*)Id.toLongLong());
     QPoint pts(x , y);
 
     // Send thee MouseButtonPress event
@@ -270,7 +289,7 @@ void CrenderView::pocketUpdated(CViewObject * pObject)
 {
 //    update();
     QMetaObject::invokeMethod(cloud.object, "refreshPocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject))
                               );
 }
 
@@ -286,10 +305,15 @@ void CrenderView::newPObject(CPObject *pObject) {
     connect( pObject,SIGNAL(updatedPObject(CViewObject*)),this,SLOT(pocketUpdated(CViewObject*)));
     connect( pObject,SIGNAL(rotPObject(CViewObject*,int)),this,SLOT(rotPObject(CViewObject*,int)));
 
+    qWarning()<<pObject;
+    QString _a = QString("%1").arg((quint64)pObject);
+
+    qWarning()<<_a;
+
     QMetaObject::invokeMethod(cloud.object, "addPocket",
                               Q_ARG(QVariant, QString("name")),
                               Q_ARG(QVariant, "qrc"+pObject->BackGroundFname),
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject)),
                               Q_ARG(QVariant, pObject->pos().x()),
                               Q_ARG(QVariant, pObject->pos().y()),
                               Q_ARG(QVariant, pObject->width()),
@@ -302,7 +326,7 @@ void CrenderView::delPObject(CPObject *pObject)
 {
 //    qWarning()<<"delPObject"<<pObject;
     QMetaObject::invokeMethod(cloud.object, "delPocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject))
                               );
 }
 
@@ -310,7 +334,7 @@ void CrenderView::movePObject(CViewObject *pObject, QPointF pos)
 {
 //    qWarning()<<"movePocket:"<<pos;
     QMetaObject::invokeMethod(cloud.object, "movePocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject)),
                               Q_ARG(QVariant, pos.x()),
                               Q_ARG(QVariant, pos.y())
                               );
@@ -319,7 +343,7 @@ void CrenderView::sizePObject(CViewObject *pObject, QSizeF size)
 {
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "sizePocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject)),
                               Q_ARG(QVariant, size.width()),
                               Q_ARG(QVariant, size.height())
                               );
@@ -328,14 +352,14 @@ void CrenderView::hidePObject(CViewObject *pObject)
 {
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "hidePocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject))
                               );
 }
 void CrenderView::showPObject(CViewObject *pObject)
 {
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "showPocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject))
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject))
                               );
 }
 void CrenderView::cloudClose()
@@ -347,7 +371,7 @@ void CrenderView::cloudClose()
 void CrenderView::rotPObject(CViewObject *pObject,int angle)
 {
     QMetaObject::invokeMethod(cloud.object, "setRotPocket",
-                              Q_ARG(QVariant, QString("%1").arg((long)pObject)),
+                              Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject)),
                               Q_ARG(QVariant,angle)
                               );
 }
@@ -361,7 +385,7 @@ void CrenderView::stackPosChanged()
     for (int i=0; i<list.count();i++) {
         CPObject * pobj = (CPObject*)(list.at(i));
         QMetaObject::invokeMethod(cloud.object, "orderPocket",
-                                  Q_ARG(QVariant, QString("%1").arg((long)pobj)),
+                                  Q_ARG(QVariant, QString("%1").arg((qlonglong)pobj)),
                                   Q_ARG(QVariant, i)
                                   );
     }

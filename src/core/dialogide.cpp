@@ -126,14 +126,14 @@ void DialogIDE::fill_inject(void) {
     for (int i = 0; i < listpPObject.size();i++) {
         CPObject *p = listpPObject.at(i);
         p->getName();
-        injectCB->addItem(p->getName(),tr("%1").arg((long)p));
+        injectCB->addItem(p->getName(),tr("%1").arg((qlonglong)p));
     }
 }
 
 void DialogIDE::inject(void) {
 
     int index = injectCB->currentIndex();
-    CpcXXXX *pc = (CpcXXXX *) injectCB->itemData(index).toString().toULongLong();
+    CpcXXXX *pc = (CpcXXXX *) injectCB->itemData(index).toString().toLongLong();
     bool ok;
     int orig = origEdit->text().toInt(&ok,16);
 

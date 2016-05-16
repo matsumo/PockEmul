@@ -64,5 +64,24 @@
         <file>content/images/readingblackhi.png</file>
         <file>content/images/pinch.png</file>
         <file>content/Camera.qml</file>
+        <file>content/NavigationDrawer.qml</file>
+        <file>content/DetailsView.qml</file>
+        <file>content/Button.qml</file>
+        <file>content/ShowRoom.qml</file>
+        <file>content/MainView.qml</file>
+        <file>content/BackGround.qml</file>
+        <file>content/SettingsView.qml</file>
+        <file>content/Switch2.qml</file>
+        <file>content/PObjectsModel.qml</file>
+        <file>content/DelegateItem.qml</file>
+        <file>content/images/settings.png</file>
+        <file>content/images/switch_background.png</file>
+        <file>content/images/switch_frame.png</file>
+        <file>content/images/switch_on.png</file>
+        <file>content/images/switch_thumb.png</file>
+        <file>content/images/background.png</file>
+        <file>content/images/button.png</file>
+        <file>content/images/info3.png</file>
+        <file>content/images/panel_bg.png</file>
     </qresource>
 </RCC>
