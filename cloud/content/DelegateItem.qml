@@ -6,8 +6,8 @@ Item {
     property string name
     property bool isSelected: listView.currentIndex === index
 
-    width: parent ? parent.width : imageItem.width
-    height: imageItem.height
+    width: parent.width //parent ? parent.width : imageItem.width
+    height: Math.max(imageItem.height,500)
     z: isSelected ? 1000 : -index
     rotation: isSelected ? 0 : -15
     scale: isSelected ? mainView.height/540 : mainView.height/1080
@@ -59,11 +59,11 @@ Item {
 
     Image {
         id: imageItem
-        width: 500 //parent.width / 2
-        height: 300 //parent.height / 2
+        width: parent.width/3
+//        height: parent.height/3
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit
-        source: "qrc" + model.image
+        source: main.getRes(model.image)
         visible: !settings.showLighting
     }
 

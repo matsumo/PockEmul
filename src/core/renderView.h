@@ -27,6 +27,7 @@ public:
     Q_INVOKABLE double getZoom();
     Q_INVOKABLE QString getReleaseNotes(QString _fn);
     Q_INVOKABLE void test();
+    Q_INVOKABLE QString getRes(QString _fn);
 
 public slots:
     Q_INVOKABLE void newpocketSlot();

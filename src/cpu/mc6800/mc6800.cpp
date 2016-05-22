@@ -220,7 +220,7 @@ UINT32 Cmc6800::mc6801_io_r(UINT32 offset)
         // port2 data register
         _data = (regs.port[1].rreg & ~regs.port[1].ddr) | (regs.port[1].wreg & regs.port[1].ddr);
 //        _data = 0x02;
-        qWarning()<<tr("Read Port 1:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
+//        qWarning()<<tr("Read Port 1:%1").arg(_data,2,16,QChar('0'))<<"="<<QChar(_data);
         return _data;
     case 0x04:
         // port3 data direction register (write only???)

@@ -1591,6 +1591,8 @@ OTHER_FILES *= \
     cloud/content/Button.qml \
     cloud/content/DelegateItem.qml \
     cloud/content/PObjectsModel.qml \
+    cloud/content/NavigationDrawer.qml \
+
 
 }
 

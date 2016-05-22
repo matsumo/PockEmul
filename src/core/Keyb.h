@@ -232,6 +232,12 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_ENG       0x210
 #define K_OFF       0x211
 
+// FIX ME
+#define K_SHIFT_DOWN_MOD 0x210
+#define K_SHIFT_UP_MOD 0x211
+#define K_CTRL_DOWN_MOD  0x212
+#define K_CTRL_UP_MOD  0x213
+
 #define K_HELP      0x220
 #define K_IO        0x221
 #define K_STP       0x222
@@ -261,10 +267,6 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_SHARP11PINS    0x240
 #define K_XY        0x241
 
-#define K_SHIFT_DOWN_MOD 0x210
-#define K_SHIFT_UP_MOD 0x211
-#define K_CTRL_DOWN_MOD  0x212
-#define K_CTRL_UP_MOD  0x213
 
 
 // FX-8000G

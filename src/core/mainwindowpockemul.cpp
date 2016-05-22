@@ -97,6 +97,10 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
 
     setupUi(this);
 
+#ifdef Q_OS_ANDROID
+    menubar->clear();
+#endif
+
     setMouseTracking(true);
     setFocusPolicy(Qt::StrongFocus);
     setStatusBar(0);

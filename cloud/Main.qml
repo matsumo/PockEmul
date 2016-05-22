@@ -71,25 +71,25 @@ Rectangle {
 
         Tab {name: "Action"
             icon: "pics/action-white.png"
-//            StackView {
-//                 id: stackView
-//                 initialItem: mainView
-//                 anchors.fill: parent
-//             }
-//            NavigationDrawer {
-//                id: drawer
-//                anchors.top: newprivateSearchItem.bottom
-//                anchors.bottom: parent.bottom
-
-//                position: Qt.LeftEdge
-//                visualParent: stackView
-
-//                    Text{text:"toto"}
-
-//            }
 
             Actions {}
+
+//            NavigationDrawer {
+//                id: drawer
+
+//                anchors.top: parent.top //newprivateSearchItem.bottom
+//                anchors.bottom: parent.bottom
+//                position: Qt.LeftEdge
+//                visualParent: parent
+
+//                Rectangle {
+//                    anchors.fill: parent
+//                    Text{text:"toto"}
+//                }
+
+//            }
         }
+
         Tab {name: "Settings"
             icon: "pics/settings-white.png"
 

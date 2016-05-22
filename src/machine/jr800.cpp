@@ -323,7 +323,7 @@ UINT8 Cjr800::out(UINT8 Port, UINT8 x, QString sender)
     Q_UNUSED(x)
     Q_UNUSED(sender)
 
-    qWarning()<<sender<<tr(": out [%1]=%2").arg(Port,2,16,QChar('0')).arg(x,2,16,QChar('0'));
+//    qWarning()<<sender<<tr(": out [%1]=%2").arg(Port,2,16,QChar('0')).arg(x,2,16,QChar('0'));
     return 0;
 }
 

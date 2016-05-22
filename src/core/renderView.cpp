@@ -202,9 +202,9 @@ void CrenderView::unclick(QString Id, int touchId,int x, int y)
 //    qWarning()<<"unclick:"<<Id<<x<<y;
 
 
-    QEventLoop eventLoop;
-    QTimer::singleShot (50, &eventLoop, SLOT (quit ()));
-    eventLoop.exec ();
+//    QEventLoop eventLoop;
+//    QTimer::singleShot (50, &eventLoop, SLOT (quit ()));
+//    eventLoop.exec ();
 
     lockClick.lock();
 
@@ -257,6 +257,22 @@ void CrenderView::test()
     QString res = decoder.decodeImage(img);
     qWarning()<<res;
 
+}
+
+QString CrenderView::getRes(QString _fn)
+{
+    QString _res = P_RES(_fn);
+
+    qWarning()<<_res;
+
+    if (_res.startsWith(':')) {
+        _res = "qrc" + _res;
+    }
+    else {
+        _res = "file:///"+_res;
+    }
+
+    return _res;
 }
 
 QString CrenderView::getReleaseNotes(QString _fn)

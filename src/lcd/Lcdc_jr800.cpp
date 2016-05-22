@@ -56,6 +56,7 @@ void Clcdc_jr800::disp(void)
 
     Cjr800 *jr800 = (Cjr800*)pPC;
 
+    bool _toRefresh = false;
     BYTE b;
 
 //    Refresh = false;
@@ -79,7 +80,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 0
     if (jr800->hd44102[0]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x<46;x++) {
             for (int y=0; y<4;y++) {
                 int sy = (jr800->hd44102[0]->info.m_page + y)%4;
@@ -97,7 +98,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 1
     if (jr800->hd44102[1]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
             int z = jr800->hd44102[1]->info.m_page;
@@ -119,7 +120,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 2
     if (jr800->hd44102[2]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
             int z = jr800->hd44102[2]->info.m_page;
@@ -141,7 +142,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 3
     if (jr800->hd44102[3]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 4; x< 50;x++)
         {
             int z = jr800->hd44102[3]->info.m_page;
@@ -163,7 +164,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 4
     if (jr800->hd44102[4]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 4; x<50;x++) {
             for (int y=0; y<4;y++) {
                 int sy = (jr800->hd44102[4]->info.m_page + y)%4;
@@ -181,7 +182,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 5
     if (jr800->hd44102[5]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
             int z = jr800->hd44102[5]->info.m_page;
@@ -203,7 +204,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 6
     if (jr800->hd44102[6]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
             int z = jr800->hd44102[6]->info.m_page;
@@ -225,7 +226,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 7
     if (jr800->hd44102[7]->updated) {
-        Refresh = true;
+        _toRefresh = true;
         for (int x = 0; x< 46;x++)
         {
             int z = jr800->hd44102[7]->info.m_page;
@@ -244,6 +245,8 @@ void Clcdc_jr800::disp(void)
         }
         jr800->hd44102[7]->updated = false;
     }
+
+    if (_toRefresh) Refresh = true;
 
     painter.end();
 }

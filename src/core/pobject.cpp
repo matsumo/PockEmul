@@ -1616,18 +1616,19 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
     menu->addAction(tr("New Post-it"),this,SLOT(Postit()));
 
-    QMenu *menuOverlay = menu->addMenu(tr("Overlays"));
+    if (overlays.count()>0) {
+        QMenu *menuOverlay = menu->addMenu(tr("Overlays"));
 
-    menuOverlay->addAction("None")->setData(-1);
-    menuOverlay->addSeparator();
-    for (int i=0;i<overlays.count();i++) {
-        menuOverlay->addAction(overlays[i]->Title)->setData(i);
+        menuOverlay->addAction("None")->setData(-1);
+        menuOverlay->addSeparator();
+        for (int i=0;i<overlays.count();i++) {
+            menuOverlay->addAction(overlays[i]->Title)->setData(i);
 
+        }
+        //    QAction *_act = menuOverlay->addAction("Load from file...");
+        connect(menuOverlay, SIGNAL(triggered(QAction*)), this, SLOT(Overlay(QAction*)));
     }
-//    menuOverlay->addSeparator();
-//    QAction *_act = menuOverlay->addAction("Load from file...");
 
-    connect(menuOverlay, SIGNAL(triggered(QAction*)), this, SLOT(Overlay(QAction*)));
     menuconfig->addSeparator();
 
 

@@ -135,15 +135,22 @@ void Clcdc::disp_symb(void)
 void Clcdc::drawPixel(QPainter *painter,float x,float y, QColor color) {
     painter->setCompositionMode(QPainter::CompositionMode_Source);
     painter->setPen(color );
-    if (pixelSize > 1) {
+    if (pixelSize == 1) {
+        painter->drawPoint( x*(pixelGap+1), y*(pixelGap+1));
+    }
+//    else if (pixelSize < 5) {
+//        for (int i=0; i<pixelSize; i++) {
+//            for (int j=0; j<pixelSize; j++) {
+//                painter->drawPoint( x*(pixelGap+pixelSize)+i, y*(pixelGap+pixelSize)+j);
+//            }
+//        }
+//    }
+    else {
         painter->setBrush(color);
         painter->drawRect(x*(pixelSize+pixelGap),
                          y*(pixelSize+pixelGap),
                          pixelSize-1,
                          pixelSize-1);
-    }
-    else {
-        painter->drawPoint( x*(pixelGap+1), y*(pixelGap+1));
     }
 }
 

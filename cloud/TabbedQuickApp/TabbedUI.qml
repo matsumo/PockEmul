@@ -17,15 +17,15 @@ Rectangle {
 
     // will contain the tab views
     Rectangle {
-	id: tabViewContainer
-	width: parent.width
+        id: tabViewContainer
+        width: parent.width
 
         anchors.top: parent.top
-	anchors.bottom: tabBar.top
+        anchors.bottom: tabBar.top
 
-	// build all the tab views
-	Repeater {
-	    model: tabsModel
+        // build all the tab views
+        Repeater {
+            model: tabsModel
         }
     }
 

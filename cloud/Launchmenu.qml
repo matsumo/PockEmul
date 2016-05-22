@@ -14,8 +14,8 @@ Rectangle {
         y:12
         MouseArea {
             anchors.fill: parent
-            onClicked: sendNewPocket()
-//            onClicked: showroom.visible = true;
+//            onClicked: sendNewPocket()
+            onClicked: showroom.visible = true;
         }
     }
     Image {

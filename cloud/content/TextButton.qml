@@ -27,6 +27,7 @@ Rectangle {
         color: Style.textButtonColor
         anchors.centerIn: parent
         renderType: Text.NativeRendering
+        font.family: "Helvetica"; font.pointSize: 14
     }
 
     states: State {

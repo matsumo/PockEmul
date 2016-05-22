@@ -54,8 +54,8 @@ Rectangle {
     readonly property int _expandedWidth: expandedFraction * _rootItem.width
     readonly property int _expandedX: _rightEdge ? _rootItem.width - width : 0
     readonly property bool _rightEdge: position === Qt.RightEdge
-    readonly property int _minimumX:  _rightEdge ?  _rootItem.width - panel.width : -panel.width
-    readonly property int _maximumX: _rightEdge ? _rootItem.width : 0
+    readonly property int _minimumX:  _rightEdge ?  _rootItem.width - panel.width : 0
+    readonly property int _maximumX: _rightEdge ? _rootItem.width : panel.width
     readonly property int _openMarginSize: 20 * _scaleFactor
 
     property real _velocity: 0
@@ -74,7 +74,7 @@ Rectangle {
     onOpenChanged: completeSlideDirection()
     width: _expandedWidth
     x: _collapsedX
-    z: 10
+    z: parent.z+1
 
     function _setupAnchors() {     // Note that we can't reliably apply anchors using bindings
         _rootItem = _findRootItem();
@@ -180,7 +180,7 @@ Rectangle {
         drag.axis: Qt.Horizontal
         drag.onActiveChanged: if (active) holdAnimation.stop()
         onReleased: handleRelease()
-        z: open ? 1 : 0
+        z: open ? parent.z + 1 : parent.z
         onMouseXChanged: {
             _velocity = (mouse.x - _oldMouseX);
             _oldMouseX = mouse.x;
@@ -202,7 +202,7 @@ Rectangle {
         height: panel.height
         x: panel.x
         y: panel.y
-        z: open ? 5 : 0
+        z: open ? parent.z +5 : parent.Z +0
         clip: true
     }
 

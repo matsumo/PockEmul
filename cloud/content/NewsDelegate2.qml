@@ -128,8 +128,8 @@ Item {
         Row {
             Image {
                 id: pmlThumbImage
-                width: 100
-                height: 100
+                width: 200 * cloud.getValueFor("hiResRatio","1")
+                height: 200 * cloud.getValueFor("hiResRatio","1")
                 asynchronous: true
                 cache: false
                 source:
@@ -210,12 +210,13 @@ Item {
         visible: (delegate.detailsOpacity==1) || ((width+pmlThumbImage.width)<column.width)
         y:40
         anchors { right: background.right; rightMargin: 10 }
-        spacing: 5
+        spacing: 10
         TextButton {
             id: closeButton
             visible: (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             text: "Close"
+
             onClicked: {
                 if (changed) {
                     rootCloud.sendWarning("Cancel changes before closing.");
@@ -461,7 +462,7 @@ Item {
         name: "Details"
 
         PropertyChanges { target: background; color: "white" }
-        PropertyChanges { target: pmlThumbImage; width: 200; height: 200;} // Make picture bigger
+        PropertyChanges { target: pmlThumbImage; width: 400 * cloud.getValueFor("hiResRatio","1"); height: 400 * cloud.getValueFor("hiResRatio","1");} // Make picture bigger
         PropertyChanges { target: delegate; detailsOpacity: 1; x: 0 } // Make details visible
         PropertyChanges { target: delegate; height: list.height } // Fill the entire list area with the detailed view
         PropertyChanges { target: categoriesView; width: rootCloud.isPortrait?0:categoriesView.width }

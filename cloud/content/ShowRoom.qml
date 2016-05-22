@@ -3,8 +3,8 @@ import QtQuick 2.0
 Item {
     id: showRoom
 
-    width: 1920
-    height: 1080
+    width: parent.width
+    height: parent.height
 
     QtObject {
         id: settings

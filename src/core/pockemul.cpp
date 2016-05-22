@@ -132,7 +132,7 @@ public:
                 // check if keyAt
                 int  x = GET_X_LPARAM(msg->lParam);
                 int  y = GET_Y_LPARAM(msg->lParam);
-                qWarning()<<x<<y;
+//                qWarning()<<x<<y;
                 for (int i =0;i < listpPObject.count();i++) {
                     if (listpPObject[i]->pKEYB) {
                         if (listpPObject[i]->pKEYB->KeyClick(listpPObject[i]->mapFromGlobal(QPoint(x,y)))) {
@@ -153,6 +153,7 @@ int main(int argc, char *argv[])
 
 //    try {
 //        qWarning()<<"throw";
+//        throw 1;
 //    }
 //    catch (...) {
 //        qWarning()<<"CATCHED:";
@@ -401,6 +402,7 @@ int main(int argc, char *argv[])
     mainwindow->openGlFlag=true;
 #ifdef Q_OS_ANDROID
     mainwindow->showFullScreen();
+    mainwindow->menuBar()->hide();
 #else
     mainwindow->show();
 #endif
@@ -490,6 +492,8 @@ void Vibrate() {
 int ask(QWidget *parent, QString msg, int nbButton) {
     qWarning() << "Ask";
 #ifdef Q_OS_ANDROID
+//    mainwindow->showMaximized();
+
     jint res = QAndroidJniObject::callStaticMethod<jint>("org/qtproject/pockemul/PockemulActivity",
                                         "ShowMyModalDialog",
                                         "(Ljava/lang/String;I)I",
@@ -499,6 +503,7 @@ int ask(QWidget *parent, QString msg, int nbButton) {
         qWarning()<<res;
 
         Vibrate();
+//        mainwindow->showFullScreen();
 
         return res;
 #else
