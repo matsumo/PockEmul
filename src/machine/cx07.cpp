@@ -1,3 +1,5 @@
+//BUG: Manage Shift Key. It works with keyboard but not on screen
+
 #include <qglobal.h>
 #if QT_VERSION >= 0x050000
 // Qt5 code

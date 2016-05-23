@@ -68,7 +68,7 @@ PROJECT_MODULE += \
 
 contains(PROJECT_TYPE,ANDROID) {
 QT +=  androidextras multimedia
-DEFINES += NO_SOUND
+#DEFINES += NO_SOUND
 PROJECT_MODULE += \
     M_EMB_QRC \
     M_CLOUD \

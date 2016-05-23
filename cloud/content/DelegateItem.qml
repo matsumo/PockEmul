@@ -60,7 +60,7 @@ Item {
     Image {
         id: imageItem
         width: parent.width/3
-//        height: parent.height/3
+        height: width *3/4 //parent.height
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit
         source: main.getRes(model.image)

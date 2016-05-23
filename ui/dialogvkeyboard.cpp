@@ -40,7 +40,7 @@ DialogVKeyboard::~DialogVKeyboard()
 
 void DialogVKeyboard::configWait(QString cfg) {
     if (cfg=="e500") {
-        changeCharWait(5);
+        changeCharWait(20);
         changeCRWait(50);
     }
     else if (cfg=="fp200") {

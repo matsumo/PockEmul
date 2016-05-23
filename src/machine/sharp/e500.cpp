@@ -16,6 +16,7 @@
 
 //TODO: UART Emulation
 //TODO: Memory cards management
+//BUG: Shift key is working with keyboard but there are issues with Touch
 
 #define TEST_MEMORY_MAPPING 0
 /*
@@ -659,8 +660,8 @@ UINT8 Ce500::out(UINT8 address, UINT8 value, QString sender)
     return 0;
 }
 
-//#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 
 
 BYTE Ce500::getKey()
@@ -679,6 +680,7 @@ BYTE Ce500::getKey()
             if (KEY('A'))			data|=0x08;
             if (KEY(K_BASIC))		data|=0x10;
             if (KEY('Z'))			data|=0x20;
+            if (KEY(K_SHT))         data|=0x40;
             if (pKEYB->isShift)		data|=0x40;
             if (KEY(K_CTRL))		data|=0x80;			// UP ARROW
         }
@@ -774,7 +776,7 @@ BYTE Ce500::getKey()
         }
         if (ks&0x400) {
             if (KEY('P'))			data|=0x01;
-            if (KEY(K_SHT))         data|=0x02;
+            if (KEY(K_SHT2))         data|=0x02;
             if (KEY(K_F5))			data|=0x04;
             if (KEY(K_F4))			data|=0x08;
             if (KEY(K_F3))			data|=0x10;

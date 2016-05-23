@@ -393,41 +393,41 @@ Rectangle {
 
         }
 
-        NavigationDrawer {
-            id: leftPanel
-            enabled: false
+//        NavigationDrawer {
+//            id: leftPanel
+//            enabled: false
 
-            color: "red"
-            border.color: "black"
-            border.width: 5
+//            color: "red"
+//            border.color: "black"
+//            border.width: 5
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            position: Qt.LeftEdge
-            visualParent: parent
+//            anchors.top: parent.top
+//            anchors.bottom: parent.bottom
+//            position: Qt.LeftEdge
+//            visualParent: parent
 
-            Launchmenu {
-                id:menu2
-            }
-        }
+//            Launchmenu {
+//                id:menu2
+//            }
+//        }
 
-        NavigationDrawer {
-            id: rightPanel
-            enabled: false
+//        NavigationDrawer {
+//            id: rightPanel
+//            enabled: false
 
-            color: "red"
-            border.color: "black"
-            border.width: 5
+//            color: "red"
+//            border.color: "black"
+//            border.width: 5
 
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            position: Qt.RightEdge
-            visualParent: parent
+//            anchors.top: parent.top
+//            anchors.bottom: parent.bottom
+//            position: Qt.RightEdge
+//            visualParent: parent
 
-            Launchmenu {
-                id:menu3
-            }
-        }
+//            Launchmenu {
+//                id:menu3
+//            }
+//        }
 
         Launchmenu {
             id:menu
@@ -466,8 +466,8 @@ Rectangle {
                 BusyIndicator {
                     id: working
                     on: true
-                    width: 200
-                    height: 200
+                    width: Math.min(workingScreen.width,workingScreen.height) / 4
+                    height: Math.min(workingScreen.width,workingScreen.height) / 4
                 }
 
                 TextButton {
