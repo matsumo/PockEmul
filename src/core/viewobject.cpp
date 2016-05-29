@@ -299,6 +299,90 @@ void CViewObject::flip(Direction dir) {
 //    if (!ConList.isEmpty()) return;
     // Animate close
 
+    targetView = currentView;
+    switch (currentView) {
+    case FRONTview:
+        switch (dir) {
+        case TOPdir: targetView = TOPview; break;
+        case LEFTdir: targetView = LEFTview; break;
+        case RIGHTdir: targetView = RIGHTview; break;
+        case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
+        }
+        break;
+    case TOPview:
+        switch (dir) {
+        case TOPdir: targetView = BACKview; break;; //BACKviewREV; break;
+//        case LEFTdir: targetView = LEFTview; break;
+//        case RIGHTdir: targetView = RIGHTview; break;
+        case BOTTOMdir: targetView = FRONTview; break;
+        default: break;
+        }
+        break;
+    case LEFTview:
+        switch (dir) {
+//        case TOPdir: targetView = TOPview; break;
+        case LEFTdir: targetView = BACKview; break;
+        case RIGHTdir: targetView = FRONTview; break;
+//        case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
+        }
+        break;
+    case RIGHTview:
+        switch (dir) {
+//        case TOPdir: targetView = TOPview; break;
+        case LEFTdir: targetView = FRONTview; break;
+        case RIGHTdir: targetView = BACKview; break;
+//        case BOTTOMdir: targetView = BOTTOMview; break;
+        default: break;
+        }
+        break;
+    case BOTTOMview:
+        switch (dir) {
+        case TOPdir: targetView = FRONTview; break;
+//        case LEFTdir: targetView = LEFTview; break;
+//        case RIGHTdir: targetView = RIGHTview; break;
+        case BOTTOMdir: targetView = BACKview; break;
+        default: break;
+        }
+        break;
+    case BACKview:
+        switch (dir) {
+        case TOPdir: targetView = BOTTOMview; break;
+        case LEFTdir: targetView = RIGHTview; break;
+        case RIGHTdir: targetView = LEFTview; break;
+        case BOTTOMdir: targetView = TOPview; break;
+        default: break;
+        }
+        break;
+    case BACKviewREV:
+        switch (dir) {
+        case TOPdir: targetView = BOTTOMview; break;
+        case LEFTdir: targetView = LEFTview; break;
+        case RIGHTdir: targetView = RIGHTview; break;
+        case BOTTOMdir: targetView = TOPview; break;
+        default: break;
+        }
+        break;
+    }
+
+    if ( (targetView != currentView) && getViewImage(targetView) ) {
+        QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
+        delete AnimatedImage;
+        AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
+
+//        emit updatedPObject(this);
+//        changeGeometry(this->posx(),this->posy(),
+//                       _s.width()*mainwindow->zoom,_s.height()*mainwindow->zoom);
+//        Refresh_Display = true;
+
+    }
+    else return;
+
+
+
+
+
     PreFlip(dir,targetView);
     targetSize = viewRect(targetView);
     currentFlipDir = dir;
@@ -510,83 +594,6 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
 
     Direction dir = borderClick(event->pos());
 
-    targetView = currentView;
-    switch (currentView) {
-    case FRONTview:
-        switch (dir) {
-        case TOPdir: targetView = TOPview; break;
-        case LEFTdir: targetView = LEFTview; break;
-        case RIGHTdir: targetView = RIGHTview; break;
-        case BOTTOMdir: targetView = BOTTOMview; break;
-        default: break;
-        }
-        break;
-    case TOPview:
-        switch (dir) {
-        case TOPdir: targetView = BACKview; break;; //BACKviewREV; break;
-//        case LEFTdir: targetView = LEFTview; break;
-//        case RIGHTdir: targetView = RIGHTview; break;
-        case BOTTOMdir: targetView = FRONTview; break;
-        default: break;
-        }
-        break;
-    case LEFTview:
-        switch (dir) {
-//        case TOPdir: targetView = TOPview; break;
-        case LEFTdir: targetView = BACKview; break;
-        case RIGHTdir: targetView = FRONTview; break;
-//        case BOTTOMdir: targetView = BOTTOMview; break;
-        default: break;
-        }
-        break;
-    case RIGHTview:
-        switch (dir) {
-//        case TOPdir: targetView = TOPview; break;
-        case LEFTdir: targetView = FRONTview; break;
-        case RIGHTdir: targetView = BACKview; break;
-//        case BOTTOMdir: targetView = BOTTOMview; break;
-        default: break;
-        }
-        break;
-    case BOTTOMview:
-        switch (dir) {
-        case TOPdir: targetView = FRONTview; break;
-//        case LEFTdir: targetView = LEFTview; break;
-//        case RIGHTdir: targetView = RIGHTview; break;
-        case BOTTOMdir: targetView = BACKview; break;
-        default: break;
-        }
-        break;
-    case BACKview:
-        switch (dir) {
-        case TOPdir: targetView = BOTTOMview; break;
-        case LEFTdir: targetView = RIGHTview; break;
-        case RIGHTdir: targetView = LEFTview; break;
-        case BOTTOMdir: targetView = TOPview; break;
-        default: break;
-        }
-        break;
-    case BACKviewREV:
-        switch (dir) {
-        case TOPdir: targetView = BOTTOMview; break;
-        case LEFTdir: targetView = LEFTview; break;
-        case RIGHTdir: targetView = RIGHTview; break;
-        case BOTTOMdir: targetView = TOPview; break;
-        default: break;
-        }
-        break;
-    }
-
-    if ( (targetView != currentView) && getViewImage(targetView) ) {
-        QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
-        delete AnimatedImage;
-        AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
-
-//        emit updatedPObject(this);
-//        changeGeometry(this->posx(),this->posy(),
-//                       _s.width()*mainwindow->zoom,_s.height()*mainwindow->zoom);
-//        Refresh_Display = true;
         flip(dir);
-    }
 
 }

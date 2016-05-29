@@ -42,6 +42,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
+    QObject::connect(cloud.object, SIGNAL(sendDisableKeyboard(QString)), this, SLOT(disableKeyboard(QString)));
+    QObject::connect(cloud.object, SIGNAL(sendEnableKeyboard(QString)), this, SLOT(enableKeyboard(QString)));
     QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int,int)), this, SLOT(click(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int,int)), this, SLOT(unclick(QString,int,int,int)));
     QObject::connect(cloud.object, SIGNAL(sendDblClick(QString,int,int)), this, SLOT(dblclick(QString,int,int)));
@@ -155,6 +157,15 @@ void CrenderView::minimize(QString Id)
     pc->minimize(pc->RectWithLinked().center().toPoint());
 }
 
+void CrenderView::disableKeyboard(QString Id) {
+    CPObject *pc = ((CPObject*)Id.toLongLong());
+    pc->pKEYB->enabled = false;
+}
+void CrenderView::enableKeyboard(QString Id) {
+    CPObject *pc = ((CPObject*)Id.toLongLong());
+    pc->pKEYB->enabled = true;
+}
+
 void CrenderView::contextMenu(QString Id, int x, int y)
 {
 //    qWarning()<<"contextMenu"<<x<<y;
@@ -232,6 +243,13 @@ bool CrenderView::keyAt(QString Id, int x, int y)
     if (pc->pKEYB) return pc->pKEYB->KeyClick(pts);
 
     return false;
+}
+
+void CrenderView::flip(QString Id, int dir)
+{
+    CPObject *pc = ((CPObject*)Id.toLongLong());
+    Direction _d = static_cast<Direction>(dir);
+    pc->flip(_d);
 }
 
 double CrenderView::getZoom()

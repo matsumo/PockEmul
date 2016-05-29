@@ -52,6 +52,8 @@ Rectangle {
     signal sendKeyPressed(string id,int key, int mod,int scancode)
     signal sendKeyReleased(string id,int key, int mod,int scancode)
     signal sendContextMenu(string id,int x,int y)
+    signal sendDisableKeyboard(string id)
+    signal sendEnableKeyboard(string id)
     signal sendClick(string pocketid,int touchid,int x,int y)
     signal sendUnClick(string pocketid,int touchid,int x,int y)
     signal sendDblClick(string id,int x,int y)
@@ -125,7 +127,8 @@ Rectangle {
                 }
                 onDoubleClicked: {
                     for (var i=0; i<repeater.count;i++) {
-                        repeater.itemAt(i).touchEnabled = !repeater.itemAt(i).touchEnabled;
+                        repeater.itemAt(i).touchEnabled = true;
+                        sendEnableKeyboard(renderArea.xmlThumbModel.get(i).idpocket);
                     }
                 }
                 onPositionChanged: {
@@ -190,27 +193,28 @@ Rectangle {
                     antialiasing: true
                 }
 
-                //            PinchArea {
-                //                property real previousScale: 1
-                //                enabled: false
-                //                anchors.fill: parent
-                //                pinch.target: photoFrame
-                //                pinch.minimumRotation: -360
-                //                pinch.maximumRotation: 360
-                //                pinch.minimumScale: 0.1
-                //                pinch.maximumScale: 10
-                //                onPinchStarted: previousScale=1;
-                //                onPinchUpdated: {
-                //                    console.warn("pinch");
-                //                    setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
-                //                    previousScale=pinch.scale;
-                ////                    photoFrame.rotation = pinch.rotation
-                //                }
-                //            }
+                PinchArea {
+                    property real previousScale: 1
+                    enabled: false //!parent.touchEnabled
+                    anchors.fill: parent
+                    pinch.target: photoFrame
+                    pinch.minimumRotation: -360
+                    pinch.maximumRotation: 360
+                    pinch.minimumScale: 0.1
+                    pinch.maximumScale: 10
+//                    onPinchStarted: previousScale=1;
+//                    onPinchUpdated: {
+//                        console.warn("pinch local");
+//                        setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
+//                        previousScale=pinch.scale;
+//                    }
+//                    onRotationChanged:  photoFrame.rotation = pinch.rotation
+                }
 
                 MultiPointTouchArea {
                     property bool isdrag: false;
                     property point previousPosition: Qt.point(1, 1);
+                    property point previousScenePosition: Qt.point(1, 1);
 
                     id: pocketTouchArea
                     enabled: parent.touchEnabled
@@ -226,6 +230,8 @@ Rectangle {
                         if ((touchPoints.length===1) && !main.keyAt(idpocket,touchPoints[0].x,touchPoints[0].y)) {
                             isdrag=true;
                             previousPosition = Qt.point(touchPoints[0].x, touchPoints[0].y);
+                            previousScenePosition = Qt.point(touchPoints[0].sceneX, touchPoints[0].sceneY);
+                            console.log("previous:",previousPosition.x,previousPosition.y);
                             if(timer.running) {
 //                                console.log("context")
                                 isdrag=false;
@@ -261,6 +267,38 @@ Rectangle {
                         }
                     }
                     onReleased: {
+                        if ( isdrag && (touchPoints.length === 1)) {
+                            console.warn("SWIPE Release");
+                            if(timer.running) {
+                                var deltax = -(touchPoints[0].sceneX - previousScenePosition.x);
+                                var deltay = -(touchPoints[0].sceneY - previousScenePosition.y);
+                                console.log("YES:",idpocket,touchPoints[0].sceneX,touchPoints[0].sceneY,deltax,deltay);
+
+                                if (Math.abs(deltax) > 40 || Math.abs(deltay) > 40) {
+                                    if (deltax > 30 && Math.abs(deltay) < 30) {
+                                        // swipe right
+                                        console.log("Swipe Right");
+                                        main.flip(idpocket,2);
+                                    } else if (deltax < -30 && Math.abs(deltay) < 30) {
+                                        // swipe left
+                                        console.log("swipeLeft");
+                                        main.flip(idpocket,1);
+                                    } else if (Math.abs(deltax) < 30 && deltay > 30) {
+                                        // swipe down
+                                        console.log("Swipe Down")
+                                        main.flip(idpocket,3);
+                                    } else if (Math.abs(deltax) < 30 && deltay < 30) {
+                                        // swipe up
+                                        console.log("swipeUp");
+                                        main.flip(idpocket,0);
+                                    }
+                                }
+                                //                                timer.stop()
+                            }
+//                            else
+//                                timer.restart()
+
+                        }
                         isdrag = false;
 
                         //                    console.warn("touchPoints count:",touchPoints.length);
@@ -282,6 +320,13 @@ Rectangle {
                         }
                     }
                     onTouchUpdated: {
+                        if ( (touchPoints.length === 0)) {
+//                            console.warn("SWIPE updated");
+                        }
+
+                        if (touchPoints.length !== 1) {
+                            isdrag = false;
+                        }
                         // Check for move if only one touchpoint
                         if (isdrag && (touchPoints.length===1)) {
                             var x = touchPoints[0].x;
@@ -289,7 +334,7 @@ Rectangle {
                             var dx = x - previousPosition.x;
                             var dy = y - previousPosition.y;
 //                            previousPosition = Qt.point(touchPoints[0].x, touchPoints[0].y);
-                            console.warn("Multitouch updated:", touchPoints[0].pointId, "at", x,",",y,"d=",dx, ",", dy)
+//                            console.warn("Multitouch updated:", touchPoints[0].pointId, "at", x,",",y,"d=",dx, ",", dy)
                             sendMovePocket(idpocket,photoFrame.x+dx,photoFrame.y+dy);
                         }
                     }
@@ -498,7 +543,6 @@ Rectangle {
         if (option==="Zoom In") {
             // zoom
             maximize(idpocket);
-
         }
         else if (option==="Zoom Out") {
             // zoom
@@ -510,8 +554,8 @@ Rectangle {
         else if (option==="Pinch") {
             var ind = getIndex(idpocket);
 //            console.log("pinch:",idpocket,ind);
+            sendDisableKeyboard(idpocket);
             repeater.itemAt(ind).touchEnabled = !repeater.itemAt(ind).touchEnabled;
-
         }
 
     }

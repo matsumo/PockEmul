@@ -53,6 +53,7 @@ Ckeyb::Ckeyb(CPObject *parent,QString map,BYTE *scan) //: CPObject(parent)						
 {
     pPC = (CpcXXXX *)parent;
     Parent	= parent;
+    enabled = true;
     for(int i=0;i<MAX_KO;i++) pc1350KeyStatus[i]=0;
     for(int j=0;j<200;j++) keym[j]=0;
     access		= 0;							//ko port access?(0:none, 1:access)
@@ -72,6 +73,8 @@ Ckeyb::~Ckeyb() {
 
 int Ckeyb::KeyClick(QPoint pts)
 {
+    if (!enabled) return 0;
+
 //    qWarning()<<"keyclick:"<<pts;
     // calculate all distance betwwen pts and keys centers
     // Keep the nearest

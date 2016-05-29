@@ -24,6 +24,7 @@ public:
     Vibrator vibrator;
 
     Q_INVOKABLE bool keyAt(QString Id, int x, int y);
+    Q_INVOKABLE void flip(QString Id, int dir);
     Q_INVOKABLE double getZoom();
     Q_INVOKABLE QString getReleaseNotes(QString _fn);
     Q_INVOKABLE void test();
@@ -61,6 +62,8 @@ public slots:
     void rotPObject(CViewObject *pObject,int angle);
 
     void LoadPocket(QString id);
+    Q_INVOKABLE void disableKeyboard(QString Id);
+    Q_INVOKABLE void enableKeyboard(QString Id);
 private:
      QMap<int,QPoint> mapTouch;
 

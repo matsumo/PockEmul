@@ -370,6 +370,8 @@ public:
     bool    isCtrl;
 
 
+    bool enabled;
+
 	KEYBMAPParser *handler;
 		
     Ckeyb(CPObject *parent = 0,QString map = "",BYTE *scan=0);
