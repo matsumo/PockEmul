@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>hx20</model>
 <Keyboard>
+    <KEY description="On/Off" height="90" left="50" masterscancode="0x00" modifier="" scancode="0xb2" top="542" view="RIGHT" width="55"/>
     <KEY description="PRINTER ON" height="20" left="66" masterscancode="0x00" modifier="" scancode="0xc3" top="294" view="FRONT" width="30"/>
     <KEY description="PRINTER OFF" height="20" left="19" masterscancode="0x00" modifier="" scancode="0xc4" top="294" view="FRONT" width="30"/>
     <KEY description="Paper Feed" height="20" left="161" masterscancode="0x00" modifier="" scancode="0xc1" top="294" view="FRONT" width="55"/>
@@ -12,10 +13,12 @@
     <KEY description="F3" height="30" left="376" masterscancode="0x00" modifier="" scancode="0xf8" top="355" view="FRONT" width="50"/>
     <KEY description="F4" height="30" left="441" masterscancode="0x00" modifier="" scancode="0xf9" top="355" view="FRONT" width="50"/>
     <KEY description="F5" height="30" left="506" masterscancode="0x00" modifier="" scancode="0xfa" top="355" view="FRONT" width="50"/>
-    <KEY description="Down Arrow" height="56" left="0" masterscancode="0x00" modifier="" scancode="0x04" top="0" view="FRONT" width="58"/>
+    <KEY description="Shift Left" height="56" left="50" masterscancode="0x00" modifier="" scancode="0x11" top="610" view="FRONT" width="85"/>
+    <KEY description="Shift Right" height="56" left="810" masterscancode="0x00" modifier="" scancode="0x11" top="610" view="FRONT" width="85"/>
+    <KEY description="Tab" height="56" left="30" masterscancode="0x00" modifier="" scancode="0x0f" top="480" view="FRONT" width="56"/>
     <KEY description="Left Arrow" height="55" left="828" masterscancode="0x00" modifier="" scancode="0x06" top="479" view="FRONT" width="58"/>
     <KEY description="Rigth Arrow" height="55" left="914" masterscancode="0x00" modifier="" scancode="0x07" top="478" view="FRONT" width="58"/>
-    <KEY description="Up Arrow" height="56" left="0" masterscancode="0x00" modifier="" scancode="0x05" top="0" view="FRONT" width="58"/>
+    <KEY description="Ctrl" height="56" left="44" masterscancode="0x00" modifier="" scancode="0xd5" top="546" view="FRONT" width="58"/>
     <KEY description="-" height="58" left="719" masterscancode="0x00" modifier="" scancode="0x2d" top="421" view="FRONT" width="58"/>
     <KEY description="^" height="58" left="0" masterscancode="0x00" modifier="" scancode="0x5e" top="0" view="FRONT" width="58"/>
     <KEY description="@" height="58" left="752" masterscancode="0x00" modifier="" scancode="0x40" top="486" view="FRONT" width="58"/>

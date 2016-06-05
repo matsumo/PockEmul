@@ -74,7 +74,7 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
 
     BackGroundFname	= P_RES(":/hx20/hx20.png");
 
-//    RightFname = P_RES(":/hx20/hx20Right.png");
+    RightFname = P_RES(":/hx20/hx20Right.png");
 //    LeftFname = P_RES(":/hx20/hx20Left.png");
 //    TopFname = P_RES(":/hx20/hx20Top.png");
 //    BackFname = P_RES(":/hx20/hx20Back.png");
@@ -1033,26 +1033,42 @@ bool Chx20::UpdateFinalImage(void) {
 
     QPainter painter;
 
-    painter.begin(FinalImage);
+    if ((currentView == RIGHTview) ) {
+        QPainter painter;
+        painter.begin(RightImage);
+        // POWER SWITCH
+        painter.drawImage(73*internalImageRatio,558*internalImageRatio,
+                          RightImageBackup.copy(73*internalImageRatio,558*internalImageRatio,
+                                                30*internalImageRatio,46*internalImageRatio).mirrored(false,!off));
+        painter.end();
+    }
 
-    float ratio = ( (float) pM160->paperWidget->width() ) / ( pM160->paperWidget->bufferImage->width() - pM160->paperWidget->getOffset().x() );
 
-    QRect source = QRect( QPoint(pM160->paperWidget->getOffset().x() ,
-                                 pM160->paperWidget->getOffset().y()  - pM160->paperWidget->height() / ratio ) ,
-                          QPoint(pM160->paperWidget->bufferImage->width(),
-                                 pM160->paperWidget->getOffset().y() /*+10*/)
+    if ((currentView == FRONTview) ) {
+        painter.begin(FinalImage);
+
+
+        float ratio = ( (float) pM160->paperWidget->width() ) / ( pM160->paperWidget->bufferImage->width() - pM160->paperWidget->getOffset().x() );
+
+        QRect source = QRect( QPoint(pM160->paperWidget->getOffset().x() ,
+                                     pM160->paperWidget->getOffset().y()  - pM160->paperWidget->height() / ratio ) ,
+                              QPoint(pM160->paperWidget->bufferImage->width(),
+                                     pM160->paperWidget->getOffset().y() /*+10*/)
+                              );
+        //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
+        int _x = pM160->PaperPos().x() * internalImageRatio;
+        int _y = pM160->PaperPos().y() * internalImageRatio;
+        painter.drawImage(_x , _y,
+                          pM160->paperWidget->bufferImage->copy(source).scaled(pM160->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                           );
-//    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    int _x = pM160->PaperPos().x() * internalImageRatio;
-    int _y = pM160->PaperPos().y() * internalImageRatio;
-    painter.drawImage(_x , _y,
-                      pM160->paperWidget->bufferImage->copy(source).scaled(pM160->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
-                      );
 
-    painter.end();
-
+        painter.end();
+    }
+    emit updatedPObject(this);
     return true;
 }
+
+
 void Chx20::contextMenuEvent(QContextMenuEvent *e)
 {
     if (pM160->PaperPos().contains(e->pos())) {

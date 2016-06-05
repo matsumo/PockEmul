@@ -28,6 +28,8 @@ public:
 
     QString FrontFname,TopFname,LeftFname,RightFname,BottomFname,BackFname,BackGroundFname;
     QImage *FrontImage,*TopImage,*LeftImage,*RightImage,*BottomImage,*BackImage;
+    QImage RightImageBackup,LeftImageBackup,TopImageBackup,BottomImageBackup,BackImageBackup;
+
     QImage* FinalImage;
     float internalImageRatio;
     QImage* BackgroundImageBackup;

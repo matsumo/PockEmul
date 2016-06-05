@@ -244,8 +244,6 @@ bool Cz1::run() {
                 }
             }
         }
-
-
     }
 
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();

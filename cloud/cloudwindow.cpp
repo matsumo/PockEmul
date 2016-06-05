@@ -49,6 +49,7 @@ extern void m_addShortcut(QString name,QString param);
 extern bool syncEnabled;
 extern bool soundEnabled;
 extern bool hiRes;
+extern bool flipOnEdge;
 extern QList<CPObject *> listpPObject;
 
 CloudWindow::CloudWindow(QWidget *parent,QString src)
@@ -340,6 +341,7 @@ void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
     if (objectName == "vibDelay") {
         vibDelay = (inputValue.toInt());
     }
+    if (objectName == "flipOnEdge") flipOnEdge =  (inputValue=="on") ? true : false;
 }
 
 QByteArray Cloud::generateKey(QString username,QString password) {

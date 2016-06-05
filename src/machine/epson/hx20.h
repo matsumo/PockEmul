@@ -78,6 +78,7 @@ private:
     void run(CCPU *_cpu);
     bool printerSW;
     bool lcdBit;
+
 };
 
 

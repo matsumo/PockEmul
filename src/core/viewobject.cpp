@@ -13,6 +13,7 @@
 
 extern MainWindowPockemul* mainwindow;
 extern bool hiRes;
+extern bool flipOnEdge;
 
 CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow->centralwidget)
 {
@@ -170,11 +171,26 @@ bool CViewObject::InitDisplay(void)
     internalImageRatio = (float) BackgroundImageBackup->size().width() / getDX();
 //    qWarning()<<"internalImageRatio="<<internalImageRatio<<BackgroundImageBackup->size().width()<<getDX();
 
-    if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname);
-    if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname);
-    if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname);
-    if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname);
-    if (!BackFname.isEmpty()) BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
+    if (!TopFname.isEmpty()) {
+        TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname);
+        TopImageBackup = TopImage->copy();
+    }
+    if (!LeftFname.isEmpty()) {
+        LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname);
+        LeftImageBackup = LeftImage->copy();
+    }
+    if (!RightFname.isEmpty()) {
+        RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname);
+        RightImageBackup = RightImage->copy();
+    }
+    if (!BottomFname.isEmpty()) {
+        BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname);
+        BottomImageBackup = BottomImage->copy();
+    }
+    if (!BackFname.isEmpty()) {
+        BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
+        BackImageBackup = BackImage->copy();
+    }
 
     return(1);
 }
@@ -587,13 +603,15 @@ void CViewObject::mousePressEvent(QMouseEvent *event) {
     // width ?
 //qWarning()<<"CViewObject::mousePressEvent"<<event;
 
-    QPoint pts(event->x() , event->y());
-    if (pKEYB && pKEYB->KeyClick(pts)) {
-        return;
-    }
+    if (flipOnEdge) {
+        QPoint pts(event->x() , event->y());
+        if (pKEYB && pKEYB->KeyClick(pts)) {
+            return;
+        }
 
-    Direction dir = borderClick(event->pos());
+        Direction dir = borderClick(event->pos());
 
         flip(dir);
+    }
 
 }

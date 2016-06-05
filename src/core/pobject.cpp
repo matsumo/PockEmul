@@ -1,5 +1,6 @@
 // TODO: move MemSave and MemLoad ti CSlot object
-
+// TODO: call slotPower with a signal Emit
+// TODO: maximize bug if zoom > 100%
 
 #include <qglobal.h>
 #if QT_VERSION >= 0x050000
@@ -800,10 +801,11 @@ void CPObject::maximize(QPoint pos) {
 
     // Compute global rect
     QRectF rs = RectWithLinked();
-    float rw= mainwindow->centralwidget->rect().width()/rs.width();
-    float rh= mainwindow->centralwidget->rect().height()/rs.height();
+    float rw= mainwindow->centralwidget->rect().width()/(rs.width());
+    float rh= mainwindow->centralwidget->rect().height()/(rs.height());
     float r = MIN(rw,rh);
-    if (r>1) {
+    if (r>1)
+    {
         mainwindow->doZoom(pos,r/mainwindow->zoom);
         //move to upper left
         // Fetch all_object and move them
@@ -919,7 +921,9 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         case K_POW_ON :qWarning()<<"GOGO"; Vibrate();TurnON(); break;
         case K_POW_OFF: Vibrate();
             Power = false;
+            mainwindow->saveAll = YES;
             TurnOFF();
+            mainwindow->saveAll = ASK;
             return;
             break;
         case K_CLOSE: Vibrate();TurnCLOSE();break;
@@ -1954,9 +1958,11 @@ void CPObject::slotPower()
 //        pKEYB->LastKey = K_POW_ON;
 		TurnON();
     }
-	else
+    else {
+        mainwindow->saveAll = YES;
         TurnOFF();
-
+        mainwindow->saveAll = ASK;
+    }
     pKEYB->LastKey = 0;
 }
 

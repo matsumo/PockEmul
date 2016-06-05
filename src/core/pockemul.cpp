@@ -63,6 +63,7 @@ LaunchButtonWidget* exitButton;
 bool soundEnabled=true;
 bool hiRes=true;
 bool syncEnabled=true;
+bool flipOnEdge=true;
 
 
 

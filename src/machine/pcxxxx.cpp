@@ -29,7 +29,7 @@
 
 extern bool	UpdateDisplayRunning;
 extern int ask(QWidget *parent,QString msg,int nbButton);
-
+extern QString workDir;
 
 CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
 {								//[constructor]
@@ -170,6 +170,7 @@ bool CpcXXXX::InitDisplay(void)
 
 void CpcXXXX::TurnOFF(void)
 {
+    mainwindow->saveAll = YES;
 #ifdef EMSCRIPTEN
     mainwindow->saveAll=NO;
 #endif
@@ -999,10 +1000,13 @@ bool CpcXXXX::SaveExtra(QFile *file)	{ Q_UNUSED(file) return true; }
 
 void CpcXXXX::LoadSession(void)
 {
+    QDir dir;
+    dir.setPath(workDir+"/sessions/");
+
 	QString fileName = QFileDialog::getOpenFileName(
 										mainwindow,
 										tr("Choose a file"),
-										".",
+                                        dir.path(),
 										tr("PockEmul sessions (*.pkm)"));
 
     if (fileName.isEmpty()) return;
@@ -1027,10 +1031,13 @@ void CpcXXXX::LoadSession(void)
 
 void CpcXXXX::SaveSession(void)
 {
-QString fileName = QFileDialog::getSaveFileName(
+    QDir dir;
+    dir.setPath(workDir+"/sessions/");
+
+    QString fileName = QFileDialog::getSaveFileName(
                     mainwindow,
                     tr("Choose a file"),
-                    ".",
+                    dir.path(),
                     tr("PockEmul sessions (*.pkm)"));
     QFile file(fileName);
 
@@ -1065,7 +1072,7 @@ bool CpcXXXX::Chk_Adr_R(UINT32 *d,UINT32 *data) { Q_UNUSED(d) Q_UNUSED(data) ret
 bool CpcXXXX::Initial_Session_Load()
 {
     qWarning()<<"Initial_Session_Load start";
-	QFile file(Initial_Session_Fname);
+    QFile file(workDir+"sessions/"+Initial_Session_Fname);
 
 	if (file.open(QIODevice::ReadOnly))
 	{
@@ -1083,7 +1090,9 @@ bool CpcXXXX::Initial_Session_Load()
 
 bool CpcXXXX::Initial_Session_Save()
 {
-	QFile file(Initial_Session_Fname);
+    qWarning()<<"Save session to :"<<workDir+"sessions/"+Initial_Session_Fname;
+    QFile file(workDir+"sessions/"+Initial_Session_Fname);
+
 	if (file.open(QIODevice::WriteOnly))
 	{
         QString s;
