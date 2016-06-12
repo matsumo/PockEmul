@@ -4,6 +4,7 @@
     <KEY description="On/Off" height="90" left="50" masterscancode="0x00" modifier="" scancode="0xb2" top="542" view="RIGHT" width="55"/>
     <KEY description="PRINTER ON" height="20" left="66" masterscancode="0x00" modifier="" scancode="0xc3" top="294" view="FRONT" width="30"/>
     <KEY description="PRINTER OFF" height="20" left="19" masterscancode="0x00" modifier="" scancode="0xc4" top="294" view="FRONT" width="30"/>
+    <KEY description="PRINTER Switch" height="15" left="33" masterscancode="0x00" modifier="" scancode="0xc0" top="295" view="FRONT" width="52"/>
     <KEY description="Paper Feed" height="20" left="161" masterscancode="0x00" modifier="" scancode="0xc1" top="294" view="FRONT" width="55"/>
     <KEY description="BASIC" height="58" left="0" masterscancode="0x00" modifier="" scancode="0xe2" top="0" view="FRONT" width="58"/>
     <KEY description="MENU" height="26" left="99" masterscancode="0x00" modifier="" scancode="0xda" top="354" view="FRONT" width="50"/>

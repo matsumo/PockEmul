@@ -170,6 +170,8 @@ bool Chx20::init(void)				// initialize
        pM160->hide();
    }
 
+   pKEYB->getKey(K_PRINT).enabled = false;
+
     Reset();
     return true;
 }
@@ -681,8 +683,10 @@ UINT16 Chx20::getKey()
         if (KEY(K_INS))			data|=0x10;
         if (KEY(K_MENU))		data|=0x20; // MENU
 
-        if (KEY(K_PRINT_ON)) 	{ printerSW = true; qWarning()<<"PrtSw:"<<printerSW;}
-        if (KEY(K_PRINT_OFF)) 	{ printerSW = false;qWarning()<<"PrtSw:"<<printerSW;}
+        if (KEY(K_PRINT_ON)) 	{ printerSW = true; qWarning()<<"PrtSw:"<<printerSW;
+            Refresh_Display = true;}
+        if (KEY(K_PRINT_OFF)) 	{ printerSW = false;qWarning()<<"PrtSw:"<<printerSW;
+            Refresh_Display = true;}
         if (printerSW) {
             data|=0x200;
         }
@@ -1062,8 +1066,21 @@ bool Chx20::UpdateFinalImage(void) {
                           pM160->paperWidget->bufferImage->copy(source).scaled(pM160->PaperPos().size()*internalImageRatio,Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                           );
 
+
+        QRect _r = pKEYB->getKey(K_PRINT).Rect;
+        qWarning()<<"rect"<<_r;
+        painter.drawImage(_r.x()*internalImageRatio,
+                          _r.y()*internalImageRatio,
+                          BackgroundImageBackup->copy(_r.x()*internalImageRatio,
+                                                      _r.y()*internalImageRatio,
+                                                      _r.width()*internalImageRatio,
+                                                      _r.height()*internalImageRatio).mirrored(printerSW,false));
+
+
         painter.end();
     }
+
+
     emit updatedPObject(this);
     return true;
 }
