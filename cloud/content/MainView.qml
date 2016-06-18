@@ -5,7 +5,7 @@ import QtGraphicalEffects 1.0
 Item {
     id: mainView
 
-
+    property bool exitOnBack: true
     property int iconsize: 48 * cloud.getValueFor("hiResRatio","1");
 
     // Set this to blur the mainView when showing something on top of it
@@ -233,7 +233,7 @@ Item {
 
                     if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
                     {
-                        showroom.visible = false;
+                        if (exitOnBack) showroom.visible = false;
                     }
                     else {
                         pobjectsmodel.brandsearch.pop();

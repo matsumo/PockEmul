@@ -101,7 +101,12 @@
    <example brand="TEXAS INSTRUMENTS" idpocket="LE-547" filename="./" name="Leisure Library module" image=":/ti59/modules/LE-547.png" connectortype="TI-59_Module" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="MU-550" filename="./" name="Math Utilities module" image=":/ti59/modules/MU-550.png" connectortype="TI-59_Module" conngender="male"/>
    <example brand="TEXAS INSTRUMENTS" idpocket="SSSM" filename="./" name="Custom module" image=":/ti59/modules/SSSM.png" connectortype="TI-59_Module" conngender="male"/>
-
+   <example brand="BRAND" idpocket="#BRAND#HEWLETT-PACKARD" filename="./" name="Hewlett Packard" image=":/logos/hp.png"/>
+   <example brand="BRAND" idpocket="#BRAND#CASIO" filename="./" name="Casio" image=":/logos/casio.png"/>
+   <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/logos/sharp.png"/>
+   <example brand="BRAND" idpocket="#BRAND#TANDY" filename="./" name="Radio Shack" image=":/logos/radioshack.png"/>
+   <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/logos/ti2.png"/>
+   <example brand="BRAND" idpocket="#BRAND#OTHER" filename="./" name="Others" image=":/logos/others.png"/>
 </demos>
  </demolauncher>
 

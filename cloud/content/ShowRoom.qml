@@ -3,6 +3,11 @@ import QtQuick 2.0
 Item {
     id: showRoom
 
+    property alias exitOnBack: mainView.exitOnBack
+    property alias source: pobjectsmodel.source
+
+    signal launched;
+
     width: parent.width
     height: parent.height
 

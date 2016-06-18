@@ -707,6 +707,8 @@ void Chx20::send_to_main(quint8 val)
     pMasterCPU->recv_buffer.append(val);
 }
 
+
+// Not used anymare since the slave cpu is fuilly emulated
 void Chx20::send_to_slave(quint8 val)
 {
     cmd_buf.append(val);

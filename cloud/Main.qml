@@ -31,6 +31,9 @@ Rectangle {
             user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
             console.log("logged:"+auth_token);
         }
+
+        showroomPocket.launched.connect(cloudHide);
+        showroomExt.launched.connect(cloudHide);
     }
 
     onWidthChanged: {
@@ -40,6 +43,26 @@ Rectangle {
 
     VisualItemModel {
         id: tabsModel
+        Tab {name: "New"
+            ShowRoom {
+                id: showroomPocket
+//                z: 9999
+                visible: true
+                exitOnBack: false
+                source: "qrc:/pockemul/config.xml"
+                anchors.fill: parent
+            }
+        }
+        Tab {name: "New Ext."
+            ShowRoom {
+                id: showroomExt
+//                z: 9999
+                visible: true
+                exitOnBack: false
+                source: "qrc:/pockemul/configExt.xml"
+                anchors.fill: parent
+            }
+        }
         Tab {name: "Cloud"
             icon: "pics/public-cloud-white.png"
 
@@ -99,6 +122,7 @@ Rectangle {
                 anchors.fill: parent
             }
         }
+
         Tab {name: "About"
             icon: "pics/white-about-256.png"
 
@@ -108,8 +132,7 @@ Rectangle {
             }
         }
 
-        Tab {
-            name: ""
+        Tab {name: ""
             icon: "pics/back-white.png"
             MouseArea {
                 anchors.fill: parent
@@ -131,7 +154,7 @@ Rectangle {
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
-        quitIndex: 4
+        quitIndex: 6
         onClose: rootCloud.close();
 
     }

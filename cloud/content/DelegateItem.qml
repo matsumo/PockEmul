@@ -39,7 +39,8 @@ Item {
             }
             else {
                 sendLoadPocket(model.idpocket);
-                showroom.visible =false;
+                showroom.visible=false;
+                launched();
             }
 //            if (isSelected) {
 //                detailsView.image = model.image
