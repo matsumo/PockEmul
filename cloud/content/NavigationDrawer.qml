@@ -1,83 +1,50 @@
-/*
-    Copyright (c) 2014 Cutehacks A/S
-    Permission is hereby granted, free of charge, to any person obtaining
-    a copy of this software and associated documentation files (the
-    "Software"), to deal in the Software without restriction, including
-    without limitation the rights to use, copy, modify, merge, publish,
-    distribute, sublicense, and/or sell copies of the Software, and to
-    permit persons to whom the Software is furnished to do so, subject to
-    the following conditions:
-    The above copyright notice and this permission notice shall be
-    included in all copies or substantial portions of the Software.
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-    EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
-    IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-    CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
-    TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-    SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-    About:
-    This is a Qt Quick implementation of the Android Navigation drawer
-    Questions, suggestions or requests can be directed to jens@cutehacks.com
-    www.cutehacks.com
-*/
+// from http://www.evileg.ru/baza-znanij/qt-qml-android/navigation-drawer-v-qt-qml-android.html
 
 
-import QtQuick 2.2
+import QtQuick 2.5
+import QtQuick.Window 2.0
 
 Rectangle {
     id: panel
 
-    property bool open: false                     // The open or close state of the drawer
-    property int position: Qt.LeftEdge            // Which side of the screen the drawer is on, can be Qt.LeftEdge or Qt.RightEdge
-    property Item visualParent: parent            // The item the drawer should cover, by default the parent of the Drawer
+    // Пересчёт независимых от плотности пикселей в физические пиксели устройства
+    readonly property int dpi: Screen.pixelDensity * 25.4
+    function dp(x){ return (dpi < 120) ? x : x*(dpi/160); }
 
-    // The fraction showing how open the drawer is
-    readonly property real panelProgress:  (panel.x - _minimumX) / (_maximumX - _minimumX)
+    // Свойства Navigation Drawer
+    property bool open: false           // Состояние Navigation Drawer - Открыт/Закрыт
+    property int position: Qt.LeftEdge  // Положение Navigation Drawer - Слева/Справа
 
+    // Функции открытия и закрытия Navigation Drawer
     function show() { open = true; }
     function hide() { open = false; }
+    function toggle() { open = open ? false : true; }
 
-    function toggle() {
-        if (open) open = false;
-        else open = true;
-    }
-
-    // Internal
-
-    default property alias data: contentItem.data
-    readonly property real expandedFraction: 0.78  // How big fraction of the screen realesatate that is covered by an open menu
-    readonly property real _scaleFactor: _rootItem.width / 320 // Note, this should really be application global
+    // Внутренние свойства Navigation Drawer
+    readonly property bool _rightEdge: position === Qt.RightEdge
+    readonly property int _closeX: _rightEdge ? _rootItem.width : - panel.width
+    readonly property int _openX: _rightEdge ? _rootItem.width - width : 0
+    readonly property int _minimumX: _rightEdge ? _rootItem.width - panel.width : -panel.width
+    readonly property int _maximumX: _rightEdge ? _rootItem.width : 0
     readonly property int _pullThreshold: panel.width/2
     readonly property int _slideDuration: 260
-    readonly property int _collapsedX: _rightEdge ? _rootItem.width :  - panel.width
-    readonly property int _expandedWidth: expandedFraction * _rootItem.width
-    readonly property int _expandedX: _rightEdge ? _rootItem.width - width : 0
-    readonly property bool _rightEdge: position === Qt.RightEdge
-    readonly property int _minimumX:  _rightEdge ?  _rootItem.width - panel.width : 0
-    readonly property int _maximumX: _rightEdge ? _rootItem.width : panel.width
-    readonly property int _openMarginSize: 20 * _scaleFactor
+    readonly property int _openMarginSize: dp(20)
 
     property real _velocity: 0
     property real _oldMouseX: -1
 
-    function _findRootItem() {
-        var p = panel;
-        while (p.parent != null)
-            p = p.parent;
-        return p;
-    }
+    property Item _rootItem: parent
 
-    property Item _rootItem: _findRootItem()
-    height: parent.height
     on_RightEdgeChanged: _setupAnchors()
     onOpenChanged: completeSlideDirection()
-    width: _expandedWidth
-    x: _collapsedX
-    z: parent.z+1
 
-    function _setupAnchors() {     // Note that we can't reliably apply anchors using bindings
-        _rootItem = _findRootItem();
+    width: (Screen.width > Screen.height) ? dp(320) : Screen.width - dp(56)
+    height: parent.height
+    x: _closeX
+    z: 10
+
+    function _setupAnchors() {
+        _rootItem = parent;
 
         shadow.anchors.right = undefined;
         shadow.anchors.left = undefined;
@@ -94,21 +61,21 @@ Rectangle {
         }
 
         slideAnimation.enabled = false;
-        panel.x =_rightEdge ? _rootItem.width :  - panel.width;
+        panel.x = _rightEdge ? _rootItem.width :  - panel.width;
         slideAnimation.enabled = true;
     }
 
     function completeSlideDirection() {
         if (open) {
-            panel.x = _expandedX;
+            panel.x = _openX;
         } else {
-            panel.x = _collapsedX;
+            panel.x = _closeX;
             Qt.inputMethod.hide();
         }
     }
 
     function handleRelease() {
-        var velocityThreshold = 5 * _scaleFactor;
+        var velocityThreshold = dp(5)
         if ((_rightEdge && _velocity > velocityThreshold) ||
                 (!_rightEdge && _velocity < -velocityThreshold)) {
             panel.open = false;
@@ -117,13 +84,13 @@ Rectangle {
                    (!_rightEdge && _velocity > velocityThreshold)) {
             panel.open = true;
             completeSlideDirection()
-        } else if ((_rightEdge && panel.x < _expandedX + _pullThreshold) ||
-                   (!_rightEdge && panel.x > _expandedX - _pullThreshold) ) {
+        } else if ((_rightEdge && panel.x < _openX + _pullThreshold) ||
+                   (!_rightEdge && panel.x > _openX - _pullThreshold) ) {
             panel.open = true;
-            panel.x = _expandedX;
+            panel.x = _openX;
         } else {
             panel.open = false;
-            panel.x = _collapsedX;
+            panel.x = _closeX;
         }
     }
 
@@ -134,7 +101,7 @@ Rectangle {
     }
 
     onPositionChanged: {
-        if (! (position === Qt.RightEdge || position === Qt.LeftEdge ) ) {
+        if (!(position === Qt.RightEdge || position === Qt.LeftEdge )) {
             console.warn("SlidePanel: Unsupported position.")
         }
     }
@@ -148,18 +115,9 @@ Rectangle {
         }
     }
 
-    Connections {
-        target: _rootItem
-        onWidthChanged: {
-            slideAnimation.enabled = false
-            panel.completeSlideDirection()
-            slideAnimation.enabled = true
-        }
-    }
-
     NumberAnimation on x {
         id: holdAnimation
-        to: _collapsedX + (_openMarginSize * (_rightEdge ? -1 : 1))
+        to: _closeX + (_openMarginSize * (_rightEdge ? -1 : 1))
         running : false
         easing.type: Easing.OutCubic
         duration: 200
@@ -169,9 +127,9 @@ Rectangle {
         id: mouse
         parent: _rootItem
 
-        y: visualParent.y
+        y: _rootItem.y
         width: open ? _rootItem.width : _openMarginSize
-        height: visualParent.height
+        height: _rootItem.height
         onPressed:  if (!open) holdAnimation.restart();
         onClicked: handleClick(mouse)
         drag.target: panel
@@ -180,42 +138,41 @@ Rectangle {
         drag.axis: Qt.Horizontal
         drag.onActiveChanged: if (active) holdAnimation.stop()
         onReleased: handleRelease()
-        z: open ? parent.z + 1 : parent.z
+        z: open ? 1 : 0
         onMouseXChanged: {
             _velocity = (mouse.x - _oldMouseX);
             _oldMouseX = mouse.x;
         }
     }
 
-    Rectangle {
-        id: backgroundDimmer
-        parent: visualParent
-        anchors.fill: parent
-        opacity: 0.5 * Math.min(1, Math.abs(panel.x - _collapsedX) / _rootItem.width/2)
-        color: "black"
+    Connections {
+        target: _rootItem
+        onWidthChanged: {
+            slideAnimation.enabled = false
+            panel.completeSlideDirection()
+            slideAnimation.enabled = true
+        }
     }
 
-    Item {
-        id: contentItem
+    Rectangle {
+        id: backgroundBlackout
         parent: _rootItem
-        width: panel.width
-        height: panel.height
-        x: panel.x
-        y: panel.y
-        z: open ? parent.z +5 : parent.Z +0
-        clip: true
+        anchors.fill: parent
+        opacity: 0.5 * Math.min(1, Math.abs(panel.x - _closeX) / _rootItem.width/2)
+        color: "black"
     }
 
     Item {
         id: shadow
         anchors.left: panel.right
-        anchors.leftMargin: _rightEdge ? 0 : 4 * _scaleFactor
+        anchors.leftMargin: _rightEdge ? 0 : dp(10)
         height: parent.height
+
         Rectangle {
-            height: 4 * _scaleFactor
+            height: dp(10)
             width: panel.height
             rotation: 90
-            opacity: Math.min(1, Math.abs(panel.x - _collapsedX)/_openMarginSize)
+            opacity: Math.min(1, Math.abs(panel.x - _closeX)/ _openMarginSize)
             transformOrigin: Item.TopLeft
             gradient: Gradient{
                 GradientStop { position: _rightEdge ? 1 : 0 ; color: "#00000000"}

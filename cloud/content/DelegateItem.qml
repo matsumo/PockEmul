@@ -39,7 +39,7 @@ Item {
             }
             else {
                 sendLoadPocket(model.idpocket);
-                showroom.visible=false;
+                showRoom.visible=false;
                 launched();
             }
 //            if (isSelected) {

@@ -73,10 +73,14 @@ Rectangle {
     signal sendBook();
     signal sendExit();
 
+    readonly property int dpi: Screen.pixelDensity * 25.4
+    function dp(x){ return (dpi < 120) ? x : x*(dpi/160); }
+
      property alias xmlThumbModel: xmlThumbModel
 
     visible: true
     width: 1024; height: 600
+//    anchors.fill: parent
     color: "black" //transparent"
 
     property int highestZ: 0
@@ -438,52 +442,85 @@ Rectangle {
 
         }
 
-//        NavigationDrawer {
-//            id: leftPanel
-//            enabled: false
+        NavigationDrawer {
+            id: nav
+            enabled: true
+            parent: renderArea
 
-//            color: "red"
-//            border.color: "black"
-//            border.width: 5
+            color: "red"
+            border.color: "black"
+            border.width: 5
 
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            position: Qt.LeftEdge
-//            visualParent: parent
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            position: Qt.LeftEdge
 
-//            Launchmenu {
-//                id:menu2
-//            }
-//        }
-
-//        NavigationDrawer {
-//            id: rightPanel
-//            enabled: false
-
-//            color: "red"
-//            border.color: "black"
-//            border.width: 5
-
-//            anchors.top: parent.top
-//            anchors.bottom: parent.bottom
-//            position: Qt.RightEdge
-//            visualParent: parent
-
-//            Launchmenu {
-//                id:menu3
-//            }
-//        }
-
-        Launchmenu {
-            id:menu
-            z: mainpinch.z+1
+            Launchmenu {
+                id:menu2
+            }
         }
 
+        Rectangle {
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            anchors.left: parent.left
+            z: parent.z
+
+            width: dp(48)
+            color: "black"
+
+            Rectangle {
+                anchors.top: parent.top
+                anchors.topMargin: dp(16)
+                anchors.left: parent.left
+                anchors.leftMargin: dp(14)
+                width: dp(20)
+                height: dp(2)
+            }
+
+            Rectangle {
+                anchors.top: parent.top
+                anchors.topMargin: dp(23)
+                anchors.left: parent.left
+                anchors.leftMargin: dp(14)
+                width: dp(20)
+                height: dp(2)
+            }
+
+            Rectangle {
+                anchors.top: parent.top
+                anchors.topMargin: dp(30)
+                anchors.left: parent.left
+                anchors.leftMargin: dp(14)
+                width: dp(20)
+                height: dp(2)
+            }
+
+            MouseArea {
+                anchors.fill: parent
+
+                onClicked: {
+                    nav.toggle()
+                }
+            }
+        }
+
+
+
+
         ShowRoom {
-            id: showroom
+            id: showroomNew
             z: 9999
             visible: false
             anchors.fill: parent
+            source: "qrc:/pockemul/config.xml"
+        }
+        ShowRoom {
+            id: showroomExt
+            z: 9999
+            visible: false
+            anchors.fill: parent
+            source: "qrc:/pockemul/configExt.xml"
         }
 
     }

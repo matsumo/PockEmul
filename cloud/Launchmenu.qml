@@ -3,97 +3,92 @@ import QtQuick 2.0
 Rectangle {
     id:menu
     x:5
+    anchors.fill: parent
+    color: "black"
 //    z: -9999999
     property int iconsize: 48 * cloud.getValueFor("hiResRatio","1")
 
-    Image {
-        id:newPocket
-        source: "qrc:/core/pocket.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        y:12
-        MouseArea {
-            anchors.fill: parent
-//            onClicked: sendNewPocket()
-            onClicked: showroom.visible = true;
+    ListModel {
+        id: menuModel
+        property var actions : {
+            "New Pocket": function(){ showroomNew.visible = true; },
+            "New Extension": function(){ showroomExt.visible = true; },
+            "DEV": function(){ sendDev(); },
+            "Save": function(){ sendSave(); },
+            "Load": function(){ sendLoad(); },
+            "Cloud": function(){ nav.hide(); cloudShow(); },
+            "Bookcase": function(){  sendBook()(); },
+            "Exit": function(){ sendExit(); }
+        }
+        ListElement {
+            libelle: "New Pocket"
+            imageName: "qrc:/core/pocket.png"
+        }
+        ListElement {
+            libelle: "New Extension"
+            imageName: "qrc:/core/ext.png"
+        }
+        ListElement {
+            libelle: "IDE"
+            imageName: "qrc:/core/dev.png"
+        }
+        ListElement {
+            libelle: "Save"
+            imageName: "qrc:/core/save.png"
+        }
+        ListElement {
+            libelle: "Load"
+            imageName: "qrc:/core/load.png"
+        }
+        ListElement {
+            libelle: "Cloud"
+            imageName: "qrc:/core/cloud-white.png"
+        }
+        ListElement {
+            libelle: "Bookcase"
+            imageName: "qrc:/core/bookcase.png"
+        }
+        ListElement {
+            libelle: "Exit"
+            imageName: "qrc:/core/exit.png"
         }
     }
-    Image {
-        id:newExt
-        source: "qrc:/core/ext.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: newPocket.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendNewExt()
+
+    Component {
+        id: menuDelegate
+        Item {
+            width: menu.width
+            height: image.height
+            Row {
+                spacing: 10
+                Image {
+                    id: image
+                    source: imageName
+                    width:menu.iconsize
+                    height:menu.iconsize
+                }
+                Text {
+                    text: libelle
+                    color: "white"
+                    font { family: "Helvetica"; pointSize: 14; bold: false }
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: {
+                    nav.hide();
+                    menuModel.actions[libelle]();
+                }
+            }
         }
     }
-    Image {
-        id:dev
-        source: "qrc:/core/dev.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: newExt.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendDev()
-        }
-    }
-    Image {
-        id:save
-        source: "qrc:/core/save.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: dev.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendSave()
-        }
-    }
-    Image {
-        id:load
-        source: "qrc:/core/load.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: save.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendLoad()
-        }
-    }
-    Image {
-        id: cloudImag
-        source: "qrc:/core/cloud-white.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: load.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: cloudShow();
-        }
-    }
-    Image {
-        id:book
-        source: "qrc:/core/bookcase.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: cloudImag.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendBook()
-        }
-    }
-    Image {
-        id:exit
-        source: "qrc:/core/exit.png"
-        width:parent.iconsize
-        height:parent.iconsize
-        anchors.top: book.bottom
-        MouseArea {
-            anchors.fill: parent
-            onClicked: sendExit()
-        }
+
+
+    ListView {
+        anchors.fill: parent
+        model: menuModel
+        delegate: menuDelegate
+
     }
 }
 

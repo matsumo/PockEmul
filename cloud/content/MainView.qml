@@ -43,7 +43,9 @@ Item {
             // Normal-mapped cover shared among delegates
             ShaderEffectSource {
                 id: coverNmapSource
-                sourceItem: Image { source: "images/cover_nmap.png" }
+                sourceItem: Image {
+                    source: ""//images/cover_nmap.png"
+                }
                 hideSource: true
                 visible: false
             }
@@ -94,7 +96,7 @@ Item {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 32
             anchors.horizontalCenter: parent.horizontalCenter
-            source: "images/qt_logo.png"
+            source: "" //images/qt_logo.png"
             opacity: listView.atYEnd
             Behavior on opacity {
                 NumberAnimation { duration: 500; easing.type: Easing.InOutQuad }
@@ -114,7 +116,8 @@ Item {
             interpolate: true
             loops: Animation.Infinite
             visible: settings.showLighting || settings.showShootingStarParticles
-            running: !detailsView.isShown && !infoView.isShown && (settings.showLighting || settings.showShootingStarParticles)
+//            running: !detailsView.isShown && !infoView.isShown && (settings.showLighting || settings.showShootingStarParticles)
+            running: !detailsView.isShown && (settings.showLighting || settings.showShootingStarParticles)
         }
 
         PathAnimation {
@@ -123,7 +126,8 @@ Item {
             orientation: PathAnimation.RightFirst
             anchorPoint: Qt.point(lightImage.width/2, lightImage.height/2)
             running: true
-            paused: detailsView.isShown || infoView.isShown || (!settings.showLighting && !settings.showShootingStarParticles)
+//            paused: detailsView.isShown || infoView.isShown || (!settings.showLighting && !settings.showShootingStarParticles)
+            paused: detailsView.isShown || (!settings.showLighting && !settings.showShootingStarParticles)
             loops: Animation.Infinite
             path: Path {
                 id: lightAnimPath
@@ -225,7 +229,7 @@ Item {
             source: "qrc:/core/back-white.png"
             width: mainView.iconsize
             height: mainView.iconsize
-            opacity: backgroundItem.opacity + 0.4
+//            opacity: backgroundItem.opacity + 0.4
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -20
@@ -233,7 +237,7 @@ Item {
 
                     if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
                     {
-                        if (exitOnBack) showroom.visible = false;
+                        if (exitOnBack) showRoom.visible = false;
                     }
                     else {
                         pobjectsmodel.brandsearch.pop();
