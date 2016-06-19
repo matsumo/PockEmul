@@ -94,23 +94,7 @@ Rectangle {
 
         Tab {name: "Action"
             icon: "pics/action-white.png"
-
             Actions {}
-
-//            NavigationDrawer {
-//                id: drawer
-
-//                anchors.top: parent.top //newprivateSearchItem.bottom
-//                anchors.bottom: parent.bottom
-//                position: Qt.LeftEdge
-//                visualParent: parent
-
-//                Rectangle {
-//                    anchors.fill: parent
-//                    Text{text:"toto"}
-//                }
-
-//            }
         }
 
         Tab {name: "Settings"
@@ -120,15 +104,6 @@ Rectangle {
 
             Settings {
                 anchors.fill: parent
-            }
-        }
-
-        Tab {name: "About"
-            icon: "pics/white-about-256.png"
-
-            About {
-                anchors.fill: parent
-                fileName: ":/pockemul/release_notes.html"
             }
         }
 
@@ -154,7 +129,7 @@ Rectangle {
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
-        quitIndex: 4
+        quitIndex: 3
         onClose: rootCloud.close();
 
     }

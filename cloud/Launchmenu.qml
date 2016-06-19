@@ -13,11 +13,13 @@ Rectangle {
         property var actions : {
             "New Pocket": function(){ showroomNew.visible = true; },
             "New Extension": function(){ showroomExt.visible = true; },
+            "Settings": function(){ settings.visible = true; },
             "DEV": function(){ sendDev(); },
             "Save": function(){ sendSave(); },
             "Load": function(){ sendLoad(); },
             "Cloud": function(){ nav.hide(); cloudShow(); },
             "Bookcase": function(){  sendBook()(); },
+            "About PockEmul": function(){ about.visible = true; },
             "Exit": function(){ sendExit(); }
         }
         ListElement {
@@ -27,6 +29,10 @@ Rectangle {
         ListElement {
             libelle: "New Extension"
             imageName: "qrc:/core/ext.png"
+        }
+        ListElement {
+            libelle: "Settings"
+            imageName: "qrc:/TabbedQuickApp/pics/settings-white.png"
         }
         ListElement {
             libelle: "IDE"
@@ -47,6 +53,10 @@ Rectangle {
         ListElement {
             libelle: "Bookcase"
             imageName: "qrc:/core/bookcase.png"
+        }
+        ListElement {
+            libelle: "About PockEmul"
+            imageName: "qrc:/TabbedQuickApp/pics/white-about-256.png"
         }
         ListElement {
             libelle: "Exit"
@@ -74,6 +84,7 @@ Rectangle {
                 }
             }
             MouseArea {
+                enabled: nav.open
                 anchors.fill: parent
                 onClicked: {
                     nav.hide();

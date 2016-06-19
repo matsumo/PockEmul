@@ -42,6 +42,7 @@ import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
 import "content"
+import "TabbedQuickApp"
 import "."
 
 
@@ -521,6 +522,53 @@ Rectangle {
             visible: false
             anchors.fill: parent
             source: "qrc:/pockemul/configExt.xml"
+        }
+
+        VisualItemModel {
+            id: settingsModel
+            Tab {
+                name: "Settings"
+                icon: "pics/back-white.png"
+
+                color: "red"
+
+                Settings {
+                    anchors.fill: parent
+                }
+            }
+        }
+
+        TabbedUI {
+            id: settings
+            visible: false
+            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+            tabIndex: 0
+            tabsModel: settingsModel
+            quitIndex: 0
+            onClose: visible=false;
+        }
+
+        VisualItemModel {
+            id: aboutModel
+            Tab {
+                name: "About"
+                icon: "pics/back-white.png"
+                About {
+                    anchors.fill: parent
+                    fileName: ":/pockemul/release_notes.html"
+                }
+            }
+        }
+
+        TabbedUI {
+            id: about
+            visible: false
+            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+            tabIndex: 0
+            tabsModel: aboutModel
+            quitIndex: 0
+            onClose: visible=false;
+
         }
 
     }
