@@ -22,6 +22,7 @@ Flickable {
         }
         onLinkActivated: Qt.openUrlExternally(link)
     }
+
 }
 
 

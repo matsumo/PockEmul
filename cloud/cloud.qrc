@@ -83,5 +83,7 @@
         <file>content/images/button.png</file>
         <file>content/images/info3.png</file>
         <file>content/images/panel_bg.png</file>
+        <file>content/Download.qml</file>
+        <file>content/PdfViewer.qml</file>
     </qresource>
 </RCC>

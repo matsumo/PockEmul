@@ -159,7 +159,7 @@ Rectangle {
         parent: _rootItem
         anchors.fill: parent
         opacity: 0.5 * Math.min(1, Math.abs(panel.x - _closeX) / _rootItem.width/2)
-        color: "black"
+        color: "red"
     }
 
     Item {
@@ -167,6 +167,7 @@ Rectangle {
         anchors.left: panel.right
         anchors.leftMargin: _rightEdge ? 0 : dp(10)
         height: parent.height
+        z: parent.z
 
         Rectangle {
             height: dp(10)
@@ -174,9 +175,10 @@ Rectangle {
             rotation: 90
             opacity: Math.min(1, Math.abs(panel.x - _closeX)/ _openMarginSize)
             transformOrigin: Item.TopLeft
+//            color: "red"
             gradient: Gradient{
-                GradientStop { position: _rightEdge ? 1 : 0 ; color: "#00000000"}
-                GradientStop { position: _rightEdge ? 0 : 1 ; color: "#2c000000"}
+                GradientStop { position: _rightEdge ? 1 : 0 ; color: "#00ffffff"}
+                GradientStop { position: _rightEdge ? 0 : 1 ; color: "#2cffffff"}
             }
         }
     }

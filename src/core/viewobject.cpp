@@ -474,7 +474,7 @@ void CViewObject::paintEvent(QPaintEvent *event)
 
         painter.begin(this);
         painter.setCompositionMode(QPainter::CompositionMode_Source);
-        painter.drawImage(0,0,AnimatedImage->scaled(this->size()));
+        painter.drawImage(0,0,AnimatedImage->scaled(this->size(),Qt::IgnoreAspectRatio,Qt::FastTransformation));
         painter.end();
     }
 }
@@ -512,7 +512,7 @@ void CViewObject::renderAnimation()
                 matrix2.rotate(-m_angle, Qt::XAxis);
                 painter.setTransform(matrix2,true);
                 painter.drawImage(QPoint(-w/2,0),
-                                  getViewImage(animationView1)->scaled(QSize(w,h*(90 -m_angle)/90),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
+                                  getViewImage(animationView1)->scaled(QSize(w,h*(90 -m_angle)/90),Qt::IgnoreAspectRatio,Qt::FastTransformation)
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
@@ -524,7 +524,7 @@ void CViewObject::renderAnimation()
                 matrix2.rotate(90-m_angle, Qt::XAxis);
                 painter.setTransform(matrix2,true);
                 painter.drawImage(QPoint(-w/2,-ht * m_angle/90),
-                                  getViewImage(animationView2)->scaled(QSize(w,ht * m_angle/90),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
+                                  getViewImage(animationView2)->scaled(QSize(w,ht * m_angle/90),Qt::IgnoreAspectRatio,Qt::FastTransformation)
                                   );
                 break;
             case LEFTdir:
@@ -534,7 +534,7 @@ void CViewObject::renderAnimation()
                 matrix2.rotate(-m_angle, Qt::YAxis);
                 painter.setTransform(matrix2,true);
                 painter.drawImage(QPoint(0,-h/2),
-                                  getViewImage(animationView1)->scaled(QSize(w*(90 -m_angle)/90,h),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
+                                  getViewImage(animationView1)->scaled(QSize(w*(90 -m_angle)/90,h),Qt::IgnoreAspectRatio,Qt::FastTransformation)
                                   );
                 painter.end();
                 painter.begin(AnimatedImage);
@@ -546,7 +546,7 @@ void CViewObject::renderAnimation()
                 matrix2.rotate(90-m_angle, Qt::YAxis);
                 painter.setTransform(matrix2,true);
                 painter.drawImage(QPoint(-wt * m_angle/90,-h/2),
-                                  getViewImage(animationView2)->scaled(QSize(wt * m_angle/90,ht),Qt::IgnoreAspectRatio,Qt::SmoothTransformation)
+                                  getViewImage(animationView2)->scaled(QSize(wt * m_angle/90,ht),Qt::IgnoreAspectRatio,Qt::FastTransformation)
                                   );
                 break;
             default: break;

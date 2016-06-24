@@ -28,6 +28,7 @@ QT += \
 #    declarative \
     sensors \
 
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets quickwidgets
 
 PROJECT_TYPE = \
@@ -1592,6 +1593,7 @@ OTHER_FILES *= \
     cloud/content/DelegateItem.qml \
     cloud/content/PObjectsModel.qml \
     cloud/content/NavigationDrawer.qml \
+    cloud/content/Download.qml \
 
 
 }
@@ -1599,7 +1601,7 @@ OTHER_FILES *= \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-RESOURCES += \
+RESOURCES +=
 
 DISTFILES += \
     package.pri \

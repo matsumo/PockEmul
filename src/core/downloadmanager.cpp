@@ -43,10 +43,12 @@
 #include <stdio.h>
 #include "downloadmanager.h"
 #include "mainwindowpockemul.h"
+#include "renderView.h"
 
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent,QString msg,int nbButton);
+extern CrenderView *view;
 
  DownloadManager::DownloadManager()
  {
@@ -59,6 +61,11 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
      progress->setVisible(false);
      progress->setFormat("%v / %m");
      connect(abortPB,SIGNAL(clicked()),this,SLOT(abort()));
+     
+     if (view) {
+         // opengl qml
+         QObject::connect(view->cloud.object, SIGNAL(sendDownloadAbort()), this, SLOT(abort()));
+     }
      resize();
  }
 
@@ -83,6 +90,9 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 
      progress->show();
      abortPB->show();
+     QMetaObject::invokeMethod(view->cloud.object, "setDownloadVisible",
+                               Q_ARG(QVariant, true)
+                               );
  }
 
  QString DownloadManager::saveFileName(const QUrl &url)
@@ -156,6 +166,9 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
      if (currentDownloads.isEmpty()) {
          progress->hide();
          abortPB->hide();
+         QMetaObject::invokeMethod(view->cloud.object, "setDownloadVisible",
+                                   Q_ARG(QVariant, false)
+                                   );
      }
      reply->deleteLater();
 
@@ -182,6 +195,11 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 
      progress->update();
 
+     QMetaObject::invokeMethod(view->cloud.object, "setDownloadProgress",
+                               Q_ARG(QVariant, 0),
+                               Q_ARG(QVariant, Total),
+                               Q_ARG(QVariant, Received)
+                               );
  }
 
 

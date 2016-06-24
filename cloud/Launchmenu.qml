@@ -5,7 +5,8 @@ Rectangle {
     x:5
     anchors.fill: parent
     color: "black"
-//    z: -9999999
+//    border.color: "white"
+//    border.width: 1
     property int iconsize: 48 * cloud.getValueFor("hiResRatio","1")
 
     ListModel {
@@ -31,10 +32,6 @@ Rectangle {
             imageName: "qrc:/core/ext.png"
         }
         ListElement {
-            libelle: "Settings"
-            imageName: "qrc:/TabbedQuickApp/pics/settings-white.png"
-        }
-        ListElement {
             libelle: "IDE"
             imageName: "qrc:/core/dev.png"
         }
@@ -53,6 +50,10 @@ Rectangle {
         ListElement {
             libelle: "Bookcase"
             imageName: "qrc:/core/bookcase.png"
+        }
+        ListElement {
+            libelle: "Settings"
+            imageName: "qrc:/TabbedQuickApp/pics/settings-white.png"
         }
         ListElement {
             libelle: "About PockEmul"

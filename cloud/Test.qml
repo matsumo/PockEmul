@@ -443,31 +443,15 @@ Rectangle {
 
         }
 
-        NavigationDrawer {
-            id: nav
-            enabled: true
-            parent: renderArea
-
-            color: "red"
-            border.color: "black"
-            border.width: 5
-
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            position: Qt.LeftEdge
-
-            Launchmenu {
-                id:menu2
-            }
-        }
-
         Rectangle {
+            id: menuSquare
             anchors.top: parent.top
-            anchors.bottom: parent.bottom
+//            anchors.bottom: parent.bottom
             anchors.left: parent.left
             z: parent.z
 
             width: dp(48)
+            height: dp(48)
             color: "black"
 
             Rectangle {
@@ -506,70 +490,86 @@ Rectangle {
             }
         }
 
+        NavigationDrawer {
+            id: nav
+            enabled: true
+            parent: renderArea
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
 
+            color: "red"
+            border.color: "white"
+            border.width: 5
 
+            position: Qt.LeftEdge
 
-        ShowRoom {
-            id: showroomNew
-            z: 9999
-            visible: false
-            anchors.fill: parent
-            source: "qrc:/pockemul/config.xml"
-        }
-        ShowRoom {
-            id: showroomExt
-            z: 9999
-            visible: false
-            anchors.fill: parent
-            source: "qrc:/pockemul/configExt.xml"
-        }
-
-        VisualItemModel {
-            id: settingsModel
-            Tab {
-                name: "Settings"
-                icon: "pics/back-white.png"
-
-                color: "red"
-
-                Settings {
-                    anchors.fill: parent
-                }
+            Launchmenu {
+                id:menu2
             }
         }
+    }
 
-        TabbedUI {
-            id: settings
-            visible: false
-            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-            tabIndex: 0
-            tabsModel: settingsModel
-            quitIndex: 0
-            onClose: visible=false;
-        }
+    ShowRoom {
+        id: showroomNew
+        z: 9999
+        visible: false
+        anchors.fill: parent
+        source: "qrc:/pockemul/config.xml"
+    }
+    ShowRoom {
+        id: showroomExt
+        z: 9999
+        visible: false
+        anchors.fill: parent
+        source: "qrc:/pockemul/configExt.xml"
+    }
 
-        VisualItemModel {
-            id: aboutModel
-            Tab {
-                name: "About"
-                icon: "pics/back-white.png"
-                About {
-                    anchors.fill: parent
-                    fileName: ":/pockemul/release_notes.html"
-                }
+    VisualItemModel {
+        id: settingsModel
+        Tab {
+            name: "Settings"
+            icon: "pics/back-white.png"
+
+            color: "red"
+
+            Settings {
+                anchors.fill: parent
             }
         }
+    }
 
-        TabbedUI {
-            id: about
-            visible: false
-            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-            tabIndex: 0
-            tabsModel: aboutModel
-            quitIndex: 0
-            onClose: visible=false;
+    TabbedUI {
+        id: settings
+        visible: false
+        z: 9999
+        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+        tabIndex: 0
+        tabsModel: settingsModel
+        quitIndex: 0
+        onClose: visible=false;
+    }
 
+    VisualItemModel {
+        id: aboutModel
+        Tab {
+            name: "About"
+            icon: "pics/back-white.png"
+            About {
+                anchors.fill: parent
+                fileName: ":/pockemul/release_notes.html"
+            }
         }
+    }
+
+    TabbedUI {
+        id: about
+        visible: false
+        z: 9999
+        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+        tabIndex: 0
+        tabsModel: aboutModel
+        quitIndex: 0
+        onClose: visible=false;
 
     }
 
@@ -581,6 +581,15 @@ Rectangle {
 
     ContextMenu {
         id: contextMenu
+    }
+
+    Download {
+        id: download
+        visible : false
+        anchors.left: parent.left
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+
     }
 
     Rectangle {
@@ -690,6 +699,7 @@ Rectangle {
         renderArea.xmlThumbModel.remove(index);
     }
 
+
     function movePocket(_pocketId,_left,_top) {
 
         var index = getIndex(_pocketId);
@@ -770,5 +780,15 @@ Rectangle {
         return -1;
     }
 
+
+    function setDownloadProgress(min,max,val) {
+        download.minimumValue = min;
+        download.maximumValue = max;
+        download.value = val;
+    }
+
+    function setDownloadVisible(visible) {
+        download.visible = visible;
+    }
 
 }

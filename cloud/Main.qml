@@ -118,8 +118,9 @@ Rectangle {
 //        Tab {
 //            name: "Test"
 //            icon: "pics/white-about-256.png"
-//            Camera {
+//            PdfViewer {
 //                anchors.fill: parent
+//                url: "qrc:/pdfjs/web/viewer.html"
 //            }
 //        }
     }
