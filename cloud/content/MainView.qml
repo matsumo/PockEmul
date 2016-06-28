@@ -141,7 +141,7 @@ Item {
 
         ParticleSystem {
             anchors.fill: parent
-            paused: detailsView.isShown || infoView.isShown
+            paused: detailsView.isShown /*|| infoView.isShown*/
 
             // Shooting star particles
             ImageParticle {

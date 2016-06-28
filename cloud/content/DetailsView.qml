@@ -78,7 +78,7 @@ Item {
         anchors.bottomMargin: 0
 
         contentWidth: backgroundItem.width
-        contentHeight: ratingsItem.y + descriptionTextItem.height + 64
+        contentHeight: /*ratingsItem.y + */descriptionTextItem.height + 64
         flickableDirection: Flickable.VerticalFlick
         clip: true
 

@@ -84,8 +84,8 @@ void CAutoUpdater::downloadFinished(QNetworkReply *reply)
     } else {
 
         QString result(reply->readAll());
-//		MSG_ERROR(result)
-        if (result != POCKEMUL_VERSION){
+        qWarning()<<result;
+        if (result.replace(".","").toInt() > QString(POCKEMUL_VERSION).replace(".","").toInt()){
             QMessageBox::about(this, tr("New Release"),tr("A new release is available\nCheck Web Site : http://pockemul.free.fr"));
             close();
         }

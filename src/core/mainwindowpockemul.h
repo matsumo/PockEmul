@@ -112,6 +112,7 @@ public slots:
     void opensession(QString sessionFN=QString());
     void opensession(QXmlStreamReader *xml);
     void quitPockEmul();
+    void CheckUpdates();
 
 private slots:
 
@@ -122,7 +123,6 @@ private slots:
     void IDE();
     void CloudSlot();
     void Analogic();
-    void CheckUpdates();
     void Minimize_All();
     bool Close_All();
     void resetZoom();

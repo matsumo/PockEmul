@@ -12,16 +12,17 @@ Rectangle {
     ListModel {
         id: menuModel
         property var actions : {
-            "New Pocket": function(){ showroomNew.visible = true; },
-            "New Extension": function(){ showroomExt.visible = true; },
-            "Settings": function(){ settings.visible = true; },
-            "DEV": function(){ sendDev(); },
-            "Save": function(){ sendSave(); },
-            "Load": function(){ sendLoad(); },
-            "Cloud": function(){ nav.hide(); cloudShow(); },
-            "Bookcase": function(){  sendBook()(); },
-            "About PockEmul": function(){ about.visible = true; },
-            "Exit": function(){ sendExit(); }
+            "New Pocket":       function(){ showroomNew.visible = true; },
+            "New Extension":    function(){ showroomExt.visible = true; },
+            "Settings":         function(){ settings.visible = true; },
+            "Code Editor":      function(){ sendDev(); },
+            "Save":             function(){ sendSave(); },
+            "Load":             function(){ sendLoad(); },
+            "Cloud":            function(){ nav.hide(); cloudShow(); },
+            "Bookcase":         function(){ sendBook(); },
+            "About PockEmul":   function(){ about.visible = true; },
+            "Check for Updates":function(){ sendCheck(); },
+            "Exit":             function(){ sendExit(); }
         }
         ListElement {
             libelle: "New Pocket"
@@ -32,7 +33,7 @@ Rectangle {
             imageName: "qrc:/core/ext.png"
         }
         ListElement {
-            libelle: "IDE"
+            libelle: "Code Editor"
             imageName: "qrc:/core/dev.png"
         }
         ListElement {
@@ -54,10 +55,15 @@ Rectangle {
         ListElement {
             libelle: "Settings"
             imageName: "qrc:/TabbedQuickApp/pics/settings-white.png"
+            separatorBefore: true
         }
         ListElement {
             libelle: "About PockEmul"
             imageName: "qrc:/TabbedQuickApp/pics/white-about-256.png"
+        }
+        ListElement {
+            libelle: "Check for Updates"
+//            imageName: "qrc:/TabbedQuickApp/pics/white-about-256.png"
         }
         ListElement {
             libelle: "Exit"
@@ -69,21 +75,37 @@ Rectangle {
         id: menuDelegate
         Item {
             width: menu.width
-            height: image.height
-            Row {
-                spacing: 10
-                Image {
-                    id: image
-                    source: imageName
-                    width:menu.iconsize
-                    height:menu.iconsize
-                }
-                Text {
-                    text: libelle
+            height: image.height + (separatorBefore ? separator.height : 0)
+            Column {
+                spacing: 0
+                Rectangle {
+                    id: separator
+                    visible : separatorBefore
+                    height: 10
+                    width: menu.width*.9
+                    anchors.horizontalCenter: parent.horizontalCenter
                     color: "white"
-                    font { family: "Helvetica"; pointSize: 14; bold: false }
+                    border.color: "black"
+                    border.width: 4
+                }
+
+                Row {
+                    id: row
+                    spacing: 10
+                    Image {
+                        id: image
+                        source: imageName
+                        width:menu.iconsize
+                        height:menu.iconsize
+                    }
+                    Text {
+                        text: libelle
+                        color: "white"
+                        font { family: "Helvetica"; pointSize: 14; bold: false }
+                    }
                 }
             }
+
             MouseArea {
                 enabled: nav.open
                 anchors.fill: parent

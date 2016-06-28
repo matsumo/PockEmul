@@ -36,6 +36,7 @@ public slots:
     Q_INVOKABLE void loadSlot();
     Q_INVOKABLE void saveSlot();
     Q_INVOKABLE void bookcaseSlot();
+    Q_INVOKABLE void checkSlot();
 
     Q_INVOKABLE void warning(QString msg);
     Q_INVOKABLE void keypressed(QString Id, int k, int m, int scan);

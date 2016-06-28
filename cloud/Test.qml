@@ -72,6 +72,7 @@ Rectangle {
     signal sendSave();
     signal sendLoad();
     signal sendBook();
+    signal sendCheck();
     signal sendExit();
 
     readonly property int dpi: Screen.pixelDensity * 25.4

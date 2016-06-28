@@ -85,5 +85,6 @@
         <file>content/images/panel_bg.png</file>
         <file>content/Download.qml</file>
         <file>content/PdfViewer.qml</file>
+        <file>content/images/star.png</file>
     </qresource>
 </RCC>

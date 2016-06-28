@@ -483,7 +483,7 @@ void CViewObject::renderAnimation()
 {
     if (flipping)
     {
-        UpdateFinalImage();
+//        UpdateFinalImage();
 
         QPainter painter;
 
@@ -492,10 +492,12 @@ void CViewObject::renderAnimation()
 //        qWarning()<<"AnimatedImage"<<AnimatedImage;
         if (FinalImage)
         {
-            int w = viewRect(animationView1).width() * mainwindow->zoom;//this->width();
-            int h = viewRect(animationView1).height() * mainwindow->zoom;//this->height();
-            int wt = viewRect(animationView2).width() * mainwindow->zoom;
-            int ht = viewRect(animationView2).height()* mainwindow->zoom;
+            QSize _size1 = viewRect(animationView1);
+            QSize _size2 = viewRect(animationView2);
+            int w = _size1.width() * mainwindow->zoom;
+            int h = _size1.height() * mainwindow->zoom;
+            int wt = _size2.width() * mainwindow->zoom;
+            int ht = _size2.height()* mainwindow->zoom;
 //            qWarning()<<"angle:"<<m_angle;
             painter.begin(AnimatedImage);
             painter.setCompositionMode(QPainter::CompositionMode_SourceOver);
@@ -554,11 +556,11 @@ void CViewObject::renderAnimation()
 
             painter.end();
 //            qWarning()<<"animation - currentview="<<currentView;
-            if (this->size() != AnimatedImage->size())
+            if (this->size() != AnimatedImage->size()) {
                 changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());
-
+            }
             Refresh_Display = true;
-            update();
+//            update();
         }
     }
 }

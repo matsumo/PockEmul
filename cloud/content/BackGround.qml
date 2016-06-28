@@ -24,7 +24,7 @@ Rectangle {
     ParticleSystem {
         width: parent.width
         height: 220
-        paused: detailsView.isShown || infoView.isShown || !settings.showShootingStarParticles
+        paused: detailsView.isShown /*|| infoView.isShown*/ || !settings.showShootingStarParticles
         ImageParticle {
             source: "images/star.png"
             rotationVariation: 10

@@ -61,10 +61,10 @@
     <example brand="OTHER" idpocket="SANCO TPC-8300" filename="./" name="SANCO TPC-8300" image=":/tpc8300/tpc-8300.png"/>
     <example brand="OTHER" idpocket="HX-20" filename="./" name="EPSON HX-20" image=":/hx20/hx20.png"/>
    <example brand="OTHER" idpocket="Panasonic HHC RL-H1000" filename="./" name="Panasonic HHC RL-H1000" image=":/rlh1000/rlh1000.png"/>
-   <example brand="BRAND" idpocket="#BRAND#HEWLETT-PACKARD" filename="./" name="Hewlett Packard" image=":/logos/hp.png"/>
    <example brand="BRAND" idpocket="#BRAND#CASIO" filename="./" name="Casio" image=":/logos/casio.png"/>
-   <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/logos/sharp.png"/>
+   <example brand="BRAND" idpocket="#BRAND#HEWLETT-PACKARD" filename="./" name="Hewlett Packard" image=":/logos/hp.png"/>
    <example brand="BRAND" idpocket="#BRAND#TANDY" filename="./" name="Radio Shack" image=":/logos/radioshack.png"/>
+   <example brand="BRAND" idpocket="#BRAND#SHARP" filename="./" name="Sharp" image=":/logos/sharp.png"/>
    <example brand="BRAND" idpocket="#BRAND#TEXAS INSTRUMENTS" filename="./" name="Texas Instruments" image=":/logos/ti2.png"/>
    <example brand="BRAND" idpocket="#BRAND#OTHER" filename="./" name="Others" image=":/logos/others.png"/>
    <example brand="SHARP" idpocket="#BRAND#SHARP_PC12XX" filename="./" name="Sharp pc-12xx Series" image=":/logos/sharp_pc12xx.png"/>

@@ -20,5 +20,6 @@
         <file>logos/ti2.png</file>
         <file>logos/others.png</file>
         <file>pockemul/about.html</file>
+        <file>logos/panasonic.png</file>
     </qresource>
 </RCC>
