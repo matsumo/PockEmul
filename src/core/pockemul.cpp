@@ -46,7 +46,7 @@ int vibDelay;
 MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
 CrenderView* view;
-
+QSettings* settings;
 
 #include "watchpoint.h"
 CWatchPoint WatchPoint;
@@ -74,6 +74,7 @@ class CPObject;
 extern QList<CPObject *> listpPObject;
 
 void test();
+void buildMenu();
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -164,6 +165,10 @@ int main(int argc, char *argv[])
 
     //    qInstallMessageHandler(myMessageOutput);
 
+
+    launch1 = launch2 = dev = save = load = cloudButton = bookcase = exitButton = 0;
+
+
     QApplication *app = new QApplication(argc, argv);
 
 #ifdef Q_OS_WIN
@@ -190,7 +195,6 @@ int main(int argc, char *argv[])
     QZXing::registerQMLTypes();
 
 
-
 #ifdef Q_OS_MAC
     QDir tmpdir(QApplication::applicationDirPath());
     tmpdir.cdUp();
@@ -205,7 +209,6 @@ int main(int argc, char *argv[])
     }
 
     workDir = QDir::homePath()+"/pockemul/";
-    vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
 #ifdef Q_OS_ANDROID
 //    QFont f = app.font();
@@ -223,6 +226,10 @@ int main(int argc, char *argv[])
 //    QApplication::setStyle(s);//new QAndroidStyle());
 
 #endif
+
+    settings = new QSettings(workDir+"config.ini",QSettings::IniFormat);
+
+    vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
     QSplashScreen splash;
     splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")));//.scaled(mainwindow->geometry().size()));
@@ -275,6 +282,92 @@ int main(int argc, char *argv[])
 
     soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
     hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
+
+
+#ifdef EMSCRIPTEN
+    mainwindow->zoomSlider = new QSlider(mainwindow->centralwidget);
+    mainwindow->zoomSlider->setMinimum(10);
+    mainwindow->zoomSlider->setMaximum(300);
+    mainwindow->zoomSlider->setTickInterval(10);
+    mainwindow->zoomSlider->setValue(100);
+#endif
+
+
+
+    mainwindow->openGlFlag=true;
+#ifdef Q_OS_ANDROID
+    mainwindow->showFullScreen();
+    mainwindow->menuBar()->hide();
+#else
+    mainwindow->show();
+#endif
+
+    test();
+
+#ifdef Q_OS_ANDROID
+    qInstallMessageHandler(0);
+#else
+    qInstallMessageHandler(myMessageOutput);
+#endif
+
+    mainwindow->initCommandLine();
+
+
+qWarning()<<"okl";
+    view = 0;
+    if (mainwindow->openGlFlag) {
+        qWarning()<<"opengl";
+        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+        view = new CrenderView(mainwindow->centralwidget);
+        windowLayout->addWidget(view);
+        windowLayout->setMargin(0);
+    }
+    else {
+        qWarning()<<"no opengl";
+
+        buildMenu();
+        launch1->show();
+        launch2->show();
+        dev->show();
+        save->show();
+        load->show();
+        cloudButton->show();
+        bookcase->show();
+        exitButton->show();
+        qWarning()<<"end fullopengl";
+    }
+
+    if (!mainwindow->loadPML.isEmpty()) {
+        mainwindow->opensession(workDir+"sessions/"+mainwindow->loadPML);
+    }
+    if (!mainwindow->runPocket.isEmpty()) {
+        CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);
+//        pPC->slotDoubleClick(QPoint(0,0));
+  #ifdef Q_OS_ANDROID
+        pPC->maximize(pPC->RectWithLinked().center().toPoint());
+//        if (pPC->getDX()> pPC->getDY())
+//            pPC->maximizeWidth();
+//        else
+//            pPC->maximizeHeight();
+  #else
+        Q_UNUSED(pPC)
+  #endif
+    }
+
+    splash.close();
+
+#ifdef EMSCRIPTEN
+    app->exec();
+    return 0;
+#endif
+
+
+    return app->exec();
+
+}
+
+
+void buildMenu() {
 
     qWarning()<<QGuiApplication::primaryScreen()->physicalDotsPerInch();
 
@@ -388,77 +481,6 @@ int main(int argc, char *argv[])
 
     v_pos += v_inter;
     exitButton->setToolTip("Exit PockEmul.");
-
-
-#ifdef EMSCRIPTEN
-    mainwindow->zoomSlider = new QSlider(mainwindow->centralwidget);
-    mainwindow->zoomSlider->setMinimum(10);
-    mainwindow->zoomSlider->setMaximum(300);
-    mainwindow->zoomSlider->setTickInterval(10);
-    mainwindow->zoomSlider->setValue(100);
-#endif
-
-    splash.close();
-
-    mainwindow->openGlFlag=true;
-#ifdef Q_OS_ANDROID
-    mainwindow->showFullScreen();
-    mainwindow->menuBar()->hide();
-#else
-    mainwindow->show();
-#endif
-
-    test();
-
-    qInstallMessageHandler(myMessageOutput);
-    mainwindow->initCommandLine();
-
-qWarning()<<"okl";
-    view = 0;
-    if (mainwindow->openGlFlag) {
-        qWarning()<<"opengl";
-        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
-        view = new CrenderView(mainwindow->centralwidget);
-        windowLayout->addWidget(view);
-        windowLayout->setMargin(0);
-    }
-    else {
-        qWarning()<<"no opengl";
-        launch1->show();
-        launch2->show();
-        dev->show();
-        save->show();
-        load->show();
-        cloudButton->show();
-        bookcase->show();
-        exitButton->show();
-        qWarning()<<"end fullopengl";
-    }
-
-    if (!mainwindow->loadPML.isEmpty()) {
-        mainwindow->opensession(workDir+"sessions/"+mainwindow->loadPML);
-    }
-    if (!mainwindow->runPocket.isEmpty()) {
-        CPObject * pPC =mainwindow->LoadPocket(mainwindow->runPocket);
-//        pPC->slotDoubleClick(QPoint(0,0));
-  #ifdef Q_OS_ANDROID
-        pPC->maximize(pPC->RectWithLinked().center().toPoint());
-//        if (pPC->getDX()> pPC->getDY())
-//            pPC->maximizeWidth();
-//        else
-//            pPC->maximizeHeight();
-  #else
-        Q_UNUSED(pPC)
-  #endif
-    }
-
-#ifdef EMSCRIPTEN
-    app->exec();
-    return 0;
-#endif
-
-
-    return app->exec();
 
 }
 

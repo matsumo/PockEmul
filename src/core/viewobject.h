@@ -65,9 +65,9 @@ public:
     void    setPosX(float);
     void    setPosY(float);
 
-    float getDX();
-    float     getDY();
-    float     getDZ();
+    float   getDX();
+    float   getDY();
+    float   getDZ();
     void    setDX(float v);
     void    setDY(float v);
     void    setDZ(float v);
@@ -78,6 +78,8 @@ public:
     void    setDXmm(int v);
     void    setDYmm(int v);
     void    setDZmm(int v);
+
+    void setSizeMM(int w, int h, int p);
 
     void setRotation(int v);
     int getRotation() { return rotation; }

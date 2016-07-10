@@ -5,6 +5,10 @@ Column {
     spacing: 20
     anchors.fill: parent
 
+    Component.onCompleted: {
+        console.log("Actions.qml: Completed",new Date());
+    }
+
     Rectangle {height: 20 }
 
     TextButton {

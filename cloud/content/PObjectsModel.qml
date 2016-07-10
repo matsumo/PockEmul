@@ -9,6 +9,7 @@ import QtQuick.XmlListModel 2.0
 
 XmlListModel {
     property var brandsearch;
+    property var connectorsearch;
     property var brandPath;
 
     id: xmlModel
@@ -20,6 +21,7 @@ XmlListModel {
     XmlRole { name: "filename"; query: "@filenamde/string()" }
     XmlRole { name: "name"; query: "@name/string()" }
     XmlRole { name: "image"; query: "@image/string()" }
+    XmlRole { name: "connectortype"; query: "@connectortype/string()" }
 
     onStatusChanged: {
         if (status == XmlListModel.Ready) {
@@ -30,12 +32,15 @@ XmlListModel {
                 var item = get(i)
                 //                        console.log(item.objects)
                 if ( ( settings.groupByCategory && (item.brand === _brand)) ||
-                     ( !settings.groupByCategory && !(item.idpocket.substring(0,1) === '#')) )  {
+                     ( !settings.groupByCategory && !(item.idpocket.substring(0,1) === '#')) ||
+                     ( item.connectortype === connectorsearch )
+                    )  {
                     sortedModel.append({rowid : i,
                                            brand: item.brand,
                                            idpocket: (item.idpocket),
                                            name: (item.name),
-                                           image: (item.image)});
+                                           image: (item.image),
+                                           connectortype: (item.connectortype)});
                 }
             }
         }

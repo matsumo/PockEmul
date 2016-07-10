@@ -5,11 +5,19 @@ Item {
 
     property alias exitOnBack: mainView.exitOnBack
     property alias source: pobjectsmodel.source
+    property alias brandsearch : pobjectsmodel.brandsearch
+    property alias connectorsearch : pobjectsmodel.connectorsearch
+    property alias pobjectsmodel : pobjectsmodel
 
     signal launched;
 
     width: parent.width
     height: parent.height
+
+    Component.onCompleted: {
+        console.log("ShowRoom.qml: Completed",new Date());
+
+    }
 
     QtObject {
         id: settings

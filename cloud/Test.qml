@@ -486,6 +486,7 @@ Rectangle {
                 anchors.fill: parent
 
                 onClicked: {
+                    console.log("menuSquare: click",new Date());
                     nav.toggle()
                 }
             }
@@ -517,6 +518,7 @@ Rectangle {
         anchors.fill: parent
         source: "qrc:/pockemul/config.xml"
     }
+
     ShowRoom {
         id: showroomExt
         z: 9999
@@ -659,6 +661,8 @@ Rectangle {
         thecloud.close.connect(cloudHide);
         contextMenu.selectedOption.connect(manageContextResponse);
 //        showWorkingScreen();
+
+        console.log("Test.qml: Completed",new Date());
     }
 
     function cloudHide() {
@@ -792,4 +796,13 @@ Rectangle {
         download.visible = visible;
     }
 
+    function pickExtension(brand) {
+        showroomExt.brandsearch = brand;
+        showroomExt.visible = true;
+    }
+    function pickExtensionConnector(connector) {
+        showroomExt.connectorsearch = connector;
+        showroomExt.pobjectsmodel.reload();
+        showroomExt.visible = true;
+    }
 }

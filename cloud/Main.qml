@@ -26,7 +26,8 @@ Rectangle {
     property string auth_token: ""
 
     Component.onCompleted: {
-        console.log("start");
+        console.log("Main.qml: Completed",new Date());
+
         if (cloud.getValueFor("username","") != "") {
             user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
             console.log("logged:"+auth_token);

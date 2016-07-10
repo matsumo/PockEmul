@@ -43,6 +43,10 @@ Rectangle {
     x: _closeX
     z: 10
 
+    Component.onCompleted: {
+        console.log("NavigationDrawer.qml: Completed",new Date());
+    }
+
     function _setupAnchors() {
         _rootItem = parent;
 
@@ -159,7 +163,7 @@ Rectangle {
         parent: _rootItem
         anchors.fill: parent
         opacity: 0.5 * Math.min(1, Math.abs(panel.x - _closeX) / _rootItem.width/2)
-        color: "red"
+        color: "grey"
     }
 
     Item {
@@ -178,7 +182,7 @@ Rectangle {
 //            color: "red"
             gradient: Gradient{
                 GradientStop { position: _rightEdge ? 1 : 0 ; color: "#00ffffff"}
-                GradientStop { position: _rightEdge ? 0 : 1 ; color: "#2cffffff"}
+                GradientStop { position: _rightEdge ? 0 : 1 ; color: "#2c2c2cff"}
             }
         }
     }

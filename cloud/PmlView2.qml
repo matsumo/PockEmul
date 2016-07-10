@@ -65,6 +65,10 @@ Rectangle {
     property int ispublic: ispublicCloud ? 1 : 0
     property string cacheFileName:""
 
+    Component.onCompleted: {
+        console.log("PmlView2.qml: Completed",new Date());
+    }
+
     onObjidChanged: {
 
         populatePMLModel(searchText)

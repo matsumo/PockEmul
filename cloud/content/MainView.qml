@@ -18,6 +18,10 @@ Item {
 
     anchors.fill: parent
 
+    Component.onCompleted: {
+        console.log("MainView.qml: Completed",new Date());
+    }
+
     // Update blur shader source when width/height changes
     onHeightChanged: {
         mainView.scheduleUpdate();
@@ -216,9 +220,9 @@ Item {
             }
         }
 
-        SettingsView {
-            id: settingsView
-        }
+//        SettingsView {
+//            id: settingsView
+//        }
 
         Image {
             id: backIcon

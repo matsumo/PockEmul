@@ -47,6 +47,7 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 
     setDX(483);
     setDY(252);
+//    setSizeMM(135,70,10);
 
     pLCDC		= new Clcdc_pc1250(this,
                                    QRect(55,49,288*1.18,16*1.18),

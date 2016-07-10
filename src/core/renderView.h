@@ -58,6 +58,8 @@ public slots:
     void sizePObject(CViewObject*pObject, QSizeF size);
     void showPObject(CViewObject *pObject);
     void hidePObject(CViewObject *pObject);
+    void pickExtension(QString brand);
+    void pickExtensionConnector(QString brand);
     void stackPosChanged();
     void cloudClose();
     void rotPObject(CViewObject *pObject,int angle);

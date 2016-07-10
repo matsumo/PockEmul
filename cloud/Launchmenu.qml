@@ -63,7 +63,7 @@ Rectangle {
         }
         ListElement {
             libelle: "Check for Updates"
-//            imageName: "qrc:/TabbedQuickApp/pics/white-about-256.png"
+            imageName: ""
         }
         ListElement {
             libelle: "Exit"

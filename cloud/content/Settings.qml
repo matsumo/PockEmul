@@ -4,6 +4,10 @@ import QtQuick.Controls 1.2
 Rectangle {
     width: 800; height: 480
 
+    Component.onCompleted: {
+        console.log("Settings.qml: Completed",new Date());
+    }
+
     VisualItemModel {
         id: visualSettingsModel
 

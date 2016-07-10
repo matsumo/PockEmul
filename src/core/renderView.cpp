@@ -88,8 +88,15 @@ void CrenderView::newextSlot()
 }
 
 extern LaunchButtonWidget* load;
+extern QString workDir;
 void CrenderView::loadSlot()
 {
+    if (load==0) {
+        load = new LaunchButtonWidget(mainwindow->centralwidget,
+                                                          LaunchButtonWidget::FileBrowser,
+                                                          QStringList()<<(workDir+"sessions")<<"*.pml",
+                                                          ":/core/load.png");
+    }
     load->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
 }
 
@@ -101,6 +108,12 @@ void CrenderView::saveSlot()
 extern LaunchButtonWidget* bookcase;
 void CrenderView::bookcaseSlot()
 {
+    if (bookcase==0) {
+        bookcase = new LaunchButtonWidget(mainwindow->centralwidget,
+                                                          LaunchButtonWidget::FileBrowser,
+                                                              QStringList()<< (workDir+"documents")<<"*.pdf",
+                                                          ":/core/bookcase.png");
+    }
     bookcase->mousePressEvent( new QMouseEvent(QEvent::MouseButtonPress, QPoint(0,0), Qt::LeftButton, Qt::LeftButton,Qt::NoModifier));
 }
 
@@ -287,7 +300,7 @@ QString CrenderView::getRes(QString _fn)
 {
     QString _res = P_RES(_fn);
 
-    qWarning()<<_res;
+//    qWarning()<<_res;
 
     if (_res.startsWith(':')) {
         _res = "qrc" + _res;
@@ -400,6 +413,21 @@ void CrenderView::showPObject(CViewObject *pObject)
 //    qWarning()<<"sizePObject:"<<size;
     QMetaObject::invokeMethod(cloud.object, "showPocket",
                               Q_ARG(QVariant, QString("%1").arg((qlonglong)pObject))
+                              );
+}
+
+void CrenderView::pickExtension(QString brand)
+{
+//    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(cloud.object, "pickExtension",
+                              Q_ARG(QVariant, brand)
+                              );
+}
+void CrenderView::pickExtensionConnector(QString brand)
+{
+//    qWarning()<<"sizePObject:"<<size;
+    QMetaObject::invokeMethod(cloud.object, "pickExtensionConnector",
+                              Q_ARG(QVariant, brand)
                               );
 }
 void CrenderView::cloudClose()

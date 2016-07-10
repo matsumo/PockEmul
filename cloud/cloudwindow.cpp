@@ -51,6 +51,7 @@ extern bool soundEnabled;
 extern bool hiRes;
 extern bool flipOnEdge;
 extern QList<CPObject *> listpPObject;
+extern QSettings* settings;
 
 CloudWindow::CloudWindow(QWidget *parent,QString src)
     : QWidget(parent),cloud(this)
@@ -319,20 +320,18 @@ extern QString workDir;
 
 QString Cloud::getValueFor(const QString &objectName, const QString &defaultValue)
 {
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
-    if (settings.value(objectName).isNull()) {
+    if (settings->value(objectName).isNull()) {
 //        qWarning()<<"getValue("<<objectName<<","<<defaultValue<<")";
         return defaultValue;
     }
 //    qWarning()<<"getValue("<<objectName<<","<<settings.value(objectName).toString()<<") in "<<workDir+"config.ini";
-    return settings.value(objectName).toString();
+    return settings->value(objectName).toString();
 }
 
 extern int vibDelay;
 void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
 {
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
-    settings.setValue(objectName, QVariant(inputValue));
+    settings->setValue(objectName, QVariant(inputValue));
 //    qWarning()<<"saveValue("<<objectName<<","<<inputValue<<") in "<<workDir+"config.ini";
 
     if (objectName == "syncEnabled") syncEnabled =  (inputValue=="on") ? true : false;

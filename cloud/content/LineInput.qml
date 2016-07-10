@@ -56,16 +56,16 @@ Rectangle {
             Rectangle {
                 id: borderTextInput
                 anchors.fill: parent
-                border.color: rootCloud.inputBorderColor
+                border.color: "black" //rootCloud.inputBorderColor
                 radius: 5
             }
-            Rectangle {
-                width: borderTextInput.width
-                height: borderTextInput.height*0.75
-                border.color: rootCloud.backGroundColor
-                radius: 5
+//            Rectangle {
+//                width: borderTextInput.width
+//                height: borderTextInput.height*0.75
+//                border.color: "black" //rootCloud.backGroundColor
+//                radius: 5
 
-            }
+//            }
 
             TextInput {
 
@@ -79,9 +79,8 @@ Rectangle {
                 font: fontstyle.font
                 inputMethodHints: Qt.ImhNoPredictiveText
                 onTextChanged: {
-                    lineinput.inputAccepted(input.objectName, input.text)
                     //Here is where we save the value or string
-//                    cloud.saveValueFor(input.objectName, input.text)
+                    lineinput.inputAccepted(input.objectName, input.text)
 
                 }
             }

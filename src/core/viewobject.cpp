@@ -11,6 +11,8 @@
 #include "Keyb.h"
 #include "renderView.h"
 
+#define DPMM 3.6   // dot per mm
+
 extern MainWindowPockemul* mainwindow;
 extern bool hiRes;
 extern bool flipOnEdge;
@@ -121,6 +123,15 @@ void CViewObject::setDXmm(int v) {Pc_DX_mm = v;}
 void CViewObject::setDYmm(int v) {Pc_DY_mm = v;}
 
 void CViewObject::setDZmm(int v) {Pc_DZ_mm = v;}
+
+void CViewObject::setSizeMM(int w,int h, int p) {
+    Pc_DX_mm = w;
+    Pc_DY_mm = h;
+    Pc_DZ_mm = p;
+
+    Pc_DX = w * DPMM;
+    Pc_DY = h * DPMM;
+}
 
 void CViewObject::setRotation(int v) {
     rotation = v;

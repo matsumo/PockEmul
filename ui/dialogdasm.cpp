@@ -23,6 +23,7 @@
 #define SEPARATOR_LINE 2
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
+extern QSettings* settings;
 
 DialogDasm::DialogDasm(QWidget *parent) :
     QDialog(parent),
@@ -515,7 +516,6 @@ void DialogDasm::loadSymbolMap()
 
 void DialogDasm::saveAll() {
     qWarning()<<"saveall";
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
 
     QString s;
     QXmlStreamWriter *xmlOut = new QXmlStreamWriter(&s);
@@ -552,14 +552,13 @@ void DialogDasm::saveAll() {
 
     xmlOut->writeEndElement();  // dasm
 
-    settings.setValue("dasm", s);
+    settings->setValue("dasm", s);
 }
 
 void DialogDasm::load() {
 
 //    qWarning()<<"LOAD";
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
-    QString xmlData = settings.value("dasm").toString();
+    QString xmlData = settings->value("dasm").toString();
 //    qWarning()<<xmlData;
     if (xmlData.isEmpty()) return;
 

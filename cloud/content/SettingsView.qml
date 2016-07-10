@@ -8,6 +8,10 @@ Item {
 
     anchors.fill: parent
 
+    Component.onCompleted: {
+        console.log("SettingsView.qml: Completed",new Date());
+    }
+
     function show() {
         isShown = true;
         hideAnimation.stop();

@@ -66,6 +66,10 @@ PieMenu {
     height: width
 
     //            style: Qt.createComponent(customizerItem.currentStylePath)
+    Component.onCompleted: {
+        console.log("ContextMenu.qml: Completed",new Date());
+
+    }
 
     MenuItem {
         text: "Zoom In"

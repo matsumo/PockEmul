@@ -15,6 +15,8 @@
 #include "watchpoint.h"
 #include "overlay.h"
 
+#include "renderView.h"
+
 
 Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
@@ -661,6 +663,9 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
 #define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
+extern CrenderView* view;
+
 void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
@@ -671,11 +676,15 @@ void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
         pKEYB->keyPressedList.removeAll(0x240);
+#if 0
+      view->pickExtensionConnector("Panasonic_44");
+#else
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
                                      "Panasonic_44");
         launcher->show();
+#endif
     }
 
     // Manage backdoor click

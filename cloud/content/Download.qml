@@ -25,4 +25,8 @@ Item {
         color: "white"
 
     }
+
+    Component.onCompleted: {
+        console.log("Download.qml: Completed");
+    }
 }

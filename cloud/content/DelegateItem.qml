@@ -26,13 +26,13 @@ Item {
     MouseArea {
         anchors.fill: parent
         onClicked: {
-            console.log("*****",model.brand,model.idpocket);
+//            console.log("*****",model.brand,model.idpocket);
             var _b = model.brand;
             if (model.idpocket.substring(0, 1)==='#') {
                 // drill down into brand
                 var _brand = model.idpocket;
                 var _res = _brand.split('#');
-                console.log(_brand,_res[0],_res[1],_res[2]);
+//                console.log(_brand,_res[0],_res[1],_res[2]);
 
                 pobjectsmodel.brandsearch.push(_res[2]);
                 pobjectsmodel.reload();
@@ -40,6 +40,7 @@ Item {
             else {
                 sendLoadPocket(model.idpocket);
                 showRoom.visible=false;
+                showRoom.connectorsearch = '';
                 launched();
             }
 //            if (isSelected) {

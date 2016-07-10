@@ -33,6 +33,7 @@
 
 extern QList<CPObject *> listpPObject; /*!< TODO */
 extern QString workDir;
+extern QSettings* settings;
 
 #define NB_FILENAME (Qt::UserRole+1)
 #define NB_PREBUILD (Qt::UserRole+2)
@@ -795,7 +796,6 @@ QString WindowIDE::getBuilder(QString model,QString ext,int role) {
 
 void WindowIDE::saveConfig() {
 
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
 
     QString s;
     QXmlStreamWriter *xmlOut = new QXmlStreamWriter(&s);
@@ -844,7 +844,7 @@ void WindowIDE::saveConfig() {
 
     xmlOut->writeEndElement();  // dasm
 
-    settings.setValue("IDE", s);
+    settings->setValue("IDE", s);
 }
 
 void WindowIDE::loadConfig() {
@@ -869,8 +869,7 @@ void WindowIDE::loadConfig() {
         ui->lwBuilders->addItem(_item);
     }
 
-    QSettings settings(workDir+"config.ini",QSettings::IniFormat);
-    QString xmlData = settings.value("IDE").toString();
+    QString xmlData = settings->value("IDE").toString();
     if (xmlData.isEmpty()) return;
 
     QXmlStreamReader *xml = new QXmlStreamReader(xmlData);
