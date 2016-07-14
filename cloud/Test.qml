@@ -72,6 +72,7 @@ Rectangle {
     signal sendSave();
     signal sendLoad();
     signal sendBook();
+    signal sendCloseAll();
     signal sendCheck();
     signal sendExit();
 
@@ -558,6 +559,7 @@ Rectangle {
             name: "About"
             icon: "pics/back-white.png"
             About {
+                id: aboutFlick
                 anchors.fill: parent
                 fileName: ":/pockemul/release_notes.html"
             }

@@ -20,7 +20,6 @@
 #define ARG4x(i)	arg(i,4,16,QChar('0'))
 
 FILE *fp_tmplog=NULL;
-extern FILE *fp_tmp;
 
 /*---------------------------------------------------------------------------*/
 
@@ -136,7 +135,6 @@ void CSC61860::set_PC(UINT32 data)
     reg.d.pc = data;
 }
 
-extern FILE	*fp_tmp;
 INLINE void CSC61860::compute_xout(void)
 {
     quint64 wait2khz = pPC->getfrequency()/1000/4;
@@ -188,8 +186,6 @@ INLINE void CSC61860::compute_xout(void)
 					{
 						Xout = !Xout;
                         start4khz += wait4khz;
-//                        if (fp_tmp) fprintf(fp_tmp,"%s\n",tr("switch XOUT to %1 : wait = %2  -  delta=%3  new:%4 - old:%5 ").arg(Xout).arg(wait4khz).arg(pPC->pTIMER->state - start4khz).arg(pPC->pTIMER->state).arg(start4khz).toLocal8Bit().data());
-
 
                         if (fp_log) fprintf(fp_log,"XOUT 4Khz switch\n");
 					}

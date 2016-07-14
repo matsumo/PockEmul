@@ -61,6 +61,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendSave()), this, SLOT(saveSlot()));
     QObject::connect(cloud.object, SIGNAL(sendLoad()), this, SLOT(loadSlot()));
     QObject::connect(cloud.object, SIGNAL(sendBook()), this, SLOT(bookcaseSlot()));
+    QObject::connect(cloud.object, SIGNAL(sendCloseAll()), mainwindow, SLOT(Close_All()));
     QObject::connect(cloud.object, SIGNAL(sendCheck()), this, SLOT(checkSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
 
@@ -70,7 +71,17 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 
 }
 void CrenderView::LoadPocket(QString id) {
-    mainwindow->LoadPocket(id);
+    CPObject *_pc=0;
+    int _result = 0;
+
+    if (mainwindow->objtable.contains(id))
+        _result = mainwindow->objtable.value(id);
+
+    if (_result != 0)	{
+        _pc=mainwindow->LoadPocket(_result);
+    }
+
+    emit Launched(id,_pc);
 }
 
 extern LaunchButtonWidget* launch1;

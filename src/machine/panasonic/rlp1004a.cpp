@@ -22,6 +22,10 @@
 #define DOWN    0
 #define UP              1
 
+#include "renderView.h"
+
+extern CrenderView* view;
+
 TransMap KeyMaprlp1004a[]={
     {1, "FEED  ",       K_PFEED,34,234, 9},
     {2, "POWER ON",     K_POW_ON,34,234,        9},
@@ -475,11 +479,13 @@ void Crlp1004a::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     // Manage left connector click
     if (KEY(0x240) && (currentView==FRONTview)) {
         pKEYB->keyPressedList.removeAll(0x240);
-        FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,QString(),
-                                     "Jack_3");
-        launcher->show();
+//        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+//                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+//                                     FluidLauncher::PictureFlowType,QString(),
+//                                     "Jack_3");
+//        launcher->show();
+
+        view->pickExtensionConnector("Jack_3");
     }
 
 }

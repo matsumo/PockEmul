@@ -13,13 +13,14 @@ Rectangle {
         id: menuModel
         property var actions : {
             "New Pocket":       function(){ showroomNew.visible = true; },
-            "New Extension":    function(){ showroomExt.visible = true; },
+            "New Extension":    function(){ showroomExt.connectorsearch='';showroomExt.visible = true; },
             "Settings":         function(){ settings.visible = true; },
             "Code Editor":      function(){ sendDev(); },
             "Save":             function(){ sendSave(); },
             "Load":             function(){ sendLoad(); },
             "Cloud":            function(){ nav.hide(); cloudShow(); },
             "Bookcase":         function(){ sendBook(); },
+            "Close All":        function(){ sendCloseAll(); },
             "About PockEmul":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
@@ -51,6 +52,10 @@ Rectangle {
         ListElement {
             libelle: "Bookcase"
             imageName: "qrc:/core/bookcase.png"
+        }
+        ListElement {
+            libelle: "Close All"
+            imageName: "qrc:/core/close.png"
         }
         ListElement {
             libelle: "Settings"

@@ -73,14 +73,6 @@
     <addaction name="actionExit"/>
     <addaction name="actionTest"/>
    </widget>
-   <widget class="QMenu" name="menuHelp">
-    <property name="title">
-     <string>Help</string>
-    </property>
-    <addaction name="actionAbout_PockEmul"/>
-    <addaction name="separator"/>
-    <addaction name="actionCheck_for_Updates"/>
-   </widget>
    <widget class="QMenu" name="menuPockets">
     <property name="title">
      <string>View</string>
@@ -90,17 +82,9 @@
     <addaction name="actionClose_All"/>
     <addaction name="separator"/>
    </widget>
-   <widget class="QMenu" name="menuIDE">
-    <property name="title">
-     <string>IDE</string>
-    </property>
-    <addaction name="actionEditor"/>
-   </widget>
    <addaction name="menuRoot"/>
    <addaction name="menuMonitor_2"/>
    <addaction name="menuPockets"/>
-   <addaction name="menuIDE"/>
-   <addaction name="menuHelp"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <action name="actionAbout_PockEmul">

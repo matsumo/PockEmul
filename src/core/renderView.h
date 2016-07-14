@@ -67,6 +67,10 @@ public slots:
     void LoadPocket(QString id);
     Q_INVOKABLE void disableKeyboard(QString Id);
     Q_INVOKABLE void enableKeyboard(QString Id);
+
+signals:
+    void Launched(QString,CPObject *);
+
 private:
      QMap<int,QPoint> mapTouch;
 

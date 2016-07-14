@@ -10,6 +10,10 @@
 #include "rlp9001.h"
 #include "buspanasonic.h"
 
+#include "renderView.h"
+
+extern CrenderView* view;
+
 Crlp9001::Crlp9001(CPObject *parent ,Models mod)   : CPObject(parent)
 {                                                       //[constructor]
     Q_UNUSED(parent)
@@ -294,6 +298,8 @@ bool Crlp9001::LoadSession_File(QXmlStreamReader *xmlIn)
             }
         }
     }
+
+    Refresh_Display = true;
     return true;
 }
 
@@ -338,6 +344,7 @@ void Crlp9001::Rotate()
         }
     }
     InitDisplay();
+    Refresh_Display = true;
 }
 
 void Crlp9001::ROMSwitch()
@@ -354,6 +361,8 @@ void Crlp9001::ROMSwitch()
            romSwitch = false;
        }
    }
+
+   Refresh_Display = true;
    qWarning()<<"romSwitch:"<<romSwitch;
 }
 
@@ -432,12 +441,18 @@ void Crlp9001::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         if (_response==2) return;
 
         currentSlot = _slot;
+#if 0
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                     FluidLauncher::PictureFlowType,QString(),
                                                     "Panasonic_Capsule");
         connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
         launcher->show();
+#else
+        connect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+        view->pickExtensionConnector("Panasonic_Capsule");
+
+#endif
     }
 }
 
@@ -445,14 +460,22 @@ void Crlp9001::addModule(QString item,CPObject *pPC)
 {
     Q_UNUSED(pPC)
 
+    disconnect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+
     qWarning()<<"Add Module:"<< item;
     if ( (currentSlot<0) || (currentSlot>7)) return;
 
     int _res = 0;
     QString moduleName;
-    if (item=="SNAPBASIC") moduleName = P_RES(":/rlh1000/SnapBasic.bin");
-    if (item=="SNAPFORTH") moduleName = P_RES(":/rlh1000/SnapForth.bin");
-    if (item=="MSBASIC")   moduleName = P_RES(":/rlh1000/HHCbasic.bin");
+    if (item=="SNAPBASIC")  moduleName = P_RES(":/rlh1000/SnapBasic.bin");
+    if (item=="SNAPFORTH")  moduleName = P_RES(":/rlh1000/SnapForth.bin");
+    if (item=="MSBASIC")    moduleName = P_RES(":/rlh1000/HHCbasic.bin");
+    if (item=="PORTACALC")  moduleName = P_RES(":/rlh1000/Portacalc.bin");
+    if (item=="SCICALC") {
+        moduleName = P_RES(":/rlh1000/ScientificCalculator.bin");
+
+        currentOverlay=0;
+    }
     if (item=="PANACAPSFILE") {
         moduleName = QFileDialog::getOpenFileName(
                     mainwindow,
@@ -488,6 +511,7 @@ void Crlp9001::addModule(QString item,CPObject *pPC)
         slotChanged = true;
     }
 
+    Refresh_Display = true;
     currentSlot = -1;
 
 }

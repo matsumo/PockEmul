@@ -17,6 +17,7 @@
 
 #include "renderView.h"
 
+extern CrenderView* view;
 
 Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
@@ -664,7 +665,7 @@ extern int ask(QWidget *parent,QString msg,int nbButton);
                   pKEYB->keyPressedList.contains(c) || \
                   pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
 
-extern CrenderView* view;
+
 
 void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
@@ -676,7 +677,7 @@ void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
         pKEYB->keyPressedList.removeAll(0x240);
-#if 0
+#if 1
       view->pickExtensionConnector("Panasonic_44");
 #else
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
@@ -733,18 +734,25 @@ void Crlh1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
         currentSlot = _slot;
         currentAdr = _adr;
+#if 1
+        connect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+        view->pickExtensionConnector("Panasonic_Capsule");
+#else
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                     FluidLauncher::PictureFlowType,QString(),
                                                     "Panasonic_Capsule");
         connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
         launcher->show();
+#endif
     }
 }
 
 void Crlh1000::addModule(QString item,CPObject *pPC)
 {
     Q_UNUSED(pPC)
+
+    disconnect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
 
     qWarning()<<"Add Module:"<< item;
     if ( (currentSlot<0) || (currentSlot>7)) return;
@@ -799,6 +807,8 @@ void Crlh1000::addModule(QString item,CPObject *pPC)
 
     currentSlot = -1;
     currentAdr=0;
+
+    Refresh_Display = true;
 }
 
 UINT8 Crlh1000::getKey(quint8 row )

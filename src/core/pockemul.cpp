@@ -211,19 +211,12 @@ int main(int argc, char *argv[])
     workDir = QDir::homePath()+"/pockemul/";
 
 #ifdef Q_OS_ANDROID
-//    QFont f = app.font();
-//    f.setItalic(true); //bold also works
-//    app.setFont(f);
 
     // Change currentPath to /sdcard/pockemul
     QDir d("/");
     d.mkpath("/sdcard/pockemul/documents");
     QDir::setCurrent("/sdcard/pockemul");
     workDir = "/sdcard/pockemul/";
-
-//    QProxyStyle *s = new QProxyStyle();//QAndroidStyle();
-
-//    QApplication::setStyle(s);//new QAndroidStyle());
 
 #endif
 
@@ -242,27 +235,10 @@ int main(int argc, char *argv[])
     appDir = app->applicationDirPath();
     qWarning()<<appDir;
 
-//#ifdef Q_OS_ANDROID
-
-
-
-//    mainwindow->menuBar()->setVisible(false);//->menuAction()->setVisible( false );
-    // search for ShowMyModalDialog method
-
-//#endif
-
-#if 1
     QWidget *cw= new QWidget();
     mainwindow->setCentralWidget(cw);
     delete mainwindow->centralwidget;
     mainwindow->centralwidget = cw;
-#else
-    view = new CrenderView();
-    mainwindow->setCentralWidget(view);
-    delete mainwindow->centralwidget;
-    mainwindow->centralwidget = view;
-#endif
-
 
 
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
@@ -313,7 +289,7 @@ int main(int argc, char *argv[])
     mainwindow->initCommandLine();
 
 
-qWarning()<<"okl";
+//qWarning()<<"okl";
     view = 0;
     if (mainwindow->openGlFlag) {
         qWarning()<<"opengl";

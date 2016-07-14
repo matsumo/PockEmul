@@ -37,13 +37,14 @@
 
 #include "mainwindowpockemul.h"
 #include "cloud/cloudwindow.h"
+#include "renderView.h"
 
 #include "bus.h"
 #include "overlay.h"
 
 
 extern QList<CPObject *> listpPObject;  /**< TODO: describe */
-FILE	*fp_tmp=NULL; /**< TODO: describe */
+extern CrenderView* view;
 
 
 extern MainWindowPockemul* mainwindow; /**< TODO: describe */
@@ -1263,12 +1264,16 @@ void CPObject::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *even
     Q_UNUSED(scancode)
     Q_UNUSED(event)
 
-    if (KEY(K_SHARP11PINS)) {
+    if ((currentView==LEFTview) && KEY(K_SHARP11PINS)) {
+#if 1
+        view->pickExtensionConnector("Sharp_11");
+#else
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
                                      "Sharp_11");
         launcher->show();
+#endif
     }
 }
 

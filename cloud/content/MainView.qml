@@ -212,12 +212,12 @@ Item {
                 sizeVariation: 64
                 acceleration: PointDirection { y: -20; xVariation: 40 }
             }
-            Turbulence {
-                groups: ["smoke"]
-                width: parent.width
-                height: parent.height * 0.8
-                strength: 60
-            }
+//            Turbulence {
+//                groups: ["smoke"]
+//                width: parent.width
+//                height: parent.height * 0.8
+//                strength: 60
+//            }
         }
 
 //        SettingsView {

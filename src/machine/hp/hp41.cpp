@@ -42,6 +42,9 @@
 #include "mainwindowpockemul.h"
 extern MainWindowPockemul *mainwindow;
 
+#include "renderView.h"
+extern CrenderView* view;
+
 int Chp41::loadedFontID = -1;
 
 /****************************/
@@ -50,6 +53,10 @@ int Chp41::loadedFontID = -1;
 void Chp41::addModule(QString item,CPObject *pPC)
 {
     qWarning()<<"Add Module:"<< item;
+
+    disconnect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+
+
     if ( (currentSlot<0) || (currentSlot>3)) return;
 
     ModuleHeader *pModuleNew;
@@ -334,12 +341,17 @@ void Chp41::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
     if (slot>=0) {
         currentSlot = _slot;
+#if 1
+        connect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
+        view->pickExtensionConnector("hp41");
+#else
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
                                      "hp41");
         connect(launcher,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
         launcher->show();
+#endif
     }
 }
 

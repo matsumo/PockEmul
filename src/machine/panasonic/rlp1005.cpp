@@ -24,6 +24,9 @@
 #define DOWN    0
 #define UP              1
 
+#include "renderView.h"
+
+extern CrenderView* view;
 
 Crlp1005::Crlp1005(CPObject *parent):Cprinter(parent)
 { //[constructor]
@@ -495,11 +498,13 @@ void Crlp1005::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     // Manage left connector click
     if (KEY(0x240) && (currentView==FRONTview)) {
         pKEYB->keyPressedList.removeAll(0x240);
-        FluidLauncher *launcher = new FluidLauncher(mainwindow,
-                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
-                                     FluidLauncher::PictureFlowType,QString(),
-                                     "Jack_3");
-        launcher->show();
+//        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+//                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+//                                     FluidLauncher::PictureFlowType,QString(),
+//                                     "Jack_3");
+//        launcher->show();
+
+        view->pickExtensionConnector("Jack_3");
     }
 
 }

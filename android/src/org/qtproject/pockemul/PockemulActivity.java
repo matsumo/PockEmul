@@ -34,6 +34,7 @@ import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.view.WindowManager;
 
 import java.io.File;
 import java.util.concurrent.Semaphore;
@@ -148,7 +149,17 @@ public class PockemulActivity extends QtActivity {
                         });
                     }
                 errorDialog.setCancelable(false);
+
+               // errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+               //         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                        //Set the dialog to immersive
+                //errorDialog.getWindow().getDecorView().setSystemUiVisibility(
+                //        m_instance.getWindow().getDecorView().getSystemUiVisibility());
                 errorDialog.show();
+
+                // Set the dialog to focusable again.
+                //errorDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             };
         }
         );
