@@ -31,6 +31,12 @@
 #include "libavoid/router.h"
 #include "libavoid/visibility.h"
 
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 namespace Avoid {
 
@@ -188,10 +194,10 @@ const Point ShapeConnectionPin::position(const Polygon& newPoly) const
     double y_max = -DBL_MAX;
     for (size_t i = 0; i < poly.size(); ++i)
     {
-        x_min = std::min(x_min, poly.ps[i].x);
-        x_max = std::max(x_max, poly.ps[i].x);
-        y_min = std::min(y_min, poly.ps[i].y);
-        y_max = std::max(y_max, poly.ps[i].y);
+        x_min = min(x_min, poly.ps[i].x);
+        x_max = max(x_max, poly.ps[i].x);
+        y_min = min(y_min, poly.ps[i].y);
+        y_max = max(y_max, poly.ps[i].y);
     }
 
     Point point;

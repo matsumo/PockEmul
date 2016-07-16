@@ -29,12 +29,15 @@ bool CHD61710::init()
 {
     uart.init();
     uart.pTIMER = pPC->pTIMER;
+
+    return true;
 }
 
 bool CHD61710::step()
 {
     uart.run();
 
+    return true;
 }
 
 

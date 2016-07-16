@@ -21,7 +21,12 @@
  *
  * Author(s):   Michael Wybrow <mjwybrow@users.sourceforge.net>
 */
-
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 #include <cmath>
 #include <cfloat>
@@ -206,10 +211,10 @@ void PolygonInterface::getBoundingRect(double *minX, double *minY,
 
     for (size_t i = 0; i < size(); ++i)
     {
-        progressiveMinX = std::min(progressiveMinX, at(i).x);
-        progressiveMinY = std::min(progressiveMinY, at(i).y);
-        progressiveMaxX = std::max(progressiveMaxX, at(i).x);
-        progressiveMaxY = std::max(progressiveMaxY, at(i).y);
+        progressiveMinX = min(progressiveMinX, at(i).x);
+        progressiveMinY = min(progressiveMinY, at(i).y);
+        progressiveMaxX = max(progressiveMaxX, at(i).x);
+        progressiveMaxY = max(progressiveMaxY, at(i).y);
     }
 
     if (minX)
@@ -557,10 +562,10 @@ Polygon Polygon::curvedPolyline(const double curve_amount,
 Rectangle::Rectangle(const Point& topLeft, const Point& bottomRight)
     : Polygon(4)
 {
-    double xMin = std::min(topLeft.x, bottomRight.x);
-    double xMax = std::max(topLeft.x, bottomRight.x);
-    double yMin = std::min(topLeft.y, bottomRight.y);
-    double yMax = std::max(topLeft.y, bottomRight.y);
+    double xMin = min(topLeft.x, bottomRight.x);
+    double xMax = max(topLeft.x, bottomRight.x);
+    double yMin = min(topLeft.y, bottomRight.y);
+    double yMax = max(topLeft.y, bottomRight.y);
 
     ps[0] = Point(xMax, yMin);
     ps[1] = Point(xMax, yMax);

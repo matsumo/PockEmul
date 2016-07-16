@@ -36,11 +36,11 @@
 #define IDENT_PC15_BIN  0xA0
 #define IDENT_PC15_BAS  0xA1
 
-static char* bitwav[] = {
+static const char* bitwav[] = {
     "\255\255\0\0\255\255\0\0\255\255\0\0\255\255\0\0",
     "\255\0\255\0\255\0\255\0\255\0\255\0\255\0\255\0"} ;
 
-char *ftyp[] = {"BASIC (prg)","BASIC (dat)","binaire","assembleur"};
+const char *ftyp[] = {"BASIC (prg)","BASIC (dat)","binaire","assembleur"};
 FILE	*fp_tape=NULL;
 
 //extern u_long testReadQuarterTape(void);
@@ -704,13 +704,13 @@ int Cce152::WriteHeadToWav (u_long    nbSamp,
     int     error ;
 
     do {
-        error = WriteStringToFile ("RIFF", &ptrFile->ptrFd) ;
+        error = WriteStringToFile ((char*)"RIFF", &ptrFile->ptrFd) ;
         if (error != ERR_OK) break ;
 
         error = WriteLongToFile ((nbSamp + 36), &ptrFile->ptrFd) ;
         if (error != ERR_OK) break ;
 
-        error = WriteStringToFile ("WAVEfmt ", &ptrFile->ptrFd) ;
+        error = WriteStringToFile ((char*)"WAVEfmt ", &ptrFile->ptrFd) ;
         if (error != ERR_OK) break ;
 
         error = WriteLongToFile (0x10, &ptrFile->ptrFd) ;
@@ -734,7 +734,7 @@ int Cce152::WriteHeadToWav (u_long    nbSamp,
         error = WriteShortToFile (8, &ptrFile->ptrFd) ;      /* Bit / Samp */
         if (error != ERR_OK) break ;
 
-        error = WriteStringToFile ("data", &ptrFile->ptrFd) ;
+        error = WriteStringToFile ((char*)"data", &ptrFile->ptrFd) ;
         if (error != ERR_OK) break ;
 
         error = WriteLongToFile (nbSamp, &ptrFile->ptrFd) ;  /* Nb Samples */

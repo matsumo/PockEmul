@@ -6,7 +6,7 @@
 
 //#include "mainwindowpockemul.h"
 class MainWindowPockemul;
-extern MainWindowPockemul *mainwindow;
+
 
 #include "cstdlib.h"
 

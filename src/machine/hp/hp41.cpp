@@ -559,6 +559,7 @@ bool Chp41::Chk_Adr(UINT32 *d, UINT32 data)
 
 bool Chp41::Chk_Adr_R(UINT32 *d, UINT32 *data)
 {
+    return true;
 }
 
 

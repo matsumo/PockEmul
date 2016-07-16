@@ -6,7 +6,6 @@
 #include <QtGui>
 
 #include "mainwindowpockemul.h"
-extern MainWindowPockemul *mainwindow;
 
 #define BO 200
 #define BA 201

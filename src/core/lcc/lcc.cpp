@@ -9,6 +9,9 @@
 
 #include "lcc.h"
 
+
+extern MainWindowPockemul *mainwindow;
+
 //FIXME: if ( iiii[0] > 0 ) { return;}
 //FIXME: remove unused variables
 

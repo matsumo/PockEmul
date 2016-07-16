@@ -20,6 +20,9 @@
 	\brief Implementation of the QEditor class
 */
 
+#include "mainwindowpockemul.h"
+extern MainWindowPockemul *mainwindow;
+
 #include "qeditorinputbindinginterface.h"
 
 #include "qdocument.h"

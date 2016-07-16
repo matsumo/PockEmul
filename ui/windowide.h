@@ -14,7 +14,7 @@
 class QFormatScheme;
 class QLanguageFactory;
 class CCompletion;
-class QCodeNode;
+struct QCodeNode;
 
 namespace Ui {
     class WindowIDE;

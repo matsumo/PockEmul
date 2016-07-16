@@ -36,6 +36,12 @@
 #include "libavoid/debug.h"
 #include "libavoid/graph.h"
 
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 namespace Avoid {
 
 
@@ -288,7 +294,7 @@ void ConnEnd::assignPinVisibilityTo(VertInf *dummyConnectionVert,
                 //     elsewhere in code.
                 edge->setDist(manhattanDist(dummyConnectionVert->point,
                             currPin->m_vertex->point) + 
-                        std::max(0.001, routingCost));
+                        max(0.001, routingCost));
             }
 
             if (router->_polyLineRouting)
@@ -301,7 +307,7 @@ void ConnEnd::assignPinVisibilityTo(VertInf *dummyConnectionVert,
                 //     elsewhere in code.
                 edge->setDist(euclideanDist(dummyConnectionVert->point,
                             currPin->m_vertex->point) + 
-                        std::max(0.001, routingCost));
+                        max(0.001, routingCost));
             }
         }
     }

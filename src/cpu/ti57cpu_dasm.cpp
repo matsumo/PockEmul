@@ -282,6 +282,8 @@ void Cdebug_ti57cpu::Disassemble(TI57regs *r) {
       s.append(QString("X%1 = %2   Y%3 = %4\n").arg(i).arg(Reg(r->RX[i])).arg(i).arg(Reg(r->RY[i])));
   //if Application.MessageBox(PChar(s),PChar(Decode),MB_OKCancel)<>IDOK then
 //Debugger=False;
+
+  return s;
 }
 
   QString Cdebug_ti57cpu::Tracing(TI57regs *r) {

@@ -68,13 +68,13 @@ enum MEMUNIT{					//memory unit
 
 typedef
 union {
-    struct a{
+    struct first{
         BYTE	a,b,il,ih;
         WORD	pc,ps,xl,xh,yl,yh,ul,uh,sl,sh;
         BYTE	c:1;
         BYTE	z:1;
     }r;
-    struct b{
+    struct second{
         WORD	ba,i;
         UINT32	p,x,y,u,s;
         BYTE	f;

@@ -14,7 +14,9 @@
 #include "Keyb.h"
 #include "Inter.h"
 
-
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
 
 CTinyBasic::CTinyBasic(CPObject *parent):CCPU(parent)
 {

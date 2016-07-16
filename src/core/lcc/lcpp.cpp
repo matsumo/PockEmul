@@ -7,6 +7,8 @@
 #include "parser/parser.h"
 #include "lcpp.h"
 
+extern MainWindowPockemul *mainwindow;
+
 #define ENABLE_COMPILATION 1
 
 #if ENABLE_COMPILATION

@@ -78,6 +78,8 @@ bool CHD61102::init()
     info.status = 0;
     updated = true;
     outputRegister = -1;
+
+    return true;
 }
 
 BYTE CHD61102::instruction(qint16 cmd)

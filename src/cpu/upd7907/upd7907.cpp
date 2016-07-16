@@ -11888,6 +11888,7 @@ bool Cupd7907::init()
 
 bool Cupd7907::exit()
 {
+    return true;
 }
 
 void Cupd7907::step()

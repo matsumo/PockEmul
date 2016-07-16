@@ -21,10 +21,11 @@
 #include "version.h"
 #include "common.h" 
 #include "autoupdater.h"
+#include "mainwindowpockemul.h"
 
 #define POCKEMUL_UPDATE_FILE "http://pockemul.free.fr/update/autoupdater.txt"
 
-extern QMainWindow *mainwindow;
+extern MainWindowPockemul* mainwindow;
 extern int ask(QWidget *parent,QString msg,int nbButton);
 
 CAutoUpdater::CAutoUpdater(QWidget *parent)

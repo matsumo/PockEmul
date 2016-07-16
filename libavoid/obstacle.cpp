@@ -21,7 +21,12 @@
  *
  * Author(s):   Michael Wybrow <mjwybrow@users.sourceforge.net>
 */
-
+#ifndef max
+#define max(a,b) (((a) > (b)) ? (a) : (b))
+#endif
+#ifndef min
+#define min(a,b) (((a) < (b)) ? (a) : (b))
+#endif
 
 #include "libavoid/obstacle.h"
 #include "libavoid/router.h"
@@ -278,10 +283,10 @@ void Obstacle::boundingBox(BBox& bbox)
     {
         const Point& p = m_polygon.ps[i];
 
-        a.x = std::min(p.x, a.x);
-        a.y = std::min(p.y, a.y);
-        b.x = std::max(p.x, b.x);
-        b.y = std::max(p.y, b.y);
+        a.x = min(p.x, a.x);
+        a.y = min(p.y, a.y);
+        b.x = max(p.x, b.x);
+        b.y = max(p.y, b.y);
     }
 }
 

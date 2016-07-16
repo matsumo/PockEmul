@@ -1,5 +1,8 @@
 #include "lcc.h"
 
+
+extern MainWindowPockemul *mainwindow;
+
 void Clcc::LoadVariableMain(QByteArray s) {
 
     if (sourceinASM) writln(outf,"\t; LoadVariable : "+s);

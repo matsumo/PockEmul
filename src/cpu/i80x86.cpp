@@ -2595,6 +2595,7 @@ bool Ci80x86::init()
 
 bool Ci80x86::exit()
 {
+    return true;
 }
 
 

@@ -16,6 +16,7 @@
 #include "lcc/pasm.h"
 #include "pobject.h"
 #include "pcxxxx.h"
+#include "mainwindowpockemul.h"
 
 #include "qformatscheme.h"
 #include "qdocument.h"
@@ -34,6 +35,7 @@
 extern QList<CPObject *> listpPObject; /*!< TODO */
 extern QString workDir;
 extern QSettings* settings;
+extern MainWindowPockemul *mainwindow;
 
 #define NB_FILENAME (Qt::UserRole+1)
 #define NB_PREBUILD (Qt::UserRole+2)

@@ -607,7 +607,7 @@ void Cpasm::doasm(void) {
             else if (param1 == "B") addcode(204);
         }
         else if (op == "INC") {
-            if ((param1 == "A") or (mathparse(param1.toLatin1(), 8) == 2)) addcode(66);
+            if ((param1 == "A") || (mathparse(param1.toLatin1(), 8) == 2)) addcode(66);
             else if ((param1 == "B") || (mathparse(param1.toLatin1(), 8) == 3)) addcode(194);
             else if ((param1 == "J") || (mathparse(param1.toLatin1(), 8) == 1)) addcode(192);
             else if ((param1 == "K") || (mathparse(param1.toLatin1(), 8) == 8)) addcode(72);
@@ -882,7 +882,7 @@ QString Cpasm::readline(QStringListIterator *linesIter) {
         c = false;
         for (int i = 0 ;i<result.length();i++) {
             if ((result[i] == '\'') || (result[i] == '"')) c = ! c;
-            if ((not c) && ((result[i] == ';')||(result[i]=='#'))) {
+            if ((! c) && ((result[i] == ';')||(result[i]=='#'))) {
                 result.remove(i, result.length());
                 break;
             }

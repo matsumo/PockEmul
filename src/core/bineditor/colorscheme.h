@@ -39,13 +39,13 @@
 namespace TextEditor {
 
 /*! Format for a particular piece of text (text/comment, etc). */
-class TEXTEDITOR_EXPORT Format
+class /*TEXTEDITOR_EXPORT*/ Format
 {
 public:
     Format();
 
     QColor foreground() const { return m_foreground; }
-    void setForeground(const QColor &foreground);
+    void setForeground(const QColor _foreground);
 
     QColor background() const { return m_background; }
     void setBackground(const QColor &background);

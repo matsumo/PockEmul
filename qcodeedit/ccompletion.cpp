@@ -6,10 +6,11 @@
 #include <QTime>
 #include <QAction>
 
-//#include "mainwindowpockemul.h"
+
 #include "ui/windowide.h"
 #include "qcodemodel2/qcodenode.h"
-
+#include "mainwindowpockemul.h"
+extern MainWindowPockemul *mainwindow;
 
 CCompletion::CCompletion(QObject *p)
 : QCodeCompletionEngine(p),pPopup(0)

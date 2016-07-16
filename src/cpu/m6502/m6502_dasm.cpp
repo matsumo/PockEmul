@@ -22,7 +22,7 @@ enum { Ac=0,Il,Im,Ab,Zp,Zx,Zy,Ax,Ay,Rl,Ix,Iy,In,No };
     /* These are the addressation methods used by 6502 CPU.   */
 
 
-static char *MN[] =
+static const char *MN[] =
 {
   "adc","and","asl","bcc","bcs","beq","bit","bmi",
   "bne","bpl","brk","bvc","bvs","clc","cld","cli",

@@ -95,7 +95,7 @@ bool Cce1600f::init()
 
 bool Cce1600f::exit()
 {
-
+    return true;
 }
 
 // (40 = Read, Write = 60, A0 = format)

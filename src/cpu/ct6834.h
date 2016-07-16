@@ -32,7 +32,7 @@ typedef struct
  {
   UINT8 lng_send;
   UINT8 lng_rsp;
-  char *Str_Cmd;
+  const char *Str_Cmd;
  } CMD_T6834;
 
 class CT6834 : public CPObject
