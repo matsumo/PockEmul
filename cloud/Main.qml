@@ -1,8 +1,11 @@
-import QtQuick 2.0
+import QtQuick 2.3
+import QtQuick.Controls 1.2
+import QtQuick.Dialogs 1.2
 import "TabbedQuickApp"
 import "content"
 import "."
 //import QtSensors 5.3 as Sensors
+
 
 Rectangle {
     width: 360
@@ -115,15 +118,15 @@ Rectangle {
                 onClicked: close();
             }
         }
+        //        Tab {
+        //            name: "Test"
+        //            icon: "pics/white-about-256.png"
+        //            PdfViewer {
+        //                anchors.fill: parent
+        //                url: "qrc:/pdfjs/web/viewer.html"
+        //            }
+        //        }
 
-//        Tab {
-//            name: "Test"
-//            icon: "pics/white-about-256.png"
-//            PdfViewer {
-//                anchors.fill: parent
-//                url: "qrc:/pdfjs/web/viewer.html"
-//            }
-//        }
     }
 
     TabbedUI {

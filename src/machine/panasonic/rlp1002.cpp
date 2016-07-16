@@ -127,13 +127,41 @@ bool Crlp1002::run(void)
         bus.setFunc(BUS_ACK);
     }
 
+//    if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
+//        qWarning()<<"1002: write BUS_LINE3:"<<bus.getData();
+//        INTrequest = true;
+
+//        bus.setFunc(BUS_ACK);
+//    }
     if ( (bus.getFunc()==BUS_LINE3) && bus.isWrite() ) {
-        qWarning()<<"1002: write BUS_LINE3:"<<bus.getData();
-        INTrequest = true;
+            switch(bus.getData()) {
+            case 0: // Print
+                qWarning()<<"1002: BUS_TOUCH:"<<bus.getData()<<  "PRINTING "<<buffer.size()<<" chars";
+    //            Refresh(0);
+                printing = true;
+    //            buffer.clear();
+                INTrequest = false;
+                break;
+            case 5: //
+                qWarning()<<"1002: BUS_TOUCH:"<<bus.getData();
+                buffer.clear();
+                receiveMode = true;
+                INTrequest = true;
+    //            receiveMode = true;
+                break;
+            case 4: // CR/LF
+    //            Refresh(0x0d);
+                qWarning()<<"1002: BUS_TOUCH:"<<bus.getData();
 
-        bus.setFunc(BUS_ACK);
+    //            printing = true;
+                CRLFPending = true;
+    //            INTrequest = true;
+                break;
+            default: qWarning()<<"1004a: BUS_TOUCH:"<<bus.getData();
+                break;
+            }
+            bus.setFunc(BUS_ACK);
     }
-
     if ( (bus.getFunc()==BUS_LINE3) && !bus.isWrite() ) {
 //        qWarning()<<"1002: read BUS_LINE3:"<<bus.getData();
         if (INTrequest) {
@@ -143,7 +171,7 @@ bool Crlp1002::run(void)
             INTrequest = false;
         }
         else {
-            qWarning()<<"INTREQUEST:false";
+//            qWarning()<<"INTREQUEST:false";
             bus.setData(0xff);
         }
         bus.setFunc(BUS_READDATA);

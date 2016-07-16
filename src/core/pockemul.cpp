@@ -337,8 +337,13 @@ int main(int argc, char *argv[])
     return 0;
 #endif
 
+    int _res =  app->exec();
 
-    return app->exec();
+    qWarning()<<"END";
+    QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
+                                        "KillProcess",
+                                        "()V");
+    return _res;
 
 }
 
@@ -502,7 +507,7 @@ int ask(QWidget *parent, QString msg, int nbButton) {
         qWarning()<<res;
 
         Vibrate();
-//        mainwindow->showFullScreen();
+
 
         return res;
 #else

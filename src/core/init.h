@@ -33,6 +33,7 @@ Q_OBJECT
 public:
     void run();
 	QTimer *threadTimer;
+    bool PcThreadRunning;
 	void SendSignal_AddLogItem(QString);
 	void SendSignal_Resize(QSize,CPObject * );
 	
@@ -51,6 +52,7 @@ signals:
 
 extern CPocketThread* PcThread;
 
+
 class CPocketThreadRun:public QThread
 {
 Q_OBJECT
@@ -67,6 +69,8 @@ public:
     {
         pPC = parent;
     }
+
+
 
 signals:
     void AddLogItem(QString);

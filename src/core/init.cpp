@@ -50,9 +50,10 @@ void CPocketThread::run()
     int j=0;
     while((j++)<1000)
 #else
-    while(true)
+    while(PcThreadRunning)
 #endif
     {
+        setTerminationEnabled(false);
         //int j=0;
         //while ((j++) < 20)
         {
@@ -116,6 +117,7 @@ void CPocketThread::run()
         mainwindow->rawclk += timer.nsecsElapsed();
         timer.restart();
 #endif
+        setTerminationEnabled(true);
     }
 }
 

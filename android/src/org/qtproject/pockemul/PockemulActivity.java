@@ -28,16 +28,19 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
+import android.os.Process;
 import android.os.Vibrator;
 import android.util.Log;
 import android.provider.Settings;
 import android.provider.Settings.System;
 import android.util.Log;
 import android.webkit.MimeTypeMap;
+import android.view.View;
 import android.view.WindowManager;
 
 import java.io.File;
 import java.util.concurrent.Semaphore;
+import java.lang.reflect.Method;
 
 import org.qtproject.qt5.android.bindings.QtActivity;
 
@@ -76,8 +79,18 @@ public class PockemulActivity extends QtActivity {
     }
 
     @Override
+    public void onStop()
+    {
+        Log.i("Qt", "Enter onStop");
+    //        Process.killProcess(Process.myPid());
+        super.onStop();
+    }
+
+    @Override
     public void onDestroy()
     {
+        Log.i("Qt", "Enter onDestroy");
+//        Process.killProcess(Process.myPid());
         super.onDestroy();
     }
 
@@ -106,6 +119,30 @@ public class PockemulActivity extends QtActivity {
 
     private static final Semaphore dialogSemaphore = new Semaphore(0, true);
 
+    public static void hideActionBar()
+    {
+        m_instance.getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        m_instance.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
+        try {
+            if (android.os.Build.VERSION.SDK_INT >= 14) {
+                int flags = View.class.getDeclaredField("SYSTEM_UI_FLAG_HIDE_NAVIGATION").getInt(null);
+                if (android.os.Build.VERSION.SDK_INT >= 16) {
+                    flags |= View.class.getDeclaredField("SYSTEM_UI_FLAG_LAYOUT_STABLE").getInt(null);
+                    flags |= View.class.getDeclaredField("SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION").getInt(null);
+                    flags |= View.class.getDeclaredField("SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN").getInt(null);
+                    flags |= View.class.getDeclaredField("SYSTEM_UI_FLAG_FULLSCREEN").getInt(null);
+
+                    if (android.os.Build.VERSION.SDK_INT >= 19)
+                        flags |= View.class.getDeclaredField("SYSTEM_UI_FLAG_IMMERSIVE_STICKY").getInt(null);
+                }
+                Method m = View.class.getMethod("setSystemUiVisibility", int.class);
+                m.invoke(m_instance.getWindow().getDecorView(), flags | View.INVISIBLE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
 
     private static int pressedButtonID;
     public static int ShowMyModalDialog(String msg,int nb)  //should be called from non-UI thread
@@ -119,8 +156,9 @@ public class PockemulActivity extends QtActivity {
         {
             public void run()
             {
-            String butlbl = "Yes";
-            if (nbButtons==1) butlbl="Ok";
+                String butlbl = "Yes";
+                if (nbButtons==1) butlbl="Ok";
+
                 AlertDialog errorDialog = new AlertDialog.Builder( m_instance ).create();
                 errorDialog.setMessage(dialogMsg);
                 errorDialog.setButton(butlbl, new DialogInterface.OnClickListener() {
@@ -128,6 +166,7 @@ public class PockemulActivity extends QtActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         pressedButtonID = 1;
                         dialogSemaphore.release();
+                        hideActionBar();
                         }
                     });
                  if (nbButtons>1) {
@@ -136,6 +175,7 @@ public class PockemulActivity extends QtActivity {
                             public void onClick(DialogInterface dialog, int which) {
                                 pressedButtonID = 2;
                                 dialogSemaphore.release();
+                                hideActionBar();
                                 }
                             });
                             }
@@ -145,33 +185,33 @@ public class PockemulActivity extends QtActivity {
                         public void onClick(DialogInterface dialog, int which) {
                             pressedButtonID = 3;
                             dialogSemaphore.release();
+                            hideActionBar();
                             }
                         });
                     }
                 errorDialog.setCancelable(false);
 
-               // errorDialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-               //         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-
-                        //Set the dialog to immersive
-                //errorDialog.getWindow().getDecorView().setSystemUiVisibility(
-                //        m_instance.getWindow().getDecorView().getSystemUiVisibility());
                 errorDialog.show();
 
-                // Set the dialog to focusable again.
-                //errorDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-            };
+               };
         }
         );
         try
         {
             dialogSemaphore.acquire();
+
         }
         catch (InterruptedException e)
         {
+            e.printStackTrace();
         }
-//        Vibrate();
+
         return pressedButtonID;
+    }
+
+    public static void KillProcess() {
+        Log.i("Qt", "Enter Quit");
+        Process.killProcess(Process.myPid());
     }
 
     public static void Vibrate(int nb)

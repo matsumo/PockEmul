@@ -150,6 +150,8 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
     PcThread->connect(PcThread,SIGNAL(Resize(QSize,CPObject * )),this,SLOT(resizeSlot(QSize,CPObject * )));
     PcThread->connect(PcThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
 #ifndef EMSCRIPTEN
+
+    PcThread->PcThreadRunning=true;
     PcThread->start();
 #endif
 #endif
@@ -1119,7 +1121,10 @@ void MainWindowPockemul::quitPockEmul()
 {
     if (ask(this,"Do you really want to quit ?",2)==1) {
         Close_All();
-        QApplication::quit();
+        PcThread->PcThreadRunning = false;
+        qWarning()<<"close";
+        QCoreApplication::quit();
+        close();
     }
 }
 
@@ -1571,8 +1576,10 @@ void MainWindowPockemul::resizeEvent		( QResizeEvent * event ){
 #ifdef EMSCRIPTEN
     zoomSlider->setGeometry(mainwindow->width()-30,20,20,mainwindow->height()-40);
 #endif
-    if (cloud) cloud->resize(this->size());
-//    qWarning()<<"Mainwindow resize";
+    if (cloud) {
+        cloud->resize(this->size());
+        qWarning()<<"cloud resize";
+    }
 
     emit resizeSignal();
 }
@@ -1616,12 +1623,18 @@ void MainWindowPockemul::closeEvent(QCloseEvent *event)
     Q_UNUSED(event)
 
     Cloud::saveValueFor("geometry",QString(saveGeometry().toHex()));
+#if 0
     if (Close_All()){
         QMainWindow::closeEvent(event);
         event->accept();
     }
     else
         event->ignore();
+#else
+    QMainWindow::closeEvent(event);
+    event->accept();
+    QApplication::quit();
+#endif
 }
 
 void MainWindowPockemul::slotMsgError(QString msg) {
