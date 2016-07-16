@@ -27,6 +27,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
 
+
+
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 

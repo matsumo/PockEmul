@@ -278,7 +278,7 @@ int main(int argc, char *argv[])
     mainwindow->show();
 #endif
 
-    test();
+//    test();
 
 #ifdef Q_OS_ANDROID
     qInstallMessageHandler(0);
@@ -339,10 +339,14 @@ int main(int argc, char *argv[])
 
     int _res =  app->exec();
 
-    qWarning()<<"END";
+#ifdef Q_OS_ANDROID
+    // On Android, the application is still running in the background after quit.
+    // So I kill the process ... :-(
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
                                         "KillProcess",
                                         "()V");
+#endif
+
     return _res;
 
 }

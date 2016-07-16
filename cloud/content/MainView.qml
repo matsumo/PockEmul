@@ -244,7 +244,9 @@ Item {
                         if (exitOnBack) showRoom.visible = false;
                     }
                     else {
+                        console.log("OK***:",pobjectsmodel.brandsearch);
                         pobjectsmodel.brandsearch.pop();
+                        console.log("OK***:",pobjectsmodel.brandsearch);
                         pobjectsmodel.reload();
                     }
                 }

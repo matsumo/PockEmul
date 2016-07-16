@@ -25,7 +25,7 @@ XmlListModel {
 
     onStatusChanged: {
         if (status == XmlListModel.Ready) {
-            console.log("xmlModel onStatusChanged: START found rows:"+count);
+            console.log("xmlModel onStatusChanged: START found rows:"+count,brandsearch);
             sortedModel.clear();
             var _brand = brandsearch[brandsearch.length-1];
             for (var i=0; i<count; i++) {
@@ -33,7 +33,7 @@ XmlListModel {
                 //                        console.log(item.objects)
                 if ( ( settings.groupByCategory && (item.brand === _brand)) ||
                      ( !settings.groupByCategory && !(item.idpocket.substring(0,1) === '#')) ||
-                     ( item.connectortype === connectorsearch )
+                     ( !(item.connectortype==='') && ( item.connectortype === connectorsearch ))
                     )  {
                     sortedModel.append({rowid : i,
                                            brand: item.brand,
