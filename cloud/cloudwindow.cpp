@@ -332,7 +332,7 @@ extern int vibDelay;
 void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
 {
     settings->setValue(objectName, QVariant(inputValue));
-//    qWarning()<<"saveValue("<<objectName<<","<<inputValue<<") in "<<workDir+"config.ini";
+//    qWarning()<<"saveValue("<<objectName<<","<<inputValue<<") in "<<settings->fileName();
 
     if (objectName == "syncEnabled") syncEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "soundEnabled") soundEnabled =  (inputValue=="on") ? true : false;

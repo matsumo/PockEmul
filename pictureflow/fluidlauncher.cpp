@@ -392,7 +392,6 @@ Vibrate();
          int result = 0; //EMPTY;
          QString ItemText = filteredList[index]->getIdPocket();
          QString ItemBrand = filteredList[index]->getBrand();
-         //TODO: try to implement sub level
          // if ItemText start with a specic tag, load the corresponding xml and display the new pictureflow.
          // Esc should exit
         if (ItemText.startsWith("#")) {

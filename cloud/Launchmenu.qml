@@ -21,6 +21,7 @@ Rectangle {
             "Cloud":            function(){ nav.hide(); cloudShow(); },
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
+            "Adjust zoom":      function(){ fit() ;},
             "About PockEmul":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
@@ -56,6 +57,10 @@ Rectangle {
         ListElement {
             libelle: "Close All"
             imageName: "qrc:/core/close.png"
+        }
+        ListElement {
+            libelle: "Adjust zoom"
+            imageName: ""
         }
         ListElement {
             libelle: "Settings"

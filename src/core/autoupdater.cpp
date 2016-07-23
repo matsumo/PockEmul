@@ -24,6 +24,7 @@
 #include "mainwindowpockemul.h"
 
 #define POCKEMUL_UPDATE_FILE "http://pockemul.free.fr/update/autoupdater.txt"
+#define POCKEMUL_DOWNLOAD_SITE "https://github.com/pockemul/PockEmul/releases"
 
 extern MainWindowPockemul* mainwindow;
 extern int ask(QWidget *parent,QString msg,int nbButton);
@@ -87,11 +88,11 @@ void CAutoUpdater::downloadFinished(QNetworkReply *reply)
         QString result(reply->readAll());
         qWarning()<<result;
         if (result.replace(".","").toInt() > QString(POCKEMUL_VERSION).replace(".","").toInt()){
-            QMessageBox::about(this, tr("New Release"),tr("A new release is available\nCheck Web Site : http://pockemul.free.fr"));
+            ask(this, tr("A new release is available\nCheck Web Site : ")+POCKEMUL_DOWNLOAD_SITE,1);
             close();
         }
         else {
-            QMessageBox::about(this, tr("New Release"),tr("PockEmul is up-to-date"));
+            ask(this, tr("PockEmul is up-to-date"),1);
             close();
         }
     }

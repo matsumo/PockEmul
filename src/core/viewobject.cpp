@@ -140,7 +140,7 @@ void CViewObject::setRotation(int v) {
 
 QRectF CViewObject::rect()
 {
-    return QRectF(PosX,PosY,Pc_DX,Pc_DY);
+    return QRectF(PosX,PosY,Pc_DX*mainwindow->zoom,Pc_DY*mainwindow->zoom);
 }
 
 QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmirror,int angle)

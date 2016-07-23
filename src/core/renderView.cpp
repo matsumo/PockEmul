@@ -55,6 +55,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendRotPocket(QString,int)), this, SLOT(rotpocket(QString,int)));
     QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
     QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
+    QObject::connect(cloud.object, SIGNAL(fit()), this, SLOT(fit()));
 
     QObject::connect(cloud.object, SIGNAL(sendLoadPocket(QString)), this, SLOT(LoadPocket(QString)));
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
@@ -187,6 +188,39 @@ void CrenderView::minimize(QString Id)
 {
     CPObject *pc = ((CPObject*)Id.toLongLong());
     pc->minimize(pc->RectWithLinked().center().toPoint());
+}
+
+void CrenderView::fit()
+{
+
+    // Compute global rect
+    QRectF _globalRect(0,0,0,0);
+    for (int k = 0; k < listpPObject.size(); k++)
+    {
+        _globalRect = _globalRect.united(listpPObject.at(k)->rect());
+    }
+
+    float _cww = mainwindow->centralwidget->rect().width();
+    float _cwh = mainwindow->centralwidget->rect().height();
+    float _grw = _globalRect.width();
+    float _grh = _globalRect.height();
+    float rw= _cww/_grw;
+    float rh= _cwh/_grh;
+    float r=0;
+    if ((rw>1) && (rh>1)) r = MIN(rw,rh);
+    else if ((rw>1) && (rh<=1)) r = rh;
+    else if ((rw<=1) && (rh>1)) r = rw;
+    else if ((rw<=1) && (rh<=1)) r = MAX(rw,rh);
+
+    mainwindow->doZoom(_globalRect.topLeft().toPoint(),r);
+    //move to upper left
+    // Fetch all_object and move them
+    _globalRect.setCoords(0,0,0,0);
+    for (int k = 0; k < listpPObject.size(); k++)
+    {
+        _globalRect = _globalRect.united(listpPObject.at(k)->rect());
+    }
+    mainwindow->MoveAll(- _globalRect.topLeft());
 }
 
 void CrenderView::disableKeyboard(QString Id) {

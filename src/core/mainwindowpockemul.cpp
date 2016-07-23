@@ -1123,7 +1123,6 @@ void MainWindowPockemul::quitPockEmul()
         Close_All();
         PcThread->PcThreadRunning = false;
         qWarning()<<"close";
-        QCoreApplication::quit();
         close();
     }
 }
@@ -1623,6 +1622,8 @@ void MainWindowPockemul::closeEvent(QCloseEvent *event)
     Q_UNUSED(event)
 
     Cloud::saveValueFor("geometry",QString(saveGeometry().toHex()));
+    qWarning()<<"geometry saved:"<<saveGeometry().toHex();
+
 #if 0
     if (Close_All()){
         QMainWindow::closeEvent(event);
@@ -1633,7 +1634,7 @@ void MainWindowPockemul::closeEvent(QCloseEvent *event)
 #else
     QMainWindow::closeEvent(event);
     event->accept();
-    QApplication::quit();
+//    QApplication::quit();
 #endif
 }
 

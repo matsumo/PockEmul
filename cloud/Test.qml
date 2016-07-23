@@ -64,6 +64,7 @@ Rectangle {
     signal sendRotPocket(string id,int rotation)
     signal maximize(string id)
     signal minimize(string id)
+    signal fit();
 
     signal sendNewPocket();
     signal sendLoadPocket(string id);
@@ -450,7 +451,7 @@ Rectangle {
             anchors.top: parent.top
 //            anchors.bottom: parent.bottom
             anchors.left: parent.left
-            z: parent.z
+            z: 9999 //parent.z
 
             width: dp(48)
             height: dp(48)
@@ -556,7 +557,7 @@ Rectangle {
     VisualItemModel {
         id: aboutModel
         Tab {
-            name: "About"
+            name: "About PockEmul "+Qt.application.version
             icon: "pics/back-white.png"
             About {
                 id: aboutFlick
@@ -807,4 +808,5 @@ Rectangle {
         showroomExt.pobjectsmodel.reload();
         showroomExt.visible = true;
     }
+
 }

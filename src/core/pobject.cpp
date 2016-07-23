@@ -804,15 +804,17 @@ void CPObject::maximize(QPoint pos) {
     QRectF rs = RectWithLinked();
     float rw= mainwindow->centralwidget->rect().width()/(rs.width());
     float rh= mainwindow->centralwidget->rect().height()/(rs.height());
-    float r = MIN(rw,rh);
-    if (r>1)
-    {
-        mainwindow->doZoom(pos,r/mainwindow->zoom);
-        //move to upper left
-        // Fetch all_object and move them
-        rs = RectWithLinked();
-        mainwindow->MoveAll(- rs.topLeft());
-    }
+    float r=0;
+    if ((rw>1) && (rh>1)) r = MIN(rw,rh);
+    else if ((rw>1) && (rh<=1)) r = rh;
+    else if ((rw<=1) && (rh>1)) r = rw;
+    else if ((rw<=1) && (rh<=1)) r = MAX(rw,rh);
+
+    mainwindow->doZoom(pos,r);
+    //move to upper left
+    // Fetch all_object and move them
+    rs = RectWithLinked();
+    mainwindow->MoveAll(- rs.topLeft());
 }
 
 /**
