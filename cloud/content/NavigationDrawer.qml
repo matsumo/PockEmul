@@ -140,7 +140,7 @@ Rectangle {
         drag.minimumX: _minimumX
         drag.maximumX: _maximumX
         drag.axis: Qt.Horizontal
-        drag.onActiveChanged: if (active) holdAnimation.stop()
+        drag.onActiveChanged: if (drag.active) holdAnimation.stop()
         onReleased: handleRelease()
         z: open ? 1 : 0
         onMouseXChanged: {

@@ -288,11 +288,25 @@ int main(int argc, char *argv[])
 
     mainwindow->initCommandLine();
 
+    float ratio = Cloud::getValueFor("hiResRatio","0").toFloat();
+    if (0==ratio) {
+        // max 8*50*ratio+2*v_pos = height
+        float _minSize =  MIN(QGuiApplication::primaryScreen()->size().width(),QGuiApplication::primaryScreen()->size().height());
+        float _maxRatio = (_minSize - 2*12)/400.0;
+
+        ratio = MIN(_maxRatio,
+                    MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150)
+                    );
+
+        Cloud::saveValueFor("hiResRatio",QString("%1").arg(ratio));
+    }
+
 
 //qWarning()<<"okl";
     view = 0;
     if (mainwindow->openGlFlag) {
         qWarning()<<"opengl";
+
         QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
         view = new CrenderView(mainwindow->centralwidget);
         windowLayout->addWidget(view);
