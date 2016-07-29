@@ -159,6 +159,7 @@ void Chp15c::TurnON()
     CpcXXXX::TurnON();
     pCPU->Reset();
     ((Clcdc_hp15c*)pLCDC)->voyager_op_display_toggle (((CHPNUT*)pCPU)->reg, 0);
+    Refresh_Display = true;
 }
 
 void Chp15c::TurnOFF()
@@ -214,9 +215,10 @@ bool Chp15c::run()
     if (lcd_count == 0) {
         lcd_count=15;
         ((Clcdc_hp15c*)pLCDC)->voyager_display_update(nutcpu->reg,((Clcdc_hp15c*)pLCDC)->info);
+        pLCDC->updated = true;
     }
 
-    pLCDC->updated = true;
+//    pLCDC->updated = true;
 
     if (pTIMER->usElapsedId(0)>=10000) {
         pTIMER->resetTimer(0);

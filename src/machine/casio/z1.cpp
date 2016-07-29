@@ -52,7 +52,7 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
     LeftFname       = P_RES(":/z1/z1Left.png");
 
-    memsize		= 0xFFFFF;
+    memsize		= 0x100000;
     InitMemValue	= 0x00;
 
     SlotList.clear();
@@ -113,7 +113,7 @@ bool Cz1::init(void)				// initialize
 //    if (!fp_log) fp_log=fopen("z1.log","wt");	// Open log file
 //    pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
-    pCPU->logsw = true;
+//    pCPU->logsw = true;
 
 #endif
     initExtension();
@@ -312,6 +312,8 @@ UINT8 Cz1::in(UINT8 Port,QString)
 
 UINT8 Cz1::in8(UINT16 Port,QString sender)
 {
+    Q_UNUSED(sender)
+
     UINT16 v=0;
 
     switch(Port) {
@@ -417,11 +419,15 @@ UINT8 Cz1::out(UINT8 Port, UINT8 x, QString sender)
 {
     Q_UNUSED(Port)
     Q_UNUSED(x)
+    Q_UNUSED(sender)
+
 
     return 0;
 }
 UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
 {
+    Q_UNUSED(sender)
+
     switch(Port) {
     case 0x0002:
         *LOW(i80l188ebcpu->eoi) = x;
@@ -444,9 +450,11 @@ UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
         *HIGH(i80l188ebcpu->p8253->t0->tcmpB) = x;
         break;
     case 0x0036:
+        qWarning()<<"low tcon 0="<<x;
         *LOW(i80l188ebcpu->p8253->t0->tcon) = x;
         break;
     case 0x0037:
+        qWarning()<<"high tcon 0="<<x;
         *HIGH(i80l188ebcpu->p8253->t0->tcon) = x;
         break;
     case 0x003a:
@@ -462,7 +470,12 @@ UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
         *HIGH(i80l188ebcpu->p8253->t1->tcmpB) = x;
         break;
     case 0x003e:
+        qWarning()<<"low tcon 1="<<x;
         *LOW(i80l188ebcpu->p8253->t1->tcon) = x;
+        break;
+    case 0x003f:
+        qWarning()<<"high tcon 1="<<x;
+        *HIGH(i80l188ebcpu->p8253->t1->tcon) = x;
         break;
     case 0x0042:
         *LOW(i80l188ebcpu->p8253->t2->tcmpA) = x;
@@ -470,14 +483,13 @@ UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
     case 0x0043:
         *HIGH(i80l188ebcpu->p8253->t2->tcmpA) = x;
         break;
-    case 0x003f:
-        *HIGH(i80l188ebcpu->p8253->t1->tcon) = x;
-        break;
     case 0x0046:
+        qWarning()<<"low tcon 2="<<x;
         *LOW(i80l188ebcpu->p8253->t2->tcon) = x;
         AddLog(LOG_MASTER,tr("Set T2Control Low[%1]=%2").arg(x,2,16,QChar('0')).arg(timer2Control,4,16,QChar('0')));
         break;
     case 0x0047:
+        qWarning()<<"high tcon 2="<<x;
         *HIGH(i80l188ebcpu->p8253->t2->tcon) = x;
         AddLog(LOG_MASTER,tr("Set T2Control High[%1]=%2").arg(x,2,16,QChar('0')).arg(timer2Control,4,16,QChar('0')));
         break;
@@ -563,6 +575,8 @@ UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
 
 UINT16 Cz1::in16(UINT16 address,QString sender)
 {
+    Q_UNUSED(sender)
+
     switch (address) {
     case 0x36 : return 0x1000; break;
     case 0x82 : return 0x400; break;
@@ -574,6 +588,7 @@ UINT16 Cz1::in16(UINT16 address,QString sender)
 
 UINT16 Cz1::out16(UINT16 Port,UINT16 x,QString sender)
 {
+    Q_UNUSED(sender)
 
     switch (Port) {
     case 0x200: break;

@@ -17,6 +17,7 @@
  *      1-Jul-2000 - PeT:   Split off from PC driver and componentized
  *
  *****************************************************************************/
+#include <QDebug>
 
 #include "pit8253.h"
 #include "i80L188EB.h"
@@ -666,9 +667,12 @@ void C8253PIT::step(quint64 nbstates)
 }
 
 void C8253PIT::throwint(int intNo) {
+//    qWarning()<<"C8253PIT::throwint";
     if (i80l188ebcpu->eoi & 0x8000) {
-        if (i80l188ebcpu->i86int(&(i80l188ebcpu->i86stat), intNo))
+        if (i80l188ebcpu->i86int(&(i80l188ebcpu->i86stat), intNo)) {
             i80l188ebcpu->eoi = 0;
+            if(i80l188ebcpu->fp_log) fprintf(i80l188ebcpu->fp_log,"C8253PIT::throwint");
+        }
     }
 }
 
@@ -676,6 +680,10 @@ timer::timer(C8253PIT *parent, quint8 intnb)
 {
     p8253pit = parent;
     this->intNb = intnb;
+    tcon=0;
+    tinp=1;           // timer input
+    tcnt=0;
+    tcmpA=tcmpB=0;
 }
 
 void timer::step()
@@ -687,13 +695,20 @@ void timer::step()
             qWarning("RTG");
         }
         else { // RTG=0
-            if (!tinp) return;
+            if (!tinp) {
+//                qWarning("! TINP");
+                return;
+            }
         }
         if (P()) {
             // check t2 reach count
-            if (p8253pit->t2->tcnt != p8253pit->t2->tcmpA) return;
+            if (p8253pit->t2->tcnt != p8253pit->t2->tcmpA) {
+                qWarning("check t2 reach count");
+                return;
+            }
         }
     }
+
 
     // increment counter
     tcnt++;
@@ -730,6 +745,7 @@ void timer::step()
 
     if (INT()) {
         // request interrupt
+//        qWarning()<<"request interrupt";
         p8253pit->throwint(intNb);
     }
 

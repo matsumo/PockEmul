@@ -1,3 +1,4 @@
+#include <QDebug>
 
 #include "i80L188EB.h"
 #include "pit8253.h"
@@ -22,6 +23,9 @@ Ci80L188EB::~Ci80L188EB()
 bool Ci80L188EB::init()
 {
     Ci80x86::init();
+    p8253->t0->tcon&= 0x04;
+    p8253->t1->tcon&= 0x04;
+    p8253->t2->tcon&= 0x04;
 
     return true;
 }
@@ -37,6 +41,7 @@ void Ci80L188EB::step()
 {
     quint64 _states = pPC->pTIMER->state;
     Ci80x86::step();
+//    qWarning()<<pPC->pTIMER->state - _states;
     p8253->step(pPC->pTIMER->state - _states);
 
     pserial0->step(pPC->pTIMER->state - _states);

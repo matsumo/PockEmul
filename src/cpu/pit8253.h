@@ -36,7 +36,7 @@ RTG         Retrigger   X       This bit specifies the action caused by a low-to
                                 count; clear RTG to enable counting. This bit is
                                 ignored with external clocking (EXT=1).
 P           Prescaler   X       Set to increment the timer when Timer 2 reaches its
-                                maximum count. Clear to increment the timer at ¼
+                                maximum count. Clear to increment the timer at 1/4
                                 CLKOUT. This bit is ignored with external clocking
                                 (EXT=1).
 EXT         External    X       Set to use external clock; clear to use internal clock.
@@ -70,9 +70,9 @@ public:
 
     // Timer 0 and 1 Clock Sources
     // EXT P Clock Source
-    //  0  0 Timer clocked internally at ¼ CLKOUT frequency.
+    //  0  0 Timer clocked internally at 1/4 CLKOUT frequency.
     //  0  1 Timer clocked internally, prescaled by Timer 2.
-    //  1  X Timer clocked externally at up to ¼ CLKOUT frequency.
+    //  1  X Timer clocked externally at up to 1/4 CLKOUT frequency.
     quint8 clockSource() { return ((tcon >> 3)&0x01) | ((tcon >> 1)&0x02); }
 
 

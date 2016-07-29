@@ -59,6 +59,7 @@ public:
 //    void keyPressEvent(QKeyEvent *event);
     UINT8 matrixResult;
     virtual void initExtension(void);
+    void update_SID();
 private:
     bool Get_MainConnector(void);
     bool Set_MainConnector(void);

@@ -23,6 +23,8 @@
 
 #define STROBE_TIMER 5
 
+#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+
 Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 6144000/2);
@@ -201,6 +203,7 @@ UINT8 Cfp200::out(UINT8 Port, UINT8 Value, QString sender)
 
         case 0x20:break;
         case 0x21: ks = Value & 0x0f;
+            update_SID();
             break;
 
         case 0x80: pCENT->newOutChar( Value );
@@ -322,21 +325,33 @@ void	Cfp200::initExtension(void)
     extensionArray[2] = ext_MemSlot3;
 }
 
+void Cfp200::update_SID() {
+    switch (ks) {
+    case 5: i85cpu->i8085_set_SID(Cetl?0:1); break;
+    case 6: i85cpu->i8085_set_SID(KEY(K_SHT) ?0:1); break;
+    case 7: i85cpu->i8085_set_SID(KEY(K_BRK) ? 0:1); break;                 // BREAK
+    case 8: i85cpu->i8085_set_SID(KEY(K_GRAPH) ? 0:1); break;               // GRAPH
+    case 9: i85cpu->i8085_set_SID(KEY(K_CTRL) ?0:1); break;
+    default: i85cpu->i8085_set_SID(1); break;
+    }
+}
+
 bool Cfp200::run()
 {
 
     pCENTCONNECTOR_value = pCENTCONNECTOR->Get_values();
     pSIOCONNECTOR_value = pSIOCONNECTOR->Get_values();
 
-    if (ks==5) i85cpu->i8085_set_SID(Cetl?0:1);
-    if (ks==6) i85cpu->i8085_set_SID(pKEYB->isShift?0:1);
-    if (ks==7) i85cpu->i8085_set_SID(pKEYB->LastKey == 0x03 ? 0:1);        // BREAK
-//    if (ks==8) i85cpu->i8085_set_SID(1);        // GRAPH
-    if (ks==9) i85cpu->i8085_set_SID(pKEYB->isCtrl?0:1);
 
+//update_SID();
     if (pKEYB->LastKey>0) {
 
-        i85cpu->i8085_set_irq_line(I8085_RST75_LINE,1);
+        if ((pKEYB->LastKey==K_SHT) || (pKEYB->LastKey==K_BRK) || (pKEYB->LastKey==K_GRAPH) || (pKEYB->LastKey==K_CTRL)) {
+            update_SID();
+        }
+        else {
+            i85cpu->i8085_set_irq_line(I8085_RST75_LINE,1);
+        }
     }
     else
         i85cpu->i8085_set_irq_line(I8085_RST75_LINE,0);
@@ -356,6 +371,8 @@ bool Cfp200::run()
 void Cfp200::Reset()
 {
     CpcXXXX::Reset();
+
+    update_SID();
 
 }
 
@@ -392,7 +409,6 @@ void Cfp200::ExtChanged()
     Reset();
 }
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 
 quint16 Cfp200::getKey()
@@ -404,7 +420,7 @@ quint16 Cfp200::getKey()
 //    i85cpu->i8085_set_SID(0);
 //    if (ks == 0x0B) strobe = 0xffff;
 
-    if ((pKEYB->LastKey>0))
+//    if ((pKEYB->LastKey>0))
     {
         if (strobe & 0x01) {
             if (KEY('7'))			data|=0x10;
@@ -471,7 +487,8 @@ quint16 Cfp200::getKey()
             if (KEY('D'))			data|=0x40;
             if (KEY('C'))			data|=0x80;
 
-            if (pKEYB->isShift) data|=0x100;
+//            if (pKEYB->isShift) data|=0x100;
+//            if (KEY(K_SHT))     data|=0x100;
 //            i85cpu->i8085_set_SID(pKEYB->isShift?1:0);
         }
         if (strobe & 0x80) {
@@ -503,7 +520,7 @@ quint16 Cfp200::getKey()
             if (KEY('H'))			data|=0x40;
             if (KEY('N'))			data|=0x80;
 
-            if (pKEYB->isCtrl) data|=0x100;
+//            if (pKEYB->isCtrl) data|=0x100;
 //            i85cpu->i8085_set_SID(pKEYB->isCtrl?1:0);
         }
 
@@ -517,11 +534,13 @@ quint16 Cfp200::getKey()
         AddLog(LOG_KEYBOARD,tr("KEY PRESSED=%1").arg(data,2,16,QChar('0')));
     }
 
-    if (ks==5) i85cpu->i8085_set_SID(Cetl?0:1);
-    if (ks==6) i85cpu->i8085_set_SID(pKEYB->isShift?0:1);
-    if (ks==7) i85cpu->i8085_set_SID(pKEYB->LastKey == 0x03 ? 0:1);        // BREAK
-//    if (ks==8) i85cpu->i8085_set_SID(1);        // GRAPH
-    if (ks==9) i85cpu->i8085_set_SID(pKEYB->isCtrl?0:1);
+
+
+//    if (ks==5) i85cpu->i8085_set_SID(Cetl?0:1);
+//    if (ks==6) i85cpu->i8085_set_SID(pKEYB->isShift || KEY(K_SHT) ?0:1);
+//    if (ks==7) i85cpu->i8085_set_SID(KEY(K_BRK) ? 0:1);        // BREAK
+////    if (ks==8) i85cpu->i8085_set_SID(1);        // GRAPH
+//    if (ks==9) i85cpu->i8085_set_SID(pKEYB->isCtrl || KEY(K_CTRL) ?0:1);
 
     return data;//^0xff;
 

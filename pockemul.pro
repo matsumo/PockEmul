@@ -624,8 +624,8 @@ DEFINES *= P_JR800
 HEADERS *= src/machine/jr800.h
 SOURCES *= src/machine/jr800.cpp
 RESOURCES *= resources/jr800.qrc
-OTHER_FILES *=
-    resources/keymap/jr800.map
+OTHER_FILES *= resources/keymap/jr800.map
+
 }
 # HX20
 contains(PROJECT_PACKAGE,HX20) {
