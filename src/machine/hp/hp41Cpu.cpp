@@ -697,6 +697,7 @@ void Chp41cpu::Subclass6()
         r->F_REG=r->ST_REG;
         //      if (SoundMode==eSoundSpeaker)
         //        Speaker(F_REG,1);
+//        pPC->fillSoundBuffer((quint8)r->F_REG);
         break;
     }
     case 10:  /* ST=F */
@@ -716,6 +717,7 @@ void Chp41cpu::Subclass6()
         r->ST_REG=TMP_REG;
         //      if (SoundMode==eSoundSpeaker)
         //        Speaker(F_REG,1);
+//        pPC->fillSoundBuffer((quint8)r->F_REG);
         break;
     }
     case 13:  /* ST=C */

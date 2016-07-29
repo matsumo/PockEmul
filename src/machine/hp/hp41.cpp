@@ -391,6 +391,7 @@ bool Chp41::run()
     //  InstrNSec=(UINT64)( ((double)PCPerf.QuadPart*(double)DEFAULT_INST_SPEED/1e6)*((double)ProcInterval/(double)DEFAULT_PROC_INTERVAL) );
     //  WaveSound.SetDuration( (DWORD)( (double)DEFAULT_INST_SPEED*(double)ProcInterval/(double)DEFAULT_PROC_INTERVAL ) );
 
+    fillSoundBuffer((quint8)hp41cpu->r->F_REG);
 
     // validate PC_REG - important if a ROM is removed from the config while it is being executed
     uint page=(pCPU->get_PC()&0xf000)>>12;
@@ -398,6 +399,7 @@ bool Chp41::run()
         pCPU->set_PC(0);
 
     CpcXXXX::run();
+
 
 
     pTIMER->state+=56;
