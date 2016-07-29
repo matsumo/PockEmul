@@ -242,4 +242,19 @@
          <url desc="HP Museum" link="http://www.hpmuseum.org/hp16.htm"/>
          <document desc="Owner's Handbook (en)" link="http://pockemul.free.fr/Documents/userguide/hp16c/hp16c.pdf"/>
       </model>
+      <model value="fx890p">
+          <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=78"/>
+          <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/fx-890p_e.html"/>
+          <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Z1/FX890PZ1Z1GR_eng.pdf"/>
+       </model>
+       <model value="z1">
+           <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=81"/>
+           <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/z-1_e.html"/>
+           <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Z1/FX890PZ1Z1GR_eng.pdf"/>
+        </model>
+        <model value="z1gr">
+            <url desc="Casio Museum" link="http://casio.ledudu.com/pockets.asp?type=73"/>
+            <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/z-1gr_e.html"/>
+            <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Z1/FX890PZ1Z1GR_eng.pdf"/>
+         </model>
 </weblinks>

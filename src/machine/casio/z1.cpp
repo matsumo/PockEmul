@@ -549,7 +549,7 @@ UINT8 Cz1::out8(UINT16 Port,UINT8 x,QString sender)
         if (( x!=0xff)&&( x!=0x0d)) {
             AddLog(LOG_CONSOLE,tr("%1").arg(QChar(x)));
         }
-        // The Z1 seemes to send each char followed by 0xff to the printer
+        // The Z1 seems to send each char followed by 0xff to the printer
         // For now we will cancel the second char sent if 0xff
 
         pCENTflip = !pCENTflip;
@@ -718,9 +718,7 @@ UINT16 Cz1::getKey()
         }
         if (ks&0x40) {
             if (KEY('P'))			data|=0x02;
-            if (KEY(K_SHT))         data|=0x04;
-
-            if (pKEYB->isShift)     data|=0x04;
+            if (KEY(K_SHT2))         data|=0x04;
             if (KEY(';'))			data|=0x08;
             if (KEY(':'))			data|=0x10;
             if (KEY(K_UA))			data|=0x20;
@@ -773,7 +771,8 @@ UINT16 Cz1::getKey()
             if (KEY(K_TAN))			data|=0x200;
         }
         if (ks&0x800) {
-            if (KEY(K_SHT2))			data|=0x400;
+            if (KEY(K_SHT))			data|=0x800;
+            if (pKEYB->isShift)     data|=0x800;
         }
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
