@@ -461,7 +461,7 @@ bool Cpc2001::UpdateFinalImage(void) {
     if ((currentView == FRONTview) ) {
         painter.begin(FinalImage);
         QRect _r = pKEYB->getKey(K_SWITCH).Rect;
-        qWarning()<<"rect"<<_r;
+//        qWarning()<<"rect"<<_r;
         painter.drawImage(_r.x()*internalImageRatio,
                           _r.y()*internalImageRatio,
                           BackgroundImageBackup->copy(_r.x()*internalImageRatio,
