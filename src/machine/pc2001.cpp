@@ -1,7 +1,8 @@
 //FIXME: issue with turnoff turnon and reset.... initialyse memory
 
-
+#include <assert.h>
 #include <QDebug>
+#include <QPainter>
 
 #include "pc2001.h"
 #include "upd7907/upd7907.h"
@@ -44,6 +45,8 @@
     0x80 : TAPE rmt
 
  */
+
+#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 
 Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
@@ -119,10 +122,14 @@ bool Cpc2001::init(void)				// initialize
 
     portB = 0;
 
+    pKEYB->getKey(K_SWITCH).enabled = false;
+
     return true;
 }
 
 bool Cpc2001::run() {
+
+    if (KEY(K_RESET)) Reset();
 
     CpcXXXX::run();
 
@@ -291,7 +298,6 @@ bool Cpc2001::SaveConfig(QXmlStreamWriter *xmlOut)
 
 
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 UINT16 Cpc2001::getKey()
 {
@@ -299,15 +305,15 @@ UINT16 Cpc2001::getKey()
     UINT16 ks = kstrobe^0xFFFF;
     UINT16 data=0;
 
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
 //        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
 
         if (ks&0x01) {
 //            if (KEY(K_F1))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY(K_SHT))			data|=0x04;
-            if (pKEYB->isShift) data|=0x04;
+            if (KEY(K_CTRL))			data|=0x02;
+            if (KEY(K_SHT))			data|=0x04;
+//            if (pKEYB->isShift) data|=0x04;
 //            if (KEY(K_F4))			data|=0x08;
 //            if (KEY(K_F5))			data|=0x10;
 //            if (KEY(K_F6))			data|=0x20;
@@ -331,7 +337,7 @@ UINT16 Cpc2001::getKey()
         }
 
         if (ks&0x08) {
-            if (KEY(','))			data|=0x01;
+            if (KEY(K_NUM_COMMA))	data|=0x01;
             if (KEY('D'))			data|=0x02;
             if (KEY('C'))			data|=0x04;
             if (KEY(K_2))			data|=0x08;
@@ -374,7 +380,7 @@ UINT16 Cpc2001::getKey()
         if (ks&0x100) {
             if (KEY('I'))			data|=0x01;
             if (KEY('K'))			data|=0x02;
-//            if (KEY('/'))			data|=0x04;
+            if (KEY(K_NUM_SLASH))	data|=0x04; // numpad /
             if (KEY(K_7))			data|=0x08;
             if (KEY('8'))			data|=0x10;
             if (KEY('/'))			data|=0x20;
@@ -389,8 +395,8 @@ UINT16 Cpc2001::getKey()
         }
         if (ks&0x400) {
             if (KEY('P'))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY('-'))			data|=0x04;     // numpad -
+            if (KEY(K_YEN))			data|=0x02;
+            if (KEY(K_NUM_MIN))		data|=0x04;     // numpad -
             if (KEY(K_9))			data|=0x08;
             if (KEY('0'))			data|=0x10;
             if (KEY(':'))			data|=0x20;
@@ -406,10 +412,10 @@ UINT16 Cpc2001::getKey()
         if (ks&0x1000) {
             if (KEY('^'))			data|=0x01;
             if (KEY(' '))			data|=0x02; //???
-//            if (KEY('.'))			data|=0x04; // Numpad .
+            if (KEY(K_NUM_PT))		data|=0x04; // Numpad .
             if (KEY(K_UA))			data|=0x08;
             if (KEY('['))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
+            if (KEY('_'))			data|=0x20;
         }
         if (ks&0x2000) {
             if (KEY(K_DEL))			data|=0x01;
@@ -425,7 +431,7 @@ UINT16 Cpc2001::getKey()
 //            if (KEY(K_F3))			data|=0x04;
             if (KEY(K_SML))			data|=0x08;  // KANA ???
             if (KEY(K_CLR))			data|=0x10; // CLR ???
-//            if (KEY(K_F6))			data|=0x20;
+            if (KEY(K_F5))			data|=0x20;
         }
 //        if (ks&0x8000) {
 //            if (KEY(K_F1))			data|=0x01;
@@ -443,6 +449,35 @@ UINT16 Cpc2001::getKey()
     return (data^0xff) & 0x3F;
 
 }
+
+bool Cpc2001::UpdateFinalImage(void) {
+
+    assert(FinalImage!=0);
+
+    CpcXXXX::UpdateFinalImage();
+
+    QPainter painter;
+
+    if ((currentView == FRONTview) ) {
+        painter.begin(FinalImage);
+        QRect _r = pKEYB->getKey(K_SWITCH).Rect;
+        qWarning()<<"rect"<<_r;
+        painter.drawImage(_r.x()*internalImageRatio,
+                          _r.y()*internalImageRatio,
+                          BackgroundImageBackup->copy(_r.x()*internalImageRatio,
+                                                      _r.y()*internalImageRatio,
+                                                      _r.width()*internalImageRatio,
+                                                      _r.height()*internalImageRatio).mirrored(!off,false));
+
+
+        painter.end();
+    }
+
+
+    emit updatedPObject(this);
+    return true;
+}
+
 
 /*
 

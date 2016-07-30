@@ -29,12 +29,10 @@ public:
 
     quint16 kstrobe;
 
-    bool init();
-
+    virtual bool init();
     virtual bool run();
-
     virtual void Reset();
-
+    virtual bool UpdateFinalImage();
     void TurnON();
     void TurnOFF();
     bool SaveConfig(QXmlStreamWriter *xmlOut);

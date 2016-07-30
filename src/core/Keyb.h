@@ -98,6 +98,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_QUOTE     0xb0
 #define K_BRACKET   0xb1
 #define K_OF		0xb2
+#define K_YEN       0xb3
 
 #define K_PRINT		0xc0
 #define K_PFEED		0xc1
@@ -213,6 +214,13 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_TS_32     0x132
 #define K_TS_33     0x133
 
+#define K_NUM_SLASH 0x140
+#define K_NUM_STAR  0x141
+#define K_NUM_PT    0x142
+#define K_NUM_MIN   0x143
+#define K_NUM_COMMA 0x144
+
+
 #define K_NEWALL    0x200
 #define K_LCKEY     0x201
 #define K_CALC      0x202
@@ -247,6 +255,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_C3        0x226
 #define K_C4        0x227
 #define K_LOCK      0x228
+#define K_SWITCH    0x229
 
 // TI57
 #define K_GTO       0x230
