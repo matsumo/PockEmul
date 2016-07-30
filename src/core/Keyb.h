@@ -268,7 +268,6 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_XY        0x241
 
 
-
 // FX-8000G
 #define K_ALPHA       0x250
 #define K_INIT       0x251
@@ -290,6 +289,9 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_NUM 0x263
 #define K_SCREEN 0x264
 #define K_OVERLAY 0x265
+
+
+#define K_CASIO30PINS    0x300
 
 class CPObject;
 class CpcXXXX;

@@ -57,7 +57,7 @@ bool Cfp100::init(void) {
 
     Cce515p::init();
 
-    pCONNECTOR = new Cconnector(this,36,0,Cconnector::Centronics_36,"Parrallel Connector",false,QPoint(631,468)); publish(pCONNECTOR);
+    pCONNECTOR = new Cconnector(this,36,0,Cconnector::Centronics_36,"Parrallel Connector",true,QPoint(631,468)); publish(pCONNECTOR);
     pSavedCONNECTOR = new Cconnector(this,36,1,Cconnector::Canon_15,"Saved Parrallel Connector",true,QPoint(631,468));
 
     QHash<int,QString> lbl;
@@ -184,19 +184,30 @@ bool Cfp100::UpdateFinalImage(void) {
                                  paperWidget->getOffset().y() +10)
                           );
 //    MSG_ERROR(QString("%1 - %2").arg(source.width()).arg(PaperPos().width()));
-    painter.drawImage(PaperPos(),
-                      paperWidget->bufferImage->copy(source).scaled(PaperPos().size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
+    QRect _p = PaperPos();
+    QRect _paper = QRect(_p.x()*internalImageRatio,_p.y()*internalImageRatio,_p.width()*internalImageRatio,_p.height()*internalImageRatio);
+    painter.drawImage(_paper,
+                      paperWidget->bufferImage->copy(source).scaled(_paper.size(),Qt::IgnoreAspectRatio, Qt::SmoothTransformation )
                       );
 #if 1
     painter.setOpacity(0.5);
-    painter.fillRect(PaperPos(),Qt::black);
+    painter.fillRect(_paper,Qt::black);
     painter.setOpacity(1);
 
-    painter.drawImage(112 * internalImageRatio,145 * internalImageRatio,*capot);
+    int _w = capot->width() * internalImageRatio;
+    int _h = capot->height()* internalImageRatio;
+    painter.drawImage(112 * internalImageRatio,145 * internalImageRatio,
+                      capot->scaled(_w,_h,Qt::IgnoreAspectRatio,Qt::SmoothTransformation));
 
-    int offset = (lastX ) * ratio;
-    painter.drawImage((152+offset) * internalImageRatio,178 * internalImageRatio,*head);       // Draw head
-    painter.drawImage((793 - offset) * internalImageRatio,214 * internalImageRatio,*cable);    // Draw cable
+    int offset = (lastX ) * ratio ;
+    painter.drawImage((152+offset) * internalImageRatio,178 * internalImageRatio,
+                      head->scaled(head->width() * internalImageRatio,
+                                   head->height() * internalImageRatio,
+                                   Qt::IgnoreAspectRatio,Qt::SmoothTransformation));       // Draw head
+    painter.drawImage((793 - offset) * internalImageRatio,214 * internalImageRatio,
+                      cable->scaled(cable->width() * internalImageRatio,
+                                    cable->height() * internalImageRatio,
+                                    Qt::IgnoreAspectRatio,Qt::SmoothTransformation));    // Draw cable
 #endif
     painter.end();
 

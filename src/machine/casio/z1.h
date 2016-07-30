@@ -59,7 +59,7 @@ public:
     Cconnector *pCENTCONNECTOR;    qint64      pCENTCONNECTOR_value;
     Cconnector *pSERIALCONNECTOR;    qint64      pSERIALCONNECTOR_value;
 
-
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
 private:
     UINT16 ks;

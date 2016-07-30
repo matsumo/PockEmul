@@ -18,6 +18,7 @@
 #include "ctronics.h"
 #include "cextension.h"
 #include "watchpoint.h"
+#include "renderView.h"
 
 #ifdef POCKEMUL_BIG_ENDIAN
 #	define LOW(x)	((uint8 *)&(x) + 1)
@@ -27,6 +28,7 @@
 #	define HIGH(x)	((uint8 *)&(x) + 1)
 #endif
 
+extern CrenderView* view;
 
 Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
 {								//[constructor]
@@ -850,3 +852,21 @@ void Cz1::Set_SIOConnector(void) {
 
 }
 
+void Cz1::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+    Q_UNUSED(event)
+
+    if ((currentView==LEFTview) && KEY(K_CASIO30PINS)) {
+#if 1
+        view->pickExtensionConnector("Centronics_36");
+#else
+        FluidLauncher *launcher = new FluidLauncher(mainwindow,
+                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
+                                     FluidLauncher::PictureFlowType,QString(),
+                                     "Sharp_11");
+        launcher->show();
+#endif
+    }
+}

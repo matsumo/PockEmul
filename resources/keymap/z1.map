@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>fx890p</model>
 <Keyboard>
+    <KEY description="30 pins connector" height="150" left="20" masterscancode="0x00" modifier="" scancode="0x300" top="130" view="LEFT" width="25"/>
     <KEY description="-" height="18" left="682" masterscancode="0x00" modifier="" scancode="0x2d" top="215" view="FRONT" width="25"/>
     <KEY description="Tab" height="17" left="23" masterscancode="0x00" modifier="" scancode="0x0f" top="156" view="FRONT" width="27"/>
     <KEY description="&apos;" height="20" left="0" masterscancode="0x00" modifier="" scancode="0xb0" top="0" view="FRONT" width="20"/>
