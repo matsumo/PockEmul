@@ -1,3 +1,5 @@
+// a lot of details at http://homepage2.nifty.com/stear/fx890p/indx.htm
+
 #include <QtGui>
 #include <QString>
 
@@ -82,7 +84,7 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
     pLCDC		= new Clcdc_z1(this,
                                QRect(77,44,384,64),
-                               QRect());
+                               QRect(67,44,75,64));
     pCPU		= new Ci80L188EB(this);
     pFPU        = new CCF79107PJ(this);
     pTIMER		= new Ctimer(this);
@@ -238,7 +240,7 @@ bool Cz1::run() {
             if(i80l188ebcpu->eoi & 0x8000) {
                 if(i80l188ebcpu->i86int(&(i80l188ebcpu->i86stat), 0x0c)) {
                     newKey = false;
-//                    if (pCPU->fp_log) fprintf(pCPU->fp_log,"INT 0x0C\n");
+                    if (pCPU->fp_log) fprintf(pCPU->fp_log,"INT 0x0C\n");
                     AddLog(LOG_MASTER,"INT 0x0C");
                     i80l188ebcpu->eoi = 0;
                 }
@@ -267,8 +269,10 @@ bool Cz1::Chk_Adr(UINT32 *d, UINT32 data)
     if(*d < 0x50000) return true; /* RAM */
     if(*d < 0xa0000) return false;
     if(*d < 0xb0000){
+        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nWRITE %06X:%04X\n",*d,data);
         AddLog(LOG_DISPLAY,tr("WriteVram[%1]=%2").arg(*d,5,QChar('0')).arg(data));
 //        if(pCPU->fp_log) fprintf(pCPU->fp_log,"Write VRAM %c\n",data);
+//        qWarning()<<"VRAM:"<<*d<<data;
         pHD66108->writeVram( *d, data);
         return false;
     }

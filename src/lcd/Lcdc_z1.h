@@ -6,6 +6,7 @@
 class Clcdc_z1:public Clcdc{
 public:
     void disp(void);				//display LCDC data to screen
+    void disp_symb(void);
     const char*	GetClassName(){ return("Clcdc_z1");}
 
     Clcdc_z1(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname=QString(), QString _symbfname=QString());

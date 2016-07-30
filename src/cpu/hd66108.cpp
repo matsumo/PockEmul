@@ -1,3 +1,4 @@
+#include <QDebug>
 
 #include "hd66108.h"
 
@@ -38,6 +39,7 @@ UINT8 CHD66108::readVram( int p)
 
 void CHD66108::pset(UINT8 *vram, int x, int y, int pix)
 {
+//    qWarning()<<"pset:"<<x<<y<<pix;
     if(pix)
         vram[y * (LCD_WIDTH / 8) + (x / 8)] |= (0x80 >> (x % 8));
     else
@@ -51,61 +53,47 @@ void CHD66108::writeVram( int p, UINT8 v)
 
     updated=true;
     if(p & 1) {
+
+//        qWarning()<<"mode:"<<(reg&7);
         switch(reg & 7) {
         case 0:
             if(fcr & 0x40) {
-                if(6 <= xar && xar < VRAM_WIDTH && yar < VRAM_HEIGHT) {
-                    /*
-                    printf(
-                    "x=%d,y=%d %c%c%c%c%c%c%c%c\n",
-                    z1->lcd.xar,
-                    z1->lcd.yar,
-                    (v & 0x80 ? '#': '_'),
-                    (v & 0x40 ? '#': '_'),
-                    (v & 0x20 ? '#': '_'),
-                    (v & 0x10 ? '#': '_'),
-                    (v & 0x08 ? '#': '_'),
-                    (v & 0x04 ? '#': '_'),
-                    (v & 0x02 ? '#': '_'),
-                    (v & 0x01 ? '#': '_')
-                    );
-                    */
-                    x = (yar / 32) * 96 + (xar - 6) * 6;
-                    y = (yar % 32);
-                    pset(vram, x + 0, y, v & 0x20);
-                    pset(vram, x + 1, y, v & 0x10);
-                    pset(vram, x + 2, y, v & 0x08);
-                    pset(vram, x + 3, y, v & 0x04);
-                    pset(vram, x + 4, y, v & 0x02);
-                    pset(vram, x + 5, y, v & 0x01);
+                if(xar < VRAM_WIDTH && yar < VRAM_HEIGHT) {
+                    ram[xar][yar]=v;
+                    if (6 <= xar) {
+                        x = (yar / 32) * 96 + (xar - 6) * 6;
+                        y = (yar % 32);
+                        pset(vram, x + 0, y, v & 0x20);
+                        pset(vram, x + 1, y, v & 0x10);
+                        pset(vram, x + 2, y, v & 0x08);
+                        pset(vram, x + 3, y, v & 0x04);
+                        pset(vram, x + 4, y, v & 0x02);
+                        pset(vram, x + 5, y, v & 0x01);
+                    }
+                    else {
+//                        qWarning()<<xar<<yar<<v;
+                    }
+
                 }
             } else {
-                if(4 <= xar && xar < VRAM_WIDTH && yar < VRAM_HEIGHT) {
-                    /*
-                    printf(
-                    "x=%d,y=%d %c%c%c%c%c%c%c%c\n",
-                    z1->lcd.xar,
-                    z1->lcd.yar,
-                    (v & 0x80 ? '#': '_'),
-                    (v & 0x40 ? '#': '_'),
-                    (v & 0x20 ? '#': '_'),
-                    (v & 0x10 ? '#': '_'),
-                    (v & 0x08 ? '#': '_'),
-                    (v & 0x04 ? '#': '_'),
-                    (v & 0x02 ? '#': '_'),
-                    (v & 0x01 ? '#': '_')
-                    );
-                    */
-                    x = (yar / 32) * 96 + (xar - 4) * 8;
-                    y = (yar % 32);
-                    pset(vram, x - 4, y, v & 0x80);
-                    pset(vram, x - 3, y, v & 0x40);
-                    pset(vram, x - 2, y, v & 0x20);
-                    pset(vram, x - 1, y, v & 0x10);
-                    pset(vram, x + 0, y, v & 0x08);
-                    pset(vram, x + 1, y, v & 0x04);
-                    pset(vram, x + 2, y, v & 0x02);
-                    pset(vram, x + 3, y, v & 0x01);
+                if(xar < VRAM_WIDTH && yar < VRAM_HEIGHT) {
+                    ram[xar][yar]=v;
+                    if (4 <= xar) {
+                        x = (yar / 32) * 96 + (xar - 4) * 8;
+                        y = (yar % 32);
+                        pset(vram, x - 4, y, v & 0x80);
+                        pset(vram, x - 3, y, v & 0x40);
+                        pset(vram, x - 2, y, v & 0x20);
+                        pset(vram, x - 1, y, v & 0x10);
+                        pset(vram, x + 0, y, v & 0x08);
+                        pset(vram, x + 1, y, v & 0x04);
+                        pset(vram, x + 2, y, v & 0x02);
+                        pset(vram, x + 3, y, v & 0x01);
+                    }
+                    else {
+//                        qWarning()<<xar<<yar<<v;
+                    }
+
                 }
             }
             if(fcr & 0x80)

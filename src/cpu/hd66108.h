@@ -51,6 +51,7 @@ public:
 //private:
     UINT8   reg,fcr,xar,yar;
     UINT8 vram[(LCD_WIDTH / 8) * LCD_HEIGHT];
+    UINT8 ram[VRAM_WIDTH][VRAM_HEIGHT];
 };
 
 #endif
