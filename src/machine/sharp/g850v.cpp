@@ -538,7 +538,7 @@ BYTE Cg850v::getKey()
             if (KEY(K_BASIC))		data|=0x01;
             if (KEY(K_TXT))			data|=0x02;
             if (KEY(K_SML))			data|=0x04;
-            if (KEY(K_EXTMENU))		data|=0x08;
+            if (KEY(K_KANA))		data|=0x08;
             if (KEY(K_TAB))			data|=0x10;
             if (KEY(' '))			data|=0x20;
             if (KEY(K_DA))			data|=0x40;

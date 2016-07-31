@@ -65,6 +65,7 @@
     <KEY description="X" height="16" left="111" masterscancode="0x00" modifier="" scancode="0x78" top="256" view="FRONT" width="25"/>
     <KEY description="Y" height="16" left="224" masterscancode="0x00" modifier="" scancode="0x79" top="191" view="FRONT" width="25"/>
     <KEY description="Z" height="16" left="77" masterscancode="0x00" modifier="" scancode="0x7a" top="254" view="FRONT" width="25"/>
+    <KEY description="Kana" height="20" left="68" masterscancode="0x00" modifier="" scancode="0xdc" top="283" view="FRONT" width="30"/>
     <KEY description="TAB" height="20" left="16" masterscancode="0x00" modifier="" scancode="0x0f" top="187" view="FRONT" width="30"/>
     <KEY description="BASIC" height="16" left="436" masterscancode="0x00" modifier="" scancode="0xe2" top="45" view="FRONT" width="25"/>
     <KEY description="TXT" height="16" left="469" masterscancode="0x00" modifier="" scancode="0x20a" top="44" view="FRONT" width="25"/>
