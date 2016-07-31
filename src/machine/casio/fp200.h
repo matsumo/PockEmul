@@ -39,6 +39,7 @@ public:
     bool LoadConfig(QXmlStreamReader *xmlIn);
 
     virtual void    ExtChanged(void);
+    virtual void ComputeKey(KEYEVENT ke = KEY_PRESSED,int scancode=0,QMouseEvent *event=0);
 
     Cconnector *pCENTCONNECTOR;
     qint64      pCENTCONNECTOR_value;

@@ -14,6 +14,10 @@
 #include "Lcdc_pc2001.h"
 #include "Connect.h"
 #include "watchpoint.h"
+#include "renderView.h"
+
+
+extern CrenderView* view;
 
 // TODO: Keyboard map is not complete
 //          Power switch paint
@@ -473,12 +477,27 @@ bool Cpc2001::UpdateFinalImage(void) {
         painter.end();
     }
 
+    Refresh_Display = true;
 
-    emit updatedPObject(this);
     return true;
 }
 
+void Cpc2001::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
+    if ((currentView==TOPview) && KEY(K_PRINTER)) {
+        view->pickExtensionConnector("Din_8");
+    }
+    if ((currentView==RIGHTview) && KEY(K_CMT)) {
+        view->pickExtensionConnector("Jack_3");
+    }
+//    if ((currentView==RIGHTview) && KEY(K_SIO)) {
+//        view->pickExtensionConnector("Din_8");
+//    }
+}
 /*
 
 

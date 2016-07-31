@@ -5,5 +5,6 @@
         <file>fp200/chr.bin</file>
         <file>fp200/fp200.png</file>
         <file>fp200/fp200Top.png</file>
+        <file>fp200/fp200Left.png</file>
     </qresource>
 </RCC>

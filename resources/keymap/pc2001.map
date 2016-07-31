@@ -1,6 +1,9 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc2001</model>
 <Keyboard>
+    <KEY description="Printer Connector" height="70" left="253" masterscancode="0x00" modifier="" scancode="0x301" top="14" view="TOP" width="70"/>
+    <KEY description="CMT Connector" height="70" left="28" masterscancode="0x00" modifier="" scancode="0x302" top="216" view="RIGHT" width="70"/>
+    <KEY description="SIO Connector" height="70" left="27" masterscancode="0x00" modifier="" scancode="0x303" top="141" view="RIGHT" width="70"/>
     <KEY description="F1" height="22" left="107" masterscancode="0x00" modifier="" scancode="0xf6" top="206" view="FRONT" width="70"/>
     <KEY description="F2" height="22" left="196" masterscancode="0x00" modifier="" scancode="0xf7" top="206" view="FRONT" width="70"/>
     <KEY description="F3" height="22" left="281" masterscancode="0x00" modifier="" scancode="0xf8" top="206" view="FRONT" width="70"/>

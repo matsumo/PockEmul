@@ -150,10 +150,11 @@ void Cpc2021::Refreshpc2021(qint8 data)
 
     painter.end();
 
-    Refresh_Display = true;
 
     paperWidget->setOffset(QPoint(0,top));
     paperWidget->updated = true;
+
+    Refresh_Display = true;
 
 }
 

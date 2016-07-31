@@ -300,7 +300,10 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_OVERLAY 0x265
 
 
-#define K_CASIO30PINS    0x300
+#define K_CASIO30PINS   0x300
+#define K_PRINTER       0x301
+#define K_CMT           0x302
+#define K_SIO           0x303
 
 class CPObject;
 class CpcXXXX;

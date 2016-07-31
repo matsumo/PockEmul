@@ -33,7 +33,7 @@
      <example brand="SHARP" idpocket="CE-160" filename="./" name="Sharp ce-160" image=":/cemem/ce160.png" connectortype="Sharp_40" conngender="female"/>
      <example brand="SHARP" idpocket="CE-163" filename="./" name="Sharp ce-163" image=":/cemem/ce163.png" connectortype="Sharp_40" conngender="female"/>
      <example brand="CANON" idpocket="Canon X-710" filename="./" name="Canon X-710" image=":/x07/x710.png" connectortype="Sharp_9" conngender="female"/>
-     <example brand="OTHER" idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Sharp_1" conngender="male"/>
+     <example brand="OTHER" idpocket="Serial Console" filename="./" name="Serial Console" image=":/ext/serial.png" connectortype="Serial" conngender="male"/>
      <example brand="OTHER" idpocket="Potar" filename="./" name="Potar" image=":/ext/jack.png" connectortype="Optical" conngender="male"/>
      <example brand="OTHER" idpocket="Simulator" filename="./" name="Simulator" image=":/ext/simu.png" connectortype="Sharp_11" conngender="male"/>
      <example brand="OTHER" idpocket="11Pins Cable" filename="./" name="Sharp EA-129C" image=":/ext/cable.png" connectortype="Sharp_11" conngender="male"/>
@@ -41,7 +41,7 @@
      <example brand="CASIO" idpocket="Casio FA-80" filename="./" name="Casio FA-80" image=":/fx8000g/fa80.png" connectortype="Casio_30" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FP-100" filename="./" name="Casio FP-100" image=":/ext/fp100.png" connectortype="Centronics_36" conngender="female"/>
      <example brand="CASIO" idpocket="Casio FP-40" filename="./" name="Casio FP-40" image=":/ext/fp40.png" connectortype="Centronics_36" conngender="female"/>
-     <example brand="OTHER" idpocket="Nec PC-2021" filename="./" name="Nec PC-2021" image=":/ext/pc-2021.png" connectortype="Sharp_9" conngender="female"/>
+     <example brand="OTHER" idpocket="Nec PC-2021" filename="./" name="Nec PC-2021" image=":/ext/pc-2021.png" connectortype="Din_8" conngender="male"/>
      <example brand="OTHER" idpocket="Nec PC-2081" filename="./" name="Nec PC-2081" image=":/ext/pc-2081.png" connectortype="Jack_3" conngender="female"/>
      <example brand="OTHER" idpocket="General CL-1000" filename="./" name="General CL-1000" image=":/ext/cl-1000.png" connectortype="General_20" conngender="male"/>
      <example brand="OTHER" idpocket="SANCO TP-83" filename="./" name="SANCO TP-83" image=":/ext/tp-83.png" connectortype="Sharp_9" conngender="female"/>

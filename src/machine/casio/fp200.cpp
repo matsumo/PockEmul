@@ -17,6 +17,9 @@
 #include "watchpoint.h"
 
 #include "Log.h"
+#include "renderView.h"
+
+extern CrenderView* view;
 
 // TODO: MultiTouch Events
 
@@ -36,6 +39,7 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
     BackGroundFname	= P_RES(":/fp200/fp200.png");
 
     TopFname    = P_RES(":/fp200/fp200Top.png");
+    LeftFname   = P_RES(":/fp200/fp200Left.png");
 
     memsize		= 0x10000;
     InitMemValue	= 0xFF;
@@ -629,4 +633,21 @@ bool Cfp200::Set_MainConnector(void) {
 
 
     return true;
+}
+
+void Cfp200::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
+{
+    Q_UNUSED(ke)
+    Q_UNUSED(scancode)
+    Q_UNUSED(event)
+
+    if ((currentView==TOPview) && KEY(K_PRINTER)) {
+        view->pickExtensionConnector("Centronics_36");
+    }
+//    if ((currentView==TOPview) && KEY(K_CMT)) {
+//        view->pickExtensionConnector("Jack_3");
+//    }
+    if ((currentView==TOPview) && KEY(K_SIO)) {
+        view->pickExtensionConnector("Serial");
+    }
 }

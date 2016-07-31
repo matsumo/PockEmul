@@ -1,6 +1,10 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>fp200</model>
 <Keyboard>
+    <KEY description="On/Off" height="90" left="89" masterscancode="0x00" modifier="" scancode="0xb2" top="402" view="LEFT" width="35"/>
+    <KEY description="Printer Connector" height="70" left="108" masterscancode="0x00" modifier="" scancode="0x301" top="27" view="TOP" width="230"/>
+    <KEY description="CMT Connector" height="70" left="380" masterscancode="0x00" modifier="" scancode="0x302" top="30" view="TOP" width="70"/>
+    <KEY description="Serial Connector" height="70" left="458" masterscancode="0x00" modifier="" scancode="0x303" top="31" view="TOP" width="70"/>
     <KEY description="BASIC" height="40" left="878" masterscancode="0x00" modifier="" scancode="0xe2" top="219" view="FRONT" width="60"/>
     <KEY description="CETL" height="40" left="944" masterscancode="0x00" modifier="" scancode="0x20e" top="219" view="FRONT" width="60"/>
     <KEY description="F1" height="58" left="57" masterscancode="0x00" modifier="" scancode="0xf6" top="268" view="FRONT" width="58"/>
