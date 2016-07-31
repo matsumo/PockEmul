@@ -17,6 +17,8 @@
 #define PIN11IF_8PIO	1	/* 8bits PIO    */
 #define PIN11IF_UART	2	// UART
 
+#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+
 Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(parent)
 {
     Q_UNUSED(parent)
@@ -262,7 +264,7 @@ UINT8 Cg850v::in(UINT8 address,QString)
         return 0;
     case 0x12:
         return 0;
-    case 0x13: pCPU->imem[address] = (ks1 & 0x08) ? (pKEYB->isShift?1:0):0;
+    case 0x13: pCPU->imem[address] = (ks1 & 0x08) ? (KEY(K_SHT)?1:0):0;
         return 0;
     case 0x14:
         return 0;
@@ -480,7 +482,7 @@ int Cg850v::mapKey(QKeyEvent *event)
 {
     int key = CpcXXXX::mapKey(event);
 
-#if 1
+#if 0
     switch (key) {
     case K_UA: return '2';
 //    case K_DA: return '2';
@@ -493,8 +495,6 @@ int Cg850v::mapKey(QKeyEvent *event)
     return key;
 }
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 BYTE Cg850v::getKey()
 {
@@ -502,7 +502,7 @@ BYTE Cg850v::getKey()
     UINT8 data=0;
 
     WORD ks = ks1 | (ks2 << 8);
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
         if (ks&1) {
             if (KEY(K_OF))			data|=0x01;

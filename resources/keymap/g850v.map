@@ -21,6 +21,7 @@
     <KEY description="Left Arrow" height="16" left="317" masterscancode="0x00" modifier="" scancode="0x06" top="288" view="FRONT" width="25"/>
     <KEY description="MODE" height="16" left="1" masterscancode="0x00" modifier="" scancode="0x08" top="0" view="FRONT" width="25"/>
     <KEY description="Rigth Arrow" height="16" left="384" masterscancode="0x00" modifier="" scancode="0x07" top="286" view="FRONT" width="25"/>
+    <KEY description="Shift" height="16" left="16" masterscancode="0x00" modifier="" scancode="0x11" top="252" view="FRONT" width="50"/>
     <KEY description="2ndF" height="16" left="436" masterscancode="0x00" modifier="" scancode="0x12" top="79" view="FRONT" width="23"/>
     <KEY description="SML" height="16" left="18" masterscancode="0x00" modifier="" scancode="0x14" top="226" view="FRONT" width="32"/>
     <KEY description="ANS" height="16" left="541" masterscancode="0x00" modifier="" scancode="0x207" top="44" view="FRONT" width="25"/>
