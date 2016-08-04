@@ -1,6 +1,4 @@
 import QtQuick 2.0
-import QtQuick.Particles 2.0
-import QtGraphicalEffects 1.0
 
 Item {
     id: mainView
@@ -13,7 +11,7 @@ Item {
 
     // Updates the blur shader source, best called right before adding blurAmount
     function scheduleUpdate() {
-        mainContentSource.scheduleUpdate();
+//        mainContentSource.scheduleUpdate();
     }
 
     anchors.fill: parent
@@ -107,118 +105,7 @@ Item {
             }
         }
 
-        // Shooting star + animation + particles
-        AnimatedSprite {
-            id: lightImage
-            width: 128
-            height: 128
-            frameWidth: 128
-            frameHeight: 128
-            frameCount: 16
-            frameRate: 15
-            source: "images/planet_sprite.png"
-            interpolate: true
-            loops: Animation.Infinite
-            visible: settings.showLighting || settings.showShootingStarParticles
-//            running: !detailsView.isShown && !infoView.isShown && (settings.showLighting || settings.showShootingStarParticles)
-            running: !detailsView.isShown && (settings.showLighting || settings.showShootingStarParticles)
-        }
 
-        PathAnimation {
-            target: lightImage
-            duration: 5000
-            orientation: PathAnimation.RightFirst
-            anchorPoint: Qt.point(lightImage.width/2, lightImage.height/2)
-            running: true
-//            paused: detailsView.isShown || infoView.isShown || (!settings.showLighting && !settings.showShootingStarParticles)
-            paused: detailsView.isShown || (!settings.showLighting && !settings.showShootingStarParticles)
-            loops: Animation.Infinite
-            path: Path {
-                id: lightAnimPath
-                startX: mainView.width*0.4; startY: mainView.height*0.3
-                PathCurve { x: mainView.width*0.8; y: mainView.height*0.2 }
-                PathCurve { x: mainView.width*0.8; y: mainView.height*0.7 }
-                PathCurve { x: mainView.width*0.1; y: mainView.height*0.6 }
-                PathCurve { x: mainView.width*0.4; y: mainView.height*0.3 }
-            }
-        }
-
-        ParticleSystem {
-            anchors.fill: parent
-            paused: detailsView.isShown /*|| infoView.isShown*/
-
-            // Shooting star particles
-            ImageParticle {
-                source: "images/particle.png"
-                color: "#ffefaf"
-                colorVariation: settings.showColors ? 1.0 : 0.1
-                alpha: 0
-            }
-            Emitter {
-                id: shootingStarEmitter
-                emitRate: settings.showShootingStarParticles ? 100 : 0
-                lifeSpan: 2000
-                x: lightImage.x + lightImage.width/2
-                y: lightImage.y + lightImage.height/2
-                velocity: PointDirection {xVariation: 8; yVariation: 8;}
-                acceleration: PointDirection {xVariation: 12; yVariation: 12;}
-                size: 32
-                sizeVariation: 16
-            }
-            Emitter {
-                id: shootingStarBurst
-                emitRate: 0
-                lifeSpan: 2000
-                x: lightImage.x + lightImage.width/2
-                y: lightImage.y + lightImage.height/2
-                velocity: PointDirection {xVariation: 60; yVariation: 60;}
-                acceleration: PointDirection {xVariation: 40; yVariation: 40;}
-                size: 24
-                sizeVariation: 16
-            }
-
-            // Dust/Smoke particles
-            ImageParticle {
-                groups: ["smoke"]
-                source: "images/smoke.png"
-                color: "#ffffff"
-                alpha: 0.9
-                opacity: 0.8
-                colorVariation: settings.showColors ? 0.9 : 0.0
-                rotationVariation: 180
-            }
-            Emitter {
-                y: mainView.height * 0.85
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 200 + parent.width * 0.1
-                height: mainView.height * 0.3
-                emitRate: settings.showFogParticles ? 8 : 0
-                lifeSpan: 2000
-                lifeSpanVariation: 1000
-                group: "smoke"
-                size: 192
-                sizeVariation: 64
-                acceleration: PointDirection { y: -80; xVariation: 20 }
-            }
-            Emitter {
-                y: mainView.height * 0.9
-                anchors.horizontalCenter: parent.horizontalCenter
-                width: 200 + parent.width * 0.1
-                height: mainView.height * 0.2
-                emitRate: settings.showFogParticles ? 10 : 0
-                lifeSpan: 2000
-                group: "smoke"
-                size: 192
-                sizeVariation: 64
-                acceleration: PointDirection { y: -20; xVariation: 40 }
-            }
-//            Turbulence {
-//                groups: ["smoke"]
-//                width: parent.width
-//                height: parent.height * 0.8
-//                strength: 60
-//            }
-        }
 
 //        SettingsView {
 //            id: settingsView
@@ -269,17 +156,4 @@ Item {
 
     }
 
-    FastBlur {
-        anchors.fill: mainViewArea
-        radius: mainView.blurAmount
-        visible: mainView.blurAmount
-        source: ShaderEffectSource {
-            id: mainContentSource
-            anchors.fill: parent
-            sourceItem: mainViewArea
-            hideSource: false
-            live: false
-            visible: mainView.blurAmount
-        }
-    }
 }

@@ -152,13 +152,14 @@ bool Chp15c::init()
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 void Chp15c::TurnON()
 {
     CpcXXXX::TurnON();
     pCPU->Reset();
+    ((Clcdc_hp15c*)pLCDC)->voyager_display_init_ops(nutcpu->reg,((Clcdc_hp15c*)pLCDC)->info);
     ((Clcdc_hp15c*)pLCDC)->voyager_op_display_toggle (((CHPNUT*)pCPU)->reg, 0);
+    pLCDC->redraw = true;
     Refresh_Display = true;
 }
 
@@ -216,6 +217,7 @@ bool Chp15c::run()
         lcd_count=15;
         ((Clcdc_hp15c*)pLCDC)->voyager_display_update(nutcpu->reg,((Clcdc_hp15c*)pLCDC)->info);
         pLCDC->updated = true;
+        Refresh_Display = true;
     }
 
 //    pLCDC->updated = true;
@@ -273,8 +275,6 @@ bool Chp15c::Chk_Adr_R(UINT32 *d, UINT32 *data)
     return true;
 }
 
-
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 UINT8 Chp15c::getKey()
 {

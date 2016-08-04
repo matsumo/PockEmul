@@ -313,7 +313,6 @@ bool Chp82143A::exit(void) {
     return true;
 }
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 void Chp82143A::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

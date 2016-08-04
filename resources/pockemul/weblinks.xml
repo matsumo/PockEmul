@@ -257,4 +257,9 @@
             <url desc="Pocket Museum" link="http://pocket.free.fr/html/casio/z-1gr_e.html"/>
             <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/Z1/FX890PZ1Z1GR_eng.pdf"/>
          </model>
+         <model value="g850">
+             <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-g850v_e.html"/>
+             <document desc="User Guide (jp) 79MB" link="http://pockemul.free.fr/Documents/userguide/G850/PC-G850VOCR2.pdf"/>
+             <document desc="French Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/G850/articleG850.pdf"/>
+          </model>
 </weblinks>

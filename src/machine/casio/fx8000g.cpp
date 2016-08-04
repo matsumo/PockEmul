@@ -316,7 +316,6 @@ bool Cfx8000g::SaveConfig(QXmlStreamWriter *xmlOut)
 
 
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 UINT8 Cfx8000g::getKey()
 {
     UINT8 data=0;

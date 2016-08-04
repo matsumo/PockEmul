@@ -476,9 +476,7 @@ void Cpc13XX::setbackdoorS1Angle(int value) {
 
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

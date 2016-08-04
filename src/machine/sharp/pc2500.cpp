@@ -17,7 +17,7 @@
 #include "ce515p.h"
 #include "watchpoint.h"
 
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
 
 Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
 {								//[constructor]

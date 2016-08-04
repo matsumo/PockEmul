@@ -347,9 +347,7 @@ bool Cpc1360::Chk_Adr_R(UINT32 *d,UINT32 *data)
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

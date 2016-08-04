@@ -557,12 +557,28 @@ Rectangle {
     VisualItemModel {
         id: aboutModel
         Tab {
+            name: "Help"
+            icon: "pics/help.png"
+            About {
+                id: helpFlick
+                anchors.fill: parent
+                fileName: ":/pockemul/help.html"
+            }
+        }
+        Tab {
             name: "About PockEmul "+Qt.application.version
-            icon: "pics/back-white.png"
+            icon: "pics/white-about-256.png"
             About {
                 id: aboutFlick
                 anchors.fill: parent
                 fileName: ":/pockemul/release_notes.html"
+            }
+        }
+        Tab {name: "Back"
+            icon: "pics/back-white.png"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: close();
             }
         }
     }
@@ -574,7 +590,7 @@ Rectangle {
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: aboutModel
-        quitIndex: 0
+        quitIndex: 2
         onClose: visible=false;
 
     }

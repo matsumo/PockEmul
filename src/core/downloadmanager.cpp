@@ -197,8 +197,8 @@ extern CrenderView *view;
 
      QMetaObject::invokeMethod(view->cloud.object, "setDownloadProgress",
                                Q_ARG(QVariant, 0),
-                               Q_ARG(QVariant, Total),
-                               Q_ARG(QVariant, Received)
+                               Q_ARG(QVariant, Total/1000),
+                               Q_ARG(QVariant, Received/1000)
                                );
  }
 

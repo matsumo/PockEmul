@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>g850</model>
 <Keyboard>
+    <KEY description="11pins connector" height="137" left="23" masterscancode="0x00" modifier="" scancode="0x240" top="103" view="LEFT" width="14"/>
     <KEY description="-" height="22" left="562" masterscancode="0x00" modifier="" scancode="0x2d" top="246" view="FRONT" width="32"/>
     <KEY description="(" height="16" left="578" masterscancode="0x00" modifier="" scancode="0x28" top="141" view="FRONT" width="25"/>
     <KEY description=")" height="16" left="612" masterscancode="0x00" modifier="" scancode="0x29" top="142" view="FRONT" width="25"/>
@@ -84,5 +85,6 @@
     <KEY description="RM" height="22" left="604" masterscancode="0x00" modifier="" scancode="0xf5" top="173" view="FRONT" width="32"/>
     <KEY description="NPR" height="22" left="431" masterscancode="0x00" modifier="" scancode="0x20c" top="105" view="FRONT" width="32"/>
     <KEY description="PI" height="22" left="431" masterscancode="0x00" modifier="" scancode="0x208" top="135" view="FRONT" width="32"/>
+    <KEY description="RESET" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x20d" top="281" view="FRONT" width="20"/>
 </Keyboard>
 </KEYBMAP>

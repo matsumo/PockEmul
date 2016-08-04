@@ -211,19 +211,23 @@ bool Clcdc_hp15c::init()
 
 void Clcdc_hp15c::disp(void)
 {
+    bool changed = false;
 
     Refresh = false;
 
     if (!ready) return;
 
-    if (!redraw) {
+    if (redraw) {
+        changed = true;
+    }
+    else {
         if (!updated) return;
     }
     redraw = false;
 
 //    voyager_display_update(nutcpu->reg,info);
 
-    bool changed = false;
+
     for (int digit=0 ; digit < 11; digit++) {
         if (info->display_segments[digit] != display_segments_backup[digit]) {
             changed = true;

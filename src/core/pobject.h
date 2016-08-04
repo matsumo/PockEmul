@@ -43,6 +43,8 @@ class COverlay;
 #define PS_PRO	3
 
 
+#define KEY(c)	(pKEYB->isKey(c))
+
 
 class CPObject:public CViewObject
 {
@@ -309,6 +311,7 @@ protected:
     // Overlay image
     QList<COverlay*> overlays;
     int currentOverlay;
+    quint64 resetFiredState;
 };
 
 

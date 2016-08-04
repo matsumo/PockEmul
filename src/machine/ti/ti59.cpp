@@ -358,7 +358,7 @@ QString Cti59::Display() {
   return s;
 }
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+
 
 UINT8 Cti59::getKey()
 {

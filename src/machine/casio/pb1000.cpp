@@ -364,8 +364,9 @@ void Cpb1000::paintEvent(QPaintEvent *event)
 }
 
 #define IA ((CHD61700*)pCPU)->m_reg8bit[4]
-#define TOUPPER( a )	(  ((a >= 'a' && a <= 'z') ? a-('a'-'A') : a ) )
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
+//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
 UINT16 Cpb1000::getKey() {
 
     UINT32 ko = 0;

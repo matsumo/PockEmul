@@ -17,8 +17,6 @@
 #define PIN11IF_8PIO	1	/* 8bits PIO    */
 #define PIN11IF_UART	2	// UART
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-
 Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(parent)
 {
     Q_UNUSED(parent)
@@ -112,7 +110,8 @@ bool Cg850v::init()
     pCPU->logsw = true;
 #endif
     CpcXXXX::init();
-    pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(0,90));	publish(pCONNECTOR);
+    pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(0,120));
+    publish(pCONNECTOR);
 
     pCPU->init();
     ks1=ks2=romBank = exBank = ramBank = 0;
@@ -124,13 +123,17 @@ bool Cg850v::Set_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-#if 0
+#if 1
     switch(pin11If) {
     case PIN11IF_3IO:
-        return (io3Out & 0x03) | ((io3Out >> 4) & 0x08);
-    case PIN11IF_8PIO:
+//        pCONNECTOR->Set_values( (io3Out & 0x03) | ((io3Out >> 4) & 0x08));
+        pCONNECTOR->Set_pin(PIN_MT_OUT1,io3Out&0x80?true:false);
+        pCONNECTOR->Set_pin(PIN_D_OUT,io3Out&0x02?true:false);
+        pCONNECTOR->Set_pin(PIN_BUSY,io3Out&0x01?true:false);
+        break;
+//    case PIN11IF_8PIO:
 //        return ~pio8Io & pio8Out;
-    case PIN11IF_UART:
+//    case PIN11IF_UART:
 //		return 0;
     }
 #endif
@@ -143,7 +146,11 @@ bool Cg850v::Get_Connector(Cbus *_bus)
 {
     Q_UNUSED(_bus)
 
-    pin11If = pCONNECTOR->Get_values() >> 3;
+//    pin11If = pCONNECTOR->Get_values() >> 3;
+
+//    io3Out=  (pCONNECTOR->Get_pin(PIN_MT_OUT1)?0x80:0x00) |
+//             (pCONNECTOR->Get_pin(PIN_D_OUT)?0x02:0x00) |
+//             (pCONNECTOR->Get_pin(PIN_BUSY)?0x01:0x00) ;
 
     return true;
 }
@@ -268,17 +275,14 @@ UINT8 Cg850v::in(UINT8 address,QString)
         return 0;
     case 0x14:
         return 0;
-    case 0x15:
+    case 0x15: pCPU->imem[address] = xinEnabled;
         return 0;
     case 0x16: pCPU->imem[address] = interruptType;
         return 0;
     case 0x17: pCPU->imem[address] = interruptMask;
         return 0;
     case 0x18:
-        pCPU->imem[address] =
-                (pCONNECTOR->Get_pin(PIN_MT_OUT1)?0x80:0x00) |
-                (pCONNECTOR->Get_pin(PIN_D_OUT)?0x02:0x00) |
-                (pCONNECTOR->Get_pin(PIN_BUSY)?0x01:0x00) ;
+        pCPU->imem[address] = io3Out;
         return 0;
     case 0x19:
         pCPU->imem[address] = ((exBank & 0x07) << 4) | (romBank & 0x0f);
@@ -299,9 +303,9 @@ UINT8 Cg850v::in(UINT8 address,QString)
         return 0;
     case 0x1f:
         pCPU->imem[address] = (keyBreak) |
-                (pCONNECTOR->Get_pin(PIN_MT_IN)?0x04:0x00) |
+                (xinEnabled ? (pCONNECTOR->Get_pin(PIN_MT_IN)?0x04:0x00) : 0x00) |
                 (pCONNECTOR->Get_pin(PIN_ACK)?0x02:0x00) |
-                (pCONNECTOR->Get_pin(PIN_D_IN)?0x01:0x00) ;
+                (pCONNECTOR->Get_pin(PIN_D_IN)?0x01:0x00);
 
         return 0;
     case 0x40:
@@ -366,18 +370,18 @@ UINT8 Cg850v::out(UINT8 address, UINT8 value, QString sender)
         return 0;
     case 0x14:
         return 0;
-    case 0x15:
+    case 0x15: xinEnabled = value & 0x80;
         return 0;
     case 0x16: interruptType &= ~value & 0x0f;
         return 0;
     case 0x17: interruptMask = value;
         return 0;
     case 0x18:
-//        io3Out = value & 0xc3;
+        io3Out = value & 0xc3;
 
-        pCONNECTOR->Set_pin(PIN_MT_OUT1,value&0x80?true:false);
-        pCONNECTOR->Set_pin(PIN_D_OUT,value&0x02?true:false);
-        pCONNECTOR->Set_pin(PIN_BUSY,value&0x01?true:false);
+//        pCONNECTOR->Set_pin(PIN_MT_OUT1,value&0x80?true:false);
+//        pCONNECTOR->Set_pin(PIN_D_OUT,value&0x02?true:false);
+//        pCONNECTOR->Set_pin(PIN_BUSY,value&0x01?true:false);
         return 0;
     case 0x19:
         romBank = (value & 0x0f);
@@ -422,6 +426,8 @@ UINT8 Cg850v::out(UINT8 address, UINT8 value, QString sender)
 
 bool Cg850v::run()
 {
+
+
     CpcXXXX::run();
 
 #if 1

@@ -50,7 +50,7 @@ bool Cprinter::UpdateFinalImage(void) {
 
     painter.end();
 
-    emit updatedPObject(this);
+//    emit updatedPObject(this);
 
     return true;
 }

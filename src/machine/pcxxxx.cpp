@@ -217,6 +217,9 @@ void CpcXXXX::TurnON(void)
         PowerSwitch = PS_RUN;
         if (pLCDC) pLCDC->TurnON();
         pKEYB->LastKey = 0;
+        Refresh_Display = true;
+        update();
+
     }
 }
 

@@ -50,7 +50,7 @@ public:
 private:
     int exBank,romBank,ramBank;
     BYTE ks1,ks2;
-    BYTE keyBreak,pio8Io,pin11If,pio3Out,pio8Out,io3Out;
+    BYTE keyBreak,pio8Io,pin11If,pio3Out,pio8Out,io3Out,xinEnabled;
     BYTE interruptType,interruptMask;
 
 };

@@ -12,9 +12,8 @@
 
 
 
-// WARNING: -- TO MODIFY !!!!!!!!!!!!!
-//#define KEY(c)	( asfocus && ( GetAsyncKeyState(c) || (TOUPPER(pPC->pKEYB->LastKey)==TOUPPER(c)) || pPC->pKEYB->LastKey == c) )
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
+//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 
 class Cpc1250:public CpcXXXX{						//PC1250 emulator main class
 

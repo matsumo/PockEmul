@@ -311,7 +311,7 @@ bool Chp41::init()
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
+
 void Chp41::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
@@ -800,8 +800,6 @@ void Chp41::SetKeyUp()
 //    return;
   fEnableCLRKEY=true;
   }
-
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 UINT8 Chp41::getKey()
 {

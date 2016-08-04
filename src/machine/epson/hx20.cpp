@@ -551,9 +551,6 @@ bool Chx20::SaveConfig(QXmlStreamWriter *xmlOut)
     return true;
 }
 
-
-
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 void Chx20::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

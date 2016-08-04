@@ -390,7 +390,8 @@ public:
 		
     Ckeyb(CPObject *parent = 0,QString map = "",BYTE *scan=0);
     virtual ~Ckeyb();
-					
+
+    bool isKey(int _key);
 protected:
 	BYTE pc1350KeyStatus[MAX_KO];			//Ko0-11
 	BYTE IA_PORT;

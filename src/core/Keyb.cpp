@@ -71,6 +71,13 @@ Ckeyb::~Ckeyb() {
     delete handler;
 }
 
+bool Ckeyb::isKey(int _key) {
+    return ( keyPressedList.contains(TOUPPER(_key)) || \
+             keyPressedList.contains(_key) || \
+             keyPressedList.contains(TOLOWER(_key)));
+
+}
+
 int Ckeyb::KeyClick(QPoint pts)
 {
     if (!enabled) return 0;
@@ -118,7 +125,7 @@ int Ckeyb::KeyClick(QPoint pts)
 //    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom);
     if ((smallerDistance < (30*mainwindow->zoom)) && (nearestIndex>=0)) {
         if (!pPC->closed) {
-            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
+//            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
             return Keys.at(nearestIndex).ScanCode;
         }
         else

@@ -661,9 +661,9 @@ bool Crlh1000::SaveConfig(QXmlStreamWriter *xmlOut)
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+//#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
+//                  pKEYB->keyPressedList.contains(c) || \
+//                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
 
 
 

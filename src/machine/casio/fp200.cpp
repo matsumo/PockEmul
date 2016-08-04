@@ -26,8 +26,6 @@ extern CrenderView* view;
 
 #define STROBE_TIMER 5
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-
 Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 6144000/2);

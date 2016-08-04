@@ -501,9 +501,7 @@ bool Ccc40::LoadConfig(QXmlStreamReader *xmlIn)
 }
 
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 quint8 Ccc40::getKey()
 {
 

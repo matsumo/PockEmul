@@ -677,7 +677,7 @@ UINT16 Cz1::getKey()
 
             if (KEY(K_TAB))			data|=0x02;
             if (KEY('Q'))			data|=0x04;
-            if (KEY(K_RESET))		data|=0x08;
+            if (KEY(K_INIT))		data|=0x08;
             if (KEY('A'))			data|=0x10;
             if (KEY(K_SML))			data|=0x20;
             if (KEY('Z'))			data|=0x40;

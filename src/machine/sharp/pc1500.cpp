@@ -563,10 +563,7 @@ BYTE Cpc15XX::Get_Port(PORTS Port){
 }
 
 #define KS		( pKEYB->Get_KS()) 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 UINT8 Cpc15XX::in(UINT8 address,QString)
 {
     Q_UNUSED(address)
@@ -775,9 +772,7 @@ void Cpc15XX::contextMenuEvent ( QContextMenuEvent * event )
 }
 
 extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 void Cpc15XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

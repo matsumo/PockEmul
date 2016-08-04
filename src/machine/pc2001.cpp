@@ -50,9 +50,6 @@ extern CrenderView* view;
 
  */
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-
-
 Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 3865000/8);
@@ -132,8 +129,6 @@ bool Cpc2001::init(void)				// initialize
 }
 
 bool Cpc2001::run() {
-
-    if (KEY(K_RESET)) Reset();
 
     CpcXXXX::run();
 

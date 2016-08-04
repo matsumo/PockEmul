@@ -82,6 +82,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     currentView = FRONTview;
 
     currentOverlay = -1;
+    resetFiredState = 0;
 
     extensionArray[0] = 0;
     extensionArray[1] = 0;
@@ -473,6 +474,31 @@ quint64 CPObject::runRange(quint64 step) {
 bool CPObject::run(void){
 
 
+
+    if (KEY(K_RESET)) {
+        if (resetFiredState != 0) {
+            // Check for 5s press
+            if (pTIMER->msElapsed(resetFiredState) >= 5000) {
+                Reset();
+                resetFiredState = 0;
+            }
+            else {
+                // draw message : Resert in 5, 4 , 3 ... Seconds every 250ms
+                Refresh_Display = true;
+            }
+        }
+        else {
+            resetFiredState = pTIMER->state;
+        }
+    }
+    else {
+        if(resetFiredState != 0) {
+            Refresh_Display = true;
+        }
+        resetFiredState = 0;
+    }
+
+
 //    if (fullscreenMode) {
 //        if (QSensorReading *reading = mainwindow->sensor->reading()) {
 //            qreal x = reading->property("x").value<qreal>();
@@ -514,6 +540,8 @@ bool CPObject::run(void){
 //        Reset();
 //        hardresetAt = 0;
 //    }
+
+
    return true;
 }
 
@@ -1844,6 +1872,8 @@ bool CPObject::UpdateFinalImage(void)
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
 
+
+
         // Draw Overlay
         if ( (currentOverlay >=0) && (currentOverlay < overlays.count()) ) {
             painter.begin(FinalImage);
@@ -1858,9 +1888,10 @@ bool CPObject::UpdateFinalImage(void)
         }
 
 
+        InitView(currentView);
+
         if (dialogkeylist)
-        {
-            InitView(currentView);
+        {    
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
             case LEFTview: painter.begin(LeftImage); break;
@@ -1888,7 +1919,45 @@ bool CPObject::UpdateFinalImage(void)
         }
 
 
+        // Draw RESET MESSAGE
+        if (resetFiredState != 0) {
+            switch(currentView) {
+            case TOPview:  painter.begin(TopImage); break;
+            case LEFTview: painter.begin(LeftImage); break;
+            case RIGHTview: painter.begin(RightImage); break;
+            case BOTTOMview: painter.begin(BottomImage); break;
+            case BACKview:
+            case BACKviewREV: painter.begin(BackImage); break;
+            default: painter.begin(FinalImage); break;
+            }
+            painter.setPen(QPen(Qt::red));
+            QFont _font = painter.font();
+
+            _font.setPointSize(25);
+            _font.setBold(true);
+            painter.setFont(_font);
+            QRect _rect(0,0,getDX()*internalImageRatio,getDY()*internalImageRatio);
+            int _delay = 5-(pTIMER->msElapsed(resetFiredState)/1000);
+            QString _msg = tr("RESET in %1s").arg(_delay);
+
+            float factor = _rect.width() / painter.fontMetrics().width(_msg);
+             if ((factor < 1) || (factor > 1.25))
+             {
+              QFont f = painter.font();
+              f.setPointSizeF(f.pointSizeF()*factor);
+              painter.setFont(f);
+             }
+            painter.drawText(_rect,Qt::AlignCenter,_msg);
+            painter.end();
+
+
+        }
+
+
+
+
 	}
+
 
     return true;
 }

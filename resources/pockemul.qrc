@@ -21,5 +21,6 @@
         <file>logos/others.png</file>
         <file>pockemul/about.html</file>
         <file>logos/panasonic.png</file>
+        <file>pockemul/help.html</file>
     </qresource>
 </RCC>

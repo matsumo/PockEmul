@@ -77,7 +77,7 @@
     <KEY description="CALC" height="15" left="199" masterscancode="0x00" modifier="" scancode="0x202" top="260" view="FRONT" width="27"/>
     <KEY description="OUT" height="19" left="159" masterscancode="0x00" modifier="" scancode="0x204" top="256" view="FRONT" width="31"/>
     <KEY description="IN" height="20" left="121" masterscancode="0x00" modifier="" scancode="0x205" top="257" view="FRONT" width="31"/>
-    <KEY description="RESET" height="20" left="29" masterscancode="0x00" modifier="" scancode="0x20d" top="188" view="FRONT" width="20"/>
+    <KEY description="RESET" height="20" left="29" masterscancode="0x00" modifier="" scancode="0x251" top="188" view="FRONT" width="20"/>
     <KEY description="SEARCH" height="18" left="82" masterscancode="0x00" modifier="" scancode="0x20f" top="257" view="FRONT" width="29"/>
     <KEY description="Log" height="16" left="507" masterscancode="0x00" modifier="" scancode="0xea" top="64" view="FRONT" width="25"/>
     <KEY description="Ln" height="16" left="544" masterscancode="0x00" modifier="" scancode="0xeb" top="63" view="FRONT" width="25"/>

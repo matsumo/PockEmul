@@ -286,8 +286,8 @@ bool Cpb2000::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 
 
-#define TOUPPER( a )	(  ((a >= 'a' && a <= 'z') ? a-('a'-'A') : a ) )
-#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
+
 UINT16 Cpb2000::getKey(void) {
     UINT32 ko = 0;
     UINT16 data = 0;

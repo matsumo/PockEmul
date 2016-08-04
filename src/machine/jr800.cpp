@@ -451,7 +451,6 @@ bool Cjr800::SaveConfig(QXmlStreamWriter *xmlOut)
 
 
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 /**
  * @brief

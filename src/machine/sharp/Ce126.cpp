@@ -54,7 +54,8 @@ Cce126::Cce126(CPObject *parent):Cprinter(parent)
     setcfgfname("ce126p");
 
     settop(10);
-    setposX(0);    pTIMER		= new Ctimer(this);
+    setposX(0);
+    pTIMER		= new Ctimer(this);
     KeyMap      = KeyMapce126;
     KeyMapLenght= KeyMapce126Lenght;
     pKEYB		= new Ckeyb(this,"ce126.map");
@@ -162,11 +163,12 @@ void Cce126::RefreshCe126(qint8 data)
 
 	painter.end();
 	
-	Refresh_Display = true;
 	
 	paperWidget->setOffset(QPoint(0,top));
     paperWidget->updated = true;
-	
+
+    Refresh_Display = true;
+
 }
 
 
@@ -189,8 +191,6 @@ void Cce126::clearPaper(void)
 bool Cce126::init(void)
 {
 	CPObject::init();
-	
-	setfrequency( 0);
 
     pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",true,QPoint(594,238));	publish(pCONNECTOR);
     pTAPECONNECTOR	= new Cconnector(this,3,1,Cconnector::Jack,"Line in / Rec / Rmt",false);	publish(pTAPECONNECTOR);
@@ -313,6 +313,8 @@ void Cce126::pulldownsignal(void)
 }
 
 bool Cce126::Get_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     MT_OUT2	= GET_PIN(PIN_MT_OUT2);
     BUSY    = GET_PIN(PIN_BUSY);
     D_OUT	= GET_PIN(PIN_D_OUT);
@@ -324,6 +326,8 @@ bool Cce126::Get_Connector(Cbus *_bus) {
 }
 
 bool Cce126::Set_Connector(Cbus *_bus) {
+    Q_UNUSED(_bus)
+
     SET_PIN(PIN_MT_IN,MT_IN);
     SET_PIN(PIN_D_IN,D_IN);
     SET_PIN(PIN_ACK,ACK);
@@ -353,7 +357,7 @@ bool Cce126::run(void)
 	pCONNECTOR_value = pCONNECTOR->Get_values();
 	pTAPECONNECTOR_value = pTAPECONNECTOR->Get_values();
 
-#if 1
+#if 0
 // Try to introduce a latency 
     if (run_oldstate == 0) run_oldstate = pTIMER->state;
     quint64 deltastate = pTIMER->state - run_oldstate;
@@ -400,125 +404,148 @@ bool Cce126::run(void)
 #endif
 
     switch (code_transfer_step) {
-    case INIT_MODE :    if ((MT_OUT1 == UP))// && (D_OUT==UP))
-                {
-                    pTIMER->resetTimer(1);//lastState = pTIMER->state; //time.restart();
-                    code_transfer_step=1;
-                    t=0; c=0;
-                    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(8);
-                }
-                break;
-    case 1 :    if ((MT_OUT1 == UP))// && (D_OUT==UP))
-                {
-                    if (pTIMER->msElapsedId(1) > 30) {
-                        // Code transfer sequence started
-                        // Raise ACK
-                        code_transfer_step = 2;
-                        AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                        ACK = UP;
-                        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(9);
-                    }
+    case INIT_MODE :
+        if ((MT_OUT1 == UP))// && (D_OUT==UP))
+        {
+            qWarning()<<"Ce126p: code_transfer_step 0";
+            pTIMER->resetTimer(9);//lastState = pTIMER->state; //time.restart();
+            code_transfer_step=1;
+            t=0; c=0;
+            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(8);
+        }
+        break;
+    case 1 :
+        if ((MT_OUT1 == UP))// && (D_OUT==UP))
+        {
+            if (pTIMER->msElapsedId(9) > 15) {
+                qWarning()<<"Ce126p: code_transfer_step 1";
+                // Code transfer sequence started
+                // Raise ACK
+                code_transfer_step = 2;
+                AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+                ACK = UP;
+                if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(9);
+            }
+        }
+        else {
+            code_transfer_step=INIT_MODE;
+            //if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
+        }
+        break;
+    case 2:
+//        qWarning()<<"Ce126p: code_transfer_step 2";
+        if (BUSY == UP )	//check for BUSY
+        {
+            if(D_OUT == UP)
+            {
+                bit = true;;
+            } else
+            {
+                bit = false;
+            }
+            t>>=1;
+            if (bit) t|=0x80;
+            if((c=(++c)&7)==0)
+            {
+                AddLog(LOG_CONSOLE,tr("device code printer : %1\n").arg(t,2,16) );
+                qWarning()<<tr("device code printer : %1\n").arg(t,2,16) ;
+                //Printer(t);
+                ACK = DOWN;
+                device_code = t;
+                if ((t == internal_device_code)) {
+                    device_code = t;
+                    code_transfer_step=4;
+                    qWarning()<<"Ce126p: device code="<<device_code;
+                    AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
                 }
                 else {
-                    code_transfer_step=INIT_MODE;
-                    //if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(7);
-                }
-                break;
-    case 2:     if (BUSY == UP )	//check for BUSY
-                {
-                    if(D_OUT == UP)
-                    {
-                        bit = true;;
-                    } else
-                    {
-                        bit = false;
-                    }
-                    t>>=1;
-                    if (bit) t|=0x80;
-                    if((c=(++c)&7)==0)
-                    {
-                        AddLog(LOG_CONSOLE,tr("device code printer : %1\n").arg(t,2,16) );
-
-                        //Printer(t);
-                        ACK = DOWN;
-                        device_code = t;
-                        if ((t == internal_device_code)) {
-                            device_code = t;
-                            code_transfer_step=4;
-                            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                        }
-                        else {
-                            code_transfer_step = 6;
-                            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                            pTIMER->resetTimer(1);
-                            //lastState = pTIMER->state;
-                        }
-                        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(17);
-                        t=0; c=0;
-                    }
-                    else {
-                        ACK = DOWN;
-                        code_transfer_step=3;
-                        AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                        pTIMER->resetTimer(1);//lastState=pTIMER->state;
-                        if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(18);
-                    }
-                }
-                break;
-    case 3:     if (pTIMER->msElapsedId(1)>2) {
-                    code_transfer_step=2;
+                    code_transfer_step = 6;
+                    qWarning()<<"Ce126p: not internal device code="<<t;
                     AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                    // wait 2 ms and raise ACK
-                    ACK = UP;
-                    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(16);
+                    pTIMER->resetTimer(9);
+                    //lastState = pTIMER->state;
                 }
-                break;
-    case 4:     if ((BUSY == DOWN)){//&&(MT_OUT1 == DOWN)) {
-                    ACK = UP;
-                    code_transfer_step=5;
-                    AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                    pTIMER->resetTimer(1);//lastState=pTIMER->state;//time.restart();
-                    t=0; c=0;
-                    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(15);
-                }
-                break;
-    case 5:     if (pTIMER->msElapsedId(1)>9) {
-                    ACK = DOWN;
-                    code_transfer_step=INIT_MODE;
-                    AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-                    pTIMER->resetTimer(1);//lastState=pTIMER->state;
-                    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(14);
-                }
-                break;
-    case 6:     if ((pTIMER->msElapsedId(1)>2) && (GET_PIN(PIN_BUSY) == UP ) ){
-                    ACK = DOWN;
-                    code_transfer_step=INIT_MODE;
-                    AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
-//                    pTIMER->resetTimer(1);
-                    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(19);
-
-
-                }
-                break;
+                if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(17);
+                t=0; c=0;
             }
+            else {
+                ACK = DOWN;
+                code_transfer_step=3;
+                AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+                pTIMER->resetTimer(9);//lastState=pTIMER->state;
+                if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(18);
+            }
+        }
+        else {
+            if (pTIMER->msElapsedId(9)>500) {
+                code_transfer_step=INIT_MODE;
+            }
+        }
+        break;
+    case 3:
+        if (pTIMER->msElapsedId(9)>2) {
+            qWarning()<<"Ce126p: code_transfer_step 3";
+            code_transfer_step=2;
+            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+            // wait 2 ms and raise ACK
+            ACK = UP;
+            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(16);
+        }
+        break;
+    case 4:
+        if ((BUSY == DOWN)){//&&(MT_OUT1 == DOWN)) {
+            qWarning()<<"Ce126p: code_transfer_step 4";
+            ACK = UP;
+            code_transfer_step=5;
+            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+            pTIMER->resetTimer(9);//lastState=pTIMER->state;//time.restart();
+            t=0; c=0;
+            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(15);
+        }
+        break;
+    case 5:
+        if (pTIMER->msElapsedId(9)>9) {
+            qWarning()<<"Ce126p: code_transfer_step 5";
+            ACK = DOWN;
+            code_transfer_step=INIT_MODE;
+            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+            pTIMER->resetTimer(9);//lastState=pTIMER->state;
+            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(14);
+        }
+        break;
+    case 6:
+        if ((pTIMER->msElapsedId(9)>2)){// && (GET_PIN(PIN_BUSY) == UP ) ){
+            qWarning()<<"Ce126p: code_transfer_step 6";
+            ACK = DOWN;
+            code_transfer_step=INIT_MODE;
+            AddLog(LOG_CONSOLE,tr("step : %1\n").arg(code_transfer_step,2,10) );
+            //                    pTIMER->resetTimer(1);
+            if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(19);
+
+
+        }
+        break;
+    }
 
    if ((code_transfer_step==BASIC_MODE) || (code_transfer_step == INIT_MODE)) {
 
+//       qWarning()<<"Ce126p: device code="<<device_code;
         switch (device_code)
         {
             case 0x00:  // only ce-125 et ce-126p specific mode
             case 0xff:
             case 0x0f:
+            case 0x20:
             case 0x21:
             case 0x45:
 
                 if ( (BUSY == Previous_BUSY ) && (Previous_BUSY == DOWN) &&
                      (MT_OUT1 == Previous_MT_OUT1) &&	(Previous_MT_OUT1 == DOWN) &&
                      (ACK == UP) &&
-                     (pTIMER->msElapsedId(1) > 2 ) )
+                     (pTIMER->msElapsedId(9) > 2 ) )
 				{
 					AddLog(LOG_PRINTER,tr("ACK timeout"));
-                    pTIMER->resetTimer(1);//lastState=pTIMER->state;//time.restart();
+                    pTIMER->resetTimer(9);//lastState=pTIMER->state;//time.restart();
                     ACK = DOWN;
                     if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(1);
 				}
@@ -542,7 +569,7 @@ bool Cce126::run(void)
 					else
 					{
                         ACK = UP;
-                        pTIMER->resetTimer(1);//lastState=pTIMER->state;
+                        pTIMER->resetTimer(9);//lastState=pTIMER->state;
                         if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->setMarker(4);
 					}
                     //AddLog(LOG_PRINTER,tr("CHANGE ACK TO %1").arg(GET_PIN(PIN_ACK)?"1":"0"));

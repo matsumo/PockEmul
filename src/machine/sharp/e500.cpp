@@ -660,10 +660,6 @@ UINT8 Ce500::out(UINT8 address, UINT8 value, QString sender)
     return 0;
 }
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
-
-
 BYTE Ce500::getKey()
 {
     UINT8 data=0;

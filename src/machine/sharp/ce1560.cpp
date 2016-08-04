@@ -358,9 +358,7 @@ bool Cce1560::SaveConfig(QXmlStreamWriter *xmlOut)
 }
 
 //extern int ask(QWidget *parent,QString msg,int nbButton);
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)

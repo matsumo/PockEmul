@@ -1326,10 +1326,7 @@ bool	CLH5810_PC1600::init(void)
     return(1);
 }
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
-#define KEY(c)	((pKEYB->keyPressedList.contains(TOUPPER(c)) || \
-                  pKEYB->keyPressedList.contains(c) || \
-                  pKEYB->keyPressedList.contains(TOLOWER(c)))?1:0)
+
 BYTE Cpc1600::getKey()
 {
 

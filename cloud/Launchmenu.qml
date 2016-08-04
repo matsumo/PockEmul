@@ -22,7 +22,7 @@ Rectangle {
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
             "Adjust zoom":      function(){ fit() ;},
-            "About PockEmul":   function(){ about.visible = true; },
+            "Help":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
         }
@@ -68,8 +68,8 @@ Rectangle {
             separatorBefore: true
         }
         ListElement {
-            libelle: "About PockEmul"
-            imageName: "qrc:/TabbedQuickApp/pics/white-about-256.png"
+            libelle: "Help"
+            imageName: "qrc:/TabbedQuickApp/pics/help.png"
         }
         ListElement {
             libelle: "Check for Updates"
