@@ -72,7 +72,6 @@ bool Cpb2000::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
-
     // Draw switch by 180� rotation
     QPainter painter;
 
@@ -84,7 +83,6 @@ bool Cpb2000::UpdateFinalImage(void) {
                           BackgroundImageBackup->copy(0,29*internalImageRatio,
                                                       10*internalImageRatio,95*internalImageRatio).mirrored(false,!off));
 
-        //TODO: Manage keyboard overlay
         // DRAW overlay depending of inserted module
         painter.drawImage(QPoint(55,218)*internalImageRatio,overlay->copy(0,0,432,6).scaled(QSize(432,6)*internalImageRatio));
         painter.drawImage(QPoint(55,251)*internalImageRatio,overlay->copy(0,6,432,6).scaled(QSize(432,6)*internalImageRatio));
@@ -180,7 +178,9 @@ bool Cpb2000::run() {
         pCONNECTOR->Set_pin(12	,1);
     }
     lcd_on_timer_rate = pHD44352->on_timer_rate;
-CpcXXXX::run();
+
+    CpcXXXX::run();
+
     if (off && pKEYB->LastKey == K_POW_ON)
     {
         TurnON();
@@ -454,7 +454,7 @@ void Cpb2000::TurnCLOSE(void) { }
 
 void Cpb2000::paintEvent(QPaintEvent *event)
 {
-    CPObject::paintEvent(event);
+    CpcXXXX::paintEvent(event);
 }
 
 UINT8 Cpb2000::readPort()

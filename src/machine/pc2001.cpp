@@ -472,8 +472,6 @@ bool Cpc2001::UpdateFinalImage(void) {
         painter.end();
     }
 
-    Refresh_Display = true;
-
     return true;
 }
 

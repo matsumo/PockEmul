@@ -286,7 +286,7 @@ QSize CViewObject::viewRect(View v) {
         return QSize();
     }
     float _ratio = this->getDX()/this->getDXmm();
-
+//    qWarning()<<"ration="<<_ratio;
     switch (v) {
 
     case FRONTview:
@@ -392,8 +392,9 @@ void CViewObject::flip(Direction dir) {
         }
         break;
     }
-
+qWarning()<<"target"<<targetView;
     if ( (targetView != currentView) && getViewImage(targetView) ) {
+        qWarning()<<"GO";
         QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
         delete AnimatedImage;
         AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
@@ -414,7 +415,7 @@ void CViewObject::flip(Direction dir) {
     targetSize = viewRect(targetView);
     currentFlipDir = dir;
 
-//    qWarning()<<"targetdir:"<<targetSize;
+    qWarning()<<"targetdir:"<<targetSize;
 
     QPropertyAnimation *animation1 = new QPropertyAnimation(this, "angle");
     QPropertyAnimation *animation2 = new QPropertyAnimation(this, "zoom");

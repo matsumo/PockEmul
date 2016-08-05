@@ -366,7 +366,7 @@ bool Ckeyb::exit(void)
         case BOTTOMview: _view = "BOTTOM"; break;
         }
         attrs.insert( "view",_view);
-        attrs.insert( "delay", QString("0x%1").arg(j->delay) );
+        attrs.insert( "delay", QString("%1").arg(j->delay) );
         xw.writeAtomTag( "KEY", attrs );
     }
 

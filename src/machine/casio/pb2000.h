@@ -1,4 +1,4 @@
-#ifndef CPB2000_H
+﻿#ifndef CPB2000_H
 #define CPB2000_H
 
 #include "pb1000.h"
