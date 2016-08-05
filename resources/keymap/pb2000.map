@@ -73,7 +73,8 @@
     <KEY description="MENU" height="17" left="621" scancode="0xda" top="34" width="27"/>
     <KEY description="CAL" height="18" left="621" scancode="0xe1" top="66" width="28"/>
     <KEY description="ETC" height="13" left="445" scancode="0xfa" top="128" width="24"/>
-    <KEY description="NEW ALL" height="20" left="645" scancode="0x200" top="2" width="20"/>
+    <KEY description="NEW ALL" height="20" left="645" scancode="0x200" top="2" width="20" view="BACK" delay="3"/>
+    <KEY description="RESET" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x20d" top="281" view="BACK" width="20" delay="3"/>
     <KEY description="CALC" height="15" left="417" scancode="0x202" top="164" width="27"/>
     <KEY description="MEMO" height="18" left="296" scancode="0x203" top="163" width="29"/>
     <KEY description="OUT" height="19" left="375" scancode="0x204" top="163" width="31"/>

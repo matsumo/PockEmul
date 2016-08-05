@@ -38,7 +38,7 @@
 **
 ****************************************************************************/
 import QtQuick 2.3
-import QtQuick.XmlListModel 2.0
+//import QtQuick.XmlListModel 2.0
 import QtQuick.Window 2.1
 import QtQuick.Controls 1.2
 import "content"
@@ -269,7 +269,7 @@ Rectangle {
                             if (touchPoints[i].pointId >= 0) {
                                 var tx = touchPoints[i].x;
                                 var ty = touchPoints[i].y;
-                                console.warn("Multitouch pressed touch", touchPoints[i].pointId, "at", tx, ",", ty)
+//                                console.warn("Multitouch pressed touch", touchPoints[i].pointId, "at", tx, ",", ty)
                                 sendClick(idpocket,touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y);
                             }
                         }
@@ -313,7 +313,7 @@ Rectangle {
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
-                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty)
+//                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty)
                             sendUnClick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
 
@@ -323,7 +323,7 @@ Rectangle {
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
-                            console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty)
+//                            console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty)
                             sendUnClick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
                     }

@@ -33,6 +33,8 @@ Cpb2000::Cpb2000(CPObject *parent)	: Cpb1000(parent)
     Initial_Session_Fname ="pb2000.pkm";
 
     BackGroundFname	= P_RES(":/pb2000/pb-2000.png");
+    RightFname      = P_RES(":/pb2000/pb-2000RIGHT.png");
+    BackFname       = P_RES(":/pb2000/pb-2000BACK.png");
 
     memsize         = 0x70000;
     InitMemValue	= 0xff;
@@ -70,22 +72,26 @@ bool Cpb2000::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+
     // Draw switch by 180� rotation
     QPainter painter;
-    painter.begin(FinalImage);
 
-    // POWER SWITCH
-    painter.drawImage(0,29*internalImageRatio,
-                      BackgroundImageBackup->copy(0,29*internalImageRatio,
-                                                  10*internalImageRatio,95*internalImageRatio).mirrored(false,!off));
+    if ((currentView == FRONTview) ) {
+        painter.begin(FinalImage);
 
-    //TODO: Manage keyboard overlay
-    // DRAW overlay depending of inserted module
-    painter.drawImage(QPoint(55,218)*internalImageRatio,overlay->copy(0,0,432,6).scaled(QSize(432,6)*internalImageRatio));
-    painter.drawImage(QPoint(55,251)*internalImageRatio,overlay->copy(0,6,432,6).scaled(QSize(432,6)*internalImageRatio));
-    painter.end();
+        // POWER SWITCH
+        painter.drawImage(0,29*internalImageRatio,
+                          BackgroundImageBackup->copy(0,29*internalImageRatio,
+                                                      10*internalImageRatio,95*internalImageRatio).mirrored(false,!off));
 
-    emit updatedPObject(this);
+        //TODO: Manage keyboard overlay
+        // DRAW overlay depending of inserted module
+        painter.drawImage(QPoint(55,218)*internalImageRatio,overlay->copy(0,0,432,6).scaled(QSize(432,6)*internalImageRatio));
+        painter.drawImage(QPoint(55,251)*internalImageRatio,overlay->copy(0,6,432,6).scaled(QSize(432,6)*internalImageRatio));
+        painter.end();
+
+    }
+
     return true;
 }
 
@@ -286,7 +292,6 @@ bool Cpb2000::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 
 UINT16 Cpb2000::getKey(void) {
     UINT32 ko = 0;
@@ -300,7 +305,7 @@ UINT16 Cpb2000::getKey(void) {
         case 15: ko = 0; break;
         default: ko = (1<<(m_kb_matrix-1)); break;
     }
-    if ((pKEYB->LastKey) )
+//    if ((pKEYB->LastKey) )
     {
 
         if (ko >= 0xfff) AddLog(LOG_KEYBOARD,tr("matrix=%1 ko=%2").arg(m_kb_matrix,2,16,QChar('0')).arg(ko,4,16,QChar('0')));

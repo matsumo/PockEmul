@@ -1,14 +1,15 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1253</model>
 <Keyboard>
+    <KEY description="RESET" height="30" left="10" masterscancode="0x00" modifier="" scancode="0x20d" top="140" view="BACK" width="70" delay="3"/>
     <KEY description="-" height="16" left="351" masterscancode="0x00" modifier="" scancode="0x2d" top="182" view="FRONT" width="25"/>
     <KEY description="SQR" height="16" left="395" masterscancode="0x00" modifier="" scancode="0xe3" top="181" view="FRONT" width="25"/>
     <KEY description="CE" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x23c" top="147" view="FRONT" width="25"/>
     <KEY description="*" height="16" left="350" masterscancode="0x00" modifier="" scancode="0x2a" top="145" view="FRONT" width="25"/>
     <KEY description="%" height="16" left="352" masterscancode="0x00" modifier="" scancode="0x25" top="181" view="FRONT" width="25"/>
     <KEY description="." height="16" left="266" masterscancode="0x00" modifier="" scancode="0x2e" top="216" view="FRONT" width="25"/>
-    <KEY description="/" height="16" left="352" masterscancode="0x00" modifier="" scancode="0x2f" top="114" view="FRONT" width="25"/>
-    <KEY description="IN" height="13" left="19" masterscancode="0x00" modifier="" scancode="0x205" top="217" view="FRONT" width="13"/>
+    <KEY description="/" height="16" left="352" masterscancode="0x00" modifier="" scancode="0x2f" top="114" view="FRONT" width="25" delay="3"/>
+    <KEY description="IN" height="13" left="19" masterscancode="0x00" modifier="" scancode="0x205" top="217" view="FRONT" width="13" delay="3"/>
     <KEY description="OUT" height="13" left="48" masterscancode="0x00" modifier="" scancode="0x204" top="218" view="FRONT" width="13"/>
     <KEY description="+" height="16" left="349" masterscancode="0x00" modifier="" scancode="0x2b" top="217" view="FRONT" width="25"/>
     <KEY description="CLS" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x0c" top="113" view="FRONT" width="25"/>

@@ -473,29 +473,8 @@ quint64 CPObject::runRange(quint64 step) {
  */
 bool CPObject::run(void){
 
-
-
     if (KEY(K_RESET)) {
-        if (resetFiredState != 0) {
-            // Check for 5s press
-            if (pTIMER->msElapsed(resetFiredState) >= 5000) {
-                Reset();
-                resetFiredState = 0;
-            }
-            else {
-                // draw message : Resert in 5, 4 , 3 ... Seconds every 250ms
-                Refresh_Display = true;
-            }
-        }
-        else {
-            resetFiredState = pTIMER->state;
-        }
-    }
-    else {
-        if(resetFiredState != 0) {
-            Refresh_Display = true;
-        }
-        resetFiredState = 0;
+        Reset();
     }
 
 
@@ -940,7 +919,10 @@ void CPObject::mousePressEvent(QMouseEvent *event)
         }
 
         pKEYB->lastMousePressedKey = pKEYB->LastKey;
-        if (pKEYB->LastKey) pKEYB->keyPressedList.append(pKEYB->LastKey);
+        if (pKEYB->LastKey) {
+            pKEYB->keyPressedList.insert(pKEYB->LastKey,pTIMER ? pTIMER->state:0);
+            Refresh_Display = true;
+        }
 
         switch (pKEYB->LastKey) {
         case K_OF :
@@ -1163,11 +1145,12 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     setCursor(Qt::ArrowCursor);
     if (pKEYB) {
         QPoint pts(event->x() , event->y());
-        int _releasedKey = pKEYB->KeyClick(pts);
-        pKEYB->keyPressedList.removeAll(_releasedKey); //pKEYB->lastMousePressedKey);
+        int _releasedKey = TOUPPER(pKEYB->KeyClick(pts));
+        pKEYB->keyPressedList.remove(_releasedKey); //pKEYB->lastMousePressedKey);
         ComputeKey(KEY_RELEASED,_releasedKey,event);
         pKEYB->lastMousePressedKey = 0;
         pKEYB->LastKey = 0;
+        Refresh_Display = true;
     }
 
     if ( (parentWidget() != mainwindow->centralwidget)
@@ -1390,10 +1373,11 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
     int _key = mapKey(event);
-    pKEYB->keyPressedList.removeAll(_key);
+    pKEYB->keyPressedList.remove(_key);
     ComputeKey(KEY_RELEASED,_key);
 
     pKEYB->LastKey = 0;
+    Refresh_Display = true;
 
 }
 
@@ -1496,7 +1480,10 @@ void CPObject::keyPressEvent (QKeyEvent * event )
 
     if (pKEYB->LastKey>0) {
         // Add th key to Key pressed buffer
-        if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) pKEYB->keyPressedList.append(pKEYB->LastKey);
+        if (!pKEYB->keyPressedList.contains(TOUPPER(pKEYB->LastKey))) {
+            pKEYB->keyPressedList.insert(TOUPPER(pKEYB->LastKey),pTIMER?pTIMER->state:0);
+            Refresh_Display = true;
+        }
         ComputeKey(KEY_PRESSED,pKEYB->LastKey);
     }
     else {
@@ -1919,8 +1906,31 @@ bool CPObject::UpdateFinalImage(void)
         }
 
 
-        // Draw RESET MESSAGE
-        if (resetFiredState != 0) {
+        // DRAW DELAYED KEYS
+        // Fetch keypressedList and for each delayed keys
+        // show message
+        QString _msg ="";
+        QMapIterator<int, quint64> i(pKEYB->keyPressedList);
+        while (i.hasNext()) {
+            i.next();
+            // Check if this key is delayed
+            CKey _key = pKEYB->getKey(TOUPPER(i.key()));
+            int _delay = _key.delay;
+            if ( _delay > 0) {
+                // Check timing
+                quint64 _stick = i.value();
+                quint64 _elapsed = pTIMER->msElapsed(_stick);
+//                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
+
+                if (_elapsed <= (_delay*1000)) {
+                    // Draw text
+                    if (!_msg.isEmpty()) _msg+= "\n";
+                    _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
+                }
+            }
+        }
+//        qWarning()<<"msg"<<_msg;
+        if (!_msg.isEmpty()) {
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
             case LEFTview: painter.begin(LeftImage); break;
@@ -1936,10 +1946,8 @@ bool CPObject::UpdateFinalImage(void)
             _font.setPointSize(25);
             _font.setBold(true);
             painter.setFont(_font);
-            QRect _rect(0,0,getDX()*internalImageRatio,getDY()*internalImageRatio);
-            int _delay = 5-(pTIMER->msElapsed(resetFiredState)/1000);
-            QString _msg = tr("RESET in %1s").arg(_delay);
 
+            QRect _rect(0,0,getDX()*internalImageRatio,getDY()*internalImageRatio);
             float factor = _rect.width() / painter.fontMetrics().width(_msg);
              if ((factor < 1) || (factor > 1.25))
              {
@@ -1949,12 +1957,7 @@ bool CPObject::UpdateFinalImage(void)
              }
             painter.drawText(_rect,Qt::AlignCenter,_msg);
             painter.end();
-
-
         }
-
-
-
 
 	}
 

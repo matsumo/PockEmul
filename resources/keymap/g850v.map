@@ -85,6 +85,6 @@
     <KEY description="RM" height="22" left="604" masterscancode="0x00" modifier="" scancode="0xf5" top="173" view="FRONT" width="32"/>
     <KEY description="NPR" height="22" left="431" masterscancode="0x00" modifier="" scancode="0x20c" top="105" view="FRONT" width="32"/>
     <KEY description="PI" height="22" left="431" masterscancode="0x00" modifier="" scancode="0x208" top="135" view="FRONT" width="32"/>
-    <KEY description="RESET" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x20d" top="281" view="FRONT" width="20"/>
+    <KEY description="RESET" height="20" left="39" masterscancode="0x00" modifier="" scancode="0x20d" top="281" view="FRONT" width="20" delay="3"/>
 </Keyboard>
 </KEYBMAP>

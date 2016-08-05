@@ -371,7 +371,7 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         qWarning()<<"RESET Up";
         bool _b = pTIMER->resetTimer(9);
         qWarning()<<"INHIBIT FALSE";
-        pKEYB->keyPressedList.removeAll(0x242);
+        pKEYB->keyPressedList.remove(0x242);
         Refresh_Display = true;
         update();
     }
@@ -381,21 +381,21 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         qWarning()<<"RESET Up";
         bool _b = pTIMER->resetTimer(9);
         qWarning()<<"INHIBIT TRUE"<<_b;
-        pKEYB->keyPressedList.removeAll(0x243);
+        pKEYB->keyPressedList.remove(0x243);
         Refresh_Display = true;
         update();
     }
     if (screenOpen && KEY(0x244)) {
         firmwarePg = 0;
         qWarning()<<"Firmware Pg 0";
-        pKEYB->keyPressedList.removeAll(0x244);
+        pKEYB->keyPressedList.remove(0x244);
         Refresh_Display = true;
         update();
     }
     if (screenOpen && KEY(0x245)) {
         firmwarePg = 1;
         qWarning()<<"Firmware Pg 1";
-        pKEYB->keyPressedList.removeAll(0x245);
+        pKEYB->keyPressedList.remove(0x245);
         Refresh_Display = true;
         update();
     }
@@ -404,8 +404,8 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     // Manage backdoor click
 //    qWarning()<<"lastkey="<<pKEYB->LastKey<<" -"<<pKEYB->keyPressedList<<" - "<<( (currentView==FRONTview) && ( (screenOpen && KEY(0x240) ) || (!screenOpen && KEY(0x241) )));
     if  ( (currentView==FRONTview) && ( (screenOpen && KEY(0x240) ) || (!screenOpen && KEY(0x241) ))) {
-        pKEYB->keyPressedList.removeAll(0x240);
-        pKEYB->keyPressedList.removeAll(0x241);
+        pKEYB->keyPressedList.remove(0x240);
+        pKEYB->keyPressedList.remove(0x241);
         screenOpen = !screenOpen;
 //        qWarning()<<"compute key screen to:"<<screenOpen;
         animateScreen();

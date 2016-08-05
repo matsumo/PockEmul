@@ -31,6 +31,7 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
     RightFname = P_RES(":/pc1250/PC1250Right.png");
     TopFname = P_RES(":/pc1250/PC1250Top.png");
     BottomFname = P_RES(":/pc1250/PC1250Bottom.png");
+    BackFname = P_RES(":/pc1250/PC1250Back.png");
 
 	memsize		= 0x10000;
 

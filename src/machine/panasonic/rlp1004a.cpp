@@ -476,7 +476,7 @@ void Crlp1004a::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
     // Manage left connector click
     if (KEY(0x240) && (currentView==FRONTview)) {
-        pKEYB->keyPressedList.removeAll(0x240);
+        pKEYB->keyPressedList.remove(0x240);
 //        FluidLauncher *launcher = new FluidLauncher(mainwindow,
 //                                     QStringList()<<P_RES(":/pockemul/configExt.xml"),
 //                                     FluidLauncher::PictureFlowType,QString(),

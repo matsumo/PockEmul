@@ -43,7 +43,7 @@ class COverlay;
 #define PS_PRO	3
 
 
-#define KEY(c)	(pKEYB->isKey(c))
+#define KEY(c)	(pKEYB ? pKEYB->isKey(c) : false)
 
 
 class CPObject:public CViewObject

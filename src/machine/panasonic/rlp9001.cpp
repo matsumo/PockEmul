@@ -413,14 +413,14 @@ void Crlp9001::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         if (KEY(0x247)) _slot = 7;
 
         qWarning()<<"ComputKey:"<<_slot;
-        pKEYB->keyPressedList.removeAll(0x240);
-        pKEYB->keyPressedList.removeAll(0x241);
-        pKEYB->keyPressedList.removeAll(0x242);
-        pKEYB->keyPressedList.removeAll(0x243);
-        pKEYB->keyPressedList.removeAll(0x244);
-        pKEYB->keyPressedList.removeAll(0x245);
-        pKEYB->keyPressedList.removeAll(0x246);
-        pKEYB->keyPressedList.removeAll(0x247);
+        pKEYB->keyPressedList.remove(0x240);
+        pKEYB->keyPressedList.remove(0x241);
+        pKEYB->keyPressedList.remove(0x242);
+        pKEYB->keyPressedList.remove(0x243);
+        pKEYB->keyPressedList.remove(0x244);
+        pKEYB->keyPressedList.remove(0x245);
+        pKEYB->keyPressedList.remove(0x246);
+        pKEYB->keyPressedList.remove(0x247);
         if (_slot == -1) return;
         int _response = 0;
         BYTE* capsule = &mem[_slot*0x4000];

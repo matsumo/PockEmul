@@ -494,7 +494,7 @@ void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     if ((currentView==BACKview) || (currentView==BACKviewREV)) {
         if ( KEY(0x241) && backdoorS1Open) {
             if (!pS1CONNECTOR->isLinked()) {
-                pKEYB->keyPressedList.removeAll(0x241);
+                pKEYB->keyPressedList.remove(0x241);
                 FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                             QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                             FluidLauncher::PictureFlowType,QString(),
@@ -509,14 +509,14 @@ void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         }
         if (KEY(0x243)) {
             // open S1
-            pKEYB->keyPressedList.removeAll(0x243);
+            pKEYB->keyPressedList.remove(0x243);
 
             animateBackDoorS1(true);
 
         }
         if (KEY(0x244)) {
             // close S1
-            pKEYB->keyPressedList.removeAll(0x244);
+            pKEYB->keyPressedList.remove(0x244);
 
             animateBackDoorS1(false);
 

@@ -1,6 +1,8 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1250</model>
 <Keyboard>
+    <KEY description="RESET" height="30" left="10" masterscancode="0x00" modifier="" scancode="0x20d" top="140" view="BACK" width="70" delay="3"/>
+    <KEY description="11pins connector" height="137" left="6" scancode="0x240" top="89" width="14" view="LEFT"/>
     <KEY description="-" height="16" left="437" scancode="0x2d" top="215" width="25"/>
     <KEY description="*" height="16" left="437" scancode="0x2a" top="181" width="25"/>
     <KEY description="." height="16" left="352" scancode="0x2e" top="215" width="25"/>
@@ -71,6 +73,5 @@
     <KEY description="(" masterscancode="0x04" modifier="2nd"/>
     <KEY description=")" masterscancode="0x05" modifier="2nd"/>
     <KEY description="@" masterscancode="0x33" modifier="2nd"/>
-    <KEY description="11pins connector" height="137" left="6" scancode="0x240" top="89" width="14" view="LEFT"/>
 </Keyboard>
 </KEYBMAP>

@@ -89,7 +89,7 @@
     <KEY description="Pad ." height="30" left="691" masterscancode="0x00" modifier="" scancode="0x142" top="399" view="FRONT" width="38"/>
     <KEY description="Pad -" height="30" left="743" masterscancode="0x00" modifier="" scancode="0x143" top="348" view="FRONT" width="38"/>
     <KEY description="Pad ," height="38" left="638" masterscancode="0x00" modifier="" scancode="0x144" top="393" view="FRONT" width="38"/>
-    <KEY description="RESET" height="30" left="550" masterscancode="0x00" modifier="" scancode="0x20d" top="250" view="BACK" width="40"/>
+    <KEY description="RESET" height="30" left="550" masterscancode="0x00" modifier="" scancode="0x20d" top="250" view="BACK" width="40" deley="3"/>
     <KEY description="Power Switch" height="20" left="24" masterscancode="0x00" modifier="" scancode="0x229" top="210" view="FRONT" width="40"/>
 </Keyboard>
 </KEYBMAP>

@@ -228,9 +228,9 @@ bool Cz1::run() {
         lastIntPulse = pulse;
 
         // Check if keybuffer size change
-        if (lastKeyBufSize != pKEYB->keyPressedList.size()) {
+        if (lastKeyBufSize != pKEYB->keyPressedCount()) {
             newKey = true;
-            lastKeyBufSize = pKEYB->keyPressedList.size();
+            lastKeyBufSize = pKEYB->keyPressedCount();
         }
 
 //        if (pCPU->halt && (pKEYB->LastKey == K_BRK)) {
@@ -660,8 +660,6 @@ KI9                                                         ENTER   -       BS  
 KIS                                                                                         SHFT
 
 */
-
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 UINT16 Cz1::getKey()
 {

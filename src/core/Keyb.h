@@ -313,12 +313,18 @@ class Ckeyb;
 class CKey{
 public:
     CKey();
-    CKey(int ScanCode, QString Description, QRect Rect = QRect(), int masterscancode=0, QString modifier = QString(), View view = FRONTview);
+    CKey(int ScanCode,
+         QString Description,
+         QRect Rect = QRect(),
+         int masterscancode=0,
+         QString modifier = QString(),
+         View view = FRONTview,
+         int delay=0);
     ~CKey(){}
 	
 	int		Icode;
     QString	Description;
-    int		ScanCode,MasterScanCode;
+    int		ScanCode,MasterScanCode,delay;
     QString Modifier;
 	QRect	Rect;
     View    view;
@@ -372,7 +378,7 @@ public:
     bool	Kon;
     int	    LastKey,lastMousePressedKey;
 
-    QList<int> keyPressedList;
+    QMap<int,quint64> keyPressedList;
 
 	QList<CKey>	Keys;
     CKey &getKey(int code);
@@ -392,8 +398,9 @@ public:
     virtual ~Ckeyb();
 
     bool isKey(int _key);
+    bool isKeyPressed();
+    bool keyPressedCount();
 protected:
-	BYTE pc1350KeyStatus[MAX_KO];			//Ko0-11
 	BYTE IA_PORT;
 
 };

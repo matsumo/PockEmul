@@ -23,8 +23,8 @@
 
 #define ADDLOG if (mainwindow->dialoganalog) Addlog
 
-#define TOUPPER( a )	(  ((a >= 'a' && a <= 'z') ? a-('a'-'A') : a ) )
-#define TOLOWER( a )	(  ((a >= 'A' && a <= 'Z') ? a+('a'-'A') : a ) )
+#define TOUPPER( a )	(  (((a) >= 'a' && (a) <= 'z') ? (a)-('a'-'A') : (a) ) )
+#define TOLOWER( a )	(  (((a) >= 'A' && (a) <= 'Z') ? (a)+('a'-'A') : (a) ) )
 
 extern QString P_RES(QString);
 

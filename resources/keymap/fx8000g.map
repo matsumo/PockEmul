@@ -1,7 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>fx8000g</model>
 <Keyboard>
-    <KEY description="Init" height="20" left="32" masterscancode="0x00" modifier="" scancode="0x251" top="419" view="BACK" width="20"/>
+    <KEY description="Init" height="20" left="32" masterscancode="0x00" modifier="" scancode="0x251" top="419" view="BACK" width="20" delay="3"/>
     <KEY description="HD" height="21" left="65" masterscancode="0x00" modifier="" scancode="0x0b" top="254" view="FRONT" width="53"/>
     <KEY description=":" height="16" left="38" masterscancode="0x00" modifier="" scancode="0x3a" top="362" view="FRONT" width="25"/>
     <KEY description="ENG" height="18" left="75" masterscancode="0x00" modifier="" scancode="0x210" top="363" view="FRONT" width="32"/>

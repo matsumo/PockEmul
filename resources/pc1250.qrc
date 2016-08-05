@@ -17,5 +17,6 @@
         <file>pc1250/PC1250Top.png</file>
         <file>pc1250/PC1250Right.png</file>
         <file>pc1250/PC1250Bottom.png</file>
+        <file>pc1250/PC1250Back.png</file>
     </qresource>
 </RCC>

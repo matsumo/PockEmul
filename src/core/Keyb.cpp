@@ -38,7 +38,7 @@ CKey::CKey()
     this->Rect = QRect();
 }
 
-CKey::CKey(int scancode, QString description,QRect rect,int masterscancode,QString modifier,View view)
+CKey::CKey(int scancode, QString description,QRect rect,int masterscancode,QString modifier,View view, int delay)
 {
     this->Description = description;
     this->ScanCode	= scancode;
@@ -47,6 +47,7 @@ CKey::CKey(int scancode, QString description,QRect rect,int masterscancode,QStri
     this->Rect = rect;
     this->view = view;
     this->enabled = true;
+    this->delay = delay;
 }
 
 Ckeyb::Ckeyb(CPObject *parent,QString map,BYTE *scan) //: CPObject(parent)								//[constructor]
@@ -54,7 +55,6 @@ Ckeyb::Ckeyb(CPObject *parent,QString map,BYTE *scan) //: CPObject(parent)						
     pPC = (CpcXXXX *)parent;
     Parent	= parent;
     enabled = true;
-    for(int i=0;i<MAX_KO;i++) pc1350KeyStatus[i]=0;
     for(int j=0;j<200;j++) keym[j]=0;
     access		= 0;							//ko port access?(0:none, 1:access)
     KStrobe		= 0;
@@ -71,18 +71,60 @@ Ckeyb::~Ckeyb() {
     delete handler;
 }
 
-bool Ckeyb::isKey(int _key) {
-    return ( keyPressedList.contains(TOUPPER(_key)) || \
-             keyPressedList.contains(_key) || \
-             keyPressedList.contains(TOLOWER(_key)));
+bool Ckeyb::isKeyPressed() {
+    bool _res = false;
+    QMapIterator<int, quint64> i(keyPressedList);
+    while (i.hasNext()) {
+        i.next();
+        if (isKey(i.key())) _res = true;
+    }
 
+    return _res;
+}
+
+bool Ckeyb::keyPressedCount() {
+    bool _res = 0;
+    QMapIterator<int, quint64> i(keyPressedList);
+    while (i.hasNext()) {
+        i.next();
+        if (isKey(i.key())) _res++;
+    }
+
+    return _res;
+}
+
+bool Ckeyb::isKey(int _key) {
+//    return ( keyPressedList.contains(TOUPPER(_key)) || \
+//             keyPressedList.contains(_key) || \
+//             keyPressedList.contains(TOLOWER(_key)));
+
+    if ( keyPressedList.contains(TOUPPER(_key)) ) {
+         // Check if this key is delayed
+        int _delay = getKey(TOUPPER(_key)).delay;
+        if ( _delay > 0) {
+            // Check timing
+            quint64 _stick = keyPressedList[TOUPPER(_key)];
+            if (pPC->pTIMER->msElapsed(_stick) >= (_delay*1000)) {
+                pPC->Refresh_Display = true;
+                return true;
+            }
+            else {
+                pPC->Refresh_Display = true;
+                return false;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+    return false;
 }
 
 int Ckeyb::KeyClick(QPoint pts)
 {
     if (!enabled) return 0;
 
-//    qWarning()<<"keyclick:"<<pts;
+    qWarning()<<"keyclick:"<<pts;
     // calculate all distance betwwen pts and keys centers
     // Keep the nearest
 
@@ -125,13 +167,14 @@ int Ckeyb::KeyClick(QPoint pts)
 //    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom);
     if ((smallerDistance < (30*mainwindow->zoom)) && (nearestIndex>=0)) {
         if (!pPC->closed) {
-//            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
-            return Keys.at(nearestIndex).ScanCode;
+            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
+            return TOUPPER(Keys.at(nearestIndex).ScanCode);
         }
         else
         {
 //            qWarning()<<"CLOSE";
-            if (Keys.at(nearestIndex).ScanCode == K_CLOSE) return Keys.at(nearestIndex).ScanCode;
+            if (Keys.at(nearestIndex).ScanCode == K_CLOSE)
+                return TOUPPER(Keys.at(nearestIndex).ScanCode);
         }
     }
     return(0);
@@ -164,10 +207,8 @@ void Ckeyb::keyscan(void)
 		for (j = 0; j < 8; j++)
 		{
 			ch = scandef[i * 8 + j];
-
-            if ( keyPressedList.contains(TOUPPER(ch)) ||
-                 keyPressedList.contains(ch) ||
-                 keyPressedList.contains(TOLOWER(ch)) ||
+// CHANGE THIS
+            if ( isKey(ch) ||
                  (LastKey == ch) ||
                  (TOUPPER(LastKey) == TOUPPER(ch)) )
 			{
@@ -183,8 +224,9 @@ void Ckeyb::keyscan(void)
 CKey &Ckeyb::getKey(int code)
 {
     for (int i=0;i<Keys.size();i++) {
-        if (Keys.at(i).ScanCode == code) return Keys[i];
+        if (TOUPPER(Keys.at(i).ScanCode) == TOUPPER(code)) return Keys[i];
     }
+    qWarning()<<"ERROR getKey";
 }
 
 
@@ -308,7 +350,7 @@ bool Ckeyb::exit(void)
     	attrs.insert( "description", j->Description.trimmed () );
         attrs.insert( "scancode", QString("0x%1").arg(j->ScanCode,2,16,QChar('0')) );
         attrs.insert( "masterscancode", QString("0x%1").arg(j->MasterScanCode,2,16,QChar('0')) );
-    	attrs.insert( "left", QString("%1").arg(j->Rect.left()) );
+        attrs.insert( "left", QString("%1").arg(j->Rect.left()) );
     	attrs.insert( "top", QString("%1").arg(j->Rect.top() ));
     	attrs.insert( "width", QString("%1").arg(j->Rect.width() ) );
     	attrs.insert( "height", QString("%1").arg(j->Rect.height() ) );
@@ -324,7 +366,8 @@ bool Ckeyb::exit(void)
         case BOTTOMview: _view = "BOTTOM"; break;
         }
         attrs.insert( "view",_view);
-    	xw.writeAtomTag( "KEY", attrs );
+        attrs.insert( "delay", QString("0x%1").arg(j->delay) );
+        xw.writeAtomTag( "KEY", attrs );
     }
 
     xw.writeCloseTag( "Keyboard" );
@@ -353,11 +396,11 @@ bool KEYBMAPParser::startElement( const QString&, const QString&, const QString 
 {
 	QString desc = "";
     QString modifier="";
-    int scancode,masterscancode,x,y,w,h;
+    int scancode,masterscancode,delay,x,y,w,h;
     View view=FRONTview;
 	bool ok = false;
 	
-    scancode=masterscancode=x=y=w=h=0;
+    scancode=masterscancode=delay=x=y=w=h=0;
 	
 	if( inKeyboard && name == "KEY" )
 	{
@@ -378,10 +421,13 @@ bool KEYBMAPParser::startElement( const QString&, const QString&, const QString 
 				h = attrs.value( i ).toInt(&ok,10);
             else if( attrs.localName( i ) == "masterscancode" )
                 masterscancode = attrs.value( i ).toInt(&ok,16);
+            else if( attrs.localName( i ) == "delay" ) {
+                delay = attrs.value( i ).toInt(&ok,10);
+                qWarning()<<"delay="<<delay;
+            }
             else if( attrs.localName( i ) == "modifier" )
                 modifier = attrs.value( i );
             else if( attrs.localName( i ) == "view" ) {
-                qWarning()<<"view="<<attrs.value( i );
                 if (attrs.value( i ) == "FRONT") view = FRONTview;
                 if (attrs.value( i ) == "TOP") view = TOPview;
                 if (attrs.value( i ) == "LEFT") view = LEFTview;
@@ -390,7 +436,7 @@ bool KEYBMAPParser::startElement( const QString&, const QString&, const QString 
                 if (attrs.value( i ) == "BOTTOM") view = BOTTOMview;
             }
 		}
-        Parent->Keys.append(CKey(scancode,desc,QRect(x,y,w,h),masterscancode,modifier,view));
+        Parent->Keys.append(CKey(scancode,desc,QRect(x,y,w,h),masterscancode,modifier,view,delay));
         AddLog(LOG_KEYBOARD,mainwindow->tr("XML Read key : %1, scan=0x%2 , Rect=(%3,%4,%5,%6), mscan=0x%7, mod=%8").
                arg(desc).
                arg(scancode,2,16,QChar('0')).

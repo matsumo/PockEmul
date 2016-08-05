@@ -156,8 +156,8 @@ bool Cpb1000::run() {
         pCONNECTOR->Set_pin(12	,1);
     }
     lcd_on_timer_rate = pHD44352->on_timer_rate;
-CpcXXXX::run();
-    if (off && pKEYB->LastKey == K_POW_ON)
+    CpcXXXX::run();
+    if (off && (pKEYB->LastKey == K_POW_ON))
     {
         TurnON();
         pKEYB->LastKey = 0;
@@ -365,7 +365,6 @@ void Cpb1000::paintEvent(QPaintEvent *event)
 
 #define IA ((CHD61700*)pCPU)->m_reg8bit[4]
 
-//#define KEY(c)	( TOUPPER(pKEYB->LastKey) == TOUPPER(c) )
 
 UINT16 Cpb1000::getKey() {
 
@@ -388,7 +387,7 @@ UINT16 Cpb1000::getKey() {
 
 
 AddLog(LOG_KEYBOARD,tr("matrix=%1 ko=%2").arg(m_kb_matrix,2,16,QChar('0')).arg(ko,4,16,QChar('0')));
-    if ((pKEYB->LastKey) )
+//    if ((pKEYB->LastKey) )
     {
 
 //AddLog(LOG_KEYBOARD,tr("GetKEY : %1").arg(ko,4,16,QChar('0')));

@@ -115,7 +115,8 @@
     <KEY description="Touch SCREEN 31" height="16" left="378" scancode="0x131" top="146" width="96"/>
     <KEY description="Touch SCREEN 32" height="16" left="378" scancode="0x132" top="162" width="96"/>
     <KEY description="Touch SCREEN 33" height="16" left="378" scancode="0x133" top="178" width="96"/>
-    <KEY description="NEW ALL" height="16" left="344" scancode="0x200" top="404" width="32"/>
+    <KEY description="NEW ALL" height="16" left="344" scancode="0x200" top="404" width="32" delay="3"/>
+    <KEY description="RESET" height="20" left="39" scancode="0x20d" top="281" width="20" delay="3"/>
     <KEY description="LCKEY" height="34" left="82" scancode="0x201" top="271" width="36"/>
     <KEY description="CALC" height="34" left="355" scancode="0x202" top="274" width="36"/>
     <KEY description="MEMO" height="34" left="199" scancode="0x203" top="273" width="36"/>
