@@ -91,6 +91,7 @@ public:
     void paintEvent(QPaintEvent *event);
     void flip(Direction dir);
     virtual bool UpdateFinalImage(void) { return true;}
+    virtual bool LastDrawFinalImage(void) { return true;}
 
     bool	Refresh_Display;
 

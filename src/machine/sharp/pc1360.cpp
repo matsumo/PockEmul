@@ -90,6 +90,7 @@ void Cpc1360::TurnON()
     CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
     if (!S1PC){
         // If not, ask for connecting the default 8Ko card.
+
         int result = ask(this,"No memory card in SLOT 1. Do you want to add the default 8Ko RAM Card ?",2);
         if (result == 1) {
             // Create ram card PObject

@@ -60,6 +60,7 @@ public:
     virtual	bool	init();			// initialize
     virtual bool	InitDisplay(void);
     virtual bool	UpdateFinalImage(void);
+    virtual bool	LastDrawFinalImage(void);
     virtual	bool	run(void);					// emulator main step
     virtual bool	exit();					// exit
     virtual bool	Set_Connector(Cbus *_bus = 0) { Q_UNUSED(_bus); return true; }
@@ -250,6 +251,7 @@ signals:
     void stackPosChanged();
     void ObjLinkedTo(Cconnector *, Cconnector *);
     void sigTurnOff();
+    void sigTurnOn();
 
 public slots:
     void slotDoubleClick(QPoint pos);
@@ -270,6 +272,7 @@ public slots:
 
 	void slotPower();
     void slotTurnOff();
+    void slotTurnOn();
     void slotResetNow();
     void slotReset();
     void slotHardReset();

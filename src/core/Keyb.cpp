@@ -124,7 +124,7 @@ int Ckeyb::KeyClick(QPoint pts)
 {
     if (!enabled) return 0;
 
-    qWarning()<<"keyclick:"<<pts;
+//    qWarning()<<"keyclick:"<<pts;
     // calculate all distance betwwen pts and keys centers
     // Keep the nearest
 
@@ -167,7 +167,7 @@ int Ckeyb::KeyClick(QPoint pts)
 //    qWarning()<<"smallerDist:"<<smallerDistance<<nearestIndex<<(30*mainwindow->zoom);
     if ((smallerDistance < (30*mainwindow->zoom)) && (nearestIndex>=0)) {
         if (!pPC->closed) {
-            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
+//            qWarning()<<"OPEN-return key:"<<Keys.at(nearestIndex).ScanCode;
             return TOUPPER(Keys.at(nearestIndex).ScanCode);
         }
         else

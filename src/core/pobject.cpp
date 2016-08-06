@@ -126,6 +126,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     // ERROR MESSAGE
     connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
     connect( this,SIGNAL(sigTurnOff()),this,SLOT(slotTurnOff()));
+    connect( this,SIGNAL(sigTurnOn()),this,SLOT(slotTurnOn()));
     setStyleSheet("background-color:white;color: black;selection-background-color: grey;");
 }
 
@@ -486,7 +487,7 @@ bool CPObject::run(void){
     }
     if (KEY(K_BRK) || KEY(K_POW_ON)) {
         Vibrate();
-        TurnON();
+        emit sigTurnOn();
         pKEYB->keyPressedList.remove(K_BRK);
         pKEYB->keyPressedList.remove(K_POW_ON);
     }
@@ -1406,6 +1407,9 @@ void CPObject::paintEvent(QPaintEvent *event)
         //        painter.drawText(10,100,QString("").setNum((int)rate)+"%");
         //    }
         painter.end();
+
+
+        LastDrawFinalImage();
     }
 
 }
@@ -1903,12 +1907,26 @@ bool CPObject::InitDisplay(void)
 bool CPObject::UpdateFinalImage(void)
 {
 
-	QPainter painter;
-	if ( (BackgroundImage) )
-	{
-
+    if ( BackgroundImage)
+    {
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
+
+//        InitView(currentView);
+    }
+
+    return true;
+}
+
+bool CPObject::LastDrawFinalImage()
+{
+
+    QPainter painter;
+    if ( (BackgroundImage) )
+    {
+
+//        delete FinalImage;
+//        FinalImage = new QImage(*BackgroundImage);
 
 
 
@@ -1926,10 +1944,10 @@ bool CPObject::UpdateFinalImage(void)
         }
 
 
-        InitView(currentView);
+//        InitView(currentView);
 
         if (dialogkeylist)
-        {    
+        {
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
             case LEFTview: painter.begin(LeftImage); break;
@@ -1980,7 +1998,7 @@ bool CPObject::UpdateFinalImage(void)
                 }
             }
         }
-        qWarning()<<"msg"<<_msg;
+//        qWarning()<<"msg"<<_msg;
         if (!_msg.isEmpty()) {
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
@@ -2010,7 +2028,7 @@ bool CPObject::UpdateFinalImage(void)
             painter.end();
         }
 
-	}
+    }
 
 
     return true;
@@ -2099,6 +2117,11 @@ void CPObject::slotPower()
 void CPObject::slotTurnOff()
 {
     TurnOFF();
+}
+
+void CPObject::slotTurnOn()
+{
+    TurnON();
 }
 
 /**

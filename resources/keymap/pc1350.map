@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1350</model>
 <Keyboard>
+    <KEY delay="3" description="RESET" height="30" left="493" masterscancode="0x00" modifier="" scancode="0x20d" top="203" view="BACK" width="70"/>
     <KEY description="Left Connector" height="125" left="5" masterscancode="0x00" modifier="" scancode="0x240" top="90" view="LEFT" width="15"/>
     <KEY description="S1" height="190" left="64" masterscancode="0x00" modifier="" scancode="0x241" top="32" view="BACK" width="288"/>
     <KEY description="Open S1" height="30" left="382" masterscancode="0x00" modifier="" scancode="0x243" top="128" view="BACK" width="25"/>
@@ -25,7 +26,8 @@
     <KEY description="Left Arrow" height="16" left="416" masterscancode="0x00" modifier="" scancode="0x06" top="77" view="FRONT" width="25"/>
     <KEY description="MODE" height="16" left="522" masterscancode="0x00" modifier="" scancode="0x08" top="48" view="FRONT" width="25"/>
     <KEY description="On/Brk" height="16" left="556" masterscancode="0x00" modifier="" scancode="0x03" top="77" view="FRONT" width="25"/>
-    <KEY description="On/Off" height="21" left="594" masterscancode="0x00" modifier="" scancode="0xb2" top="32" view="FRONT" width="19"/>
+    <KEY description="Power On" height="20" left="593" masterscancode="0x00" modifier="" scancode="0xc7" top="18" view="FRONT" width="20"/>
+    <KEY delay="3" description="Power Off" height="20" left="593" masterscancode="0x00" modifier="" scancode="0xc8" top="52" view="FRONT" width="20"/>
     <KEY description="Rigth Arrow" height="16" left="451" masterscancode="0x00" modifier="" scancode="0x07" top="77" view="FRONT" width="25"/>
     <KEY description="SHIFT1" height="16" left="592" masterscancode="0x00" modifier="" scancode="0x11" top="77" view="FRONT" width="25"/>
     <KEY description="SHIFT2" height="16" left="22" masterscancode="0x00" modifier="" scancode="0x11" top="157" view="FRONT" width="25"/>
