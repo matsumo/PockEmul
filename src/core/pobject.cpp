@@ -1527,12 +1527,12 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
 
-    pKEYB->LastKey = mapKey(event);
+    pKEYB->LastKey = TOUPPER(mapKey(event));
 
-    if (pKEYB->LastKey>0) {
+    if ( (pKEYB->LastKey>0) && (pKEYB->getKey(pKEYB->LastKey).ScanCode != 0)) {
         // Add th key to Key pressed buffer
-        if (!pKEYB->keyPressedList.contains(TOUPPER(pKEYB->LastKey))) {
-            pKEYB->keyPressedList.insert(TOUPPER(pKEYB->LastKey),pTIMER?pTIMER->state:0);
+        if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) {
+            pKEYB->keyPressedList.insert(pKEYB->LastKey,pTIMER?pTIMER->state:0);
             Refresh_Display = true;
         }
         ComputeKey(KEY_PRESSED,pKEYB->LastKey);

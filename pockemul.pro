@@ -1174,6 +1174,7 @@ OTHER_FILES += \
     resources/weblinks.xml \
     resources/notes.txt \
     resources/pockemul/release_notes.html \
+    resources/pockemul/help.html \
     resources/pockemul/script_help.html \
     resources/pockemul/config.xml \
     resources/pockemul/configExt.xml \

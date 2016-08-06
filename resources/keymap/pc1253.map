@@ -20,7 +20,8 @@
     <KEY description="ENTER" height="22" left="92" masterscancode="0x00" modifier="" scancode="0x0d" top="213" view="FRONT" width="70"/>
     <KEY description="Equal" height="16" left="394" masterscancode="0x00" modifier="" scancode="0x3d" top="216" view="FRONT" width="25"/>
     <KEY description="On/Brk" height="16" left="25" masterscancode="0x00" modifier="" scancode="0x03" top="182" view="FRONT" width="25"/>
-    <KEY description="On/Off" height="42" left="441" masterscancode="0x00" modifier="" scancode="0xb2" top="26" view="FRONT" width="30"/>
+    <KEY description="Power On" height="20" left="443" masterscancode="0x00" modifier="" scancode="0xc7" top="11" view="FRONT" width="20"/>
+    <KEY delay="3" description="Power Off" height="20" left="443" masterscancode="0x00" modifier="" scancode="0xc8" top="65" view="FRONT" width="20"/>
     <KEY description="0" height="16" left="222" masterscancode="0x00" modifier="" scancode="0x30" top="217" view="FRONT" width="25"/>
     <KEY description="1" height="16" left="222" masterscancode="0x00" modifier="" scancode="0x31" top="181" view="FRONT" width="25"/>
     <KEY description="2" height="16" left="265" masterscancode="0x00" modifier="" scancode="0x32" top="181" view="FRONT" width="25"/>

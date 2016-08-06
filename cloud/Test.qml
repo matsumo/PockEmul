@@ -529,6 +529,12 @@ Rectangle {
         source: "qrc:/pockemul/configExt.xml"
     }
 
+    Main {
+        id: thecloud
+        anchors.fill: parent
+        visible: false;
+    }
+
     VisualItemModel {
         id: settingsModel
         Tab {
@@ -595,11 +601,6 @@ Rectangle {
 
     }
 
-    Main {
-        id: thecloud
-        anchors.fill: parent
-        visible: false;
-    }
 
     ContextMenu {
         id: contextMenu

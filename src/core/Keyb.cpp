@@ -226,8 +226,9 @@ CKey &Ckeyb::getKey(int code)
     for (int i=0;i<Keys.size();i++) {
         if (TOUPPER(Keys.at(i).ScanCode) == TOUPPER(code)) return Keys[i];
     }
-    // FIXME: return value
-    qWarning()<<"ERROR getKey";
+
+    CKey *_k = new CKey();
+    return *_k;
 }
 
 
