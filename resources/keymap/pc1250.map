@@ -16,7 +16,7 @@
     <KEY description="Left Arrow" height="13" left="185" scancode="0x6" top="115" width="21"/>
     <KEY description="MODE" height="31" left="447" scancode="0x8" top="30" width="16"/>
     <KEY description="On/Brk" height="13" left="268" scancode="0x3" top="114" width="21"/>
-    <KEY description="On/Off" height="60" left="443" scancode="0xb2" top="16" width="20"/>
+    <KEY description="On/Off" height="60" left="443" scancode="0xb2" top="16" width="20" delay="3"/>
     <KEY description="Rigth Arrow" height="13" left="226" scancode="0x7" top="114" width="21"/>
     <KEY description="SHIFT1" height="13" left="61" scancode="0x11" top="115" width="21"/>
     <KEY description="Space" height="13" left="220" scancode="0x20" top="218" width="13"/>

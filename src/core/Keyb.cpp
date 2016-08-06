@@ -226,6 +226,7 @@ CKey &Ckeyb::getKey(int code)
     for (int i=0;i<Keys.size();i++) {
         if (TOUPPER(Keys.at(i).ScanCode) == TOUPPER(code)) return Keys[i];
     }
+    // FIXME: return value
     qWarning()<<"ERROR getKey";
 }
 
@@ -366,7 +367,9 @@ bool Ckeyb::exit(void)
         case BOTTOMview: _view = "BOTTOM"; break;
         }
         attrs.insert( "view",_view);
-        attrs.insert( "delay", QString("%1").arg(j->delay) );
+        if (j->delay > 0) {
+            attrs.insert( "delay", QString("%1").arg(j->delay) );
+        }
         xw.writeAtomTag( "KEY", attrs );
     }
 

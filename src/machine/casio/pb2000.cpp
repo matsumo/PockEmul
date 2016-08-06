@@ -181,7 +181,7 @@ bool Cpb2000::run() {
 
     CpcXXXX::run();
 
-    if (off && pKEYB->LastKey == K_POW_ON)
+    if (off && KEY(K_POW_ON))
     {
         TurnON();
         pKEYB->LastKey = 0;

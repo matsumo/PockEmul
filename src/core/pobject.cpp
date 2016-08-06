@@ -45,7 +45,7 @@
 
 extern QList<CPObject *> listpPObject;  /**< TODO: describe */
 extern CrenderView* view;
-
+extern void Vibrate();
 
 extern MainWindowPockemul* mainwindow; /**< TODO: describe */
 /**
@@ -125,6 +125,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
 
     // ERROR MESSAGE
     connect( this,SIGNAL(msgError(QString)),mainwindow,SLOT(slotMsgError(QString)));
+    connect( this,SIGNAL(sigTurnOff()),this,SLOT(slotTurnOff()));
     setStyleSheet("background-color:white;color: black;selection-background-color: grey;");
 }
 
@@ -475,6 +476,32 @@ bool CPObject::run(void){
 
     if (KEY(K_RESET)) {
         Reset();
+    }
+
+    if (KEY(K_OF)) {
+        qWarning()<<"K_OF";
+        Vibrate();
+        slotPower();
+        pKEYB->keyPressedList.remove(K_OF);
+    }
+    if (KEY(K_BRK) || KEY(K_POW_ON)) {
+        Vibrate();
+        TurnON();
+        pKEYB->keyPressedList.remove(K_BRK);
+        pKEYB->keyPressedList.remove(K_POW_ON);
+    }
+    if (KEY(K_POW_OFF)) {
+        Vibrate();
+        Power = false;
+        mainwindow->saveAll = YES;
+        emit sigTurnOff();
+        mainwindow->saveAll = ASK;
+        pKEYB->keyPressedList.remove(K_POW_OFF);
+    }
+    if (KEY(K_CLOSE)) {
+        Vibrate();
+        TurnCLOSE();
+        pKEYB->keyPressedList.remove(K_CLOSE);
     }
 
 
@@ -888,7 +915,7 @@ void CPObject::mouseDoubleClickEvent(QMouseEvent *event)
  * @brief
  *
  */
-extern void Vibrate();
+
 /**
  * @brief
  *
@@ -924,23 +951,47 @@ void CPObject::mousePressEvent(QMouseEvent *event)
             Refresh_Display = true;
         }
 
-        switch (pKEYB->LastKey) {
-        case K_OF :
-            Vibrate();
-            slotPower();
-            return;
-            break;
-        case K_BRK :
-        case K_POW_ON :qWarning()<<"GOGO"; Vibrate();TurnON(); break;
-        case K_POW_OFF: Vibrate();
-            Power = false;
-            mainwindow->saveAll = YES;
-            TurnOFF();
-            mainwindow->saveAll = ASK;
-            return;
-            break;
-        case K_CLOSE: Vibrate();TurnCLOSE();break;
-        }
+//        if (KEY(K_OF)) {
+//            qWarning()<<"K_OF";
+//            Vibrate();
+//            slotPower();
+//            return;
+//        }
+//        if (KEY(K_BRK) || KEY(K_POW_ON)) {
+//            Vibrate();
+//            TurnON();
+//            return;
+//        }
+//        if (KEY(K_POW_OFF)) {
+//            Vibrate();
+//            Power = false;
+//            mainwindow->saveAll = YES;
+//            TurnOFF();
+//            mainwindow->saveAll = ASK;
+//            return;
+//        }
+//        if (KEY(K_CLOSE)) {
+//            Vibrate();
+//            TurnCLOSE();
+//        }
+
+//        switch (pKEYB->LastKey) {
+//        case K_OF :
+//            Vibrate();
+//            slotPower();
+//            return;
+//            break;
+//        case K_BRK :
+//        case K_POW_ON :qWarning()<<"GOGO"; Vibrate();TurnON(); break;
+//        case K_POW_OFF: Vibrate();
+//            Power = false;
+//            mainwindow->saveAll = YES;
+//            TurnOFF();
+//            mainwindow->saveAll = ASK;
+//            return;
+//            break;
+//        case K_CLOSE: Vibrate();TurnCLOSE();break;
+//        }
 
         if (pKEYB->LastKey != 0)
         {
@@ -1929,7 +1980,7 @@ bool CPObject::UpdateFinalImage(void)
                 }
             }
         }
-//        qWarning()<<"msg"<<_msg;
+        qWarning()<<"msg"<<_msg;
         if (!_msg.isEmpty()) {
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
@@ -2043,6 +2094,11 @@ void CPObject::slotPower()
         mainwindow->saveAll = ASK;
     }
     pKEYB->LastKey = 0;
+}
+
+void CPObject::slotTurnOff()
+{
+    TurnOFF();
 }
 
 /**

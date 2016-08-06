@@ -157,7 +157,7 @@ bool Cpb1000::run() {
     }
     lcd_on_timer_rate = pHD44352->on_timer_rate;
     CpcXXXX::run();
-    if (off && (pKEYB->LastKey == K_POW_ON))
+    if (off && KEY(K_POW_ON))
     {
         TurnON();
         pKEYB->LastKey = 0;

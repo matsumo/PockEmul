@@ -1,8 +1,8 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
-<model>pc1262</model>
+<model>pc1245</model>
 <Keyboard>
     <KEY description="11pins connector" height="137" left="6" masterscancode="0x00" modifier="" scancode="0x240" top="89" view="LEFT" width="14"/>
-    <KEY description="RESET" height="30" left="10" masterscancode="0x00" modifier="" scancode="0x20d" top="140" view="BACK" width="70" delay="3"/>
+    <KEY delay="3" description="RESET" height="30" left="10" masterscancode="0x00" modifier="" scancode="0x20d" top="140" view="BACK" width="70"/>
     <KEY description="-" height="16" left="437" masterscancode="0x00" modifier="" scancode="0x2d" top="215" view="FRONT" width="25"/>
     <KEY description="*" height="16" left="437" masterscancode="0x00" modifier="" scancode="0x2a" top="181" view="FRONT" width="25"/>
     <KEY description="." height="16" left="352" masterscancode="0x00" modifier="" scancode="0x2e" top="215" view="FRONT" width="25"/>
@@ -16,7 +16,8 @@
     <KEY description="Left Arrow" height="13" left="185" masterscancode="0x00" modifier="" scancode="0x06" top="115" view="FRONT" width="21"/>
     <KEY description="MODE" height="31" left="447" masterscancode="0x00" modifier="" scancode="0x08" top="30" view="FRONT" width="16"/>
     <KEY description="On/Brk" height="13" left="268" masterscancode="0x00" modifier="" scancode="0x03" top="114" view="FRONT" width="21"/>
-    <KEY description="On/Off" height="60" left="443" masterscancode="0x00" modifier="" scancode="0xb2" top="16" view="FRONT" width="20"/>
+    <KEY description="Power On" height="20" left="443" masterscancode="0x00" modifier="" scancode="0xc7" top="11" view="FRONT" width="20"/>
+    <KEY delay="3" description="Power Off" height="20" left="443" masterscancode="0x00" modifier="" scancode="0xc8" top="65" view="FRONT" width="20"/>
     <KEY description="Rigth Arrow" height="13" left="226" masterscancode="0x00" modifier="" scancode="0x07" top="114" view="FRONT" width="21"/>
     <KEY description="SHIFT1" height="13" left="61" masterscancode="0x00" modifier="" scancode="0x11" top="115" view="FRONT" width="21"/>
     <KEY description="Space" height="13" left="220" masterscancode="0x00" modifier="" scancode="0x20" top="218" view="FRONT" width="13"/>

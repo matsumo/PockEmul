@@ -249,6 +249,7 @@ signals:
     void msgError(QString);
     void stackPosChanged();
     void ObjLinkedTo(Cconnector *, Cconnector *);
+    void sigTurnOff();
 
 public slots:
     void slotDoubleClick(QPoint pos);
@@ -268,6 +269,7 @@ public slots:
     void slotContrast(QAction *);
 
 	void slotPower();
+    void slotTurnOff();
     void slotResetNow();
     void slotReset();
     void slotHardReset();

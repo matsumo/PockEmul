@@ -202,9 +202,9 @@ void CpcXXXX::TurnON(void)
 
     if (pKEYB->LastKey == 0) pKEYB->LastKey = K_POW_ON;
     qWarning()<<"power1="<<Power<< " k="<<pKEYB->LastKey;
-    if ( (pKEYB->LastKey == K_POW_ON) ||
-         (!Power && pKEYB->LastKey == K_OF) ||
-         (!Power && pKEYB->LastKey == K_BRK))
+    if ( KEY(K_POW_ON) ||
+         (!Power && KEY(K_OF)) ||
+         (!Power && KEY(K_BRK)))
     {
          qWarning()<<"power ON:";
         AddLog(LOG_MASTER,"Power ON");

@@ -22,7 +22,7 @@
     <KEY description="]" height="20" left="520" masterscancode="0x00" modifier="" scancode="0x5d" top="327" view="FRONT" width="28"/>
     <KEY description=";" height="20" left="436" masterscancode="0x00" modifier="" scancode="0x3b" top="326" view="FRONT" width="27"/>
     <KEY description="+" height="34" left="735" masterscancode="0x00" modifier="" scancode="0x2b" top="393" view="FRONT" width="40"/>
-    <KEY description="OFF" height="40" left="27" masterscancode="0x00" modifier="" scancode="0xc8" top="192" view="FRONT" width="10"/>
+    <KEY delay="3" description="OFF" height="40" left="27" masterscancode="0x00" modifier="" scancode="0xc8" top="192" view="FRONT" width="10"/>
     <KEY description="ON" height="40" left="59" masterscancode="0x00" modifier="" scancode="0xc7" top="194" view="FRONT" width="10"/>
     <KEY description="CLS" height="21" left="748" masterscancode="0x00" modifier="" scancode="0x0c" top="204" view="FRONT" width="27"/>
     <KEY description="DEL" height="18" left="371" masterscancode="0x00" modifier="" scancode="0x0a" top="408" view="FRONT" width="26"/>
@@ -89,7 +89,7 @@
     <KEY description="Pad ." height="30" left="691" masterscancode="0x00" modifier="" scancode="0x142" top="399" view="FRONT" width="38"/>
     <KEY description="Pad -" height="30" left="743" masterscancode="0x00" modifier="" scancode="0x143" top="348" view="FRONT" width="38"/>
     <KEY description="Pad ," height="38" left="638" masterscancode="0x00" modifier="" scancode="0x144" top="393" view="FRONT" width="38"/>
-    <KEY description="RESET" height="30" left="550" masterscancode="0x00" modifier="" scancode="0x20d" top="250" view="BACK" width="40" deley="3"/>
+    <KEY delay="3" description="RESET" height="30" left="550" masterscancode="0x00" modifier="" scancode="0x20d" top="250" view="BACK" width="40" deley="3"/>
     <KEY description="Power Switch" height="20" left="24" masterscancode="0x00" modifier="" scancode="0x229" top="210" view="FRONT" width="40"/>
 </Keyboard>
 </KEYBMAP>
