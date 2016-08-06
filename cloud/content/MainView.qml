@@ -39,8 +39,8 @@ Item {
         ListView {
             id: listView
 
-            property real globalLightPosX: lightImage.x / mainView.width
-            property real globalLightPosY: lightImage.y / mainView.height
+//            property real globalLightPosX: lightImage.x / mainView.width
+//            property real globalLightPosY: lightImage.y / mainView.height
 
             // Normal-mapped cover shared among delegates
             ShaderEffectSource {

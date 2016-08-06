@@ -217,19 +217,28 @@ void CViewObject::PostFlip()
 }
 
 void CViewObject::InitView(View v) {
-    switch (v) {
-    case TOPview:   if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname); break;
-    case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
-    case RIGHTview: if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname); break;
-    case BOTTOMview:if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname); break;
-    case BACKviewREV:
-    case BACKview:  if (!BackFname.isEmpty()) {
-            delete BackImage;
-            BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
-        }
-        break;
+//    switch (v) {
+//    case TOPview:   if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname); break;
+//    case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
+//    case RIGHTview: if (!RightFname.isEmpty()) RightImage = CreateImage(viewRect(RIGHTview)*internalImageRatio,RightFname); break;
+//    case BOTTOMview:if (!BottomFname.isEmpty()) BottomImage = CreateImage(viewRect(BOTTOMview)*internalImageRatio,BottomFname); break;
+//    case BACKviewREV:
+//    case BACKview:  if (!BackFname.isEmpty()) {
+//            delete BackImage;
+//            BackImage = CreateImage(viewRect(BACKview)*internalImageRatio,BackFname);
+//        }
+//        break;
 
+//    }
+    switch (v) {
+    case TOPview:   if (TopImage) { delete TopImage; TopImage =  new QImage(TopImageBackup);} break;
+    case LEFTview:  if (LeftImage) { delete LeftImage; LeftImage =  new QImage(LeftImageBackup);} break;
+    case RIGHTview: if (RightImage) { delete RightImage; RightImage =  new QImage(RightImageBackup);} break;
+    case BOTTOMview:if (BottomImage) { delete BottomImage; BottomImage =  new QImage(BottomImageBackup);} break;
+    case BACKviewREV:
+    case BACKview:  if (BackImage) { delete BackImage; BackImage =  new QImage(BackImageBackup);} break;
     }
+
 }
 
 extern CrenderView *view;

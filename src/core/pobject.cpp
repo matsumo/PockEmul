@@ -1912,7 +1912,7 @@ bool CPObject::UpdateFinalImage(void)
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
 
-//        InitView(currentView);
+        InitView(currentView);
     }
 
     return true;

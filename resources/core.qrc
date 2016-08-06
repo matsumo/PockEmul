@@ -21,5 +21,7 @@
         <file>core/size-white.png</file>
         <file>core/back-white.png</file>
         <file>core/close.png</file>
+        <file>core/fit_to_width.png</file>
+        <file>core/check.png</file>
     </qresource>
 </RCC>

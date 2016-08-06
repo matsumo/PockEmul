@@ -2,8 +2,8 @@
     <qresource prefix="/">
         <file>pc1401/bas-1401.rom</file>
         <file>pc1401/cpu-1401.rom</file>
-        <file>pc1401/1401lcd.png</file>
-        <file>pc1401/1401symb.png</file>
         <file>pc1401/pc1401.png</file>
+        <file>pc1401/pc1401Back.png</file>
+        <file>pc1401/pc1401Top.png</file>
     </qresource>
 </RCC>

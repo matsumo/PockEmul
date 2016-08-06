@@ -448,11 +448,11 @@ void Cpc1360::linkObject(QString item,CPObject *pPC)
 bool Cpc1360::UpdateFinalImage(void) {
 //    qWarning()<<"UpdateFinalImage";
     // Draw backdoor when not in frontview
-    if (!flipping && (currentView != FRONTview) ) {
-//        InitView(BACKview);
-        delete BackImage;
-        BackImage = new QImage(BackImageBackup);
-    }
+//    if (!flipping && (currentView != FRONTview) ) {
+////        InitView(BACKview);
+//        delete BackImage;
+//        BackImage = new QImage(BackImageBackup);
+//    }
 
     CpcXXXX::UpdateFinalImage();
 

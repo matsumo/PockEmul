@@ -25,6 +25,10 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
     Initial_Session_Fname ="pc1401.pkm";
 
     BackGroundFname	= P_RES(":/pc1401/pc1401.png");
+    RightFname  = P_RES(":/pc1250/PC1250Right.png");
+    BackFname   = P_RES(":/pc1401/pc1401Back.png");
+    TopFname    = P_RES(":/pc1401/pc1401Top.png");
+    BottomFname = P_RES(":/pc1401/pc1401Top.png");
 
     memsize			= 0x10000;
     LeftFname = P_RES(":/pc1250/125xLeft.png");

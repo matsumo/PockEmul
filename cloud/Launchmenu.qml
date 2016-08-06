@@ -21,7 +21,7 @@ Rectangle {
             "Cloud":            function(){ nav.hide(); cloudShow(); },
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
-            "Adjust zoom":      function(){ fit() ;},
+            "Fit to screen":    function(){ fit() ;},
             "Help":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
@@ -59,8 +59,8 @@ Rectangle {
             imageName: "qrc:/core/close.png"
         }
         ListElement {
-            libelle: "Adjust zoom"
-            imageName: ""
+            libelle: "Fit to screen"
+            imageName: "qrc:/core/fit_to_width.png"
         }
         ListElement {
             libelle: "Settings"
@@ -73,7 +73,7 @@ Rectangle {
         }
         ListElement {
             libelle: "Check for Updates"
-            imageName: ""
+            imageName: "qrc:/core/check.png"
         }
         ListElement {
             libelle: "Exit"
@@ -111,6 +111,8 @@ Rectangle {
                     Text {
                         text: libelle
                         color: "white"
+                        height:menu.iconsize
+                        verticalAlignment: Text.AlignVCenter
                         font { family: "Helvetica"; pointSize: 14; bold: false }
                     }
                 }
@@ -131,6 +133,7 @@ Rectangle {
     ListView {
         anchors.fill: parent
         model: menuModel
+        spacing: 5
         delegate: menuDelegate
 
     }
