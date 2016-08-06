@@ -350,8 +350,9 @@ private:
   Ckeyb *Parent;
 };
 
-class Ckeyb
+class Ckeyb:public QObject
 {
+    Q_OBJECT
 public:
     CpcXXXX *pPC;
     CPObject *Parent;
@@ -400,6 +401,11 @@ public:
     bool isKey(int _key);
     bool isKeyPressed();
     bool keyPressedCount();
+    void insertKey(int _key);
+
+signals:
+    void keyPressed(int);
+
 protected:
 	BYTE IA_PORT;
 

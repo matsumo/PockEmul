@@ -948,7 +948,7 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
         pKEYB->lastMousePressedKey = pKEYB->LastKey;
         if (pKEYB->LastKey) {
-            pKEYB->keyPressedList.insert(pKEYB->LastKey,pTIMER ? pTIMER->state:0);
+            pKEYB->insertKey(pKEYB->LastKey);
             Refresh_Display = true;
         }
 
@@ -1536,7 +1536,7 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     if ( (pKEYB->LastKey>0) && (pKEYB->getKey(pKEYB->LastKey).ScanCode != 0)) {
         // Add th key to Key pressed buffer
         if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) {
-            pKEYB->keyPressedList.insert(pKEYB->LastKey,pTIMER?pTIMER->state:0);
+            pKEYB->insertKey(pKEYB->LastKey);
             Refresh_Display = true;
         }
         ComputeKey(KEY_PRESSED,pKEYB->LastKey);

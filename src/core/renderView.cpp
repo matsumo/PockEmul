@@ -193,6 +193,8 @@ void CrenderView::minimize(QString Id)
 void CrenderView::fit()
 {
 
+    if (listpPObject.isEmpty()) return;
+
     // Compute global rect
     QRectF _globalRect(0,0,0,0);
     for (int k = 0; k < listpPObject.size(); k++)

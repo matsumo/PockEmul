@@ -120,6 +120,13 @@ bool Ckeyb::isKey(int _key) {
     return false;
 }
 
+void Ckeyb::insertKey(int _key)
+{
+    keyPressedList.insert(_key,pPC->pTIMER ? pPC->pTIMER->state:0);
+
+    emit keyPressed(_key);
+}
+
 int Ckeyb::KeyClick(QPoint pts)
 {
     if (!enabled) return 0;
