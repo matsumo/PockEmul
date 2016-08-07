@@ -134,6 +134,7 @@ extern CrenderView *view;
 
  void DownloadManager::abort()
  {
+     qWarning()<<"Abort Download";
      while (!currentDownloads.isEmpty()) {
          currentDownloads.first()->abort();
         currentDownloads.removeAt(0);

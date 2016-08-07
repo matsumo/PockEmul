@@ -13,6 +13,7 @@
 #include "Keyb.h"
 #include "QZXing.h"
 #include "vibrator.h"
+#include "downloadmanager.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -20,6 +21,7 @@ extern void m_addShortcut(QString name,QString param);
 extern bool soundEnabled;
 extern bool hiRes;
 extern QList<CPObject *> listpPObject;
+extern DownloadManager *downloadManager;
 
 using namespace zxing;
 
@@ -67,6 +69,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendCloseAll()), mainwindow, SLOT(Close_All()));
     QObject::connect(cloud.object, SIGNAL(sendCheck()), this, SLOT(checkSlot()));
     QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
+
+    QObject::connect(cloud.object, SIGNAL(sendDownloadCancel()), downloadManager, SLOT(abort()));
 
     QObject::connect(&cloud,SIGNAL(downloadEnd()),this,SLOT(cloudClose()));
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));

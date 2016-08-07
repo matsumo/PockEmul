@@ -65,6 +65,7 @@ Rectangle {
     signal maximize(string id)
     signal minimize(string id)
     signal fit();
+    signal sendDownloadCancel();
 
     signal sendNewPocket();
     signal sendLoadPocket(string id);
@@ -677,9 +678,11 @@ Rectangle {
 
     }
 
+
     Component.onCompleted: {
         thecloud.close.connect(cloudHide);
         contextMenu.selectedOption.connect(manageContextResponse);
+        download.sendDownloadCancel.connect(sendDownloadCancel);
 //        showWorkingScreen();
 
         console.log("Test.qml: Completed",new Date());

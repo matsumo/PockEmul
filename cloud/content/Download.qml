@@ -6,6 +6,8 @@ Item {
     property alias maximumValue: progressbar.maximumValue
     property alias value: progressbar.value
 
+    signal sendDownloadCancel();
+
 //    spacing: 10
     height: cancelPB.height
     ProgressBar {
@@ -23,7 +25,10 @@ Item {
         expand: false
         text: "Cancel"
         color: "white"
-
+        onClicked: {
+            console.log("Downaload Cancel");
+            sendDownloadCancel();
+        }
     }
 
     Component.onCompleted: {
