@@ -94,6 +94,7 @@ public:
     }
 	void	Dump_pin(void);
 	char	dump[100];
+    bool closeConnectedOnExit;
 
     Q_INVOKABLE bool	getGender();
     Q_INVOKABLE void	setGender(bool);

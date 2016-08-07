@@ -79,6 +79,7 @@ bool Cpc1360::init()
 
     pS2CONNECTOR = new Cconnector(this,35,3,Cconnector::Sharp_35,"Memory SLOT 2",true,QPoint(0,90));
     publish(pS2CONNECTOR);
+    pS2CONNECTOR->closeConnectedOnExit=true;
 
 
     return true;

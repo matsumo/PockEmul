@@ -411,6 +411,7 @@ bool CPObject::init()
  */
 bool CPObject::exit()
 {
+
     if (pKEYB)	pKEYB->exit();
     if (pLCDC)  pLCDC->exit();
     if (pTIMER) pTIMER->exit();
@@ -1876,6 +1877,16 @@ void CPObject::remove(Cconnector* newConn)
  */
 void CPObject::slotExit(void)
 {
+    // Close all connected objects if necessary
+    for (int i=0; i< ConnList.size();i++) {
+        if (ConnList.at(i)->closeConnectedOnExit) {
+            qWarning()<<"close";
+            if (ConnList.at(i)->LinkedToObject()) {
+                ConnList.at(i)->LinkedToObject()->slotExit();
+            }
+        }
+    }
+
 	toDestroy = true;
 }
 

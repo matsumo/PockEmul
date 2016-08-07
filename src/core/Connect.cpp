@@ -21,6 +21,8 @@ Cconnector::Cconnector(CPObject *parent , QString desc, bool newGender):QObject(
     Desc = desc;
     gender = newGender;
     values = 0;
+
+    closeConnectedOnExit = false;
 }
 
 Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QString desc, bool newGender, QPointF snap, ConnectorDir dir):QObject(parent)
@@ -35,6 +37,7 @@ Cconnector::Cconnector(CPObject *parent , int nb, int id, ConnectorType type, QS
     setSnap(snap);
     this->dir    = dir;
 
+    closeConnectedOnExit = false;
 }
 
 bool Cconnector::arePluggable(Cconnector *a,Cconnector *b) {
