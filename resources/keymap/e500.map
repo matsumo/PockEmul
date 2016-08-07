@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>e500</model>
 <Keyboard>
+<KEY description="11pins connector" height="137" left="6" masterscancode="0x00" modifier="" scancode="0x240" top="139" view="LEFT" width="14"/>
     <KEY description="-" height="22" left="615" masterscancode="0x00" modifier="" scancode="0x2d" top="275" view="FRONT" width="32"/>
     <KEY description="(" height="16" left="630" masterscancode="0x00" modifier="" scancode="0x28" top="151" view="FRONT" width="25"/>
     <KEY description=")" height="16" left="669" masterscancode="0x00" modifier="" scancode="0x29" top="152" view="FRONT" width="25"/>
@@ -10,7 +11,8 @@
     <KEY description="/" height="22" left="616" masterscancode="0x00" modifier="" scancode="0x2f" top="197" view="FRONT" width="32"/>
     <KEY description=";" height="16" left="382" masterscancode="0x00" modifier="" scancode="0x3b" top="287" view="FRONT" width="25"/>
     <KEY description="+" height="22" left="616" masterscancode="0x00" modifier="" scancode="0x2b" top="314" view="FRONT" width="32"/>
-    <KEY description="OFF" height="16" left="21" masterscancode="0x00" modifier="" scancode="0xc8" top="288" view="FRONT" width="25"/>
+    <KEY delay="3" description="OFF" height="16" left="21" masterscancode="0x00" modifier="" scancode="0xc8" top="288" view="FRONT" width="25"/>
+    <KEY delay="3" description="RESET" height="20" left="51" masterscancode="0x00" modifier="" scancode="0x20d" top="252" view="FRONT" width="20"/>
     <KEY description="On/Brk" height="16" left="58" masterscancode="0x00" modifier="" scancode="0x03" top="288" view="FRONT" width="25"/>
     <KEY description="CLS" height="16" left="671" masterscancode="0x00" modifier="" scancode="0xef" top="87" view="FRONT" width="25"/>
     <KEY description="DEL" height="27" left="663" masterscancode="0x00" modifier="" scancode="0x0a" top="195" view="FRONT" width="31"/>

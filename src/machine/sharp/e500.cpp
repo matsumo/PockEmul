@@ -194,7 +194,7 @@ bool Ce500::init(void) {
     CpcXXXX::init();
 
 //    pRP5C01->init();
-    pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(1,87));		publish(pCONNECTOR);
+    pCONNECTOR	= new Cconnector(this,11,0,Cconnector::Sharp_11,"Connector 11 pins",false,QPoint(1,150));		publish(pCONNECTOR);
 
     WatchPoint.remove(this);
     QHash<int,QString> lbl;

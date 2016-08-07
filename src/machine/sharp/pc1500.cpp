@@ -219,6 +219,7 @@ bool Cpc15XX::init(void)				// initialize
 
     pMEMCONNECTOR = new Cconnector(this,40,1,Cconnector::Sharp_40,"Memory SLOT",true,QPoint(0,90));
     publish(pMEMCONNECTOR);
+    pMEMCONNECTOR->closeConnectedOnExit=true;
 
     connect(pMEMCONNECTOR,SIGNAL(linked()),this,SLOT(memLinked()));
 
