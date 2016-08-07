@@ -1796,6 +1796,9 @@ void CPObject::computeLinkMenu(QMenu * menu)
 	connect(menulink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotNewLink( QAction *)));    
 	for (int i = 0;i < ConnList.size(); i++)
  	{
+        // The connector is already connected - continue
+        if (ConnList.at(i)->isLinked()) continue;
+
         QMenu * menuLocConn = 0;
         if (ConnList.size() == 1)
             menuLocConn = menulink;
@@ -1809,7 +1812,7 @@ void CPObject::computeLinkMenu(QMenu * menu)
                 QMenu * menuAllPc = 0;//menuLocConn->addMenu(listpPObject.at(j)->getName());
 				for (int k = 0; k < listpPObject.at(j)->ConnList.size(); k++)
                 {
-                    if (ConnList.at(i)->isPluggableWith(listpPObject.at(j)->ConnList.at(k))) {
+                    if (!listpPObject.at(j)->ConnList.at(k)->isLinked() && ConnList.at(i)->isPluggableWith(listpPObject.at(j)->ConnList.at(k))) {
                         if (menuAllPc==0)
                             menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
                         QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
@@ -1835,12 +1838,14 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
         menuunlink->addSeparator();
     //connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLinkAll( QAction *)));
     }
-	for (int i = 0;i < ConnList.size(); i++)
- 	{
-        QAction * actionLocConn = menuunlink->addAction(ConnList.at(i)->Desc);
-        actionLocConn->setData(tr("C%1").arg((qlonglong)ConnList.at(i)));
-        connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));
-	}	
+    for (int i = 0;i < ConnList.size(); i++)
+    {
+        if(ConnList.at(i)->isLinked()) {
+            QAction * actionLocConn = menuunlink->addAction(ConnList.at(i)->Desc);
+            actionLocConn->setData(tr("C%1").arg((qlonglong)ConnList.at(i)));
+            connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));
+        }
+    }
 }
 
 
