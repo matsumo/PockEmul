@@ -22,6 +22,7 @@ Rectangle {
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
             "Fit to screen":    function(){ fit() ;},
+            "Logic Analyser":   function(){ analyser() ;},
             "Help":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
@@ -35,16 +36,12 @@ Rectangle {
             imageName: "qrc:/core/ext.png"
         }
         ListElement {
-            libelle: "Code Editor"
-            imageName: "qrc:/core/dev.png"
+            libelle: "Load"
+            imageName: "qrc:/core/load.png"
         }
         ListElement {
             libelle: "Save"
             imageName: "qrc:/core/save.png"
-        }
-        ListElement {
-            libelle: "Load"
-            imageName: "qrc:/core/load.png"
         }
         ListElement {
             libelle: "Cloud"
@@ -53,6 +50,14 @@ Rectangle {
         ListElement {
             libelle: "Bookcase"
             imageName: "qrc:/core/bookcase.png"
+        }
+        ListElement {
+            libelle: "Code Editor"
+            imageName: "qrc:/core/dev.png"
+        }
+        ListElement {
+            libelle: "Logic Analyser"
+            imageName: "qrc:/core/analyser.png"
         }
         ListElement {
             libelle: "Close All"

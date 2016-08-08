@@ -29,7 +29,7 @@
     <KEY description="Equal" height="32" left="790" masterscancode="0x00" modifier="" scancode="0x3d" top="443" view="FRONT" width="32"/>
     <KEY description="INS" height="32" left="690" masterscancode="0x00" modifier="" scancode="0x09" top="258" view="FRONT" width="32"/>
     <KEY description="Left Arrow" height="32" left="0" masterscancode="0x00" modifier="" scancode="0x06" top="0" view="FRONT" width="32"/>
-    <KEY description="Brk" height="32" left="603" masterscancode="0x00" modifier="" scancode="0x03" top="304" view="FRONT" width="32"/>
+    <KEY description="Break" height="32" left="603" masterscancode="0x00" modifier="" scancode="0x22a" top="304" view="FRONT" width="32"/>
     <KEY description="Rigth Arrow" height="32" left="789" masterscancode="0x00" modifier="" scancode="0x07" top="257" view="FRONT" width="32"/>
     <KEY description="Shift" height="32" left="38" masterscancode="0x00" modifier="" scancode="0x11" top="446" view="FRONT" width="58"/>
     <KEY description="Ctrl" height="32" left="38" masterscancode="0x00" modifier="" scancode="0xd5" top="398" view="FRONT" width="32"/>

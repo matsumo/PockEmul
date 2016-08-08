@@ -13,7 +13,8 @@ Rectangle {
 
 //        SettingsDelegate { id: testcombo; name: "combobox"; labelString: "Combobox"; type: "combo"; saveInput: false }
         SettingsDelegate { id: labelCloud; name: "label1"; labelString: "Cloud settings"; type: "text"; saveInput: false }
-        SettingsDelegate { id: servername; name: "serverURL"; labelString: "Cloud Server"; type: "input"; defaultText: "http://pockemul.dscloud.me/elgg/"}
+        SettingsDelegate { id: api; name: "api"; labelString: "API type"; type: "input"; defaultText: "elgg"}
+        SettingsDelegate { id: servername; name: "serverURL"; labelString: "Cloud Server"; type: "input"; defaultText: "http://pockemul.ddns.net/elgg/"}
         SettingsDelegate { id: nameFld; name: "name"; labelString: "Name"; type: "input"; }
         SettingsDelegate { id: emailFld; name: "email"; labelString: "Email"; type: "input"; }
         SettingsDelegate { id: usernameFld; name: "username"; labelString: "User Name"; type: "input"; }

@@ -307,6 +307,9 @@ int main(int argc, char *argv[])
     if (mainwindow->openGlFlag) {
         qWarning()<<"opengl";
 
+
+        mainwindow->menuBar()->setVisible(false);
+
         QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
         view = new CrenderView(mainwindow->centralwidget);
         windowLayout->addWidget(view);

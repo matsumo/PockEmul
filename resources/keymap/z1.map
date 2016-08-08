@@ -26,7 +26,7 @@
     <KEY description="Equal" height="17" left="348" masterscancode="0x00" modifier="" scancode="0x3d" top="259" view="FRONT" width="29"/>
     <KEY description="INS" height="17" left="387" masterscancode="0x00" modifier="" scancode="0x09" top="223" view="FRONT" width="27"/>
     <KEY description="Left Arrow" height="19" left="387" masterscancode="0x00" modifier="" scancode="0x06" top="258" view="FRONT" width="29"/>
-    <KEY description="On/Brk" height="21" left="682" masterscancode="0x00" modifier="" scancode="0x03" top="133" view="FRONT" width="27"/>
+    <KEY description="Break" height="21" left="682" masterscancode="0x00" modifier="" scancode="0x22a" top="133" view="FRONT" width="27"/>
     <KEY description="Rigth Arrow" height="16" left="464" masterscancode="0x00" modifier="" scancode="0x07" top="258" view="FRONT" width="27"/>
     <KEY description="BS" height="22" left="637" masterscancode="0x00" modifier="" scancode="0xd6" top="136" view="FRONT" width="30"/>
     <KEY description="Shift" height="17" left="23" masterscancode="0x00" modifier="" scancode="0x11" top="260" view="FRONT" width="51"/>

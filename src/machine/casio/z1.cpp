@@ -669,7 +669,7 @@ UINT16 Cz1::getKey()
     if ((pKEYB->LastKey) && ks )
     {
         if (ks&1) {
-            if (KEY(K_BRK))			data|=0x01;
+            if (KEY(K_BREAK))		data|=0x01;
         }
         if (ks&2) {
 

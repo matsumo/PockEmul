@@ -58,6 +58,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
     QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
     QObject::connect(cloud.object, SIGNAL(fit()), this, SLOT(fit()));
+    QObject::connect(cloud.object, SIGNAL(analyser()), mainwindow, SLOT(Analogic()));
 
     QObject::connect(cloud.object, SIGNAL(sendLoadPocket(QString)), this, SLOT(LoadPocket(QString)));
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));

@@ -15,6 +15,8 @@ Rectangle {
     signal sendWarning(string test)
     signal close
 
+    property string api: cloud.getValueFor("api","elgg");
+
     property string serverURL: cloud.getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")
     property string currentUserid: "pock emul"
     property string currentApiKey: cloud.getValueFor("apikey","0")
@@ -153,6 +155,10 @@ Rectangle {
 
         var xhr = new XMLHttpRequest();
 
+        if (api==='wp') {
+            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
+        }
+
         xhr.onreadystatechange = function() { callback(xhr);}
 
         console.log('before POST:');
@@ -163,57 +169,104 @@ Rectangle {
 
     }
 
+
     function user_register(name,email,username,password) {
-        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
-        var url = serverURL+'?method=user.register&'+
-                '&name='+encodeURIComponent(name)+
-                '&email='+encodeURIComponent(email)+
-                '&username='+encodeURIComponent(username)+
-                '&password='+encodeURIComponent(password)+
-                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
-        console.log('url:'+url);
-        renderArea.showWorkingScreen();
+        if (api==='elgg') {
+            var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
+            var url = serverURL+'?method=user.register&'+
+                    '&name='+encodeURIComponent(name)+
+                    '&email='+encodeURIComponent(email)+
+                    '&username='+encodeURIComponent(username)+
+                    '&password='+encodeURIComponent(password)+
+                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
 
-        requestGet(url, function (o) {
-            renderArea.hideWorkingScreen();
+            console.log('url:'+url);
+            renderArea.showWorkingScreen();
+            requestGet(url, function (o) {
+                renderArea.hideWorkingScreen();
 
-            if (o.readyState == 4 ) {
-                if (o.status==200) {
-                    var obj = JSON.parse(o.responseText);
-                    console.log(o.responseText);
-                    if (obj.status == 0) {
-                        if (obj.result.success) {
-                            // sucess so login
-                            message.showMessage("User Created. Please Login.",5000);
+                if (o.readyState === 4 ) {
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status=== 0) {
+                            if (obj.result.success) {
+                                // sucess so login
+                                message.showMessage("User Created. Please Login.",5000);
+                            }
+                            else {
+                                message.showErrorMessage(obj.result.message,5000);
+                            }
                         }
                         else {
-                            message.showErrorMessage(obj.result.message,5000);
+                            message.showErrorMessage(obj.message,5000);
                         }
                     }
-                    else {
-                        message.showErrorMessage(obj.message,5000);
+                }
+            });
+        }
+
+        if(api==='wp') {
+//            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
+            url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
+
+            var data= 'name='+encodeURIComponent(name)+
+                      '&email='+encodeURIComponent(email)+
+                      '&username='+encodeURIComponent(username)+
+                      '&password='+encodeURIComponent(password);
+
+            renderArea.showWorkingScreen();
+            requestPost(url, data , function (o) {
+                console.log('ERREUR:'+o.readyState);
+
+                if (o.readyState === 4 ) {
+                    console.log('STATUS:'+o.status);
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status === 0) {
+                            message.showMessage("User logged.<p>",5000);
+                            auth_token = obj.result;
+                            cloud.saveValueFor("auth_token",auth_token);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     function user_login(username,password) {
-        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
-        var url = serverURL+'?method=auth.gettoken&'+
-                '&username='+encodeURIComponent(username)+
-                '&password='+encodeURIComponent(password)+
-                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+        var data = '';
+        var url = '';
+        var serverURL='';
+
+        if (api==='elgg') {
+            serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
+            url = serverURL+'?method=auth.gettoken&'+
+                    '&username='+encodeURIComponent(username)+
+                    '&password='+encodeURIComponent(password)+
+                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+        }
+
+        if(api==='wp') {
+//            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
+            url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
+
+        }
+
         console.log('url:'+url);
-        requestPost(url, '' , function (o) {
+        requestPost(url, data , function (o) {
             console.log('ERREUR:'+o.readyState);
 
-            if (o.readyState == 4 ) {
+            if (o.readyState === 4 ) {
                 console.log('STATUS:'+o.status);
-                if (o.status==200) {
+                if (o.status===200) {
                     var obj = JSON.parse(o.responseText);
                     console.log(o.responseText);
-                    if (obj.status == 0) {
+                    if (obj.status === 0) {
                         message.showMessage("User logged.<p>",5000);
                         auth_token = obj.result;
                         cloud.saveValueFor("auth_token",auth_token);
@@ -227,31 +280,64 @@ Rectangle {
     }
 
     function save_pml(title,description) {
-        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-        var url = serverURL+ '?method=file.save_pml&'+
-                '&title='+encodeURIComponent(title)+
-                '&description='+encodeURIComponent(description)+
-                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                '&auth_token='+auth_token;
-        var xml = cloud.save();
-        console.log('url:'+url);
+        var serverURL = '';
+        var url = '';
+        var xml = '';
 
-        requestPost(url, xml , function (o) {
-            renderArea.hideWorkingScreen();
+        if(api==='elgg') {
+            serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+            url = serverURL+ '?method=file.save_pml&'+
+                    '&title='+encodeURIComponent(title)+
+                    '&description='+encodeURIComponent(description)+
+                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+                    '&auth_token='+auth_token;
+            xml = cloud.save();
+            console.log('url:'+url);
 
-            if (o.readyState == 4 ) {
-                if (o.status==200) {
-                    var obj = JSON.parse(o.responseText);
-                    console.log(o.responseText);
-                    if (obj.status == 0) {
-                        message.showMessage("Session saved",5000);
-                    }
-                    else {
-                        message.showErrorMessage(obj.message,5000);
+            requestPost(url, xml , function (o) {
+                renderArea.hideWorkingScreen();
+
+                if (o.readyState == 4 ) {
+                    if (o.status==200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status == 0) {
+                            message.showMessage("Session saved",5000);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
+        if(api==='wp') {
+            serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+            url = serverURL+ '?method=file.save_pml&'+
+                    '&title='+encodeURIComponent(title)+
+                    '&description='+encodeURIComponent(description)+
+                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+                    '&auth_token='+auth_token;
+            xml = cloud.save();
+            console.log('url:'+url);
+
+            requestPost(url, xml , function (o) {
+                renderArea.hideWorkingScreen();
+
+                if (o.readyState == 4 ) {
+                    if (o.status==200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status == 0) {
+                            message.showMessage("Session saved",5000);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
+                    }
+                }
+            });
+        }
     }
 
     function set_access(pmlid,access,on_success,on_failure) {

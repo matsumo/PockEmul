@@ -256,6 +256,7 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 #define K_C4        0x227
 #define K_LOCK      0x228
 #define K_SWITCH    0x229
+#define K_BREAK		0x22a
 
 // TI57
 #define K_GTO       0x230

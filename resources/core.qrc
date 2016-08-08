@@ -23,5 +23,6 @@
         <file>core/close.png</file>
         <file>core/fit_to_width.png</file>
         <file>core/check.png</file>
+        <file>core/analyser.png</file>
     </qresource>
 </RCC>
