@@ -232,11 +232,6 @@ int main(int argc, char *argv[])
 
     mainwindow = new MainWindowPockemul();
 
-//    mainwindow->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
-#ifdef Q_OS_WIN
-//    QWindowsWindowFunctions::setHasBorderInFullScreen(mainwindow->windowHandle(), true);
-#endif
-
     appDir = app->applicationDirPath();
     qWarning()<<appDir;
 
@@ -249,7 +244,7 @@ int main(int argc, char *argv[])
     mainwindow->setWindowIcon ( QIcon(":/core/pockemul.bmp") );
     mainwindow->resize(680,520);
     qWarning()<<Cloud::getValueFor("geometry").toLatin1();
-     qWarning()<<"restore:"<<mainwindow->restoreGeometry(QByteArray::fromHex(Cloud::getValueFor("geometry").toLatin1()));
+
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
 
 #ifdef EMSCRIPTEN
@@ -282,7 +277,9 @@ int main(int argc, char *argv[])
 #else
     mainwindow->show();
     QWindowsWindowFunctions::setHasBorderInFullScreen(mainwindow->windowHandle(), true);
+    mainwindow->restoreGeometry(QByteArray::fromHex(Cloud::getValueFor("geometry").toLatin1()));
 #endif
+
 
 //    test();
 

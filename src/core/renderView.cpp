@@ -58,7 +58,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
     QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
     QObject::connect(cloud.object, SIGNAL(fit()), this, SLOT(fit()));
-    QObject::connect(cloud.object, SIGNAL(toggleFullscreen()), this, SLOT(toggleFullscreen()));
+    QObject::connect(cloud.object, SIGNAL(toggleFullscreen()), mainwindow, SLOT(toggleFullscreen()));
     QObject::connect(cloud.object, SIGNAL(analyser()), mainwindow, SLOT(Analogic()));
 
     QObject::connect(cloud.object, SIGNAL(sendLoadPocket(QString)), this, SLOT(LoadPocket(QString)));
@@ -196,15 +196,6 @@ void CrenderView::minimize(QString Id)
     pc->minimize(pc->RectWithLinked().center().toPoint());
 }
 
-void CrenderView::toggleFullscreen()
-{
-//    hide();
-//    mainwindow->setWindowState(mainwindow->windowState() ^ Qt::FramelessWindowHint );
-//    mainwindow->setFixedSize(mainwindow->size()-QSize(0,1));
-//    show();
-
-    mainwindow->setWindowState(mainwindow->windowState() ^ Qt::WindowFullScreen);
-}
 
 void CrenderView::fit()
 {

@@ -113,6 +113,7 @@ public slots:
     void opensession(QXmlStreamReader *xml);
     void quitPockEmul();
     void CheckUpdates();
+    void toggleFullscreen();
 
 private slots:
 

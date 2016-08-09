@@ -1575,11 +1575,24 @@ void MainWindowPockemul::keyPressEvent		( QKeyEvent * event ){
 #endif
 }
 
+
+void MainWindowPockemul::toggleFullscreen()
+{
+//    hide();
+//    mainwindow->setWindowState(mainwindow->windowState() ^ Qt::FramelessWindowHint );
+//    mainwindow->setFixedSize(mainwindow->size()-QSize(0,1));
+//    show();
+
+    setWindowState(windowState() ^ Qt::WindowFullScreen);
+}
+
 void MainWindowPockemul::resizeEvent		( QResizeEvent * event ){
     Q_UNUSED(event)
 
 #ifndef EMSCRIPTEN
-    downloadManager->resize();
+    if (downloadManager) {
+        downloadManager->resize();
+    }
 #endif
 #ifdef EMSCRIPTEN
     zoomSlider->setGeometry(mainwindow->width()-30,20,20,mainwindow->height()-40);

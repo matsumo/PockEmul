@@ -53,7 +53,6 @@ public slots:
     Q_INVOKABLE void maximize(QString Id);
     Q_INVOKABLE void minimize(QString Id);
     Q_INVOKABLE void fit();
-    Q_INVOKABLE void toggleFullscreen();
     void pocketUpdated(CViewObject *pObject);
     void newPObject(CPObject *pObject);
     void delPObject(CPObject *pObject);
