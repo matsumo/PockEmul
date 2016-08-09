@@ -22,6 +22,7 @@ Rectangle {
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
             "Fit to screen":    function(){ fit() ;},
+            "Toggle Fullscreen":function(){ toggleFullscreen() ;},
             "Logic Analyser":   function(){ analyser() ;},
             "Help":   function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
@@ -67,6 +68,11 @@ Rectangle {
             libelle: "Fit to screen"
             imageName: "qrc:/core/fit_to_width.png"
         }
+        ListElement {
+            libelle: "Toggle Fullscreen"
+            imageName: "qrc:/core/expand.png"
+        }
+
         ListElement {
             libelle: "Settings"
             imageName: "qrc:/TabbedQuickApp/pics/settings-white.png"

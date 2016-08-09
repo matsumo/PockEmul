@@ -118,7 +118,7 @@ void Cce126::SaveAsText(void)
 
 	file.write(TextBuffer);
 	
-	mainwindow->grabKeyboard();
+//	mainwindow->grabKeyboard();
 		AddLog(LOG_PRINTER,TextBuffer.data());
 }
 

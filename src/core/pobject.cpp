@@ -486,7 +486,7 @@ bool CPObject::run(void){
         slotPower();
         pKEYB->keyPressedList.remove(K_OF);
     }
-    if (KEY(K_BRK) || KEY(K_POW_ON)) {
+    if (off && (KEY(K_BRK) || KEY(K_POW_ON))) {
         Vibrate();
         emit sigTurnOn();
         pKEYB->keyPressedList.remove(K_BRK);

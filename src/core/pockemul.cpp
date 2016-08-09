@@ -11,6 +11,7 @@
 
 #ifdef Q_OS_WIN
 #include <windowsx.h>
+#include <QtPlatformHeaders/QWindowsWindowFunctions>
 #endif
 
 #include "launchbuttonwidget.h"
@@ -168,7 +169,6 @@ int main(int argc, char *argv[])
 
     launch1 = launch2 = dev = save = load = cloudButton = bookcase = exitButton = 0;
 
-
     QApplication *app = new QApplication(argc, argv);
 
 #ifdef Q_OS_WIN
@@ -232,6 +232,11 @@ int main(int argc, char *argv[])
 
     mainwindow = new MainWindowPockemul();
 
+//    mainwindow->setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
+#ifdef Q_OS_WIN
+//    QWindowsWindowFunctions::setHasBorderInFullScreen(mainwindow->windowHandle(), true);
+#endif
+
     appDir = app->applicationDirPath();
     qWarning()<<appDir;
 
@@ -276,6 +281,7 @@ int main(int argc, char *argv[])
     mainwindow->menuBar()->hide();
 #else
     mainwindow->show();
+    QWindowsWindowFunctions::setHasBorderInFullScreen(mainwindow->windowHandle(), true);
 #endif
 
 //    test();

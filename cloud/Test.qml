@@ -65,6 +65,7 @@ Rectangle {
     signal maximize(string id)
     signal minimize(string id)
     signal fit();
+    signal toggleFullscreen();
     signal analyser();
     signal sendDownloadCancel();
 

@@ -156,9 +156,7 @@ MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QM
 #endif
 #endif
 
-
-//    grabGesture(Qt::PanGesture);
-//    grabGesture(Qt::PinchGesture);
+//    grabKeyboard();
 
     initObjectTable();
 #ifdef AVOID
@@ -1563,8 +1561,18 @@ void MainWindowPockemul::keyReleaseEvent	( QKeyEvent * event ){
 }
 
 void MainWindowPockemul::keyPressEvent		( QKeyEvent * event ){
-//    qWarning()<<"MainWindowPockemul::keyPressEvent";
+#if 0
+    qWarning()<<"MainWindowPockemul::keyPressEvent";
+    if (event->key() == Qt::Key_F11) {
+        qWarning()<<"F11";
+        setWindowState(windowState() ^ Qt::WindowFullScreen);
+    }
+    else {
+        event->ignore();
+    }
+#else
     event->ignore();
+#endif
 }
 
 void MainWindowPockemul::resizeEvent		( QResizeEvent * event ){
