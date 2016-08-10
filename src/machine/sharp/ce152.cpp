@@ -89,7 +89,7 @@ Cce152::Cce152(CPObject *parent)	: CPObject(parent)
     setDZmm(52);
     KeyMap		= KeyMapce152;
     KeyMapLenght= KeyMapce152Lenght;
-    pKEYB		= new Ckeyb(this,"ce152.map");
+    pKEYB->setMap("ce152.map");
     first_state = 0;
     counter		= 0;
     counterDiv100 = 0;
@@ -105,7 +105,7 @@ Cce127r::Cce127r(CPObject *parent) : Cce152(parent)
     setDZmm(25);
     setDX(472);
     setDY(266);
-    pKEYB->fn_KeyMap = "ce127r.map";
+    pKEYB->setMap("ce127r.map");
 
     //touche play 460,293 : 60x70
 
@@ -120,7 +120,7 @@ Cpc2081::Cpc2081(CPObject *parent) : Cce152(parent)
     setDZmm(31);
     setDX(658);
     setDY(410);
-    pKEYB->fn_KeyMap = "pc2081.map";
+    pKEYB->setMap("pc2081.map");
 
 
 }

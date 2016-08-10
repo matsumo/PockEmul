@@ -63,7 +63,7 @@ Crlh1000::Crlh1000(CPObject *parent)	: CpcXXXX(parent)
                                     QRect());
     pCPU		= new Cm6502(this);    m6502 = (Cm6502*)pCPU;
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"rlh1000.map");
+    pKEYB->setMap("rlh1000.map");
     backdoorKeyIndex=0;
     capsuleKeyIndex=0;
 
@@ -92,6 +92,7 @@ bool Crlh1000::init(void)				// initialize
 #ifndef QT_NO_DEBUG
 //    pCPU->logsw = true;
 #endif
+    qWarning()<<"Crlh1000::init";
     CpcXXXX::init();
 
     pCONNECTOR	= new Cconnector(this,44,0,Cconnector::Panasonic_44,"44 pins connector",false,
@@ -112,6 +113,7 @@ bool Crlh1000::init(void)				// initialize
     memset(&lineFE,0xff,sizeof(lineFE));
     memset(&lineFF,0xff,sizeof(lineFF));
 
+    qWarning()<<pKEYB->Keys.size();
     // search key 0x242 index
     for (int i=0;i<pKEYB->Keys.size();i++)
     {

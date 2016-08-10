@@ -55,7 +55,7 @@ Cg850v::Cg850v(CPObject *parent)	: CpcXXXX(parent)
                                  QRect(50,60,47+288,96));
     pCPU        = new CZ80(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"g850v.map");
+    pKEYB->setMap("g850v.map");
     pSED1560    = new CSED1560(this);
 
     Tape_Base_Freq=2500;

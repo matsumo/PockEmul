@@ -70,7 +70,7 @@ Crlp9001::Crlp9001(CPObject *parent ,Models mod)   : CPObject(parent)
         SlotList.append(CSlot(16 , 0x1C000 , "" , ""        , CSlot::RAM , "RAM 16Ko bank 8"));
         break;
     case RLP9006:
-        pKEYB               = new Ckeyb(this,"rlp9006.map");
+        pKEYB->setMap("rlp9006.map");
         BackGroundFname     = P_RES(":/rlh1000/rlp9006.png");
         memsize      = 0x20000;
         SlotList.append(CSlot(16 , 0x0000 , ""  , ""        , CSlot::CUSTOM_ROM , "ROM bank 1"));

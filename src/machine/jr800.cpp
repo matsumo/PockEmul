@@ -62,7 +62,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
         qWarning()<<hd44102[i];
     }
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"jr800.map");
+    pKEYB->setMap("jr800.map");
 
     ioFreq = 0;
 }

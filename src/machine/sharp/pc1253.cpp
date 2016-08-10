@@ -21,8 +21,7 @@ Cpc1253::Cpc1253(CPObject *parent)	: Cpc1251(parent)
     SlotList.append(CSlot(32, 0x8000 ,	""                              , "" , CSlot::RAM , "RAM"));
     SlotList.append(CSlot(128,0x10000 ,	""                              , "" , CSlot::RAM , "RAM"));
 
-    delete pKEYB;
-    pKEYB		= new Ckeyb(this,"pc1253.map");
+    pKEYB->setMap("pc1253.map");
 
     pLCDC->symbList.clear();
      pLCDC->symbList

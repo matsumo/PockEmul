@@ -339,9 +339,9 @@ void Crlp3001::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     Q_UNUSED(scancode)
 
 
-    if (pKEYB->LastKey>0) {
-        connected = !connected;
-    }
+//    if (pKEYB->LastKey>0) {
+//        connected = !connected;
+//    }
 }
 
 void Crlp3001::addModule(QString item,CPObject *pPC)

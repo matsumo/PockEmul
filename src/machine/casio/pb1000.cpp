@@ -68,7 +68,7 @@ Cpb1000::Cpb1000(CPObject *parent)	: CpcXXXX(parent)
                                    QRect());
     pCPU		= new CHD61700(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pb1000.map");
+    pKEYB->setMap("pb1000.map");
     pHD44352    = new CHD44352(this,P_RES(":/pb1000/chr.bin"));
 
     m_kb_matrix = 0;

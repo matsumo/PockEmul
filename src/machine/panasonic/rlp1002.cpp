@@ -33,7 +33,7 @@ Crlp1002::Crlp1002(CPObject *parent):Cce515p(parent)
 
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp1002.map");
+    pKEYB->setMap("rlp1002.map");
     setDXmm(227);
     setDYmm(95);
     setDZmm(31);

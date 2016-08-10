@@ -118,7 +118,7 @@ Chp15c::Chp15c(CPObject *parent,Models mod):CpcXXXX(parent)
                                   QRect());
     pCPU		= new CHPNUT(this, mod==HP15 ? 80 : 40);
     nutcpu = (CHPNUT*)pCPU;
-    pKEYB		= new Ckeyb(this,"hp15c.map");
+    pKEYB->setMap("hp15c.map");
 
     turnOnNext = false;
 }

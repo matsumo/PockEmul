@@ -83,7 +83,7 @@ Cti59::Cti59(CPObject *parent,Models mod):CpcXXXX(parent)
                                  QRect(),
                                  P_RES(":/ti59/ti59lcd.png"));
     pCPU		= new Ctmc0501(this,currentModel);    ti59cpu = (Ctmc0501*)pCPU;
-    pKEYB		= new Ckeyb(this,"ti59.map");
+    pKEYB->setMap("ti59.map");
 
     ioFreq = 0;
 

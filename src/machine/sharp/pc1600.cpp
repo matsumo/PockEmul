@@ -70,7 +70,7 @@ if (!fp_log) fp_log=fopen("pc1600.log","wt");	// Open log file
     pLU57813P   = new CLU57813P(this);
     pLH5810		= new CLH5810_PC1600(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc1600.map");
+    pKEYB->setMap("pc1600.map");
     pHD61102_1  = new CHD61102(this);
     pHD61102_2  = new CHD61102(this);
     pTC8576P    = new CTC8576P(this,1288800);

@@ -32,7 +32,7 @@ Cpc1425::Cpc1425(CPObject *parent) : Cpc1403(parent)
     delete pLCDC;	pLCDC = new Clcdc_pc1425(this,
                                              QRect(130,56,144*4.0/3,15),
                                              QRect(130,44,196,35));
-    pKEYB->fn_KeyMap = "pc1425.map";
+    pKEYB->setMap("pc1425.map");
 
 
 }

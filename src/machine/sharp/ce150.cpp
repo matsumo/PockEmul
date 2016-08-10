@@ -78,7 +78,7 @@ Cce150::Cce150(CPObject *parent):Cprinter(parent)
     pLH5810		= new CLH5810(this);
     KeyMap		= KeyMapce150;
     KeyMapLenght= KeyMapce150Lenght;
-    pKEYB		= new Ckeyb(this,"ce150.map");
+    pKEYB->setMap("ce150.map");
 
     memsize			= 0x2000;
 

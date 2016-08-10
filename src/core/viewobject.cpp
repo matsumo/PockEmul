@@ -16,6 +16,7 @@
 extern MainWindowPockemul* mainwindow;
 extern bool hiRes;
 extern bool flipOnEdge;
+extern int ask(QWidget *parent,QString msg,int nbButton);
 
 CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow->centralwidget)
 {
@@ -27,12 +28,14 @@ CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow
     FrontImage=TopImage=LeftImage=RightImage=BottomImage=BackImage=0;
     Pc_DX_mm=Pc_DY_mm=Pc_DZ_mm=0;
     PosX = PosY	= Pc_DX = Pc_DY = 0;
-    pKEYB = 0;
+
     FinalImage = 0;
     BackgroundImageBackup = 0;
     AnimatedImage = 0;
     internalImageRatio = 1;
     rotation = 0;
+
+    pKEYB = new Ckeyb(this);
 }
 
 CViewObject::~CViewObject()
@@ -156,6 +159,9 @@ QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmi
     else
         if (size.isValid()) {
             loc = QImage(fname).mirrored(Hmirror,Vmirror).transformed(matrix).scaled(size,Qt::IgnoreAspectRatio,Qt::SmoothTransformation).convertToFormat(QImage::Format_ARGB32);
+            if (loc.isNull()) {
+                qWarning()<<"Cannot create Image";
+            }
         }
         else {
             loc = QImage(fname).mirrored(Hmirror,Vmirror).transformed(matrix).convertToFormat(QImage::Format_ARGB32);

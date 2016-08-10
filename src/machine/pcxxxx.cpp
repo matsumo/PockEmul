@@ -556,7 +556,7 @@ bool CpcXXXX::init(void)
     AddLog(LOG_MASTER,tr("CPU init"));
     if (!pCPU) return 0;
     if(!(pCPU->init())) return(0);
-	if(pKEYB)	pKEYB->init();
+
 	if(pTIMER)	pTIMER->init();
 	if(pLCDC)	pLCDC->init_screen();
     AddLog(LOG_MASTER,"Success");

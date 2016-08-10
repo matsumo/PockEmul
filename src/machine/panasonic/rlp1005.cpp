@@ -45,7 +45,7 @@ Crlp1005::Crlp1005(CPObject *parent):Cprinter(parent)
     setposX(0);
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp1005.map");
+    pKEYB->setMap("rlp1005.map");
 
     setDXmm(299);
     setDYmm(219);

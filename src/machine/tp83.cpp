@@ -21,7 +21,7 @@ Ctp83::Ctp83(CPObject *parent):Cce515p(parent) {
     setcfgfname(QString("tp83"));
     BackGroundFname	= P_RES(":/ext/tp-83.png");
 
-    delete pKEYB; pKEYB		= new Ckeyb(this,"tp83.map");
+    pKEYB->setMap("tp83.map");
 
     setDXmm(329);
     setDYmm(117);

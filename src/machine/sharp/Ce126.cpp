@@ -58,7 +58,7 @@ Cce126::Cce126(CPObject *parent):Cprinter(parent)
     pTIMER		= new Ctimer(this);
     KeyMap      = KeyMapce126;
     KeyMapLenght= KeyMapce126Lenght;
-    pKEYB		= new Ckeyb(this,"ce126.map");
+    pKEYB->setMap("ce126.map");
     setDX(620);
     setDY(488);
 
@@ -625,7 +625,7 @@ Cce123::Cce123()
     setDZmm(33);
     setPaperPos(QRect(89,185-149,207,149));
 
-    delete pKEYB; pKEYB=new Ckeyb(this,"ce123.map");
+    pKEYB->setMap("ce123.map");
 }
 bool Cce123::init(void) {
     Cce126::init();
@@ -645,7 +645,7 @@ Cce129::Cce129()
     setDZmm(33);
 
     setPaperPos(QRect(89,185-149,207,149));
-    delete pKEYB; pKEYB=new Ckeyb(this,"ce129.map");
+    pKEYB->setMap("ce129.map");
 
 }
 bool Cce129::init(void) {
@@ -666,7 +666,7 @@ C263591::C263591()
 
     setPaperPos(QRect(78,0,207,149));
 
-    delete pKEYB; pKEYB=new Ckeyb(this,"263591.map");
+    pKEYB->setMap("263591.map");
 }
 bool C263591::init(void) {
     Cce126::init();

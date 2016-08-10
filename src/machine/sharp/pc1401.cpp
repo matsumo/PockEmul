@@ -55,7 +55,7 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
                                    QRect(119,44,210,35));
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc1401.map",scandef_pc1401);
+    pKEYB->setMap("pc1401.map",scandef_pc1401);
 
 
 }

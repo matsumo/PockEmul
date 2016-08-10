@@ -33,7 +33,7 @@ Cpc1211::Cpc1211(CPObject *parent)	: CpcXXXX(parent)
     pLCDC   = new Clcdc_pc1211(this,
                                QRect(46,50,144*2*1.375,8*2*1.375),
                                QRect(55,41,380,5));
-    pKEYB   = new Ckeyb(this,"pc1211.map");
+    pKEYB->setMap("pc1211.map");
     pCPU    = new CTinyBasic(this);
     pTIMER  = new Ctimer(this);
     pBASIC  = (CTinyBasic *)pCPU;

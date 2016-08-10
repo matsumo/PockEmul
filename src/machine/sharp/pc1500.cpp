@@ -62,7 +62,7 @@ Cpc15XX::Cpc15XX(CPObject *parent)	: CpcXXXX(parent)
     pCPU		= new CLH5801(this); pCPU->logsw=false;
 	pLH5810		= new CLH5810_PC1500(this);
 	pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc1500.map");
+    pKEYB->setMap("pc1500.map");
 	
     bus = new CbusPc1500();
     busMem = new CbusPc1500();
@@ -130,7 +130,7 @@ Ctrspc2::Ctrspc2(CPObject *parent)	: Cpc1500(parent)
 
     pLCDC->symbRect.moveTo(181,53);
 
-    pKEYB->fn_KeyMap = "trspc2.map";
+    pKEYB->setMap( "trspc2.map");
 
 }
 

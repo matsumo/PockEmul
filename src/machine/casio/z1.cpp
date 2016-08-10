@@ -91,7 +91,7 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
     pFPU        = new CCF79107PJ(this);
     pTIMER		= new Ctimer(this);
     pHD66108    = new CHD66108(this);
-    pKEYB		= new Ckeyb(this,"z1.map");
+    pKEYB->setMap("z1.map");
     pCENT       = new Cctronics(this); pCENT->pTIMER = pTIMER;
 
     lastKeyBufSize = 0;

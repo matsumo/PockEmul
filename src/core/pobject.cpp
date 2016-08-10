@@ -71,7 +71,6 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     toDestroy = false;
 
 
-    pKEYB	= 0;
     pTIMER	= 0;
     pLCDC	= 0;
     bus     = 0;
@@ -390,6 +389,8 @@ bool CPObject::init()
     move(QPoint(posx(),posy()));
     setAttribute(Qt::WA_AlwaysShowToolTips,true);
 
+    pKEYB->init();
+
     AddLog(LOG_MASTER,tr("Memory initialisation"));
     if (memsize>0)  {
         if ((mem=(BYTE *)malloc(memsize*sizeof(BYTE)))==NULL) return(0);                /* alloc main ram */
@@ -412,7 +413,7 @@ bool CPObject::init()
 bool CPObject::exit()
 {
 
-    if (pKEYB)	pKEYB->exit();
+    pKEYB->exit();
     if (pLCDC)  pLCDC->exit();
     if (pTIMER) pTIMER->exit();
     if (dialogVKeyboard) { dialogVKeyboard->close(); dialogVKeyboard->deleteLater(); }
@@ -505,7 +506,6 @@ bool CPObject::run(void){
         TurnCLOSE();
         pKEYB->keyPressedList.remove(K_CLOSE);
     }
-
 
 //    if (fullscreenMode) {
 //        if (QSensorReading *reading = mainwindow->sensor->reading()) {
@@ -869,7 +869,7 @@ void CPObject::minimize(QPoint pos) {
  * @param pos
  */
 void CPObject::slotDoubleClick(QPoint pos) {
-    if ((pKEYB) &&(pKEYB->KeyClick(pos))) {
+    if (pKEYB->KeyClick(pos)) {
 //        qWarning()<<"keyclick";
         // Send thee mouseclick event twice
         QMouseEvent event(QEvent::MouseButtonPress, pos, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
@@ -939,72 +939,27 @@ void CPObject::mousePressEvent(QMouseEvent *event)
 
     QPoint pts(event->x() , event->y());
 
-    if (pKEYB)
+    pKEYB->LastKey = pKEYB->KeyClick(pts);
+    if (pKEYB->LastKey != 0)  {
+        //            ungrabGesture(Qt::TapAndHoldGesture);
+        //            qWarning()<<"lastKey="<<pKEYB->LastKey;
+    }
+
+    pKEYB->lastMousePressedKey = pKEYB->LastKey;
+    if (pKEYB->LastKey) {
+        pKEYB->insertKey(pKEYB->LastKey);
+        Refresh_Display = true;
+    }
+
+    if (pKEYB->LastKey != 0)
     {
-        pKEYB->LastKey = pKEYB->KeyClick(pts);
-        if (pKEYB->LastKey != 0)  {
-//            ungrabGesture(Qt::TapAndHoldGesture);
-//            qWarning()<<"lastKey="<<pKEYB->LastKey;
-        }
+        ComputeKey(KEY_PRESSED,pKEYB->LastKey,event);
+        Vibrate();
+    }
 
-        pKEYB->lastMousePressedKey = pKEYB->LastKey;
-        if (pKEYB->LastKey) {
-            pKEYB->insertKey(pKEYB->LastKey);
-            Refresh_Display = true;
-        }
-
-//        if (KEY(K_OF)) {
-//            qWarning()<<"K_OF";
-//            Vibrate();
-//            slotPower();
-//            return;
-//        }
-//        if (KEY(K_BRK) || KEY(K_POW_ON)) {
-//            Vibrate();
-//            TurnON();
-//            return;
-//        }
-//        if (KEY(K_POW_OFF)) {
-//            Vibrate();
-//            Power = false;
-//            mainwindow->saveAll = YES;
-//            TurnOFF();
-//            mainwindow->saveAll = ASK;
-//            return;
-//        }
-//        if (KEY(K_CLOSE)) {
-//            Vibrate();
-//            TurnCLOSE();
-//        }
-
-//        switch (pKEYB->LastKey) {
-//        case K_OF :
-//            Vibrate();
-//            slotPower();
-//            return;
-//            break;
-//        case K_BRK :
-//        case K_POW_ON :qWarning()<<"GOGO"; Vibrate();TurnON(); break;
-//        case K_POW_OFF: Vibrate();
-//            Power = false;
-//            mainwindow->saveAll = YES;
-//            TurnOFF();
-//            mainwindow->saveAll = ASK;
-//            return;
-//            break;
-//        case K_CLOSE: Vibrate();TurnCLOSE();break;
-//        }
-
-        if (pKEYB->LastKey != 0)
-        {
-            ComputeKey(KEY_PRESSED,pKEYB->LastKey,event);
-            Vibrate();
-        }
-
-        if (pKEYB->LastKey != 0) {
-            event->accept();
-            return;
-        }
+    if (pKEYB->LastKey != 0) {
+        event->accept();
+        return;
     }
 
     // NO KEY CLICK Global pobject drag mode
@@ -1087,25 +1042,18 @@ void CPObject::mouseMoveEvent( QMouseEvent * event )
         }
 
 #ifndef Q_OS_ANDROID
-        if (pKEYB)
+        QPoint pts(event->x() , event->y());
+        if (pKEYB->KeyClick(pts))
         {
-            QPoint pts(event->x() , event->y());
-            if (pKEYB->KeyClick(pts))
-            {
-                setCursor(Qt::PointingHandCursor);
-                setToolTip(pKEYB->KeyString(pts));
-                event->accept();
-            }
-            else
-            {
-                setCursor(NONEdir != borderClick(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
-            }
+            setCursor(Qt::PointingHandCursor);
+            setToolTip(pKEYB->KeyString(pts));
+            event->accept();
         }
-        else {
+        else
+        {
             setCursor(NONEdir != borderClick(event->pos()) ? Qt::OpenHandCursor : Qt::ArrowCursor);
         }
 #endif
-
 
         if ( (parentWidget() != mainwindow->centralwidget)
              && (parentWidget() != 0))
@@ -1315,7 +1263,6 @@ bool CPObject::LoadSession_File(QXmlStreamReader *)
 }
 
 
-#define KEY(c)	( pKEYB->keyPressedList.contains(TOUPPER(c)) || pKEYB->keyPressedList.contains(c) || pKEYB->keyPressedList.contains(TOLOWER(c)))
 
 /**
  * @brief
@@ -1424,7 +1371,8 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
 {
 //    if (event->isAutoRepeat()) return;
 
-	if (!pKEYB) return;	// if no Keyboard then return;
+    if (pKEYB->Keys.isEmpty()) return;	// if no Keyboard then return;
+
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//(QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
@@ -1526,7 +1474,7 @@ void CPObject::keyPressEvent (QKeyEvent * event )
 {
 
 //    if (event->isAutoRepeat()) return;
-	if (!pKEYB) return;	// if no Keyboard then return;
+    if (pKEYB->Keys.isEmpty()) return;	// if no Keyboard then return;
 
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
@@ -1684,7 +1632,7 @@ void CPObject::BuildContextMenu(QMenu * menu)
         connect(menuAudioVolume, SIGNAL(triggered(QAction*)), this, SLOT(slotAudioVolume(QAction*)));
     }
 #endif
-    if (pKEYB) {
+    if (!pKEYB->Keys.isEmpty()) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
     }
@@ -1995,28 +1943,26 @@ bool CPObject::LastDrawFinalImage()
         // Fetch keypressedList and for each delayed keys
         // show message
         QString _msg ="";
-        if (pKEYB) {
-            QMapIterator<int, quint64> i(pKEYB->keyPressedList);
-            while (i.hasNext()) {
-                i.next();
-                // Check if this key is delayed
-                CKey _key = pKEYB->getKey(TOUPPER(i.key()));
-                int _delay = _key.delay;
-                if ( _delay > 0) {
-                    // Check timing
-                    quint64 _stick = i.value();
-                    quint64 _elapsed = pTIMER->msElapsed(_stick);
-                    //                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
+        QMapIterator<int, quint64> i(pKEYB->keyPressedList);
+        while (i.hasNext()) {
+            i.next();
+            // Check if this key is delayed
+            CKey _key = pKEYB->getKey(TOUPPER(i.key()));
+            int _delay = _key.delay;
+            if ( _delay > 0) {
+                // Check timing
+                quint64 _stick = i.value();
+                quint64 _elapsed = pTIMER->msElapsed(_stick);
+                //                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
 
-                    if (_elapsed <= (_delay*1000)) {
-                        // Draw text
-                        if (!_msg.isEmpty()) _msg+= "\n";
-                        _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
-                    }
+                if (_elapsed <= ((quint64)_delay*1000)) {
+                    // Draw text
+                    if (!_msg.isEmpty()) _msg+= "\n";
+                    _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
                 }
             }
         }
-//        qWarning()<<"msg"<<_msg;
+        //        qWarning()<<"msg"<<_msg;
         if (!_msg.isEmpty()) {
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
@@ -2058,8 +2004,14 @@ bool CPObject::LastDrawFinalImage()
  */
 void CPObject::KeyList()
 {
+    if (!pKEYB->Keys.isEmpty()) {
         dialogkeylist = new DialogKeyList(this);
         dialogkeylist->show();
+    }
+    else {
+       ask(this,"No Keyboard defined",1);
+
+      }
 }
 
 /**
@@ -2129,7 +2081,7 @@ void CPObject::slotPower()
         TurnOFF();
         mainwindow->saveAll = ASK;
     }
-    pKEYB->LastKey = 0;
+    if (pKEYB) pKEYB->LastKey = 0;
 }
 
 void CPObject::slotTurnOff()

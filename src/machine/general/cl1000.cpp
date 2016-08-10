@@ -30,7 +30,7 @@ Ccl1000::Ccl1000(CPObject *parent):Cce515p(parent) {
     setcfgfname(QString("cl1000"));
     BackGroundFname	= P_RES(":/ext/cl-1000.png");
 
-    delete pKEYB; pKEYB		= new Ckeyb(this,"cl1000.map");
+    pKEYB->setMap("cl1000.map");
 
     setDXmm(260);
     setDYmm(225);

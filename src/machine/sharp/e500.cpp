@@ -122,7 +122,7 @@ Ce500::Ce500(CPObject *parent, Models mod)	: CpcXXXX(parent)
 
     pCPU		= new Csc62015(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"e500.map");
+    pKEYB->setMap("e500.map");
 
     pHD61102_1  = new CHD61102(this);
     pHD61102_2  = new CHD61102(this);

@@ -31,7 +31,7 @@ Crlp4002::Crlp4002(CPObject *parent):CPObject(parent)
     setcfgfname("rlp4002");
 
     pTIMER              = new Ctimer(this);
-    pKEYB               = new Ckeyb(this,"rlp4002.map");
+    pKEYB->setMap("rlp4002.map");
     setDXmm(227);
     setDYmm(95);
     setDZmm(31);

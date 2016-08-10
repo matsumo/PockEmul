@@ -51,8 +51,7 @@ Cce1600f::Cce1600f(CPObject *parent):CPObject(parent)
     setDX(339);
     setDY(428);
 
-    delete pKEYB;
-    pKEYB		= new Ckeyb(this,"ce1600f.map",0);
+    pKEYB->setMap("ce1600f.map",0);
 
     bus = new CbusPc1500();
 

@@ -61,7 +61,7 @@ Cfp200::Cfp200(CPObject *parent)	: CpcXXXX(parent)
                                   QRect());
     pCPU		= new Ci8085(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"fp200.map");
+    pKEYB->setMap("fp200.map");
 //    pUART        = new Cuart(this);
     pCENT       = new Cctronics(this);
     pRP5C01     = new CRP5C01(this);

@@ -58,8 +58,8 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
     pLCDC		= new Clcdc_pc1280(this,
                                    QRect(80,48,328,30*1.22),
                                    QRect(80,40,328,48*1.22));
-    delete pKEYB;
-    pKEYB		= new Ckeyb(this,"pc1280.map",scandef_pc1280);
+
+    pKEYB->setMap("pc1280.map",scandef_pc1280);
 
     remove(pSIOCONNECTOR);
 

@@ -100,7 +100,7 @@ Cpc100::Cpc100(CPObject *parent):Cprinter(parent)
     pTIMER		= new Ctimer(this);
 //    KeyMap      = KeyMappc100;
 //    KeyMapLenght= KeyMappc100Lenght;
-    pKEYB		= new Ckeyb(this,"pc100.map");
+    pKEYB->setMap("pc100.map");
     setDXmm(287);
     setDYmm(265);
     setDZmm(104);

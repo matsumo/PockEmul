@@ -88,7 +88,7 @@ Clbc1100::Clbc1100(CPObject *parent)	: CpcXXXX(parent)
     for (int i=0;i<4;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"lbc1100.map");
+    pKEYB->setMap("lbc1100.map");
 
     ioFreq = 0;
 }

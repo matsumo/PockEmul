@@ -114,7 +114,7 @@ Chx20::Chx20(CPObject *parent)	: CpcXXXX(parent)
         upd16434[i]  = new CUPD16434(this,i);
     }
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"hx20.map");
+    pKEYB->setMap("hx20.map");
 
     pM160 = new Cm160(this);
 

@@ -33,7 +33,7 @@ Cce153::Cce153(CPObject *parent):CPObject(parent)
     pTIMER		= new Ctimer(this);
 
     pLH5810   = new CLH5810(this);
-//    pKEYB		= new Ckeyb(this,"ce150.map");
+//    pKEYB->setMap("ce150.map");
 
     bus = new CbusPc1500();
 

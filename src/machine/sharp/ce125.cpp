@@ -17,7 +17,7 @@ Cce125tape::Cce125tape(CPObject *parent)	: Cce152(parent)
     setDX(249);
     setDY(299);
 
-    pKEYB		= new Ckeyb(this,"ce125tape.map");
+    pKEYB->setMap("ce125tape.map");
 }
 
 void Cce125tape::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
@@ -119,7 +119,7 @@ Cce125::Cce125(CPObject *parent):Cce126(parent),
     remove(pTAPECONNECTOR);
     setPaperPos(QRect(377,0,207,149));
 
-    delete pKEYB; pKEYB=new Ckeyb(this,"ce125.map");
+    pKEYB->setMap("ce125.map");
 }
 
 Cce125::~Cce125() {

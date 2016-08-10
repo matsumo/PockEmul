@@ -121,7 +121,7 @@ Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
     pTIMER		= new Ctimer(this);
     //pCONNECTOR	= new Cconnector(this,11,0,"Connector 11 pins",false,QPoint(1,87));		publish(pCONNECTOR);
 
-    pKEYB		= new Ckeyb(this,"x07.map");
+    pKEYB->setMap("x07.map");
 
     Cpt = 0;
     Nb=0;

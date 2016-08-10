@@ -91,7 +91,7 @@ Cpc2001::Cpc2001(CPObject *parent)	: CpcXXXX(parent)
     for (int i=0;i<4;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"pc2001.map");
+    pKEYB->setMap("pc2001.map");
 
     ioFreq = 0;
 }

@@ -29,7 +29,7 @@ Cce140p::Cce140p(CPObject *parent):Cce515p(parent) {
     //pTIMER		= new Ctimer(this);
     KeyMap      = KeyMapce140p;
     KeyMapLenght= KeyMapce140pLenght;
-    delete pKEYB; pKEYB		= new Ckeyb(this,"ce140p.map");
+    pKEYB->setMap("ce140p.map");
 
     setDXmm(256);
     setDYmm(185);

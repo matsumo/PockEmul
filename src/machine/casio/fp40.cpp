@@ -23,7 +23,7 @@ Cfp40::Cfp40(CPObject *parent):CprinterCtronics(parent) {
     setcfgfname(QString("fp40"));
     BackGroundFname	= P_RES(":/ext/fp40.png");
 
-    delete pKEYB; pKEYB		= new Ckeyb(this,"fp40.map");
+    pKEYB->setMap("fp40.map");
 
     setDXmm(210);
     setDYmm(145);

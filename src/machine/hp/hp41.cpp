@@ -149,7 +149,7 @@ Chp41::Chp41(CPObject *parent):CpcXXXX(parent)
                                  QRect(35,55,215,7));
     pTIMER		= new Ctimer(this);
     pCPU		= new Chp41cpu(this);    hp41cpu = (Chp41cpu*)pCPU;
-    pKEYB		= new Ckeyb(this,"hp41.map");
+    pKEYB->setMap("hp41.map");
 
     fPrinter=fCardReader=fTimer=fWand=fHPIL=fInfrared=-1;
     for (int i=0;i<4;i++) slot[i].used=false;

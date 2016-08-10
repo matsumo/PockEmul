@@ -27,7 +27,7 @@ Cce162e::Cce162e(CPObject *parent):CPObject(parent)
 
     pLH5810_1   = new CLH5810(this);
     pLH5810_2   = new CLH5810(this);
-//    pKEYB		= new Ckeyb(this,"ce150.map");
+//    pKEYB->setMap("ce150.map");
 
     bus = new CbusPc1500();
 

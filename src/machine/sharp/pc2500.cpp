@@ -49,8 +49,8 @@ Cpc2500::Cpc2500(CPObject *parent)	: Cpc1350(parent)
     pLCDC		= new Clcdc_pc2500(this,
                                    QRect(560,70,300,64),
                                    QRect(560,60,300,5));
-    delete pKEYB;
-    pKEYB		= new Ckeyb(this,"pc2500.map",scandef_pc2500);
+
+    pKEYB->setMap("pc2500.map",scandef_pc2500);
 
     pce515p     = new Cce515p(this);
     pce515p->pTIMER = pTIMER;

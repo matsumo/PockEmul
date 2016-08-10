@@ -61,7 +61,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
                                     QRect());
     pCPU		= new CUPD1007(this,P_RES(":/fx8000g/rom0.bin"));
     fx8000gcpu = (CUPD1007*)pCPU;
-    pKEYB		= new Ckeyb(this,"fx8000g.map");
+    pKEYB->setMap("fx8000g.map");
     pHD44352    = new CHD44352(this,P_RES(":/fx8000g/charset.bin"));
     pHD44352->OP_bit = 0x20;
     pHD44352->byteLenght = 4;

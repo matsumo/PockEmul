@@ -48,7 +48,7 @@ Cpc1475::Cpc1475(CPObject *parent)	: Cpc1360(parent)
     delete pLCDC;		pLCDC		= new Clcdc_pc1475(this,
                                                        QRect(111,48,264*.9,30),
                                                        QRect(111,38,264*.9,45));
-    delete pKEYB;		pKEYB		= new Ckeyb(this,"pc1475.map",scandef_pc1450);
+    pKEYB->setMap("pc1475.map",scandef_pc1450);
 
 }
 

@@ -33,7 +33,7 @@ Cce1560::Cce1560(CPObject *parent):CpcXXXX(parent)
                                    QRect(188,60,384,128),
                                    QRect());
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"ce1560.map");
+    pKEYB->setMap("ce1560.map");
 
     memsize		= 0x9A000;
     SlotList.clear();

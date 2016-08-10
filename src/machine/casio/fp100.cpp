@@ -24,7 +24,7 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(parent) {
     setcfgfname(QString("fp100"));
     BackGroundFname	= P_RES(":/ext/fp100.png");
 
-    delete pKEYB; pKEYB		= new Ckeyb(this,"x710.map");
+    pKEYB->setMap("x710.map");
 
     setDXmm(302);
     setDYmm(120);

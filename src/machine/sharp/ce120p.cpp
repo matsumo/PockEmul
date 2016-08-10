@@ -18,7 +18,7 @@ Cce120p::Cce120p(CPObject *parent):Cce126(parent)
 
     setPaperPos(QRect(89,185-149,207,149));
 
-    delete pKEYB; pKEYB=new Ckeyb(this,"ce120.map");
+    pKEYB->setMap("ce120.map");
 
     //internal_device_code = 0x21;
 }

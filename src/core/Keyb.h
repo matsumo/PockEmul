@@ -356,7 +356,7 @@ class Ckeyb:public QObject
     Q_OBJECT
 public:
     CpcXXXX *pPC;
-    CPObject *Parent;
+    CViewObject *Parent;
 
 	virtual bool init(void);				//initialize
 	virtual bool exit(void);				//end
@@ -375,8 +375,7 @@ public:
 
 	BYTE	KStrobe;							// Last K strobe signal sent
 	BYTE	keym[200];
-	bool	access;							//KO access flag(0:none,1:access)
-	QString fn_KeyMap;
+    bool	access;							//KO access flag(0:none,1:access)
     bool	Kon;
     int	    LastKey,lastMousePressedKey;
 
@@ -396,7 +395,7 @@ public:
 
 	KEYBMAPParser *handler;
 		
-    Ckeyb(CPObject *parent = 0,QString map = "",BYTE *scan=0);
+    Ckeyb(CViewObject *parent = 0,QString map = "",BYTE *scan=0);
     virtual ~Ckeyb();
 
     bool isKey(int _key);
@@ -404,12 +403,16 @@ public:
     bool keyPressedCount();
     void insertKey(int _key);
 
+    void setMap(QString _map, BYTE *scan=0);
+    QString getMap();
 signals:
     void keyPressed(int);
 
 protected:
 	BYTE IA_PORT;
 
+private:
+    QString fn_KeyMap;
 };
 
 

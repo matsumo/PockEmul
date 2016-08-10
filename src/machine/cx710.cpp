@@ -27,7 +27,7 @@ Cx710::Cx710(CPObject *parent):Cce515p(parent) {
     setPaperPos(QRect(155,46,400,300));
 
     delete(pKEYB);
-    pKEYB		= new Ckeyb(this,"x710.map",0);
+    pKEYB->setMap("x710.map",0);
 
 }
 

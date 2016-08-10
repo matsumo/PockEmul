@@ -57,7 +57,7 @@ Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 
     pCPU		= new Ctms70c46(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"ti74.map");
+    pKEYB->setMap("ti74.map");
     pHD44780    = new CHD44780(P_RES(":/cc40/hd44780_a00.bin"),this);
 
     ptms70c46cpu = (Ctms70c46*)pCPU;
@@ -92,7 +92,7 @@ Cti95::Cti95(CPObject *parent)	: Cti74(parent)
     pLCDC		= new Clcdc_ti95(this,
                                  QRect(137,32,370,90),
                                  QRect());
-    pKEYB->fn_KeyMap = "ti95.map";
+    pKEYB->setMap("ti95.map");
 
 }
 

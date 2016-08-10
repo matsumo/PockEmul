@@ -76,7 +76,7 @@ Ctpc8300::Ctpc8300(CPObject *parent)	: CpcXXXX(parent)
     for (int i=0;i<3;i++) upd16434[i]  = new CUPD16434(this);
     pd1990ac    = new CPD1990AC(this);
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"tpc8300.map");
+    pKEYB->setMap("tpc8300.map");
 
     ioFreq = 0;
 }

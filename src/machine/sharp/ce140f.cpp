@@ -39,7 +39,7 @@ Cce140f::Cce140f(CPObject *parent):CPObject(parent)
     setcfgfname("ce140f");
 
     pTIMER		= new Ctimer(this);
-    pKEYB		= new Ckeyb(this,"ce140f.map");
+    pKEYB->setMap("ce140f.map");
     setDX(620);
     setDY(488);
     setDXmm(118);

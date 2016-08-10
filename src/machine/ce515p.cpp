@@ -50,7 +50,7 @@ Cce515p::Cce515p(CPObject *parent):Cprinter(parent)
     pTIMER		= new Ctimer(this);
     KeyMap		= 0;
     KeyMapLenght= 0;
-    pKEYB		= new Ckeyb(this,"ce150.map",0);
+    pKEYB->setMap("ce150.map");
 
     Print_Mode = 0;
 

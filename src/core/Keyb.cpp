@@ -50,7 +50,7 @@ CKey::CKey(int scancode, QString description,QRect rect,int masterscancode,QStri
     this->delay = delay;
 }
 
-Ckeyb::Ckeyb(CPObject *parent,QString map,BYTE *scan) //: CPObject(parent)								//[constructor]
+Ckeyb::Ckeyb(CViewObject *parent, QString map, BYTE *scan) //: CPObject(parent)								//[constructor]
 {
     pPC = (CpcXXXX *)parent;
     Parent	= parent;
@@ -67,9 +67,19 @@ Ckeyb::Ckeyb(CPObject *parent,QString map,BYTE *scan) //: CPObject(parent)						
     LastKey = lastMousePressedKey = 0;
 }
 
+
 Ckeyb::~Ckeyb() {
     delete handler;
 }
+
+void Ckeyb::setMap(QString _map,BYTE *scan) {
+    fn_KeyMap = _map;
+    scandef     = scan;
+}
+QString Ckeyb::getMap() {
+    return fn_KeyMap;
+}
+
 
 bool Ckeyb::isKeyPressed() {
     bool _res = false;
@@ -94,9 +104,6 @@ bool Ckeyb::keyPressedCount() {
 }
 
 bool Ckeyb::isKey(int _key) {
-//    return ( keyPressedList.contains(TOUPPER(_key)) || \
-//             keyPressedList.contains(_key) || \
-//             keyPressedList.contains(TOLOWER(_key)));
 
     if ( keyPressedList.contains(TOUPPER(_key)) ) {
          // Check if this key is delayed
@@ -289,17 +296,20 @@ int Ckeyb::CheckOff()
 
 bool Ckeyb::init(void)
 {
+    qWarning()<<"Ckeyb::init";
     isShift = false;
     isCtrl = false;
     LastKey = 0;
+
+    if (fn_KeyMap.isEmpty()) return true;
+
     QFile file( workDir+"sessions/"+fn_KeyMap );
 	QXmlInputSource source(&file);
 
 	QXmlSimpleReader reader;
 	reader.setContentHandler( handler );
 
-	bool result = reader.parse( source );
-
+    bool result = reader.parse( source );
 	if (result) return true;
 
     // Else load from ressource

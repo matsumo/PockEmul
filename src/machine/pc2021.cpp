@@ -46,7 +46,7 @@ Cpc2021::Cpc2021(CPObject *parent):Cprinter(parent)
     pTIMER		= new Ctimer(this);
     KeyMap      = KeyMappc2021;
     KeyMapLenght= KeyMappc2021Lenght;
-    pKEYB		= new Ckeyb(this,"pc2021.map");
+    pKEYB->setMap("pc2021.map");
     setDXmm(108);
     setDYmm(130);
     setDZmm(43);

@@ -26,7 +26,7 @@ Cpc1245::Cpc1245(CPObject *parent)	: Cpc1250(parent)
     delete pLCDC;	pLCDC		= new Clcdc_pc1245(this,
                                                    QRect(50,56,192,16),
                                                    QRect(50,45,173,5));
-    pKEYB->fn_KeyMap = "pc1260.map";
+    pKEYB->setMap("pc1260.map");
 
 }
 

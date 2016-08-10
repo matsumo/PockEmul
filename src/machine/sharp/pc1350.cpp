@@ -101,7 +101,7 @@ Cpc1350::Cpc1350(CPObject *parent)	: Cpc13XX(parent)
     pLCDC		= new Clcdc_pc1350(this,
                                    QRect(75,48,300,64),
                                    QRect(50,48,30,64));
-    pKEYB		= new Ckeyb(this,"pc1350.map",scandef_pc1350);
+    pKEYB->setMap("pc1350.map",scandef_pc1350);
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
 

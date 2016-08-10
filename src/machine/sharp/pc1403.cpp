@@ -78,7 +78,7 @@ Cpc1403::Cpc1403(CPObject *parent)	: Cpc1401(parent)
     delete pLCDC;	pLCDC		= new Clcdc_pc1403(this,
                                                    QRect(116,53,144*1.5,14),
                                                    QRect(119,44,210,35));
-    delete pKEYB;	pKEYB		= new Ckeyb(this,"pc1403.map",scandef_pc1403);
+    pKEYB->setMap("pc1403.map",scandef_pc1403);
 
 
     memOffset = 0xC000;

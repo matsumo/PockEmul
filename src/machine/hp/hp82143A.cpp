@@ -154,7 +154,7 @@ Chp82143A::Chp82143A(CPObject *parent):Cprinter(parent) {
     setcfgfname(QString("hp82143a"));
     BackGroundFname	= P_RES(":/hp41/hp82143a.png");
 
-    pKEYB = new Ckeyb(this,"hp82143a.map");
+    pKEYB->setMap("hp82143a.map");
 
     setDXmm(180);
     setDYmm(130);

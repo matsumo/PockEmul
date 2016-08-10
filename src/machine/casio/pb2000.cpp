@@ -56,7 +56,7 @@ Cpb2000::Cpb2000(CPObject *parent)	: Cpb1000(parent)
 
     pLCDC->rect.moveTo(58,45);
 
-    pKEYB->fn_KeyMap = "pb2000.map";
+    pKEYB->setMap("pb2000.map");
 
     closed = false;
 

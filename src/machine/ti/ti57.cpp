@@ -48,7 +48,7 @@ Cti57::Cti57(CPObject *parent)	: CpcXXXX(parent)
                                  QRect(),
                                  P_RES(":/ti57/ti57lcd.png"));
     pCPU		= new Cti57cpu(this);    ti57cpu = (Cti57cpu*)pCPU;
-    pKEYB		= new Ckeyb(this,"ti57.map");
+    pKEYB->setMap("ti57.map");
 
     ioFreq = 0;
 }
