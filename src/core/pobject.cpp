@@ -1995,22 +1995,24 @@ bool CPObject::LastDrawFinalImage()
         // Fetch keypressedList and for each delayed keys
         // show message
         QString _msg ="";
-        QMapIterator<int, quint64> i(pKEYB->keyPressedList);
-        while (i.hasNext()) {
-            i.next();
-            // Check if this key is delayed
-            CKey _key = pKEYB->getKey(TOUPPER(i.key()));
-            int _delay = _key.delay;
-            if ( _delay > 0) {
-                // Check timing
-                quint64 _stick = i.value();
-                quint64 _elapsed = pTIMER->msElapsed(_stick);
-//                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
+        if (pKEYB) {
+            QMapIterator<int, quint64> i(pKEYB->keyPressedList);
+            while (i.hasNext()) {
+                i.next();
+                // Check if this key is delayed
+                CKey _key = pKEYB->getKey(TOUPPER(i.key()));
+                int _delay = _key.delay;
+                if ( _delay > 0) {
+                    // Check timing
+                    quint64 _stick = i.value();
+                    quint64 _elapsed = pTIMER->msElapsed(_stick);
+                    //                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
 
-                if (_elapsed <= (_delay*1000)) {
-                    // Draw text
-                    if (!_msg.isEmpty()) _msg+= "\n";
-                    _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
+                    if (_elapsed <= (_delay*1000)) {
+                        // Draw text
+                        if (!_msg.isEmpty()) _msg+= "\n";
+                        _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
+                    }
                 }
             }
         }

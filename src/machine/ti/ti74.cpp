@@ -297,7 +297,7 @@ quint8 Cti74::getKey()
 {
     quint8 data=0;
 
-    if ((pKEYB->LastKey>0))
+//    if ((pKEYB->LastKey>0))
     {
         if (ks & 0x01) {
             if (KEY('M'))			data|=0x01;
