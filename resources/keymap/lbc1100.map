@@ -33,7 +33,8 @@
     <KEY description="Left Arrow" height="19" left="677" masterscancode="0x00" modifier="" scancode="0x06" top="107" width="29"/>
     <KEY description="On/Brk" height="20" left="0" masterscancode="0x00" modifier="" scancode="0x03" top="0" width="20"/>
     <KEY description="Rigth Arrow" height="16" left="737" masterscancode="0x00" modifier="" scancode="0x07" top="108" width="27"/>
-    <KEY description="Shift" height="20" left="491" masterscancode="0x00" modifier="" scancode="0x11" top="329" width="54"/>
+    <KEY description="Shift L" height="20" left="19" masterscancode="0x00" modifier="" scancode="0x11" top="329" width="54"/>
+    <KEY description="Shift R" height="20" left="491" masterscancode="0x00" modifier="" scancode="0x11" top="329" width="54"/>
     <KEY description="SML" height="26" left="19" masterscancode="0x00" modifier="" scancode="0x14" top="255" width="30"/>
     <KEY description="Space" height="20" left="563" masterscancode="0x00" modifier="" scancode="0x20" top="328" width="57"/>
     <KEY description="Up Arrow" height="19" left="706" masterscancode="0x00" modifier="" scancode="0x05" top="78" width="28"/>

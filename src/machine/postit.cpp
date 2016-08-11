@@ -106,7 +106,7 @@ bool Cpostit::UpdateFinalImage()
 #if 1
     QPainter painter;
     painter.begin(FinalImage);
-    QFont font("Arial", 6);
+    QFont font("Arial", 6*internalImageRatio);
     painter.setFont(font);
     painter.setPen(Qt::black);
     QRect _rect = QRect(QPoint(50,50),this->size());

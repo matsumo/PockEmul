@@ -340,16 +340,16 @@ UINT16 Clbc1100::getKey()
     UINT16 ks = kstrobe^0xFFFF;
     UINT16 data=0;
 
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
 //        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
-        qWarning()<<"key"<<pKEYB->LastKey;
+//        qWarning()<<"key"<<pKEYB->LastKey;
 
         if (ks&0x01) {
 //            if (KEY(K_F1))			data|=0x01;
 //            if (KEY(K_F3))			data|=0x02;
-//            if (KEY(K_SHT))			data|=0x04;
-            if (pKEYB->isShift) data|=0x04;
+            if (KEY(K_SHT))			data|=0x04;
+//            if (pKEYB->isShift) data|=0x04;
 //            if (KEY(K_F5))			data|=0x08;
 //            if (KEY(K_F6))			data|=0x10;
 //            if (KEY(K_F7))			data|=0x20;
