@@ -1067,7 +1067,7 @@ bool Chx20::UpdateFinalImage(void) {
 
 
         QRect _r = pKEYB->getKey(K_PRINT).Rect;
-        qWarning()<<"rect"<<_r;
+//        qWarning()<<"rect"<<_r;
         painter.drawImage(_r.x()*internalImageRatio,
                           _r.y()*internalImageRatio,
                           BackgroundImageBackup->copy(_r.x()*internalImageRatio,
@@ -1094,4 +1094,29 @@ void Chx20::contextMenuEvent(QContextMenuEvent *e)
         CpcXXXX::contextMenuEvent(e);
 
     e->accept();
+}
+
+void Chx20::PreFlip(Direction dir, View targetView)
+{
+    Q_UNUSED(dir)
+    Q_UNUSED(targetView)
+
+    // hide memory cards
+    // show Extension
+    CPObject * _extpc = pCN8->LinkedToObject();
+    if (_extpc) {
+        if (currentView == FRONTview) {
+            _extpc->hideObject();
+        }
+    }
+}
+
+void Chx20::PostFlip()
+{
+    CPObject * _extpc = pCN8->LinkedToObject();
+    if (_extpc) {
+        if (currentView == FRONTview) {
+            _extpc->showObject();
+        }
+    }
 }

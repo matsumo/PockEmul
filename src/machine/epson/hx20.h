@@ -35,6 +35,8 @@ public:
     virtual void Reset();
 
     virtual bool UpdateFinalImage(void);
+    virtual void PreFlip(Direction dir,View targetView);
+    virtual void PostFlip();
 
     bool Set_PrinterConnector(Cconnector *_conn);
     bool Get_PrinterConnector(Cconnector *_conn);
@@ -80,6 +82,8 @@ private:
     bool lcdBit;
 
 };
+
+
 
 
 #endif // HX20_H
