@@ -28,9 +28,9 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
 
     QStringList _id = id.split('/');
 
-//qWarning()<<"PocketImageProvider::requestImage:"<<id<<(_id[0].toLongLong());
+//qWarning()<<"PocketImageProvider::requestImage:"<<id<<(_id[0].toULongLong());
     if (id.isEmpty()) return QImage();
-    CPObject *pc = (CPObject*)(_id[0].toLongLong());
+    CPObject *pc = (CPObject*)(_id[0].toULongLong());
 
     if ( (pc->flipping | pc->closed) && pc->AnimatedImage){
 //        qWarning()<<"image prov:"<<mainwindow->rawclk;

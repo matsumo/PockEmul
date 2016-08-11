@@ -201,18 +201,18 @@ void QHexPanel::mouseReleaseEvent(QMouseEvent *e)
 
 void QHexPanel::newPocket(CPObject *pc)
 {
-    cbinstallTo->addItem(pc->getName(),tr("%1").arg((qlonglong)pc));
+    cbinstallTo->addItem(pc->getName(),tr("%1").arg((quint64)pc));
 }
 
 void QHexPanel::removePocket(CPObject *pc)
 {
-    cbinstallTo->removeItem(cbinstallTo->findData(tr("%1").arg((qlonglong)pc)));
+    cbinstallTo->removeItem(cbinstallTo->findData(tr("%1").arg((quint64)pc)));
 }
 
 void QHexPanel::install()
 {
     int index = cbinstallTo->currentIndex();
-    CpcXXXX *pc = (CpcXXXX *) cbinstallTo->itemData(index).toString().toLongLong();
+    CpcXXXX *pc = (CpcXXXX *) cbinstallTo->itemData(index).toString().toULongLong();
 
     quint32 _adr = startadr;
     if (!leTargetAdr->text().isEmpty()) {
@@ -229,7 +229,7 @@ void QHexPanel::filltargetCB(void) {
     cbinstallTo->clear();
     for (int i = 0; i < listpPObject.size();i++) {
         CPObject *p = listpPObject.at(i);
-        cbinstallTo->addItem(p->getName(),tr("%1").arg((qlonglong)p));
+        cbinstallTo->addItem(p->getName(),tr("%1").arg((quint64)p));
     }
 }
 

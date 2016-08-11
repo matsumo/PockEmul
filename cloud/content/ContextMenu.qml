@@ -53,9 +53,9 @@ import QtQuick.Controls.Styles 1.4
 
 
 PieMenu {
-    signal selectedOption(string option,int idpocket, point mousePt, int buttons);
+    signal selectedOption(string option,string idpocket, point mousePt, int buttons);
 
-    property int idpocket: 0;
+    property string idpocket: "";
     property point mousePt;
     property int buttons: 0
     property string path: ""

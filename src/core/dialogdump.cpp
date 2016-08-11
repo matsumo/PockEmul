@@ -55,7 +55,7 @@ void DialogDump::Find(void) {
 }
 void DialogDump::JumpTo(void) {
     bool ok;
-    hexeditor->jumpToAddress(leJump->text().toLongLong(&ok,16));
+    hexeditor->jumpToAddress(leJump->text().toULongLong(&ok,16));
 }
 void DialogDump::FindPrevious(void) {
     findpos = hexeditor->find(leFind->text().toLatin1(),findpos-1,QTextDocument::FindBackward);

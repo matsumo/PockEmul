@@ -760,12 +760,12 @@ void MainWindowPockemul::slotUnlink(CPObject * obj) {
 void MainWindowPockemul::slotUnLink(QAction * action)
 {
     if (action->data().toString().startsWith("A")) {
-        CPObject * obj = (CPObject*) action->data().toString().mid(1).toLongLong();
+        CPObject * obj = (CPObject*) action->data().toString().mid(1).toULongLong();
         slotUnlink(obj);
     }
     else if (action->data().toString().startsWith("C"))
         {
-            Cconnector * conn = (Cconnector*) action->data().toString().mid(1).toLongLong();
+            Cconnector * conn = (Cconnector*) action->data().toString().mid(1).toULongLong();
             slotUnLink(conn);
         }
 }
@@ -822,8 +822,8 @@ void MainWindowPockemul::slotNewLink(QAction * action)
     QString s = action->data().toString();
     QStringList list = s.split(":");
 
-    qint64 l1 = list.at(0).toLongLong();
-    qint64 l2 = list.at(1).toLongLong();
+    qint64 l1 = list.at(0).toULongLong();
+    qint64 l2 = list.at(1).toULongLong();
 
     Cconnector * p1 = (Cconnector*)l1;
     Cconnector * p2 = (Cconnector*)l2;
@@ -862,7 +862,7 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                 }
                 else
                 {
-                    AddLog(LOG_MASTER,tr("%1").arg((qlonglong)newpPC));
+                    AddLog(LOG_MASTER,tr("%1").arg((quint64)newpPC));
                     listpPObject.append(newpPC);
 #ifndef MONOTHREAD
                     // Create the Pocket Thread
@@ -872,7 +872,7 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                     pocketThread->start();
 #endif
                     QAction * actionDistConn = menuPockets->addAction(newpPC->getName());
-                    actionDistConn->setData(tr("%1").arg((qlonglong)newpPC));
+                    actionDistConn->setData(tr("%1").arg((quint64)newpPC));
                     QMenu *ctxMenu = new QMenu(newpPC);
                     newpPC->BuildContextMenu(ctxMenu);
                     actionDistConn->setMenu(ctxMenu);
@@ -943,7 +943,7 @@ void MainWindowPockemul::resetZoom() {
 void MainWindowPockemul::SelectPocket(QAction * action) {
     if (action->data().isNull()) return;
 
-    CPObject *pc = (CPObject*) action->data().toString().toLongLong();
+    CPObject *pc = (CPObject*) action->data().toString().toULongLong();
     pc->raise();
     pc->setFocus();
     if (!pc->isFront()) {
@@ -1620,7 +1620,7 @@ void MainWindowPockemul::DestroySlot( CPObject *pObject)
     for (int i=0; i< actionList.size();i++) {
         QAction* action = actionList.at(i);
         if (! action->data().isNull()) {
-            CPObject *pc = (CPObject*) action->data().toString().toLongLong();
+            CPObject *pc = (CPObject*) action->data().toString().toULongLong();
             if (pc == pObject) {
                  menuPockets->removeAction(action);
             }

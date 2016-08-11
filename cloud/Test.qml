@@ -703,6 +703,7 @@ Rectangle {
         menu.visible = false;
     }
     function addPocket(_name,_url,_pocketId,_left,_top,_width,_height,_rotation) {
+        console.log("add pocket",_pocketId);
         renderArea.xmlThumbModel.append(   {name:_name,
                                  imageFileName:_url,
                                  _left:_left,

@@ -1764,7 +1764,7 @@ void CPObject::computeLinkMenu(QMenu * menu)
                         if (menuAllPc==0)
                             menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
                         QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
-                        actionDistConn->setData(tr("%1:%2").arg((qlonglong)ConnList.at(i)).arg((qlonglong)listpPObject.at(j)->ConnList.at(k)));
+                        actionDistConn->setData(tr("%1:%2").arg((quint64)ConnList.at(i)).arg((quint64)listpPObject.at(j)->ConnList.at(k)));
                     }
                 }
             }
@@ -1782,7 +1782,7 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
     menuunlink = menu->addMenu(tr("Remove Link"));
     if(ConnList.size()>1) {
         QAction * actionLocAllConn = menuunlink->addAction("All");
-        actionLocAllConn->setData(tr("A%1").arg((qlonglong)this));
+        actionLocAllConn->setData(tr("A%1").arg((quint64)this));
         menuunlink->addSeparator();
     //connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLinkAll( QAction *)));
     }
@@ -1790,7 +1790,7 @@ void CPObject::computeUnLinkMenu(QMenu * menu)
     {
         if(ConnList.at(i)->isLinked()) {
             QAction * actionLocConn = menuunlink->addAction(ConnList.at(i)->Desc);
-            actionLocConn->setData(tr("C%1").arg((qlonglong)ConnList.at(i)));
+            actionLocConn->setData(tr("C%1").arg((quint64)ConnList.at(i)));
             connect(menuunlink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotUnLink( QAction *)));
         }
     }
