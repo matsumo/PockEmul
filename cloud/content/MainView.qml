@@ -74,7 +74,7 @@ Item {
             width: 180 + parent.width * 0.25
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
-            text: listView.currentIndex+1 + ". " + listView.currentItem.name
+            text: (listView.currentIndex >=0) ? listView.currentIndex+1 + ". " + listView.currentItem.name : ""
             color: "#ffffff"
             style: Text.Outline
             styleColor: "#b0a030"

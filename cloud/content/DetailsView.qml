@@ -144,7 +144,7 @@ Item {
 
         Text {
             id: descriptionTextItem
-            anchors.top: ratingsItem.bottom
+//            anchors.top: ratingsItem.bottom
             anchors.topMargin: 16
             width: parent.width - 32
             anchors.horizontalCenter: parent.horizontalCenter

@@ -1200,7 +1200,7 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     // Fetch all objects
     for (int i=0;i<listpPObject.size();i++)
     {
-        qWarning()<<"object:"<<i;
+        qWarning()<<"serialize object:"<<i<<listpPObject.at(i)->getName();
         CPObject *po = listpPObject.at(i);
         map.insert(po,i);
         po->serialize(xml,i);

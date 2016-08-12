@@ -167,6 +167,9 @@ QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmi
             loc = QImage(fname).mirrored(Hmirror,Vmirror).transformed(matrix).convertToFormat(QImage::Format_ARGB32);
         }
     tempImage = new QImage(loc);
+    if (tempImage->isNull()) {
+        qWarning()<<"Cannot create Image 2";
+    }
     return tempImage;
 }
 
