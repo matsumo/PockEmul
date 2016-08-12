@@ -1980,15 +1980,15 @@ bool CPObject::LastDrawFinalImage()
             _font.setBold(true);
             painter.setFont(_font);
 
-            QRect _rect(0,0,getDX()*internalImageRatio,getDY()*internalImageRatio);
-            float factor = _rect.width() / painter.fontMetrics().width(_msg);
+            QSize _size = size()*internalImageRatio/mainwindow->zoom;
+            float factor = _size.width() / painter.fontMetrics().width(_msg);
              if ((factor < 1) || (factor > 1.25))
              {
               QFont f = painter.font();
               f.setPointSizeF(f.pointSizeF()*factor);
               painter.setFont(f);
              }
-            painter.drawText(_rect,Qt::AlignCenter,_msg);
+            painter.drawText(QRect(QPoint(0,0),_size),Qt::AlignCenter,_msg);
             painter.end();
         }
 

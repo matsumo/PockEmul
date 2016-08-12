@@ -1,7 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>hx20</model>
 <Keyboard>
-    <KEY description="On/Off" height="90" left="50" masterscancode="0x00" modifier="" scancode="0xb2" top="542" view="RIGHT" width="55"/>
+    <KEY delay="3" description="On/Off" height="90" left="50" masterscancode="0x00" modifier="" scancode="0xb2" top="542" view="RIGHT" width="55"/>
     <KEY description="PRINTER ON" height="20" left="66" masterscancode="0x00" modifier="" scancode="0xc3" top="294" view="FRONT" width="30"/>
     <KEY description="PRINTER OFF" height="20" left="19" masterscancode="0x00" modifier="" scancode="0xc4" top="294" view="FRONT" width="30"/>
     <KEY description="PRINTER Switch" height="15" left="33" masterscancode="0x00" modifier="" scancode="0xc0" top="295" view="FRONT" width="52"/>

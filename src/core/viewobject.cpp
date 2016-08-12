@@ -617,6 +617,8 @@ void CViewObject::changeGeometry(float newposx,float newposy,float newwidth,floa
 
     setPosX(newposx);
     setPosY(newposy);
+//    setDX(newwidth);
+//    setDY(newheight);
     setGeometry(newposx,newposy,newwidth,newheight);
     setMask(mask.scaled(newwidth,newheight).mask());
 #ifdef AVOID

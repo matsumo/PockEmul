@@ -21,8 +21,6 @@
 
 extern CrenderView* view;
 
-// TODO: MultiTouch Events
-
 
 #define STROBE_TIMER 5
 
