@@ -187,7 +187,7 @@ void CpcXXXX::TurnOFF(void)
 
 
     off = 1;
-    Power = false;
+    setPower(false);
     PowerSwitch = PS_OFF;
     if (pLCDC) pLCDC->TurnOFF();
     InitDisplay();
@@ -201,11 +201,11 @@ void CpcXXXX::TurnON(void)
 {
 
     if (pKEYB->LastKey == 0) pKEYB->LastKey = K_POW_ON;
-    qWarning()<<"power1="<<Power<< " k="<<pKEYB->LastKey;
+    qWarning()<<"power1="<<getPower()<< " k="<<pKEYB->LastKey;
     if ( (pKEYB->LastKey = K_POW_ON ) ||
          KEY(K_POW_ON) ||
-         (!Power && KEY(K_OF)) ||
-         (!Power && KEY(K_BRK)))
+         (!getPower() && KEY(K_OF)) ||
+         (!getPower() && KEY(K_BRK)))
     {
          qWarning()<<"power ON:";
         AddLog(LOG_MASTER,"Power ON");
@@ -214,7 +214,7 @@ void CpcXXXX::TurnON(void)
         }
         else hardreset = false;
         off = 0;
-        Power = true;
+        setPower(true);
         PowerSwitch = PS_RUN;
         if (pLCDC) pLCDC->TurnON();
         pKEYB->LastKey = 0;
@@ -759,7 +759,7 @@ bool CpcXXXX::SaveSession_File(QXmlStreamWriter *xmlOut) {
     xmlOut->writeStartElement("session");
         xmlOut->writeAttribute("version", "2.0");
         xmlOut->writeAttribute("model", SessionHeader );
-        xmlOut->writeAttribute("power",Power?"true":"false");
+        xmlOut->writeAttribute("power",getPower()?"true":"false");
         xmlOut->writeAttribute("closed",closed?"true":"false");
         SaveConfig(xmlOut);
         SaveExt(xmlOut);
@@ -822,7 +822,7 @@ bool CpcXXXX::LoadSession_File(QXmlStreamReader *xmlIn) {
                 }
             }
         }
-        if (Power) TurnON();
+        if (getPower()) TurnON();
     }
 
     updateMenuFromExtension();

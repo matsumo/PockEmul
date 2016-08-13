@@ -25,8 +25,6 @@ public:
     Crlp9001(CPObject *parent = 0, Models mod=RLP9001);
     virtual ~Crlp9001();
 
-    bool Power;
-
 protected:
     void paintEvent(QPaintEvent *);
 protected slots:

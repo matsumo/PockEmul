@@ -115,7 +115,7 @@ bool CrlExt::run(void)
     }
 
 
-    if (!Power) return true;
+    if (!getPower()) return true;
 
     quint32 adr = bus.getAddr();
     quint8 data = bus.getData();

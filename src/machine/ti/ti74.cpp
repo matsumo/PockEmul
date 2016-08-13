@@ -250,7 +250,7 @@ void Cti74::Reset()
 
     m_clock_control = 0;
     m_power = 1;
-    Power = true;
+    setPower(true);
     ks = 0;
     m_banks = 0;
     RomBank = RamBank = 0;

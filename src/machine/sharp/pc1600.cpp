@@ -195,10 +195,10 @@ void Cpc1600::TurnON(void)
 {
     AddLog(LOG_FUNC,"Cpc1600::TurnOn");
     if (pKEYB->LastKey == 0) pKEYB->LastKey = K_POW_ON;
-    qWarning()<<"power="<<Power;
+    qWarning()<<"power="<<getPower();
     if ( (pKEYB->LastKey == K_POW_ON) ||
-         (!Power && pKEYB->LastKey == K_OF) ||
-         (!Power && pKEYB->LastKey == K_BRK))
+         (!getPower() && pKEYB->LastKey == K_OF) ||
+         (!getPower() && pKEYB->LastKey == K_BRK))
     {
          qWarning()<<"power ON";
         AddLog(LOG_MASTER,"Power ON");
@@ -207,7 +207,7 @@ void Cpc1600::TurnON(void)
         }
         else hardreset = false;
         off = 0;
-        Power = true;
+        setPower(true);
         PowerSwitch = PS_RUN;
         pHD61102_1->updated = pHD61102_2->updated = true;
 //        Reset();

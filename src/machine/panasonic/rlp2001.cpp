@@ -85,10 +85,10 @@ bool Crlp2001::run(void)
 //        qWarning()<<"2001 BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {
-        case 1: Power = true; break;
-        default: Power = false; break;
+        case 1: setPower(true); break;
+        default: setPower(false); break;
         }
-        if (Power)
+        if (getPower())
         {
             bus.setFunc(BUS_READDATA);
             bus.setData(0x01);
@@ -144,7 +144,7 @@ bool Crlp2001::run(void)
         bus.setFunc(BUS_ACK);
     }
 
-    if (!Power) return true;
+    if (!getPower()) return true;
 
     quint32 adr = bus.getAddr();
 //    quint8 data = bus.getData();
@@ -229,7 +229,7 @@ bool Crlp2001::init(void)
 
     if(pKEYB)   pKEYB->init();
 
-    Power = false;
+    setPower(false);
 
 
     if (pMC6847) {

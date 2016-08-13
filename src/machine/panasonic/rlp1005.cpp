@@ -199,18 +199,18 @@ bool Crlp1005::run(void)
 //        qWarning()<<"1004A BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {
-        case 1: Power = true; bank = 7; break;
-        case 2: Power = true; bank = 6;  break;
-        case 4: Power = true; bank = 5;  break;
-        case 8: Power = true; bank = 4;  break;
-        case 16: Power = true; bank = 3;  break;
-        case 32: Power = true; bank = 2;  break;
-        case 64: Power = true; bank = 1;  break;
-        case 128: Power = true; bank = 0;  break;
-        default: Power = false; break;
+        case 1: setPower(true); bank = 7; break;
+        case 2: setPower(true); bank = 6;  break;
+        case 4: setPower(true); bank = 5;  break;
+        case 8: setPower(true); bank = 4;  break;
+        case 16: setPower(true); bank = 3;  break;
+        case 32: setPower(true); bank = 2;  break;
+        case 64: setPower(true); bank = 1;  break;
+        case 128: setPower(true); bank = 0;  break;
+        default: setPower(false); break;
         }
 
-        if (Power)
+        if (getPower())
         {
             bus.setFunc(BUS_READDATA);
             bus.setData(0x01);
@@ -251,7 +251,7 @@ bool Crlp1005::run(void)
 
 
 
-    if (!Power) return true;
+    if (!getPower()) return true;
 
     quint32 adr = bus.getAddr();
 //    quint8 data = bus.getData();

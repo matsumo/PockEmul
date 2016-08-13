@@ -85,8 +85,10 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
     PowerSwitch = 0;
 
     pLCDC		= new Clcdc_z1(this,
-                               QRect(77,44,384,64),
-                               QRect(67,44,75,64));
+                               QRect(91,44,370,64),
+                               QRect(81,44,89,64));
+//                               QRect(77,44,384,64),
+//                               QRect(67,44,75,64));
     pCPU		= new Ci80L188EB(this);
     pFPU        = new CCF79107PJ(this);
     pTIMER		= new Ctimer(this);

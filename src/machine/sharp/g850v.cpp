@@ -163,14 +163,14 @@ void Cg850v::TurnON()
 
 
 #if 1
-    if (!Power && pKEYB->LastKey == K_BRK) {
+    if (!getPower() && pKEYB->LastKey == K_BRK) {
         AddLog(LOG_MASTER,"TURN ON");
         if (!hardreset) {
             Initial_Session_Load();
         }
         else hardreset = false;
         off = 0;
-        Power = true;
+        setPower(true);
         PowerSwitch = PS_RUN;
         if (pLCDC) pLCDC->TurnON();
         this->Reset();

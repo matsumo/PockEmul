@@ -182,7 +182,7 @@ bool Cm160::run(void)
 
     QPainter painter;
 
-    if (!pPC->Power) return true;
+    if (!pPC->getPower()) return true;
     Get_Connector();
 
     bool _prevTS = TS;

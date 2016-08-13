@@ -27,8 +27,6 @@ public:
     Crlp2001(CPObject *parent = 0);
     virtual ~Crlp2001();
 
-    bool Power;
-
 protected:
     void paintEvent(QPaintEvent *);
 protected slots:

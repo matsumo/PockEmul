@@ -1072,7 +1072,7 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                             else
                             if (eltname == "session") {
                                 locPC->LoadSession_File(xml);
-                                locPC->Power = _Power;
+                                locPC->setPower(_Power);
                                 xml->skipCurrentElement();
                             }
                             else

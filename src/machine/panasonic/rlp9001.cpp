@@ -115,44 +115,44 @@ bool Crlp9001::run(void)
     }
 
     if ( (bus.getFunc()==BUS_LINE2) && bus.isWrite() ) {
-        Power = false;
+        setPower(false);
         bank=0;
 //        qWarning()<<"9001 BUS SELECT:"<<bus.getData();
         if (romSwitch) {
-            Power = false;
+            setPower(false);
             if ( bus.getData()==128 ) {
-                Power = true;
+                setPower(true);
                 bank = 0;
             }
         }
         else if (model==RLP9006) {
             switch (bus.getData()) {
-            case 1: Power = true; bank = 7; break;
-            case 2: Power = true; bank = 6;  break;
-            case 4: Power = true; bank = 5;  break;
-            case 8: Power = true; bank = 4;  break;
-            case 16: Power = true; bank = 3;  break;
-            case 32: Power = true; bank = 2;  break;
-            case 64: Power = true; bank = 1;  break;
-            case 128: Power = true; bank = 0;  break;
-            default: Power = false; break;
+            case 1: setPower(true); bank = 7; break;
+            case 2: setPower(true); bank = 6;  break;
+            case 4: setPower(true); bank = 5;  break;
+            case 8: setPower(true); bank = 4;  break;
+            case 16: setPower(true); bank = 3;  break;
+            case 32: setPower(true); bank = 2;  break;
+            case 64: setPower(true); bank = 1;  break;
+            case 128: setPower(true); bank = 0;  break;
+            default: setPower(false); break;
             }
         }
         else {
             switch (bus.getData()) {
-            case 1: Power = true; bank = 0; break;
-            case 2: if ((model == RLP9004)||(model == RLP9005)) { Power = true; bank = 1; } break;
-            case 4: if (model == RLP9005) { Power = true; bank = 2; } break;
-            case 8: if (model == RLP9005) { Power = true; bank = 3; } break;
-            case 16: if (model == RLP9005) { Power = true; bank = 4; } break;
-            case 32: if (model == RLP9005) { Power = true; bank = 5; } break;
-            case 64: if (model == RLP9005) { Power = true; bank = 6; } break;
-            case 128: if (model == RLP9005) { Power = true; bank = 7; } break;
-            default: Power = false; break;
+            case 1: setPower(true); bank = 0; break;
+            case 2: if ((model == RLP9004)||(model == RLP9005)) { setPower(true); bank = 1; } break;
+            case 4: if (model == RLP9005) { setPower(true); bank = 2; } break;
+            case 8: if (model == RLP9005) { setPower(true); bank = 3; } break;
+            case 16: if (model == RLP9005) { setPower(true); bank = 4; } break;
+            case 32: if (model == RLP9005) { setPower(true); bank = 5; } break;
+            case 64: if (model == RLP9005) { setPower(true); bank = 6; } break;
+            case 128: if (model == RLP9005) { setPower(true); bank = 7; } break;
+            default: setPower(false); break;
             }
         }
 
-        if (Power)
+        if (getPower())
         {
             bus.setFunc(BUS_READDATA);
             bus.setData(0x00);
@@ -161,7 +161,7 @@ bool Crlp9001::run(void)
         return true;
     }
 
-    if (!Power) return true;
+    if (!getPower()) return true;
 
 
 
@@ -244,7 +244,7 @@ bool Crlp9001::init(void)
 
     if(pKEYB)   pKEYB->init();
 
-    Power = false;
+    setPower(false);
 
     AddLog(LOG_MASTER,"done.\n");
 

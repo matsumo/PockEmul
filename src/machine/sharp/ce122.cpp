@@ -22,7 +22,7 @@ Cce122::Cce122(CPObject *parent):Cce126(parent)
 
     pKEYB->setMap("ce122.map");
 
-    Power=true;
+    setPower(true);
     printSwitch = true;
 
 }
@@ -88,7 +88,7 @@ bool Cce122::run(void)
         pCONNECTOR->Set_values(0);
     }
 
-    if (Power && printSwitch) {
+    if (getPower() && printSwitch) {
         pCONNECTOR->Set_pin(1,true);
     }
     else pCONNECTOR->Set_pin(1,false);
@@ -137,7 +137,7 @@ bool Cce122::UpdateFinalImage(void) {
     // PRINTER SWITCH
     painter.begin(FinalImage);
 
-    painter.drawImage(257,257,BackgroundImageBackup->copy(257,257,22,30).mirrored(false,Power));
+    painter.drawImage(257,257,BackgroundImageBackup->copy(257,257,22,30).mirrored(false,getPower()));
     painter.drawImage(203,257,BackgroundImageBackup->copy(203,257,22,30).mirrored(false,printSwitch));
     painter.end();
 
@@ -148,14 +148,14 @@ bool Cce122::UpdateFinalImage(void) {
 
 void Cce122::TurnON()
 {
-    Power = true;
+    setPower(true);
     update();
     emit updatedPObject(this);
 }
 
 void Cce122::TurnOFF()
 {
-    Power = false;
+    setPower(false);
     update();
     emit updatedPObject(this);
 }

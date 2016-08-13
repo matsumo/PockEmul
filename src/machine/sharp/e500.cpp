@@ -621,7 +621,7 @@ BYTE Ce500::Get_PortB()
 
 void Ce500::TurnON()
 {
-    if (!Power && pKEYB->LastKey == K_BRK) {
+    if (!getPower() && pKEYB->LastKey == K_BRK) {
         AddLog(LOG_MASTER,"TURN ON");
         if (!hardreset) {
             Initial_Session_Load();
@@ -631,7 +631,7 @@ void Ce500::TurnON()
         if (pLCDC) pLCDC->TurnON();
         this->Reset();
         off = 0;
-        Power = true;
+        setPower(true);
         PowerSwitch = PS_RUN;
         getKey();
     }

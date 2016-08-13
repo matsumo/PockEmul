@@ -152,7 +152,7 @@ QString Cti57::Display() {
 
   if (!pCPU) return "";
   s="";
-  if (Power)
+  if (getPower())
     for (int i = 11;i >=0; i--) {
         if (ti57cpu->r->RB[i] & 8) c=' ';
         else if (ti57cpu->r->RB[i] & 1) c='-';

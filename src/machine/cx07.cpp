@@ -175,7 +175,7 @@ bool Cx07::init(void)				// initialize
 
 bool Cx07::run() {
 
-    if (!Power && pT6834->General_Info.Break == 1)
+    if (!getPower() && pT6834->General_Info.Break == 1)
     {
             pT6834->General_Info.Break = 0;
             pKEYB->LastKey = K_BRK;
@@ -753,7 +753,7 @@ void Cx07::TurnOFF(void) {
 
 void Cx07::TurnON(void){
 
-    if (!Power && pKEYB->LastKey == K_BRK) {
+    if (!getPower() && pKEYB->LastKey == K_BRK) {
         qWarning()<<"Power ON";
         AddLog(LOG_MASTER,"TURN ON");
         if (!hardreset) {
@@ -761,7 +761,7 @@ void Cx07::TurnON(void){
         }
         else hardreset = false;
         off = 0;
-        Power = true;
+        setPower(true);
         PowerSwitch = PS_RUN;
         pCPU->Reset();
         ((CZ80 *) pCPU)->z80.r16.pc = 0xC3C3;

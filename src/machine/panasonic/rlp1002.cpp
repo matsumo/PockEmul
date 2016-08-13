@@ -111,10 +111,10 @@ bool Crlp1002::run(void)
 //        qWarning()<<"1002 BUS SELECT:"<<bus.getData();
 
         switch (bus.getData()) {
-        case 1: Power = true; break;
-        default: Power = false; break;
+        case 1: setPower(true); break;
+        default: setPower(false); break;
         }
-        if (Power)
+        if (getPower())
         {
             bus.setFunc(BUS_READDATA);
             bus.setData(0x01);
@@ -181,7 +181,7 @@ bool Crlp1002::run(void)
 
 
 
-    if (!Power) return true;
+    if (!getPower()) return true;
 
     quint32 adr = bus.getAddr();
 

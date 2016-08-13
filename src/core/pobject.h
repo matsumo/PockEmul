@@ -187,7 +187,8 @@ public:
 
 	void setCpu(int );
 
-	bool	Power;
+    bool getPower() { return Power; }
+    void setPower(bool _p);
     qint8	PowerSwitch;
 
     bool forceStackOver,forceStackUnder;
@@ -252,6 +253,7 @@ signals:
     void ObjLinkedTo(Cconnector *, Cconnector *);
     void sigTurnOff();
     void sigTurnOn();
+    void PowerChanged(CPObject*);
 
 public slots:
     void slotDoubleClick(QPoint pos);
@@ -289,7 +291,7 @@ public slots:
 
     void createShortcut();
 private:
-
+    bool	Power;
 	bool	startKeyDrag;
 	QPoint	KeyDrag;
 	bool	startPosDrag;

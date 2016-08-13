@@ -107,7 +107,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     dialogdump		= 0;
     dialogdasm = 0;
     dialogVKeyboard = 0;
-    Power = false;
+    setPower(false);
     audioBuff.clear();
 #ifndef NO_SOUND
     m_audioOutput = 0;
@@ -172,7 +172,7 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
         xml->writeAttribute("name", getName());
         xml->writeAttribute("id", QString("%1").arg(id));
         xml->writeAttribute("front",Front?"true":"false");
-        xml->writeAttribute("power",Power?"true":"false");
+        xml->writeAttribute("power",getPower()?"true":"false");
         xml->writeAttribute("visible",isVisible()?"true":"false");
         xml->writeStartElement("position");
             xml->writeAttribute("x", QString("%1").arg(posx()));
@@ -495,7 +495,7 @@ bool CPObject::run(void){
     }
     if (KEY(K_POW_OFF)) {
         Vibrate();
-        Power = false;
+        setPower(false);
         mainwindow->saveAll = YES;
         emit sigTurnOff();
         mainwindow->saveAll = ASK;
@@ -2021,7 +2021,16 @@ void CPObject::KeyList()
  */
 void CPObject::setCpu(int newspeed)
 {
-	pTIMER->SetCPUspeed(newspeed);
+    pTIMER->SetCPUspeed(newspeed);
+}
+
+void CPObject::setPower(bool _p)
+{
+    bool m_Power = Power;
+    Power = _p;
+    if (_p != m_Power) {
+        emit PowerChanged(this);
+    }
 }
 
 /**
@@ -2072,7 +2081,7 @@ void CPObject::slotContrast(QAction * action) {
 void CPObject::slotPower()
 { 
     qWarning()<<"Slot POWER"<<Power;
-    if (!Power) {
+    if (!getPower()) {
 //        pKEYB->LastKey = K_POW_ON;
 		TurnON();
     }
