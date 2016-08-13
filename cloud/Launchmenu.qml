@@ -8,6 +8,8 @@ Rectangle {
 //    border.color: "white"
 //    border.width: 1
     property int iconsize: 48 * cloud.getValueFor("hiResRatio","1")
+    property alias currentIndex : menuListView.currentIndex
+
 
     ListModel {
         id: menuModel
@@ -167,7 +169,7 @@ Rectangle {
         focus: menu.focus
         spacing: 5
         delegate: menuDelegate
-        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
+        highlight: Rectangle { color: "darkslategrey"; radius: 5 }
 
     }
 }

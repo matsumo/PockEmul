@@ -232,6 +232,7 @@ bool Cz1::run() {
         // Check if keybuffer size change
         if (lastKeyBufSize != pKEYB->keyPressedCount()) {
             newKey = true;
+            qWarning()<<"NEW KEY!!!";
             lastKeyBufSize = pKEYB->keyPressedCount();
         }
 
@@ -241,6 +242,7 @@ bool Cz1::run() {
 //            i80l188ebcpu->i86nmi(&i80l188ebcpu->i86stat);
 //        }
         if (newKey) {
+
             if(i80l188ebcpu->eoi & 0x8000) {
                 if(i80l188ebcpu->i86int(&(i80l188ebcpu->i86stat), 0x0c)) {
                     newKey = false;
@@ -668,7 +670,7 @@ UINT16 Cz1::getKey()
 
     UINT16 data=0;
 
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
         if (ks&1) {
             if (KEY(K_BREAK))		data|=0x01;

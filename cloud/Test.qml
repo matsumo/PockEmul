@@ -96,7 +96,16 @@ Rectangle {
     property int prevX: 0
     property int prevY: 0
 
+    focus: true
 
+    Keys.onPressed: {
+        console.log("key:",event.key);
+        if ((event.key === Qt.Key_Menu) ||
+            (event.key === Qt.Key_F1) ) {
+            nav.toggle();
+            event.accepted = true;
+        }
+    }
 
     Rectangle {
         id: scene
@@ -183,16 +192,42 @@ Rectangle {
 
                 onRotationChanged: sendRotPocket(idpocket,rotation)
 
+                function showContextMenu(_id,_x,_y) {
+                    contextMenu.idpocket = _id;
+                    contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
+                    contextMenu.mousePt = Qt.point(_x,_y);
+                    //                                    contextMenu.buttons = mouse.buttons;
+                    contextMenu.popup(photoFrame.x+_x, photoFrame.y+_y);
+                    console.log("popup:",contextMenu.selectedOption);
+                }
+
                 Keys.onPressed: {
-//                    console.log("send key:",event.key);
-                    sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
-                    event.accepted = true;
+                    console.log("press key:",event.key);
+//                    if (event.key === Qt.Key_F1) {
+//                        event.accepted = false;
+//                    }
+//                    else
+                    if (event.key === Qt.Key_Menu) {
+                        showContextMenu(idpocket,photoFrame.x,photoFrame.y);
+                        event.accepted = true;
+                    }
+                    else {
+                        sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                        event.accepted = true;
+                    }
+
                 }
                 Keys.onReleased: {
-                    sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
-                    event.accepted = true;
+//                    if (event.key === Qt.Key_F1) {
+//                        event.accepted = false;
+//                    }
+//                    else
+                    {
+                        console.log("release key:",event.key);
+                        sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                        event.accepted = true;
+                    }
                 }
-                Keys.onContext1Pressed: console.log("okkkk");
 
                 Image {
                     id: image
@@ -251,12 +286,7 @@ Rectangle {
                                     sendContextMenu(idpocket,touchPoints[0].x,touchPoints[0].y);
                                 }
                                 else {
-                                    contextMenu.idpocket = idpocket;
-                                    contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
-                                    contextMenu.mousePt = Qt.point(touchPoints[0].x,touchPoints[0].y);
-//                                    contextMenu.buttons = mouse.buttons;
-                                    contextMenu.popup(photoFrame.x+touchPoints[0].x, photoFrame.y+touchPoints[0].y);
-                                    console.log("popup:",contextMenu.selectedOption);
+                                    showContextMenu(idpocket,touchPoints[0].x,touchPoints[0].y);
                                 }
 
                                 timer.stop()
@@ -496,6 +526,7 @@ Rectangle {
                     nav.toggle()
                 }
             }
+
         }
 
         NavigationDrawer {
@@ -515,6 +546,7 @@ Rectangle {
                 id:menu2
                 focus: nav.open
             }
+            onOpenChanged: if (open) menu2.currentIndex = -1;
         }
     }
 
@@ -728,8 +760,9 @@ Rectangle {
 
     function delPocket(_pocketId) {
         var index = getIndex(_pocketId);
-        if (index == -1) return;
+        if (index === -1) return;
         renderArea.xmlThumbModel.remove(index);
+        renderArea.focus = true;
     }
 
 
