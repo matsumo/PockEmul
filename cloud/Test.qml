@@ -46,6 +46,7 @@ import "TabbedQuickApp"
 import "."
 
 
+
 Rectangle {
     id: renderArea
 
@@ -512,6 +513,7 @@ Rectangle {
 
             Launchmenu {
                 id:menu2
+                focus: nav.open
             }
         }
     }

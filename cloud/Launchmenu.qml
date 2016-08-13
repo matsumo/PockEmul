@@ -95,6 +95,7 @@ Rectangle {
     Component {
         id: menuDelegate
         Item {
+            id: itemDelegate
             width: menu.width
             height: image.height + (separatorBefore ? separator.height : 0)
             Column {
@@ -120,7 +121,9 @@ Rectangle {
                         height:menu.iconsize
                     }
                     Text {
-                        text: libelle
+                        text:
+                            libelle
+//                            (itemDelegate.activeFocus ? "I have active focus!" : "I do not have active focus")
                         color: "white"
                         height:menu.iconsize
                         verticalAlignment: Text.AlignVCenter
@@ -129,23 +132,42 @@ Rectangle {
                 }
             }
 
+            function select() {
+                nav.hide();
+                menuModel.actions[libelle]();
+            }
+
             MouseArea {
                 enabled: nav.open
                 anchors.fill: parent
-                onClicked: {
-                    nav.hide();
-                    menuModel.actions[libelle]();
-                }
+                onClicked: itemDelegate.select()
             }
+            Keys.onPressed: {
+                    if (event.key === Qt.Key_Return) {
+                        console.log('Key Return was pressed');
+                        select();
+                        event.accepted = true;
+                    }
+                    if ((event.key === Qt.Key_Escape) ||
+                        (event.key === Qt.Key_Backspace) ) {
+                        console.log('Key Escape was pressed');
+                        nav.hide();
+                        event.accepted = true;
+                    }
+                }
+
         }
     }
 
 
     ListView {
+        id: menuListView
         anchors.fill: parent
         model: menuModel
+        focus: menu.focus
         spacing: 5
         delegate: menuDelegate
+        highlight: Rectangle { color: "lightsteelblue"; radius: 5 }
 
     }
 }

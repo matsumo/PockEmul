@@ -333,7 +333,7 @@ Rectangle {
 
             ListView {
                 id: categories
-                focus: true
+                focus: visible
                 anchors.fill: parent
                 model: categoryModel //xmlcategoryModel
                 clip:true

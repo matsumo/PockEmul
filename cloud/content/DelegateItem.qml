@@ -24,41 +24,43 @@ Item {
     }
 
     MouseArea {
+        id: entryMouseArea
         anchors.fill: parent
-        onClicked: {
-//            console.log("*****",model.brand,model.idpocket);
-            var _b = model.brand;
-            if (model.idpocket.substring(0, 1)==='#') {
-                // drill down into brand
-                var _brand = model.idpocket;
-                var _res = _brand.split('#');
-//                console.log(_brand,_res[0],_res[1],_res[2]);
-
-                pobjectsmodel.brandsearch.push(_res[2]);
-                pobjectsmodel.reload();
-            }
-            else {
-                sendLoadPocket(model.idpocket);
-                showRoom.visible=false;
-                showRoom.connectorsearch = '';
-                launched();
-            }
-//            if (isSelected) {
-//                detailsView.image = model.image
-//                detailsView.name =  model.name
-//                detailsView.year = model.year
-//                detailsView.director = model.director
-//                detailsView.cast = model.cast
-////                detailsView.rating = model.rating
-//                detailsView.overview = model.overview
-//                detailsView.show();
-//            } else {
-//                listView.currentIndex = index;
-//                if (settings.showShootingStarParticles) shootingStarBurst.burst(50);
-//            }
-        }
+        onClicked: select();
     }
 
+    function select(){
+    //            console.log("*****",model.brand,model.idpocket);
+                var _b = model.brand;
+                if (model.idpocket.substring(0, 1)==='#') {
+                    // drill down into brand
+                    var _brand = model.idpocket;
+                    var _res = _brand.split('#');
+    //                console.log(_brand,_res[0],_res[1],_res[2]);
+
+                    pobjectsmodel.brandsearch.push(_res[2]);
+                    pobjectsmodel.reload();
+                }
+                else {
+                    sendLoadPocket(model.idpocket);
+                    showRoom.visible=false;
+                    showRoom.connectorsearch = '';
+                    launched();
+                }
+    //            if (isSelected) {
+    //                detailsView.image = model.image
+    //                detailsView.name =  model.name
+    //                detailsView.year = model.year
+    //                detailsView.director = model.director
+    //                detailsView.cast = model.cast
+    ////                detailsView.rating = model.rating
+    //                detailsView.overview = model.overview
+    //                detailsView.show();
+    //            } else {
+    //                listView.currentIndex = index;
+    //                if (settings.showShootingStarParticles) shootingStarBurst.burst(50);
+    //            }
+            }
     Image {
         id: imageItem
         width: parent.width/3

@@ -55,7 +55,7 @@ Rectangle {
     }
 
     ListView {
-        focus: true
+        focus: visible
         id: categories
         anchors.fill: parent
         interactive: true;

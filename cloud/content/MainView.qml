@@ -36,8 +36,32 @@ Item {
             id: background
         }
 
+
+
+
         ListView {
             id: listView
+            focus: visible
+            interactive: true
+
+//            onActiveFocusChanged: { console.log("FocusScope activeFocusChanged", listView.activeFocus) }
+//            onFocusChanged: { console.log("FocusScope focusChanged", listView.focus) }
+
+            Keys.onPressed: {
+                    if (event.key === Qt.Key_Return) {
+                        console.log('Key Return was pressed');
+                        currentItem.select();
+                        event.accepted = true;
+                    }
+                    if ((event.key === Qt.Key_Escape) ||
+                        (event.key === Qt.Key_Backspace) ) {
+                        console.log('Key Escape was pressed');
+                        backIcon.select();
+                        event.accepted = true;
+                    }
+
+
+                }
 
 //            property real globalLightPosX: lightImage.x / mainView.width
 //            property real globalLightPosY: lightImage.y / mainView.height
@@ -66,6 +90,7 @@ Item {
             cacheBuffer: 4000
         }
 
+
         Text {
             id: titleText
             anchors.verticalCenter: parent.verticalCenter
@@ -74,7 +99,9 @@ Item {
             width: 180 + parent.width * 0.25
             wrapMode: Text.WordWrap
             horizontalAlignment: Text.AlignHCenter
-            text: (listView.currentIndex >=0) ? listView.currentIndex+1 + ". " + listView.currentItem.name : ""
+            text:
+//                listView.activeFocus ? "I have active focus!" : "I do not have active focus";
+                (listView.currentIndex >=0) ? (listView.currentIndex+1) + ". " + listView.currentItem.name : ""
             color: "#ffffff"
             style: Text.Outline
             styleColor: "#b0a030"
@@ -124,36 +151,22 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -20
-                onClicked: {
+                onClicked: backIcon.select();
+            }
 
-                    if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
-                    {
-                        if (exitOnBack) showRoom.visible = false;
-                    }
-                    else {
-                        console.log("OK***:",pobjectsmodel.brandsearch);
-                        pobjectsmodel.brandsearch.pop();
-                        console.log("OK***:",pobjectsmodel.brandsearch);
-                        pobjectsmodel.reload();
-                    }
+            function select() {
+
+                if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
+                {
+                    if (exitOnBack) showRoom.visible = false;
+                }
+                else {
+                    console.log("OK***:",pobjectsmodel.brandsearch);
+                    pobjectsmodel.brandsearch.pop();
+                    console.log("OK***:",pobjectsmodel.brandsearch);
+                    pobjectsmodel.reload();
                 }
             }
         }
-
-//        if ( (index==-1) )//||(index == demoList.size() -1))
-//        {
-//            if (brandSearch.isEmpty() || (brandSearch==brand)) {
-//                hide();
-//            }
-//            else {
-//                brandSearch = brand;
-//                populatePictureFlow();
-//            }
-
-//            qWarning()<<"brandSearch:"<<brandSearch<<"  brand:"<<brand;
-//            return;
-//        }
-
     }
-
 }

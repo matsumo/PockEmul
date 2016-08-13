@@ -29,6 +29,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
 
+    grabKeyboard();
 
 
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );

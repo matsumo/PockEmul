@@ -92,7 +92,7 @@ Rectangle {
 
             ListView {
                 id: slots
-                focus: true
+                focus: visible
                 anchors.fill: parent
                 model: xmlslotModel
                 clip:true

@@ -74,6 +74,15 @@ Rectangle {
 
             color: "yellow"
 
+            SearchBox {
+                id: newprivateSearchItem
+                width: parent.width
+                height: 50
+                objectName: "searchFld"
+                onTextChanged: {
+                    myCloud.populate(text)
+                }
+            }
             PmlView2   {
                 id: myCloud
                 anchors.top: newprivateSearchItem.bottom
@@ -85,17 +94,6 @@ Rectangle {
 //                xml: cloud.loadCache(cacheFileName)
             }
 
-            SearchBox {
-                id: newprivateSearchItem
-                width: parent.width
-                height: 50
-                objectName: "searchFld"
-                onTextChanged: {
-                    myCloud.populate(text)
-
-                }
-
-            }
         }
 
         Tab {name: "Action"
