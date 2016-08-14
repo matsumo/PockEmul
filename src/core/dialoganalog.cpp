@@ -1,5 +1,6 @@
 //TODO  Several tabs to record different input at the same time
 
+#include <QDebug>
 #include <QPainter> 
 #include <QMouseEvent>
 #include <QFileDialog>
@@ -18,7 +19,8 @@
 class CPObject;
 extern QList<CPObject *> listpPObject; 
 
-dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f)
+dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f),
+    QQuickImageProvider(QQuickImageProvider::Pixmap)
 {
 	setupUi(this);
 
@@ -43,6 +45,22 @@ dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QD
     fill_twWatchPoint();
     twWatchPoint->expandAll();
 }
+
+QPixmap dialogAnalog::requestPixmap(const QString &id, QSize *size, const QSize &requestedSize)
+{
+    Q_UNUSED(size)
+    Q_UNUSED(requestedSize)
+
+    qWarning()<<"size"<<*size<<requestedSize;
+    if (requestedSize.isEmpty()) return QPixmap();
+
+    size->setWidth(requestedSize.width());
+    size->setHeight(requestedSize.height());
+    plot(true,requestedSize);
+
+    return screenPixmap;
+}
+
 
 
 void dialogAnalog::slotChangeWatchPoint( QTreeWidgetItem * current , QTreeWidgetItem * previous)

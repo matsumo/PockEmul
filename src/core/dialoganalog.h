@@ -11,16 +11,19 @@ class CpcXXXX;
 class CPObject;
 
 
+#include <QQuickImageProvider>
 
 
 
-class dialogAnalog : public QDialog, public Ui::DialogAnalog
+class dialogAnalog : public QDialog, public Ui::DialogAnalog, public QQuickImageProvider
 {
 Q_OBJECT
 public:
     dialogAnalog( int nbbits,QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	
-//	CAnalog plotview;
+    QPixmap requestPixmap(const QString& id, QSize* size, const QSize& requestedSize);
+
+    //	CAnalog plotview;
 	
 	void	plot(bool,QSize);
 	void	setCapture(bool);

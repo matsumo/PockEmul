@@ -87,5 +87,6 @@
         <file>content/PdfViewer.qml</file>
         <file>content/images/star.png</file>
         <file>TabbedQuickApp/pics/help.png</file>
+        <file>content/Logic.qml</file>
     </qresource>
 </RCC>

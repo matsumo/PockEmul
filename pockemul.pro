@@ -1595,6 +1595,7 @@ OTHER_FILES *= \
     cloud/content/PObjectsModel.qml \
     cloud/content/NavigationDrawer.qml \
     cloud/content/Download.qml \
+    cloud/content/Logic.qml \
 
 
 }

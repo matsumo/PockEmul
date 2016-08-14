@@ -14,6 +14,7 @@
 #include "QZXing.h"
 #include "vibrator.h"
 #include "downloadmanager.h"
+#include "dialoganalog.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -31,8 +32,10 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 
     grabKeyboard();
 
+    if (mainwindow->dialoganalogic==0) mainwindow->dialoganalogic = new dialogAnalog(11,this);
 
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
+    engine()->addImageProvider(QLatin1String("Logic"),mainwindow->dialoganalogic );
     engine()->addImageProvider(QLatin1String("PockEmulCloud"),cloud.imgprov );
 
     rootContext()->setContextProperty("Vibrator", &vibrator);

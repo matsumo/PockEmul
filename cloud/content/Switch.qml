@@ -43,6 +43,8 @@ import QtQuick 2.0
 
 Item {
     id: toggleswitch
+    property bool saveToSettings: true
+
     property alias objectName: toggleswitch.objectName
     objectName: "checkbox"
     property alias bwidth: background.width
@@ -65,7 +67,9 @@ Item {
     }
 //![2]
     Component.onCompleted: {
-        state = cloud.getValueFor(toggleswitch.objectName, defaultText)
+        if (saveToSettings) {
+            state = cloud.getValueFor(toggleswitch.objectName, defaultText)
+        }
     }
 //![3]
     function releaseSwitch() {

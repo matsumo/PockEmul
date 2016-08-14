@@ -88,8 +88,7 @@ Rectangle {
 
     visible: true
     width: 1024; height: 600
-//    anchors.fill: parent
-    color: "black" //transparent"
+    color: "black"
 
     property int highestZ: 0
     property real defaultSize: 200
@@ -110,7 +109,8 @@ Rectangle {
     Rectangle {
         id: scene
         anchors.fill: parent
-        color: "transparent"
+        color: "black"
+//        z: parent.z+1
 
         PinchArea {
             id: mainpinch
@@ -197,6 +197,7 @@ Rectangle {
                     contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
                     contextMenu.mousePt = Qt.point(_x,_y);
                     //                                    contextMenu.buttons = mouse.buttons;
+                    contextMenu.z = z+1;
                     contextMenu.popup(photoFrame.x+_x, photoFrame.y+_y);
                     console.log("popup:",contextMenu.selectedOption);
                 }
@@ -485,7 +486,7 @@ Rectangle {
             anchors.top: parent.top
 //            anchors.bottom: parent.bottom
             anchors.left: parent.left
-            z: 9999 //parent.z
+            z: 9998 //parent.z
 
             width: dp(48)
             height: dp(48)
@@ -532,9 +533,9 @@ Rectangle {
         NavigationDrawer {
             id: nav
             enabled: true
-            parent: renderArea
             anchors.top: parent.top
             anchors.bottom: parent.bottom
+            z: 9999
 
             color: "red"
             border.color: "white"
@@ -546,25 +547,35 @@ Rectangle {
                 id:menu2
                 focus: nav.open
             }
-            onOpenChanged: if (open) menu2.currentIndex = -1;
+            onOpenChanged: {
+                if (open) {
+                    menu2.currentIndex = -1;
+                }
+            }
+        }
+
+        ShowRoom {
+            id: showroomNew
+            z: 9999
+            visible: false
+            anchors.fill: parent
+            source: "qrc:/pockemul/config.xml"
+        }
+
+        ShowRoom {
+            id: showroomExt
+            z: 9999
+            visible: false
+            anchors.fill: parent
+            source: "qrc:/pockemul/configExt.xml"
+        }
+
+        ContextMenu {
+            id: contextMenu
         }
     }
 
-    ShowRoom {
-        id: showroomNew
-        z: 9999
-        visible: false
-        anchors.fill: parent
-        source: "qrc:/pockemul/config.xml"
-    }
 
-    ShowRoom {
-        id: showroomExt
-        z: 9999
-        visible: false
-        anchors.fill: parent
-        source: "qrc:/pockemul/configExt.xml"
-    }
 
     Main {
         id: thecloud
@@ -589,7 +600,7 @@ Rectangle {
     TabbedUI {
         id: settings
         visible: false
-        z: 9999
+        z: parent.Z+1
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: settingsModel
@@ -629,19 +640,60 @@ Rectangle {
     TabbedUI {
         id: about
         visible: false
-        z: 9999
+        z: parent.z+1
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: aboutModel
+        quitIndex: 3
+        onClose: visible=false;
+    }
+
+    VisualItemModel {
+        id: logicModel
+
+        Tab {
+            id: sceneTab
+            name: "PockEmul Desktop"
+            icon: "pics/help.png"
+        }
+        Tab {
+            name: "Logic Analyser"
+            icon: "qrc:/core/analyser.png"
+            Logic {
+                id: logicAnalyser
+                anchors.fill: parent
+            }
+        }
+        Tab {name: "Back"
+            icon: "pics/back-white.png"
+            MouseArea {
+                anchors.fill: parent
+                onClicked: close();
+            }
+        }
+    }
+
+    TabbedUI {
+        id: logic
+        visible: false
+        z: 9999
+        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+        tabIndex: 0
+        tabsModel: logicModel
         quitIndex: 2
         onClose: visible=false;
 
+        onVisibleChanged: {
+            if (visible) {
+                scene.parent = sceneTab;
+            }
+            else {
+                scene.parent = renderArea;
+            }
+        }
     }
 
 
-    ContextMenu {
-        id: contextMenu
-    }
 
     Download {
         id: download
