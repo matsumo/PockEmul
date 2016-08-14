@@ -10,6 +10,7 @@ Rectangle {
     property int iconsize: 48 * cloud.getValueFor("hiResRatio","1")
     property alias currentIndex : menuListView.currentIndex
 
+    property bool android : Qt.platform.os==='android'
 
     ListModel {
         id: menuModel
@@ -26,9 +27,26 @@ Rectangle {
             "Fit to screen":    function(){ fit() ;},
             "Toggle Fullscreen":function(){ toggleFullscreen() ;},
             "Logic Analyser":   function(){ analyser() ;},
-            "Help":   function(){ about.visible = true; },
+            "Help":             function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
+        }
+        property var visible : {
+            "New Pocket":       true,
+            "New Extension":    true,
+            "Settings":         true,
+            "Code Editor":      !android,
+            "Save":             true,
+            "Load":             true,
+            "Cloud":            true,
+            "Bookcase":         true,
+            "Close All":        true,
+            "Fit to screen":    true,
+            "Toggle Fullscreen":!android,
+            "Logic Analyser":   !android,
+            "Help":             true,
+            "Check for Updates":true,
+            "Exit":             true
         }
         ListElement {
             libelle: "New Pocket"
@@ -96,6 +114,7 @@ Rectangle {
 
     Component {
         id: menuDelegate
+
         Item {
             id: itemDelegate
             width: menu.width
@@ -171,6 +190,19 @@ Rectangle {
         delegate: menuDelegate
         highlight: Rectangle { color: "darkslategrey"; radius: 5 }
 
+    }
+
+    Component.onCompleted: {
+        // fetch listelement and apply filter
+
+        for (var i=0; i < menuModel.count; i++) {
+            var visible = menuModel.visible[menuModel.get(i).libelle];
+//            console.log(menuModel.get(i).libelle,visible);
+            if (!visible) {
+                menuModel.remove(i);
+                i--;
+            }
+        }
     }
 }
 
