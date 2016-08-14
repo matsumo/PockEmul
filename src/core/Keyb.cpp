@@ -92,8 +92,8 @@ bool Ckeyb::isKeyPressed() {
     return _res;
 }
 
-bool Ckeyb::keyPressedCount() {
-    bool _res = 0;
+int Ckeyb::keyPressedCount() {
+    int _res = 0;
     QMapIterator<int, quint64> i(keyPressedList);
     while (i.hasNext()) {
         i.next();
@@ -131,6 +131,7 @@ void Ckeyb::insertKey(int _key)
 {
     keyPressedList.insert(_key,pPC->pTIMER ? pPC->pTIMER->state:0);
 
+    qWarning()<<"insert key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
     emit keyPressed(_key);
 }
 

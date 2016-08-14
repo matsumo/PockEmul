@@ -400,7 +400,7 @@ public:
 
     bool isKey(int _key);
     bool isKeyPressed();
-    bool keyPressedCount();
+    int keyPressedCount();
     void insertKey(int _key);
 
     void setMap(QString _map, BYTE *scan=0);
