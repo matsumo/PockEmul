@@ -203,9 +203,9 @@ bool Cz1::UpdateFinalImage(void) {
     painter.begin(FinalImage);
 
     // POWER SWITCH
-    painter.drawImage(0,41*internalImageRatio,
-                      BackgroundImageBackup->copy(0,41*internalImageRatio,
-                                                  11*internalImageRatio,70*internalImageRatio).mirrored(false,off));
+    painter.drawImage(0,34*internalImageRatio,
+                      BackgroundImageBackup->copy(0,34*internalImageRatio,
+                                                  11*internalImageRatio,60*internalImageRatio).mirrored(false,!off));
 
     painter.end();
 
