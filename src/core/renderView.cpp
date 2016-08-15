@@ -15,6 +15,7 @@
 #include "vibrator.h"
 #include "downloadmanager.h"
 #include "dialoganalog.h"
+#include "ui/windowide.h"
 
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -374,6 +375,15 @@ QString CrenderView::getRes(QString _fn)
     }
 
     return _res;
+}
+
+void CrenderView::changeGeo(int x, int y, int w, int h)
+{
+//    if (mainwindow->windowide==0) mainwindow->windowide = new WindowIDE(this);
+//    mainwindow->windowide->show();
+
+    if (mainwindow->windowide)
+        mainwindow->windowide->setGeometry(QRect(mapToGlobal(QPoint(x,y)),QSize(w,h)));
 }
 
 QString CrenderView::getReleaseNotes(QString _fn)

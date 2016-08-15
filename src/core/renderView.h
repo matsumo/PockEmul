@@ -29,7 +29,7 @@ public:
     Q_INVOKABLE QString getReleaseNotes(QString _fn);
     Q_INVOKABLE void test();
     Q_INVOKABLE QString getRes(QString _fn);
-
+    Q_INVOKABLE void changeGeo(int,int,int,int);
 
 public slots:
     Q_INVOKABLE void newpocketSlot();

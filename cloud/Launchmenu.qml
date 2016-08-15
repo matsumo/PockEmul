@@ -18,7 +18,7 @@ Rectangle {
             "New Pocket":       function(){ showroomNew.visible = true; },
             "New Extension":    function(){ showroomExt.connectorsearch='';showroomExt.visible = true; },
             "Settings":         function(){ settings.visible = true; },
-            "Code Editor":      function(){ sendDev(); },
+            "Code Editor":      function(){ /*codeEditor.visible=true;*/ sendDev(); },
             "Save":             function(){ sendSave(); },
             "Load":             function(){ sendLoad(); },
             "Cloud":            function(){ nav.hide(); cloudShow(); },

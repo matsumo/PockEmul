@@ -169,6 +169,9 @@ int main(int argc, char *argv[])
 
     launch1 = launch2 = dev = save = load = cloudButton = bookcase = exitButton = 0;
 
+    // Force the software backend always. Qt 5.8
+//    QQuickWindow::setSceneGraphBackend(QSGRendererInterface::Software);
+
     QApplication *app = new QApplication(argc, argv);
 
 #ifdef Q_OS_WIN

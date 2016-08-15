@@ -192,13 +192,13 @@ UINT8 Ctms70c46::pf_read(UINT32 offset)
     switch (offset)
     {
     case 0x0c: return e_bus_data_r();
-    case 0x0e:    return 0xff;
+    case 0x0e: return 0xff;
     case 0x0f:
         // d0: slave _HSK
         // d1: slave _BAV
         // d2: unused?
         // d3: IRQ active
-        return (pPC->pKEYB->LastKey>0)? 0x08:00;
+        return (pPC->pKEYB->isKeyPressed())? 0x08:00;
     default:
         return Ctms7000::pf_read(offset);
         break;

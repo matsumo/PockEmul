@@ -88,5 +88,6 @@
         <file>content/images/star.png</file>
         <file>TabbedQuickApp/pics/help.png</file>
         <file>content/Logic.qml</file>
+        <file>DevEditor.qml</file>
     </qresource>
 </RCC>

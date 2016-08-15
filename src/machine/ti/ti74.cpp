@@ -407,7 +407,7 @@ quint8 Cti95::getKey()
 {
     quint8 data=0;
 
-    if ((pKEYB->LastKey>0))
+//    if ((pKEYB->LastKey>0))
     {
         if (ks & 0x01) {
             if (KEY(K_OFF))		data|=0x01;

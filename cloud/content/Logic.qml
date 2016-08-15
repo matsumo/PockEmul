@@ -118,7 +118,6 @@ Rectangle {
         id: lowLayout
         anchors.bottom: parent.bottom
         width: parent.width
-//        height: 50
         anchors.margins: 5
         spacing: 5
 

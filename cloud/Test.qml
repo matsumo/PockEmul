@@ -696,6 +696,9 @@ Rectangle {
         }
     }
 
+//    DevEditor {
+//        id: codeEditor
+//    }
 
 
     Download {
