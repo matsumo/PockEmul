@@ -41,6 +41,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     rootContext()->setContextProperty("Vibrator", &vibrator);
     rootContext()->setContextProperty("cloud", &cloud);
     rootContext()->setContextProperty("main", this);
+    rootContext()->setContextProperty("logicObj", mainwindow->dialoganalogic);
+
     setSource(QUrl("qrc:/Test.qml"));
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 //    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
@@ -82,6 +84,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(newPObject(CPObject*)));
     connect(mainwindow,SIGNAL(DestroySignal(CPObject *)),this,SLOT(delPObject(CPObject*)));
 
+//    connect(mainwindow->dialoganalogic,SIGNAL(refreshLogic()),this,SLOT(refreshLogic()));
 }
 void CrenderView::LoadPocket(QString id) {
     CPObject *_pc=0;
@@ -425,7 +428,7 @@ void CrenderView::newPObject(CPObject *pObject) {
     qWarning()<<_a;
 
     QMetaObject::invokeMethod(cloud.object, "addPocket",
-                              Q_ARG(QVariant, QString("name")),
+                              Q_ARG(QVariant, pObject->getName()),
                               Q_ARG(QVariant, "qrc"+pObject->BackGroundFname),
                               Q_ARG(QVariant, QString("%1").arg((quint64)pObject)),
                               Q_ARG(QVariant, pObject->pos().x()),

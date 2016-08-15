@@ -110,7 +110,7 @@ Rectangle {
         id: scene
         anchors.fill: parent
         color: "black"
-//        z: parent.z+1
+        z: parent.z+1
 
         PinchArea {
             id: mainpinch
@@ -486,7 +486,7 @@ Rectangle {
             anchors.top: parent.top
 //            anchors.bottom: parent.bottom
             anchors.left: parent.left
-            z: 9998 //parent.z
+            z: 9990 //parent.z
 
             width: dp(48)
             height: dp(48)
@@ -535,7 +535,7 @@ Rectangle {
             enabled: true
             anchors.top: parent.top
             anchors.bottom: parent.bottom
-            z: 9999
+            z: 9991
 
             color: "red"
             border.color: "white"
@@ -573,6 +573,32 @@ Rectangle {
         ContextMenu {
             id: contextMenu
         }
+
+
+        VisualItemModel {
+            id: settingsModel
+            Tab {
+                name: "Settings"
+                icon: "pics/back-white.png"
+
+                color: "red"
+
+                Settings {
+                    anchors.fill: parent
+                }
+            }
+        }
+
+        TabbedUI {
+            id: settings
+            visible: false
+            z: 9999
+            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+            tabIndex: 0
+            tabsModel: settingsModel
+            quitIndex: 0
+            onClose: visible=false;
+        }
     }
 
 
@@ -583,30 +609,6 @@ Rectangle {
         visible: false;
     }
 
-    VisualItemModel {
-        id: settingsModel
-        Tab {
-            name: "Settings"
-            icon: "pics/back-white.png"
-
-            color: "red"
-
-            Settings {
-                anchors.fill: parent
-            }
-        }
-    }
-
-    TabbedUI {
-        id: settings
-        visible: false
-        z: parent.Z+1
-        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-        tabIndex: 0
-        tabsModel: settingsModel
-        quitIndex: 0
-        onClose: visible=false;
-    }
 
     VisualItemModel {
         id: aboutModel
@@ -640,11 +642,11 @@ Rectangle {
     TabbedUI {
         id: about
         visible: false
-        z: parent.z+1
+        z: parent.z+2
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: aboutModel
-        quitIndex: 3
+        quitIndex: 2
         onClose: visible=false;
     }
 
@@ -676,7 +678,7 @@ Rectangle {
     TabbedUI {
         id: logic
         visible: false
-        z: 9999
+        z: parent.z+2
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: logicModel
@@ -771,6 +773,7 @@ Rectangle {
         thecloud.close.connect(cloudHide);
         contextMenu.selectedOption.connect(manageContextResponse);
         download.sendDownloadCancel.connect(sendDownloadCancel);
+        logicObj.refreshLogic.connect(refreshLogic);
 //        showWorkingScreen();
 
         console.log("Test.qml: Completed",new Date());
@@ -788,8 +791,9 @@ Rectangle {
         scene.visible = false;
         menu.visible = false;
     }
+
     function addPocket(_name,_url,_pocketId,_left,_top,_width,_height,_rotation) {
-        console.log("add pocket",_pocketId);
+        console.log("add pocket",_pocketId,_name);
         renderArea.xmlThumbModel.append(   {name:_name,
                                  imageFileName:_url,
                                  _left:_left,
@@ -802,13 +806,27 @@ Rectangle {
                                  dummy:0,
                                  _zorder:0});
 
+
+    }
+
+    function clearWatchPoint() {
+        logicAnalyser.watchPointModel.clear();
+    }
+    function addWatchPoint(_pocketId,_name,_wpName,_index) {
+        logicAnalyser.watchPointModel.append({"idpocket":_pocketId,"name":_name,"wpName":_wpName,"wpIndex":_index});
     }
 
     function refreshPocket(_pocketId) {
         var index = getIndex(_pocketId);
-        if (index == -1) return;
+        if (index === -1) return;
         renderArea.xmlThumbModel.get(index).dummy = Math.random();
     }
+
+    function refreshLogic() {
+        console.log("refreshLogic");
+        logicAnalyser.source = "image://Logic/"+String(Math.random());
+    }
+
 
     function delPocket(_pocketId) {
         var index = getIndex(_pocketId);

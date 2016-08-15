@@ -41,8 +41,12 @@ void Clcdc_pc1250::disp(void)
     int ind;
     WORD adr;
 
+    if (!updated) return;
+    //    if (!On) return;
+
+    lock.lock();
     Refresh = false;
-    if (!On) return;
+    updated = false;
 
     disp_symb();
 
@@ -83,6 +87,8 @@ void Clcdc_pc1250::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -114,19 +120,25 @@ void Clcdc_pc1245::disp(void)
     int ind;
     WORD adr;
 
+    if (!updated) return;
+    //    if (!On) return;
+
+    lock.lock();
     Refresh = false;
-    if (!On) return;
+    updated = false;
 
     disp_symb();
 
     QPainter painter(LcdImage);
+    painter.setCompositionMode(QPainter::CompositionMode_Source);
 
     for (ind=0; ind<0x3c; ind++)
     {	adr = 0xF800 + ind;
         if (DirtyBuf[adr-0xF800])
         {
             Refresh = true;
-            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+//            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+            data = pPC->Get_8(adr);
 
             x =ind + (ind/5);			// +1 every 5 cols
             y = 0;
@@ -143,7 +155,8 @@ void Clcdc_pc1245::disp(void)
         if (DirtyBuf[adr-0xF800])
         {
             Refresh = true;
-            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+//            data = ( On ? (BYTE) pPC->Get_8(adr) : 0);
+            data = pPC->Get_8(adr);
 
             x = 142 - ind - (ind/5);			// +1 every 5 cols
             y = 0;
@@ -156,6 +169,8 @@ void Clcdc_pc1245::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 ///////////////////////////////////////////////////////////////////////

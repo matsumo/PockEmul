@@ -13,6 +13,7 @@
 #include "Connect.h"
 #include "sio.h"
 #include "watchpoint.h"
+#include "renderView.h"
 
 #define DEFAULT_POINTS_PER_SAMPLE 10
 //
@@ -35,6 +36,7 @@ dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QD
     connect(twWatchPoint,SIGNAL(currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * )), this, SLOT(slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * )));
 
     connect(mainwindow,SIGNAL(DestroySignal(CPObject*)),this,SLOT(DestroySlot(CPObject*)));
+    connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(CreateSlot(CPObject*)));
 
 	Capture = false; 
     NbBits = nbbits;
@@ -61,21 +63,34 @@ QPixmap dialogAnalog::requestPixmap(const QString &id, QSize *size, const QSize 
     return screenPixmap;
 }
 
-
-
 void dialogAnalog::slotChangeWatchPoint( QTreeWidgetItem * current , QTreeWidgetItem * previous)
 {
     if (current) {
         int pos = current->data(0,Qt::UserRole).toInt();
-        currentWatchPoint = WatchPoint.items.at( pos ).Point;
-        currentWatchPointSize = WatchPoint.items.at( pos ).PointSize;
-        NbBits = WatchPoint.items.at( pos ).nbBits;
-        pPC = WatchPoint.items.at( pos ).PObject;
-        currentlabels = WatchPoint.items.at( pos ).Labels;
+        slotChangeWatchPoint(pos);
     }
+
 }
 
-void dialogAnalog::DestroySlot(CPObject *pObject)
+void dialogAnalog::slotChangeWatchPoint( int pos)
+{
+    qWarning()<<"slot changed to "<<pos;
+    currentWatchPoint = WatchPoint.items.at( pos ).Point;
+    currentWatchPointSize = WatchPoint.items.at( pos ).PointSize;
+    NbBits = WatchPoint.items.at( pos ).nbBits;
+    pPC = WatchPoint.items.at( pos ).PObject;
+    currentlabels = WatchPoint.items.at( pos ).Labels;
+
+    emit refreshLogic();
+}
+
+void dialogAnalog::DestroySlot(CPObject *)
+{
+    fill_twWatchPoint();
+    update();
+}
+
+void dialogAnalog::CreateSlot(CPObject *_pc)
 {
     fill_twWatchPoint();
     update();
@@ -83,9 +98,17 @@ void dialogAnalog::DestroySlot(CPObject *pObject)
 
 void dialogAnalog::fill_twWatchPoint(void)
 {
+    CrenderView* _rv = 0;
+
     twWatchPoint->clear();
 	twWatchPoint->setColumnCount(1);
 
+    if (dynamic_cast<CrenderView *>(parent()) ) {
+        _rv = (CrenderView *)parent();
+        if (_rv->cloud.object) {
+            QMetaObject::invokeMethod(_rv->cloud.object, "clearWatchPoint");
+        }
+    }
 	
 	for (int i = 0; i < listpPObject.size(); i++)
 	{
@@ -96,6 +119,18 @@ void dialogAnalog::fill_twWatchPoint(void)
 			{
                 QTreeWidgetItem *Point = new QTreeWidgetItem(material,QStringList(WatchPoint.items.at(j).WatchPointName));
 				Point->setData(0,Qt::UserRole,j);
+
+
+                if (_rv && _rv->cloud.object) {
+                    CPObject *pObject = listpPObject.at(i);
+                    QMetaObject::invokeMethod(_rv->cloud.object, "addWatchPoint",
+                                              Q_ARG(QVariant, QString("%1").arg((quint64)pObject)),
+                                              Q_ARG(QVariant, pObject->getName()),
+                                              Q_ARG(QVariant, WatchPoint.items.at(j).WatchPointName),
+                                              Q_ARG(QVariant, j)
+                                              );
+                }
+
 			}
 		}
 	}
@@ -172,7 +207,7 @@ void dialogAnalog::paintEvent(QPaintEvent *event)
 {
 	QPainter p;
 	
-	plot(true,frame_dataview->size());
+    plot(true,frame_dataview->size());
 
     p.begin(this);
     p.drawPixmap(frame_dataview->mapTo ( this,QPoint(0,0) ), screenPixmap); 
@@ -213,7 +248,7 @@ void dialogAnalog::scroll(int value)
 
 void dialogAnalog::updatecapture(int state)
 {
-    mainwindow->analogMutex.lock();
+
 
 	if (state == Qt::Checked )
 	{
@@ -244,8 +279,11 @@ void dialogAnalog::updatecapture(int state)
 		chkBShowMarker->setEnabled(true);
 
 		this->update();
-	}
-    mainwindow->analogMutex.unlock();
+
+        emit refreshLogic();
+    }
+
+
 }
 
 void dialogAnalog::captureData(void)
@@ -300,7 +338,7 @@ void dialogAnalog::fillPixmap(CData *data, QPen *dataPen)
 	TAnalog_Data plot,next_plot;
 	QPainter painter;
     int heightPerField = lastPixmap.height() / NbBits;
-    int dataview_width = frame_dataview->width();
+    int dataview_width = lastPixmap.width();
 	
 	painter.begin(&lastPixmap);
 	painter.setPen(*dataPen);
@@ -454,6 +492,8 @@ void dialogAnalog::ComputeMarkersLength(void)
 {
 	long LMarkerState,RMarkerState;
 	
+    if (dataplot.dataset.isEmpty()) return;
+
 	if (m_leftMarker == -1)
 		LMarkerState = dataplot.Read_state(0);
 	else
@@ -476,6 +516,8 @@ void dialogAnalog::ComputeScrollBar(void)
 	// define scrollbar min,max,step
 	long min,max,pagestep;
 	
+    if (dataplot.dataset.isEmpty()) return;
+
 	min = dataplot.Read_state(0);
 	pagestep =  (long) ( ( dataplot.Read_state(dataplot.size()-1) - min ) / m_zoom );
 	max = dataplot.Read_state(dataplot.size()-1) - pagestep;
@@ -491,11 +533,15 @@ void dialogAnalog::fitmarkers(void)
 {
 	int new_pos = XToState(m_leftMarker);
 	
+    if (dataplot.dataset.isEmpty()) return;
+
 	m_zoom = (float)( dataplot.Read_state(dataplot.size()-1) - dataplot.Read_state(0) ) / ( XToState(m_rightMarker) - XToState(m_leftMarker) );
 	ComputeScrollBar();
 	hlScrollBar->setValue(new_pos);
 	setLeftMarker(0);
 	setRightMarker(frame_dataview->width());
+
+    emit refreshLogic();
 	this->update();
 }
 
@@ -503,6 +549,8 @@ void dialogAnalog::zoomin(void)
 {
 	m_zoom *= 2;
 	ComputeScrollBar();	
+
+    emit refreshLogic();
 	this->update();	
 }
 void dialogAnalog::zoomout(void)
@@ -510,7 +558,9 @@ void dialogAnalog::zoomout(void)
 	m_zoom /= 2;
 	if (m_zoom <1.0) m_zoom=1.0;
 	ComputeScrollBar();		
-	this->update();	
+
+    emit refreshLogic();
+    this->update();
 	
 }
 
@@ -522,7 +572,7 @@ bool dialogAnalog::capture(void)		{ return Capture; }
 
 long dialogAnalog::StateToX(long plotState)
 { 
-	float ratio = (float) frame_dataview->width() / hlScrollBar->pageStep();
+    float ratio = (float) lastPixmap.width() / hlScrollBar->pageStep();
     int loc_X;
 	loc_X = (int) (( plotState-hlScrollBar->value() ) * ratio);
 	
@@ -532,7 +582,7 @@ long dialogAnalog::StateToX(long plotState)
 long dialogAnalog::XToState(long x)
 { 
     long loc_State;
-	float ratio = (float) frame_dataview->width() / hlScrollBar->pageStep();
+    float ratio = (float) lastPixmap.width() / hlScrollBar->pageStep();
 	loc_State= (long) (((float)x / ratio) + hlScrollBar->value());
     return loc_State;
 }

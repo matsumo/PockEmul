@@ -879,10 +879,6 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
 
                     emit NewPObjectsSignal(newpPC);
 
-                    if (dialoganalogic) {
-                        dialoganalogic->fill_twWatchPoint();
-                        dialoganalogic->update();
-                    }
 #ifdef P_IDE
                     if (windowide) {
                         windowide->addtargetCB(newpPC);

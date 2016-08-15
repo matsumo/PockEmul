@@ -111,6 +111,7 @@ Cloud::Cloud(QWidget* parent)
     m_fileDialog = new QFileDialog(parent);
     m_fileDialog->setFileMode(QFileDialog::ExistingFile);
     m_fileDialog->setNameFilter("PockEmul Session files (*.pml)");
+    object=0;
 }
 
 int Cloud::askDialog(QString msg, int nbButton)

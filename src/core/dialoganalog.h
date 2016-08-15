@@ -56,18 +56,24 @@ public:
 
 	void	fill_twWatchPoint(void);
 
-	
-private slots:
-	void	updatecapture(int);
-	void	zoomin(void);
-	void	zoomout(void);
-	void	fitmarkers(void);
+
+public slots:
+    Q_INVOKABLE void	updatecapture(int);
+    Q_INVOKABLE void	zoomin(void);
+    Q_INVOKABLE void	zoomout(void);
+    Q_INVOKABLE void	fitmarkers(void);
 	void	scroll(int);
-	void	slotSave();
-	void	slotLoad();
+    Q_INVOKABLE void	slotSave();
+    Q_INVOKABLE void	slotLoad();
 	void	slotMarker();
 	void	slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * );
-    void    DestroySlot(CPObject *pObject);
+    Q_INVOKABLE void slotChangeWatchPoint(int pos);
+
+    void DestroySlot(CPObject *);
+    void CreateSlot(CPObject *_pc);
+
+signals:
+    Q_INVOKABLE void refreshLogic();
 
 protected:
 	void paintEvent(QPaintEvent *event);
