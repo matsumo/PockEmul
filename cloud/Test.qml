@@ -599,6 +599,46 @@ Rectangle {
             quitIndex: 0
             onClose: visible=false;
         }
+
+        VisualItemModel {
+            id: aboutModel
+            Tab {
+                name: "Help"
+                icon: "pics/help.png"
+                About {
+                    id: helpFlick
+                    anchors.fill: parent
+                    fileName: ":/pockemul/help.html"
+                }
+            }
+            Tab {
+                name: "About PockEmul "+Qt.application.version
+                icon: "pics/white-about-256.png"
+                About {
+                    id: aboutFlick
+                    anchors.fill: parent
+                    fileName: ":/pockemul/release_notes.html"
+                }
+            }
+            Tab {name: "Back"
+                icon: "pics/back-white.png"
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: close();
+                }
+            }
+        }
+
+        TabbedUI {
+            id: about
+            visible: false
+            z: 9999
+            tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+            tabIndex: 0
+            tabsModel: aboutModel
+            quitIndex: 2
+            onClose: visible=false;
+        }
     }
 
 
@@ -610,45 +650,6 @@ Rectangle {
     }
 
 
-    VisualItemModel {
-        id: aboutModel
-        Tab {
-            name: "Help"
-            icon: "pics/help.png"
-            About {
-                id: helpFlick
-                anchors.fill: parent
-                fileName: ":/pockemul/help.html"
-            }
-        }
-        Tab {
-            name: "About PockEmul "+Qt.application.version
-            icon: "pics/white-about-256.png"
-            About {
-                id: aboutFlick
-                anchors.fill: parent
-                fileName: ":/pockemul/release_notes.html"
-            }
-        }
-        Tab {name: "Back"
-            icon: "pics/back-white.png"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: close();
-            }
-        }
-    }
-
-    TabbedUI {
-        id: about
-        visible: false
-        z: parent.z+2
-        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-        tabIndex: 0
-        tabsModel: aboutModel
-        quitIndex: 2
-        onClose: visible=false;
-    }
 
     VisualItemModel {
         id: logicModel
@@ -656,7 +657,7 @@ Rectangle {
         Tab {
             id: sceneTab
             name: "PockEmul Desktop"
-            icon: "pics/help.png"
+            icon: "qrc:/core/pocket.png"
         }
         Tab {
             name: "Logic Analyser"
@@ -774,6 +775,7 @@ Rectangle {
         contextMenu.selectedOption.connect(manageContextResponse);
         download.sendDownloadCancel.connect(sendDownloadCancel);
         logicObj.refreshLogic.connect(refreshLogic);
+        logicObj.markersLengthChanged.connect(markersLengthChanged);
 //        showWorkingScreen();
 
         console.log("Test.qml: Completed",new Date());
@@ -827,6 +829,9 @@ Rectangle {
         logicAnalyser.source = "image://Logic/"+String(Math.random());
     }
 
+    function markersLengthChanged(value) {
+        logicAnalyser.markersLenght.text = "Lenght:"+value;
+    }
 
     function delPocket(_pocketId) {
         var index = getIndex(_pocketId);

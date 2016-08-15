@@ -19,6 +19,7 @@
 //
 class CPObject;
 extern QList<CPObject *> listpPObject; 
+extern QString workDir;
 
 dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QDialog(parent, f),
     QQuickImageProvider(QQuickImageProvider::Pixmap)
@@ -34,6 +35,7 @@ dialogAnalog::dialogAnalog( int nbbits,QWidget * parent, Qt::WindowFlags f) : QD
     connect(pbLoad,     SIGNAL(clicked()), this, SLOT(slotLoad()));
     connect(pbMarker,   SIGNAL(clicked()), this, SLOT(slotMarker()));
     connect(twWatchPoint,SIGNAL(currentItemChanged ( QTreeWidgetItem * , QTreeWidgetItem * )), this, SLOT(slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * )));
+    connect(chkBShowMarker, SIGNAL(stateChanged(int)), this, SLOT(updateDrawMarkers(int)));
 
     connect(mainwindow,SIGNAL(DestroySignal(CPObject*)),this,SLOT(DestroySlot(CPObject*)));
     connect(mainwindow,SIGNAL(NewPObjectsSignal(CPObject*)),this,SLOT(CreateSlot(CPObject*)));
@@ -142,7 +144,14 @@ void dialogAnalog::fill_twWatchPoint(void)
 
 void dialogAnalog::slotMarker(void)
 {
-	dataplot.Marker = 1;
+    dataplot.Marker = 1;
+}
+
+void dialogAnalog::updateDrawMarkers(int value)
+{
+    csMarker = value;
+
+    emit refreshLogic();
 }
 
 void    dialogAnalog::setMarker(quint8 val) {
@@ -156,7 +165,7 @@ quint8 dialogAnalog::getMarker(void) {
 void dialogAnalog::slotSave(void)
 {
 	QString fileName = QFileDialog::getSaveFileName(this, tr("Save File"),
-                            ".",
+                            (workDir+"sessions"),
                             tr("Analogic Sample (*.ana)"));
 
 	QFile file(fileName);
@@ -183,7 +192,7 @@ void dialogAnalog::slotLoad(void)
         return;
     }
 	QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
-                                                 ".",
+                                                 (workDir+"sessions"),
                                                  tr("Analogic Sample (*.ana)"));
 
 
@@ -345,7 +354,7 @@ void dialogAnalog::fillPixmap(CData *data, QPen *dataPen)
 
     QVector< QVector<QPoint> > polyline(64);
 
-    Qt::CheckState csMarker = chkBShowMarker->checkState();
+
 
     for (int j=1;j<data->size();j++)
 	{
@@ -379,7 +388,7 @@ void dialogAnalog::fillPixmap(CData *data, QPen *dataPen)
                 QPen pen((Qt::white));
                 pen.setStyle(Qt::DotLine);
                 painter.setPen(pen);
-                painter.drawLine(X1,12,X1,height());
+                painter.drawLine(X1,12,X1,lastPixmap.height());
                 // set font ------------------------------------------------------------------------------------
                 QFont textFont;
                 textFont.setPixelSize(10);
@@ -452,7 +461,7 @@ void dialogAnalog::drawLeftMarker(QPainter* painter)
     {
 		QPen leftMarkerPen(QColor(0,255,0));
 		painter->setPen(leftMarkerPen);
-        painter->drawLine( m_leftMarker, 0, m_leftMarker, height());
+        painter->drawLine( m_leftMarker, 0, m_leftMarker, lastPixmap.height());
     }
 }
 
@@ -462,7 +471,7 @@ void dialogAnalog::drawRightMarker(QPainter* painter)
     {
 		QPen rightMarkerPen(QColor(255,0,0));
 		painter->setPen(rightMarkerPen);
-        painter->drawLine( m_rightMarker, 0, m_rightMarker, height());
+        painter->drawLine( m_rightMarker, 0, m_rightMarker, lastPixmap.height());
     }
 }
 
@@ -477,15 +486,19 @@ int dialogAnalog::getRightMarker(){ return m_rightMarker;}
 
 void dialogAnalog::setLeftMarker(int markerpos)
 {
+    qWarning()<<"setLeftMarker"<<markerpos;
 	m_leftMarker = markerpos;
 	ComputeMarkersLength();
+    emit refreshLogic();
 }
 
 // -------------------------------------------------------------------------------------------------
 void dialogAnalog::setRightMarker(int markerpos)
 {
+    qWarning()<<"setRightMarker"<<markerpos;
 	m_rightMarker = markerpos;
 	ComputeMarkersLength();
+    emit refreshLogic();
 }
 
 void dialogAnalog::ComputeMarkersLength(void)
@@ -508,7 +521,9 @@ void dialogAnalog::ComputeMarkersLength(void)
 	
     MarkersLength = deltaState / dataplot.timeUnit * 1000.0f;
 	
-	labelLength->setText(tr("%1 ms").arg(MarkersLength,0,'f',5));
+    QString _m = tr("%1 ms").arg(MarkersLength,0,'f',5);
+    labelLength->setText(_m);
+    emit markersLengthChanged(_m);
 }
 
 void dialogAnalog::ComputeScrollBar(void)

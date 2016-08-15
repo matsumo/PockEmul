@@ -8,6 +8,7 @@ Rectangle {
 
     property alias source : imageLogic.source
     property alias watchPointModel : watchPointModel
+    property alias markersLenght : markersLenght
 
     Rectangle {
         anchors.top: parent.top
@@ -28,6 +29,18 @@ Rectangle {
             mipmap: true
             antialiasing: true
             cache: false;
+            MouseArea {
+                anchors.fill: parent
+                acceptedButtons: Qt.LeftButton | Qt.RightButton
+                onPressed: {
+                    if (mouse.button === Qt.LeftButton) {
+                        logicObj.setLeftMarker(mouseX);
+                    }
+                    else {
+                        logicObj.setRightMarker(mouseX);
+                    }
+                }
+            }
         }
     }
     ColumnLayout {
@@ -101,10 +114,11 @@ Rectangle {
             }
         }
     }
-    Row {
+    Flow {
         id: lowLayout
         anchors.bottom: parent.bottom
-        height: 50
+        width: parent.width
+//        height: 50
         anchors.margins: 5
         spacing: 5
 
@@ -139,7 +153,35 @@ Rectangle {
         Rectangle {
             width: 100
         }
+        Text {
+            id: label2Element
 
+            text: "  Draw markers:"
+            color: "white"
+            font { family: "Helvetica"; pointSize: 16; bold: false }
+            renderType: Text.NativeRendering
+        }
+
+        Switch {
+            id: drawSwitch
+            objectName: "Draw"
+            saveToSettings: false
+            bheight: 50 //buttonElement.height*.9
+            bwidth: 50 * 2
+            on: false
+            onToggleState: {
+                logicObj.updateDrawMarkers(value === "on" ? 2:0);
+                console.log("toggle draw");
+            }
+        }
+        TextButton {
+            text: "Add Marker"
+            expand: false
+            font.pointSize: 16
+            onClicked: {
+                logicObj.slotMarker();
+            }
+        }
         TextButton {
             text: "Zoom +"
             expand: false
@@ -167,6 +209,30 @@ Rectangle {
             onClicked: {
                 logicObj.fitmarkers();
             }
+        }
+        TextButton {
+            text: "Save"
+            expand: false
+            font.pointSize: 16
+            onClicked: {
+                logicObj.slotSave();
+            }
+        }
+        TextButton {
+            text: "Load"
+            expand: false
+            font.pointSize: 16
+            onClicked: {
+                logicObj.slotLoad();
+            }
+        }
+        Text {
+            id: markersLenght
+
+            text: "ms"
+            color: "white"
+            font { family: "Helvetica"; pointSize: 16; bold: false }
+            renderType: Text.NativeRendering
         }
 
     }

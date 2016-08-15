@@ -31,10 +31,8 @@ public:
 	void	captureData(void);
 	
 	//// marker handling ------------------------------------------------------------------------
-	int		getLeftMarker() ;
-	void	setLeftMarker(int markerPosition);
-	int		getRightMarker() ;
-	void	setRightMarker(int markerPosition);
+    int		getLeftMarker() ;
+    int		getRightMarker() ;
 
     void    setMarker(quint8);
     quint8   getMarker(void);
@@ -58,6 +56,9 @@ public:
 
 
 public slots:
+    Q_INVOKABLE void	setLeftMarker(int markerPosition);
+    Q_INVOKABLE void	setRightMarker(int markerPosition);
+
     Q_INVOKABLE void	updatecapture(int);
     Q_INVOKABLE void	zoomin(void);
     Q_INVOKABLE void	zoomout(void);
@@ -65,7 +66,8 @@ public slots:
 	void	scroll(int);
     Q_INVOKABLE void	slotSave();
     Q_INVOKABLE void	slotLoad();
-	void	slotMarker();
+    Q_INVOKABLE void	slotMarker();
+    Q_INVOKABLE void updateDrawMarkers(int value);
 	void	slotChangeWatchPoint( QTreeWidgetItem * , QTreeWidgetItem * );
     Q_INVOKABLE void slotChangeWatchPoint(int pos);
 
@@ -74,6 +76,7 @@ public slots:
 
 signals:
     Q_INVOKABLE void refreshLogic();
+    Q_INVOKABLE void markersLengthChanged(QString);
 
 protected:
 	void paintEvent(QPaintEvent *event);
@@ -93,6 +96,8 @@ private:
     qint64 * currentWatchPoint;
     qint8	currentWatchPointSize;
     QHash<int,QString> currentlabels;
+
+    int csMarker;
 
 };
 #endif
