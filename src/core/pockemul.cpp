@@ -8,6 +8,7 @@
 #include <QSplashScreen>
 #include <QScreen>
 #include <QWidget>
+#include <QUuid>
 
 #ifdef Q_OS_WIN
 #include <windowsx.h>
@@ -48,6 +49,7 @@ MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
 CrenderView* view;
 QSettings* settings;
+QUuid uniqueId;
 
 #include "watchpoint.h"
 CWatchPoint WatchPoint;
@@ -215,7 +217,7 @@ int main(int argc, char *argv[])
 
 #ifdef Q_OS_ANDROID
 
-    // Change currentPath to /sdcard/pockemul
+    // Change currentPath t;o /sdcard/pockemul
     QDir d("/");
     d.mkpath("/sdcard/pockemul/documents");
     QDir::setCurrent("/sdcard/pockemul");
@@ -224,6 +226,17 @@ int main(int argc, char *argv[])
 #endif
 
     settings = new QSettings(workDir+"config.ini",QSettings::IniFormat);
+
+    QString _Id = Cloud::getValueFor("uniqueId","0000");
+    if (_Id=="0000") {
+        uniqueId = QUuid::createUuid();
+        Cloud::saveValueFor("uniqueId",uniqueId.toString());
+    }
+    else {
+        uniqueId = QUuid(_Id);
+    }
+
+    qWarning()<<"uniqueId"<<uniqueId;
 
     vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
