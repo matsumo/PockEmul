@@ -71,6 +71,9 @@ PockEmul is a Sharp Pocket Computer Emulator.
 
 #include "allobjects.h"
 
+#include "ganalytics.h"
+extern GAnalytics* tracker;
+
 extern MainWindowPockemul* mainwindow;
 extern CrenderView* view;
 extern DownloadManager *downloadManager;
@@ -854,6 +857,7 @@ CPObject * MainWindowPockemul::LoadPocket(QString Id) {
 
 CPObject * MainWindowPockemul::LoadPocket(int result) {
     qWarning()<<"Load Pocket:"<<result;
+
     CPObject *newpPC;
     if (result)	{
                 newpPC = InitApp(result);
@@ -862,6 +866,9 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                 }
                 else
                 {
+                    tracker->sendEvent("App","Start Pocket",newpPC->getName());
+                    tracker->startSending();
+
                     AddLog(LOG_MASTER,tr("%1").arg((quint64)newpPC));
                     listpPObject.append(newpPC);
 #ifndef MONOTHREAD
@@ -1111,14 +1118,23 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
 
 }
 
-void MainWindowPockemul::quitPockEmul()
+bool MainWindowPockemul::quitPockEmul()
 {
+    tracker->endSession();
+    tracker->startSending();
+
     if (ask(this,"Do you really want to quit ?",2)==1) {
         Close_All();
         PcThread->PcThreadRunning = false;
         qWarning()<<"close";
-        close();
+        return true;
     }
+    else {
+        tracker->startSession();
+        return false;
+    }
+
+    return true;
 }
 
 
@@ -1574,12 +1590,11 @@ void MainWindowPockemul::keyPressEvent		( QKeyEvent * event ){
 
 void MainWindowPockemul::toggleFullscreen()
 {
-//    hide();
-//    mainwindow->setWindowState(mainwindow->windowState() ^ Qt::FramelessWindowHint );
-//    mainwindow->setFixedSize(mainwindow->size()-QSize(0,1));
-//    show();
-
     setWindowState(windowState() ^ Qt::WindowFullScreen);
+    show();
+
+    tracker->sendEvent("App","Fullscreen",(windowState() & Qt::WindowFullScreen) ? "on" : "off");
+    tracker->startSending();
 }
 
 void MainWindowPockemul::resizeEvent		( QResizeEvent * event ){
@@ -1639,21 +1654,18 @@ void MainWindowPockemul::closeEvent(QCloseEvent *event)
 {
     Q_UNUSED(event)
 
+    if (!quitPockEmul()) {
+        event->ignore();
+        return;
+    }
+
     Cloud::saveValueFor("geometry",QString(saveGeometry().toHex()));
     qWarning()<<"geometry saved:"<<saveGeometry().toHex();
 
-#if 0
-    if (Close_All()){
-        QMainWindow::closeEvent(event);
-        event->accept();
-    }
-    else
-        event->ignore();
-#else
     QMainWindow::closeEvent(event);
     event->accept();
 //    QApplication::quit();
-#endif
+
 }
 
 void MainWindowPockemul::slotMsgError(QString msg) {

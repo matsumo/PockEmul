@@ -31,6 +31,11 @@ public:
     Q_INVOKABLE QString getRes(QString _fn);
     Q_INVOKABLE void changeGeo(int,int,int,int);
 
+    Q_INVOKABLE void sendTrackingEvent(const QString &cat = QString(),
+                                       const QString &action = QString(),
+                                       const QString &label = QString(),
+                                       const QVariant &value =QVariant());
+
 public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();

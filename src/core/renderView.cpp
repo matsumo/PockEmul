@@ -17,6 +17,9 @@
 #include "dialoganalog.h"
 #include "ui/windowide.h"
 
+#include "ganalytics.h"
+extern GAnalytics *tracker;
+
 extern MainWindowPockemul *mainwindow;
 extern int ask(QWidget *parent, QString msg, int nbButton);
 extern void m_addShortcut(QString name,QString param);
@@ -77,7 +80,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     QObject::connect(cloud.object, SIGNAL(sendBook()), this, SLOT(bookcaseSlot()));
     QObject::connect(cloud.object, SIGNAL(sendCloseAll()), mainwindow, SLOT(Close_All()));
     QObject::connect(cloud.object, SIGNAL(sendCheck()), this, SLOT(checkSlot()));
-    QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(quitPockEmul()));
+    QObject::connect(cloud.object, SIGNAL(sendExit()), mainwindow, SLOT(close()));
 
     QObject::connect(cloud.object, SIGNAL(sendDownloadCancel()), downloadManager, SLOT(abort()));
 
@@ -384,6 +387,15 @@ void CrenderView::changeGeo(int x, int y, int w, int h)
 
     if (mainwindow->windowide)
         mainwindow->windowide->setGeometry(QRect(mapToGlobal(QPoint(x,y)),QSize(w,h)));
+}
+
+void CrenderView::sendTrackingEvent(const QString &cat,
+                                    const QString &action,
+                                    const QString &label,
+                                    const QVariant &value)
+{
+    tracker->sendEvent(cat,action,label,value);
+    tracker->startSending();
 }
 
 QString CrenderView::getReleaseNotes(QString _fn)

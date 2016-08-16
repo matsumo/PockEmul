@@ -45,6 +45,10 @@ int vibDelay;
 
 #endif
 
+#include "ganalytics.h"
+GAnalytics *tracker;
+
+
 MainWindowPockemul* mainwindow;
 DownloadManager* downloadManager;
 CrenderView* view;
@@ -67,6 +71,7 @@ bool soundEnabled=true;
 bool hiRes=true;
 bool syncEnabled=true;
 bool flipOnEdge=true;
+bool trackerEnabled=false;
 
 
 
@@ -78,6 +83,7 @@ extern QList<CPObject *> listpPObject;
 
 void test();
 void buildMenu();
+int ask(QWidget *parent, QString msg, int nbButton);
 
 void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
@@ -237,6 +243,30 @@ int main(int argc, char *argv[])
     }
 
     qWarning()<<"uniqueId"<<uniqueId;
+
+    tracker = new GAnalytics("UA-82656903-1");
+
+    tracker->setUserID(uniqueId.toString().mid(1,36));
+    tracker->setLogLevel(GAnalytics::Debug);
+
+    tracker->startSession();
+    tracker->sendAppView("main");
+
+    QString _te = Cloud::getValueFor("trackerEnabled","not defined");
+    if (_te == "not defined") {
+           QString _msg;
+           _msg += "Are you agree to enable activity tracking ?\n";
+           _msg += "It is only to track functions usage\n";
+           _msg += "Only anonymous information will be transmitted to PockEmul Server";
+
+           int _res = ask(0,_msg,2);
+           trackerEnabled = (_res == 1);
+           Cloud::saveValueFor("trackerEnabled",trackerEnabled ? "on" : "off");
+    }
+    else {
+        trackerEnabled = (_te == "on") ? true : false;
+        qWarning()<<"trackerEnabled"<<trackerEnabled;
+    }
 
     vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
@@ -495,7 +525,7 @@ void buildMenu() {
                                                       LaunchButtonWidget::Action,
                                                       QStringList(),
                                                       ":/core/exit.png");
-    mainwindow->connect(exitButton,SIGNAL(clicked()),mainwindow, SLOT(quitPockEmul()));//closeAllWindows()));
+    mainwindow->connect(exitButton,SIGNAL(clicked()),mainwindow, SLOT(close()));//closeAllWindows()));
 
     exitButton->setGeometry(0,v_pos,iconSize,iconSize);
     exitButton->hide();

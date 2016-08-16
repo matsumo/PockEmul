@@ -234,6 +234,7 @@ Item {
 //                renderArea.showWorkingScreen();
                 cloud.getPML(pmlid,1,rootCloud.auth_token);
 //                renderArea.hideWorkingScreen();
+                main.sendTrackingEvent('cloud','download','pml',pmlid);
             }
 
         }
@@ -247,6 +248,7 @@ Item {
                                function(){xmlpmlModel.reload();},
                                function(){}
                                );
+                main.sendTrackingEvent('cloud','clone','pml',pmlid);
             }
         }
         //    *     0 => 'Private',

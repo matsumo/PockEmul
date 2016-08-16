@@ -560,6 +560,7 @@ Rectangle {
             visible: false
             anchors.fill: parent
             source: "qrc:/pockemul/config.xml"
+            onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','showroom pocket');
         }
 
         ShowRoom {
@@ -568,6 +569,7 @@ Rectangle {
             visible: false
             anchors.fill: parent
             source: "qrc:/pockemul/configExt.xml"
+            onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','showroom ext');
         }
 
         ContextMenu {
@@ -598,6 +600,7 @@ Rectangle {
             tabsModel: settingsModel
             quitIndex: 0
             onClose: visible=false;
+            onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','settings');
         }
 
         VisualItemModel {
@@ -638,6 +641,7 @@ Rectangle {
             tabsModel: aboutModel
             quitIndex: 2
             onClose: visible=false;
+            onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','about');
         }
     }
 
@@ -647,6 +651,7 @@ Rectangle {
         id: thecloud
         anchors.fill: parent
         visible: false;
+        onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','cloud');
     }
 
 
@@ -693,6 +698,8 @@ Rectangle {
             else {
                 scene.parent = renderArea;
             }
+
+            main.sendTrackingEvent('nav',visible ? 'show':'hide','logic analyser');
         }
     }
 

@@ -106,12 +106,15 @@ public:
     QSensor *sensor;
 #endif
     QString saveassessionString();
+
+
+    bool quitPockEmul();
+
 public slots:
     QString saveassession();
     void saveassession(QXmlStreamWriter *xml);
     void opensession(QString sessionFN=QString());
     void opensession(QXmlStreamReader *xml);
-    void quitPockEmul();
     void CheckUpdates();
     void toggleFullscreen();
 
