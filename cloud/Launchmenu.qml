@@ -43,7 +43,7 @@ Rectangle {
             "Close All":        true,
             "Fit to screen":    true,
             "Toggle Fullscreen":!android,
-            "Logic Analyser":   !android,
+            "Logic Analyser":   true, //!android,
             "Help":             true,
             "Check for Updates":true,
             "Exit":             true

@@ -385,8 +385,8 @@ void CrenderView::changeGeo(int x, int y, int w, int h)
 //    if (mainwindow->windowide==0) mainwindow->windowide = new WindowIDE(this);
 //    mainwindow->windowide->show();
 
-    if (mainwindow->windowide)
-        mainwindow->windowide->setGeometry(QRect(mapToGlobal(QPoint(x,y)),QSize(w,h)));
+//    if (mainwindow->windowide)
+//        mainwindow->windowide->setGeometry(QRect(mapToGlobal(QPoint(x,y)),QSize(w,h)));
 }
 
 void CrenderView::sendTrackingEvent(const QString &cat,
