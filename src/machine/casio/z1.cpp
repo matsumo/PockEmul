@@ -615,9 +615,10 @@ UINT16 Cz1::out16(UINT16 Port,UINT16 x,QString sender)
 
 
 void Cz1::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

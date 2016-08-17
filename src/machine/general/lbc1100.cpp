@@ -296,9 +296,10 @@ bool Clbc1100::Get_Connector(Cbus *_bus)
 
 
 void Clbc1100::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

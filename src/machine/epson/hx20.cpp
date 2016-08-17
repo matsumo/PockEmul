@@ -508,9 +508,10 @@ bool Chx20::Get_PrinterConnector(Cconnector *_conn)
 }
 
 void Chx20::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

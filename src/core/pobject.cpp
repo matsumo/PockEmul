@@ -129,6 +129,7 @@ CPObject::CPObject(CPObject *parent):CViewObject(parent)
     connect( this,SIGNAL(sigTurnOff()),this,SLOT(slotTurnOff()));
     connect( this,SIGNAL(sigTurnOn()),this,SLOT(slotTurnOn()));
     setStyleSheet("background-color:white;color: black;selection-background-color: grey;");
+
 }
 
 

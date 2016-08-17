@@ -268,9 +268,10 @@ void Cti74::TurnON()
 
 void Cti74::TurnOFF()
 {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
 }
 
 bool Cti74::SaveConfig(QXmlStreamWriter *xmlOut)

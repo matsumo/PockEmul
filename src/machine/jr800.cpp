@@ -394,9 +394,10 @@ bool Cjr800::Get_Connector(Cbus *_bus)
  *
  */
 void Cjr800::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

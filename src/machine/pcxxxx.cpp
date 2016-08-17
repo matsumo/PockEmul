@@ -170,7 +170,9 @@ bool CpcXXXX::InitDisplay(void)
 
 void CpcXXXX::TurnOFF(void)
 {
-    mainwindow->saveAll = YES;
+//    ASKYN _sa = mainwindow->saveAll;
+
+//    mainwindow->saveAll = YES;
 #ifdef EMSCRIPTEN
     mainwindow->saveAll=NO;
 #endif
@@ -185,6 +187,7 @@ void CpcXXXX::TurnOFF(void)
 
     }
 
+//    mainwindow->saveAll = _sa;
 
     off = 1;
     setPower(false);

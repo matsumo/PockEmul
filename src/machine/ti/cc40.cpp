@@ -477,9 +477,10 @@ void Ccc40::TurnON()
 
 void Ccc40::TurnOFF()
 {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
 }
 
 bool Ccc40::SaveConfig(QXmlStreamWriter *xmlOut)

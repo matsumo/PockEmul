@@ -261,9 +261,11 @@ bool Ctpc8300::Get_Connector(Cbus *_bus)
 
 
 void Ctpc8300::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
+
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

@@ -639,9 +639,10 @@ void Ce500::TurnON()
 
 void Ce500::TurnOFF()
 {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
 }
 
 UINT8 Ce500::in(UINT8 address, QString)

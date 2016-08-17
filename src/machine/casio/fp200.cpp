@@ -384,9 +384,11 @@ void Cfp200::TurnON()
 
 void Cfp200::TurnOFF()
 {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
+
 }
 
 bool Cfp200::SaveConfig(QXmlStreamWriter *xmlOut)

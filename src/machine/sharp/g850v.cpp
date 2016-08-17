@@ -180,9 +180,10 @@ void Cg850v::TurnON()
 }
 
 void Cg850v::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
 }
 
 void Cg850v::Reset()

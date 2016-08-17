@@ -614,9 +614,10 @@ bool Crlh1000::Get_Connector(Cbus *_bus)
 
 
 void Crlh1000::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
     AddLog(LOG_TEMP,"TURN OFF");
 
 }

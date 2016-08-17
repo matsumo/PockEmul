@@ -278,9 +278,11 @@ UINT8 Cpb1000::out(UINT8 Port, UINT8 Value, QString sender)
 }
 
 void Cpb1000::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
+
 }
 
 void Cpb1000::TurnON(void){

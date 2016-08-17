@@ -743,9 +743,11 @@ void Cx07::TurnOFFSlot(void){
 
 
 void Cx07::TurnOFF(void) {
+    ASKYN _tmp = mainwindow->saveAll;
     mainwindow->saveAll = YES;
     CpcXXXX::TurnOFF();
-    mainwindow->saveAll = ASK;
+    mainwindow->saveAll = _tmp;
+
     AddLog(LOG_TEMP,"TURN OFF");
     pT6834->General_Info.LcdOn = false;
     qWarning()<<"Turn OFF";
