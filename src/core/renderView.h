@@ -10,6 +10,7 @@
 
 class CPObject;
 class CViewObject;
+class BinaryData;
 
 class CrenderView : public QQuickWidget
 {
@@ -35,6 +36,8 @@ public:
                                        const QString &action = QString(),
                                        const QString &label = QString(),
                                        const QVariant &value =QVariant());
+
+    Q_INVOKABLE void loadSlot(QString Id, int slotNumber, BinaryData* display);
 
 public slots:
     Q_INVOKABLE void newpocketSlot();

@@ -15,7 +15,8 @@ Item {
     Action {
         id: loadFile
         onTriggered: {
-            load.loadFile(file.text, hexModel)
+//            load.loadFile(file.text, hexModel)
+            main.loadSlot(0,0,hexModel);
         }
     }
     Action {

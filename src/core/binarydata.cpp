@@ -28,33 +28,50 @@ QHash<int, QByteArray> BinaryData::roleNames() const
 {
     QHash<int, QByteArray> roles;
     roles[Line] = "lineData";
+    roles[Line+1]="lineChar";
     return roles;
 }
 
-QStringList BinaryData::containingRow(const QModelIndex &index)
+QStringList BinaryData::containingRow(const QModelIndex &index,int role)
 {
-    if ((index == mLastIdx) && !mLastResult.isEmpty())
-        return mLastResult;
+    int _index = role-Line;
 
-    mLastResult.clear();
-    mLastResult.reserve(LineSize);
-    mLastIdx = index;
+    if ((index == mLastIdx[_index]) && !mLastResult[_index].isEmpty())
+        return mLastResult[_index];
+
+    mLastResult[_index].clear();
+    mLastResult[_index].reserve(LineSize);
+    mLastIdx[_index] = index;
 
     int offset = index.row() * LineSize;
-    QString addr = QString("%1").arg(offset, 4, 16, QChar('0')).toUpper();
-    mLastResult.append(addr);
     const QByteArray& lineData = mData.mid(offset, LineSize);
-    foreach (char c, lineData) {
-        QString byte = QString("%1").arg((quint8)c, 2, 16, QChar('0')).toUpper();
-        mLastResult.append(byte);
+
+    if (_index==0) {
+        QString addr = QString("%1").arg(offset, 6, 16, QChar('0')).toUpper();
+        mLastResult[_index].append(addr);
+        foreach (char c, lineData) {
+            QString byte = QString("%1").arg((quint8)c, 2, 16, QChar('0')).toUpper();
+            mLastResult[_index].append(byte);
+        }
     }
-    return mLastResult;
+    if (_index==1) {
+        foreach (char c, lineData) {
+            QChar qc = QLatin1Char(c);
+            if (qc.unicode() >= 127 || !qc.isPrint())
+                qc = 0xB7;
+            QString byte = QString(qc);
+            mLastResult[_index].append(byte);
+        }
+    }
+
+    qWarning()<<"role:"<<_index<<mLastResult[_index];
+    return mLastResult[_index];
 }
 
 QVariant BinaryData::data(const QModelIndex &index, int role) const
 {
     (void)role;
-    return const_cast<BinaryData*>(this)->containingRow(index);
+    return const_cast<BinaryData*>(this)->containingRow(index,role);
 }
 
 int BinaryData::rowCount(const QModelIndex &parent) const
@@ -241,7 +258,8 @@ bool BinaryData::editCell()
     mData[addr] = mEntered.toInt(0, 16);
 
     QModelIndex row = index(addr / LineSize);
-    mLastResult.clear();
+    mLastResult[0].clear();
+    mLastResult[1].clear();
     emit dataChanged(row, row);
     bool editComplete = (mEntered.length() == 2);
     if (editComplete)

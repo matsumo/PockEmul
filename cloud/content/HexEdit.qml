@@ -21,13 +21,21 @@ Item {
 
     Component {
         id: drawLine
-        ListView {
-            id: line
+        Row {
+            spacing: 2
+
             property int normalWidth : line.width / (HexModel.LineSize + 2)
+            property int normalWidthChar : linechar.width / (HexModel.LineSize*2 + 2)
             property int addressWidth : normalWidth * 2
 
+
+        ListView {
+            id: line
+//            anchors.left: parent.left
+//            visible: false
+
             height: lineHeight
-            width: hexViewer.width
+            width: hexViewer.width / 2
             orientation: ListView.Horizontal
             interactive: false
             model: lineData
@@ -43,7 +51,10 @@ Item {
                 radius: 3
 
                 Text {
-                    anchors.centerIn: parent
+//                    anchors.centerIn: parent
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+
                     text: lineData[index]
                     font.pixelSize: Math.min(parent.height / 2, parent.width / 2)
                     color: selected && (hexModel.mode === HexModel.InsertMode) ? "white" : "black"
@@ -59,6 +70,49 @@ Item {
                 }
             }
         }
+
+        ListView {
+            id: linechar
+
+            height: lineHeight
+            width: hexViewer.width / 2
+            orientation: ListView.Horizontal
+            interactive: false
+            model: lineChar
+            delegate: Rectangle {
+
+                property bool selected : (index === hexModel.offset) && (lineChar[0] === hexModel.address)
+
+                color:  !selected ? "#F7F7F7" : (hexModel.mode === HexModel.InsertMode) ? "black" : "#CCCCCC"
+                border.width: 1
+                border.color: "#CCCCCC"
+                width: normalWidthChar
+                height: lineHeight
+                radius: 3
+
+                Text {
+//                    anchors.centerIn: parent
+                    anchors.horizontalCenter:  parent.horizontalCenter
+                    anchors.bottom: parent.bottom
+
+                    text: lineChar[index]
+                    font.pixelSize: Math.min(parent.height / 2, parent.width / 2)
+                    color: selected && (hexModel.mode === HexModel.InsertMode) ? "white" : "black"
+                }
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked : {
+                        hexModel.address = lineChar[0]
+                        hexModel.offset = index
+                        hexViewer.forceActiveFocus()
+                    }
+                }
+            }
+        }
+
+        }
+
     }
 
     function showStatusBar() {

@@ -402,6 +402,19 @@ void CrenderView::sendTrackingEvent(const QString &cat,
     tracker->startSending();
 }
 
+void CrenderView::loadSlot(QString Id, int slotNumber, BinaryData *display)
+{
+//    CPObject *pc = ((CPObject*)Id.toULongLong());
+    if (listpPObject.isEmpty()) return;
+    CPObject *pc = listpPObject[0];
+
+    int adr = pc->SlotList[slotNumber].getAdr();
+    int size = pc->SlotList[slotNumber].getSize() * 1024;
+    QByteArray *ba= new QByteArray((const char*)&(pc->mem[adr]),size);
+    display->load(*ba);
+    display->setAddress(QString("%1").arg(adr,10,16,QChar('0')));
+}
+
 QString CrenderView::getReleaseNotes(QString _fn)
 {
     QFile _file(_fn);

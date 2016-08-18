@@ -46,7 +46,7 @@ public:
     void setMode(Mode mode);
 
     QVariant data(const QModelIndex &index, int role) const;
-    QStringList containingRow(const QModelIndex &index);
+    QStringList containingRow(const QModelIndex &index, int role);
 
     QString entered() const {return mEntered;}
     QString prompt() const {return mPrompt;}
@@ -66,8 +66,8 @@ private:
 
     QByteArray mData;
     QString mStrData;
-    QModelIndex mLastIdx;
-    QStringList mLastResult;
+    QModelIndex mLastIdx[10];
+    QStringList mLastResult[10];
 
     int mLastSearchIdx;
     QString mSearchPattern;
