@@ -62,7 +62,7 @@ Cpc1250::Cpc1250(CPObject *parent)	: CpcXXXX(parent)
 	pTIMER		= new Ctimer(this);
     pKEYB->setMap("pc1250.map");
 
-    ioFreq = 2400;
+//    ioFreq = 2400;
 }
 
 

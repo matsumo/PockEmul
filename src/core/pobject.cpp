@@ -2248,6 +2248,18 @@ bool CPObject::getDisp_on()
     return disp_on;
 }
 
+void CPObject::setName(QString val)
+{
+    // Check if a same object is already running
+    int _index = 0;
+    for (int i=0; i<listpPObject.count();i++) {
+        if (listpPObject.at(i)->getName() == val) {
+            _index++;
+        }
+    }
+    Name = val + (_index >0 ? QString(" - %1").arg(_index+1) : "");
+}
+
 
 
 

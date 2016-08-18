@@ -89,5 +89,7 @@
         <file>TabbedQuickApp/pics/help.png</file>
         <file>content/Logic.qml</file>
         <file>DevEditor.qml</file>
+        <file>content/HexEdit.qml</file>
+        <file>content/MemoryDump.qml</file>
     </qresource>
 </RCC>

@@ -203,7 +203,7 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("PockEmul");
     QCoreApplication::setApplicationVersion(POCKEMUL_VERSION);
 
-    QZXing::registerQMLTypes();
+
 
 
 #ifdef Q_OS_MAC

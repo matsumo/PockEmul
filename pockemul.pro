@@ -936,7 +936,8 @@ HEADERS *= \
     src/lcd/Lcdc_jr800.h \
     src/core/overlay.h \
     src/core/vibrator.h \
-    src/core/ganalytics.h
+    src/core/ganalytics.h \
+    src/core/binarydata.h
 
 
 
@@ -1105,7 +1106,8 @@ SOURCES *=  \
     src/lcd/Lcdc_ti59.cpp \
     src/core/overlay.cpp \
     src/core/vibrator.cpp \
-    src/core/ganalytics.cpp
+    src/core/ganalytics.cpp \
+    src/core/binarydata.cpp
 
 
 
@@ -1599,6 +1601,10 @@ OTHER_FILES *= \
     cloud/content/Download.qml \
     cloud/content/Logic.qml \
     cloud/DevEditor.qml \
+    cloud/HexEdit.qml \
+    cloud/MemoryDump.qml \
+
+
 
 
 }

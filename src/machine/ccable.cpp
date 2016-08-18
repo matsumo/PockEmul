@@ -69,20 +69,10 @@ bool Ccable::run(void)
         // 6 : tape in
         // 7 : tape out
 
-//        pCONNECTOR_A->Set_pin(4,pCONNECTOR_B->Get_pin(9));
-//        pCONNECTOR_B->Set_pin(4,pCONNECTOR_A->Get_pin(9));
-
-//        pCONNECTOR_A->Set_pin(8,pCONNECTOR_B->Get_pin(5));
-//        pCONNECTOR_B->Set_pin(8,pCONNECTOR_A->Get_pin(5));
-
-        bool _tmp6A = pCONNECTOR_A->Get_pin(6);
         bool _tmp7A = pCONNECTOR_A->Get_pin(7);
-        bool _tmp6B = pCONNECTOR_B->Get_pin(6);
         bool _tmp7B = pCONNECTOR_B->Get_pin(7);
         pCONNECTOR_B->Set_pin(6,_tmp7A);
         pCONNECTOR_A->Set_pin(6,_tmp7B);
-//        pCONNECTOR_B->Set_pin(6,_tmp7A);
-//        pCONNECTOR_B->Set_pin(7,_tmp6A);
 
     }
 //    if (mainwindow->dialoganalogic) mainwindow->dialoganalogic->dataplot.Marker = 8;

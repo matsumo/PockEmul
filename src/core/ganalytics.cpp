@@ -8,6 +8,7 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QNetworkConfiguration>
 #include <QQueue>
 #include <QSettings>
 #include <QTimer>
@@ -842,6 +843,7 @@ void GAnalytics::Private::postMessage()
     if (networkManager == NULL)
     {
         networkManager = new QNetworkAccessManager(this);
+        qWarning()<<"networkManager"<<networkManager->activeConfiguration().bearerTypeName();
     }
 
     QNetworkReply *reply = networkManager->post(request, buffer.postQuery.query(QUrl::EncodeUnicode).toUtf8());

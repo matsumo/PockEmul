@@ -106,7 +106,7 @@ public:
     bool getDisp_on(void);
     int     ioFreq;
 	
-    void setName(QString val){ Name = val;	}
+    void setName(QString val);
     QString getName(){ return Name;	}
 	
     QString getcfgfname() { return cfgfname; }

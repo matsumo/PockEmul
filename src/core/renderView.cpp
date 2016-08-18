@@ -16,6 +16,7 @@
 #include "downloadmanager.h"
 #include "dialoganalog.h"
 #include "ui/windowide.h"
+#include "binarydata.h"
 
 #include "ganalytics.h"
 extern GAnalytics *tracker;
@@ -37,6 +38,9 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     grabKeyboard();
 
     if (mainwindow->dialoganalogic==0) mainwindow->dialoganalogic = new dialogAnalog(11,this);
+
+    qmlRegisterType<BinaryData>("HexEditor", 1, 0, "HexModel");
+    QZXing::registerQMLTypes();
 
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );
     engine()->addImageProvider(QLatin1String("Logic"),mainwindow->dialoganalogic );

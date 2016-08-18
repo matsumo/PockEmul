@@ -665,6 +665,14 @@ Rectangle {
             icon: "qrc:/core/pocket.png"
         }
         Tab {
+            name: "Memory Dump"
+            icon: "qrc:/core/analyser.png"
+            MemoryDump {
+                id: memoryDump
+                anchors.fill: parent
+            }
+        }
+        Tab {
             name: "Logic Analyser"
             icon: "qrc:/core/analyser.png"
             Logic {
@@ -688,7 +696,7 @@ Rectangle {
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: logicModel
-        quitIndex: 2
+        quitIndex: 3
         onClose: visible=false;
 
         onVisibleChanged: {
