@@ -4,7 +4,7 @@ import HexEditor 1.0
 Item {
     id: root
     property HexModel hexModel
-    property int visibleLines : 16
+    property int visibleLines : 32
     property int lineHeight: height / visibleLines
 
     function search(pattern) {
@@ -24,9 +24,9 @@ Item {
         Row {
             spacing: 2
 
-            property int normalWidth : line.width / (HexModel.LineSize + 2)
-            property int normalWidthChar : linechar.width / (HexModel.LineSize*2 + 2)
-            property int addressWidth : normalWidth * 2
+            property int normalWidth : line.width / (HexModel.LineSize + 4)
+            property int normalWidthChar : linechar.width / (HexModel.LineSize*1.5 + 0)
+            property int addressWidth : normalWidth * 3
 
 
         ListView {
@@ -48,15 +48,16 @@ Item {
                 border.color: "#CCCCCC"
                 width: addressField ?  addressWidth : normalWidth
                 height: lineHeight
-                radius: 3
+//                radius: 3
 
                 Text {
+                    id: textData
 //                    anchors.centerIn: parent
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.bottom: parent.bottom
 
                     text: lineData[index]
-                    font.pixelSize: Math.min(parent.height / 2, parent.width / 2)
+                    font.pixelSize: Math.min(parent.height / 1, parent.width / (addressField ? 6:2))
                     color: selected && (hexModel.mode === HexModel.InsertMode) ? "white" : "black"
                 }
 
@@ -83,27 +84,31 @@ Item {
 
                 property bool selected : (index === hexModel.offset) && (lineChar[0] === hexModel.address)
 
-                color:  !selected ? "#F7F7F7" : (hexModel.mode === HexModel.InsertMode) ? "black" : "#CCCCCC"
-                border.width: 1
+//                color:  !selected ? "#F7F7F7" : (hexModel.mode === HexModel.InsertMode) ? "black" : "#CCCCCC"
+                color:  selected ? "#F7F7F7" : (hexModel.mode !== HexModel.InsertMode) ? "black" : "#CCCCCC"
+                border.width: 0
                 border.color: "#CCCCCC"
                 width: normalWidthChar
                 height: lineHeight
-                radius: 3
+//                radius: 3
 
                 Text {
+                    id: textChar
 //                    anchors.centerIn: parent
                     anchors.horizontalCenter:  parent.horizontalCenter
                     anchors.bottom: parent.bottom
 
                     text: lineChar[index]
-                    font.pixelSize: Math.min(parent.height / 2, parent.width / 2)
-                    color: selected && (hexModel.mode === HexModel.InsertMode) ? "white" : "black"
+                    font.pixelSize: Math.min(parent.height / 1, parent.width / 1)
+                    font.bold: true
+//                    color: selected && (hexModel.mode === HexModel.InsertMode) ? "white" : "black"
+                    color: selected && (hexModel.mode === HexModel.InsertMode) ? "black" : "white"
                 }
 
                 MouseArea {
                     anchors.fill: parent
                     onClicked : {
-                        hexModel.address = lineChar[0]
+//                        hexModel.address = lineChar[0]
                         hexModel.offset = index
                         hexViewer.forceActiveFocus()
                     }

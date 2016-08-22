@@ -106,6 +106,9 @@ Rectangle {
         }
     }
 
+//    FocusScope {
+//        anchors.fill: parent
+
     Rectangle {
         id: scene
         anchors.fill: parent
@@ -550,6 +553,7 @@ Rectangle {
             onOpenChanged: {
                 if (open) {
                     menu2.currentIndex = -1;
+                    menu2.focus = true;
                 }
             }
         }
@@ -645,7 +649,7 @@ Rectangle {
         }
     }
 
-
+//}
 
     Main {
         id: thecloud
@@ -655,7 +659,7 @@ Rectangle {
     }
 
 
-
+/*
     VisualItemModel {
         id: logicModel
 
@@ -710,6 +714,7 @@ Rectangle {
             main.sendTrackingEvent('nav',visible ? 'show':'hide','logic analyser');
         }
     }
+*/
 
 //    DevEditor {
 //        id: codeEditor
@@ -828,12 +833,28 @@ Rectangle {
 
 
     }
-
+    function clearSlotList() {
+//        memoryDump.slotListModel.clear();
+    }
     function clearWatchPoint() {
-        logicAnalyser.watchPointModel.clear();
+//        logicAnalyser.watchPointModel.clear();
     }
     function addWatchPoint(_pocketId,_name,_wpName,_index) {
-        logicAnalyser.watchPointModel.append({"idpocket":_pocketId,"name":_name,"wpName":_wpName,"wpIndex":_index});
+//        logicAnalyser.watchPointModel.append({"idpocket":_pocketId,"name":_name,"wpName":_wpName,"wpIndex":_index});
+    }
+
+    function addSlot(_pocketId,_name,_sLabel,_sSize,_sStart,_sEnd,_sIndex)
+    {
+//        memoryDump.slotListModel.append(
+//                    {
+//                        "idpocket":_pocketId,
+//                        "name":_name,
+//                        "sLabel":_sLabel,
+//                        "sSize":_sSize,
+//                        "sStart":_sStart,
+//                        "sEnd":_sEnd,
+//                        "sIndex":_sIndex
+//                    });
     }
 
     function refreshPocket(_pocketId) {
@@ -844,11 +865,11 @@ Rectangle {
 
     function refreshLogic() {
         console.log("refreshLogic");
-        logicAnalyser.source = "image://Logic/"+String(Math.random());
+//        logicAnalyser.source = "image://Logic/"+String(Math.random());
     }
 
     function markersLengthChanged(value) {
-        logicAnalyser.markersLenght.text = "Lenght:"+value;
+//        logicAnalyser.markersLenght.text = "Lenght:"+value;
     }
 
     function delPocket(_pocketId) {

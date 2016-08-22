@@ -237,7 +237,7 @@ Rectangle {
     }
 
     Component.onCompleted: {
-        console.log("size",width,height);
+//        console.log("size",width,height);
     }
 
     ListModel {

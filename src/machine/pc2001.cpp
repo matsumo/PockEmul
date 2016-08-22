@@ -19,8 +19,6 @@
 
 extern CrenderView* view;
 
-// TODO: Keyboard map is not complete
-//          Power switch paint
 //      TIMER
 //      SERIAL INTERFACE
 

@@ -10,9 +10,13 @@ class BinaryData : public QAbstractListModel
     Q_ENUMS(Param)
     Q_ENUMS(Mode)
 public:
+
+#define ROLE_COUNT 2
     enum Roles {
-        Line = Qt::UserRole + 1
+        LineData = Qt::UserRole + 1,
+        LineChar
     };
+
 
     enum Mode {
         BrowseMode,
@@ -25,6 +29,7 @@ public:
     };
 
     explicit BinaryData(QAbstractListModel *parent = 0);
+    Q_PROPERTY (QString startAddress READ startAddress WRITE setStartAddress NOTIFY startAddressChange)
     Q_PROPERTY (QString address READ address WRITE setAddress NOTIFY addressChange)
     Q_PROPERTY (int offset READ offset WRITE setOffset NOTIFY offsetChange)
     Q_PROPERTY (Mode mode READ mode WRITE setMode NOTIFY modeChange)
@@ -38,6 +43,9 @@ public:
 
     QString address() const {return QString("%1").arg(mAddress, 4, 16, QChar('0')).toUpper();}
     void setAddress(const QString& addr);
+
+    QString startAddress() const {return QString("%1").arg(mStartAddress, 4, 16, QChar('0')).toUpper();}
+    void setStartAddress(const QString& addr);
 
     int offset() const {return mOffset;}
     void setOffset(int off) {mOffset = off; offsetChange();}
@@ -57,6 +65,7 @@ protected:
 
 private:
     int mAddress;
+    int mStartAddress;
     int mOffset;
     QString mEntered;
     QStringList mLastResponse;
@@ -66,8 +75,8 @@ private:
 
     QByteArray mData;
     QString mStrData;
-    QModelIndex mLastIdx[10];
-    QStringList mLastResult[10];
+    QModelIndex mLastIdx[ROLE_COUNT];
+    QStringList mLastResult[ROLE_COUNT];
 
     int mLastSearchIdx;
     QString mSearchPattern;
@@ -90,6 +99,7 @@ private:
 
 signals:
     void addressChange(int address);
+    void startAddressChange(int address);
     void offsetChange();
     void modeChange();
     void enteredChange();

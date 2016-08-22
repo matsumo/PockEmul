@@ -75,6 +75,9 @@
 #define SIO_ER		14
 #define SIO_PRQ		15
 
+extern void Vibrate();
+
+
 Cx07::Cx07(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 3840000*3/8);
@@ -324,6 +327,8 @@ bool Cx07::Chk_Adr_R(UINT32 *d, UINT32 *data)
 
 UINT8 Cx07::in(UINT8 Port, QString sender)
 {
+    Q_UNUSED(sender)
+
     UINT8 Value=0;
 
      switch (Port)
@@ -398,6 +403,7 @@ void Cx07::manageSound(void) {
 
 UINT8 Cx07::out(UINT8 Port, UINT8 Value, QString sender)
 {
+    Q_UNUSED(sender)
 
 //    if (fp_tmp3==NULL)
 //        fp_tmp3=fopen("LOG out x07.txt","wb");
@@ -732,7 +738,7 @@ void Cx07::keyReleaseEvent(QKeyEvent *event)
 
 void Cx07::keyPressEvent(QKeyEvent *event)
 {
-
+    Vibrate();
     pT6834->keyPress(event);
 
 }

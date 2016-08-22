@@ -714,8 +714,13 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
 
-    if (!openGlFlag)
+    if (!openGlFlag) {
+        qWarning()<<"show";
         pPC->show();
+    }
+    else {
+        pPC->hide();
+    }
 
 qWarning()<<"init ok4";
     return pPC;

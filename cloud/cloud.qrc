@@ -91,5 +91,6 @@
         <file>DevEditor.qml</file>
         <file>content/HexEdit.qml</file>
         <file>content/MemoryDump.qml</file>
+        <file>content/SlotList.qml</file>
     </qresource>
 </RCC>

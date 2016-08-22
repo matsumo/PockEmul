@@ -26,7 +26,7 @@ Rectangle {
             "Close All":        function(){ sendCloseAll(); },
             "Fit to screen":    function(){ fit() ;},
             "Toggle Fullscreen":function(){ toggleFullscreen() ;},
-            "Logic Analyser":   function(){ logic.visible = true; /*analyser() ;*/},
+            "Logic Analyser":   function(){ /*logic.visible = true;*/ analyser() ;},
             "Help":             function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }
@@ -43,7 +43,7 @@ Rectangle {
             "Close All":        true,
             "Fit to screen":    true,
             "Toggle Fullscreen":!android,
-            "Logic Analyser":   true, //!android,
+            "Logic Analyser":   !android,
             "Help":             true,
             "Check for Updates":true,
             "Exit":             true
@@ -185,7 +185,7 @@ Rectangle {
         id: menuListView
         anchors.fill: parent
         model: menuModel
-        focus: menu.focus
+        focus: true
         spacing: 5
         delegate: menuDelegate
         highlight: Rectangle { color: "darkslategrey"; radius: 5 }

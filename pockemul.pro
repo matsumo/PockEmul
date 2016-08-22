@@ -1601,8 +1601,9 @@ OTHER_FILES *= \
     cloud/content/Download.qml \
     cloud/content/Logic.qml \
     cloud/DevEditor.qml \
-    cloud/HexEdit.qml \
-    cloud/MemoryDump.qml \
+    cloud/content/HexEdit.qml \
+    cloud/content/MemoryDump.qml \
+    cloud/content/SlotList.qml \
 
 
 

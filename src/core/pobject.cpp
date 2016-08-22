@@ -1557,9 +1557,9 @@ void CPObject::BuildContextMenu(QMenu * menu)
         menupocket = menu->addMenu(tr("Pocket"));
 			menupocket->addAction(tr("Turn On"),this,SLOT(slotPower()));
             menupocket->addAction(tr("Reset"),this,SLOT(slotResetNow()));
-            menupocket->addAction(tr("Reset (5s delay)"),this,SLOT(slotReset()));
-            menupocket->addAction(tr("Hard Reset (5s delay)"),this,SLOT(slotHardReset()));
-            menupocket->addAction(tr("Detach"),this,SLOT(slotDetach()));
+//            menupocket->addAction(tr("Reset (5s delay)"),this,SLOT(slotReset()));
+//            menupocket->addAction(tr("Hard Reset (5s delay)"),this,SLOT(slotHardReset()));
+//            menupocket->addAction(tr("Detach"),this,SLOT(slotDetach()));
             menupocket->addSeparator();
             menupocket->addAction(tr("Load ..."),this,SLOT(slotLoadSession()));
             menupocket->addAction(tr("Save ..."),this,SLOT(slotSaveSession()));
@@ -1635,10 +1635,13 @@ void CPObject::BuildContextMenu(QMenu * menu)
         connect(menuAudioVolume, SIGNAL(triggered(QAction*)), this, SLOT(slotAudioVolume(QAction*)));
     }
 #endif
+
+#ifndef Q_OS_ANDROID
     if (!pKEYB->Keys.isEmpty()) {
         menuconfig->addAction(tr("Keyboard"),this,SLOT(KeyList()));
         menu->addAction(tr("Keyboard Simulator"),this,SLOT(VirtualKeyboard()));
     }
+
 
     if (!SlotList.isEmpty()) menuconfig->addAction(tr("Dump Memory"),this,SLOT(Dump()));
 
@@ -1648,6 +1651,7 @@ void CPObject::BuildContextMenu(QMenu * menu)
     }
 
     menu->addAction(tr("New Post-it"),this,SLOT(Postit()));
+#endif
 
     if (overlays.count()>0) {
         QMenu *menuOverlay = menu->addMenu(tr("Overlays"));

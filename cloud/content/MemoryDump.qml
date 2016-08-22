@@ -3,20 +3,25 @@ import HexEditor 1.0
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.0
 
-Item {
-    id: root
+Rectangle {
+    //    id: root
 
 
-    width: 800
-    height: 600
+    //    width: 800
+    //    height: 600
 
-//    LoadData { id: load }
+    //    LoadData { id: load }
+    property alias slotListModel : slotList.slotListModel
+
+    color: "black"
 
     Action {
         id: loadFile
         onTriggered: {
-//            load.loadFile(file.text, hexModel)
-            main.loadSlot(0,0,hexModel);
+            //            load.loadFile(file.text, hexModel)
+            var _item = slotList.slotListModel.get(slotList.slotListView.currentIndex);
+            console.log(_item,_item.idpocket,_item.sIndex);
+            main.loadSlot(_item.idpocket,_item.sIndex,hexModel);
         }
     }
     Action {
@@ -33,64 +38,82 @@ Item {
         }
     }
 
-    ColumnLayout {
+    RowLayout {
         anchors.fill: parent
         anchors.margins: 10
-        RowLayout {
-            width: parent.width
-            TextField {
-                id: file
-                Layout.fillWidth: true
-                placeholderText: "file name"
-                onAccepted:  loadFile.trigger()
-            }
 
-            Button {
-                text: "load"
-                action: loadFile
-            }
+        SlotList {
+            id: slotList
+            Layout.minimumWidth: 400
+            Layout.maximumWidth: 400
         }
 
-        GroupBox {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            implicitWidth: 10
+        ColumnLayout {
 
-            HexEdit {
-                id: editor
-                anchors.fill: parent
-                hexModel: HexModel {id: hexModel}
-                visibleLines: 16
-            }
-        }
-
-        RowLayout {
-            CheckBox {
-                text: "InsertMode"
-                onClicked : {
-                    if (checked)
-                        hexModel.mode = HexModel.InsertMode
-                    else
-                        hexModel.mode = HexModel.BrowseMode
+            //        onHeightChanged: console.log("height column",height,parent.height);
+            RowLayout {
+                width: parent.width
+                TextField {
+                    id: file
+                    Layout.fillWidth: true
+                    placeholderText: "file name"
+                    onAccepted:  loadFile.trigger()
                 }
-            }
-            Label{ text: "search: " }
-            TextField {
-                id: pattern
-                placeholderText: "regular expression pattern"
-                Layout.fillWidth: true
-                onAccepted: {
-                    searchFirstAction.trigger()
+
+                TextButton {
+                    text: "load"
+                    onClicked: loadFile.trigger()
                 }
             }
 
-            Button {
-                text: "FindFirst"
-                action: searchFirstAction
+            RowLayout {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                implicitWidth: 10
+                implicitHeight: 10
+                //            onHeightChanged: console.log("height group",height,parent.height);
+
+
+
+
+                HexEdit {
+                    id: editor
+                    Layout.fillWidth: true
+                    Layout.fillHeight: true
+                    hexModel: HexModel {id: hexModel}
+                    visibleLines: 16
+                }
+
             }
-            Button {
-                text: "FindNext"
-                action: searchNextAction
+
+            RowLayout {
+                CheckBox {
+                    text: "InsertMode"
+                    onClicked : {
+                        if (checked)
+                            hexModel.mode = HexModel.InsertMode
+                        else
+                            hexModel.mode = HexModel.BrowseMode
+                    }
+                }
+                LineInput {
+                    id: pattern
+                    label: "search: "
+                    text: "regular expression pattern"
+                    Layout.fillWidth: true
+                    //                onAccepted: {
+                    //                    searchFirstAction.trigger()
+                    //                }
+                }
+
+                TextButton {
+                    text: "FindFirst"
+                    onClicked: searchFirstAction.trigger();
+                }
+                TextButton {
+                    text: "FindNext"
+                    onClicked: searchNextAction.trigger();
+                }
             }
         }
     }

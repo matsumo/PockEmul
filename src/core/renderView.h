@@ -39,6 +39,7 @@ public:
 
     Q_INVOKABLE void loadSlot(QString Id, int slotNumber, BinaryData* display);
 
+    void fillSlotList();
 public slots:
     Q_INVOKABLE void newpocketSlot();
     Q_INVOKABLE void newextSlot();

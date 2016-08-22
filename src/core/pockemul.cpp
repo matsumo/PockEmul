@@ -203,9 +203,6 @@ int main(int argc, char *argv[])
     QCoreApplication::setApplicationName("PockEmul");
     QCoreApplication::setApplicationVersion(POCKEMUL_VERSION);
 
-
-
-
 #ifdef Q_OS_MAC
     QDir tmpdir(QApplication::applicationDirPath());
     tmpdir.cdUp();
@@ -249,9 +246,6 @@ int main(int argc, char *argv[])
     tracker->setUserID(uniqueId.toString().mid(1,36));
     tracker->setLogLevel(GAnalytics::Debug);
 
-    tracker->startSession();
-    tracker->sendAppView("main");
-
     QString _te = Cloud::getValueFor("trackerEnabled","not defined");
     if (_te == "not defined") {
            QString _msg;
@@ -267,6 +261,9 @@ int main(int argc, char *argv[])
         trackerEnabled = (_te == "on") ? true : false;
         qWarning()<<"trackerEnabled"<<trackerEnabled;
     }
+
+    tracker->startSession();
+    tracker->sendAppView("main");
 
     vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
@@ -297,10 +294,6 @@ int main(int argc, char *argv[])
     mainwindow->setWindowTitle("PockEmul Online");
 #endif
 
-#ifndef EMSCRIPTEN
-    downloadManager = new DownloadManager();
-    downloadManager->targetDir = workDir+"documents";
-#endif
 
     soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
     hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
@@ -314,9 +307,8 @@ int main(int argc, char *argv[])
     mainwindow->zoomSlider->setValue(100);
 #endif
 
-
-
     mainwindow->openGlFlag=true;
+
 #ifdef Q_OS_ANDROID
     mainwindow->showFullScreen();
     mainwindow->menuBar()->hide();
@@ -337,6 +329,8 @@ int main(int argc, char *argv[])
 
     mainwindow->initCommandLine();
 
+
+    // Calculate pixel ratio for hiDPI screen
     float ratio = Cloud::getValueFor("hiResRatio","0").toFloat();
     if (0==ratio) {
         // max 8*50*ratio+2*v_pos = height
@@ -351,18 +345,22 @@ int main(int argc, char *argv[])
     }
 
 
-//qWarning()<<"okl";
     view = 0;
     if (mainwindow->openGlFlag) {
         qWarning()<<"opengl";
 
-
         mainwindow->menuBar()->setVisible(false);
-
-        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
+#if 0
         view = new CrenderView(mainwindow->centralwidget);
+        QVBoxLayout *windowLayout = new QVBoxLayout(mainwindow->centralwidget);
         windowLayout->addWidget(view);
         windowLayout->setMargin(0);
+#else
+        view = new CrenderView(mainwindow);
+        mainwindow->centralwidget = view;
+        mainwindow->setCentralWidget(view);
+#endif
+
     }
     else {
         qWarning()<<"no opengl";
@@ -378,6 +376,12 @@ int main(int argc, char *argv[])
         exitButton->show();
         qWarning()<<"end fullopengl";
     }
+
+
+#ifndef EMSCRIPTEN
+    downloadManager = new DownloadManager();
+    downloadManager->targetDir = workDir+"documents";
+#endif
 
     if (!mainwindow->loadPML.isEmpty()) {
         mainwindow->opensession(workDir+"sessions/"+mainwindow->loadPML);
@@ -424,20 +428,9 @@ void buildMenu() {
 
     int v_pos = 12;
     float ratio = Cloud::getValueFor("hiResRatio","0").toFloat();
-    if (0==ratio) {
-        // max 8*50*ratio+2*v_pos = height
-        float _minSize =  MIN(QGuiApplication::primaryScreen()->size().width(),QGuiApplication::primaryScreen()->size().height());
-        float _maxRatio = (_minSize - 2*v_pos)/400.0;
 
-        ratio = MIN(_maxRatio,
-                    MAX(1,QGuiApplication::primaryScreen()->physicalDotsPerInch()/150)
-                    );
-
-        Cloud::saveValueFor("hiResRatio",QString("%1").arg(ratio));
-    }
     int iconSize = 48*ratio;
     int v_inter = 50*ratio;
-
 
     qWarning()<<"ratio:"<<ratio<<"  iconSize:"<<iconSize<<"  inter:"<<v_inter;
 
@@ -628,7 +621,7 @@ void m_openURL(QUrl url) {
 void m_addShortcut(QString name, QString param) {
 #ifdef Q_OS_ANDROID
 
-    qWarning()<<"assShortcut";
+    qWarning()<<"addShortcut";
     QAndroidJniObject::callStaticMethod<void>("org/qtproject/pockemul/PockemulActivity",
                                               "addShortcut",
                                               "(Ljava/lang/String;Ljava/lang/String;)V",

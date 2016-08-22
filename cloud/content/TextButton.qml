@@ -7,6 +7,7 @@ Rectangle {
     property alias text: label.text
     property alias font: label.font
 
+
     property bool expand: true;
 
     signal clicked

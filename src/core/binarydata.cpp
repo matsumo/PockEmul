@@ -27,14 +27,20 @@ void BinaryData::load(const QByteArray& data)
 QHash<int, QByteArray> BinaryData::roleNames() const
 {
     QHash<int, QByteArray> roles;
-    roles[Line] = "lineData";
-    roles[Line+1]="lineChar";
+    roles[LineData] = "lineData";
+    roles[LineChar] = "lineChar";
     return roles;
 }
 
 QStringList BinaryData::containingRow(const QModelIndex &index,int role)
 {
-    int _index = role-Line;
+    int _index = 0;
+
+    switch (role) {
+    case LineData: _index = 0; break;
+    case LineChar: _index = 1; break;
+    default: return QStringList();
+    }
 
     if ((index == mLastIdx[_index]) && !mLastResult[_index].isEmpty())
         return mLastResult[_index];
@@ -46,7 +52,7 @@ QStringList BinaryData::containingRow(const QModelIndex &index,int role)
     int offset = index.row() * LineSize;
     const QByteArray& lineData = mData.mid(offset, LineSize);
 
-    if (_index==0) {
+    if (role == LineData) {
         QString addr = QString("%1").arg(offset, 6, 16, QChar('0')).toUpper();
         mLastResult[_index].append(addr);
         foreach (char c, lineData) {
@@ -54,7 +60,7 @@ QStringList BinaryData::containingRow(const QModelIndex &index,int role)
             mLastResult[_index].append(byte);
         }
     }
-    if (_index==1) {
+    if (role == LineChar) {
         foreach (char c, lineData) {
             QChar qc = QLatin1Char(c);
             if (qc.unicode() >= 127 || !qc.isPrint())
@@ -64,7 +70,7 @@ QStringList BinaryData::containingRow(const QModelIndex &index,int role)
         }
     }
 
-    qWarning()<<"role:"<<_index<<mLastResult[_index];
+//    qWarning()<<"role:"<<_index<<mLastResult[_index];
     return mLastResult[_index];
 }
 
@@ -277,7 +283,10 @@ void BinaryData::setAddress(const QString& addr)
     addressChange(mAddress);
     offsetChange();
 }
-
+void BinaryData::setStartAddress(const QString& addr)
+{
+    mStartAddress = addr.toInt(0, 16);
+}
 void BinaryData::setMode(Mode mode)
 {
     switch (mode) {

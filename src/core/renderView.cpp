@@ -35,7 +35,8 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
 
-    grabKeyboard();
+//    grabKeyboard();
+    setFocusPolicy(Qt::ClickFocus);
 
     if (mainwindow->dialoganalogic==0) mainwindow->dialoganalogic = new dialogAnalog(11,this);
 
@@ -402,17 +403,43 @@ void CrenderView::sendTrackingEvent(const QString &cat,
     tracker->startSending();
 }
 
+void CrenderView::fillSlotList(void)
+{
+
+    QMetaObject::invokeMethod(cloud.object, "clearSlotList");
+
+    for (int i = 0; i < listpPObject.size(); i++)
+    {
+        CPObject *_p = listpPObject.at(i);
+        for (int j = 0; j < _p->SlotList.count(); j++)
+        {
+            CSlot _s =_p->SlotList[j];
+            QMetaObject::invokeMethod(cloud.object, "addSlot",
+                                      Q_ARG(QVariant, QString("%1").arg((quint64)_p)),
+                                      Q_ARG(QVariant, _p->getName()),
+                                      Q_ARG(QVariant, _s.getLabel()),
+                                      Q_ARG(QVariant, _s.getSize()),
+                                      Q_ARG(QVariant, QString("0x%1").arg(_s.getAdr(),6,16,QChar('0'))),
+                                      Q_ARG(QVariant, QString("0x%1").arg(_s.getAdr()+_s.getSize()*1024,6,16,QChar('0'))),
+                                      Q_ARG(QVariant, j)
+                                      );
+        }
+    }
+}
+
+
 void CrenderView::loadSlot(QString Id, int slotNumber, BinaryData *display)
 {
-//    CPObject *pc = ((CPObject*)Id.toULongLong());
-    if (listpPObject.isEmpty()) return;
-    CPObject *pc = listpPObject[0];
+    CPObject *pc = ((CPObject*)Id.toULongLong());
+//    if (listpPObject.isEmpty()) return;
+//    CPObject *pc = listpPObject[0];
 
     int adr = pc->SlotList[slotNumber].getAdr();
     int size = pc->SlotList[slotNumber].getSize() * 1024;
     QByteArray *ba= new QByteArray((const char*)&(pc->mem[adr]),size);
     display->load(*ba);
-    display->setAddress(QString("%1").arg(adr,10,16,QChar('0')));
+//    display->setAddress(QString("%1").arg(adr,10,16,QChar('0')));
+//    display->setOffset(adr);
 }
 
 QString CrenderView::getReleaseNotes(QString _fn)
@@ -476,6 +503,8 @@ void CrenderView::newPObject(CPObject *pObject) {
                               Q_ARG(QVariant, pObject->height()),
                               Q_ARG(QVariant, pObject->getRotation())
                               );
+
+    fillSlotList();
 }
 
 void CrenderView::delPObject(CPObject *pObject)
@@ -484,6 +513,7 @@ void CrenderView::delPObject(CPObject *pObject)
     QMetaObject::invokeMethod(cloud.object, "delPocket",
                               Q_ARG(QVariant, QString("%1").arg((quint64)pObject))
                               );
+    fillSlotList();
 }
 
 void CrenderView::movePObject(CViewObject *pObject, QPointF pos)

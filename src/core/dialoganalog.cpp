@@ -55,7 +55,7 @@ QPixmap dialogAnalog::requestPixmap(const QString &id, QSize *size, const QSize 
     Q_UNUSED(size)
     Q_UNUSED(requestedSize)
 
-    qWarning()<<"size"<<*size<<requestedSize;
+//    qWarning()<<"size"<<*size<<requestedSize;
     if (requestedSize.isEmpty()) return QPixmap();
 
     size->setWidth(requestedSize.width());
