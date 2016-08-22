@@ -1921,6 +1921,8 @@ bool CPObject::LastDrawFinalImage()
 
         if (dialogkeylist)
         {
+            paintingImage.lock();
+
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
             case LEFTview: painter.begin(LeftImage); break;
@@ -1945,6 +1947,7 @@ bool CPObject::LastDrawFinalImage()
                 }
             }
             painter.end();
+            paintingImage.unlock();
         }
 
 
@@ -1973,6 +1976,8 @@ bool CPObject::LastDrawFinalImage()
         }
         //        qWarning()<<"msg"<<_msg;
         if (!_msg.isEmpty()) {
+            paintingImage.lock();
+
             switch(currentView) {
             case TOPview:  painter.begin(TopImage); break;
             case LEFTview: painter.begin(LeftImage); break;
@@ -1999,6 +2004,7 @@ bool CPObject::LastDrawFinalImage()
              }
             painter.drawText(QRect(QPoint(0,0),_size),Qt::AlignCenter,_msg);
             painter.end();
+            paintingImage.unlock();
         }
 
     }

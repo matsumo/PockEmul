@@ -30,11 +30,18 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
 
 //qWarning()<<"PocketImageProvider::requestImage:"<<id<<(_id[0].toULongLong());
     if (id.isEmpty()) return QImage();
+
+
     CPObject *pc = (CPObject*)(_id[0].toULongLong());
+
+    pc->paintingImage.lock();
 
     if ( (pc->flipping | pc->closed) && pc->AnimatedImage){
 //        qWarning()<<"image prov:"<<mainwindow->rawclk;
-       return *(pc->AnimatedImage);
+       providedImage = *(pc->AnimatedImage);
+
+       pc->paintingImage.unlock();
+       return providedImage;
     }
 
     View _v = pc->currentView;
@@ -47,5 +54,15 @@ QImage PocketImageProvider::requestImage(const QString& id, QSize* size, const Q
     if (_id[1]=="FRONT")    _v = FRONTview;
 
 //qWarning()<<"image prov:"<<mainwindow->rawclk;
-    return *(pc->getViewImage(_v));
+    QImage * _ret = pc->getViewImage(_v);
+    if (_ret) {
+        providedImage = *_ret;
+    }
+    else {
+        providedImage = QImage();
+    }
+
+    pc->paintingImage.unlock();
+
+    return providedImage;
 }

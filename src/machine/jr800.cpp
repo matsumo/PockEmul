@@ -64,7 +64,7 @@ Cjr800::Cjr800(CPObject *parent)	: CpcXXXX(parent)
     pTIMER		= new Ctimer(this);
     pKEYB->setMap("jr800.map");
 
-    ioFreq = 0;
+    ioFreq = 9600;
 }
 
 /**

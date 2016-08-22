@@ -73,6 +73,17 @@ void Clcdc_jr800::disp(void)
         }
     }
     redraw=false;
+
+    if (!(  jr800->hd44102[0]->updated ||
+            jr800->hd44102[1]->updated ||
+            jr800->hd44102[2]->updated ||
+            jr800->hd44102[3]->updated ||
+            jr800->hd44102[4]->updated ||
+            jr800->hd44102[5]->updated ||
+            jr800->hd44102[6]->updated ||
+            jr800->hd44102[7]->updated )) return;
+
+
     disp_symb();
 
     QPainter painter(LcdImage);

@@ -175,6 +175,8 @@ QImage * CViewObject::CreateImage(QSize size,QString fname,bool Hmirror,bool Vmi
 
 bool CViewObject::InitDisplay(void)
 {
+    paintingImage.lock();
+
     delete BackgroundImageBackup;
     delete TopImage;
     delete LeftImage;
@@ -212,6 +214,8 @@ bool CViewObject::InitDisplay(void)
         BackImageBackup = BackImage->copy();
     }
 
+    paintingImage.unlock();
+
     return(1);
 }
 
@@ -226,6 +230,9 @@ void CViewObject::PostFlip()
 }
 
 void CViewObject::InitView(View v) {
+
+    paintingImage.lock();
+
 //    switch (v) {
 //    case TOPview:   if (!TopFname.isEmpty()) TopImage = CreateImage(viewRect(TOPview)*internalImageRatio,TopFname); break;
 //    case LEFTview:  if (!LeftFname.isEmpty()) LeftImage = CreateImage(viewRect(LEFTview)*internalImageRatio,LeftFname); break;
@@ -247,6 +254,8 @@ void CViewObject::InitView(View v) {
     case BACKviewREV:
     case BACKview:  if (BackImage) { delete BackImage; BackImage =  new QImage(BackImageBackup);} break;
     }
+
+    paintingImage.unlock();
 
 }
 
@@ -344,6 +353,8 @@ void CViewObject::flip(Direction dir) {
 //    if (!ConList.isEmpty()) return;
     // Animate close
 
+    if (flipping) return;
+
     targetView = currentView;
     switch (currentView) {
     case FRONTview:
@@ -416,6 +427,10 @@ qWarning()<<"target"<<targetView;
         QSize _s = viewRect(currentView).expandedTo(viewRect(targetView));
         delete AnimatedImage;
         AnimatedImage = new QImage(_s*mainwindow->zoom,QImage::Format_ARGB32);
+
+//        QPainter painter(AnimatedImage);
+//        painter.drawImage(0,0,*getViewImage(currentView)); //->scaled(this->size(),Qt::IgnoreAspectRatio,Qt::FastTransformation));
+//        painter.end();
 
 //        emit updatedPObject(this);
 //        changeGeometry(this->posx(),this->posy(),
@@ -522,6 +537,8 @@ void CViewObject::renderAnimation()
 //        qWarning()<<"AnimatedImage"<<AnimatedImage;
         if (FinalImage)
         {
+            paintingImage.lock();
+
             QSize _size1 = viewRect(animationView1);
             QSize _size2 = viewRect(animationView2);
             int w = _size1.width() * mainwindow->zoom;
@@ -585,6 +602,9 @@ void CViewObject::renderAnimation()
             }
 
             painter.end();
+
+            paintingImage.unlock();
+
 //            qWarning()<<"animation - currentview="<<currentView;
             if (this->size() != AnimatedImage->size()) {
                 changeGeometry(this->posx(),this->posy(),AnimatedImage->width(),AnimatedImage->height());

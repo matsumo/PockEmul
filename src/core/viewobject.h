@@ -1,6 +1,9 @@
 #ifndef VIEWOBJECT_H
 #define VIEWOBJECT_H
 
+
+#include <QMutex>
+
 #if 1
 #define MAINCLASS QWidget
 #include <QWidget>
@@ -29,6 +32,8 @@ public:
     QString FrontFname,TopFname,LeftFname,RightFname,BottomFname,BackFname,BackGroundFname;
     QImage *FrontImage,*TopImage,*LeftImage,*RightImage,*BottomImage,*BackImage;
     QImage RightImageBackup,LeftImageBackup,TopImageBackup,BottomImageBackup,BackImageBackup;
+
+    QMutex paintingImage;
 
     QImage* FinalImage;
     float internalImageRatio;

@@ -68,7 +68,7 @@ Cfx8000g::Cfx8000g(CPObject *parent)	: CpcXXXX(parent)
 
     bus = new Cbus();
 
-    ioFreq = 0;
+    ioFreq = 9600;
 }
 
 Cfx8000g::~Cfx8000g() {
@@ -250,7 +250,9 @@ UINT8 Cfx8000g::out(UINT8 Port, UINT8 x, QString sender) {
     switch (Port) {
     case 0:
 //        qWarning()<<"HD44352 Ctrl_write:"<<(x);
-        pHD44352->control_write(x); pLCDC->updated = true; break;
+        pHD44352->control_write(x);
+        pLCDC->updated = true;
+        break;
     case 1:
 //        qWarning()<<"HD44352 Data_write:"<<QString("%1").arg(x,2,16,QChar('0'))<<QChar(x);
 //        if (pCPU->fp_log) fprintf(pCPU->fp_log,"\nLcdTransfert:%02X\n",x);
