@@ -367,7 +367,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     if ((currentView==BACKview) || (currentView==BACKviewREV)) {
         if ( KEY(0x241) && backdoorS1Open) {
             if (!pS1CONNECTOR->isLinked()) {
-                pKEYB->keyPressedList.remove(0x241);
+                pKEYB->removeKey(0x241);
                 FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                             QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                             FluidLauncher::PictureFlowType,QString(),
@@ -382,7 +382,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         }
         if (KEY(0x242) && backdoorS2Open) {
             if (!pS2CONNECTOR->isLinked()) {
-                pKEYB->keyPressedList.remove(0x242);
+                pKEYB->removeKey(0x242);
                 FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                             QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                             FluidLauncher::PictureFlowType,QString(),
@@ -397,7 +397,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         }
         if (KEY(0x243)) {
             // open S1 & close S2
-            pKEYB->keyPressedList.remove(0x243);
+            pKEYB->removeKey(0x243);
 
             animateBackDoorS1(true);
             animateBackDoorS2(false);
@@ -405,7 +405,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         }
         if (KEY(0x244)) {
             // close S1 & close S2
-            pKEYB->keyPressedList.remove(0x244);
+            pKEYB->removeKey(0x244);
 
             animateBackDoorS1(false);
             animateBackDoorS2(false);
@@ -413,7 +413,7 @@ void Cpc1360::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
         }
         if (KEY(0x245)) {
             // close S1 & open S2
-            pKEYB->keyPressedList.remove(0x245);
+            pKEYB->removeKey(0x245);
 
             animateBackDoorS1(false);
             animateBackDoorS2(true);

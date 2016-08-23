@@ -192,16 +192,16 @@ void Chp15c::ComputeKey(CPObject::KEYEVENT ke, int scancode, QMouseEvent *event)
 //    }
 
     if (ke==KEY_PRESSED) {
-        if (pKEYB->keyPressedList.count()==1)
+        if (pKEYB->keyPressedCount()==1)
             firstkey = scancode;
             nutcpu->nut_press_key (nutcpu->reg, getKey());
     }
     if (ke==KEY_RELEASED) {
-        if (pKEYB->keyPressedList.isEmpty()) {
+        if (pKEYB->keyPressedCount()==0) {
             nutcpu->nut_release_key(nutcpu->reg);
             firstkey = 0;
         }
-        if (pKEYB->keyPressedList.count()==1) {
+        if (pKEYB->keyPressedCount()==1) {
             nutcpu->nut_release_key(nutcpu->reg);
             firstkey = scancode;
             nutcpu->nut_press_key (nutcpu->reg, getKey());

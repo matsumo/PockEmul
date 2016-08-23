@@ -80,31 +80,74 @@ QString Ckeyb::getMap() {
     return fn_KeyMap;
 }
 
+QString Ckeyb::msgDelay(Ctimer *timer) {
+    QString _msg="";
+
+    keyPressing.lock();
+
+    QMapIterator<int, quint64> i(keyPressedList);
+    while (i.hasNext()) {
+        i.next();
+        // Check if this key is delayed
+        CKey _key = getKey(TOUPPER(i.key()));
+        int _delay = _key.delay;
+        if ( _delay > 0) {
+            // Check timing
+            quint64 _stick = i.value();
+            quint64 _elapsed = timer->msElapsed(_stick);
+            //                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
+
+            if (_elapsed <= ((quint64)_delay*1000)) {
+                // Draw text
+                if (!_msg.isEmpty()) _msg+= "\n";
+                _msg += QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
+            }
+        }
+    }
+
+    keyPressing.unlock();
+
+    return _msg;
+}
+
+
 
 bool Ckeyb::isKeyPressed() {
     bool _res = false;
+    keyPressing.lock();
     QMapIterator<int, quint64> i(keyPressedList);
     while (i.hasNext()) {
         i.next();
         if (isKey(i.key())) _res = true;
     }
-
+    keyPressing.unlock();
     return _res;
 }
 
 int Ckeyb::keyPressedCount() {
     int _res = 0;
+    keyPressing.lock();
     QMapIterator<int, quint64> i(keyPressedList);
     while (i.hasNext()) {
         i.next();
         if (isKey(i.key())) _res++;
     }
-
+    keyPressing.unlock();
     return _res;
+}
+
+bool Ckeyb::isKeyPressed(int _key) {
+    keyPressing.lock();
+    bool _ret = keyPressedList.contains(TOUPPER(_key));
+
+    keyPressing.unlock();
+
+    return _ret;
 }
 
 bool Ckeyb::isKey(int _key) {
 
+    keyPressing.lock();
     if ( keyPressedList.contains(TOUPPER(_key)) ) {
          // Check if this key is delayed
         int _delay = getKey(TOUPPER(_key)).delay;
@@ -113,26 +156,42 @@ bool Ckeyb::isKey(int _key) {
             quint64 _stick = keyPressedList[TOUPPER(_key)];
             if (pPC->pTIMER->msElapsed(_stick) >= (_delay*1000)) {
                 pPC->Refresh_Display = true;
+                keyPressing.unlock();
                 return true;
             }
             else {
                 pPC->Refresh_Display = true;
+                keyPressing.unlock();
                 return false;
             }
         }
         else {
+            keyPressing.unlock();
             return true;
         }
     }
+    keyPressing.unlock();
     return false;
 }
 
 void Ckeyb::insertKey(int _key)
 {
+    keyPressing.lock();
+
     keyPressedList.insert(_key,pPC->pTIMER ? pPC->pTIMER->state:0);
 
-    qWarning()<<"insert key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
+    keyPressing.unlock();
+
+//    qWarning()<<"insert key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
     emit keyPressed(_key);
+}
+
+void Ckeyb::removeKey(int _key) {
+    keyPressing.lock();
+
+    keyPressedList.remove(_key);
+
+    keyPressing.unlock();
 }
 
 int Ckeyb::KeyClick(QPoint pts)

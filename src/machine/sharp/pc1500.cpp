@@ -781,7 +781,7 @@ void Cpc15XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
     // Manage left connector click
     if (KEY(0x240) && (currentView==LEFTview)) {
-        pKEYB->keyPressedList.remove(0x240);
+        pKEYB->removeKey(0x240);
         FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                      QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                      FluidLauncher::PictureFlowType,QString(),
@@ -791,7 +791,7 @@ void Cpc15XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     if ((currentView==BACKview) &&
             KEY(0x241)) {
         if (!pMEMCONNECTOR->isLinked()) {
-            pKEYB->keyPressedList.remove(0x241);
+            pKEYB->removeKey(0x241);
             FluidLauncher *launcher = new FluidLauncher(mainwindow,
                                                         QStringList()<<P_RES(":/pockemul/configExt.xml"),
                                                         FluidLauncher::PictureFlowType,QString(),

@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>jr800</model>
 <Keyboard>
+    <KEY delay="3" description="RESET" height="30" left="77" masterscancode="0x00" modifier="" scancode="0x251" top="256" view="FRONT" width="60"/>
     <KEY description="F1" height="22" left="641" masterscancode="0x00" modifier="" scancode="0xf6" top="187" view="FRONT" width="32"/>
     <KEY description="F2" height="22" left="690" masterscancode="0x00" modifier="" scancode="0xf7" top="187" view="FRONT" width="32"/>
     <KEY description="F3" height="22" left="740" masterscancode="0x00" modifier="" scancode="0xf8" top="187" view="FRONT" width="32"/>

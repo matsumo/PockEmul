@@ -488,13 +488,13 @@ bool CPObject::run(void){
         qWarning()<<"K_OF";
         Vibrate();
         slotPower();
-        pKEYB->keyPressedList.remove(K_OF);
+        pKEYB->removeKey(K_OF);
     }
     if (off && (KEY(K_BRK) || KEY(K_POW_ON))) {
         Vibrate();
         emit sigTurnOn();
-        pKEYB->keyPressedList.remove(K_BRK);
-        pKEYB->keyPressedList.remove(K_POW_ON);
+        pKEYB->removeKey(K_BRK);
+        pKEYB->removeKey(K_POW_ON);
     }
     if (KEY(K_POW_OFF)) {
         Vibrate();
@@ -502,12 +502,12 @@ bool CPObject::run(void){
         mainwindow->saveAll = YES;
         emit sigTurnOff();
         mainwindow->saveAll = ASK;
-        pKEYB->keyPressedList.remove(K_POW_OFF);
+        pKEYB->removeKey(K_POW_OFF);
     }
     if (KEY(K_CLOSE)) {
         Vibrate();
         TurnCLOSE();
-        pKEYB->keyPressedList.remove(K_CLOSE);
+        pKEYB->removeKey(K_CLOSE);
     }
 
 //    if (fullscreenMode) {
@@ -1150,7 +1150,7 @@ void CPObject::mouseReleaseEvent(QMouseEvent *event)
     if (pKEYB) {
         QPoint pts(event->x() , event->y());
         int _releasedKey = TOUPPER(pKEYB->KeyClick(pts));
-        pKEYB->keyPressedList.remove(_releasedKey); //pKEYB->lastMousePressedKey);
+        pKEYB->removeKey(_releasedKey); //pKEYB->lastMousePressedKey);
         ComputeKey(KEY_RELEASED,_releasedKey,event);
         pKEYB->lastMousePressedKey = 0;
         pKEYB->LastKey = 0;
@@ -1380,7 +1380,7 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
     int _key = mapKey(event);
-    pKEYB->keyPressedList.remove(_key);
+    pKEYB->removeKey(_key);
     ComputeKey(KEY_RELEASED,_key);
 
     pKEYB->LastKey = 0;
@@ -1487,7 +1487,7 @@ void CPObject::keyPressEvent (QKeyEvent * event )
 
     if ( (pKEYB->LastKey>0) && (pKEYB->getKey(pKEYB->LastKey).ScanCode != 0)) {
         // Add th key to Key pressed buffer
-        if (!pKEYB->keyPressedList.contains(pKEYB->LastKey)) {
+        if (!pKEYB->isKeyPressed(pKEYB->LastKey)) {
             pKEYB->insertKey(pKEYB->LastKey);
             Refresh_Display = true;
         }
@@ -1954,26 +1954,8 @@ bool CPObject::LastDrawFinalImage()
         // DRAW DELAYED KEYS
         // Fetch keypressedList and for each delayed keys
         // show message
-        QString _msg ="";
-        QMapIterator<int, quint64> i(pKEYB->keyPressedList);
-        while (i.hasNext()) {
-            i.next();
-            // Check if this key is delayed
-            CKey _key = pKEYB->getKey(TOUPPER(i.key()));
-            int _delay = _key.delay;
-            if ( _delay > 0) {
-                // Check timing
-                quint64 _stick = i.value();
-                quint64 _elapsed = pTIMER->msElapsed(_stick);
-                //                qWarning()<<"delay"<<_delay<<"stick"<<_stick<<"elapsed"<<_elapsed;
+        QString _msg = pKEYB->msgDelay(pTIMER);
 
-                if (_elapsed <= ((quint64)_delay*1000)) {
-                    // Draw text
-                    if (!_msg.isEmpty()) _msg+= "\n";
-                    _msg = QString(_key.Description+" in %1s").arg(_delay - _elapsed/1000);
-                }
-            }
-        }
         //        qWarning()<<"msg"<<_msg;
         if (!_msg.isEmpty()) {
             paintingImage.lock();

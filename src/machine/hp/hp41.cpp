@@ -323,10 +323,10 @@ void Chp41::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     if (KEY(0x242)) _slot = 2;
     if (KEY(0x243)) _slot = 3;
     qWarning()<<"ComputKey:"<<_slot;
-    pKEYB->keyPressedList.remove(0x240);
-    pKEYB->keyPressedList.remove(0x241);
-    pKEYB->keyPressedList.remove(0x242);
-    pKEYB->keyPressedList.remove(0x243);
+    pKEYB->removeKey(0x240);
+    pKEYB->removeKey(0x241);
+    pKEYB->removeKey(0x242);
+    pKEYB->removeKey(0x243);
     if (_slot == -1) return;
     int _response = 0;
     if (slot[_slot].used)

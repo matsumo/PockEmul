@@ -541,7 +541,7 @@ void Cti59::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     int _slot = -1;
     if (KEY(0x240)) {
         _slot = 1;
-        pKEYB->keyPressedList.remove(0x240);
+        pKEYB->removeKey(0x240);
         if (getPower()) {
             ask(this, "Please turn off the pocket before unplugging the cartridge.",1);
             return;

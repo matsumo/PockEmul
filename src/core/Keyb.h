@@ -309,6 +309,8 @@ K_0,K_1,K_2,K_3,K_4,K_5,K_6,K_7,K_8,K_9
 class CPObject;
 class CpcXXXX;
 class Ckeyb;
+class Ctimer;
+
 #include "viewobject.h"
 
 class CKey{
@@ -369,7 +371,7 @@ public:
 	int		CheckOff();
 
 	QString KeyString(QPoint pts);
-    int	KeyClick(QPoint pts);
+    int     KeyClick(QPoint pts);
 	void	keyscan(void);
 	BYTE	*scandef;
 
@@ -379,7 +381,6 @@ public:
     bool	Kon;
     int	    LastKey,lastMousePressedKey;
 
-    QMap<int,quint64> keyPressedList;
 
 	QList<CKey>	Keys;
     CKey &getKey(int code);
@@ -401,10 +402,14 @@ public:
     bool isKey(int _key);
     bool isKeyPressed();
     int keyPressedCount();
+
+    bool isKeyPressed(int _key);
     void insertKey(int _key);
+    void removeKey(int _key);
 
     void setMap(QString _map, BYTE *scan=0);
     QString getMap();
+    QString msgDelay(Ctimer *timer);
 signals:
     void keyPressed(int);
 
@@ -413,6 +418,8 @@ protected:
 
 private:
     QString fn_KeyMap;
+    QMap<int,quint64> keyPressedList;
+    QMutex keyPressing;
 };
 
 
