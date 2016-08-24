@@ -91,6 +91,7 @@ void Clcdc_jr800::disp(void)
 
     // DRIVER 0
     if (jr800->hd44102[0]->updated) {
+        jr800->hd44102[0]->updated = false;
         _toRefresh = true;
         for (int x = 0; x<46;x++) {
             for (int y=0; y<4;y++) {
@@ -104,11 +105,12 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[0]->updated = false;
+
     }
 
     // DRIVER 1
     if (jr800->hd44102[1]->updated) {
+        jr800->hd44102[1]->updated = false;
         _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
@@ -126,11 +128,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[1]->updated = false;
     }
 
     // DRIVER 2
     if (jr800->hd44102[2]->updated) {
+        jr800->hd44102[2]->updated = false;
         _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
@@ -148,11 +150,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[2]->updated = false;
     }
 
     // DRIVER 3
     if (jr800->hd44102[3]->updated) {
+        jr800->hd44102[3]->updated = false;
         _toRefresh = true;
         for (int x = 4; x< 50;x++)
         {
@@ -170,11 +172,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-       jr800->hd44102[3]->updated = false;
     }
 
     // DRIVER 4
     if (jr800->hd44102[4]->updated) {
+        jr800->hd44102[4]->updated = false;
         _toRefresh = true;
         for (int x = 4; x<50;x++) {
             for (int y=0; y<4;y++) {
@@ -188,11 +190,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[4]->updated = false;
     }
 
     // DRIVER 5
     if (jr800->hd44102[5]->updated) {
+        jr800->hd44102[5]->updated = false;
         _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
@@ -210,11 +212,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[5]->updated = false;
     }
 
     // DRIVER 6
     if (jr800->hd44102[6]->updated) {
+        jr800->hd44102[6]->updated = false;
         _toRefresh = true;
         for (int x = 0; x< 50;x++)
         {
@@ -232,11 +234,11 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[6]->updated = false;
     }
 
     // DRIVER 7
     if (jr800->hd44102[7]->updated) {
+        jr800->hd44102[7]->updated = false;
         _toRefresh = true;
         for (int x = 0; x< 46;x++)
         {
@@ -254,7 +256,6 @@ void Clcdc_jr800::disp(void)
                 }
             }
         }
-        jr800->hd44102[7]->updated = false;
     }
 
     if (_toRefresh) Refresh = true;

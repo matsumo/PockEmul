@@ -1379,7 +1379,7 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//(QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
-    int _key = mapKey(event);
+    int _key = TOUPPER(mapKey(event));
     pKEYB->removeKey(_key);
     ComputeKey(KEY_RELEASED,_key);
 
