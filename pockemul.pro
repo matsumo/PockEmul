@@ -15,6 +15,8 @@ CONFIG += qt \
 
 CONFIG += rtti
 
+#CONFIG += qtquickcompiler
+
 QT += \
     printsupport \
     core \

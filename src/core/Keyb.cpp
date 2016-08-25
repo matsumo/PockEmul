@@ -116,11 +116,13 @@ bool Ckeyb::isKeyPressed() {
     bool _res = false;
     keyPressing.lock();
     QMapIterator<int, quint64> i(keyPressedList);
+    keyPressing.unlock();
+
     while (i.hasNext()) {
         i.next();
         if (isKey(i.key())) _res = true;
     }
-    keyPressing.unlock();
+
     return _res;
 }
 
@@ -128,11 +130,12 @@ int Ckeyb::keyPressedCount() {
     int _res = 0;
     keyPressing.lock();
     QMapIterator<int, quint64> i(keyPressedList);
+    keyPressing.unlock();
+
     while (i.hasNext()) {
         i.next();
         if (isKey(i.key())) _res++;
     }
-    keyPressing.unlock();
     return _res;
 }
 
