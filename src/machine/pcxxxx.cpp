@@ -120,6 +120,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 
         if (pLCDC && pLCDC->rect.isValid())
         {
+            pLCDC->lock.lock();
             if (pLCDC->symbRect.isValid()) {
                 //painter.setRenderHint(QPainter::Antialiasing);
                 x = pLCDC->symbRect.x() * internalImageRatio;
@@ -134,7 +135,7 @@ bool CpcXXXX::UpdateFinalImage(void)
             z	= (int) (pLCDC->rect.width() * internalImageRatio);
             t	= (int) (pLCDC->rect.height() * internalImageRatio);
             painter.drawImage(QRect(x,y,z,t),pLCDC->LcdImage->scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
-
+            pLCDC->lock.unlock();
         }
 
         if (pLCDC) pLCDC->Refresh = false;
