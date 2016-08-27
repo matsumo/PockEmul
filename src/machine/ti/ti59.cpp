@@ -627,6 +627,7 @@ bool Cti59::UpdateFinalImage(void) {
     CpcXXXX::UpdateFinalImage();
 
     if (drawCard && renderedCard) {
+        paintingImage.lock();
         QPainter painter;
         painter.begin(FinalImage);
 
@@ -637,6 +638,7 @@ bool Cti59::UpdateFinalImage(void) {
                                 Qt::IgnoreAspectRatio,Qt::SmoothTransformation);
 
         painter.end();
+        paintingImage.unlock();
     }
 
     return true;

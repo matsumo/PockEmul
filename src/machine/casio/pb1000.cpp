@@ -92,6 +92,7 @@ Cpb1000::~Cpb1000() {
 bool Cpb1000::UpdateFinalImage(void) {
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180� rotation
     QPainter painter;
     painter.begin(FinalImage);
@@ -102,7 +103,7 @@ bool Cpb1000::UpdateFinalImage(void) {
                                                   56*internalImageRatio,23*internalImageRatio).mirrored(off,false));
 
     painter.end();
-
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }
@@ -327,7 +328,7 @@ void Cpb1000::paintEvent(QPaintEvent *event)
         QPainter painter;
 
         UpdateFinalImage();
-
+        paintingImage.lock();
         painter.begin(this);
 
         if (FinalImage)
@@ -360,6 +361,7 @@ void Cpb1000::paintEvent(QPaintEvent *event)
             }
         }
         painter.end();
+        paintingImage.unlock();
     }
     else {
         CPObject::paintEvent(event);

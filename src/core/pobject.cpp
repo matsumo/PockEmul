@@ -1861,6 +1861,7 @@ bool CPObject::InitDisplay(void)
 {
     CViewObject::InitDisplay();
 
+    paintingImage.lock();
     delete BackgroundImage;
     BackgroundImage = new QImage(*BackgroundImageBackup);
     delete FinalImage;
@@ -1869,6 +1870,7 @@ bool CPObject::InitDisplay(void)
     mask = QPixmap(BackGroundFname).scaled(getDX()*mainwindow->zoom,getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
+    paintingImage.unlock();
 	return(1);
 }
 
@@ -1880,10 +1882,13 @@ bool CPObject::InitDisplay(void)
 bool CPObject::UpdateFinalImage(void)
 {
 
+
     if ( BackgroundImage)
     {
+        paintingImage.lock();
         delete FinalImage;
         FinalImage = new QImage(*BackgroundImage);
+        paintingImage.unlock();
 
         InitView(currentView);
     }
@@ -1905,6 +1910,7 @@ bool CPObject::LastDrawFinalImage()
 
         // Draw Overlay
         if ( (currentOverlay >=0) && (currentOverlay < overlays.count()) ) {
+            paintingImage.lock();
             painter.begin(FinalImage);
 
             int x = overlays[currentOverlay]->overlayRect.x() * internalImageRatio;
@@ -1914,6 +1920,7 @@ bool CPObject::LastDrawFinalImage()
             painter.drawImage(QRect(x,y,z,t),
                               overlays[currentOverlay]->overlayImage.scaled(z,t,Qt::IgnoreAspectRatio,TRANSFORM));
             painter.end();
+            paintingImage.unlock();
         }
 
 

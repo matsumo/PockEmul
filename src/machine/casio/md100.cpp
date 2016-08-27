@@ -59,6 +59,7 @@ bool Cmd100::UpdateFinalImage(void) {
     CPObject::UpdateFinalImage();
 
 
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -68,7 +69,7 @@ bool Cmd100::UpdateFinalImage(void) {
     }
 
     painter.end();
-
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }

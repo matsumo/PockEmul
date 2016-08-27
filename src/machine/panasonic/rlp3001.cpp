@@ -436,7 +436,7 @@ bool Crlp3001::LoadSession_File(QXmlStreamReader *xmlIn)
 
 bool Crlp3001::InitDisplay(void)
 {
-
+    paintingImage.lock();
     //    CPObject::InitDisplay();
         slotChanged = true;
 
@@ -454,6 +454,7 @@ bool Crlp3001::InitDisplay(void)
                                                                  getDY()*mainwindow->zoom);
         setMask(mask.mask());
 
+        paintingImage.unlock();
         return true;
 }
 

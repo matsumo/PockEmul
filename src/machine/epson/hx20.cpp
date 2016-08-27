@@ -1035,6 +1035,7 @@ bool Chx20::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
     QPainter painter;
 
     if ((currentView == RIGHTview) ) {
@@ -1080,6 +1081,7 @@ bool Chx20::UpdateFinalImage(void) {
         painter.end();
     }
 
+    paintingImage.unlock();
 
     emit updatedPObject(this);
     return true;

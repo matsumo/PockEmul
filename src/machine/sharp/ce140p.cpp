@@ -168,6 +168,7 @@ void Cce140p::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 bool Cce140p::UpdateFinalImage(void) {
     Cce515p::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180  rotation
     QPainter painter;
 
@@ -180,6 +181,7 @@ bool Cce140p::UpdateFinalImage(void) {
 
     painter.end();
 
+    paintingImage.unlock();
     Refresh_Display = false;
     emit updatedPObject(this);
     return true;

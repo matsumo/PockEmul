@@ -122,6 +122,8 @@ bool Cpc2500::UpdateFinalImage(void) {
     assert(pce515p->paperWidget != 0);
 
     CpcXXXX::UpdateFinalImage();
+
+    paintingImage.lock();
     QPainter painter;
 
     painter.begin(FinalImage);
@@ -152,6 +154,7 @@ bool Cpc2500::UpdateFinalImage(void) {
     }
     painter.end();
 
+    paintingImage.unlock();
     return true;
 }
 

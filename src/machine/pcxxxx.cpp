@@ -114,6 +114,7 @@ bool CpcXXXX::UpdateFinalImage(void)
 
     if ( (BackgroundImage) )
     {
+        paintingImage.lock();
         painter.begin(FinalImage);
 //        painter.drawImage(QPoint(0,0),*BackgroundImage);
 
@@ -139,6 +140,7 @@ bool CpcXXXX::UpdateFinalImage(void)
         if (pLCDC) pLCDC->Refresh = false;
 
         painter.end();
+        paintingImage.unlock();
 
     }
 

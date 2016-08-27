@@ -83,6 +83,7 @@ void Clcdc_jr800::disp(void)
             jr800->hd44102[6]->updated ||
             jr800->hd44102[7]->updated )) return;
 
+    lock.lock();
 
     disp_symb();
 
@@ -261,6 +262,8 @@ void Clcdc_jr800::disp(void)
     if (_toRefresh) Refresh = true;
 
     painter.end();
+
+    lock.unlock();
 }
 
 

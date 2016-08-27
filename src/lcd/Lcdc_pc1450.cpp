@@ -119,6 +119,8 @@ void Clcdc_pc1450::disp(void)
     int ind;
     WORD adr;
 
+    lock.lock();
+
     Refresh = false;
     disp_symb();
     QPainter painter(LcdImage);
@@ -144,6 +146,8 @@ void Clcdc_pc1450::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

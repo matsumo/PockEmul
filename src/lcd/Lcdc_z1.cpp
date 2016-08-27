@@ -48,6 +48,7 @@ void Clcdc_z1::disp(void)
         if (!z1->pHD66108->updated) return;
     }
 
+    lock.lock();
     redraw = false;
     z1->pHD66108->updated = false;
 
@@ -70,6 +71,8 @@ void Clcdc_z1::disp(void)
         }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

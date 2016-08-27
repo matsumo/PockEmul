@@ -272,6 +272,7 @@ bool Crlp1002::Set_Connector(Cbus *_bus) {
 
 void Crlp1002::Rotate()
 {
+    paintingImage.lock();
     rotate = ! rotate;
 
     delete BackgroundImageBackup;
@@ -288,6 +289,7 @@ void Crlp1002::Rotate()
                                                              getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
+    paintingImage.unlock();
     update();
 
         // adapt SNAP connector

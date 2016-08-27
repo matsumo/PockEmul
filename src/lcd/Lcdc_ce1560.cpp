@@ -65,6 +65,8 @@ void Clcdc_ce1560::disp(void)
               ((Cce1560 *)pPC)->ps6b0108[2]->updated)) return;
     }
 
+    lock.lock();
+
     redraw = false;
     ((Cce1560 *)pPC)->ps6b0108[0]->updated = false;
     ((Cce1560 *)pPC)->ps6b0108[1]->updated = false;
@@ -114,6 +116,8 @@ void Clcdc_ce1560::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

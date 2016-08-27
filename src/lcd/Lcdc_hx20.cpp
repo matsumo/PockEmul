@@ -45,6 +45,9 @@ void Clcdc_hx20::disp(void)
             hx20->upd16434[i]->updated=true;
         }
     }
+
+    lock.lock();
+
     redraw=false;
     disp_symb();
 
@@ -82,6 +85,8 @@ void Clcdc_hx20::disp(void)
 //    Refresh = _toRefresh;
 
     painter.end();
+
+    lock.unlock();
 }
 
 

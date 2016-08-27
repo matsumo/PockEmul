@@ -223,6 +223,7 @@ void Clcdc_hp15c::disp(void)
     else {
         if (!updated) return;
     }
+
     redraw = false;
 
 //    voyager_display_update(nutcpu->reg,info);
@@ -238,6 +239,8 @@ void Clcdc_hp15c::disp(void)
     if (!changed) {
         return;
     }
+
+    lock.lock();
 
     updated = false;
     Refresh= true;
@@ -289,6 +292,8 @@ void Clcdc_hp15c::disp(void)
 
     Refresh = true;
     painter.end();
+
+    lock.unlock();
 }
 
 void Clcdc_hp15c::voyager_op_display_off (nut_reg_t *nut_reg, int opcode)

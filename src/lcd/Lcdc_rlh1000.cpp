@@ -58,6 +58,7 @@ void Clcdc_rlh1000::disp(void)
     Refresh = false;
     if (!On) return;
 
+    lock.lock();
     //	disp_symb();
 
     QPainter painter(LcdImage);
@@ -81,5 +82,8 @@ void Clcdc_rlh1000::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
+
 }
 

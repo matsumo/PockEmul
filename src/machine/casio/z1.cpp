@@ -198,6 +198,7 @@ bool Cz1::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180° rotation
     QPainter painter;
     painter.begin(FinalImage);
@@ -208,7 +209,7 @@ bool Cz1::UpdateFinalImage(void) {
                                                   11*internalImageRatio,60*internalImageRatio).mirrored(false,!off));
 
     painter.end();
-
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }

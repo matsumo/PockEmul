@@ -518,7 +518,7 @@ void Crlp9001::addModule(QString item,CPObject *pPC)
 
 bool Crlp9001::InitDisplay(void)
 {
-
+    paintingImage.lock();
 //    CPObject::InitDisplay();
     slotChanged = true;
 
@@ -536,6 +536,7 @@ bool Crlp9001::InitDisplay(void)
                                                              getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
+    paintingImage.unlock();
     return true;
 }
 
@@ -548,6 +549,7 @@ bool Crlp9001::UpdateFinalImage(void) {
     // on TOP view, draw installed modules
     if ((model == RLP9006) && (currentView == FRONTview) && slotChanged) {
         InitDisplay();
+        paintingImage.lock();
         slotChanged = false;
         QPainter painter;
         painter.begin(FinalImage);
@@ -565,6 +567,7 @@ bool Crlp9001::UpdateFinalImage(void) {
             }
         }
         painter.end();
+        paintingImage.unlock();
     }
 
     emit updatedPObject(this);

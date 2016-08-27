@@ -72,6 +72,7 @@ bool Cpb2000::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180� rotation
     QPainter painter;
 
@@ -90,6 +91,7 @@ bool Cpb2000::UpdateFinalImage(void) {
 
     }
 
+    paintingImage.unlock();
     return true;
 }
 

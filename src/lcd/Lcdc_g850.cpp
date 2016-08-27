@@ -135,6 +135,9 @@ void Clcdc_g850::disp(void)
     if (!redraw) {
         if (!g850->pSED1560->updated) return;
     }
+
+    lock.lock();
+
     redraw = false;
     g850->pSED1560->updated = false;
 
@@ -166,6 +169,8 @@ void Clcdc_g850::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

@@ -505,8 +505,8 @@ qWarning()<<"target"<<targetView;
 
      connect(animation1,SIGNAL(valueChanged(QVariant)),this,SLOT(renderAnimation()));
      connect(animation1,SIGNAL(finished()),this,SLOT(endAnimation()));
-     renderAnimation();
      flipping = true;
+     renderAnimation();
      group->start();
 
 }

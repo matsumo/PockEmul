@@ -130,6 +130,7 @@ Cce125::~Cce125() {
 bool Cce125::UpdateFinalImage(void) {
     Cprinter::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180� rotation
     QPainter painter;
     painter.begin(FinalImage);
@@ -142,6 +143,7 @@ bool Cce125::UpdateFinalImage(void) {
 
     painter.end();
 
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }

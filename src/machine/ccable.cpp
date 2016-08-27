@@ -114,6 +114,7 @@ bool Ccable::Adapt(Cconnector *A, Cconnector *B)
 
 bool Ccable::UpdateFinalImage(void) {
     CPObject::UpdateFinalImage();
+    paintingImage.lock();
     clearMask();
 
     // Draw switch by 180° rotation
@@ -160,6 +161,6 @@ bool Ccable::UpdateFinalImage(void) {
 
     painter.end();
 
-
+    paintingImage.unlock();
     return true;
 }

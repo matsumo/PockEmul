@@ -46,6 +46,9 @@ void Clcdc_pc2001::disp(void)
             pc2001->upd16434[i]->updated=true;
         }
     }
+
+    lock.lock();
+
     redraw=false;
     disp_symb();
 
@@ -80,6 +83,9 @@ void Clcdc_pc2001::disp(void)
 //    Refresh = _toRefresh;
 
     painter.end();
+
+    lock.unlock();
+
 }
 
 

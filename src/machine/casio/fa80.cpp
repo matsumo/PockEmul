@@ -55,6 +55,7 @@ Cfa80::~Cfa80() {
 bool Cfa80::UpdateFinalImage(void) {
     CPObject::UpdateFinalImage();
 
+    paintingImage.lock();
 
     QPainter painter;
     painter.begin(FinalImage);
@@ -65,6 +66,7 @@ bool Cfa80::UpdateFinalImage(void) {
 //    }
 
     painter.end();
+    paintingImage.unlock();
     Refresh_Display = true;
     return true;
 

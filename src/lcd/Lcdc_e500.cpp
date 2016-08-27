@@ -98,6 +98,8 @@ void Clcdc_e500::disp(void)
               ((Ce500 *)pPC)->pHD61102_2->updated)) return;
     }
 
+    lock.lock();
+
     redraw = false;
     ((Ce500 *)pPC)->pHD61102_1->updated = false;
     ((Ce500 *)pPC)->pHD61102_2->updated = false;
@@ -200,5 +202,7 @@ void Clcdc_e500::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 

@@ -170,6 +170,7 @@ bool Cfp100::UpdateFinalImage(void) {
 
 //    Cce515p::UpdateFinalImage();
 
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -211,6 +212,7 @@ bool Cfp100::UpdateFinalImage(void) {
 #endif
     painter.end();
 
+    paintingImage.unlock();
     return true;
 }
 

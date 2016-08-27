@@ -458,6 +458,7 @@ void Crlp1005::BuildContextMenu(QMenu * menu) {
 
 void Crlp1005::Rotate()
 {
+    paintingImage.lock();
     rotate = ! rotate;
 
     delete BackgroundImageBackup;
@@ -474,7 +475,7 @@ void Crlp1005::Rotate()
                                                              getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
-
+    paintingImage.unlock();
     update();
 
         // adapt SNAP connector

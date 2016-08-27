@@ -102,6 +102,7 @@ bool Ccemem::InitDisplay(void)
 
 //    CPObject::InitDisplay();
 
+    paintingImage.lock();
     delete BackgroundImageBackup;
     BackgroundImageBackup = CreateImage(QSize(getDX(), getDY()),BackGroundFname,false,false,90);
     delete BackgroundImage;
@@ -116,6 +117,7 @@ bool Ccemem::InitDisplay(void)
                                                              getDY()*mainwindow->zoom);
     setMask(mask.mask());
 
+    paintingImage.unlock();
     return true;
 }
 

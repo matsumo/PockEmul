@@ -162,6 +162,8 @@ void Clcdc_pc1211::disp()
 {
     int _curPos=-1;
 
+    lock.lock();
+
     disp_symb();
 
 //    qWarning()<< "DISP:"<<pPC1211->pBASIC->outputBuffer<<"**";
@@ -239,6 +241,7 @@ void Clcdc_pc1211::disp()
 
     }
 
+    lock.unlock();
 }
 
 void Clcdc_pc1211::DrawChar(quint8 c, int x)

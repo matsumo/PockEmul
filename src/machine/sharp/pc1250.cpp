@@ -83,6 +83,7 @@ bool Cpc1250::UpdateFinalImage(void)
     CpcXXXX::UpdateFinalImage();
 
     // Draw
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
     painter.scale(internalImageRatio,internalImageRatio);
@@ -101,6 +102,7 @@ bool Cpc1250::UpdateFinalImage(void)
 
     painter.end();
 
+    paintingImage.unlock();
     return true;
 }
 

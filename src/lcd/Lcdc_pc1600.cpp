@@ -99,6 +99,9 @@ void Clcdc_pc1600::disp(void)
         if (!(((Cpc1600 *)pPC)->pHD61102_1->updated ||
               ((Cpc1600 *)pPC)->pHD61102_2->updated)) return;
     }
+
+    lock.lock();
+
     redraw = false;
     ((Cpc1600 *)pPC)->pHD61102_1->updated = false;
     ((Cpc1600 *)pPC)->pHD61102_2->updated = false;
@@ -179,4 +182,7 @@ void Clcdc_pc1600::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
+
 }

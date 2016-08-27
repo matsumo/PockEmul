@@ -98,6 +98,8 @@ void Clcdc_pc1500::disp(void)
     Refresh = false;
     if (!On) return;
 
+    lock.lock();
+
     disp_symb();
 
     QPainter painter(LcdImage);
@@ -145,4 +147,6 @@ void Clcdc_pc1500::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }

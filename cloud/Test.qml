@@ -51,20 +51,20 @@ Rectangle {
     id: renderArea
 
     signal sendWarning(string test)
-    signal sendKeyPressed(string id,int key, int mod,int scancode)
-    signal sendKeyReleased(string id,int key, int mod,int scancode)
-    signal sendContextMenu(string id,int x,int y)
+//    signal sendKeyPressed(string id,int key, int mod,int scancode)
+//    signal sendKeyReleased(string id,int key, int mod,int scancode)
+//    signal sendContextMenu(string id,int x,int y)
     signal sendDisableKeyboard(string id)
     signal sendEnableKeyboard(string id)
-    signal sendClick(string pocketid,int touchid,int x,int y)
-    signal sendUnClick(string pocketid,int touchid,int x,int y)
-    signal sendDblClick(string id,int x,int y)
+//    signal sendClick(string pocketid,int touchid,int x,int y)
+//    signal sendUnClick(string pocketid,int touchid,int x,int y)
+//    signal sendDblClick(string id,int x,int y)
     signal sendMovePocket(string id,int x,int y)
     signal sendMoveAllPocket(int x,int y)
     signal setZoom(int x,int y,real z)
     signal sendRotPocket(string id,int rotation)
-    signal maximize(string id)
-    signal minimize(string id)
+//    signal maximize(string id)
+//    signal minimize(string id)
     signal fit();
     signal toggleFullscreen();
     signal analyser();
@@ -216,7 +216,7 @@ Rectangle {
                         event.accepted = true;
                     }
                     else {
-                        sendKeyPressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                        main.keypressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                         event.accepted = true;
                     }
 
@@ -228,7 +228,7 @@ Rectangle {
 //                    else
                     {
                         console.log("release key:",event.key);
-                        sendKeyReleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
+                        main.keyreleased(idpocket,event.key,event.modifiers,event.nativeScanCode);
                         event.accepted = true;
                     }
                 }
@@ -308,7 +308,7 @@ Rectangle {
                                 var tx = touchPoints[i].x;
                                 var ty = touchPoints[i].y;
 //                                console.warn("Multitouch pressed touch", touchPoints[i].pointId, "at", tx, ",", ty)
-                                sendClick(idpocket,touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y);
+                                main.click(idpocket,touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y);
                             }
                         }
                     }
@@ -352,7 +352,7 @@ Rectangle {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
 //                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty)
-                            sendUnClick(idpocket,touchPoints[i].pointId,tx,ty);
+                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
 
                    }
@@ -362,7 +362,7 @@ Rectangle {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
 //                            console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty)
-                            sendUnClick(idpocket,touchPoints[i].pointId,tx,ty);
+                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
                     }
                     onTouchUpdated: {
@@ -419,7 +419,7 @@ Rectangle {
                     //                                    isdrag=true;
                     //                                }
 
-                    //                                sendClick(idpocket,0,mouse.x,mouse.y);
+                    //                                main.click(idpocket,0,mouse.x,mouse.y);
                     //                            }
                     //                            mouse.accepted=true;
                     //                        }
@@ -435,7 +435,7 @@ Rectangle {
                     onDoubleClicked: {
                         isdrag = false;
                         if (main.keyAt(idpocket,mouse.x,mouse.y)) {
-                            sendDblClick(idpocket,mouseX,mouseY);
+                            main.dblclick(idpocket,mouseX,mouseY);
                         }
                         else {
                             contextMenu.idpocket = idpocket;
@@ -774,14 +774,14 @@ Rectangle {
         console.log("option:",option);
         if (option==="Zoom In") {
             // zoom
-            maximize(idpocket);
+            main.maximize(idpocket);
         }
         else if (option==="Zoom Out") {
             // zoom
-            minimize(idpocket);
+            main.minimize(idpocket);
         }
         else if (option==="Menu") {
-            sendContextMenu(idpocket,mousePt.x,mousePt.y);
+            main.contextMenu(idpocket,mousePt.x,mousePt.y);
         }
         else if (option==="Pinch") {
             var ind = getIndex(idpocket);

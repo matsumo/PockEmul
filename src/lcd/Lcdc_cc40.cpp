@@ -94,6 +94,9 @@ void Clcdc_cc40::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+
+    lock.lock();
+
     redraw = false;
     Refresh = true;
     info = pHD44780->getInfo();
@@ -119,6 +122,8 @@ void Clcdc_cc40::disp(void)
 
 
     updated = false;
+
+    lock.unlock();
 
 }
 

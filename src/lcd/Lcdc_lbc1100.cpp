@@ -47,6 +47,9 @@ void Clcdc_lbc1100::disp(void)
             lbc1100->upd16434[i]->updated=true;
         }
     }
+
+    lock.lock();
+
     redraw=false;
 
 
@@ -80,6 +83,8 @@ void Clcdc_lbc1100::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

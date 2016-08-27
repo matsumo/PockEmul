@@ -51,6 +51,7 @@ void Clcdc_fx8000g::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+    lock.lock();
     redraw = false;
     updated = false;
     info = ((Cfx8000g*) pPC)->pHD44352->getInfo();
@@ -116,6 +117,8 @@ void Clcdc_fx8000g::disp(void)
     Refresh = true;
 
     painter.end();
+
+    lock.unlock();
 }
 
 

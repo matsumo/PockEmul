@@ -194,6 +194,7 @@ bool Crlp2001::UpdateFinalImage(void) {
 
 //    CPObject::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180 rotation
     QPainter painter;
 
@@ -203,7 +204,7 @@ bool Crlp2001::UpdateFinalImage(void) {
     painter.drawImage(200,20,screen->scaled(screen->size()*1.5));
 
     painter.end();
-
+    paintingImage.unlock();
 //    Refresh_Display = true;
     emit updatedPObject(this);
     return true;

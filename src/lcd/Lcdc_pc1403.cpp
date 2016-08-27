@@ -104,6 +104,8 @@ void Clcdc_pc1403::disp(void)
     int ind;
     WORD adr;
 
+    lock.lock();
+
     Refresh = false;
 
     disp_symb();
@@ -243,6 +245,9 @@ void Clcdc_pc1403::disp(void)
 
 
     painter.end();
+
+    lock.unlock();
+
 }
 
 

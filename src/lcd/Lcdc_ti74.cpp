@@ -166,6 +166,7 @@ void Clcdc_ti74::disp(void)
     if (!updated) return;
     if (!ready) return;
     if (!pHD44780 ) return;
+    lock.lock();
     Refresh = true;
     info = pHD44780->getInfo();
 //    disp_symb();
@@ -191,6 +192,7 @@ void Clcdc_ti74::disp(void)
 
     updated = 0;
 
+    lock.unlock();
 }
 
 
@@ -202,6 +204,7 @@ void Clcdc_ti95::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+    lock.lock();
     redraw = false;
     Refresh = true;
     info = pHD44780->getInfo();
@@ -216,4 +219,5 @@ void Clcdc_ti95::disp(void)
 
     updated = 0;
 
+    lock.unlock();
 }

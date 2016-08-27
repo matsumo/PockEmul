@@ -34,6 +34,9 @@ void Clcdc_ti57::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+
+    lock.lock();
+
     redraw = false;
     updated = false;
     Refresh= true;
@@ -101,6 +104,8 @@ void Clcdc_ti57::disp(void)
     //On=true;
     Refresh = true;
     painter.end();
+
+    lock.unlock();
 }
 
 void Clcdc_ti57::blink() {

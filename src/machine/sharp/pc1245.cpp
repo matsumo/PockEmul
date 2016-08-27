@@ -35,6 +35,7 @@ bool Cpc1245::UpdateFinalImage(void)
     CpcXXXX::UpdateFinalImage();
 
     // Draw
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -48,7 +49,7 @@ bool Cpc1245::UpdateFinalImage(void)
     }
 
     painter.end();
-
+    paintingImage.unlock();
     return true;
 }
 

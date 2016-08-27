@@ -203,6 +203,7 @@ void Cce152::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 bool Cce152::UpdateFinalImage(void) {
     CPObject::UpdateFinalImage();
 
+    paintingImage.lock();
     QPainter painter;
 
 
@@ -251,6 +252,7 @@ bool Cce152::UpdateFinalImage(void) {
 
 
     Refresh_Display = true;
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }

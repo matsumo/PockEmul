@@ -576,6 +576,8 @@ if (!General_Info.LcdOn) return;
     if (!pPC->pLCDC->updated) return;
     pPC->pLCDC->updated = false;
     if (!pPC->pLCDC->LcdImage) return;
+
+    pPC->pLCDC->lock.lock();
     QPainter painter;
     painter.begin(pPC->pLCDC->LcdImage);
     painter.setCompositionMode(QPainter::CompositionMode_Source);
@@ -616,6 +618,7 @@ if (!General_Info.LcdOn) return;
 //    if (General_Info.Curseur && cursorTimer.elapsed()>1000) cursorTimer.restart();
     painter.end();
 
+    pPC->pLCDC->lock.unlock();
 
     pPC->pLCDC->Refresh = true;
     Refresh_Display = true;

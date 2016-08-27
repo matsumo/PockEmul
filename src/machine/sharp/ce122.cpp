@@ -131,6 +131,7 @@ void Cce122::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 bool Cce122::UpdateFinalImage(void) {
     Cprinter::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180� rotation
     QPainter painter;
 
@@ -141,6 +142,7 @@ bool Cce122::UpdateFinalImage(void) {
     painter.drawImage(203,257,BackgroundImageBackup->copy(203,257,22,30).mirrored(false,printSwitch));
     painter.end();
 
+    paintingImage.unlock();
     Refresh_Display = true;
     emit updatedPObject(this);
     return true;

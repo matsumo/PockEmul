@@ -26,6 +26,7 @@ bool Cprinter::UpdateFinalImage(void) {
 
     CPObject::UpdateFinalImage();
 
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -49,6 +50,7 @@ bool Cprinter::UpdateFinalImage(void) {
                       );
 
     painter.end();
+    paintingImage.unlock();
 
 //    emit updatedPObject(this);
 

@@ -1623,10 +1623,14 @@ void MainWindowPockemul::resizeEvent		( QResizeEvent * event ){
 
 void MainWindowPockemul::resizeSlot( QSize size , CPObject *pObject)
 {
+    pObject->paintingImage.lock();
+
     delete(pObject->FinalImage);
 
     int l = menuBar()->height();
     pObject->FinalImage = new QImage(size-QSize(0,l),QImage::Format_RGB32);
+
+    pObject->paintingImage.unlock();
 }
 
 void MainWindowPockemul::DestroySlot( CPObject *pObject)

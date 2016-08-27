@@ -59,8 +59,7 @@ void ServeurTcp ::lecture()
 void ServeurTcp::send_greeting(QTextStream *sock)
 {
     *sock << endl << "Welcome to the PockEmul v1.0 TELNET interface." << endl;
-//    *sock << "Use decimal, C hex (0x2a) or Asm hex (14h) for input." << endl;
-//    *sock << "Type 'help' for a list of supported commands." << endl<< endl;
+    *sock << "Type 'help' for a list of supported commands." << endl<< endl;
     *sock << "PockEmul>" << flush;
 
 }

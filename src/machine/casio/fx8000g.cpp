@@ -126,6 +126,7 @@ bool Cfx8000g::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
     // Draw switch by 180 rotation
     QPainter painter;
     painter.begin(FinalImage);
@@ -140,6 +141,7 @@ bool Cfx8000g::UpdateFinalImage(void) {
                                                          55*internalImageRatio,24*internalImageRatio).mirrored(hdFlag,false));
     painter.end();
 
+    paintingImage.unlock();
     return true;
 }
 

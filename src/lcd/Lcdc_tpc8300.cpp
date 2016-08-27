@@ -50,6 +50,8 @@ void Clcdc_tpc8300::disp(void)
             tpc8300->upd16434[i]->updated=true;
         }
     }
+
+    lock.lock();
     redraw=false;
 
     disp_symb();
@@ -86,5 +88,7 @@ void Clcdc_tpc8300::disp(void)
 
 
     painter.end();
+
+    lock.unlock();
 }
 

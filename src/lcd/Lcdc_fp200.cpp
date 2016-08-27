@@ -367,6 +367,9 @@ void Clcdc_fp200::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+
+    lock.lock();
+
     redraw = false;
     updated = false;
 
@@ -391,6 +394,8 @@ void Clcdc_fp200::disp(void)
     }
 
     painter.end();
+
+    lock.unlock();
 }
 
 

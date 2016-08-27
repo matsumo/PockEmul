@@ -478,6 +478,7 @@ bool Chp82143A::UpdateFinalImage(void) {
 
     Cprinter::UpdateFinalImage();
 
+    paintingImage.lock();
     QPainter painter;
     painter.begin(FinalImage);
 
@@ -524,6 +525,7 @@ bool Chp82143A::UpdateFinalImage(void) {
 //    painter.drawImage(350,15,QImage("://hp41/hp82143a_cover.png"));
 
     painter.end();
+    paintingImage.unlock();
     emit updatedPObject(this);
     return true;
 }

@@ -61,6 +61,7 @@ Cce140f::~Cce140f() {
 bool Cce140f::UpdateFinalImage(void) {
     CPObject::UpdateFinalImage();
 // Busy led
+    paintingImage.lock();
     if (busyLed) {
         QPainter painter;
         painter.begin(FinalImage);
@@ -71,6 +72,7 @@ bool Cce140f::UpdateFinalImage(void) {
         painter.end();
     }
 
+    paintingImage.unlock();
     return true;
 
 }

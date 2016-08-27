@@ -72,6 +72,8 @@ void Clcdc_hp41::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+
+    lock.lock();
     redraw = false;
 
     updated = false;
@@ -112,6 +114,8 @@ void Clcdc_hp41::disp(void)
 
     Refresh = true;
     painter.end();
+
+    lock.unlock();
 }
 
 

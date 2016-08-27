@@ -416,11 +416,14 @@ void Cce1560::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 #define RATIO (251.0/502.0)
 bool Cce1560::UpdateFinalImage(void) {
 
+    paintingImage.lock();
     delete FinalImage;
     FinalImage = new QImage(*BackgroundImageBackup);
     pLCDC->Refresh=true;
+    paintingImage.unlock();
     CpcXXXX::UpdateFinalImage();
 
+    paintingImage.lock();
 
     QPainter painter;
     painter.begin(FinalImage);
@@ -464,6 +467,9 @@ bool Cce1560::UpdateFinalImage(void) {
 
     painter.drawImage(-getDX()/2+60*internalImageRatio/2,0,screenImage);
     painter.end();
+
+    paintingImage.unlock();
+
     mask = QPixmap::fromImage(*FinalImage).scaled(getDX()*mainwindow->zoom,
                                                   getDY()*mainwindow->zoom);
 

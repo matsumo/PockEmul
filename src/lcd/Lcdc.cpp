@@ -209,6 +209,8 @@ void Clcdc::SetDirtyBuf(WORD index)
 
 void Clcdc::InitDisplay()
 {
+    lock.lock();
+
     if (!hiRes) {
         pixelSize = 1;
         pixelGap = 0;
@@ -224,6 +226,7 @@ void Clcdc::InitDisplay()
         SymbImage	= CViewObject::CreateImage(internalSymbSize * SymbRatio,SymbFname);
     }
 
+    lock.unlock();
 }
 
 

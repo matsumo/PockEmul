@@ -31,6 +31,9 @@ void Clcdc_pb1000::disp(void)
     if (!updated) return;
     if (!ready) return;
     if (!((Cpb1000 *)pPC)->pHD44352 ) return;
+
+    lock.lock();
+
     Refresh = true;
     info = ((Cpb1000*) pPC)->pHD44352->getInfo();
 //    disp_symb();
@@ -75,5 +78,7 @@ void Clcdc_pb1000::disp(void)
 
     updated = 0;
     painter.end();
+
+    lock.unlock();
 }
 
