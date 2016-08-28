@@ -133,9 +133,9 @@ void Cce153::mouseDoubleClickEvent(QMouseEvent *event) {
     QRect kbdZone(118*_zoom,170*_zoom,636*_zoom,382*_zoom);
 
     if (kbdZone.contains(pts)) {
-        QMouseEvent *e=new QMouseEvent(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-        QApplication::sendEvent(this, e);
-        delete e;
+        QMouseEvent _e(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
+        QApplication::sendEvent(this, &_e);
+
         return;
     }
     else {

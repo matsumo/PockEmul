@@ -57,26 +57,9 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 //    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
     cloud.object = (QObject*) rootObject();
 
-//    QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), this, SLOT(warning(QString)));
-//    QObject::connect(cloud.object, SIGNAL(sendKeyPressed(QString,int,int,int)), this, SLOT(keypressed(QString,int,int,int)));
-//    QObject::connect(cloud.object, SIGNAL(sendKeyReleased(QString,int,int,int)), this, SLOT(keyreleased(QString,int,int,int)));
-//    QObject::connect(cloud.object, SIGNAL(sendContextMenu(QString,int,int)), this, SLOT(contextMenu(QString,int,int)));
-    QObject::connect(cloud.object, SIGNAL(sendDisableKeyboard(QString)), this, SLOT(disableKeyboard(QString)));
-    QObject::connect(cloud.object, SIGNAL(sendEnableKeyboard(QString)), this, SLOT(enableKeyboard(QString)));
-//    QObject::connect(cloud.object, SIGNAL(sendClick(QString,int,int,int)), this, SLOT(click(QString,int,int,int)));
-//    QObject::connect(cloud.object, SIGNAL(sendUnClick(QString,int,int,int)), this, SLOT(unclick(QString,int,int,int)));
-//    QObject::connect(cloud.object, SIGNAL(sendDblClick(QString,int,int)), this, SLOT(dblclick(QString,int,int)));
-    QObject::connect(cloud.object, SIGNAL(sendMovePocket(QString,int,int)), this, SLOT(movepocket(QString,int,int)));
-    QObject::connect(cloud.object, SIGNAL(sendMoveAllPocket(int,int)), this, SLOT(moveallpocket(int,int)));
-    QObject::connect(cloud.object, SIGNAL(setZoom(int,int,double)), this, SLOT(setzoom(int,int,double)));
-    QObject::connect(cloud.object, SIGNAL(sendRotPocket(QString,int)), this, SLOT(rotpocket(QString,int)));
-//    QObject::connect(cloud.object, SIGNAL(maximize(QString)), this, SLOT(maximize(QString)));
-//    QObject::connect(cloud.object, SIGNAL(minimize(QString)), this, SLOT(minimize(QString)));
-    QObject::connect(cloud.object, SIGNAL(fit()), this, SLOT(fit()));
     QObject::connect(cloud.object, SIGNAL(toggleFullscreen()), mainwindow, SLOT(toggleFullscreen()));
     QObject::connect(cloud.object, SIGNAL(analyser()), mainwindow, SLOT(Analogic()));
 
-    QObject::connect(cloud.object, SIGNAL(sendLoadPocket(QString)), this, SLOT(LoadPocket(QString)));
     QObject::connect(cloud.object, SIGNAL(sendNewPocket()), this, SLOT(newpocketSlot()));
     QObject::connect(cloud.object, SIGNAL(sendNewExt()), this, SLOT(newextSlot()));
     QObject::connect(cloud.object, SIGNAL(sendDev()),mainwindow,SLOT(IDE()));
@@ -95,7 +78,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 
 //    connect(mainwindow->dialoganalogic,SIGNAL(refreshLogic()),this,SLOT(refreshLogic()));
 }
-void CrenderView::LoadPocket(QString id) {
+void CrenderView::loadPocket(QString id) {
     CPObject *_pc=0;
     int _result = 0;
 
@@ -167,11 +150,11 @@ void CrenderView::keypressed(QString Id, int k,int m,int scan)
     Q_UNUSED(scan)
 
     CPObject *pc = ((CPObject*)Id.toULongLong());
-//    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
+    qWarning()<<"CrenderView::keypressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
-    QKeyEvent *e=new QKeyEvent( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
-    QApplication::sendEvent(pc, e);
-    delete e;
+    QKeyEvent _e( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
+    QApplication::sendEvent(pc, &_e);
+
 }
 void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 {
@@ -180,9 +163,9 @@ void CrenderView::keyreleased(QString Id, int k,int m,int scan)
     CPObject *pc = ((CPObject*)Id.toULongLong());
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
-    QKeyEvent *e=new QKeyEvent( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
-    QApplication::sendEvent(pc, e);
-    delete e;
+    QKeyEvent _e( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
+    QApplication::sendEvent(pc, &_e);
+
 }
 void CrenderView::movepocket(QString Id, int x, int y)
 {
@@ -263,13 +246,13 @@ void CrenderView::contextMenu(QString Id, int x, int y)
 //    qWarning()<<"contextMenu"<<x<<y;
     CPObject *pc = ((CPObject*)Id.toULongLong());
     QPoint pts(x , y);
-    QContextMenuEvent *cme = new QContextMenuEvent(
+    QContextMenuEvent cme(
                 QContextMenuEvent::Mouse,
                 pts,
                 pc->mapToGlobal(pts));
     //contextMenuEvent(cme);
-    QApplication::sendEvent(pc,cme);
-    delete cme;
+    QApplication::sendEvent(pc,&cme);
+
 
 }
 
@@ -302,6 +285,8 @@ void CrenderView::click(QString Id, int touchId,int x, int y)
 
 void CrenderView::unclick(QString Id, int touchId,int x, int y)
 {
+    Q_UNUSED(x)
+    Q_UNUSED(y)
 //    qWarning()<<"unclick:"<<Id<<x<<y;
 
 
@@ -387,6 +372,10 @@ QString CrenderView::getRes(QString _fn)
 
 void CrenderView::changeGeo(int x, int y, int w, int h)
 {
+    Q_UNUSED(x)
+    Q_UNUSED(y)
+    Q_UNUSED(w)
+    Q_UNUSED(h)
 //    if (mainwindow->windowide==0) mainwindow->windowide = new WindowIDE(this);
 //    mainwindow->windowide->show();
 

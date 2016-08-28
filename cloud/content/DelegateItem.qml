@@ -42,7 +42,7 @@ Item {
                     pobjectsmodel.reload();
                 }
                 else {
-                    sendLoadPocket(model.idpocket);
+                    main.loadPocket(model.idpocket);
                     showRoom.visible=false;
                     showRoom.connectorsearch = '';
                     launched();

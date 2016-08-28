@@ -1476,9 +1476,11 @@ int CPObject::mapKey(QKeyEvent * event) {
 void CPObject::keyPressEvent (QKeyEvent * event )
 {
 
+
 //    if (event->isAutoRepeat()) return;
     if (pKEYB->Keys.isEmpty()) return;	// if no Keyboard then return;
 
+    qWarning()<<"keyPressEvent"<<event->key();
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
@@ -1493,10 +1495,10 @@ void CPObject::keyPressEvent (QKeyEvent * event )
         }
         ComputeKey(KEY_PRESSED,pKEYB->LastKey);
     }
-    else {
-        event->ignore();
-        QWidget::keyPressEvent(event);
-    }
+//    else {
+//        event->ignore();
+//        QWidget::keyPressEvent(event);
+//    }
 }
 
 /**

@@ -54,24 +54,24 @@ Rectangle {
 //    signal sendKeyPressed(string id,int key, int mod,int scancode)
 //    signal sendKeyReleased(string id,int key, int mod,int scancode)
 //    signal sendContextMenu(string id,int x,int y)
-    signal sendDisableKeyboard(string id)
-    signal sendEnableKeyboard(string id)
+//    signal sendDisableKeyboard(string id)
+//    signal sendEnableKeyboard(string id)
 //    signal sendClick(string pocketid,int touchid,int x,int y)
 //    signal sendUnClick(string pocketid,int touchid,int x,int y)
 //    signal sendDblClick(string id,int x,int y)
-    signal sendMovePocket(string id,int x,int y)
-    signal sendMoveAllPocket(int x,int y)
-    signal setZoom(int x,int y,real z)
-    signal sendRotPocket(string id,int rotation)
+//    signal sendMovePocket(string id,int x,int y)
+//    signal sendMoveAllPocket(int x,int y)
+//    signal setZoom(int x,int y,real z)
+//    signal sendRotPocket(string id,int rotation)
 //    signal maximize(string id)
 //    signal minimize(string id)
-    signal fit();
+//    signal fit();
     signal toggleFullscreen();
     signal analyser();
     signal sendDownloadCancel();
 
     signal sendNewPocket();
-    signal sendLoadPocket(string id);
+//    signal sendLoadPocket(string id);
     signal sendNewExt();
     signal sendDev();
     signal sendSave();
@@ -126,7 +126,7 @@ Rectangle {
             pinch.maximumScale: 10
             onPinchUpdated: {
                 console.warn("pinch master");
-                setZoom(pinch.center.x,pinch.center.y,pinch.scale/pinch.previousScale);
+                main.setzoom(pinch.center.x,pinch.center.y,pinch.scale/pinch.previousScale);
                 previousScale=pinch.scale;
             }
 
@@ -137,7 +137,7 @@ Rectangle {
                 onWheel: {
                     //                console.log("wheel:"+wheel.x+wheel.y+wheel.angleDelta);
                     console.warn("wheel");
-                    setZoom(wheel.x,wheel.y,wheel.angleDelta.y/12>0 ? 1.1 : .9);
+                    main.setzoom(wheel.x,wheel.y,wheel.angleDelta.y/12>0 ? 1.1 : .9);
                 }
                 onPressed: {
                     //                console.warn("pressed MASTER");
@@ -152,13 +152,13 @@ Rectangle {
                 onDoubleClicked: {
                     for (var i=0; i<repeater.count;i++) {
                         repeater.itemAt(i).touchEnabled = true;
-                        sendEnableKeyboard(renderArea.xmlThumbModel.get(i).idpocket);
+                        main.enableKeyboard(renderArea.xmlThumbModel.get(i).idpocket);
                     }
                 }
                 onPositionChanged: {
 
                     if (isdrag) {
-                        sendMoveAllPocket(mouseX-prevX,mouseY-prevY);
+                        main.moveallpocket(mouseX-prevX,mouseY-prevY);
                         //                    console.warn("move MASTER:",mouseX-prevX,mouseY-prevY);
                         prevX = mouseX;
                         prevY = mouseY;
@@ -193,7 +193,7 @@ Rectangle {
                 visible: _visible
                 rotation: _rotation
 
-                onRotationChanged: sendRotPocket(idpocket,rotation)
+                onRotationChanged: main.rotpocket(idpocket,rotation)
 
                 function showContextMenu(_id,_x,_y) {
                     contextMenu.idpocket = _id;
@@ -216,8 +216,9 @@ Rectangle {
                         event.accepted = true;
                     }
                     else {
-                        main.keypressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
                         event.accepted = true;
+                        main.keypressed(idpocket,event.key,event.modifiers,event.nativeScanCode);
+
                     }
 
                 }
@@ -256,7 +257,7 @@ Rectangle {
 //                    onPinchStarted: previousScale=1;
 //                    onPinchUpdated: {
 //                        console.warn("pinch local");
-//                        setZoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
+//                        main.setzoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
 //                        previousScale=pinch.scale;
 //                    }
 //                    onRotationChanged:  photoFrame.rotation = pinch.rotation
@@ -381,7 +382,7 @@ Rectangle {
                             var dy = y - previousPosition.y;
 //                            previousPosition = Qt.point(touchPoints[0].x, touchPoints[0].y);
 //                            console.warn("Multitouch updated:", touchPoints[0].pointId, "at", x,",",y,"d=",dx, ",", dy)
-                            sendMovePocket(idpocket,photoFrame.x+dx,photoFrame.y+dy);
+                            main.movepocket(idpocket,photoFrame.x+dx,photoFrame.y+dy);
                         }
                     }
 
@@ -786,7 +787,7 @@ Rectangle {
         else if (option==="Pinch") {
             var ind = getIndex(idpocket);
 //            console.log("pinch:",idpocket,ind);
-            sendDisableKeyboard(idpocket);
+            main.disableKeyboard(idpocket);
             repeater.itemAt(ind).touchEnabled = !repeater.itemAt(ind).touchEnabled;
         }
 

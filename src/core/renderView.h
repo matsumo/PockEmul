@@ -75,7 +75,7 @@ public slots:
     void cloudClose();
     void rotPObject(CViewObject *pObject,int angle);
 
-    void LoadPocket(QString id);
+    void loadPocket(QString id);
     Q_INVOKABLE void disableKeyboard(QString Id);
     Q_INVOKABLE void enableKeyboard(QString Id);
 

@@ -5,7 +5,7 @@
     <KEY description="*" height="25" left="404" masterscancode="0x00" modifier="" scancode="0x2a" top="150" width="28"/>
     <KEY description="/" height="25" left="403" masterscancode="0x00" modifier="" scancode="0x2f" top="103" width="28"/>
     <KEY description="+" height="25" left="406" masterscancode="0x00" modifier="" scancode="0x2b" top="239" width="28"/>
-    <KEY description="On/Off" height="25" left="34" masterscancode="0x00" modifier="" scancode="0xb2" top="236" width="32"/>
+    <KEY delay="2" description="ON" height="25" left="34" masterscancode="0x00" modifier="" scancode="0xb2" top="236" width="32"/>
     <KEY description="A" height="25" left="34" masterscancode="0x00" modifier="" scancode="0x41" top="101" width="28"/>
     <KEY description="B" height="25" left="75" masterscancode="0x00" modifier="" scancode="0x42" top="101" width="28"/>
     <KEY description="C" height="25" left="118" masterscancode="0x00" modifier="" scancode="0x43" top="100" width="28"/>

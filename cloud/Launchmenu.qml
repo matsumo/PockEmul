@@ -24,7 +24,7 @@ Rectangle {
             "Cloud":            function(){ nav.hide(); cloudShow(); },
             "Bookcase":         function(){ sendBook(); },
             "Close All":        function(){ sendCloseAll(); },
-            "Fit to screen":    function(){ fit() ;},
+            "Fit to screen":    function(){ main.fit() ;},
             "Toggle Fullscreen":function(){ toggleFullscreen() ;},
             "Logic Analyser":   function(){ /*logic.visible = true;*/ analyser() ;},
             "Help":             function(){ about.visible = true; },

@@ -33,11 +33,11 @@ bool CpaperWidget::event(QEvent *event)
             const QPoint pos = (static_cast<QTapAndHoldGesture *>(tap))->position().toPoint();
             //             qWarning()<< (static_cast<QTapAndHoldGesture *>(tap))->timeout()<<pos<<tap->gestureType()<<tap->state();
             if (tap->state() == Qt::GestureStarted) {
-                QContextMenuEvent *cme = new QContextMenuEvent(
+                QContextMenuEvent cme(
                             QContextMenuEvent::Mouse,
                             pos,
                             (pos));
-                QApplication::sendEvent(this,cme);
+                QApplication::sendEvent(this,&cme);
 
                 setCursor(Qt::ArrowCursor);
 
