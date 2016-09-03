@@ -482,7 +482,7 @@ void MainWindowPockemul::initObjectTable() {
 }
 
 
-CPObject * MainWindowPockemul::InitApp(int idPC )
+CPObject * MainWindowPockemul::InitApp(int idPC , QString _cfg)
 {
     CPObject *pPC=0;
 
@@ -593,15 +593,15 @@ CPObject * MainWindowPockemul::InitApp(int idPC )
     case CE152  : pPC = new Cce152;		pPC->setName("CE-152");break;
     case CE127R : pPC = new Cce127r;	pPC->setName("CE-127R");break;
 
-    case CE201M : pPC = new Cce2xxx(0,CE201M); pPC->setName("CE-201M");break;
-    case CE202M : pPC = new Cce2xxx(0,CE202M); pPC->setName("CE-202M");break;
-    case CE203M : pPC = new Cce2xxx(0,CE203M); pPC->setName("CE-203M");break;
-    case CE210M : pPC = new Cce2xxx(0,CE210M); pPC->setName("CE-210M");break;
-    case CE211M : pPC = new Cce2xxx(0,CE211M); pPC->setName("CE-211M");break;
-    case CE212M : pPC = new Cce2xxx(0,CE212M); pPC->setName("CE-212M");break;
-    case CE2H16M: pPC = new Cce2xxx(0,CE2H16M);pPC->setName("CE-2H16M");break;
-    case CE2H32M: pPC = new Cce2xxx(0,CE2H32M);pPC->setName("CE-2H32M");break;
-    case CE2H64M: pPC = new Cce2xxx(0,CE2H64M);pPC->setName("CE-2H64M");break;
+    case CE201M : pPC = new Cce2xxx(0,CE201M,_cfg); pPC->setName("CE-201M");break;
+    case CE202M : pPC = new Cce2xxx(0,CE202M,_cfg); pPC->setName("CE-202M");break;
+    case CE203M : pPC = new Cce2xxx(0,CE203M,_cfg); pPC->setName("CE-203M");break;
+    case CE210M : pPC = new Cce2xxx(0,CE210M,_cfg); pPC->setName("CE-210M");break;
+    case CE211M : pPC = new Cce2xxx(0,CE211M,_cfg); pPC->setName("CE-211M");break;
+    case CE212M : pPC = new Cce2xxx(0,CE212M,_cfg); pPC->setName("CE-212M");break;
+    case CE2H16M: pPC = new Cce2xxx(0,CE2H16M,_cfg);pPC->setName("CE-2H16M");break;
+    case CE2H32M: pPC = new Cce2xxx(0,CE2H32M,_cfg);pPC->setName("CE-2H32M");break;
+    case CE2H64M: pPC = new Cce2xxx(0,CE2H64M,_cfg);pPC->setName("CE-2H64M");break;
 
     case SerialConsole: pPC = new Csio;	pPC->setName("Serial Console");break;
     case CABLE11Pins: pPC = new Ccable;	pPC->setName("11Pins Cable");break;
@@ -860,12 +860,12 @@ CPObject * MainWindowPockemul::LoadPocket(QString Id) {
     return LoadPocket(objtable.value(Id));
 }
 
-CPObject * MainWindowPockemul::LoadPocket(int result) {
-    qWarning()<<"Load Pocket:"<<result;
+CPObject * MainWindowPockemul::LoadPocket(int result, QString _cfg) {
+    qWarning()<<"Load Pocket:"<<result<<_cfg;
 
     CPObject *newpPC;
     if (result)	{
-                newpPC = InitApp(result);
+                newpPC = InitApp(result,_cfg);
                 if (! newpPC) {
                     ask(this,"pPC is NULL in slotStart",1);
                 }
@@ -883,7 +883,7 @@ CPObject * MainWindowPockemul::LoadPocket(int result) {
                     pocketThread->connect(pocketThread,SIGNAL(Destroy(CPObject * )),this,SLOT(DestroySlot(CPObject * )));
                     pocketThread->start();
 #endif
-                    QAction * actionDistConn = menuPockets->addAction(newpPC->getName());
+                    QAction * actionDistConn = menuPockets->addAction(newpPC->getDisplayName());
                     actionDistConn->setData(tr("%1").arg((quint64)newpPC));
                     QMenu *ctxMenu = new QMenu(newpPC);
                     newpPC->BuildContextMenu(ctxMenu);
@@ -922,7 +922,12 @@ void MainWindowPockemul::Minimize_All() {
 
 bool MainWindowPockemul::Close_All() {
 
+    PcThread->PcThreadRunning = false;
+
     if (!listpPObject.isEmpty()) {
+#if 1
+        saveAll = YES;
+#else
 #ifdef EMSCRIPTEN
         saveAll = NO;
 #else
@@ -933,10 +938,12 @@ bool MainWindowPockemul::Close_All() {
         default: return true;
         }
 #endif
+#endif
 
         for (int k = 0; k < listpPObject.size(); k++)
         {
-            listpPObject.at(k)->slotExit();
+//            listpPObject.at(k)->slotExit();
+            DestroySlot(listpPObject.at(k));
         }
     }
 
@@ -1129,8 +1136,8 @@ bool MainWindowPockemul::quitPockEmul()
     tracker->startSending();
 
     if (ask(this,"Do you really want to quit ?",2)==1) {
+
         Close_All();
-        PcThread->PcThreadRunning = false;
         qWarning()<<"close";
         return true;
     }
@@ -1217,7 +1224,7 @@ void MainWindowPockemul::saveassession(QXmlStreamWriter *xml)
     // Fetch all objects
     for (int i=0;i<listpPObject.size();i++)
     {
-        qWarning()<<"serialize object:"<<i<<listpPObject.at(i)->getName();
+        qWarning()<<"serialize object:"<<i<<listpPObject.at(i)->getDisplayName();
         CPObject *po = listpPObject.at(i);
         map.insert(po,i);
         po->serialize(xml,i);
@@ -1489,7 +1496,7 @@ void MainWindowPockemul::updateFrameTimer()
                     str = ": "+str+tr("% original speed");
                 }
 #ifndef Q_OS_ANDROID
-                CurrentpPC->setToolTip(CurrentpPC->getName()+str);
+                CurrentpPC->setToolTip(CurrentpPC->getDisplayName()+str);
 #endif
 
             }
@@ -1635,7 +1642,8 @@ void MainWindowPockemul::resizeSlot( QSize size , CPObject *pObject)
 
 void MainWindowPockemul::DestroySlot( CPObject *pObject)
 {
-//qWarning()<< QApplication::topLevelWidgets();
+    qWarning()<< "DestroySlot:"<<pObject->getcfgfname();
+
     QList< QAction *> actionList = menuPockets->actions();
     for (int i=0; i< actionList.size();i++) {
         QAction* action = actionList.at(i);

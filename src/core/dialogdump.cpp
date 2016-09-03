@@ -19,7 +19,7 @@ DialogDump::DialogDump(QWidget * parent, Qt::WindowFlags f)
 	setupUi(this);
 	
     pPC =  (CPObject *) parent;
-	lbl_connected->setText(tr("Connected to : %1").arg(pPC->getName()));
+    lbl_connected->setText(tr("Connected to : %1").arg(pPC->getDisplayName()));
 
     connect(twSlot, SIGNAL(currentItemChanged ( QTableWidgetItem * , QTableWidgetItem * )), this, SLOT(slotDump( QTableWidgetItem * , QTableWidgetItem * )));
     connect(pbLoadBin, SIGNAL(clicked()), this, SLOT(LoadBin())); 

@@ -201,7 +201,7 @@ void QHexPanel::mouseReleaseEvent(QMouseEvent *e)
 
 void QHexPanel::newPocket(CPObject *pc)
 {
-    cbinstallTo->addItem(pc->getName(),tr("%1").arg((quint64)pc));
+    cbinstallTo->addItem(pc->getDisplayName(),tr("%1").arg((quint64)pc));
 }
 
 void QHexPanel::removePocket(CPObject *pc)
@@ -229,7 +229,7 @@ void QHexPanel::filltargetCB(void) {
     cbinstallTo->clear();
     for (int i = 0; i < listpPObject.size();i++) {
         CPObject *p = listpPObject.at(i);
-        cbinstallTo->addItem(p->getName(),tr("%1").arg((quint64)p));
+        cbinstallTo->addItem(p->getDisplayName(),tr("%1").arg((quint64)p));
     }
 }
 

@@ -127,7 +127,7 @@ void dialogAnalog::fill_twWatchPoint(void)
                     CPObject *pObject = listpPObject.at(i);
                     QMetaObject::invokeMethod(_rv->cloud.object, "addWatchPoint",
                                               Q_ARG(QVariant, QString("%1").arg((quint64)pObject)),
-                                              Q_ARG(QVariant, pObject->getName()),
+                                              Q_ARG(QVariant, pObject->getDisplayName()),
                                               Q_ARG(QVariant, WatchPoint.items.at(j).WatchPointName),
                                               Q_ARG(QVariant, j)
                                               );

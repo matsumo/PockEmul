@@ -30,7 +30,7 @@
 Cpc13XX::Cpc13XX(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
     setfrequency( (int) 768000/3);
-    setcfgfname("pc1350");
+
 
     setDXmm(182);
     setDYmm(72);
@@ -578,7 +578,7 @@ void Cpc1350::TurnON()
 //        if (result == 1)
         {
             // Create ram card PObject
-            CPObject *cardPC = mainwindow->LoadPocket(CE202M);
+            CPObject *cardPC = mainwindow->LoadPocket(CE202M,"ce202m_pc1350");
             // link the memory card to PS1Connector
             // and move memory card to correct coordinates
             currentSlot = 1;
@@ -586,7 +586,7 @@ void Cpc1350::TurnON()
 
             // Hide memory card
             cardPC->hideObject();
-            memcpy((char*) cardPC->mem,(char*) &mem[0x2000],0x4000);
+//            memcpy((char*) cardPC->mem,(char*) &mem[0x2000],0x4000);
         }
     }
 
@@ -595,9 +595,15 @@ void Cpc1350::TurnON()
 
 bool Cpc1350::LoadSession_File(QXmlStreamReader *xmlIn) {
 
-    CpcXXXX::LoadSession_File(xmlIn);
+    Cpc13XX::LoadSession_File(xmlIn);
 
 
 
     return true;
+}
+
+bool Cpc1350::SaveSession_File(QXmlStreamWriter *xmlOut)
+{
+    Cpc13XX::SaveSession_File(xmlOut);
+
 }

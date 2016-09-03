@@ -75,9 +75,9 @@ public:
     void slotUnlink(CPObject *);
 
     quint64	rawclk;
-    CPObject * LoadPocket(int result);
+    CPObject * LoadPocket(int result,QString _cfg=QString());
     CPObject *LoadPocket(QString Id);
-    CPObject * InitApp(int idPC);
+    CPObject * InitApp(int idPC,QString _cfg=QString());
 
     ASKYN saveAll;
     float	zoom;
@@ -117,6 +117,7 @@ public slots:
     void opensession(QXmlStreamReader *xml);
     void CheckUpdates();
     void toggleFullscreen();
+    void DestroySlot(CPObject *pObject);
 
 private slots:
 
@@ -137,7 +138,7 @@ private slots:
     void updateFrameTimer();
     void updateTimeTimer();
     void resizeSlot(QSize size , CPObject *pObject);
-    void DestroySlot(CPObject *pObject);
+
     void slotNewLink(QAction *);
     void slotWebLink(QAction *);
     void slotDocument(QAction *);

@@ -405,7 +405,7 @@ void CrenderView::fillSlotList(void)
             CSlot _s =_p->SlotList[j];
             QMetaObject::invokeMethod(cloud.object, "addSlot",
                                       Q_ARG(QVariant, QString("%1").arg((quint64)_p)),
-                                      Q_ARG(QVariant, _p->getName()),
+                                      Q_ARG(QVariant, _p->getDisplayName()),
                                       Q_ARG(QVariant, _s.getLabel()),
                                       Q_ARG(QVariant, _s.getSize()),
                                       Q_ARG(QVariant, QString("0x%1").arg(_s.getAdr(),6,16,QChar('0'))),
@@ -483,7 +483,7 @@ void CrenderView::newPObject(CPObject *pObject) {
     qWarning()<<_a;
 
     QMetaObject::invokeMethod(cloud.object, "addPocket",
-                              Q_ARG(QVariant, pObject->getName()),
+                              Q_ARG(QVariant, pObject->getDisplayName()),
                               Q_ARG(QVariant, "qrc"+pObject->BackGroundFname),
                               Q_ARG(QVariant, QString("%1").arg((quint64)pObject)),
                               Q_ARG(QVariant, pObject->pos().x()),

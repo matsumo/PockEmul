@@ -19,6 +19,7 @@
 #include "common.h"
 #include "pobject.h"
 #include "Inter.h"
+#include "cpu.h"
 #include "Log.h"
 #include "pcxxxx.h"
 #include "Lcdc.h"
@@ -48,8 +49,9 @@ extern GAnalytics* tracker;
 extern QList<CPObject *> listpPObject;  /**< TODO: describe */
 extern CrenderView* view;
 extern void Vibrate();
-
 extern MainWindowPockemul* mainwindow; /**< TODO: describe */
+extern QString workDir;
+
 /**
  * @brief
  *
@@ -66,13 +68,16 @@ extern bool soundEnabled; /**< TODO: describe */
  *
  * @param parent
  */
-CPObject::CPObject(CPObject *parent):CViewObject(parent)
+CPObject::CPObject(CPObject *parent, QString _cfg):CViewObject(parent)
 {
     pPC = (CpcXXXX*) parent;
     Parent	= parent;
     toDestroy = false;
 
-
+    Initial_Session_Fname = "NotDefined";
+    indexName = 0;
+    cfgfname = _cfg;
+    pCPU	= 0;
     pTIMER	= 0;
     pLCDC	= 0;
     bus     = 0;
@@ -415,8 +420,10 @@ bool CPObject::init()
  */
 bool CPObject::exit()
 {
+    Initial_Session_Save();
 
     pKEYB->exit();
+    if (pCPU) pCPU->exit();
     if (pLCDC)  pLCDC->exit();
     if (pTIMER) pTIMER->exit();
     if (dialogVKeyboard) { dialogVKeyboard->close(); dialogVKeyboard->deleteLater(); }
@@ -1240,6 +1247,40 @@ void CPObject::manageStackPos(QList<CPObject *> *l) {
     }
 
 }
+bool CPObject::LoadConfig(QXmlStreamReader *xmlIn)
+{
+    Q_UNUSED(xmlIn)
+    if (xmlIn->readNextStartElement()) {
+        if (xmlIn->name() == "config" && xmlIn->attributes().value("version") == "1.0") {
+
+            LoadConfigExtra(xmlIn);
+
+        }
+        xmlIn->skipCurrentElement();
+    }
+    return true;
+}
+bool CPObject::SaveConfig(QXmlStreamWriter *xmlOut)
+{
+    Q_UNUSED(xmlOut)
+    xmlOut->writeStartElement("config");
+    xmlOut->writeAttribute("version", "1.0");
+
+    SaveConfigExtra(xmlOut);
+
+    xmlOut->writeEndElement();
+    return true;
+}
+
+bool CPObject::LoadConfigExtra(QXmlStreamReader *)
+{
+    return true;
+}
+
+bool CPObject::SaveConfigExtra(QXmlStreamWriter *)
+{
+    return true;
+}
 
 /**
  * @brief
@@ -1247,10 +1288,23 @@ void CPObject::manageStackPos(QList<CPObject *> *l) {
  * @param xmlOut
  * @return bool
  */
-bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut)
-{
-    Q_UNUSED(xmlOut)
-
+bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut) {
+    xmlOut->writeStartElement("session");
+        xmlOut->writeAttribute("version", "2.0");
+        xmlOut->writeAttribute("model", SessionHeader );
+        xmlOut->writeAttribute("power",getPower()?"true":"false");
+        xmlOut->writeAttribute("closed",closed?"true":"false");
+        SaveConfig(xmlOut);
+//        SaveExt(xmlOut);
+        if (pCPU) pCPU->save_internal(xmlOut);
+        xmlOut->writeStartElement("memory");
+            for (int s=0; s<SlotList.size(); s++)				// Save Memory
+            {
+                if (SlotList[s].getType() == CSlot::RAM)	Mem_Save(xmlOut,s);
+            }
+        xmlOut->writeEndElement();  // memory
+    xmlOut->writeEndElement();  // session
+//    SaveExtra(&xw);									// Save all other data  (virtual)
     return true;
 }
 
@@ -1260,12 +1314,86 @@ bool CPObject::SaveSession_File(QXmlStreamWriter *xmlOut)
  * @param
  * @return bool
  */
-bool CPObject::LoadSession_File(QXmlStreamReader *)
-{
+
+bool CPObject::LoadSession_File(QXmlStreamReader *xmlIn) {
+
+    if ((xmlIn->name()=="session") || (xmlIn->readNextStartElement())) {
+        if ( (xmlIn->name() == "session") &&
+             (xmlIn->attributes().value("model") == SessionHeader) ) {
+//            Power = (xmlIn->attributes().value("power")=="true") ?true:false;
+            closed = (xmlIn->attributes().value("closed")=="true") ?true:false;
+            QString version = xmlIn->attributes().value("version").toString();
+            if (!LoadConfig(xmlIn)) {
+                emit msgError("ERROR Loading Session Config:"+SessionHeader);
+                return false;
+            }
+//            if ( (version == "2.0") && !LoadExt(xmlIn)) {
+//                MSG_ERROR("ERROR Loading Session Extensions");
+//                return false;
+//            }
+
+            if (pCPU) pCPU->Load_Internal(xmlIn);
+
+            AddLog(LOG_MASTER,"Loadmemory:"+xmlIn->name().toString());
+            if (xmlIn->readNextStartElement() && xmlIn->name() == "memory" ) {
+                AddLog(LOG_MASTER,"Load Memory");
+                for (int s=0; s<SlotList.size(); s++)				// Save Memory
+                {
+                    if (SlotList[s].getType() == CSlot::RAM) {
+                        AddLog(LOG_MASTER,"    Load Slot"+SlotList[s].getLabel());
+                        Mem_Load(xmlIn,s);
+                    }
+                }
+            }
+        }
+        if (getPower()) TurnON();
+    }
+
+//    updateMenuFromExtension();
     return true;
 }
 
+bool CPObject::Initial_Session_Load()
+{
+    qWarning()<<"Initial_Session_Load start:"<<getcfgfname();
 
+    QFile file(workDir+"sessions/"+getcfgfname()+".pkm");
+
+    if (file.open(QIODevice::ReadOnly))
+    {
+
+        QXmlStreamReader xmlIn;
+        xmlIn.setDevice(&file);
+        if (LoadSession_File(&xmlIn) && pLCDC)
+            pLCDC->forceRedraw();
+        file.close();
+        return true;
+    }
+
+    return false;
+}
+
+bool CPObject::Initial_Session_Save()
+{
+    qWarning()<<"Save session to :"<<workDir+"sessions/"+getcfgfname()+".pkm";
+    QFile file(workDir+"sessions/"+getcfgfname()+".pkm");
+
+    if (file.open(QIODevice::WriteOnly))
+    {
+        QString s;
+        QXmlStreamWriter *xmlOut = new QXmlStreamWriter(&s);
+        xmlOut->setAutoFormatting(true);
+        SaveSession_File(xmlOut);
+        QTextStream out(&file);
+        out << s;
+
+        //SaveSession_File(&file);
+        file.close();
+        return true;
+    }
+
+    return false;
+}
 
 /**
  * @brief
@@ -1771,7 +1899,7 @@ void CPObject::computeLinkMenu(QMenu * menu)
                 {
                     if (!listpPObject.at(j)->ConnList.at(k)->isLinked() && ConnList.at(i)->isPluggableWith(listpPObject.at(j)->ConnList.at(k))) {
                         if (menuAllPc==0)
-                            menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getName());
+                            menuAllPc = menuLocConn->addMenu(listpPObject.at(j)->getDisplayName());
                         QAction * actionDistConn = menuAllPc->addAction(listpPObject.at(j)->ConnList.at(k)->Desc);
                         actionDistConn->setData(tr("%1:%2").arg((quint64)ConnList.at(i)).arg((quint64)listpPObject.at(j)->ConnList.at(k)));
                     }
@@ -2251,14 +2379,28 @@ bool CPObject::getDisp_on()
 
 void CPObject::setName(QString val)
 {
+    Name = val;
+
     // Check if a same object is already running
     int _index = 0;
     for (int i=0; i<listpPObject.count();i++) {
         if (listpPObject.at(i)->getName() == val) {
-            _index++;
+            _index = MAX(_index,listpPObject.at(i)->indexName);
         }
     }
-    Name = val + (_index >0 ? QString(" - %1").arg(_index+1) : "");
+
+    indexName = _index + 1;
+    setDisplayName(val + (_index >0 ? QString(" - %1").arg(indexName) : ""));
+}
+
+void CPObject::setDisplayName(QString val)
+{
+    displayName = val;
+}
+
+void CPObject::setcfgfname(QString s)
+{
+    cfgfname = s;
 }
 
 

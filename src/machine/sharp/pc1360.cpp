@@ -92,10 +92,11 @@ void Cpc1360::TurnON()
     if (!S1PC){
         // If not, ask for connecting the default 8Ko card.
 
-        int result = ask(this,"No memory card in SLOT 1. Do you want to add the default 8Ko RAM Card ?",2);
-        if (result == 1) {
+//        int result = ask(this,"No memory card in SLOT 1. Do you want to add the default 32Ko RAM Card ?",2);
+//        if (result == 1)
+        {
             // Create ram card PObject
-            CPObject *cardPC = mainwindow->LoadPocket(CE212M);
+            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_pc1360S1");
             // link the memory card to PS1Connector
             // and move memory card to correct coordinates
             currentSlot = 1;
@@ -105,7 +106,24 @@ void Cpc1360::TurnON()
             cardPC->hideObject();
         }
     }
+    CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+    if (!S2PC){
+        // If not, ask for connecting the default 8Ko card.
 
+//        int result = ask(this,"No memory card in SLOT 1. Do you want to add the default 32Ko RAM Card ?",2);
+//        if (result == 1)
+        {
+            // Create ram card PObject
+            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_pc1360S2");
+            // link the memory card to PS1Connector
+            // and move memory card to correct coordinates
+            currentSlot = 2;
+            linkObject("",cardPC);
+
+            // Hide memory card
+            cardPC->hideObject();
+        }
+    }
     Cpc13XX::TurnON();
 }
 

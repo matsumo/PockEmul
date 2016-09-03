@@ -9,7 +9,7 @@ class CbusPc1500;
 class Cce2xxx:public CPObject{
     Q_OBJECT
 public:
-    Cce2xxx(CPObject *parent=0, Models mod=CE201M);
+    Cce2xxx(CPObject *parent=0, Models mod=CE201M, QString _cfg=QString());
     ~Cce2xxx();
 
     virtual bool init(void);				//initialize

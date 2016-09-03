@@ -124,7 +124,7 @@ void ServeurTcp::process_command(QString ligne)
         for (int i=0;i<listpPObject.size();i++)
         {
             CPObject *po = listpPObject.at(i);
-            texte << i << " : "<< po->getName();
+            texte << i << " : "<< po->getDisplayName();
             if (po == currentPC) {
                 texte << " (** selected Pocket **)";
             }

@@ -42,7 +42,7 @@ void DialogConsole::refresh( void)
 
 	
 	if (! pSIO) return;
-    if (pSIO->pTIMER) ConnectLbl->setText("Connected to : " + pSIO->pTIMER->pPC->getName());
+    if (pSIO->pTIMER) ConnectLbl->setText("Connected to : " + pSIO->pTIMER->pPC->getDisplayName());
     refreshMutex.lock();
 	if (pSIO->baOutput.size() > currentIndex)
 	{

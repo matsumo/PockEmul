@@ -79,6 +79,7 @@ public:
     virtual bool	run(void);				// emulator main
 
     virtual bool	LoadSession_File(QXmlStreamReader *);
+    virtual bool	SaveSession_File(QXmlStreamWriter *);
     virtual void TurnON(void);
 
     Cpc1350(CPObject *parent = 0);

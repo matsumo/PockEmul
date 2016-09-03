@@ -20,7 +20,7 @@ DialogVKeyboard::DialogVKeyboard(QWidget *parent) :
 
     pPC = (CPObject*) parent;
 
-    setWindowTitle("Keyboard Simulator for "+pPC->getName());
+    setWindowTitle("Keyboard Simulator for "+pPC->getDisplayName());
     PopulateKeyList();
 
     connect(ui->keylistWidget,SIGNAL(itemDoubleClicked(QListWidgetItem*)),this,SLOT(InsertKeySlot(QListWidgetItem*)));

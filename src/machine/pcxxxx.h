@@ -113,12 +113,6 @@ Q_OBJECT
 public:
     virtual const char*	GetClassName(){ return("CpcXXXX");}
 
-
-	
-	QString	Initial_Session_Fname;
-	bool Initial_Session_Load();
-	bool Initial_Session_Save();
-
 	virtual void Regs_Info(UINT8);
 	virtual void TurnON(void);
     virtual void TurnOFF(void);
@@ -129,7 +123,7 @@ public:
 	virtual bool InitDisplay(void);
 	virtual bool CompleteDisplay(void);
 
-	CCPU		*pCPU;
+
 	Cconnector	*pCONNECTOR;		qint64 pCONNECTOR_value;
 	Cconnector	*pSIOCONNECTOR;		qint64 pSIOCONNECTOR_value;
 

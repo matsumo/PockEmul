@@ -33,8 +33,7 @@ extern QString workDir;
 
 CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
 {								//[constructor]
-    Initial_Session_Fname = "TO DO";
-    pCPU		= 0;
+
     pCONNECTOR	= 0;
     pSIOCONNECTOR	= 0;
     KeyMapLenght = 0;
@@ -43,9 +42,6 @@ CpcXXXX::CpcXXXX(CPObject *parent)	: CPObject(parent)
     RomBank=RamBank=0;
     fp_log  = 0;
     off			= true;
-    setcfgfname(QString("pcXXXX"));
-    SessionHeader	= "PCXXXXPKM";
-
     mem = 0;
 
     SoundOn			= 1;
@@ -175,7 +171,7 @@ void CpcXXXX::TurnOFF(void)
 {
 //    ASKYN _sa = mainwindow->saveAll;
 
-//    mainwindow->saveAll = YES;
+    mainwindow->saveAll = YES;
 #ifdef EMSCRIPTEN
     mainwindow->saveAll=NO;
 #endif
@@ -1076,49 +1072,6 @@ bool CpcXXXX::Chk_Adr_R(UINT32 *d,UINT32 *data) { Q_UNUSED(d) Q_UNUSED(data) ret
 
 
 
-
-
-
-bool CpcXXXX::Initial_Session_Load()
-{
-    qWarning()<<"Initial_Session_Load start";
-    QFile file(workDir+"sessions/"+Initial_Session_Fname);
-
-	if (file.open(QIODevice::ReadOnly))
-	{
-
-        QXmlStreamReader xmlIn;
-        xmlIn.setDevice(&file);
-        if (LoadSession_File(&xmlIn) && pLCDC)
-            pLCDC->forceRedraw();
-		file.close();	
-		return true;
-	}
-
-	return false;
-}
-
-bool CpcXXXX::Initial_Session_Save()
-{
-    qWarning()<<"Save session to :"<<workDir+"sessions/"+Initial_Session_Fname;
-    QFile file(workDir+"sessions/"+Initial_Session_Fname);
-
-	if (file.open(QIODevice::WriteOnly))
-	{
-        QString s;
-        QXmlStreamWriter *xmlOut = new QXmlStreamWriter(&s);
-        xmlOut->setAutoFormatting(true);
-        SaveSession_File(xmlOut);
-        QTextStream out(&file);
-        out << s;
-
-        //SaveSession_File(&file);
-		file.close();	
-		return true;
-	}
-
-	return false;
-}
 
 void CpcXXXX::Regs_Info(UINT8 Type)
 {

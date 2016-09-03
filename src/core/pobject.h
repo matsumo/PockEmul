@@ -21,6 +21,7 @@
 
 class CpcXXXX;
 class Ckeyb;
+class CCPU;
 class Ctimer;
 class Clcdc;
 class Cconnector;
@@ -54,7 +55,7 @@ class CPObject:public CViewObject
 public:
     enum KEYEVENT{ KEY_PRESSED,KEY_RELEASED};
 
-	CPObject(CPObject *parent=0);
+    CPObject(CPObject *parent=0, QString _cfg=QString());
 	virtual ~CPObject();
 	
     virtual	bool	init();			// initialize
@@ -75,6 +76,15 @@ public:
     virtual bool    SaveSession_File(QXmlStreamWriter *xmlOut);
     virtual bool	LoadSession_File(QXmlStreamReader *);
 
+    virtual bool	LoadConfig(QXmlStreamReader *);	// Load PC Configuration
+    virtual bool	SaveConfig(QXmlStreamWriter *);	// Save PC Configuration
+    virtual bool	LoadConfigExtra(QXmlStreamReader *);	// Load PC Configuration
+    virtual bool	SaveConfigExtra(QXmlStreamWriter *);	// Save PC Configuration
+
+    QString	Initial_Session_Fname;
+    virtual bool Initial_Session_Load();
+    virtual bool Initial_Session_Save();
+
     quint64 runRange(quint64);
 
     QList<CSlot> SlotList;
@@ -84,6 +94,7 @@ public:
 	CPObject	*Parent;
 	CpcXXXX		*pPC;
 
+    CCPU		*pCPU;
 	Ctimer		*pTIMER;
 	Clcdc		*pLCDC;					// create LCDC object
 
@@ -108,9 +119,11 @@ public:
 	
     void setName(QString val);
     QString getName(){ return Name;	}
+    void setDisplayName(QString val);
+    QString getDisplayName(){ return displayName;	}
 	
     QString getcfgfname() { return cfgfname; }
-    void	setcfgfname(QString s) { cfgfname = s; }
+    void	setcfgfname(QString s);
 	
     void    serialize(QXmlStreamWriter *,int id);
 
@@ -299,6 +312,8 @@ private:
 	int		frequency;
 
 	QString Name;
+    int     indexName;
+    QString displayName;
 	QString cfgfname;				// configration file name
 	
 
