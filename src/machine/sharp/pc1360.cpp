@@ -158,20 +158,20 @@ void Cpc1360::PreFlip(Direction dir, View targetView)
 
 
 void Cpc1360::manageCardVisibility() {
-    Cpc13XX::manageCardVisibility();
+//    Cpc13XX::manageCardVisibility();
 
-    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
-        // show memory cards
-        CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
-        if (S2PC) {
-            if (backdoorS2Open) {
-                S2PC->showObject();
-            }
-            else {
-                S2PC->hideObject();
-            }
-        }
-    }
+//    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
+//        // show memory cards
+//        CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+//        if (S2PC) {
+//            if (backdoorS2Open) {
+//                S2PC->showObject();
+//            }
+//            else {
+//                S2PC->hideObject();
+//            }
+//        }
+//    }
 }
 
 // PIN_MT_OUT2	1
@@ -475,6 +475,26 @@ bool Cpc1360::UpdateFinalImage(void) {
 
     CpcXXXX::UpdateFinalImage();
 
+    // Draw memory cards
+    if ((currentView != FRONTview) ) {
+        if (pS1CONNECTOR->isLinked()) {
+ // TODO : rotate the card
+            QPainter painter;
+            painter.begin(BackImage);
+            CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+            QRect _r = pKEYB->getKey(0x241).Rect;
+            S1PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.end();
+        }
+        if (pS2CONNECTOR->isLinked()) {
+            QPainter painter;
+            painter.begin(BackImage);
+            CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+            QRect _r = pKEYB->getKey(0x242).Rect;
+            S2PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.end();
+        }
+    }
     if ((currentView != FRONTview) ) {
         QPainter painter;
         painter.begin(BackImage);

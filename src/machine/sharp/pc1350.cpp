@@ -402,18 +402,18 @@ void Cpc13XX::PostFlip()
 }
 
 void Cpc13XX::manageCardVisibility() {
-    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
-        // show memory cards
-        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
-        if (S1PC){
-            if (backdoorS1Open) {
-                S1PC->showObject();
-            }
-            else {
-                S1PC->hideObject();
-            }
-        }
-    }
+//    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
+//        // show memory cards
+//        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+//        if (S1PC){
+//            if (backdoorS1Open) {
+//                S1PC->showObject();
+//            }
+//            else {
+//                S1PC->hideObject();
+//            }
+//        }
+//    }
 }
 
 void Cpc13XX::animateBackDoorS1(bool _open) {
@@ -537,6 +537,18 @@ bool Cpc13XX::UpdateFinalImage(void) {
     }
 
     CpcXXXX::UpdateFinalImage();
+
+    if ((currentView != FRONTview) ) {
+        if (pS1CONNECTOR->isLinked()) {
+ // TODO : rotate the card
+            QPainter painter;
+            painter.begin(BackImage);
+            CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+            QRect _r = pKEYB->getKey(0x241).Rect;
+            S1PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.end();
+        }
+    }
 
     if ((currentView != FRONTview) ) {
         QPainter painter;

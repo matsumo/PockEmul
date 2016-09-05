@@ -4,7 +4,7 @@
 <KEY delay="3" description="RESET" height="50" left="249" masterscancode="0x00" modifier="" scancode="0x20d" top="13" view="BACK" width="30"/>
     <KEY description="Left Connector" height="125" left="5" masterscancode="0x00" modifier="" scancode="0x240" top="90" width="15" view="LEFT"/>
     <KEY description="S1" height="190" left="68" masterscancode="0x00" modifier="" scancode="0x241" top="31" view="BACK" width="140"/>
-    <KEY description="S2" height="190" left="322" masterscancode="0x00" modifier="" scancode="0x242" top="31" view="BACK" width="140"/>
+    <KEY description="S2" height="190" left="312" masterscancode="0x00" modifier="" scancode="0x242" top="31" view="BACK" width="140"/>
     <KEY description="Open S1" height="30" left="252" masterscancode="0x00" modifier="" scancode="0x243" top="108" view="BACK" width="25"/>
     <KEY description="Lock S1-S2" height="50" left="251" masterscancode="0x00" modifier="" scancode="0x244" top="139" view="BACK" width="25"/>
     <KEY description="Open S2" height="30" left="252" masterscancode="0x00" modifier="" scancode="0x245" top="189" view="BACK" width="25"/>
