@@ -478,12 +478,14 @@ bool Cpc1360::UpdateFinalImage(void) {
     // Draw memory cards
     if ((currentView != FRONTview) ) {
         if (pS1CONNECTOR->isLinked()) {
- // TODO : rotate the card
             QPainter painter;
             painter.begin(BackImage);
             CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
             QRect _r = pKEYB->getKey(0x241).Rect;
-            S1PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.translate((_r.left()+_r.width()/2)*mainwindow->zoom,
+                              (_r.top()+_r.height()/2)*mainwindow->zoom);
+            painter.rotate(180);
+            S1PC->render(&painter,QPoint(-_r.width()/2,-_r.height()/2)*mainwindow->zoom);
             painter.end();
         }
         if (pS2CONNECTOR->isLinked()) {
