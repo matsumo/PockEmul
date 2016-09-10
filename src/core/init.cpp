@@ -28,6 +28,7 @@
 
 
 extern QList<CPObject *> listpPObject;  
+extern QMutex listpPObjectMutex;
 //extern QTimer *timer;
 
 
@@ -58,13 +59,25 @@ void CPocketThread::run()
         //while ((j++) < 20)
         {
             pause = true;
+            listpPObjectMutex.lock();
             for (int i=0;i<listpPObject.size();i++)
             {
                 CPObject *pPC = listpPObject.at(i);
-                // si objet maitre
                 int f = pPC->getfrequency();
-                if ( f != 0)
+
+                if (pPC->toDestroy)
                 {
+                    // Unlink before destroy
+                    mainwindow->slotUnlink(pPC);
+
+                    listpPObject.removeAt(i);
+                    i--;
+                    emit Destroy(pPC);
+                }
+                else
+                if (( f != 0) && !PcThreadSuspended)
+                {
+                    // si objet maitre
                     // test si en retard
                     quint64 cs = pPC->pTIMER->currentState();
 //                    qWarning()<< cs - pPC->pTIMER->state;
@@ -94,16 +107,8 @@ void CPocketThread::run()
 //                        qWarning()<<"ok!"<<pPC->pTIMER->state << cs;
                     }
                 }
-                if (pPC->toDestroy)
-                {
-                    // Unlink before destroy
-                    mainwindow->slotUnlink(pPC);
-
-                    listpPObject.removeAt(i);
-                    i--;
-                    emit Destroy(pPC);
-                }
             }
+            listpPObjectMutex.unlock();
         }
 #ifdef EMSCRIPTEN
         if (pause) return;

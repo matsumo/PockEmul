@@ -158,20 +158,21 @@ void Cpc1360::PreFlip(Direction dir, View targetView)
 
 
 void Cpc1360::manageCardVisibility() {
-//    Cpc13XX::manageCardVisibility();
+    Cpc13XX::manageCardVisibility();
 
-//    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
-//        // show memory cards
-//        CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
-//        if (S2PC) {
-//            if (backdoorS2Open) {
-//                S2PC->showObject();
-//            }
-//            else {
-//                S2PC->hideObject();
-//            }
-//        }
-//    }
+    if ((currentView == BACKview) || (currentView == BACKviewREV))
+    {
+        // show memory cards
+        CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+        if (S2PC) {
+            if (backdoorS2Open) {
+                S2PC->showObject();
+            }
+            else {
+                S2PC->hideObject();
+            }
+        }
+    }
 }
 
 // PIN_MT_OUT2	1
@@ -465,6 +466,8 @@ void Cpc1360::linkObject(QString item,CPObject *pPC)
 }
 
 bool Cpc1360::UpdateFinalImage(void) {
+
+
 //    qWarning()<<"UpdateFinalImage";
     // Draw backdoor when not in frontview
 //    if (!flipping && (currentView != FRONTview) ) {

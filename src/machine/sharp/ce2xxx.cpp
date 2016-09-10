@@ -123,6 +123,8 @@ bool Cce2xxx::init()
 
     Initial_Session_Load();
 
+    hideObject();
+
     return true;
 }
 

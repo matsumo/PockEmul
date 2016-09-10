@@ -44,6 +44,7 @@ public:
     bool flipping;
     QImage* AnimatedImage;
 
+    bool visible;
 
     void setAngle(int value);
     int angle() const { return m_angle; }

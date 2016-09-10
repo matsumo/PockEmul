@@ -72,6 +72,7 @@ bool hiRes=true;
 bool syncEnabled=true;
 bool flipOnEdge=true;
 bool trackerEnabled=false;
+bool magnifyTouch=true;
 
 
 
@@ -297,6 +298,8 @@ int main(int argc, char *argv[])
 
     soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
     hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
+    magnifyTouch =  (Cloud::getValueFor("magnifyTouch","on")=="on") ? true : false;
+    qWarning()<<"magnifyTouch"<<magnifyTouch;
 
 
 #ifdef EMSCRIPTEN

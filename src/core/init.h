@@ -34,6 +34,7 @@ public:
     void run();
 	QTimer *threadTimer;
     bool PcThreadRunning;
+    bool PcThreadSuspended;
 	void SendSignal_AddLogItem(QString);
 	void SendSignal_Resize(QSize,CPObject * );
 	
@@ -41,6 +42,7 @@ public:
     CPocketThread(QObject * parent):QThread(parent)
 	{
 //		pPC = material;
+        PcThreadSuspended = false;
 	}
 	
 signals:

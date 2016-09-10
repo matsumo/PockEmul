@@ -35,6 +35,8 @@ CViewObject::CViewObject(CViewObject *parent):MAINCLASS(parent?parent:mainwindow
     internalImageRatio = 1;
     rotation = 0;
 
+    visible = true;
+
     pKEYB = new Ckeyb(this);
 }
 
@@ -262,6 +264,7 @@ void CViewObject::InitView(View v) {
 extern CrenderView *view;
 void CViewObject::showObject()
 {
+    visible = true;
     if (view)
         view->showPObject(this);
     else
@@ -270,6 +273,7 @@ void CViewObject::showObject()
 
 void CViewObject::hideObject()
 {
+    visible = false;
     if (view)
         view->hidePObject(this);
     else

@@ -51,6 +51,7 @@ extern CrenderView* view;
 extern void Vibrate();
 extern MainWindowPockemul* mainwindow; /**< TODO: describe */
 extern QString workDir;
+extern bool magnifyTouch;
 
 /**
  * @brief
@@ -181,7 +182,7 @@ void CPObject::serialize(QXmlStreamWriter *xml,int id) {
         xml->writeAttribute("id", QString("%1").arg(id));
         xml->writeAttribute("front",Front?"true":"false");
         xml->writeAttribute("power",getPower()?"true":"false");
-        xml->writeAttribute("visible",isVisible()?"true":"false");
+        xml->writeAttribute("isVisible",visible?"true":"false");
         xml->writeStartElement("position");
             xml->writeAttribute("x", QString("%1").arg(posx()));
             xml->writeAttribute("y", QString("%1").arg(posy()));
@@ -2087,6 +2088,11 @@ bool CPObject::LastDrawFinalImage()
             paintingImage.unlock();
         }
 
+
+        // Draw pressed keys
+        if (magnifyTouch) {
+            pKEYB->drawPressed(FinalImage);
+        }
 
         // DRAW DELAYED KEYS
         // Fetch keypressedList and for each delayed keys

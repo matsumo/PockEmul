@@ -52,6 +52,7 @@ extern bool soundEnabled;
 extern bool hiRes;
 extern bool flipOnEdge;
 extern bool trackerEnabled;
+extern bool magnifyTouch;
 
 extern QList<CPObject *> listpPObject;
 extern QSettings* settings;
@@ -346,6 +347,7 @@ void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
         vibDelay = (inputValue.toInt());
     }
     if (objectName == "flipOnEdge") flipOnEdge =  (inputValue=="on") ? true : false;
+    if (objectName == "magnifyTouch") magnifyTouch =  (inputValue=="on") ? true : false;
 }
 
 QByteArray Cloud::generateKey(QString username,QString password) {

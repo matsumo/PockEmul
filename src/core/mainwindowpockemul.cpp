@@ -91,6 +91,7 @@ QTime t,tf;
 QElapsedTimer et;
 QTimer *timer;
 QList<CPObject *> listpPObject;
+QMutex listpPObjectMutex;
 
 
 MainWindowPockemul::MainWindowPockemul(QWidget * parent, Qt::WindowFlags f) : QMainWindow(parent, f)
@@ -701,6 +702,15 @@ CPObject * MainWindowPockemul::InitApp(int idPC , QString _cfg)
     mainwindow->shapeRefList[pPC] = new Avoid::ShapeRef(mainwindow->router, rectangle);
     mainwindow->router->addShape(mainwindow->shapeRefList[pPC]);
 #endif
+
+    if (!openGlFlag) {
+        qWarning()<<"show";
+        pPC->show();
+    }
+    else {
+        pPC->hide();
+    }
+
     if (!pPC->init()) return 0;
     qWarning()<<"init ok";
 
@@ -714,13 +724,7 @@ CPObject * MainWindowPockemul::InitApp(int idPC , QString _cfg)
     pPC->MoveRel(QPoint(0,0));
     pPC->setGeometry(0,0,dx,dy);
 
-    if (!openGlFlag) {
-        qWarning()<<"show";
-        pPC->show();
-    }
-    else {
-        pPC->hide();
-    }
+
 
 qWarning()<<"init ok4";
     return pPC;
@@ -922,8 +926,6 @@ void MainWindowPockemul::Minimize_All() {
 
 bool MainWindowPockemul::Close_All() {
 
-    PcThread->PcThreadRunning = false;
-
     if (!listpPObject.isEmpty()) {
 #if 1
         saveAll = YES;
@@ -940,11 +942,18 @@ bool MainWindowPockemul::Close_All() {
 #endif
 #endif
 
+        listpPObjectMutex.lock();
+
+//        PcThread->PcThreadSuspended = true;
         for (int k = 0; k < listpPObject.size(); k++)
         {
 //            listpPObject.at(k)->slotExit();
-            DestroySlot(listpPObject.at(k));
+            CPObject *pPC = listpPObject.at(k);
+            DestroySlot(pPC);
         }
+//        PcThread->PcThreadSuspended = false;
+        listpPObject.clear();
+        listpPObjectMutex.unlock();
     }
 
     return true;
@@ -1050,8 +1059,9 @@ void MainWindowPockemul::opensession(QXmlStreamReader *xml) {
                             toPowerOn.append(locPC);
                         }
 
-                        bool _Visible = (xml->attributes().value("visible")=="false") ? false : true;
-                        if (!_Visible) locPC->hide();
+                        bool _Visible = (xml->attributes().value("isVisible")=="false") ? false : true;
+                        if (_Visible) locPC->showObject();
+                        else locPC->hideObject();
 
                         while (xml->readNextStartElement()) {
                             QString eltname = xml->name().toString();
@@ -1138,6 +1148,11 @@ bool MainWindowPockemul::quitPockEmul()
     if (ask(this,"Do you really want to quit ?",2)==1) {
 
         Close_All();
+
+        while (!listpPObject.isEmpty()) {
+            qWarning()<<listpPObject;
+        }
+
         qWarning()<<"close";
         return true;
     }
@@ -1461,6 +1476,7 @@ void MainWindowPockemul::updateFrameTimer()
 
     deltaTime = tf.elapsed();
 
+    listpPObjectMutex.lock();
     for (int i = 0;i < listpPObject.size(); i++)
     {
         CPObject* CurrentpPC = listpPObject.at(i);
@@ -1531,6 +1547,7 @@ void MainWindowPockemul::updateFrameTimer()
             //                    CurrentpPC->pLCDC->Refresh = false;
         }
     }
+    listpPObjectMutex.unlock();
 
 
     if (deltaTime >= 1000) tf.restart();

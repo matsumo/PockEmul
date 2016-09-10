@@ -381,6 +381,7 @@ public:
     bool	Kon;
     int	    LastKey,lastMousePressedKey;
 
+    void drawPressed(QImage *);
 
 	QList<CKey>	Keys;
     CKey &getKey(int code);

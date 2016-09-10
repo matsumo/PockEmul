@@ -1,4 +1,5 @@
 #include <QDebug>
+#include <QPainter>
 
 #include "xmlwriter.h"
  
@@ -185,6 +186,8 @@ void Ckeyb::insertKey(int _key)
 
     keyPressing.unlock();
 
+//    QApplication::beep();
+
 //    qWarning()<<"insert key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
     emit keyPressed(_key);
 }
@@ -295,6 +298,81 @@ void Ckeyb::keyscan(void)
 			}	    
 		}
 		if (keym[i] != 0) break;
+    }
+}
+
+void Ckeyb::drawPressed(QImage *_img)
+{
+
+    if (keyPressedList.isEmpty()) { return; }
+
+    keyPressing.lock();
+    QMapIterator<int, quint64> i(keyPressedList);
+    keyPressing.unlock();
+
+    while (i.hasNext()) {
+        i.next();
+        QRect _rect = getKey(i.key()).Rect;
+        _rect.setCoords(_rect.x()*pPC->internalImageRatio,
+                        _rect.y()*pPC->internalImageRatio,
+                        (_rect.x()+_rect.width())*pPC->internalImageRatio,
+                        (_rect.y()+_rect.height())*pPC->internalImageRatio);
+
+        int dim = qMin(_rect.width(), _rect.height());
+        int magnifierSize = dim * 3;
+        int radius = magnifierSize / 2;
+        int ring = radius - 15;
+        QSize box = QSize(magnifierSize, magnifierSize);
+
+        QPixmap maskPixmap;
+        maskPixmap = QPixmap(box);
+        maskPixmap.fill(Qt::transparent);
+
+        QRadialGradient g;
+        g.setCenter(radius, radius);
+        g.setFocalPoint(radius, radius);
+        g.setRadius(radius);
+        g.setColorAt(1.0, QColor(64, 64, 64, 0));
+        g.setColorAt(0.5, QColor(0, 0, 0, 255));
+
+        QPainter mask(&maskPixmap);
+        mask.setRenderHint(QPainter::Antialiasing);
+        mask.setCompositionMode(QPainter::CompositionMode_Source);
+        mask.setBrush(g);
+        mask.setPen(Qt::NoPen);
+        mask.drawRect(maskPixmap.rect());
+        mask.setBrush(QColor(Qt::transparent));
+        mask.drawEllipse(g.center(), ring, ring);
+        mask.end();
+
+        QPoint center = _rect.center() - QPoint(0, radius);
+        center = center + QPoint(0, radius / 2);
+        QPoint corner = center - QPoint(radius, radius);
+
+        QPoint xy = center * 2 - QPoint(radius, radius);
+
+        // only set the dimension to the magnified portion
+        QPixmap zoomPixmap = QPixmap(box);
+        zoomPixmap.fill(Qt::lightGray);
+        QPainter pz(&zoomPixmap);
+//        pz.translate(-xy);
+        QRect target=QRect(QPoint(0,0),box);
+        pz.drawImage(target, *_img,_rect);
+        pz.end();
+
+        QPainterPath clipPath;
+        clipPath.addEllipse(center, ring, ring);
+
+        QPainter p(_img);
+        p.setRenderHint(QPainter::Antialiasing);
+        p.setClipPath(clipPath);
+        p.drawPixmap(corner, zoomPixmap);
+        p.setClipping(false);
+        p.drawPixmap(corner, maskPixmap);
+        p.setPen(Qt::gray);
+        p.drawPath(clipPath);
+
+        p.end();
     }
 }
 

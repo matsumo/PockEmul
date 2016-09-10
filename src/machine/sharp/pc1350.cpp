@@ -402,18 +402,19 @@ void Cpc13XX::PostFlip()
 }
 
 void Cpc13XX::manageCardVisibility() {
-//    if ((currentView == BACKview) || (currentView == BACKviewREV)) {
-//        // show memory cards
-//        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
-//        if (S1PC){
-//            if (backdoorS1Open) {
-//                S1PC->showObject();
-//            }
-//            else {
-//                S1PC->hideObject();
-//            }
-//        }
-//    }
+    if ((currentView == BACKview) || (currentView == BACKviewREV))
+    {
+        // show memory cards
+        CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
+        if (S1PC){
+            if (backdoorS1Open) {
+                S1PC->showObject();
+            }
+            else {
+                S1PC->hideObject();
+            }
+        }
+    }
 }
 
 void Cpc13XX::animateBackDoorS1(bool _open) {
@@ -528,6 +529,9 @@ void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 }
 
 bool Cpc13XX::UpdateFinalImage(void) {
+
+    manageCardVisibility();
+
 //    qWarning()<<"UpdateFinalImage";
     // Draw backdoor when not in frontview
     if (!flipping && (currentView != FRONTview) ) {
@@ -618,4 +622,5 @@ bool Cpc1350::SaveSession_File(QXmlStreamWriter *xmlOut)
 {
     Cpc13XX::SaveSession_File(xmlOut);
 
+    return true;
 }

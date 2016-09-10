@@ -47,6 +47,7 @@ Rectangle {
         SettingsDelegate { id: vibDelay; name: "vibDelay"; labelString: "Vibrator delay(ms)"; type: "input"; defaultText: "75"}
         SettingsDelegate { id: flipOnEdge; name: "flipOnEdge"; labelString: "Flip on Edge"; type: "checkbox"; defaultText: "on"}
         SettingsDelegate { id: trackerEnabled; name: "trackerEnabled"; labelString: "Enable tracking activity"; type: "checkbox"; defaultText: "false"}
+        SettingsDelegate { id: magnifyTouch; name: "magnifyTouch"; labelString: "Magnify key touch"; type: "checkbox"; defaultText: "on"}
 
         SettingsDelegate { id: labelServer; name: "labelServer"; labelString: "Telnet Server settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: telnetPort; name: "telnetPort"; labelString: "Telnet Server port"; type: "input"; defaultText: "4000"}
