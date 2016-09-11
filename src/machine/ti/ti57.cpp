@@ -35,13 +35,6 @@ Cti57::Cti57(CPObject *parent)	: CpcXXXX(parent)
     setDX(279);
     setDY(529);
 
-//    Lcd_X		= 30;
-//    Lcd_Y		= 43;
-//    Lcd_DX		= 220;
-//    Lcd_DY		= 40;
-//    Lcd_ratio_X	= 1;
-//    Lcd_ratio_Y	= 1;
-
     pTIMER		= new Ctimer(this);
     pLCDC		= new Clcdc_ti57(this,
                                  QRect(30,43,220,40),

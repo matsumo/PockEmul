@@ -21,7 +21,7 @@
     <KEY description=":" height="32" left="592" masterscancode="0x00" modifier="" scancode="0x3a" top="395" view="FRONT" width="32"/>
     <KEY description=";" height="32" left="540" masterscancode="0x00" modifier="" scancode="0x3b" top="396" view="FRONT" width="32"/>
     <KEY description="+" height="32" left="839" masterscancode="0x00" modifier="" scancode="0x2b" top="443" view="FRONT" width="32"/>
-    <KEY description="OFF" height="32" left="638" masterscancode="0x00" modifier="" scancode="0xc8" top="88" view="FRONT" width="32"/>
+    <KEY delay="3" description="OFF" height="32" left="638" masterscancode="0x00" modifier="" scancode="0xc8" top="88" view="FRONT" width="32"/>
     <KEY description="ON" height="32" left="688" masterscancode="0x00" modifier="" scancode="0xc7" top="87" view="FRONT" width="32"/>
     <KEY description="CLS" height="32" left="839" masterscancode="0x00" modifier="" scancode="0x0c" top="254" view="FRONT" width="32"/>
     <KEY description="DEL" height="32" left="0" masterscancode="0x00" modifier="" scancode="0x0a" top="0" view="FRONT" width="32"/>

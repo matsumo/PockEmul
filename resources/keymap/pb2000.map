@@ -16,7 +16,7 @@
     <KEY description=":" height="18" left="457" masterscancode="0x00" modifier="" scancode="0x3a" top="228" view="FRONT" width="27"/>
     <KEY description=";" height="16" left="416" masterscancode="0x00" modifier="" scancode="0x3b" top="229" view="FRONT" width="27"/>
     <KEY description="+" height="18" left="620" masterscancode="0x00" modifier="" scancode="0x2b" top="220" view="FRONT" width="25"/>
-    <KEY description="OFF" height="40" left="1" masterscancode="0x00" modifier="" scancode="0xc8" top="84" view="FRONT" width="10"/>
+    <KEY delay="3" description="OFF" height="40" left="1" masterscancode="0x00" modifier="" scancode="0xc8" top="84" view="FRONT" width="10"/>
     <KEY description="ON" height="40" left="-1" masterscancode="0x00" modifier="" scancode="0xc7" top="28" view="FRONT" width="10"/>
     <KEY description="CLS" height="21" left="540" masterscancode="0x00" modifier="" scancode="0x0c" top="108" view="FRONT" width="27"/>
     <KEY description="DEL" height="18" left="581" masterscancode="0x00" modifier="" scancode="0x0a" top="33" view="FRONT" width="26"/>
