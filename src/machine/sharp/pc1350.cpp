@@ -454,6 +454,8 @@ void Cpc13XX::endbackdoorAnimation()
 
 void Cpc13XX::linkObject(QString item,CPObject *pPC)
 {
+    Q_UNUSED(item)
+
     qWarning()<<"currentslot:"<<currentSlot;
     Cconnector *_conn = 0;
     QRect _rect;
@@ -482,6 +484,7 @@ void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
     // Manage left connector click
     if ((currentView==LEFTview) && KEY(0x240) ) {

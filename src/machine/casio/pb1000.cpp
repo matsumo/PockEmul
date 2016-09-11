@@ -326,7 +326,7 @@ void Cpb1000::paintEvent(QPaintEvent *event)
 
     if (closed | loc_flipping) {
         QPainter painter;
-
+qWarning()<<"Cpb1000::paintEvent";
         UpdateFinalImage();
         paintingImage.lock();
         painter.begin(this);
@@ -581,6 +581,7 @@ UINT8 Cpb1000::lcdDataRead() {
 void Cpb1000::TurnCLOSE(void) {
 //    return;
 
+    qWarning()<<"Cpb1000::TurnCLOSE"<<closed;
     // if connected then refuse to close
     if (!closed && pCONNECTOR->isLinked()) {
 
@@ -638,6 +639,7 @@ void Cpb1000::loc_setZoom(qreal value)
 
 void Cpb1000::loc_endAnimation()
 {
+    qWarning()<<"Cpb1000::loc_endAnimation";
     loc_flipping = false;
     if (closed) {
         setGeometry(this->posx(),

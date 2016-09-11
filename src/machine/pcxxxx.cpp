@@ -899,7 +899,7 @@ bool CpcXXXX::LoadConfig(QXmlStreamReader *xmlIn)
                 RamBank = xmlIn->attributes().value("RamBank").toString().toInt(0,16);
                 ProtectMemory = xmlIn->attributes().value("ProtectMemory").toString().toInt(0,16);
                 //Japan = xml->attributes().value("ProtectMemory").toString().toInt(0,16);
-                closed = xmlIn->attributes().value("closed").toString().toInt(0,16);
+//                closed = xmlIn->attributes().value("closed").toString().toInt(0,16);
                 xmlIn->skipCurrentElement();
             }
 
@@ -935,7 +935,7 @@ bool CpcXXXX::SaveConfig(QXmlStreamWriter *xmlOut)
             xmlOut->writeAttribute("RamBank",QString("%1").arg(RamBank,2,16));
             xmlOut->writeAttribute("ProtectMemory",QString("%1").arg(ProtectMemory));
             xmlOut->writeAttribute("Japan",QString("%1").arg(Japan));
-            xmlOut->writeAttribute("closed",QString("%1").arg(closed));
+//            xmlOut->writeAttribute("closed",QString("%1").arg(closed));
         xmlOut->writeEndElement();
         pBreakpointManager->serialize(xmlOut);
     xmlOut->writeEndElement();
