@@ -63,5 +63,7 @@ private:
 
     void animateBackDoorS1(bool _open);
     void animateBackDoorS2(bool _open);
+    void manageCardVisibilityS1();
+    void manageCardVisibilityS2();
 };
 #endif

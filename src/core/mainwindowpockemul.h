@@ -48,6 +48,8 @@ Q_OBJECT
 public:
     QMutex audioMutex,analogMutex;
 
+    QMutex frameMutex;
+
     MainWindowPockemul( QWidget * parent = 0, Qt::WindowFlags f = 0 );
     ~MainWindowPockemul();
 #ifdef P_AVOID

@@ -942,18 +942,18 @@ bool MainWindowPockemul::Close_All() {
 #endif
 #endif
 
-        listpPObjectMutex.lock();
+        PcThread->PcThreadMutex.lock();
+        frameMutex.lock();
 
-//        PcThread->PcThreadSuspended = true;
         for (int k = 0; k < listpPObject.size(); k++)
         {
 //            listpPObject.at(k)->slotExit();
             CPObject *pPC = listpPObject.at(k);
             DestroySlot(pPC);
         }
-//        PcThread->PcThreadSuspended = false;
         listpPObject.clear();
-        listpPObjectMutex.unlock();
+        PcThread->PcThreadMutex.unlock();
+        frameMutex.unlock();
     }
 
     return true;
@@ -1476,7 +1476,7 @@ void MainWindowPockemul::updateFrameTimer()
 
     deltaTime = tf.elapsed();
 
-    listpPObjectMutex.lock();
+    frameMutex.lock();
     for (int i = 0;i < listpPObject.size(); i++)
     {
         CPObject* CurrentpPC = listpPObject.at(i);
@@ -1547,7 +1547,7 @@ void MainWindowPockemul::updateFrameTimer()
             //                    CurrentpPC->pLCDC->Refresh = false;
         }
     }
-    listpPObjectMutex.unlock();
+    frameMutex.unlock();
 
 
     if (deltaTime >= 1000) tf.restart();

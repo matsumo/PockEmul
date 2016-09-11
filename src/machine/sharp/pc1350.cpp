@@ -466,9 +466,7 @@ void Cpc13XX::linkObject(QString item,CPObject *pPC)
     pPC->setPosX(posx()+_rect.left()*mainwindow->zoom);
     pPC->setPosY(posy()+_rect.top()*mainwindow->zoom);
     pPC->raise();
-    if (currentSlot==1) {
-        pPC->setRotation(180);
-    }
+
     emit stackPosChanged();
 }
 
@@ -530,7 +528,6 @@ void Cpc13XX::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 
 bool Cpc13XX::UpdateFinalImage(void) {
 
-    manageCardVisibility();
 
 //    qWarning()<<"UpdateFinalImage";
     // Draw backdoor when not in frontview
@@ -544,16 +541,18 @@ bool Cpc13XX::UpdateFinalImage(void) {
 
     if ((currentView != FRONTview) ) {
         if (pS1CONNECTOR->isLinked()) {
- // TODO : rotate the card
             QPainter painter;
             painter.begin(BackImage);
             CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
             QRect _r = pKEYB->getKey(0x241).Rect;
-            S1PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.translate(_r.topLeft()*internalImageRatio);
+            painter.scale(internalImageRatio/mainwindow->zoom,
+                          internalImageRatio/mainwindow->zoom);
+            S1PC->render(&painter);
             painter.end();
+
         }
     }
-
     if ((currentView != FRONTview) ) {
         QPainter painter;
         painter.begin(BackImage);

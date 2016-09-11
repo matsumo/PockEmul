@@ -3,7 +3,7 @@
 <Keyboard>
     <KEY delay="3" description="RESET" height="30" left="493" masterscancode="0x00" modifier="" scancode="0x20d" top="203" view="BACK" width="70"/>
     <KEY description="Left Connector" height="125" left="5" masterscancode="0x00" modifier="" scancode="0x240" top="90" view="LEFT" width="15"/>
-    <KEY description="S1" height="190" left="64" masterscancode="0x00" modifier="" scancode="0x241" top="32" view="BACK" width="288"/>
+    <KEY description="S1" height="190" left="58" masterscancode="0x00" modifier="" scancode="0x241" top="31" view="BACK" width="288"/>
     <KEY description="Open S1" height="30" left="382" masterscancode="0x00" modifier="" scancode="0x243" top="128" view="BACK" width="25"/>
     <KEY description="Lock S1" height="50" left="384" masterscancode="0x00" modifier="" scancode="0x244" top="70" view="BACK" width="25"/>
     <KEY description="-" height="22" left="542" masterscancode="0x00" modifier="" scancode="0x2d" top="218" view="FRONT" width="32"/>

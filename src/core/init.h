@@ -15,6 +15,7 @@
 #include <QThread>
 #include <QTimer>
 #include <QStringList>
+#include <QMutex>
 
 
 class CPocketThread;
@@ -38,6 +39,7 @@ public:
 	void SendSignal_AddLogItem(QString);
 	void SendSignal_Resize(QSize,CPObject * );
 	
+    QMutex PcThreadMutex;
 
     CPocketThread(QObject * parent):QThread(parent)
 	{

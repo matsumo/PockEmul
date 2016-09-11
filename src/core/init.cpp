@@ -59,7 +59,7 @@ void CPocketThread::run()
         //while ((j++) < 20)
         {
             pause = true;
-            listpPObjectMutex.lock();
+            PcThreadMutex.lock();
             for (int i=0;i<listpPObject.size();i++)
             {
                 CPObject *pPC = listpPObject.at(i);
@@ -108,7 +108,7 @@ void CPocketThread::run()
                     }
                 }
             }
-            listpPObjectMutex.unlock();
+            PcThreadMutex.unlock();
         }
 #ifdef EMSCRIPTEN
         if (pause) return;

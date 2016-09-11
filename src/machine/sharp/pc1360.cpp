@@ -158,7 +158,14 @@ void Cpc1360::PreFlip(Direction dir, View targetView)
 
 
 void Cpc1360::manageCardVisibility() {
+    manageCardVisibilityS1();
+    manageCardVisibilityS2();
+}
+void Cpc1360::manageCardVisibilityS1() {
     Cpc13XX::manageCardVisibility();
+
+}
+void Cpc1360::manageCardVisibilityS2() {
 
     if ((currentView == BACKview) || (currentView == BACKviewREV))
     {
@@ -174,7 +181,6 @@ void Cpc1360::manageCardVisibility() {
         }
     }
 }
-
 // PIN_MT_OUT2	1
 // PIN_GND		2
 // PIN_VGG		3
@@ -480,23 +486,30 @@ bool Cpc1360::UpdateFinalImage(void) {
 
     // Draw memory cards
     if ((currentView != FRONTview) ) {
+
         if (pS1CONNECTOR->isLinked()) {
             QPainter painter;
             painter.begin(BackImage);
             CPObject * S1PC = pS1CONNECTOR->LinkedToObject();
             QRect _r = pKEYB->getKey(0x241).Rect;
-            painter.translate((_r.left()+_r.width()/2)*mainwindow->zoom,
-                              (_r.top()+_r.height()/2)*mainwindow->zoom);
+            painter.translate(_r.center()*internalImageRatio);
+            painter.scale(internalImageRatio/mainwindow->zoom,
+                          internalImageRatio/mainwindow->zoom);
             painter.rotate(180);
+
             S1PC->render(&painter,QPoint(-_r.width()/2,-_r.height()/2)*mainwindow->zoom);
             painter.end();
         }
+
         if (pS2CONNECTOR->isLinked()) {
             QPainter painter;
             painter.begin(BackImage);
-            CPObject * S2PC = pS2CONNECTOR->LinkedToObject();
+            CPObject * S2PC = pS1CONNECTOR->LinkedToObject();
             QRect _r = pKEYB->getKey(0x242).Rect;
-            S2PC->render(&painter,_r.topLeft()*mainwindow->zoom);
+            painter.translate(_r.topLeft()*internalImageRatio);
+            painter.scale(internalImageRatio/mainwindow->zoom,
+                          internalImageRatio/mainwindow->zoom);
+            S2PC->render(&painter);
             painter.end();
         }
     }
@@ -562,7 +575,7 @@ void Cpc1360::animateBackDoorS1(bool _open) {
          animation1->setEndValue(70);
      }
      else {
-         manageCardVisibility();
+         manageCardVisibilityS1();
          animation1->setStartValue(m_backdoorS1Angle);
          animation1->setEndValue(0);
      }
@@ -590,7 +603,7 @@ void Cpc1360::animateBackDoorS2(bool _open) {
          animation1->setEndValue(-70);
      }
      else {
-         manageCardVisibility();
+         manageCardVisibilityS2();
          animation1->setStartValue(m_backdoorS2Angle);
          animation1->setEndValue(0);
      }
