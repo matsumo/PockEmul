@@ -678,7 +678,7 @@ BYTE Ce500::getKey()
             if (KEY(K_BASIC))		data|=0x10;
             if (KEY('Z'))			data|=0x20;
             if (KEY(K_SHT))         data|=0x40;
-            if (pKEYB->isShift)		data|=0x40;
+//            if (pKEYB->isShift)		data|=0x40;
             if (KEY(K_CTRL))		data|=0x80;			// UP ARROW
         }
         if (ks&2) {
@@ -801,7 +801,9 @@ BYTE Ce500::getKey()
         ((Csc62015*)pCPU)->opr_imem(IMEM_ISR,OPR_OR,INT_KEY);	// set status to ISR
     }
     pCPU->imem[IMEM_KI] = data;					//set data to ki
-    return data^0xff;start2khz = 0;
+    return data^0xff;
+
+    start2khz = 0;
     start4khz = 0;
 
 }

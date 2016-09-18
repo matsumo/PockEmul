@@ -198,6 +198,9 @@ void Ckeyb::removeKey(int _key) {
     keyPressedList.remove(_key);
 
     keyPressing.unlock();
+
+//    qWarning()<<"remove key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
+
 }
 
 int Ckeyb::KeyClick(QPoint pts)

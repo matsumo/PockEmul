@@ -1109,6 +1109,7 @@ QList<Cconnector *> CPObject::nearConnectors(Cconnector *refConnector,qint8 snap
 void CPObject::mouseReleaseEvent(QMouseEvent *event)
 {
 
+//    qWarning()<<"mouseReleaseEvent"<<event;
     // if a connector is free
     // if an object with free connector is "near"
     // propose to autolink

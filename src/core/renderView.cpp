@@ -34,6 +34,7 @@ using namespace zxing;
 CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
+    this->setAttribute(Qt::WA_AcceptTouchEvents);
 
 //    grabKeyboard();
     setFocusPolicy(Qt::ClickFocus);

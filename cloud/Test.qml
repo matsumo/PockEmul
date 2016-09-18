@@ -51,21 +51,6 @@ Rectangle {
     id: renderArea
 
     signal sendWarning(string test)
-//    signal sendKeyPressed(string id,int key, int mod,int scancode)
-//    signal sendKeyReleased(string id,int key, int mod,int scancode)
-//    signal sendContextMenu(string id,int x,int y)
-//    signal sendDisableKeyboard(string id)
-//    signal sendEnableKeyboard(string id)
-//    signal sendClick(string pocketid,int touchid,int x,int y)
-//    signal sendUnClick(string pocketid,int touchid,int x,int y)
-//    signal sendDblClick(string id,int x,int y)
-//    signal sendMovePocket(string id,int x,int y)
-//    signal sendMoveAllPocket(int x,int y)
-//    signal setZoom(int x,int y,real z)
-//    signal sendRotPocket(string id,int rotation)
-//    signal maximize(string id)
-//    signal minimize(string id)
-//    signal fit();
     signal toggleFullscreen();
     signal analyser();
     signal sendDownloadCancel();
@@ -352,7 +337,7 @@ Rectangle {
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
-//                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty)
+//                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty, "pressed:",touchPoints[i].pressed)
                             main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
 
@@ -362,8 +347,8 @@ Rectangle {
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
-//                            console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty)
-                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
+                            console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty, "pressed:",touchPoints[i].pressed)
+//                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
                     }
                     onTouchUpdated: {
@@ -648,6 +633,7 @@ Rectangle {
             onClose: visible=false;
             onVisibleChanged: main.sendTrackingEvent('nav',visible ? 'show':'hide','about');
         }
+
     }
 
 //}
