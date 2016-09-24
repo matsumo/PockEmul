@@ -567,7 +567,7 @@ UINT16 Cjr800::getKey()
 //            if (KEY(K_F1))			data|=0x01;
 //            if (KEY(K_F2))			data|=0x02;
             if (KEY(K_MENU))		data|=0x04;
-            if (KEY(K_SHT))			data|=0x08;
+            if (KEY(K_SHT2))			data|=0x08;
             if (KEY(K_CTRL))		data|=0x10;
 //            if (KEY(K_F6))			data|=0x20;
 //            if (KEY(K_F7))			data|=0x40;

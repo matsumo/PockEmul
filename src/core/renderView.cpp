@@ -34,7 +34,7 @@ using namespace zxing;
 CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
-    this->setAttribute(Qt::WA_AcceptTouchEvents);
+//    this->setAttribute(Qt::WA_AcceptTouchEvents);
 
 //    grabKeyboard();
     setFocusPolicy(Qt::ClickFocus);
@@ -154,8 +154,8 @@ void CrenderView::keypressed(QString Id, int k,int m,int scan)
     qWarning()<<"CrenderView::keypressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent _e( QEvent::KeyPress, k,static_cast<Qt::KeyboardModifiers>(m));
-    QApplication::sendEvent(pc, &_e);
-
+//    QApplication::sendEvent(pc, &_e);
+    pc->keyPressEvent(&_e);
 }
 void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 {
@@ -165,7 +165,8 @@ void CrenderView::keyreleased(QString Id, int k,int m,int scan)
 //    qWarning()<<"key pressed:"<<k<<m<<(quint32)scan;
     // Send thee MouseButtonPress event
     QKeyEvent _e( QEvent::KeyRelease, k, static_cast<Qt::KeyboardModifiers>(m));
-    QApplication::sendEvent(pc, &_e);
+//    QApplication::sendEvent(pc, &_e);
+    pc->keyReleaseEvent(&_e);
 
 }
 void CrenderView::movepocket(QString Id, int x, int y)
@@ -252,7 +253,8 @@ void CrenderView::contextMenu(QString Id, int x, int y)
                 pts,
                 pc->mapToGlobal(pts));
     //contextMenuEvent(cme);
-    QApplication::sendEvent(pc,&cme);
+//    QApplication::sendEvent(pc,&cme);
+    pc->contextMenuEvent(&cme);
 
 
 }
@@ -277,8 +279,9 @@ void CrenderView::click(QString Id, int touchId,int x, int y)
     // Send thee MouseButtonPress event
     QMouseEvent event(QEvent::MouseButtonPress, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
 
-    QApplication::sendEvent(pc, &event);
+//    QApplication::sendEvent(pc, &event);
 
+    pc->mousePressEvent(&event);
     lockClick.unlock();
 
     return;
@@ -304,8 +307,9 @@ void CrenderView::unclick(QString Id, int touchId,int x, int y)
     mapTouch.remove(touchId);
     // Send thee MouseButtonRelease event
     QMouseEvent event(QEvent::MouseButtonRelease, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-    QApplication::sendEvent(pc, &event);
+//    QApplication::sendEvent(pc, &event);
 
+    pc->mouseReleaseEvent(&event);
     lockClick.unlock();
 
     return;
@@ -449,8 +453,9 @@ void CrenderView::dblclick(QString Id, int x, int y)
 
     // Send thee MouseButtonPress event
     QMouseEvent event(QEvent::MouseButtonDblClick, pts, Qt::LeftButton, Qt::LeftButton,Qt::NoModifier);
-    QApplication::sendEvent(pc, &event);
+//    QApplication::sendEvent(pc, &event);
 
+    pc->mouseDoubleClickEvent(&event);
     return;
 
 }

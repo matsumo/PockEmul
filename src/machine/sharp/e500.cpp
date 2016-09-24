@@ -1,3 +1,6 @@
+// Some interesting source code
+// https://translate.googleusercontent.com/translate_c?depth=1&hl=en&rurl=translate.google.com.au&sl=ja&tl=en&u=http://www.geocities.jp/setokem/prog.html&usg=ALkJrhja5IWeE4qHebd9liWWh0kjDSyOYA#15pa
+
 #include <QDebug>
 
 #include "e500.h"
@@ -677,7 +680,7 @@ BYTE Ce500::getKey()
             if (KEY('A'))			data|=0x08;
             if (KEY(K_BASIC))		data|=0x10;
             if (KEY('Z'))			data|=0x20;
-            if (KEY(K_SHT))         data|=0x40;
+            if (KEY(K_SHT2))         data|=0x40;
 //            if (pKEYB->isShift)		data|=0x40;
             if (KEY(K_CTRL))		data|=0x80;			// UP ARROW
         }
@@ -773,7 +776,7 @@ BYTE Ce500::getKey()
         }
         if (ks&0x400) {
             if (KEY('P'))			data|=0x01;
-            if (KEY(K_SHT2))         data|=0x02;
+            if (KEY(K_SHT))         data|=0x02;
             if (KEY(K_F5))			data|=0x04;
             if (KEY(K_F4))			data|=0x08;
             if (KEY(K_F3))			data|=0x10;

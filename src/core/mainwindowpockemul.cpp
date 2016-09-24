@@ -1555,7 +1555,7 @@ void MainWindowPockemul::updateFrameTimer()
 }
 
 void MainWindowPockemul::mousePressEvent	( QMouseEvent *event){
-//    qWarning()<<"MainWindowPockemul::mousePressEvent";
+    qWarning()<<"MainWindowPockemul::mousePressEvent";
     if (event->button() != Qt::LeftButton) {
         event->ignore();
 //        qWarning()<<"ignore event";
@@ -1591,6 +1591,8 @@ void MainWindowPockemul::mouseMoveEvent		( QMouseEvent * event ){
 
 void MainWindowPockemul::mouseReleaseEvent	( QMouseEvent *event){
     Q_UNUSED(event)
+
+    qWarning()<<"MainWindowPockemul::mousePressEvent";
 
     startPosDrag = false;
     setCursor(Qt::ArrowCursor);

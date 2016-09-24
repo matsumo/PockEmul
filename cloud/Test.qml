@@ -103,6 +103,7 @@ Rectangle {
         PinchArea {
             id: mainpinch
             z: -9999
+            enabled: false
             property real previousScale: 1
             anchors.fill: parent
             pinch.minimumRotation: -360
@@ -230,23 +231,23 @@ Rectangle {
                     antialiasing: true
                 }
 
-                PinchArea {
-                    property real previousScale: 1
-                    enabled: false //!parent.touchEnabled
-                    anchors.fill: parent
-                    pinch.target: photoFrame
-                    pinch.minimumRotation: -360
-                    pinch.maximumRotation: 360
-                    pinch.minimumScale: 0.1
-                    pinch.maximumScale: 10
-//                    onPinchStarted: previousScale=1;
-//                    onPinchUpdated: {
-//                        console.warn("pinch local");
-//                        main.setzoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
-//                        previousScale=pinch.scale;
-//                    }
-//                    onRotationChanged:  photoFrame.rotation = pinch.rotation
-                }
+//                PinchArea {
+//                    property real previousScale: 1
+//                    enabled: false //!parent.touchEnabled
+//                    anchors.fill: parent
+//                    pinch.target: photoFrame
+//                    pinch.minimumRotation: -360
+//                    pinch.maximumRotation: 360
+//                    pinch.minimumScale: 0.1
+//                    pinch.maximumScale: 10
+////                    onPinchStarted: previousScale=1;
+////                    onPinchUpdated: {
+////                        console.warn("pinch local");
+////                        main.setzoom(pinch.startCenter.x,pinch.startCenter.y,pinch.scale);
+////                        previousScale=pinch.scale;
+////                    }
+////                    onRotationChanged:  photoFrame.rotation = pinch.rotation
+//                }
 
                 MultiPointTouchArea {
                     property bool isdrag: false;
@@ -255,34 +256,40 @@ Rectangle {
 
                     id: pocketTouchArea
                     enabled: parent.touchEnabled
-                    mouseEnabled: true;
+                    mouseEnabled: true
                     anchors.fill: parent
                     Timer{
+                        property int count: 0;
                                 id:timer
                                 interval: 200
-//                                onTriggered: singleClick()
+                                repeat: false;
+//                                onTriggered: count++;
                             }
                     onPressed: {
                         photoFrame.focus = true;
-                        if ((touchPoints.length===1) && !main.keyAt(idpocket,touchPoints[0].x,touchPoints[0].y)) {
+                        console.log("onPressed",touchPoints.length,touchPoints[0].pressed,timer.count);
+
+                        if ((touchPoints.length===1) &&
+                            !main.keyAt(idpocket,touchPoints[0].x,touchPoints[0].y))
+                        {
                             isdrag=true;
                             previousPosition = Qt.point(touchPoints[0].x, touchPoints[0].y);
                             previousScenePosition = Qt.point(touchPoints[0].sceneX, touchPoints[0].sceneY);
-                            console.log("previous:",previousPosition.x,previousPosition.y);
+                            console.log("previous(",timer.count,")",previousPosition.x,previousPosition.y);
                             if(timer.running) {
-//                                console.log("context")
+                                console.log("context",timer.count)
                                 isdrag=false;
-                                if (false) {
-                                    sendContextMenu(idpocket,touchPoints[0].x,touchPoints[0].y);
-                                }
-                                else {
-                                    showContextMenu(idpocket,touchPoints[0].x,touchPoints[0].y);
-                                }
-
-                                timer.stop()
+                                showContextMenu(idpocket,touchPoints[0].x,touchPoints[0].y);
+                                timer.stop();
+                                timer.count = 0;
+                                console.log("Stop timer");
                             }
-                            else
-                                timer.restart()
+                            else {
+                                console.log("Restart timer");
+                                timer.count = 0;
+                                timer.restart();
+                            }
+
                         }
 
                         if (touchPoints.length !== 1) {
@@ -293,18 +300,21 @@ Rectangle {
                             if (touchPoints[i].pointId >= 0) {
                                 var tx = touchPoints[i].x;
                                 var ty = touchPoints[i].y;
-//                                console.warn("Multitouch pressed touch", touchPoints[i].pointId, "at", tx, ",", ty)
+                                console.warn("Multitouch pressed touch (",timer.count,")", touchPoints[i].pointId, "at", tx, ",", ty)
                                 main.click(idpocket,touchPoints[i].pointId,touchPoints[i].x,touchPoints[i].y);
                             }
                         }
                     }
                     onReleased: {
+                        console.log("onReleased",touchPoints.length,touchPoints[0].pressed);
+
                         if ( isdrag && (touchPoints.length === 1)) {
                             console.warn("SWIPE Release");
-                            if(timer.running) {
+                            if(timer.running)
+                            {
                                 var deltax = -(touchPoints[0].sceneX - previousScenePosition.x);
                                 var deltay = -(touchPoints[0].sceneY - previousScenePosition.y);
-                                console.log("YES:",idpocket,touchPoints[0].sceneX,touchPoints[0].sceneY,deltax,deltay);
+//                                console.log("YES:",idpocket,touchPoints[0].sceneX,touchPoints[0].sceneY,deltax,deltay);
 
                                 if (Math.abs(deltax) > 40 || Math.abs(deltay) > 40) {
                                     if (deltax > 30 && Math.abs(deltay) < 30) {
@@ -327,9 +337,6 @@ Rectangle {
                                 }
                                 //                                timer.stop()
                             }
-//                            else
-//                                timer.restart()
-
                         }
                         isdrag = false;
 
@@ -337,18 +344,20 @@ Rectangle {
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
-//                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty, "pressed:",touchPoints[i].pressed)
+                            console.warn("Multitouch released touch", touchPoints[i].pointId, "at", tx, ",", ty, "pressed:",touchPoints[i].pressed)
                             main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
 
                    }
                     onCanceled: {
+                        console.log("onCanceled",touchPoints.length,touchPoints[0].pressed);
+
                         isdrag = false;
                         for (var i=0;i< touchPoints.length;i++) {
                             var tx = touchPoints[i].x;
                             var ty = touchPoints[i].y;
                             console.warn("Multitouch canceled touch", touchPoints[i].pointId, "at", tx, ",", ty, "pressed:",touchPoints[i].pressed)
-//                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
+                            main.unclick(idpocket,touchPoints[i].pointId,tx,ty);
                         }
                     }
                     onTouchUpdated: {
@@ -366,7 +375,7 @@ Rectangle {
                             var dx = x - previousPosition.x;
                             var dy = y - previousPosition.y;
 //                            previousPosition = Qt.point(touchPoints[0].x, touchPoints[0].y);
-//                            console.warn("Multitouch updated:", touchPoints[0].pointId, "at", x,",",y,"d=",dx, ",", dy)
+                            console.warn("Multitouch updated:", touchPoints[0].pointId, "at", x,",",y,"d=",dx, ",", dy)
                             main.movepocket(idpocket,photoFrame.x+dx,photoFrame.y+dy);
                         }
                     }

@@ -32,7 +32,7 @@
     <KEY description="Left Arrow" height="32" left="0" masterscancode="0x00" modifier="" scancode="0x06" top="0" view="FRONT" width="32"/>
     <KEY description="Break" height="32" left="603" masterscancode="0x00" modifier="" scancode="0x22a" top="304" view="FRONT" width="32"/>
     <KEY description="Rigth Arrow" height="32" left="789" masterscancode="0x00" modifier="" scancode="0x07" top="257" view="FRONT" width="32"/>
-    <KEY description="Shift" height="32" left="38" masterscancode="0x00" modifier="" scancode="0x11" top="446" view="FRONT" width="58"/>
+    <KEY description="Shift" height="32" left="38" masterscancode="0x00" modifier="" scancode="0x12" top="446" view="FRONT" width="58"/>
     <KEY description="Ctrl" height="32" left="38" masterscancode="0x00" modifier="" scancode="0xd5" top="398" view="FRONT" width="32"/>
     <KEY description="Space" height="32" left="565" masterscancode="0x00" modifier="" scancode="0x20" top="444" view="FRONT" width="58"/>
     <KEY description="Up Arrow" height="32" left="739" masterscancode="0x00" modifier="" scancode="0x05" top="255" view="FRONT" width="32"/>
@@ -85,5 +85,20 @@
     <KEY description="Pad 8" height="32" left="739" masterscancode="0x00" modifier="" scancode="0xa8" top="304" view="FRONT" width="32"/>
     <KEY description="Pad 9" height="32" left="789" masterscancode="0x00" modifier="" scancode="0xa9" top="304" view="FRONT" width="32"/>
     <KEY description="Pad ." height="32" left="740" masterscancode="0x00" modifier="" scancode="0xab" top="442" view="FRONT" width="32"/>
-</Keyboard>
+    <KEY description="!" height="0" left="0" masterscancode="0x31" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&quot;" height="0" left="0" masterscancode="0x32" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="#" height="0" left="0" masterscancode="0x33" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="$" height="0" left="0" masterscancode="0x34" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="%" height="0" left="0" masterscancode="0x35" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&amp;" height="0" left="0" masterscancode="0x36" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&apos;" height="0" left="0" masterscancode="0x37" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="(" height="0" left="0" masterscancode="0x38" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description=")" height="0" left="0" masterscancode="0x39" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="@" height="0" left="0" masterscancode="0x30" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="§" height="0" left="0" masterscancode="0x5e" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&lt;" height="0" left="0" masterscancode="0x2c" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&gt;" height="0" left="0" masterscancode="0x2e" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="_" height="0" left="0" masterscancode="0x3a" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="?" height="0" left="0" masterscancode="0x3b" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
+    </Keyboard>
 </KEYBMAP>

@@ -1109,7 +1109,7 @@ QList<Cconnector *> CPObject::nearConnectors(Cconnector *refConnector,qint8 snap
 void CPObject::mouseReleaseEvent(QMouseEvent *event)
 {
 
-//    qWarning()<<"mouseReleaseEvent"<<event;
+//    qWarning()<<"CPObject::mouseReleaseEvent"<<event;
     // if a connector is free
     // if an object with free connector is "near"
     // propose to autolink
@@ -1509,6 +1509,8 @@ void CPObject::keyReleaseEvent(QKeyEvent * event )
     pKEYB->isShift = event->modifiers() &  Qt::ShiftModifier;//(QApplication::keyboardModifiers() == Qt::ShiftModifier);
     pKEYB->isCtrl = (QApplication::keyboardModifiers() == Qt::ControlModifier);
 
+    pKEYB->removeKey(K_SHT2);
+
     int _key = TOUPPER(mapKey(event));
     pKEYB->removeKey(_key);
     ComputeKey(KEY_RELEASED,_key);
@@ -1618,7 +1620,12 @@ void CPObject::keyPressEvent (QKeyEvent * event )
     pKEYB->LastKey = TOUPPER(mapKey(event));
 
     if ( (pKEYB->LastKey>0) && (pKEYB->getKey(pKEYB->LastKey).ScanCode != 0)) {
-        // Add th key to Key pressed buffer
+        if(pKEYB->isShift && !pKEYB->isKeyPressed(K_SHT2)) {
+            pKEYB->insertKey(K_SHT2);
+            Refresh_Display = true;
+        }
+
+        // Add the key to Key pressed buffer
         if (!pKEYB->isKeyPressed(pKEYB->LastKey)) {
             pKEYB->insertKey(pKEYB->LastKey);
             Refresh_Display = true;

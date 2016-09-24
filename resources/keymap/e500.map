@@ -23,8 +23,8 @@
     <KEY description="Left Arrow" height="16" left="347" masterscancode="0x00" modifier="" scancode="0x06" top="320" view="FRONT" width="25"/>
     <KEY description="MODE" height="16" left="1" masterscancode="0x00" modifier="" scancode="0x08" top="0" view="FRONT" width="25"/>
     <KEY description="Rigth Arrow" height="16" left="384" masterscancode="0x00" modifier="" scancode="0x07" top="320" view="FRONT" width="25"/>
-    <KEY description="2ndF" height="16" left="430" masterscancode="0x00" modifier="" scancode="0x12" top="192" view="FRONT" width="23"/>
-    <KEY description="Shift" height="16" left="23" masterscancode="0x00" modifier="" scancode="0x11" top="321" view="FRONT" width="30"/>
+    <KEY description="2ndF" height="16" left="430" masterscancode="0x00" modifier="" scancode="0x11" top="192" view="FRONT" width="23"/>
+    <KEY description="Shift" height="16" left="23" masterscancode="0x00" modifier="" scancode="0x12" top="321" view="FRONT" width="30"/>
     <KEY description="SML" height="16" left="129" masterscancode="0x00" modifier="" scancode="0x14" top="320" view="FRONT" width="25"/>
     <KEY description="CTRL" height="16" left="88" masterscancode="0x00" modifier="" scancode="0xd5" top="319" view="FRONT" width="30"/>
     <KEY description="ANS" height="16" left="166" masterscancode="0x00" modifier="" scancode="0xdc" top="321" view="FRONT" width="25"/>
@@ -95,16 +95,26 @@
     <KEY description="PF3" height="17" left="211" masterscancode="0x00" modifier="" scancode="0xf8" top="191" view="FRONT" width="60"/>
     <KEY description="PF4" height="17" left="283" masterscancode="0x00" modifier="" scancode="0xf9" top="191" view="FRONT" width="60"/>
     <KEY description="PF5" height="17" left="356" masterscancode="0x00" modifier="" scancode="0xfa" top="191" view="FRONT" width="60"/>
-    <KEY description="!" height="0" left="0" masterscancode="0x71" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="&quot;" height="0" left="0" masterscancode="0x77" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="#" height="0" left="0" masterscancode="0x65" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="$" height="0" left="0" masterscancode="0x72" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="%" height="0" left="0" masterscancode="0x74" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="&amp;" height="0" left="0" masterscancode="0x79" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="&apos;" height="0" left="0" masterscancode="0x75" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="&lt;" height="0" left="0" masterscancode="0x69" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="&gt;" height="0" left="0" masterscancode="0x6f" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description="@" height="0" left="0" masterscancode="0x70" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-    <KEY description=":" height="0" left="0" masterscancode="0x3b" modifier="shift" scancode="0x00" top="0" view="FRONT" width="0"/>
-</Keyboard>
+    <KEY description="!" height="0" left="0" masterscancode="0x71" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&quot;" height="0" left="0" masterscancode="0x77" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="#" height="0" left="0" masterscancode="0x65" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="$" height="0" left="0" masterscancode="0x72" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="%" height="0" left="0" masterscancode="0x74" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&amp;" height="0" left="0" masterscancode="0x79" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&apos;" height="0" left="0" masterscancode="0x75" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&lt;" height="0" left="0" masterscancode="0x69" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="&gt;" height="0" left="0" masterscancode="0x6f" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="@" height="0" left="0" masterscancode="0x70" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description=":" height="0" left="0" masterscancode="0x3b" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="?" height="0" left="0" masterscancode="0x2c" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="[" height="0" left="0" masterscancode="0x61" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="]" height="0" left="0" masterscancode="0x73" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="{" height="0" left="0" masterscancode="0x64" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="}" height="0" left="0" masterscancode="0x66" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="\" height="0" left="0" masterscancode="0x67" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="|" height="0" left="0" masterscancode="0x68" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="~" height="0" left="0" masterscancode="0x6a" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="_" height="0" left="0" masterscancode="0x6b" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    <KEY description="^" height="0" left="0" masterscancode="0x6c" modifier="2nd" scancode="0x00" top="0" view="FRONT" width="0"/>
+    </Keyboard>
 </KEYBMAP>
