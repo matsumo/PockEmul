@@ -163,9 +163,10 @@ HD44780_PIXEL_UPDATE(Cti95_update_pixel)
 void Clcdc_ti74::disp(void)
 {
     CHD44780 * pHD44780 = ((Cti74*) pPC)->pHD44780;
-    if (!updated) return;
     if (!ready) return;
     if (!pHD44780 ) return;
+    if (!updated) return;
+    updated = false;
     lock.lock();
     Refresh = true;
     info = pHD44780->getInfo();
@@ -190,7 +191,6 @@ void Clcdc_ti74::disp(void)
     painterSymb.end();
 
 
-    updated = 0;
 
     lock.unlock();
 }
@@ -204,6 +204,9 @@ void Clcdc_ti95::disp(void)
     if (!redraw) {
         if (!updated) return;
     }
+    if (!updated) return;
+    updated = false;
+
     lock.lock();
     redraw = false;
     Refresh = true;
@@ -217,7 +220,6 @@ void Clcdc_ti95::disp(void)
     pHD44780->screen_update(this,&painter,Color_On,Color_Off);
     painter.end();
 
-    updated = 0;
 
     lock.unlock();
 }

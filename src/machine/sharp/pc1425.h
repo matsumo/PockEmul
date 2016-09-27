@@ -11,6 +11,7 @@ public:
 
     virtual bool Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
+    virtual BYTE	Get_PortA(void);
 
     Cpc1425(CPObject *parent=0);
 

@@ -69,7 +69,7 @@ Cti74::~Cti74() {
 
 Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 {								//[constructor]
-    setfrequency( (int) 4000000);
+    setfrequency( (int) 2000000);
     setcfgfname(QString("ti95"));
 
     SessionHeader	= "TI95PKM";
@@ -165,6 +165,7 @@ UINT8 Cti74::out(UINT8 Port, UINT8 Value, QString sender)
         {
             m_power = 0;
             TurnOFF();
+            Refresh_Display = true;
             qWarning()<<"POWER 0";
 //            ptms70c46cpu->set_input_line(INPUT_LINE_RESET, ASSERT_LINE); // stop running
         }

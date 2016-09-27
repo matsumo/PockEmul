@@ -10,7 +10,7 @@
 #include "Log.h"
 #include "Inter.h"
 #include "Keyb.h"
-#include "Keyb1401.h"
+//#include "Keyb1401.h"
 #include "cextension.h"
 #include "sc61860.h"
 #include "Keyb.h"
@@ -38,8 +38,8 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
     SlotList.append(CSlot(24, 0x2000 ,	"",								"pc-1401/R1-1401.ram" , CSlot::RAM , "RAM"));
     SlotList.append(CSlot(32, 0x8000 ,	P_RES(":/pc1401/bas-1401.rom"), "pc-1401/bas-1401.rom" , CSlot::ROM , "BASIC ROM"));
 
-    KeyMap		= KeyMap1401;
-    KeyMapLenght= KeyMap1401Lenght;
+//    KeyMap		= KeyMap1401;
+//    KeyMapLenght= KeyMap1401Lenght;
 
     setDXmm(170);
     setDYmm(72);
@@ -55,7 +55,7 @@ Cpc1401::Cpc1401(CPObject *parent)	: CpcXXXX(parent)
                                    QRect(119,44,210,35));
     pCPU		= new CSC61860(this);
     pTIMER		= new Ctimer(this);
-    pKEYB->setMap("pc1401.map",scandef_pc1401);
+    pKEYB->setMap("pc1401.map");
 
 
 }
@@ -100,33 +100,167 @@ bool Cpc1401::init()
 }
 
 
+//BYTE	Cpc1401::Get_PortA(void)
+//{
+//    qint8 data = pKEYB->Read(IO_A);
+//    return(data);
+//}
+//BYTE scandef_pc1401[] = {
+////+0		+1			+2			+3			+4			+5			+6			+7
+//K_SIGN,		'8',		'2',		'5',		K_CAL,		'q',		'a',		'z',
+//'.',		'9',		'3',		'6',		K_BASIC,	'w',		's',		'x',
+//'+',		'/',		'-',		'*',		K_CTRL,		'e',		'd',		'c',
+//')',		'(',		K_SQR,		K_ROOT,		K_POT,		K_EXP,		K_XM,		'=',
+//K_STAT,		K_1X,		K_LOG,		K_LN,		K_DEG,		K_HEX,		NUL,		K_MPLUS,
+//K_CCE,		K_FSE,		K_TAN,		K_COS,		K_SIN,		K_HYP,		K_SHT,		K_RM,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,
+
+//NUL,		'7',		'1',		'4',		K_DA,		'r',		'f',		'v',
+//NUL,		NUL,		',',		'p',		K_UA,		't',		'g',		'b',
+//NUL,		NUL,		NUL,		'o',		K_LA,		'y',		'h',		'n',
+//NUL,		NUL,		NUL,		NUL,		K_RA,		'u',		'j',		'm',
+//NUL,		NUL,		NUL,		NUL,		NUL,		'i',		'k',		' ',
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'l',		K_RET,
+//NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		NUL,		'0',
+
+//};
+
+
+
 BYTE	Cpc1401::Get_PortA(void)
 {
-    qint8 data = pKEYB->Read(IO_A);
-    return(data);
+    int data = 0;
+
+    if (IO_B & 1) {
+        if (KEY(K_SIGN))			data|=0x01;
+        if (KEY('8'))			data|=0x02;
+        if (KEY('2'))			data|=0x04;
+        if (KEY('5'))			data|=0x08;
+        if (KEY(K_CAL))			data|=0x10;
+        if (KEY('Q'))			data|=0x20;
+        if (KEY('A'))			data|=0x40;
+        if (KEY('Z'))			data|=0x80;
+    }
+    if (IO_B & 2) {
+        if (KEY('.'))			data|=0x01;
+        if (KEY('9'))			data|=0x02;
+        if (KEY('3'))			data|=0x04;
+        if (KEY('6'))			data|=0x08;
+        if (KEY(K_BASIC))			data|=0x10;
+        if (KEY('W'))			data|=0x20;
+        if (KEY('S'))			data|=0x40;
+        if (KEY('X'))			data|=0x80;
+    }
+    if (IO_B & 4) {
+        if (KEY('+'))			data|=0x01;
+        if (KEY('/'))			data|=0x02;
+        if (KEY('-'))			data|=0x04;
+        if (KEY('*'))			data|=0x08;
+        if (KEY(K_CTRL))			data|=0x10;
+        if (KEY('E'))			data|=0x20;
+        if (KEY('D'))			data|=0x40;
+        if (KEY('C'))			data|=0x80;
+    }
+    if (IO_B & 8) {
+        if (KEY(')'))			data|=0x01;
+        if (KEY('('))			data|=0x02;
+        if (KEY(K_SQR))			data|=0x04;
+        if (KEY(K_ROOT))			data|=0x08;
+        if (KEY(K_POT))			data|=0x10;
+        if (KEY(K_EXP))			data|=0x20;
+        if (KEY(K_XM))			data|=0x40;
+        if (KEY('='))			data|=0x80;
+    }
+    if (IO_B & 0x10) {
+        if (KEY(K_STAT))			data|=0x01;
+        if (KEY(K_1X))			data|=0x02;
+        if (KEY(K_LOG))			data|=0x04;
+        if (KEY(K_LN))			data|=0x08;
+        if (KEY(K_DEG))			data|=0x10;
+        if (KEY(K_HEX))			data|=0x20;
+//		if (KEY(''))			data|=0x40;
+        if (KEY(K_MPLUS))			data|=0x80;
+    }
+    if (IO_B & 0x20) {
+        if (KEY(K_CCE))			data|=0x01;
+        if (KEY(K_FSE))			data|=0x02;
+        if (KEY(K_TAN))			data|=0x04;
+        if (KEY(K_COS))			data|=0x08;
+        if (KEY(K_SIN))			data|=0x10;
+        if (KEY(K_HYP))			data|=0x20;
+        if (KEY(K_SHT))			data|=0x40;
+        if (KEY(K_RM))			data|=0x80;
+    }
+
+
+    if (IO_A & 0x01) {
+        if (KEY('7'))			data|=0x02;
+        if (KEY('1'))			data|=0x04;
+        if (KEY('4'))			data|=0x08;
+        if (KEY(K_DA))			data|=0x10;
+        if (KEY('R'))			data|=0x20;
+        if (KEY('F'))			data|=0x40;
+        if (KEY('V'))			data|=0x80;
+    }
+    if (IO_A & 0x02) {
+        if (KEY(','))			data|=0x04;
+        if (KEY('P'))			data|=0x08;
+        if (KEY(K_UA))			data|=0x10;
+        if (KEY('T'))			data|=0x20;
+        if (KEY('G'))			data|=0x40;
+        if (KEY('B'))			data|=0x80;
+    }
+    if (IO_A & 0x04) {
+        if (KEY('O'))			data|=0x08;
+        if (KEY(K_LA))			data|=0x10;
+        if (KEY('Y'))			data|=0x20;
+        if (KEY('H'))			data|=0x40;
+        if (KEY('N'))			data|=0x80;
+    }
+    if (IO_A & 0x08) {
+        if (KEY(K_RA))			data|=0x10;
+        if (KEY('U'))			data|=0x20;
+        if (KEY('J'))			data|=0x40;
+        if (KEY('M'))			data|=0x80;
+    }
+    if (IO_A & 0x10) {
+        if (KEY('I'))			data|=0x20;
+        if (KEY('K'))			data|=0x40;
+        if (KEY(' '))			data|=0x80;
+    }
+    if (IO_A & 0x20) {
+        if (KEY('L'))			data|=0x40;
+        if (KEY(K_RET))			data|=0x80;
+    }
+    if (IO_A & 0x40) {
+        if (KEY('0'))			data|=0x80;
+    }
+
+    return data;
 }
 
-void	Cpc1401::Set_PortA(BYTE data)
-{
+//void	Cpc1401::Set_PortA(BYTE data)
+//{
 
 
-	if ((IO_A != 0) && (data == 0))
-	{
-		++cnt;
-        if (cnt > 2)
-		{
-			pKEYB->keyscan();
-			cnt = 0;
-		}
-	}
-	IO_A = data;
-}
+//	if ((IO_A != 0) && (data == 0))
+//	{
+//		++cnt;
+//        if (cnt > 2)
+//		{
+//			pKEYB->keyscan();
+//			cnt = 0;
+//		}
+//	}
+//	IO_A = data;
+//}
 			
-void	Cpc1401::Set_PortB(BYTE data)
-{
-	IO_B = data;
-	pKEYB->Set_KS(data);
-}
+//void	Cpc1401::Set_PortB(BYTE data)
+//{
+//	IO_B = data;
+//	pKEYB->Set_KS(data);
+//}
 
 // PIN_MT_OUT2	1
 // PIN_GND		2

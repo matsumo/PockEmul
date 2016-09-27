@@ -19,8 +19,8 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
     virtual BYTE	Get_PortA(void);
-    virtual void	Set_PortA(BYTE data);
-    virtual void	Set_PortB(BYTE data);
+//    virtual void	Set_PortA(BYTE data);
+//    virtual void	Set_PortB(BYTE data);
 
     virtual bool	Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool	Chk_Adr_R(UINT32 *d, UINT32 *data);

@@ -393,6 +393,7 @@ void CHD44780::control_write(UINT8 data)
 
 void CHD44780::data_write(UINT8 data)
 {
+
     if (info.m_busy_flag)
     {
 //		qWarning()<<"HD44780 : Ignoring data write due of busy flag\n", tag(), data);

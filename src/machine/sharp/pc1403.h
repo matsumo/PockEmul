@@ -21,6 +21,8 @@ public:
     virtual bool	Set_Connector(Cbus *_bus = 0);
     virtual bool	Get_Connector(Cbus *_bus = 0);
 
+    virtual BYTE	Get_PortA(void);
+
 
     virtual bool Chk_Adr(UINT32 *d,UINT32 data);
     virtual bool Chk_Adr_R(UINT32 *d, UINT32 *data);
@@ -34,7 +36,6 @@ public:
     virtual ~Cpc1403()
 	{								//[constructor]
     }
-    BYTE Get_PortA();
 private:
 };
 

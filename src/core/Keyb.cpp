@@ -321,10 +321,10 @@ void Ckeyb::drawPressed(QImage *_img)
                         (_rect.x()+_rect.width())*pPC->internalImageRatio,
                         (_rect.y()+_rect.height())*pPC->internalImageRatio);
 
-        int _m = qMax(_rect.width(), _rect.height())*.25;
+        int _m = qMin(_rect.width(), _rect.height())*.25;
         _rect+= QMargins(_m,_m,_m,_m);
         int dim = qMax(_rect.width(), _rect.height());
-        int magnifierSize = dim * 3;
+        int magnifierSize = dim * 2;
         int radius = magnifierSize / 2;
         int ring = radius - 15;
         QSize box = QSize(magnifierSize, magnifierSize);

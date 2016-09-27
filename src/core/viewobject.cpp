@@ -536,12 +536,14 @@ void CViewObject::renderAnimation()
 
         QPainter painter;
 
+//        paintingImage.lock();
 
-        AnimatedImage->fill(Qt::transparent);
+
 //        qWarning()<<"AnimatedImage"<<AnimatedImage;
         if (FinalImage)
         {
-//            paintingImage.lock();
+            paintingImage.lock();
+            AnimatedImage->fill(Qt::transparent);
 
             QSize _size1 = viewRect(animationView1);
             QSize _size2 = viewRect(animationView2);
@@ -607,7 +609,7 @@ void CViewObject::renderAnimation()
 
             painter.end();
 
-//            paintingImage.unlock();
+            paintingImage.unlock();
 
 //            qWarning()<<"animation - currentview="<<currentView;
             if (this->size() != AnimatedImage->size()) {
@@ -616,6 +618,8 @@ void CViewObject::renderAnimation()
             Refresh_Display = true;
 //            update();
         }
+
+//        paintingImage.unlock();
     }
 }
 

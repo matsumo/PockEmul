@@ -103,7 +103,7 @@ Rectangle {
         PinchArea {
             id: mainpinch
             z: -9999
-            enabled: false
+            enabled: true
             property real previousScale: 1
             anchors.fill: parent
             pinch.minimumRotation: -360
@@ -127,6 +127,7 @@ Rectangle {
                 }
                 onPressed: {
                     //                console.warn("pressed MASTER");
+                    scene.focus = true;
                     prevX = mouseX;
                     prevY = mouseY;
                     this.isdrag=true;
