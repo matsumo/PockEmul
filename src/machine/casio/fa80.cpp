@@ -22,11 +22,11 @@ Cfa80::Cfa80(CPObject *parent):CPObject(parent)
 {								//[constructor]
     setfrequency( 1000000);
 
-    BackGroundFname	= P_RES(":/fx8000g/fa80.png");
+    BackGroundFname	= P_RES(":/fa80/fa80.png");
     setcfgfname("fa80");
 
-    TopFname = P_RES(":/fx8000g/fa80top.png");
-    LeftFname = P_RES(":/fx8000g/fa80left.png");
+    TopFname = P_RES(":/fa80/fa80top.png");
+    LeftFname = P_RES(":/fa80/fa80left.png");
 
     pTIMER		= new Ctimer(this);
 

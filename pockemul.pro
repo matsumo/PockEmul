@@ -1615,7 +1615,8 @@ OTHER_FILES *= \
 
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
-RESOURCES +=
+RESOURCES += \
+    resources/fa80.qrc
 
 DISTFILES += \
     package.pri \

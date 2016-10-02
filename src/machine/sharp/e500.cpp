@@ -664,6 +664,15 @@ UINT8 Ce500::out(UINT8 address, UINT8 value, QString sender)
     return 0;
 }
 
+//BUG Pockemul core has a bug with multi touch.
+// when the Shift key is maintened pressed, it is in fact released then repressed when an other key is pressed
+// unforutanely, the E500 need to have the shift key pressed BEFORE an other key.
+// If it is pressed at the same time, the E500 ignore the shift
+// So, i add a trick to delay all keys except Shift by 5 ms :-(
+
+#undef KEY(c)
+#define KEY(c)	(pKEYB ? pKEYB->isKey(c, (c==K_SHT2) ? 0 : 5) : false)
+
 BYTE Ce500::getKey()
 {
     UINT8 data=0;
@@ -800,9 +809,15 @@ BYTE Ce500::getKey()
     else
         pCPU->setImemBit(IMEM_SSR,4,0);
 //    else
+
+//    if ((ks&1) && (data==0x20)) {
+
+//    }
+//    else
     if(data) {
         ((Csc62015*)pCPU)->opr_imem(IMEM_ISR,OPR_OR,INT_KEY);	// set status to ISR
     }
+
     pCPU->imem[IMEM_KI] = data;					//set data to ki
     return data^0xff;
 

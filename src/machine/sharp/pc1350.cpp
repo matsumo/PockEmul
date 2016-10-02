@@ -596,7 +596,7 @@ void Cpc1350::TurnON()
 //        if (result == 1)
         {
             // Create ram card PObject
-            CPObject *cardPC = mainwindow->LoadPocket(CE202M,"ce202m_pc1350");
+            CPObject *cardPC = mainwindow->LoadPocket(CE202M,"ce202m_"+getcfgfname());
             // link the memory card to PS1Connector
             // and move memory card to correct coordinates
             currentSlot = 1;

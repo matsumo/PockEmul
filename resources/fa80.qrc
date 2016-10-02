@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fa80/fa80.png</file>
+        <file>fa80/fa80left.png</file>
+        <file>fa80/fa80top.png</file>
+    </qresource>
+</RCC>

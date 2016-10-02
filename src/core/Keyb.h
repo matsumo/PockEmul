@@ -400,7 +400,7 @@ public:
     Ckeyb(CViewObject *parent = 0,QString map = "",BYTE *scan=0);
     virtual ~Ckeyb();
 
-    bool isKey(int _key);
+    bool isKey(int _key, int _addedDelay = 0);
     bool isKeyPressed();
     int keyPressedCount();
 

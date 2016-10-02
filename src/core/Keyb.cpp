@@ -149,16 +149,16 @@ bool Ckeyb::isKeyPressed(int _key) {
     return _ret;
 }
 
-bool Ckeyb::isKey(int _key) {
+bool Ckeyb::isKey(int _key,int _addedDelay) {
 
     keyPressing.lock();
     if ( keyPressedList.contains(TOUPPER(_key)) ) {
          // Check if this key is delayed
-        int _delay = getKey(TOUPPER(_key)).delay;
+        int _delay = getKey(TOUPPER(_key)).delay *1000 + _addedDelay;
         if ( _delay > 0) {
             // Check timing
             quint64 _stick = keyPressedList[TOUPPER(_key)];
-            if (pPC->pTIMER->msElapsed(_stick) >= (_delay*1000)) {
+            if (pPC->pTIMER->msElapsed(_stick) >= _delay) {
                 pPC->Refresh_Display = true;
                 keyPressing.unlock();
                 return true;
@@ -449,21 +449,24 @@ bool Ckeyb::init(void)
 
     if (fn_KeyMap.isEmpty()) return true;
 
-    QFile file( workDir+"sessions/"+fn_KeyMap );
-	QXmlInputSource source(&file);
+    QFile file;
+    file.setFileName(workDir+"sessions/"+fn_KeyMap );
+    if (!file.exists()) {
+        file.setFileName(":/KEYMAP/keymap/"+fn_KeyMap);
+    }
+//    if (!file.exists()) {
+//        file.setFileName(":/KEYMAP/keymap/"+fn_KeyMap);
+//    }
+    if (file.exists()) {
 
-	QXmlSimpleReader reader;
-	reader.setContentHandler( handler );
+        QXmlInputSource source(&file);
+        QXmlSimpleReader reader;
+        reader.setContentHandler( handler );
 
-    bool result = reader.parse( source );
-	if (result) return true;
+        bool result = reader.parse( source );
+        return result;
+    }
 
-    // Else load from ressource
-    QFile fileRes(":/KEYMAP/keymap/"+fn_KeyMap);
-    QXmlInputSource sourceRes(&fileRes);
-    result = reader.parse(sourceRes);
-//    if (result) qWarning("success read key ressource\n");
-    if (result) return true;
 
 	// else load the struct
 	for (int i = 0;i < pPC->KeyMapLenght;i++)

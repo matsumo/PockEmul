@@ -96,7 +96,7 @@ void Cpc1360::TurnON()
 //        if (result == 1)
         {
             // Create ram card PObject
-            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_pc1360S1");
+            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_"+getcfgfname()+"S1");
             // link the memory card to PS1Connector
             // and move memory card to correct coordinates
             currentSlot = 1;
@@ -114,7 +114,7 @@ void Cpc1360::TurnON()
 //        if (result == 1)
         {
             // Create ram card PObject
-            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_pc1360S2");
+            CPObject *cardPC = mainwindow->LoadPocket(CE2H32M,"ce2h32m_"+getcfgfname()+"S2");
             // link the memory card to PS1Connector
             // and move memory card to correct coordinates
             currentSlot = 2;
