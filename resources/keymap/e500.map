@@ -16,6 +16,7 @@
     <KEY description="On/Brk" height="16" left="58" masterscancode="0x00" modifier="" scancode="0x03" top="288" view="FRONT" width="25"/>
     <KEY description="CLS" height="16" left="671" masterscancode="0x00" modifier="" scancode="0xef" top="87" view="FRONT" width="25"/>
     <KEY description="DEL" height="27" left="663" masterscancode="0x00" modifier="" scancode="0x0a" top="195" view="FRONT" width="31"/>
+    <KEY description="BS" height="27" left="663" masterscancode="0x00" modifier="" scancode="0xd6" top="236" view="FRONT" width="31"/>
     <KEY description="Down Arrow" height="16" left="274" masterscancode="0x00" modifier="" scancode="0x04" top="321" view="FRONT" width="25"/>
     <KEY description="ENTER" height="56" left="420" masterscancode="0x00" modifier="" scancode="0x0d" top="283" view="FRONT" width="34"/>
     <KEY description="Equal" height="22" left="663" masterscancode="0x00" modifier="" scancode="0x3d" top="315" view="FRONT" width="32"/>

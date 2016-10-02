@@ -670,7 +670,7 @@ UINT8 Ce500::out(UINT8 address, UINT8 value, QString sender)
 // If it is pressed at the same time, the E500 ignore the shift
 // So, i add a trick to delay all keys except Shift by 5 ms :-(
 
-#undef KEY(c)
+#undef KEY
 #define KEY(c)	(pKEYB ? pKEYB->isKey(c, (c==K_SHT2) ? 0 : 5) : false)
 
 BYTE Ce500::getKey()
