@@ -317,7 +317,9 @@ int main(int argc, char *argv[])
     mainwindow->menuBar()->hide();
 #else
     mainwindow->show();
+#ifdef Q_OS_WIN
     QWindowsWindowFunctions::setHasBorderInFullScreen(mainwindow->windowHandle(), true);
+#endif
     mainwindow->restoreGeometry(QByteArray::fromHex(Cloud::getValueFor("geometry").toLatin1()));
 #endif
 

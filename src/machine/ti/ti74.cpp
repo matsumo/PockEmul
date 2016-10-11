@@ -24,7 +24,7 @@
 
 Cti74::Cti74(CPObject *parent)	: CpcXXXX(parent)
 {								//[constructor]
-    setfrequency( (int) 4000000);
+    setfrequency( (int) 1000000);
     setcfgfname(QString("ti74"));
 
     SessionHeader	= "TI74PKM";
@@ -69,7 +69,7 @@ Cti74::~Cti74() {
 
 Cti95::Cti95(CPObject *parent)	: Cti74(parent)
 {								//[constructor]
-    setfrequency( (int) 2000000);
+    setfrequency( (int) 1000000);
     setcfgfname(QString("ti95"));
 
     SessionHeader	= "TI95PKM";
