@@ -268,7 +268,7 @@ bool QDocumentLine::isNull() const
 */
 bool QDocumentLine::isValid() const
 {
-	return m_handle ? m_handle->document() : false;
+    return m_handle ? (m_handle->document()?true:false) : false;
 }
 
 /*!
