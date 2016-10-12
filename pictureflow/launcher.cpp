@@ -108,25 +108,25 @@ extern MainWindowPockemul *mainwindow;
  {
      return description;
  }
- void Launcher::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
- {
-     Q_UNUSED(exitCode);
-     Q_UNUSED(exitStatus);
+// void Launcher::processFinished(int exitCode, QProcess::ExitStatus exitStatus)
+// {
+//     Q_UNUSED(exitCode);
+//     Q_UNUSED(exitStatus);
 
-     emit demoFinished();
+//     emit demoFinished();
 
-     QObject::disconnect(this, SIGNAL(demoStarted()), 0, 0);
-     QObject::disconnect(this, SIGNAL(demoFinished()), 0, 0);
- }
+//     QObject::disconnect(this, SIGNAL(demoStarted()), 0, 0);
+//     QObject::disconnect(this, SIGNAL(demoFinished()), 0, 0);
+// }
 
- void Launcher::processError(QProcess::ProcessError err)
- {
-     qDebug() << "Process error: " << err;
-     if (err == QProcess::Crashed)
-         emit demoFinished();
- }
+// void Launcher::processError(QProcess::ProcessError err)
+// {
+//     qDebug() << "Process error: " << err;
+//     if (err == QProcess::Crashed)
+//         emit demoFinished();
+// }
 
- void Launcher::processStarted()
- {
-     emit demoStarted();
- }
+// void Launcher::processStarted()
+// {
+//     emit demoStarted();
+// }
