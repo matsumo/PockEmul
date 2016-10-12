@@ -46,7 +46,7 @@
 
  #include <QPixmap>
  #include <QImage>
- #include <QProcess>
+// #include <QProcess>
  #include <QObject>
 
  class Launcher : public QObject
@@ -64,9 +64,9 @@
 
      QString getDescription();
  public slots:
-     void processStarted();
-     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
-     void processError(QProcess::ProcessError err);
+//     void processStarted();
+//     void processFinished(int exitCode, QProcess::ExitStatus exitStatus);
+//     void processError(QProcess::ProcessError err);
 
  signals:
      void demoStarted();
@@ -78,7 +78,7 @@
      QString appCaption;
      QString executablePath;
      QStringList arguments;
-     QProcess process;
+//     QProcess process;
      QString description;
      QString brand;
  };

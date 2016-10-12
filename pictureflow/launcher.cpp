@@ -62,20 +62,20 @@ extern MainWindowPockemul *mainwindow;
 
      arguments = args;
 
-     process.setProcessChannelMode(QProcess::ForwardedChannels);
+//     process.setProcessChannelMode(QProcess::ForwardedChannels);
 
-     QObject::connect( &process, SIGNAL(finished(int,QProcess::ExitStatus)),
-                       this, SLOT(processFinished(int,QProcess::ExitStatus)));
+//     QObject::connect( &process, SIGNAL(finished(int,QProcess::ExitStatus)),
+//                       this, SLOT(processFinished(int,QProcess::ExitStatus)));
 
-     QObject::connect( &process, SIGNAL(error(QProcess::ProcessError)),
-                       this, SLOT(processError(QProcess::ProcessError)));
+//     QObject::connect( &process, SIGNAL(error(QProcess::ProcessError)),
+//                       this, SLOT(processError(QProcess::ProcessError)));
 
-     QObject::connect( &process, SIGNAL(started()), this, SLOT(processStarted()));
+//     QObject::connect( &process, SIGNAL(started()), this, SLOT(processStarted()));
  }
 
  void Launcher::launch()
  {
-     process.start(executablePath, arguments);
+//     process.start(executablePath, arguments);
  }
 
  QImage* Launcher::getImage()
