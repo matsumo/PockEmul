@@ -21,7 +21,6 @@ Column {
             save_pml("un titre provisoire","une description provisoire");
             cloudShow();
             renderArea.showWorkingScreen();
-
         }
     }
 

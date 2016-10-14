@@ -805,13 +805,13 @@ Rectangle {
         console.log("Hide test");
         thecloud.visible = false;
         scene.visible = true;
-        menu.visible = true;
+//        menu.visible = true;
     }
     function cloudShow() {
         console.log("Show");
         thecloud.visible = true;
         scene.visible = false;
-        menu.visible = false;
+//        menu.visible = false;
     }
 
     function addPocket(_name,_url,_pocketId,_left,_top,_width,_height,_rotation) {
