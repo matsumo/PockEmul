@@ -2559,7 +2559,7 @@ bool CPObject::Mem_Load(BYTE s)
     if (SlotList[s].getFileName() == "EMPTY") return true;
 
     file.setFileName(QCoreApplication::applicationDirPath()+"/"+QFileInfo(SlotList[s].getFileName()).fileName());
-//    qWarning()<<file.fileName();
+    qWarning()<<file.fileName();
     if (!SlotList[s].getFileName().isEmpty() && file.exists())
     {
 //        qWarning()<<"ok";
@@ -2577,6 +2577,7 @@ bool CPObject::Mem_Load(BYTE s)
     else
     {
         file.setFileName(SlotList[s].getResID());
+        qWarning()<<SlotList[s].getResID();
         if (file.exists())
         {
             file.open(QIODevice::ReadOnly);

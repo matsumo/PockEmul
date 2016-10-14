@@ -103,21 +103,24 @@ void Cpb2000::TurnON(void){
     SlotList[4].setLabel("EMPTY");
 
     if (ext_MemSlot1->ExtArray[ID_OM51P]->IsChecked) {
-        SlotList[4].setFileName(P_RES(":/pb2000/om51p.bin"));
+        SlotList[4].setFileName("om51p.bin");
+        SlotList[4].setResID(P_RES(":/pb2000/om51p.bin"));
         SlotList[4].setLabel("PROLOG");
         overlay = new QImage(P_RES(":/pb2000/prologoverlay.png"));
         Mem_Load(4);
     }
     else
     if (ext_MemSlot1->ExtArray[ID_OM53B]->IsChecked) {
-        SlotList[4].setFileName(P_RES(":/pb2000/om53b.bin"));
+        SlotList[4].setFileName("om53b.bin");
+        SlotList[4].setResID(P_RES(":/pb2000/om53b.bin"));
         SlotList[4].setLabel("BASIC");
         overlay = new QImage(P_RES(":/pb2000/basicoverlay.bmp"));
         Mem_Load(4);
     }
     else
     if (ext_MemSlot1->ExtArray[ID_OM55L]->IsChecked) {
-        SlotList[4].setFileName(P_RES(":/pb2000/om55l.bin"));
+        SlotList[4].setFileName("om55l.bin");
+        SlotList[4].setResID(P_RES(":/pb2000/om55l.bin"));
         SlotList[4].setLabel("LISP");
         overlay = new QImage(P_RES(":/pb2000/lispoverlay.bmp"));
         Mem_Load(4);
@@ -136,9 +139,9 @@ void	Cpb2000::initExtension(void)
     AddLog(LOG_MASTER,"INIT EXT PB2000");
     // initialise ext_MemSlot1
     ext_MemSlot1 = new CExtensionArray("ROM Slot 1","Add ROM Module");
-    ext_MemSlot1->setAvailable(ID_OM51P,true);
-    ext_MemSlot1->setAvailable(ID_OM53B,true);
-    ext_MemSlot1->setAvailable(ID_OM55L,true);
+    ext_MemSlot1->setAvailable(ID_OM51P,true,false);
+    ext_MemSlot1->setAvailable(ID_OM53B,true,false);
+    ext_MemSlot1->setAvailable(ID_OM55L,true,false);
 
 //    ext_MemSlot1->setChecked(ID_OM53B,true);
 
