@@ -518,6 +518,10 @@ void Parse::uploadPML() {
             qWarning()<<"**"<<m_uploadQueue.count()<<" files remaining";
             processPML(m_uploadQueue.takeFirst());
         }
+        else {
+            QMetaObject::invokeMethod(object, "hideWorkingScreen");
+            pmlList();
+        }
     });
 
     QMetaObject::invokeMethod(object, "showWorkingScreen");
@@ -626,8 +630,8 @@ void Parse::updatePML(QString doc)
                 update(m_updateQueue.takeFirst());
             }
             else {
-                QMetaObject::invokeMethod(object, "hideWorkingScreen");
-                pmlList();
+//                QMetaObject::invokeMethod(object, "hideWorkingScreen");
+//                pmlList();
             }
         }
         else {
@@ -697,7 +701,7 @@ void Parse::postPML( QString title, QString description, QString pml_file )
             qWarning()<<"updatePMLfile Result:"<<json.object();
 
             if (m_uploadQueue.isEmpty()) {
-                QMetaObject::invokeMethod(object, "hideWorkingScreen");
+//                QMetaObject::invokeMethod(object, "hideWorkingScreen");
             }
             updatePMLfile( obj.value("objectId").toString() , pml_file);
         }
@@ -775,6 +779,8 @@ QString Parse::generatePmlXml(QJsonObject obj) {
         xml->writeTextElement("ispublic",pml_item["ACL"].toObject().contains("*")?"1":"0");
         xml->writeTextElement("objects",pml_item["objects"].toString());
         xml->writeTextElement("listobjects",pml_item["listobjects"].toString());
+        xml->writeTextElement("createdAt",pml_item["createdAt"].toString());
+        xml->writeTextElement("updatedAt",pml_item["updatedAt"].toString());
 
 
         xml->writeEndElement();  // pml_item

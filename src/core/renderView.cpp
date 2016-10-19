@@ -35,7 +35,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
 
-    parse.setHostURI("http://192.168.1.6:1337");
+    parse.setHostURI(Cloud::getValueFor("serverURL",""));
     parse.setApplicationId("PockEmul");
 
 //    this->setAttribute(Qt::WA_AcceptTouchEvents);

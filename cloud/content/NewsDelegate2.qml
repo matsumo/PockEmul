@@ -115,7 +115,15 @@ Item {
                 id: username_avatar
                 source: avatar_url
             }
+            Text {
+                id: updatedAtText
+                text: 'MàJ le '+Date(updatedAt).toString()
 
+                renderType: Text.NativeRendering
+                //            width: parent.width;
+                wrapMode: Text.WordWrap
+                font { bold: false; family: "Helvetica"; pointSize: 14 }
+            }
             Text {
                 id: usernameText
                 text: username;
@@ -361,38 +369,42 @@ Item {
             visible: changed
             text: "Save"
             onClicked: {
-                var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-                var url = serverURL+ '?method=file.update&'+
-                        '&guid='+pmlid+
-                        '&access='+newpublicstatus+
-                        '&title='+encodeURIComponent(titleText.text)+
-                        '&description='+encodeURIComponent(descriptionText.text)+
-                        '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                        '&auth_token='+auth_token;
+                var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
+                //console.log('url:'+url);
+                renderArea.showWorkingScreen();
 
-                console.log('url:'+url);
-                //                if (cloud.askMsg("Are you sure ?",2) == 1)
-                {
-                    renderArea.showWorkingScreen();
+//                var data = '{
+//                {"title": "'+ titleText.text+'"},
+//                {"description": "'+ descriptionText.text+'"}
+//                }';
+                var data = {
+                    "title": titleText.text ,
+                    "description": descriptionText.text
+                    };
 
-                    // update data
-                    requestPost(url, "",function (o) {
-                        renderArea.hideWorkingScreen();
 
-                        if (o.readyState == 4) {
-                            //                        console.log("status:"+o.status);
-                            if (o.status==200) {
-                                //                        cloud.askMsg("Ok, saved !",1);
-                                //Reload record
-                                changed = false;
-                                var publicstatuschanged = false;
-                                refpmlModel.setProperty(rowid,"title",titleText.text);
-                                refpmlModel.setProperty(rowid,"description",descriptionText.text);
-                            }
+                console.log(data);
+                requestPut(url, JSON.stringify(data) , function (o) {
+                    renderArea.hideWorkingScreen();
+
+                    console.log(o.readyState,o.status);
+                    if (o.readyState == 4 ) {
+                        if (o.status == 200) {
+                            var obj = JSON.parse(o.responseText);
+                            message.showMessage("data saved",2000);
+                            changed = false;
+                            var publicstatuschanged = false;
+                            refpmlModel.setProperty(rowid,"title",titleText.text);
+                            refpmlModel.setProperty(rowid,"description",descriptionText.text);
+
                         }
-                    });
-                }
-
+                        else {
+                            var obj = JSON.parse(o.responseText);
+                            console.log(obj);
+                            message.showErrorMessage(obj.error,5000);
+                        }
+                    }
+                });
             }
         }
         TextButton {

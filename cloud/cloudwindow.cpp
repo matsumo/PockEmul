@@ -62,7 +62,7 @@ CloudWindow::CloudWindow(QWidget *parent,QString src)
 {
 
     if (cloud.getValueFor("serverURL","")=="")
-        cloud.saveValueFor("serverURL","http://pockemul.dscloud.me/elgg/");
+        cloud.saveValueFor("serverURL","http://pockemul.ddns.net:6969");
 
 //    if (mainwindow->openGlFlag)
     {

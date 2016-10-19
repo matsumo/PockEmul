@@ -110,6 +110,8 @@ Rectangle {
         XmlRole { name: "snap_medium"; query: "snapshot_medium/string()" }
         XmlRole { name: "snap_large"; query: "snapshot_large/string()" }
         XmlRole { name: "pmlfile"; query: "pmlfile/string()" }
+        XmlRole { name: "createdAt"; query: "createdAt/string()" }
+        XmlRole { name: "updatedAt"; query: "updatedAt/string()" }
 
         onStatusChanged: {
                 if (status == XmlListModel.Ready) {
@@ -135,7 +137,9 @@ Rectangle {
                                             snap_small: decodeXml(item.snap_small),
                                            snap_medium: decodeXml(item.snap_medium),
                                            snap_large: decodeXml(item.snap_large),
-                                               pmlfile: decodeXml(item.pmlfile)})
+                                               pmlfile: decodeXml(item.pmlfile),
+                                               createdAt: decodeXml(item.createdAt),
+                                               updatedAt: decodeXml(item.updatedAt)})
                     }
 
                     cloud.saveCache(cacheFileName,serializerefpmlModel());
@@ -283,7 +287,9 @@ Rectangle {
                                 title: item.title,
                                 description: item.description,
                                 snap_small: item.snap_small,
-                                pmlfile: item.pmlfile})
+                                pmlfile: item.pmlfile,
+                                createdAt: item.createdAt,
+                                updatedAt: item.updatedAt})
 //            console.log("Store: "+item.title);
         }
 
@@ -317,7 +323,9 @@ Rectangle {
                        title: item.title,
                        description: item.description,
                        snap_small: item.snap_small,
-                       pmlfile: item.pmlfile});
+                       pmlfile: item.pmlfile,
+                       createdAt: item.createdAt,
+                       updatedAt: item.updatedAt});
         }
 
         function removePml(pmlid) {

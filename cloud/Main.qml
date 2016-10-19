@@ -429,7 +429,7 @@ Rectangle {
 //                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
 //                '&auth_token='+auth_token;
 
-        var url = 'http://192.168.1.6:1337/parse/classes/Pml/'+pmlid;
+        var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
         console.log('url:'+url);
         renderArea.showWorkingScreen();
 
@@ -516,7 +516,7 @@ Rectangle {
 //                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
 //                '&auth_token='+auth_token;
 
-        var url = 'http://192.168.1.6:1337/parse/classes/Pml/'+pmlid;
+        var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
 //                '?X-Parse-Application-Id='+ encodeURIComponent(parse.applicationId)+
 //                '&Accept=application/json'+
 //                '&X-Parse-Session-Token='+ encodeURIComponent(parse.sessionId);
