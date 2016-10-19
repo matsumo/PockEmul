@@ -5,8 +5,10 @@
 #include <QQuickView>
 #include <QMutex>
 
+#include "baas/parse.h"
 #include "cloud/cloudwindow.h"
 #include "vibrator.h"
+
 
 class CPObject;
 class CViewObject;
@@ -22,6 +24,8 @@ public:
 //    QObject *object;
     QWidget * parent;
     Cloud cloud;
+    Parse parse;
+
     Vibrator vibrator;
 
     Q_INVOKABLE bool keyAt(QString Id, int x, int y);

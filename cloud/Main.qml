@@ -30,6 +30,7 @@ Rectangle {
 
     property string auth_token: ""
 
+
     Component.onCompleted: {
         console.log("Main.qml: Completed",new Date());
 
@@ -38,8 +39,24 @@ Rectangle {
             console.log("logged:"+auth_token);
         }
 
+        parse.loginChanged.connect(loginChanged);
+        parse.currentObjectChanged.connect(currentObjectChanged);
+
 //        showroomPocket.launched.connect(cloudHide);
 //        showroomExt.launched.connect(cloudHide);
+    }
+
+    function currentObjectChanged(json) {
+        console.log("change:",JSON.stringify(json));
+    }
+
+    function loginChanged() {
+        console.log(parse.userName," logged ?",parse.loggedIn);
+        // Refresh pml List
+        parse.pmlList();
+        // Refresh messages
+        // Refresh news
+
     }
 
     onWidthChanged: {
@@ -140,6 +157,7 @@ Rectangle {
     }
 
 
+
     // this function is included locally, but you can also include separately via a header definition
     function requestGet(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -169,6 +187,10 @@ Rectangle {
 
 
     function user_register(name,email,username,password) {
+        if (api==='parse') {
+            parse.signup(username,password,email);
+        }
+
         if (api==='elgg') {
             var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
             var url = serverURL+'?method=user.register&'+
@@ -241,46 +263,58 @@ Rectangle {
         var url = '';
         var serverURL='';
 
-        if (api==='elgg') {
-            serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
-            url = serverURL+'?method=auth.gettoken&'+
-                    '&username='+encodeURIComponent(username)+
-                    '&password='+encodeURIComponent(password)+
-                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+        console.log("api:",api);
+        if (api==='parse') {
+
+            parse.login(username,password);
         }
+        else {
+            if (api==='elgg') {
+                serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
+                url = serverURL+'?method=auth.gettoken&'+
+                        '&username='+encodeURIComponent(username)+
+                        '&password='+encodeURIComponent(password)+
+                        '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+            }
 
-        if(api==='wp') {
-//            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
-            url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
+            if(api==='wp') {
+                //            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
+                url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
 
-        }
+            }
 
-        console.log('url:'+url);
-        requestPost(url, data , function (o) {
-            console.log('ERREUR:'+o.readyState);
+            console.log('url:'+url);
+            requestPost(url, data , function (o) {
+                console.log('ERREUR:'+o.readyState);
 
-            if (o.readyState === 4 ) {
-                console.log('STATUS:'+o.status);
-                if (o.status===200) {
-                    var obj = JSON.parse(o.responseText);
-                    console.log(o.responseText);
-                    if (obj.status === 0) {
-                        message.showMessage("User logged.<p>",5000);
-                        auth_token = obj.result;
-                        cloud.saveValueFor("auth_token",auth_token);
-                    }
-                    else {
-                        message.showErrorMessage(obj.message,5000);
+                if (o.readyState === 4 ) {
+                    console.log('STATUS:'+o.status);
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status === 0) {
+                            message.showMessage("User logged.<p>",5000);
+                            auth_token = obj.result;
+                            cloud.saveValueFor("auth_token",auth_token);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
                     }
                 }
-            }
-        });
+            });
+        }
     }
 
     function save_pml(title,description) {
         var serverURL = '';
         var url = '';
         var xml = '';
+
+        if (api==='parse') {
+            xml = cloud.save();
+            parse.createPML(title,description,xml);
+        }
 
         if(api==='elgg') {
             serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';

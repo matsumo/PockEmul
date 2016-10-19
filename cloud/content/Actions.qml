@@ -29,7 +29,8 @@ Column {
         expand: false
         font.pointSize: 16
         onClicked: {
-            cloud.showFileDialog();
+//            cloud.showFileDialog();
+            parse.uploadPML();
         }
     }
 

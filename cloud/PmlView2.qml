@@ -90,7 +90,10 @@ Rectangle {
                 "&username="+cloud.getValueFor("username","")+
                 "&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa"+
                 "&auth_token="+rootCloud.auth_token
-        query: "/elgg/result/array_item"
+//        query: "/elgg/result/array_item"
+
+        query: "/pmllist/pml_item"
+        xml: parse.xmlPmlList
 
         XmlRole { name: "pmlid"; query: "guid/string()"; }
         XmlRole { name: "username"; query: "owner_username/string()" }
@@ -106,9 +109,11 @@ Rectangle {
         XmlRole { name: "snap_small"; query: "snapshot_small/string()" }
         XmlRole { name: "snap_medium"; query: "snapshot_medium/string()" }
         XmlRole { name: "snap_large"; query: "snapshot_large/string()" }
+        XmlRole { name: "pmlfile"; query: "pmlfile/string()" }
 
         onStatusChanged: {
                 if (status == XmlListModel.Ready) {
+                    console.log("xml:",source);
 //                    console.log("url ("+(ispublicCloud?"public":"private")+"):"+source);
                     console.log("xmlpmlModel onStatusChanged: START found rows:"+count);
                     refpmlModel.clear();
@@ -129,7 +134,8 @@ Rectangle {
                                             description: decodeXml(item.description),
                                             snap_small: decodeXml(item.snap_small),
                                            snap_medium: decodeXml(item.snap_medium),
-                                           snap_large: decodeXml(item.snap_large)})
+                                           snap_large: decodeXml(item.snap_large),
+                                               pmlfile: decodeXml(item.pmlfile)})
                     }
 
                     cloud.saveCache(cacheFileName,serializerefpmlModel());
@@ -275,7 +281,9 @@ Rectangle {
                                 ispublic: item.ispublic,
                                 isdeleted: item.isdeleted,
                                 title: item.title,
-                                description: item.description})
+                                description: item.description,
+                                snap_small: item.snap_small,
+                                pmlfile: item.pmlfile})
 //            console.log("Store: "+item.title);
         }
 
@@ -307,7 +315,9 @@ Rectangle {
                        ispublic: item.ispublic,
                        isdeleted: item.isdeleted,
                        title: item.title,
-                       description: item.description});
+                       description: item.description,
+                       snap_small: item.snap_small,
+                       pmlfile: item.pmlfile});
         }
 
         function removePml(pmlid) {
@@ -376,7 +386,9 @@ Rectangle {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    xmlpmlModel.reload();
+                    parse.pmlList();
+//                    xmlpmlModel.reload();
+
 //                   categoriesView.width = (expandcollapsebutton.text=="<")? 50 : 220;
 //                    expandcollapsebutton.text = (expandcollapsebutton.text=="<")? ">" : "<";
 //                    populateCategoryModel();//xmlcategoryModel.reload();

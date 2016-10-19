@@ -55,7 +55,7 @@ Item {
     // want to fade.
     property real detailsOpacity : 0
 
-    property bool ismine: (username == cloud.getValueFor("username",""))
+    property bool ismine: (username === cloud.getValueFor("username",""))
     property bool changed: false
     property int newpublicstatus: ispublic
 
@@ -131,39 +131,36 @@ Item {
                 width: 200 * cloud.getValueFor("hiResRatio","1")
                 height: 200 * cloud.getValueFor("hiResRatio","1")
                 asynchronous: true
-                cache: false
-                source:
-                        "image://PockEmulCloud/"+
-                        cloud.getValueFor("serverURL","").replace("http://","")+
-                        "services/api/rest/xml/?method=file.get_snap"+
-                        "&file_guid="+pmlid+
-                        "&size=medium"
-//                        "mod/file/thumbnail.php"+
-//                        "?file_guid="+pmlid+
+                cache: true
+//                source:
+//                        "image://PockEmulCloud/"+
+//                        cloud.getValueFor("serverURL","").replace("http://","")+
+//                        "services/api/rest/xml/?method=file.get_snap"+
+//                        "&file_guid="+pmlid+
 //                        "&size=medium"
+                source:   snap_small
+
 
                     //serverURL+"getPMLthumb/"+pmlid+"/"+getThumbId(pmlid)
                 fillMode: Image.PreserveAspectFit;
-                Timer {
-                        id: reset
-                        interval: 500;
-                        onTriggered: pmlThumbImage.source="image://PockEmulCloud/"+
-                                     cloud.getValueFor("serverURL","").replace("http://","")+
-                                     "services/api/rest/xml/?method=file.get_snap"+
-                                     "&file_guid="+pmlid+
-                                     "&size=medium"
-//                                     "mod/file/thumbnail.php"+
-//                                     "?file_guid="+pmlid+
-//                                     "&size=medium"
-//                                     "&ghost="+getThumbId(pmlid);
-                    }
-                onStatusChanged: {
-                    if (status == Image.Error) {
-                        source = "";
-                        reset.restart();
-                    }
-//                                     console.log("*****image status("+index+")="+pmlThumbImage.status);
-                }
+//                Timer {
+//                        id: reset
+//                        interval: 500;
+//                        onTriggered:
+////                            pmlThumbImage.source="image://PockEmulCloud/"+
+////                                     cloud.getValueFor("serverURL","").replace("http://","")+
+////                                     "services/api/rest/xml/?method=file.get_snap"+
+////                                     "&file_guid="+pmlid+
+////                                     "&size=medium";
+//                            pmlThumbImage.source="image://PockEmulCloud/"+snap_small.replace("http://","");
+//                    }
+//                onStatusChanged: {
+//                    if (status == Image.Error) {
+//                        source = "";
+//                        reset.restart();
+//                    }
+////                                     console.log("*****image status("+index+")="+pmlThumbImage.status);
+//                }
 
 //                MouseArea {
 //                    anchors.fill: parent
@@ -232,7 +229,8 @@ Item {
             text: "Download File"
             onClicked: {
 //                renderArea.showWorkingScreen();
-                cloud.getPML(pmlid,1,rootCloud.auth_token);
+//                cloud.getPML(pmlid,1,rootCloud.auth_token);
+                cloud.getPML(pmlid,1,pmlfile);
 //                renderArea.hideWorkingScreen();
                 main.sendTrackingEvent('cloud','download','pml',pmlid);
             }

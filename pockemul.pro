@@ -939,7 +939,9 @@ HEADERS *= \
     src/core/overlay.h \
     src/core/vibrator.h \
     src/core/ganalytics.h \
-    src/core/binarydata.h
+    src/core/binarydata.h \
+    baas/baas.h \
+    baas/parse.h
 
 
 
@@ -1109,7 +1111,9 @@ SOURCES *=  \
     src/core/overlay.cpp \
     src/core/vibrator.cpp \
     src/core/ganalytics.cpp \
-    src/core/binarydata.cpp
+    src/core/binarydata.cpp \
+    baas/baas.cpp \
+    baas/parse.cpp
 
 
 

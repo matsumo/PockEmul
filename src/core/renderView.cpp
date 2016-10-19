@@ -34,6 +34,10 @@ using namespace zxing;
 CrenderView::CrenderView(QWidget *parent):cloud(this)
 {
     this->parent = parent;
+
+    parse.setHostURI("http://192.168.1.6:1337");
+    parse.setApplicationId("PockEmul");
+
 //    this->setAttribute(Qt::WA_AcceptTouchEvents);
 
 //    grabKeyboard();
@@ -52,11 +56,13 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     rootContext()->setContextProperty("cloud", &cloud);
     rootContext()->setContextProperty("main", this);
     rootContext()->setContextProperty("logicObj", mainwindow->dialoganalogic);
+    rootContext()->setContextProperty("parse", &parse);
 
     setSource(QUrl("qrc:/Test.qml"));
     setResizeMode(QQuickWidget::SizeRootObjectToView);
 //    connect(engine(), SIGNAL(quit()), this,SLOT(hide()));
     cloud.object = (QObject*) rootObject();
+    parse.object = (QObject*) rootObject();
 
     QObject::connect(cloud.object, SIGNAL(toggleFullscreen()), mainwindow, SLOT(toggleFullscreen()));
     QObject::connect(cloud.object, SIGNAL(analyser()), mainwindow, SLOT(Analogic()));

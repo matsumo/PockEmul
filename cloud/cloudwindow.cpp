@@ -81,8 +81,8 @@ CloudWindow::CloudWindow(QWidget *parent,QString src)
     QObject::connect(cloud.object, SIGNAL(sendWarning(QString)), &cloud, SLOT(warning(QString)));
 
 
-//    connect(cloud.m_fileDialog, SIGNAL(fileSelected(QString)),
-//            this, SLOT(sendPML(QString)));
+    connect(cloud.m_fileDialog, SIGNAL(fileSelected(QString)),
+            this, SLOT(sendPML(QString)));
 
     QVBoxLayout *windowLayout = new QVBoxLayout(this);
 //    QWidget *container = QWidget::createWindowContainer(view,this);
@@ -176,7 +176,6 @@ void Cloud::sendPML(const QString &filePath)
     QString server = getValueFor("serverURL","")+"savePML";
     // Check if apikey exists
 
-#if QT_VERSION >= 0x050000
 // Qt5 code
     QUrlQuery qu;
     qu.addQueryItem("apikey",apikey);
@@ -189,9 +188,7 @@ void Cloud::sendPML(const QString &filePath)
     connect(mgr,SIGNAL(finished(QNetworkReply*)),this,SLOT(finishedSave(QNetworkReply*)));
     QNetworkReply *reply = mgr->post(req, qu.query(QUrl::FullyEncoded).toUtf8());
     Q_UNUSED(reply)
-#else
-// Qt4 code
-#endif
+
 }
 
 void Cloud::finishedSave(QNetworkReply *reply)
@@ -251,6 +248,7 @@ void Cloud::downloadFinished()
 //    emit imageChanged(m_object.value("id").toString());
 
     m_reply->deleteLater();
+    QMetaObject::invokeMethod(object, "hideWorkingScreen");
 
     emit downloadEnd();
 //    this->hide();
@@ -303,7 +301,7 @@ void Cloud::getPML(int id,int version,QString auth_token) {
         QString server = getValueFor("serverURL","http://pockemul.dscloud.me/pocketcloud/")+"getPML";
         url = server+QString("/%1/%2").arg(getValueFor("apikey","0")).arg(id);
     }
-    else {
+    else if (getValueFor("api","elgg") == "elgg") {
         url = getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")+
                 QString("services/api/rest/xml/?method=file.get_pml")+
                 QString("&file_guid=%1").arg(id)+
@@ -311,13 +309,20 @@ void Cloud::getPML(int id,int version,QString auth_token) {
                 "&auth_token="+auth_token;
         qWarning()<<url;
     }
+    else if (getValueFor("api","elgg") == "parse") {
+        url = auth_token;
+        qWarning()<<url;
+    }
+
     QNetworkRequest req(url);
 
 //    qWarning()<<req.url();
     m_reply = mgr->get(req);
     if (version==0)
         connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-    else
+    else if (getValueFor("api","elgg") == "parse")
+        connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
+    else if (getValueFor("api","elgg") == "elgg")
         connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished2()));
 }
 

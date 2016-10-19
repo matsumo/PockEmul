@@ -2,6 +2,7 @@
 #include <QDebug>
 
 #include "common.h"
+#include "renderView.h"
 #include "pc1360.h"
 #include "cextension.h"
 #include "Lcdc_pc1350.h"
@@ -12,7 +13,6 @@
 #include "Log.h"
 #include "bus.h"
 #include "fluidlauncher.h"
-#include "renderView.h"
 #include "clink.h"
 
 #include "modelids.h"
