@@ -7,6 +7,8 @@ class Parse : public BaaS
 {
     Q_OBJECT
     Q_PROPERTY( QString applicationId READ getApplicationId  WRITE setApplicationId NOTIFY applicationIdChanged)
+    Q_PROPERTY( QString sessionId READ getSessionId  WRITE setSessionId NOTIFY sessionIdChanged)
+    Q_PROPERTY( QString userId READ getUserId  WRITE setUserId NOTIFY userIdChanged)
     Q_PROPERTY( QString masterKey READ getMasterKey  WRITE setMasterKey NOTIFY masterKeyChanged)
     Q_PROPERTY( bool useMaster READ getUseMaster WRITE SetMasterMode NOTIFY masterModeChanged)
     Q_PROPERTY( bool loggedIn READ isLoggedIn NOTIFY loginChanged)
@@ -32,9 +34,10 @@ public:
 
     Q_INVOKABLE bool ensureEndPointHasPrefix(QString prefix);
 
-    Q_INVOKABLE void createPML(QString title, QString description, QString pml_file);
     Q_INVOKABLE void pmlList();
     Q_INVOKABLE void uploadPML();
+    Q_INVOKABLE void postPML(QString title, QString description, QString pml_file);
+    Q_INVOKABLE void updatePMLfile(QString objectId, QString pml_file);
 
     //Files related
     Q_INVOKABLE QNetworkReply *uploadFile(QUrl url, QString name = QString());
@@ -48,6 +51,10 @@ public:
 public: // property access
     QString getApplicationId() const;
     void setApplicationId(const QString& res);
+    QString getSessionId() const;
+    void setSessionId(const QString& res);
+    QString getUserId() const;
+    void setUserId(const QString& res);
     QString getMasterKey() const;
     void setMasterKey(const QString& res);
     bool isLoggedIn(){ return !sessionId.isEmpty();}
@@ -67,9 +74,7 @@ public: // property access
 
 
     void postProcessGet(QJsonObject obj);
-    void postSNAP(QString title, QString description, QString pml_file);
-    void postPMLfile(QString title, QString description, QString pml_file, QJsonObject snap);
-    void postPML(QString title, QString description, QJsonObject snap, QJsonObject pmlfile);
+
     QString generatePmlXml(QJsonObject json);
 
     static QString toKey(QString s) {
@@ -78,9 +83,13 @@ public: // property access
 
     QObject *object;
 
-    void processPML(QString pml);
+    void processPML(QString pmlFileName);
+    void updatePML(QString doc);
+    void updateSnapfile(QString objectId, QString pml_file, QJsonObject obj);
 signals:
     void applicationIdChanged();
+    void sessionIdChanged();
+    void userIdChanged();
     void masterKeyChanged();
     void loginChanged();
     void pmlListChanged(QString xml);

@@ -185,6 +185,55 @@ Rectangle {
 
     }
 
+    function requestPut(url, data, callback) {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        console.log('before PUT:');
+        xhr.open('PUT', url,true);
+
+        if (api==='parse') {
+            xhr.setRequestHeader("X-Parse-Application-Id", parse.applicationId);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
+        }
+
+        console.log('before SEND*:'+JSON.stringify(data)+'*');
+        xhr.send(data);
+        console.log('after SEND:');
+
+    }
+
+
+    function requestDelete(url, data, callback) {
+
+        var xhr = new XMLHttpRequest();
+
+
+
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        console.log('before DELETE:');
+        xhr.open('DELETE', url,true);
+
+        if (api==='wp') {
+            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
+        }
+        if (api==='parse') {
+            console.log('parse',parse.applicationId,parse.sessionId);
+            var _app = parse.applicationId;
+            xhr.setRequestHeader("X-Parse-Application-Id", _app);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
+        }
+
+        console.log('before SEND*:'+data+'*');
+        xhr.send(data);
+        console.log('after SEND:');
+
+    }
 
     function user_register(name,email,username,password) {
         if (api==='parse') {
@@ -313,7 +362,7 @@ Rectangle {
 
         if (api==='parse') {
             xml = cloud.save();
-            parse.createPML(title,description,xml);
+            parse.postPML(title,description,xml);
         }
 
         if(api==='elgg') {
@@ -373,30 +422,59 @@ Rectangle {
     }
 
     function set_access(pmlid,access,on_success,on_failure) {
-        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-        var url = serverURL+ '?method=file.set_access'+
-                '&file_guid='+pmlid+
-                '&access='+access+
-                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                '&auth_token='+auth_token;
+//        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+//        var url = serverURL+ '?method=file.set_access'+
+//                '&file_guid='+pmlid+
+//                '&access='+access+
+//                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+//                '&auth_token='+auth_token;
+
+        var url = 'http://192.168.1.6:1337/parse/classes/Pml/'+pmlid;
         console.log('url:'+url);
         renderArea.showWorkingScreen();
 
-        requestPost(url, "" , function (o) {
+        var data;
+        var  owner = parse.userId;
+        if (access == 0) {
+            data = '{
+                "ACL": {"'+
+                    owner+'": {
+                        "read": true,
+                        "write": true
+                    }
+                }
+            }';
+        }
+        if (access == 2) {
+            data = '{
+                "ACL": {"'+
+                    owner+'": {
+                        "read": true,
+                        "write": true
+                    },
+                    "*": {
+                        "read": true
+                    }
+                }
+            }';
+        }
+
+        console.log(data);
+        requestPut(url, data , function (o) {
             renderArea.hideWorkingScreen();
 
+            console.log(o.readyState,o.status);
             if (o.readyState == 4 ) {
-                if (o.status==200) {
+                if (o.status == 200) {
                     var obj = JSON.parse(o.responseText);
-                    console.log(o.responseText);
-                    if (obj.status == 0) {
-                        message.showMessage("Access rights changed",2000);
-                        on_success();
-                    }
-                    else {
-                        message.showErrorMessage(obj.message,5000);
-                        on_failure();
-                    }
+                    message.showMessage("Access rights changed",2000);
+                    on_success();
+                }
+                else {
+                    var obj = JSON.parse(o.responseText);
+                    console.log(obj);
+                    message.showErrorMessage(obj.error,5000);
+                    on_failure();
                 }
             }
         });
@@ -432,26 +510,33 @@ Rectangle {
     }
 
     function delete_pml(pmlid,on_success,on_failure) {
-        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-        var url = serverURL+ '?method=file.delete_pml'+
-                '&file_guid='+pmlid+
-                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                '&auth_token='+auth_token;
+//        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+//        var url = serverURL+ '?method=file.delete_pml'+
+//                '&file_guid='+pmlid+
+//                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+//                '&auth_token='+auth_token;
+
+        var url = 'http://192.168.1.6:1337/parse/classes/Pml/'+pmlid;
+//                '?X-Parse-Application-Id='+ encodeURIComponent(parse.applicationId)+
+//                '&Accept=application/json'+
+//                '&X-Parse-Session-Token='+ encodeURIComponent(parse.sessionId);
+
         console.log('url:'+url);
 
-        requestPost(url, "" , function (o) {
+        requestDelete(url, "" , function (o) {
             renderArea.hideWorkingScreen();
-
-            if (o.readyState == 4 ) {
-                if (o.status==200) {
+            console.log(o.readyState,o.status);
+            if (o.readyState === 4 ) {
+                if (o.status===200) {
                     var obj = JSON.parse(o.responseText);
                     console.log(o.responseText);
-                    if (obj.status == 0) {
-                        message.showMessage("File deleted",2000);
-                        on_success();
-                    }
-                    else {
-                        message.showErrorMessage(obj.message,5000);
+                    message.showMessage("File deleted",2000);
+                    on_success();
+                }
+                else {
+                    var obj = JSON.parse(o.responseText);
+                    if (typeof obj.error != "undefined") {
+                        message.showErrorMessage(obj.error,5000);
                         on_failure();
                     }
                 }

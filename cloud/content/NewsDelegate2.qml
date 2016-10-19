@@ -312,39 +312,47 @@ Item {
             visible: ismine && (delegate.detailsOpacity == 1)
             opacity: delegate.detailsOpacity
             onClicked: {
-                var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-                var url = serverURL+ '?method=file.update_pmldata'+
-                        '&file_guid='+pmlid+
-                        '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                        '&auth_token='+auth_token;
-
                 cloudHide();
                 if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
 
                 var xml = cloud.save();
                 cloudShow();
                 renderArea.showWorkingScreen();
-//                console.log('url:'+url);
-                requestPost(url, xml , function (o) {
+                parse.updatePMLfile(pmlid,xml);
 
-                    renderArea.hideWorkingScreen();
-                    if (o.readyState == 4 ) {
-                        if (o.status==200) {
-                            var obj = JSON.parse(o.responseText);
-//                            console.log(o.responseText);
-                            if (obj.status == 0) {
-                                message.showMessage("Session updated",5000);
-                                // refresh thumb
-                                cloud.clearCache(pmlThumbImage.source);
-                                pmlThumbImage.source="";
-                                reset.restart();
-                            }
-                            else {
-                                message.showErrorMessage(obj.message,5000);
-                            }
-                        }
-                    }
-                });
+//                var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
+//                var url = serverURL+ '?method=file.update_pmldata'+
+//                        '&file_guid='+pmlid+
+//                        '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
+//                        '&auth_token='+auth_token;
+
+//                cloudHide();
+//                if (cloud.askDialog("Do you want to overwrite this session file ?",2)==2) return;
+
+//                var xml = cloud.save();
+//                cloudShow();
+//                renderArea.showWorkingScreen();
+////                console.log('url:'+url);
+//                requestPost(url, xml , function (o) {
+
+//                    renderArea.hideWorkingScreen();
+//                    if (o.readyState == 4 ) {
+//                        if (o.status==200) {
+//                            var obj = JSON.parse(o.responseText);
+////                            console.log(o.responseText);
+//                            if (obj.status == 0) {
+//                                message.showMessage("Session updated",5000);
+//                                // refresh thumb
+//                                cloud.clearCache(pmlThumbImage.source);
+//                                pmlThumbImage.source="";
+//                                reset.restart();
+//                            }
+//                            else {
+//                                message.showErrorMessage(obj.message,5000);
+//                            }
+//                        }
+//                    }
+//                });
             }
 
         }
@@ -430,10 +438,10 @@ Item {
             opacity: delegate.detailsOpacity
             text: (isdeleted ==1) ? "Permanently delete" : "Delete"
             onClicked: {
-                if (cloud.askDialog("Do you want to delete this session ?",2)==2) return;
+                if (cloud.askDialog("Do you want to delete this session ?",2) === 2) return;
 
                 rootCloud.delete_pml(pmlid,
-                               function(){xmlpmlModel.reload();},
+                               function(){parse.pmlList(); xmlpmlModel.reload();},
                                function(){}
                                );
                 renderArea.showWorkingScreen();

@@ -1,6 +1,10 @@
 #ifndef MODELIDS_H
 #define MODELIDS_H
 
+
+// DANGER!!!
+// NEVER CHANGE THIS LIST ORDER
+// ONLY APPEND VALUES AT THE END
 enum Models {
     EMPTY=0,
 
