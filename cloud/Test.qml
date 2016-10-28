@@ -71,6 +71,8 @@ Rectangle {
 
      property alias xmlThumbModel: xmlThumbModel
 
+    property string apiSelected: cloud.getValueFor("api","elgg");
+
     visible: true
     width: 1024; height: 600
     color: "black"
@@ -976,6 +978,83 @@ Rectangle {
         showroomExt.connectorsearch = connector;
         showroomExt.pobjectsmodel.reload();
         showroomExt.visible = true;
+    }
+
+    // this function is included locally, but you can also include separately via a header definition
+    function requestGet(url, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        xhr.open('GET', url, true);
+        xhr.send('');
+    }
+
+    function requestPost(url, data, callback) {
+
+        var xhr = new XMLHttpRequest();
+
+        if (apiSelected==='wp') {
+            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
+        }
+
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        console.log('before POST:');
+        xhr.open('POST', url,true);
+        console.log('before SEND*:'+data+'*');
+        xhr.send(data);
+        console.log('after SEND:');
+
+    }
+
+    function requestPut(url, data, callback) {
+
+        var xhr = new XMLHttpRequest();
+
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        console.log('before PUT:');
+        xhr.open('PUT', url,true);
+
+        if (apiSelected==='parse') {
+            xhr.setRequestHeader("X-Parse-Application-Id", parse.applicationId);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
+        }
+
+        console.log('before SEND*:'+JSON.stringify(data)+'*');
+        xhr.send(data);
+        console.log('after SEND:');
+
+    }
+
+
+    function requestDelete(url, data, callback) {
+
+        var xhr = new XMLHttpRequest();
+
+
+
+        xhr.onreadystatechange = function() { callback(xhr);}
+
+        console.log('before DELETE:');
+        xhr.open('DELETE', url,true);
+
+        if (apiSelected==='wp') {
+            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
+        }
+        if (apiSelected==='parse') {
+            console.log('parse',parse.applicationId,parse.sessionId);
+            var _app = parse.applicationId;
+            xhr.setRequestHeader("X-Parse-Application-Id", _app);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
+        }
+
+        console.log('before SEND*:'+data+'*');
+        xhr.send(data);
+        console.log('after SEND:');
+
     }
 
 }

@@ -428,6 +428,7 @@ void MainWindowPockemul::initObjectTable() {
     objtable["Panasonic RL-P4002 Modem"]=RLP4002;
     objtable["Panasonic RL-P6001"]=RLP6001;
     objtable["Panasonic RL-P9001 4Ko"]=RLP9001;
+    objtable["Panasonic RL-P9001"]=RLP9001;
     objtable["Panasonic RL-P9002 8Ko"]=RLP9002;
     objtable["Panasonic RL-P9003 16Ko"]=RLP9003;
     objtable["Panasonic RL-P9003R 16Ko ROM Simulator"]=RLP9003R;

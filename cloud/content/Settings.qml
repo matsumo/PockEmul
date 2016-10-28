@@ -6,6 +6,15 @@ Rectangle {
 
     Component.onCompleted: {
         console.log("Settings.qml: Completed",new Date());
+
+        if (cloud.getValueFor("username","") != "") {
+            user_login(cloud.getValueFor("username"),cloud.getValueFor("password"));
+            console.log("logged:"+auth_token);
+        }
+
+        parse.loginChanged.connect(loginChanged);
+        parse.currentObjectChanged.connect(currentObjectChanged);
+
     }
 
     VisualItemModel {
@@ -23,11 +32,11 @@ Rectangle {
         SettingsDelegate { name: "registercloud"; labelString: "Register PockEmul Cloud"; type: "action"; saveInput:false;
             onButtonClicked: {
                 if (passwordFld.inputText != passwordFld2.inputText) {
-                    apikey.inputText = "Passwords mismatch !.";
+                    api.inputText = "Passwords mismatch !.";
                     return;
                 }
 
-                rootCloud.user_register(nameFld.inputText,
+                user_register(nameFld.inputText,
                                    emailFld.inputText,
                                    usernameFld.inputText,
                                    passwordFld.inputText);
@@ -35,10 +44,15 @@ Rectangle {
         }
         SettingsDelegate { name: "apikey"; labelString: "Login"; type: "action"; saveInput:false;
             onButtonClicked: {
-                rootCloud.user_login(usernameFld.inputText,passwordFld.inputText);
+                user_login(usernameFld.inputText,passwordFld.inputText);
             }
         }
-        SettingsDelegate { id: syncEnabled; name: "syncEnabled"; labelString: "Enable file synchronization"; type: "checkbox"; defaultText: "on"}
+        SettingsDelegate { name: "reset"; labelString: "Reset Password"; type: "action"; saveInput:false;
+            onButtonClicked: {
+                parse.passwordReset(emailFld.inputText);
+            }
+        }
+//        SettingsDelegate { id: syncEnabled; name: "syncEnabled"; labelString: "Enable file synchronization"; type: "checkbox"; defaultText: "on"}
 
         SettingsDelegate { id: labelAppSettings; name: "labelAppSettings"; labelString: "Application Settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: soundEnabled; name: "soundEnabled"; labelString: "Enable sound"; type: "checkbox"; defaultText: "on"}
@@ -70,6 +84,127 @@ Rectangle {
         scrollArea: categories; height: categories.height; width: 8
         anchors.right: categories.right
     }
+
+    function user_login(username,password) {
+        var data = '';
+        var url = '';
+        var serverURL='';
+
+        console.log("api:",apiSelected);
+        if (apiSelected==='parse') {
+
+            parse.login(username,password);
+        }
+        else {
+            if (apiSelected==='elgg') {
+                serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
+                url = serverURL+'?method=auth.gettoken&'+
+                        '&username='+encodeURIComponent(username)+
+                        '&password='+encodeURIComponent(password)+
+                        '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+            }
+
+            if(apiSelected==='wp') {
+                //            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
+                url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
+
+            }
+
+            console.log('url:'+url);
+            requestPost(url, data , function (o) {
+                console.log('ERREUR:'+o.readyState);
+
+                if (o.readyState === 4 ) {
+                    console.log('STATUS:'+o.status);
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status === 0) {
+                            message.showMessage("User logged.<p>",5000);
+                            auth_token = obj.result;
+                            cloud.saveValueFor("auth_token",auth_token);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+    function user_register(name,email,username,password) {
+        if (apiSelected==='parse') {
+            parse.signup(username,password,email);
+        }
+
+        if (apiSelected==='elgg') {
+            var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';  //cloud.getValueFor("serverURL","");
+            var url = serverURL+'?method=user.register&'+
+                    '&name='+encodeURIComponent(name)+
+                    '&email='+encodeURIComponent(email)+
+                    '&username='+encodeURIComponent(username)+
+                    '&password='+encodeURIComponent(password)+
+                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa';
+
+            console.log('url:'+url);
+            renderArea.showWorkingScreen();
+            requestGet(url, function (o) {
+                renderArea.hideWorkingScreen();
+
+                if (o.readyState === 4 ) {
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status=== 0) {
+                            if (obj.result.success) {
+                                // sucess so login
+                                message.showMessage("User Created. Please Login.",5000);
+                            }
+                            else {
+                                message.showErrorMessage(obj.result.message,5000);
+                            }
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
+                    }
+                }
+            });
+        }
+
+        if(apiSelected==='wp') {
+//            serverURL = cloud.getValueFor("serverURL","")+'wordpress/wp-json/wp/v2/users/'
+            url = 'http://pockemul.ddns.net/wordpress/wp-json/wp/v2/users/'
+
+            var data= 'name='+encodeURIComponent(name)+
+                      '&email='+encodeURIComponent(email)+
+                      '&username='+encodeURIComponent(username)+
+                      '&password='+encodeURIComponent(password);
+
+            renderArea.showWorkingScreen();
+            requestPost(url, data , function (o) {
+                console.log('ERREUR:'+o.readyState);
+
+                if (o.readyState === 4 ) {
+                    console.log('STATUS:'+o.status);
+                    if (o.status===200) {
+                        var obj = JSON.parse(o.responseText);
+                        console.log(o.responseText);
+                        if (obj.status === 0) {
+                            message.showMessage("User logged.<p>",5000);
+                            auth_token = obj.result;
+                            cloud.saveValueFor("auth_token",auth_token);
+                        }
+                        else {
+                            message.showErrorMessage(obj.message,5000);
+                        }
+                    }
+                }
+            });
+        }
+    }
+
 
 }
 

@@ -7,6 +7,7 @@
 
 #include "parse.h"
 #include "mainwindowpockemul.h"
+#include "cloud/cloudwindow.h"
 
 extern MainWindowPockemul *mainwindow;
 
@@ -123,6 +124,8 @@ void Parse::deleteUser( QString objectId)
 
 void Parse::login( QString username, QString password )
 {
+    setHostURI(Cloud::getValueFor("serverURL",""));
+
     if (!isReady()) return;
 
     QUrlQuery postData;
