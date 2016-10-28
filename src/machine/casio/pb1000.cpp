@@ -181,6 +181,8 @@ bool Cpb1000::run() {
     }
 #endif
 
+    fillSoundBuffer(pdi & 0x80);
+
     return true;
 }
 

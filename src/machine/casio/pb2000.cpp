@@ -194,6 +194,9 @@ bool Cpb2000::run() {
 //    if (pKEYB->LastKey) {
 //        ((CHD61700*)pCPU)->execute_set_input(HD61700_KEY_INT,1);
 //    }
+
+    fillSoundBuffer(pdi & 0x80);
+
     return true;
 }
 
