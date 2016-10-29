@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>h20rc/h20rc.png</file>
+    </qresource>
+</RCC>

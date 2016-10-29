@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fp40/fp40.png</file>
+    </qresource>
+</RCC>

@@ -21,7 +21,7 @@ Cfp40::Cfp40(CPObject *parent):CprinterCtronics(parent) {
     Q_UNUSED(parent)
 
     setcfgfname(QString("fp40"));
-    BackGroundFname	= P_RES(":/ext/fp40.png");
+    BackGroundFname	= P_RES(":/fp40/fp40.png");
 
     pKEYB->setMap("fp40.map");
 
@@ -60,6 +60,7 @@ void Cfp40::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
     if (pKEYB->LastKey == K_PFEED) {
         Printer(0x0d);

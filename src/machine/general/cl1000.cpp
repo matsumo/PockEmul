@@ -28,7 +28,7 @@ Ccl1000::Ccl1000(CPObject *parent):Cce515p(parent) {
     setfrequency( 0);
     ioFreq = 0;
     setcfgfname(QString("cl1000"));
-    BackGroundFname	= P_RES(":/ext/cl-1000.png");
+    BackGroundFname	= P_RES(":/cl1000/cl-1000.png");
 
     pKEYB->setMap("cl1000.map");
 
@@ -150,6 +150,7 @@ void Ccl1000::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
 {
     Q_UNUSED(ke)
     Q_UNUSED(scancode)
+    Q_UNUSED(event)
 
 
 //    if (pKEYB->LastKey == K_PRINT_ON) {

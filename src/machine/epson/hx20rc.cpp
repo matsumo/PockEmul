@@ -41,8 +41,8 @@ Chx20RC::Chx20RC(CPObject *parent ):CPObject(parent)
     setDX(230);
     setDY(330);
 
-    BackGroundFname	= P_RES(":/hx20/h20rc.png");
-    setcfgfname(QString("H20RC"));
+    BackGroundFname	= P_RES(":/h20rc/h20rc.png");
+    setcfgfname(QString("h20rc"));
 
     InitMemValue = 0x00;
     memsize      = 0x8000;

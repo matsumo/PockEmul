@@ -22,7 +22,7 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(parent) {
     setfrequency( 4000);
     ioFreq = 0;
     setcfgfname(QString("fp100"));
-    BackGroundFname	= P_RES(":/ext/fp100.png");
+    BackGroundFname	= P_RES(":/fp100/fp100.png");
 
     pKEYB->setMap("x710.map");
 
@@ -36,9 +36,9 @@ Cfp100::Cfp100(CPObject *parent):Cce515p(parent) {
     printerACK = false;
     printerBUSY = false;
 
-    capot = CreateImage(QSize(849,274),P_RES(":/ext/fp100-capot.png"));
-    head = CreateImage(QSize(79,161),P_RES(":/ext/fp100head.png"));
-    cable = CreateImage(QSize(75,10),P_RES(":/ext/fp100cable.png"));
+    capot = CreateImage(QSize(849,274),P_RES(":/fp100/fp100-capot.png"));
+    head = CreateImage(QSize(79,161),P_RES(":/fp100/fp100head.png"));
+    cable = CreateImage(QSize(75,10),P_RES(":/fp100/fp100cable.png"));
 
     margin = 40;
     Paper_DX = 960+2*margin;

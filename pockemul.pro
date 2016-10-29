@@ -1620,7 +1620,12 @@ OTHER_FILES *= \
 ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android
 
 RESOURCES += \
-    resources/fa80.qrc
+    resources/fa80.qrc \
+    resources/fp100.qrc \
+    resources/fp40.qrc \
+    resources/md100.qrc \
+    resources/h20rc.qrc \
+    resources/cl1000.qrc
 
 DISTFILES += \
     package.pri \
