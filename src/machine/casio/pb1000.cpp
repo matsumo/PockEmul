@@ -568,12 +568,12 @@ void Cpb1000::writePort(UINT8 data)
 }
 
 void Cpb1000::lcdControlWrite(UINT8 data) {
-    pLCDC->updated = true;
     pHD44352->control_write(data);
+    pLCDC->updated = true;
 }
 void Cpb1000::lcdDataWrite(UINT8 data) {
-    pLCDC->updated = true;
     pHD44352->data_write(data);
+    pLCDC->updated = true;
 }
 UINT8 Cpb1000::lcdDataRead() {
     return pHD44352->data_read();
