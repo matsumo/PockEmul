@@ -279,24 +279,24 @@ Item {
                                );
             }
         }
-        TextButton {
-            id: makeFriend
-            visible: (access_id != -2) && ismine && (delegate.detailsOpacity == 1)
-            opacity: delegate.detailsOpacity
-            text: "Share with Friends"
-            onClicked: {
-                rootCloud.set_access(pmlid,-2,
-                               function(){
+//        TextButton {
+//            id: makeFriend
+//            visible: (access_id != -2) && ismine && (delegate.detailsOpacity == 1)
+//            opacity: delegate.detailsOpacity
+//            text: "Share with Friends"
+//            onClicked: {
+//                rootCloud.set_access(pmlid,-2,
+//                               function(){
 
-                                   refpmlModel.setProperty(rowid,"access_id",-2);
-                                   pmlModel.setProperty(index,"access_id",-2);
+//                                   refpmlModel.setProperty(rowid,"access_id",-2);
+//                                   pmlModel.setProperty(index,"access_id",-2);
 
-//                                   pmlview.populate(newprivateSearchItem.text);
-                               },
-                               function(){}
-                               );
-            }
-        }
+////                                   pmlview.populate(newprivateSearchItem.text);
+//                               },
+//                               function(){}
+//                               );
+//            }
+//        }
         TextButton {
             id: makePublic
             visible: (access_id != 2) && ismine

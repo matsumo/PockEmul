@@ -530,7 +530,16 @@ void Parse::uploadPML() {
     QMetaObject::invokeMethod(object, "showWorkingScreen");
     processPML(m_uploadQueue.takeFirst());
 }
+void Parse::saveCurrentSession(QString title, QString description, QString pml_file) {
 
+    connect(this,&pmlUploaded,this,[=](){
+            QMetaObject::invokeMethod(object, "hideWorkingScreen");
+            pmlList();
+    });
+
+    QMetaObject::invokeMethod(object, "showWorkingScreen");
+    postPML(  title,  description,  pml_file );
+}
 void Parse::processPML(QString pmlFileName) {
     QFile _file(pmlFileName);
     _file.open(QIODevice::ReadOnly);
@@ -539,79 +548,6 @@ void Parse::processPML(QString pmlFileName) {
 }
 
 
-void Parse::updatePMLfile( QString objectId, QString pml_file)
-{
-    if (!isReady()) return;
-
-    QString name = toKey(pml_file)+".pml";
-    setEndPoint( "files/"+name);
-
-    QByteArray data = pml_file.toLatin1();
-
-    initHeaders();
-    setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
-
-    m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
-        disconnect(m_conn);
-        if ( getHttpCode() == 201 ){
-            currentObject = json.object();
-            qWarning()<<"updatePMLfile Result:"<<json.object();
-            // update pml file link
-            setEndPoint("classes/Pml/"+objectId);
-            QJsonObject obj;
-            QJsonObject pmlfileLink{
-                        {"name",json.object().value("name").toString()},
-                        {"__type","File"}
-                    };
-            obj.insert("pmlfile",pmlfileLink);
-            updateSnapfile( objectId,pml_file,obj);
-        }
-
-    } );
-
-    request( BaaS::POST, data );
-}
-void Parse::updateSnapfile( QString objectId, QString pml_file, QJsonObject obj)
-{
-    if (!isReady()) return;
-
-    // extract the snap
-    int begin = pml_file.indexOf("<snapshot format=\"JPG\">")+23;
-    if (begin==22) begin = pml_file.indexOf("<snapshot>")+10;
-    int end = pml_file.indexOf("</snapshot>");
-
-    QString snap = pml_file.mid(begin, end-begin);
-    qWarning()<<"snap"<<snap.left(10)<<"    fin:"<<snap.right(10);
-    QString name = toKey(snap)+".jpg";
-    setEndPoint( "files/"+name);
-
-    QByteArray data = QByteArray::fromBase64(snap.toLatin1());
-    QMimeDatabase db;
-    QMimeType mime = db.mimeTypeForData(data);
-
-    initHeaders();
-    setHeader(QNetworkRequest::ContentTypeHeader, mime.name().toUtf8());
-
-    m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
-        disconnect(m_conn);
-        if ( getHttpCode() == 201 ){
-            currentObject = json.object();
-            qWarning()<<"updatePMLfile Result:"<<json.object();
-            // update pml file link
-            setEndPoint("classes/Pml/"+objectId);
-            QJsonObject _obj = obj;
-            QJsonObject snapLink{
-                        {"name",json.object().value("name").toString()},
-                        {"__type","File"}
-                    };
-            _obj.insert("snap",snapLink);
-            updatePML( QJsonDocument(_obj).toJson());
-        }
-
-    } );
-
-    request( BaaS::POST, data );
-}
 void Parse::updatePML(QString doc)
 {
     if (!isReady()) {
@@ -664,6 +600,7 @@ void Parse::postPML( QString title, QString description, QString pml_file )
     obj.insert("owner",owner);
     obj.insert("title",title);
     obj.insert("description",description);
+    obj.insert("xml",QString(pml_file.toLatin1().toBase64()));
 
     QJsonObject acl{
         { userId,  QJsonObject{
@@ -676,6 +613,7 @@ void Parse::postPML( QString title, QString description, QString pml_file )
 
 
     // parse pml to generate objetcs list
+    // TODO: This should be moved to parse.Cloud
     QDomDocument document;
     document.setContent( pml_file );
     QDomElement documentElement = document.documentElement();
@@ -706,7 +644,8 @@ void Parse::postPML( QString title, QString description, QString pml_file )
             if (m_uploadQueue.isEmpty()) {
 //                QMetaObject::invokeMethod(object, "hideWorkingScreen");
             }
-            updatePMLfile( obj.value("objectId").toString() , pml_file);
+
+            emit pmlUploaded();
         }
 
     } );
@@ -796,4 +735,80 @@ QString Parse::generatePmlXml(QJsonObject obj) {
     qWarning()<<xmlPmlList;
 
     return xmlPmlList;
+}
+
+// NOT USED anymore
+void Parse::updatePMLfile( QString objectId, QString pml_file)
+{
+    if (!isReady()) return;
+
+    QString name = toKey(pml_file)+".pml";
+    setEndPoint( "files/"+name);
+
+    QByteArray data = pml_file.toLatin1();
+
+    initHeaders();
+    setHeader(QNetworkRequest::ContentTypeHeader, "text/plain");
+
+    m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
+        disconnect(m_conn);
+        if ( getHttpCode() == 201 ){
+            currentObject = json.object();
+            qWarning()<<"updatePMLfile Result:"<<json.object();
+            // update pml file link
+            setEndPoint("classes/Pml/"+objectId);
+            QJsonObject obj;
+            QJsonObject pmlfileLink{
+                        {"name",json.object().value("name").toString()},
+                        {"__type","File"}
+                    };
+            obj.insert("pmlfile",pmlfileLink);
+            updateSnapfile( objectId,pml_file,obj);
+        }
+
+    } );
+
+    request( BaaS::POST, data );
+}
+// NOT USED anymore
+void Parse::updateSnapfile( QString objectId, QString pml_file, QJsonObject obj)
+{
+    if (!isReady()) return;
+
+    // extract the snap
+    int begin = pml_file.indexOf("<snapshot format=\"JPG\">")+23;
+    if (begin==22) begin = pml_file.indexOf("<snapshot>")+10;
+    int end = pml_file.indexOf("</snapshot>");
+
+    QString snap = pml_file.mid(begin, end-begin);
+    qWarning()<<"snap"<<snap.left(10)<<"    fin:"<<snap.right(10);
+    QString name = toKey(snap)+".jpg";
+    setEndPoint( "files/"+name);
+
+    QByteArray data = QByteArray::fromBase64(snap.toLatin1());
+    QMimeDatabase db;
+    QMimeType mime = db.mimeTypeForData(data);
+
+    initHeaders();
+    setHeader(QNetworkRequest::ContentTypeHeader, mime.name().toUtf8());
+
+    m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
+        disconnect(m_conn);
+        if ( getHttpCode() == 201 ){
+            currentObject = json.object();
+            qWarning()<<"updatePMLfile Result:"<<json.object();
+            // update pml file link
+            setEndPoint("classes/Pml/"+objectId);
+            QJsonObject _obj = obj;
+            QJsonObject snapLink{
+                        {"name",json.object().value("name").toString()},
+                        {"__type","File"}
+                    };
+            _obj.insert("snap",snapLink);
+            updatePML( QJsonDocument(_obj).toJson());
+        }
+
+    } );
+
+    request( BaaS::POST, data );
 }

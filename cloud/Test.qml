@@ -44,7 +44,7 @@ import QtQuick.Controls 1.2
 import "content"
 import "TabbedQuickApp"
 import "."
-
+//import "http://www.parsecdn.com/js/parse-latest.js" as test
 
 
 Rectangle {

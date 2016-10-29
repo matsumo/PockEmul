@@ -161,7 +161,7 @@ Rectangle {
 
         if (apiSelected==='parse') {
             xml = cloud.save();
-            parse.postPML(title,description,xml);
+            parse.saveCurrentSession(title,description,xml);
         }
 
         if(apiSelected==='elgg') {

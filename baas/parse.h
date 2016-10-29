@@ -38,6 +38,7 @@ public:
     Q_INVOKABLE void uploadPML();
     Q_INVOKABLE void postPML(QString title, QString description, QString pml_file);
     Q_INVOKABLE void updatePMLfile(QString objectId, QString pml_file);
+    Q_INVOKABLE void saveCurrentSession(QString title, QString description, QString pml_file);
 
     //Files related
     Q_INVOKABLE QNetworkReply *uploadFile(QUrl url, QString name = QString());
