@@ -58,26 +58,14 @@ Rectangle {
 
     VisualItemModel {
         id: tabsModel
-//        Tab {name: "New"
-//            ShowRoom {
-//                id: showroomPocket
-////                z: 9999
-//                visible: true
-//                exitOnBack: false
-//                source: "qrc:/pockemul/config.xml"
-//                anchors.fill: parent
-//            }
-//        }
-//        Tab {name: "New Ext."
-//            ShowRoom {
-//                id: showroomExt
-////                z: 9999
-//                visible: true
-//                exitOnBack: false
-//                source: "qrc:/pockemul/configExt.xml"
-//                anchors.fill: parent
-//            }
-//        }
+        Tab {name: "Portal"
+            Portal {
+                id: myPortal
+//                z: 9999
+                visible: true
+                anchors.fill: parent
+            }
+        }
         Tab {name: "Cloud"
             icon: "pics/public-cloud-white.png"
 
@@ -140,10 +128,12 @@ Rectangle {
 
     TabbedUI {
         id: tabbedui
+//        vertical: true
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+//        tabsWidth:  144 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
-        quitIndex: 3
+        quitIndex: 4
         onClose: rootCloud.close();
 
     }

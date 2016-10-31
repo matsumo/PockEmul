@@ -1,6 +1,16 @@
 import QtQuick 2.0
+import QtGraphicalEffects 1.0
 
 Rectangle {
+    property bool horizontal: true
+    property bool vertical: false
+
+    onHorizontalChanged: vertical = !horizontal
+    onVerticalChanged: horizontal = !vertical
+
+    // width of the tab bar
+    property int tabsWidth : 128
+
     // height of the tab bar
     property int tabsHeight : 64
 
@@ -19,9 +29,13 @@ Rectangle {
     Rectangle {
         id: tabViewContainer
         width: parent.width
+        height: parent.height
+        color: "red"
 
         anchors.top: parent.top
-        anchors.bottom: tabBar.top
+        anchors.bottom: horizontal ? tabBar.top : parent.bottom
+        anchors.left: vertical ? tabBar.right : parent.left
+        anchors.right: parent.right
 
         // build all the tab views
         Repeater {
@@ -62,8 +76,10 @@ Rectangle {
 	id: tabBarItem
 
 	Rectangle {
-	    height: tabs.height
-	    width: tabs.width / tabsModel.count
+        height: horizontal ? tabsHeight : (tabs.height / tabsModel.count)
+        width: horizontal ? (tabs.width / tabsModel.count) : tabsWidth
+//	    height: tabs.height
+//	    width: tabs.width / tabsModel.count
         property int margin : tabs.height / 16
 
 	    color: "transparent"
@@ -103,34 +119,48 @@ Rectangle {
 
     // the tab bar
     Rectangle {
-	height: tabsHeight
-	width: parent.width
+        height: horizontal ? tabsHeight : parent.height
+        width: horizontal ? parent.width : tabsWidth
+        color: "black"
+//        border.color: "red"
 
-	// take the whole parent width
-	anchors.left: parent.left
-	anchors.right: parent.right
+        // take the whole parent width
+        anchors.left: parent.left
+//        anchors.right: parent.right
 
-	// attach it to the view bottom
-	anchors.bottom: parent.bottom
+        // attach it to the view bottom
+        anchors.bottom: parent.bottom
 
-	id: tabBar
+        id: tabBar
 
-	gradient: Gradient {
-	    GradientStop {position: 0.0; color: "#666666"}
-	    GradientStop {position: 1.0; color: "#000000"}
-	}
-
-	// place all the tabs in a row
-	Row {
-	    anchors.fill: parent
-
-            id: tabs
-
-	    Repeater {
-		model: tabsModel.count
-
-		delegate: tabBarItem
-	    }
+        LinearGradient {
+            visible: horizontal
+            anchors.fill: parent
+            start: horizontal ? Qt.point(0,0) : Qt.point(parent.width,0)
+            end: horizontal ? Qt.point(0,parent.height) : Qt.point(0,0)
+            gradient: Gradient {
+                GradientStop { position: 0.0; color: "#666666" }
+                GradientStop { position: 1.0; color: "#000000" }
+            }
         }
+//        gradient: Gradient {
+//            GradientStop {position: 0.0; color: "#666666"}
+//            GradientStop {position: 1.0; color: "#000000"}
+//        }
+
+        // place all the tabs in a row
+        Grid {
+            columns: horizontal ? tabsModel.count : 1
+            anchors.fill: parent
+
+                id: tabs
+
+            Repeater {
+            model: tabsModel.count
+
+            delegate: tabBarItem
+            }
+         }
+
     }
 }

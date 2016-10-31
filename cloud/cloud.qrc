@@ -92,5 +92,6 @@
         <file>content/HexEdit.qml</file>
         <file>content/MemoryDump.qml</file>
         <file>content/SlotList.qml</file>
+        <file>content/Portal.qml</file>
     </qresource>
 </RCC>

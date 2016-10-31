@@ -33,6 +33,7 @@ class DialogVKeyboard;
 class QSwipeGesture;
 class Cbus;
 class COverlay;
+class Filter;
 
 #include "slot.h"
 #include "viewobject.h"
@@ -106,6 +107,8 @@ public:
 
 
     FILE	*fp_log;
+
+    Filter *my_filter;
 
     int rate;
 

@@ -941,7 +941,8 @@ HEADERS *= \
     src/core/ganalytics.h \
     src/core/binarydata.h \
     baas/baas.h \
-    baas/parse.h
+    baas/parse.h \
+    src/core/filt.h
 
 
 
@@ -1113,7 +1114,8 @@ SOURCES *=  \
     src/core/ganalytics.cpp \
     src/core/binarydata.cpp \
     baas/baas.cpp \
-    baas/parse.cpp
+    baas/parse.cpp \
+    src/core/filt.cpp
 
 
 
@@ -1610,6 +1612,7 @@ OTHER_FILES *= \
     cloud/content/HexEdit.qml \
     cloud/content/MemoryDump.qml \
     cloud/content/SlotList.qml \
+    cloud/content/Portal.qml \
 
 
 

@@ -43,6 +43,8 @@
 #include "bus.h"
 #include "overlay.h"
 
+#include "filt.h"
+
 #include "ganalytics.h"
 extern GAnalytics* tracker;
 
@@ -612,6 +614,9 @@ int CPObject::initsound()
     connect(m_audioOutput, SIGNAL(stateChanged(QAudio::State)), SLOT(audioStateChanged(QAudio::State)));
     m_audioOutput->setBufferSize(1000);
 
+    my_filter = new Filter(LPF, 48, 8, 1.0);
+//    if ( my_filter->get_error_flag() != 0 ) // abort in an appropriate manner
+
     m_output = m_audioOutput->start();
     m_audioOutput->setVolume(0.25);
 //    int p = m_audioOutput->periodSize();
@@ -674,7 +679,13 @@ void CPObject::fillSoundBuffer(BYTE val)
         if (audioBuff.size() <= (2*ps)) {
             while ((pTIMER->state - fillSoundBuffer_old_state) >= wait)
             {
-                audioBuff.append(val);
+                if (0) {
+                    BYTE filtered_sample = my_filter->do_sample( (double) val );
+                    audioBuff.append(filtered_sample);
+                }
+                else {
+                    audioBuff.append(val);
+                }
 //qWarning()<<val;
                 fillSoundBuffer_old_state += wait;
                 //delta_state -= wait;

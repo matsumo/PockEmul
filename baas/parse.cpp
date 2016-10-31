@@ -516,7 +516,7 @@ void Parse::uploadPML() {
 
 
 
-    connect(this,&pmlUploaded,this,[=](){
+    connect(this,&Parse::pmlUploaded,this,[=](){
         if (!m_uploadQueue.isEmpty()) {
             qWarning()<<"**"<<m_uploadQueue.count()<<" files remaining";
             processPML(m_uploadQueue.takeFirst());
@@ -532,7 +532,7 @@ void Parse::uploadPML() {
 }
 void Parse::saveCurrentSession(QString title, QString description, QString pml_file) {
 
-    connect(this,&pmlUploaded,this,[=](){
+    connect(this,&Parse::pmlUploaded,this,[=](){
             QMetaObject::invokeMethod(object, "hideWorkingScreen");
             pmlList();
     });
