@@ -12,7 +12,7 @@ Rectangle {
             console.log("logged:");//+auth_token);
         }
 
-        parse.loginChanged.connect(rootCloud.loginChanged);
+        parse.loginChanged.connect(loginChanged);
         parse.currentObjectChanged.connect(currentObjectChanged);
 
     }

@@ -454,9 +454,7 @@ bool Ckeyb::init(void)
     if (!file.exists()) {
         file.setFileName(":/KEYMAP/keymap/"+fn_KeyMap);
     }
-//    if (!file.exists()) {
-//        file.setFileName(":/KEYMAP/keymap/"+fn_KeyMap);
-//    }
+
     if (file.exists()) {
 
         QXmlInputSource source(&file);

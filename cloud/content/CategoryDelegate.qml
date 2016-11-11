@@ -43,19 +43,53 @@ import QtQuick 2.0
 
 Item {
     id: delegate
+    property int tempX: 0
 
     width: delegate.ListView.view.width;
-    height: textlabel.height *1.1
+    height: textlabel.height *1.5
 
     Text {
         id:textlabel
         renderType: Text.NativeRendering
         text: keyword+" ("+counter+")"
         color: delegate.ListView.isCurrentItem ? "white" : "black"
-        font { family: "Helvetica"; pointSize: 14; bold: false }
+        font { family: "Helvetica"; pointSize: 16; bold: false }
         anchors {
-            left: parent.left; leftMargin: 15
+//            left: parent.left; leftMargin: 15
             verticalCenter: parent.verticalCenter
+        }
+    }
+
+    Timer {
+        id:timer
+        interval: 40; running: false; repeat: true
+        onTriggered:{
+
+
+            if( tempX + delegate.width > textlabel.width ) {
+                timer.running = false
+                pauseTimer.restart()
+                tempX = 0
+//                textlabel.x = 0
+            }
+            else {
+                tempX = tempX + 1
+                textlabel.x = -tempX;
+            }
+        }
+    }
+
+    Timer {
+        id:pauseTimer
+        interval: 2000; running: false; repeat: false
+        onTriggered: {
+            if (textlabel.x < 0) {
+                textlabel.x = 0
+                pauseTimer.restart()
+            }
+            else {
+                timer.running = true;
+            }
         }
     }
 
@@ -79,9 +113,21 @@ Item {
         anchors.fill: delegate
         onClicked: {
             delegate.ListView.view.currentIndex = index
-//            pmlview.objid = objid
             pmlview.keyword = keyword
-            //window.currentObjid = objid
         }
+    }
+
+//    MouseArea {
+//        id:mouseArea
+//        anchors.fill: parent
+//        onClicked: {
+//            tempX = 0;
+//            timer.running = true;
+//        }
+//    }
+
+    Component.onCompleted: {
+        tempX = 0;
+        pauseTimer.restart();
     }
 }

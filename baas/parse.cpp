@@ -616,20 +616,22 @@ void Parse::postPML( QString title, QString description, QString pml_file )
 
 
     // parse pml to generate objetcs list
-    // TODO: This should be moved to parse.Cloud
-    QDomDocument document;
-    document.setContent( pml_file );
-    QDomElement documentElement = document.documentElement();
-    QDomNodeList elements = documentElement.elementsByTagName( "object" );
-    QString keywords = "|";
-    for (int i=0; i<elements.size();i++ )
-    {
-        QDomElement object = elements.at(i).toElement();
-        QString name = object.attribute("name");
-        keywords.append( name + QString("|") );
-        qWarning()<<keywords;
-    }
-    obj.insert("keywords",keywords);
+    // This should be moved to parse.Cloud
+    // DONE
+
+//    QDomDocument document;
+//    document.setContent( pml_file );
+//    QDomElement documentElement = document.documentElement();
+//    QDomNodeList elements = documentElement.elementsByTagName( "object" );
+//    QString keywords = "|";
+//    for (int i=0; i<elements.size();i++ )
+//    {
+//        QDomElement object = elements.at(i).toElement();
+//        QString name = object.attribute("name");
+//        keywords.append( name + QString("|") );
+//        qWarning()<<keywords;
+//    }
+//    obj.insert("keywords",keywords);
 
     m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
         disconnect(m_conn);
