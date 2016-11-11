@@ -13,7 +13,7 @@ Rectangle {
     signal clicked
 
     width: expand ? Math.max(label.width + 20 , parent.width) : label.width + 20 ;
-    height: label.height + 6
+    height: label.height + 40
     border.color: Style.buttonBorderColor
     radius: 5
 

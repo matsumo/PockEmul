@@ -19,7 +19,7 @@ Rectangle {
 
 
     width: 480;
-    height: row.height +5
+    height: row.height +40
 
     Text {
         id: fontstyle

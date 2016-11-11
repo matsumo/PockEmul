@@ -12,7 +12,6 @@
         <file>content/Settings.qml</file>
         <file>content/SearchBox.qml</file>
         <file>content/LineInput.qml</file>
-        <file>PmlView.qml</file>
         <file>content/images/busy.png</file>
         <file>content/images/clear.png</file>
         <file>content/images/lineedit-bg.png</file>

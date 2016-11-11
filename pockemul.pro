@@ -942,7 +942,8 @@ HEADERS *= \
     src/core/binarydata.h \
     baas/baas.h \
     baas/parse.h \
-    src/core/filt.h
+    src/core/filt.h \
+    src/core/laserfilter.h
 
 
 
@@ -1115,7 +1116,8 @@ SOURCES *=  \
     src/core/binarydata.cpp \
     baas/baas.cpp \
     baas/parse.cpp \
-    src/core/filt.cpp
+    src/core/filt.cpp \
+    src/core/laserfilter.cpp
 
 
 
@@ -1592,7 +1594,6 @@ OTHER_FILES *= \
     cloud/content/Actions.qml \
     cloud/content/About.qml \
     cloud/content/ContextMenu.qml \
-    cloud/PmlView.qml \
     cloud/PmlView2.qml \
     cloud/Test.qml \
     cloud/Main.qml \

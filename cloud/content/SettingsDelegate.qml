@@ -16,8 +16,9 @@ Item {
     signal buttonClicked
 
     width: delegate.ListView.view.width;
-    height: (type == "input") ? inputElement.height :
-            (type == "action")? buttonElement.height +5 : labelElement.height +5
+    height: cloud.getValueFor("hiResRatio","1") *
+            (type == "input") ? inputElement.height :
+            (type == "action")? buttonElement.height +40 : labelElement.height +40
 
 
     LineInput {

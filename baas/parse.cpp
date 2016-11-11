@@ -508,6 +508,7 @@ QNetworkReply* Parse::deleteFile(QString fileName)
     return request( BaaS::DELETE );
 
 }
+
 void Parse::uploadPML() {
     m_uploadQueue = QFileDialog::getOpenFileNames(0,
                                                     tr("Open Session files"),
@@ -598,8 +599,10 @@ void Parse::postPML( QString title, QString description, QString pml_file )
             };
 
     obj.insert("owner",owner);
+    obj.insert("type","pml");
     obj.insert("title",title);
     obj.insert("description",description);
+//    obj.insert("xml",QString(qCompress(pml_file.toLatin1()).remove(0,4).toBase64()));
     obj.insert("xml",QString(pml_file.toLatin1().toBase64()));
 
     QJsonObject acl{
@@ -618,22 +621,15 @@ void Parse::postPML( QString title, QString description, QString pml_file )
     document.setContent( pml_file );
     QDomElement documentElement = document.documentElement();
     QDomNodeList elements = documentElement.elementsByTagName( "object" );
-    QString objects;
-    QString listobjects;
+    QString keywords = "|";
     for (int i=0; i<elements.size();i++ )
     {
         QDomElement object = elements.at(i).toElement();
         QString name = object.attribute("name");
-        int objid = mainwindow->objtable[name];
-        objects.append( QString(";") + QString("%1").arg(objid) + QString("|") + name);
-        listobjects.append( QString(",") + QString("%1").arg(objid) );
-        qWarning()<<objects;
-        qWarning()<<listobjects;
+        keywords.append( name + QString("|") );
+        qWarning()<<keywords;
     }
-    objects.remove(0,1);
-    listobjects.append(QString(","));
-    obj.insert("objects",objects);
-    obj.insert("listobjects",listobjects);
+    obj.insert("keywords",keywords);
 
     m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
         disconnect(m_conn);
@@ -719,8 +715,8 @@ QString Parse::generatePmlXml(QJsonObject obj) {
         xml->writeTextElement("owner_username",(pml_item["owner"].toObject())["username"].toString());
         xml->writeTextElement("access_id",pml_item["ACL"].toObject().contains("*")?"2":"0");
         xml->writeTextElement("ispublic",pml_item["ACL"].toObject().contains("*")?"1":"0");
-        xml->writeTextElement("objects",pml_item["objects"].toString());
-        xml->writeTextElement("listobjects",pml_item["listobjects"].toString());
+        xml->writeTextElement("keywords",pml_item["keywords"].toString());
+        xml->writeTextElement("type",pml_item["pml"].toString());
         xml->writeTextElement("createdAt",pml_item["createdAt"].toString());
         xml->writeTextElement("updatedAt",pml_item["updatedAt"].toString());
 

@@ -7,35 +7,35 @@
     <KEY description="F4" height="30" left="227" masterscancode="0x00" modifier="" scancode="0xf9" top="125" width="30"/>
     <KEY description="F5" height="30" left="277" masterscancode="0x00" modifier="" scancode="0xfa" top="124" width="30"/>
     <KEY description="-" height="30" left="651" masterscancode="0x00" modifier="" scancode="0x2d" top="252" width="30"/>
-    <KEY description="*" height="30" left="648" masterscancode="0x00" modifier="" scancode="0x2a" top="207" width="20"/>
+    <KEY description="*" height="30" left="648" masterscancode="0x00" modifier="" scancode="0x2a" top="207" width="30"/>
     <KEY description="," height="30" left="404" masterscancode="0x00" modifier="" scancode="0x2c" top="253" width="30"/>
     <KEY description="." height="30" left="556" masterscancode="0x00" modifier="" scancode="0x2e" top="296" width="30"/>
     <KEY description="/" height="30" left="647" masterscancode="0x00" modifier="" scancode="0x2f" top="162" width="30"/>
     <KEY description=":" height="30" left="450" masterscancode="0x00" modifier="" scancode="0x3a" top="251" width="30"/>
-    <KEY description="+" height="30" left="648" masterscancode="0x00" modifier="" scancode="0x2b" top="293" width="20"/>
-    <KEY description="OFF" height="30" left="650" masterscancode="0x00" modifier="" scancode="0xc8" top="114" width="20"/>
-    <KEY description="ON" height="23" left="601" masterscancode="0x00" modifier="" scancode="0xc7" top="120" width="20"/>
-    <KEY description="CLS" height="21" left="39" masterscancode="0x00" modifier="" scancode="0x0c" top="122" width="20"/>
+    <KEY description="+" height="30" left="648" masterscancode="0x00" modifier="" scancode="0x2b" top="293" width="30"/>
+    <KEY delay="3" description="OFF" height="30" left="650" masterscancode="0x00" modifier="" scancode="0xc8" top="114" width="30"/>
+    <KEY description="ON" height="23" left="601" masterscancode="0x00" modifier="" scancode="0xc7" top="120" width="30"/>
+    <KEY description="Break" height="21" left="39" masterscancode="0x00" modifier="" scancode="0x03" top="122" width="30"/>
     <KEY description="DEL" height="30" left="448" masterscancode="0x00" modifier="" scancode="0xd6" top="294" width="30"/>
-    <KEY description="Down Arrow" height="30" left="367" masterscancode="0x00" modifier="" scancode="0x04" top="120" width="20"/>
-    <KEY description="EXE Keyboard" height="29" left="287" masterscancode="0x00" modifier="" scancode="0x0d" top="295" width="78"/>
+    <KEY description="Down Arrow" height="30" left="367" masterscancode="0x00" modifier="" scancode="0x04" top="120" width="30"/>
+    <KEY description="Return" height="29" left="287" masterscancode="0x00" modifier="" scancode="0x0d" top="295" width="78"/>
     <KEY description="INS" height="30" left="400" masterscancode="0x00" modifier="" scancode="0x09" top="294" width="30"/>
     <KEY description="Left Arrow" height="19" left="463" masterscancode="0x00" modifier="" scancode="0x06" top="122" width="29"/>
-    <KEY description="Rigth Arrow" height="30" left="508" masterscancode="0x00" modifier="" scancode="0x07" top="122" width="20"/>
+    <KEY description="Rigth Arrow" height="30" left="508" masterscancode="0x00" modifier="" scancode="0x07" top="122" width="30"/>
     <KEY description="Shift" height="27" left="52" masterscancode="0x00" modifier="" scancode="0x11" top="297" width="78"/>
-    <KEY description="SML" height="26" left="28" masterscancode="0x00" modifier="" scancode="0x14" top="254" width="30"/>
+    <KEY description="Ctrl" height="26" left="28" masterscancode="0x00" modifier="" scancode="0xd5" top="254" width="30"/>
     <KEY description="Space" height="28" left="166" masterscancode="0x00" modifier="" scancode="0x20" top="295" width="83"/>
-    <KEY description="Up Arrow" height="30" left="415" masterscancode="0x00" modifier="" scancode="0x05" top="124" width="20"/>
+    <KEY description="Up Arrow" height="30" left="415" masterscancode="0x00" modifier="" scancode="0x05" top="124" width="30"/>
     <KEY description="0" height="30" left="506" masterscancode="0x00" modifier="" scancode="0x30" top="296" width="30"/>
-    <KEY description="1" height="20" left="509" masterscancode="0x00" modifier="" scancode="0x31" top="248" width="30"/>
-    <KEY description="2" height="20" left="556" masterscancode="0x00" modifier="" scancode="0x32" top="250" width="30"/>
-    <KEY description="3" height="20" left="600" masterscancode="0x00" modifier="" scancode="0x33" top="252" width="30"/>
-    <KEY description="4" height="20" left="507" masterscancode="0x00" modifier="" scancode="0x34" top="207" width="30"/>
-    <KEY description="5" height="20" left="554" masterscancode="0x00" modifier="" scancode="0x35" top="207" width="30"/>
-    <KEY description="6" height="20" left="599" masterscancode="0x00" modifier="" scancode="0x36" top="209" width="30"/>
-    <KEY description="7" height="20" left="508" masterscancode="0x00" modifier="" scancode="0x37" top="165" width="30"/>
-    <KEY description="8" height="20" left="552" masterscancode="0x00" modifier="" scancode="0x38" top="164" width="30"/>
-    <KEY description="9" height="20" left="601" masterscancode="0x00" modifier="" scancode="0x39" top="163" width="30"/>
+    <KEY description="1" height="30" left="509" masterscancode="0x00" modifier="" scancode="0x31" top="248" width="30"/>
+    <KEY description="2" height="30" left="556" masterscancode="0x00" modifier="" scancode="0x32" top="250" width="30"/>
+    <KEY description="3" height="30" left="600" masterscancode="0x00" modifier="" scancode="0x33" top="252" width="30"/>
+    <KEY description="4" height="30" left="507" masterscancode="0x00" modifier="" scancode="0x34" top="207" width="30"/>
+    <KEY description="5" height="30" left="554" masterscancode="0x00" modifier="" scancode="0x35" top="207" width="30"/>
+    <KEY description="6" height="30" left="599" masterscancode="0x00" modifier="" scancode="0x36" top="209" width="30"/>
+    <KEY description="7" height="30" left="508" masterscancode="0x00" modifier="" scancode="0x37" top="165" width="30"/>
+    <KEY description="8" height="30" left="552" masterscancode="0x00" modifier="" scancode="0x38" top="164" width="30"/>
+    <KEY description="9" height="30" left="601" masterscancode="0x00" modifier="" scancode="0x39" top="163" width="30"/>
     <KEY description="A" height="18" left="51" masterscancode="0x00" modifier="" scancode="0x61" top="208" width="30"/>
     <KEY description="B" height="18" left="262" masterscancode="0x00" modifier="" scancode="0x62" top="254" width="30"/>
     <KEY description="C" height="18" left="170" masterscancode="0x00" modifier="" scancode="0x63" top="251" width="27"/>

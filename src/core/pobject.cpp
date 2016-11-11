@@ -80,6 +80,7 @@ CPObject::CPObject(CPObject *parent, QString _cfg):CViewObject(parent)
     Initial_Session_Fname = "NotDefined";
     indexName = 0;
     cfgfname = _cfg;
+    resName = "";
     pCPU	= 0;
     pTIMER	= 0;
     pLCDC	= 0;
@@ -2426,6 +2427,10 @@ void CPObject::setDisplayName(QString val)
 void CPObject::setcfgfname(QString s)
 {
     cfgfname = s;
+
+    if (resName.isEmpty()) {
+        resName = s;
+    }
 }
 
 

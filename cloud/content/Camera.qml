@@ -7,10 +7,13 @@ Item {
 
     Camera {
         id: camera
+        position: Camera.BackFace
         imageCapture {
             onImageCaptured: {
                 // Show the preview in an Image
-                photoPreview.source = preview; //"http://ereimer.net/rants/qrcode-EreimerDotNet-zxing.png";
+                photoPreview.source = //preview;
+                        "http://domi2.developpez.com/tutoriels/access/codes-barres/images/codebarres128-1.jpg";
+                        //"http://ereimer.net/rants/qrcode-EreimerDotNet-zxing.png";
                 console.log(preview);
 //                decoder.decodeImageQML(preview);
 
@@ -24,7 +27,7 @@ Item {
             width: 320; height: 240
             MouseArea {
                 anchors.fill: parent
-                onClicked: main.test(); //camera.imageCapture.capture()
+                onClicked: camera.imageCapture.capture()
             }
         }
         Text {
@@ -36,7 +39,7 @@ Item {
             id: photoPreview
 //            source: "http://ereimer.net/rants/qrcode-EreimerDotNet-zxing.png"
 //            source: "http://www.podiocom.com/img/vehicules/bus_car_vip/bus_double_etage/slideshow/bus_double_etage04.jpg"
-            width: 300; height: 300
+            width: 500; height: 400
             cache: false
             asynchronous: false
             onStatusChanged: {
@@ -54,11 +57,11 @@ Item {
     QZXing{
         id: decoder
 
-        enabledDecoders: QZXing.DecoderFormat_QR_CODE
+        enabledDecoders: QZXing.DecoderFormat_CODE_128
 
         onDecodingStarted: console.log("Decoding of image started...")
 
-        onTagFound: console.log( "Barcode data: " + tag)
+        onTagFound: text.text= "Barcode data: " + tag
 
         onDecodingFinished: console.log("Decoding finished " + (succeeded==true ? "successfully" :    "unsuccessfully") )
     }

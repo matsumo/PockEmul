@@ -128,6 +128,9 @@ public:
     QString getcfgfname() { return cfgfname; }
     void	setcfgfname(QString s);
 	
+    QString getresName() { return resName; }
+    void	setresName(QString s) { resName = s;}
+
     void    serialize(QXmlStreamWriter *,int id);
 
     void    MoveWithLinkedRel(QPointF);
@@ -318,6 +321,7 @@ private:
     int     indexName;
     QString displayName;
 	QString cfgfname;				// configration file name
+    QString resName;
 	
 
 	int		iChanIndex;

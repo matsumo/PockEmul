@@ -1625,6 +1625,8 @@ void MainWindowPockemul::toggleFullscreen()
     setWindowState(windowState() ^ Qt::WindowFullScreen);
     show();
 
+    qWarning()<<"fullscreen:"<<((windowState() & Qt::WindowFullScreen) ? "on" : "off");
+
     tracker->sendEvent("App","Fullscreen",(windowState() & Qt::WindowFullScreen) ? "on" : "off");
     tracker->startSending();
 }

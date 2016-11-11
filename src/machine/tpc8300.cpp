@@ -207,6 +207,7 @@ UINT8 Ctpc8300::in(UINT8 Port,QString)
     switch (Port) {
     case 0x01 : return portB | (pCONNECTOR->Get_pin(12) ? 0x80 : 0x00); break;
     case 0x02 : return (getKey() & 0x3F); break;
+//    case 0x02 : return (getKey() & 0x7f); break;
     }
 
     return 0;
@@ -228,6 +229,7 @@ UINT16 Ctpc8300::out16(UINT16 address, UINT16 value, QString sender)
 {
     if (address == UPD7907_PORTE) {
         kstrobe = value;
+//        qWarning()<<QString("kstrobe=%1").arg(kstrobe,4,16);
     }
 
     return 0;
@@ -308,10 +310,10 @@ UINT16 Ctpc8300::getKey()
     UINT16 ks = kstrobe^0xFFFF;
     UINT16 data=0;
 
-    if ((pKEYB->LastKey) && ks )
+//    if ((pKEYB->LastKey) && ks )
     {
 //        if (fp_log) fprintf(fp_log,"KSTROBE=%04X\n",ks);
-//        qWarning()<<QString("ks:%1").arg(ks,4,16,QChar('0'));
+        qWarning()<<QString("ks:%1").arg(ks,4,16,QChar('0'));
 
         if (ks&0x01) {
             if (KEY('Q'))			data|=0x01;
@@ -319,6 +321,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('Z'))			data|=0x04;
             if (KEY('+'))			data|=0x08;
             if (KEY('1'))			data|=0x10;
+//            if (KEY(K_F1))			data|=0x20;
         }
 
         if (ks&0x02) {
@@ -327,6 +330,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('X'))			data|=0x04; // Q
             if (KEY('*'))			data|=0x08;
             if (KEY('2'))			data|=0x10; // 1
+//            if (KEY(K_F2))			data|=0x20;
         }
         if (ks&0x04) {
             if (KEY('E'))			data|=0x01; // X
@@ -334,6 +338,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('C'))			data|=0x04; // W
             if (KEY('-'))			data|=0x08;
             if (KEY('3'))			data|=0x10; // 2
+//            if (KEY(K_F3))			data|=0x20;
         }
 
         if (ks&0x08) {
@@ -342,22 +347,25 @@ UINT16 Ctpc8300::getKey()
             if (KEY('V'))			data|=0x04; // E
             if (KEY('/'))			data|=0x08;
             if (KEY('4'))			data|=0x10; // 3
+//            if (KEY(K_F4))			data|=0x20;
         }
 
         if (ks&0x10) {
             if (KEY('T'))			data|=0x01; // V
             if (KEY('G'))			data|=0x02; // F
             if (KEY('B'))			data|=0x04; // R
-            if (KEY(K_F1))			data|=0x08;
+            if (KEY(K_F1))			data|=0x08; // F1
             if (KEY('5'))			data|=0x10; // 4
+//            if (KEY(K_F5))			data|=0x20;
         }
 
         if (ks&0x20) {
             if (KEY('Y'))			data|=0x01; // B
             if (KEY('H'))			data|=0x02; // G
             if (KEY('N'))			data|=0x04; // T
-            if (KEY(K_F2))			data|=0x08;
+            if (KEY(K_F2))			data|=0x08; // F2
             if (KEY('6'))			data|=0x10;
+//            if (KEY(K_F6))			data|=0x20;
         }
         if (ks&0x40) {
             if (KEY('U'))			data|=0x01; // N
@@ -365,6 +373,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('M'))			data|=0x04; // Y
             if (KEY(K_F3))			data|=0x08;
             if (KEY('7'))			data|=0x10;
+//            if (KEY(K_F7))			data|=0x20;
         }
         if (ks&0x80) {
             if (KEY('I'))			data|=0x01; // M
@@ -372,6 +381,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY(K_RA))			data|=0x04; // U
             if (KEY(K_F4))			data|=0x08;
             if (KEY('8'))			data|=0x10;
+//            if (KEY(K_F8))			data|=0x20;
         }
         if (ks&0x100) {
             if (KEY('O'))			data|=0x01;
@@ -379,6 +389,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY(K_LA))			data|=0x04; // I
             if (KEY(K_F5))			data|=0x08;
             if (KEY('9'))			data|=0x10;
+//            if (KEY(K_F9))			data|=0x20;
         }
         if (ks&0x200) {
             if (KEY('P'))			data|=0x01; // *
@@ -386,7 +397,10 @@ UINT16 Ctpc8300::getKey()
             if (KEY(K_UA))			data|=0x04;
             if (KEY(' '))			data|=0x08;
             if (KEY('0'))			data|=0x10;
+
+//            if (KEY(K_F6))			data|=0x20;
         }
+
         if (ks&0x400) {
             if (KEY('='))			data|=0x01;     // numpad -
             if (KEY(K_BS))			data|=0x02;
@@ -395,55 +409,55 @@ UINT16 Ctpc8300::getKey()
             if (KEY(':'))			data|=0x10;
             if (KEY('.'))			data|=0x20; // :
         }
+
         if (ks&0x800) {
             if (KEY(K_RET))			data|=0x01;
-
-//            if (pKEYB->isShift) data|=0x02;
-
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY(K_F3))			data|=0x04;
-//            if (KEY(K_F4))		data|=0x08;
-//            if (KEY(K_F5))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
+            if (KEY(K_F6))			data|=0x02;
+            if (KEY(K_F7))			data|=0x04;
+            if (KEY(K_F8))			data|=0x08;
+            if (KEY(K_F9))			data|=0x010;
+//            if (KEY(K_F6))			data|=0x020;
         }
-//        if (ks&0x1000) {
-//            if (KEY(K_F1))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (pKEYB->isShift)     data|=0x04;
-//            if (KEY(K_F4))		data|=0x08;
-//            if (KEY(K_F5))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
-//        }
+
+        if (ks&0x1000) {
+            if (KEY(K_F9))		data|=0x01;
+            if (KEY(K_CTRL))		data|=0x02;
+            if (KEY(K_SHT))			data|=0x04;
+            if (KEY(K_F6))			data|=0x08;
+            if (KEY(K_F7))			data|=0x10;
+            if (KEY(K_F8))			data|=0x20;
+        }
+
         if (ks&0x2000) {
-////            if (KEY(K_F5))			data|=0x01;
-//            if (KEY(K_INS))			data|=0x02;
-//            if (KEY(K_DEL))			data|=0x04;
-//            if (KEY(K_DA))			data|=0x08;
-//            if (KEY(K_LA))			data|=0x10;
-//            if (KEY(K_RA))			data|=0x20;
+//            if (KEY(K_F6))			data|=0x01;
+//            if (KEY(K_F7))			data|=0x02;
+//            if (KEY(K_F8))			data|=0x04;
+//            if (KEY(K_F9))			data|=0x08;
+//            if (KEY(K_F6))			data|=0x10;
+//            if (KEY(K_F7))			data|=0x20;
         }
         if (ks&0x4000) {
-//            if (KEY(K_F7))			data|=0x01;
-//            if (KEY(K_RET))			data|=0x02;
-//            if (KEY(K_F6))			data|=0x04;
-//            if (KEY(K_SML))			data|=0x08;  // KANA ???
-//            if (KEY(K_CLR))			data|=0x10; // CLR ???
-//            if (KEY(K_F5))			data|=0x20;
+//            if (KEY(K_F6))			data|=0x01;
+//            if (KEY(K_F7))			data|=0x02;
+//            if (KEY(K_F8))			data|=0x04;
+//            if (KEY(K_F9))			data|=0x08;
+//            if (KEY(K_F6))			data|=0x10;
+//            if (KEY(K_F7))			data|=0x20;
         }
-//        if (ks&0x8000) {
-//            if (KEY(K_F1))			data|=0x01;
-//            if (KEY(K_F2))			data|=0x02;
-//            if (KEY(K_F3))			data|=0x04;
-//            if (KEY(K_F4))			data|=0x08;
-//            if (KEY(K_F5))			data|=0x10;
-//            if (KEY(K_F6))			data|=0x20;
-//        }
+        if (ks&0x8000) {
+//            if (KEY(K_F6))			data|=0x01;
+//            if (KEY(K_F7))			data|=0x02;
+//            if (KEY(K_F8))			data|=0x04;
+//            if (KEY(K_F9))			data|=0x08;
+//            if (KEY(K_F6))			data|=0x10;
+//            if (KEY(K_F7))			data|=0x20;
+        }
 
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 
     }
-    return (data^0xff) & 0x3F;
+    return (data^0xff);// & 0x3F;
 
 }
 

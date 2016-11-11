@@ -62,6 +62,7 @@ Rectangle {
     property string searchText: ""
 
     property int objid: 0
+    property string keyword: ""
     property int ispublic: ispublicCloud ? 1 : 0
     property string cacheFileName:""
 
@@ -74,22 +75,25 @@ Rectangle {
         populatePMLModel(searchText)
     }
 
+    onKeywordChanged: {
 
+        populatePMLModel(searchText)
+    }
 
     ListModel {
         id: categoryModel
     }
     SortListModel {
         id: tmpcategoryModel
-        sortColumnName: "name"
+        sortColumnName: "keyword"
     }
 
     XmlListModel {
         id: xmlpmlModel
-        source: cloud.getValueFor("serverURL","")+"services/api/rest/xml/?method=file.get_pmlfiles"+
-                "&username="+cloud.getValueFor("username","")+
-                "&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa"+
-                "&auth_token="+rootCloud.auth_token
+//        source: cloud.getValueFor("serverURL","")+"services/api/rest/xml/?method=file.get_pmlfiles"+
+//                "&username="+cloud.getValueFor("username","")+
+//                "&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa"+
+//                "&auth_token="+rootCloud.auth_token
 //        query: "/elgg/result/array_item"
 
         query: "/pmllist/pml_item"
@@ -99,8 +103,9 @@ Rectangle {
         XmlRole { name: "username"; query: "owner_username/string()" }
         XmlRole { name: "name"; query: "owner_name/string()" }
         XmlRole { name: "avatar_url"; query: "owner_avatar_url/string()" }
-        XmlRole { name: "objects"; query: "objects/string()" }
-        XmlRole { name: "listobjects"; query: "listobjects/string()" }
+//        XmlRole { name: "objects"; query: "objects/string()" }
+        XmlRole { name: "keywords"; query: "keywords/string()" }
+//        XmlRole { name: "listobjects"; query: "listobjects/string()" }
         XmlRole { name: "access_id"; query: "access_id/number()" }
         XmlRole { name: "ispublic"; query: "ispublic/number()" }
         XmlRole { name: "isdeleted"; query: "deleted/number()" }
@@ -127,8 +132,8 @@ Rectangle {
                                             username: decodeXml(item.username),
                                             name: decodeXml(item.name),
                                             avatar_url: decodeXml(item.avatar_url),
-                                            objects: decodeXml(item.objects),
-                                            listobjects: decodeXml(item.listobjects),
+                                            keywords: decodeXml(item.keywords),
+//                                            listobjects: decodeXml(item.listobjects),
                                             access_id: item.access_id,
                                             ispublic: item.ispublic,
                                             isdeleted: item.isdeleted,
@@ -151,19 +156,18 @@ Rectangle {
             }
     }
 
-    function insertorupdatecategoryModel(object_id,object_name) {
-//        console.log("insertorupdatecategoryModel:"+object_id+"-"+object_name);
+    function insertorupdatecategoryModel(keyword) {
+//        console.log("insertorupdatecategoryModel:"+keyword);
         for (var i=0; i<tmpcategoryModel.count;i++) {
             var item = tmpcategoryModel.get(i);
-            if (item.objid == object_id) {
+            if (item.keyword == keyword) {
                 // found, increment
                 item.counter++;
                 return;
             }
         }
         // not found, create a record
-        tmpcategoryModel.append({objid: parseInt(object_id),
-                                 name: object_name,
+        tmpcategoryModel.append({keyword: keyword,
                                  counter: 1});
     }
 
@@ -207,15 +211,15 @@ Rectangle {
 
             totalCount++;
             // fetch all item's objects
-//            console.log("XML:"+item.objects);
-            var x=item.objects
+//            console.log("XML:"+item.keywords);
+            var x=item.keywords
 
 
-            var tableau=x.split(';');
-            for (var j=0; j<tableau.length; j++) {
+            var tableau=x.split('|');
+            for (var j=1; j<tableau.length - 1; j++) {
 //                console.log("j="+j)
-                var obj = tableau[j].split('|');
-                insertorupdatecategoryModel(obj[0],obj[1]);
+//                var obj = tableau[j].split('|');
+                insertorupdatecategoryModel(tableau[j]);
             }
 //            console.log("populateCategoryModel : END");
         }
@@ -225,12 +229,12 @@ Rectangle {
         tmpcategoryModel.quick_sort();
 //        console.log("***"+tmpcategoryModel.count);
         categoryModel.clear();
-        categoryModel.append({objid: 0,name: "All", counter: (totalCount-isdeletedCount)});
+        categoryModel.append({keyword: "All", counter: (totalCount-isdeletedCount)});
         // copy tmpcategoryModel to categoryModel with SORT
         for (var i=0; i<tmpcategoryModel.count;i++){
             categoryModel.append(tmpcategoryModel.get(i));
         }
-        categoryModel.append({objid: -1,name: "Recycle Bin", counter: (isdeletedCount)});
+//        categoryModel.append({objid: -1,name: "Recycle Bin", counter: (isdeletedCount)});
         tmpcategoryModel.clear();
     }
 
@@ -243,8 +247,8 @@ Rectangle {
             xml += "<username>"+encodeXml(pmlItem.username)+"</username>";
             xml += "<name>"+encodeXml(pmlItem.name)+"</name>";
             xml += "<avatar_url>"+encodeXml(pmlItem.avatar_url)+"</avatar_url>";
-            xml += "<objects>"+encodeXml(pmlItem.objects)+"</objects>";
-            xml += "<listobjects>"+encodeXml(pmlItem.listobjects)+"</listobjects>";
+            xml += "<keywords>"+encodeXml(pmlItem.keywords)+"</keywords>";
+//            xml += "<listobjects>"+encodeXml(pmlItem.listobjects)+"</listobjects>";
             xml += "<access_id>"+pmlItem.access_id+"</access_id>";
             xml += "<ispublic>"+pmlItem.ispublic+"</ispublic>";
             xml += "<deleted>"+pmlItem.isdeleted+"</deleted>";
@@ -262,16 +266,18 @@ Rectangle {
 //        console.log("REFRESH Model");
         list.interactive = true;
         pmlModel.clear();
+
         for (var i=0; i<refpmlModel.count; i++) {
             var item = refpmlModel.get(i)
 //            console.log("Read: "+item.pmlid+"-"+item.title);
-            if (pmlview.ispublicCloud && (item.ispublic == 0)) continue;
+//            if (pmlview.ispublicCloud && (item.ispublic == 0)) continue;
 //            console.log("public OK");
-            if ( (pmlview.objid >= 0) && (item.isdeleted == 1)) continue;
+//            if ( (pmlview.objid >= 0) && (item.isdeleted == 1)) continue;
 
-            if ( (pmlview.objid > 0) && !idInArray(pmlview.objid.toString(),item.listobjects)) continue;
+//            if ( (pmlview.objid > 0) && !idInArray(pmlview.objid.toString(),item.listobjects)) continue;
+            if ( (pmlview.keyword != "") && (pmlview.keyword != "All") && !idInArray(pmlview.keyword,item.keywords)) continue;
 //            console.log("object OK");
-            if ( (pmlview.objid == -1) && (item.isdeleted != 1 )) continue;
+//            if ( (pmlview.objid == -1) && (item.isdeleted != 1 )) continue;
 //            console.log("Deleted OK");
             if ( (searchText !== "") && !pmlContain(item,searchText)) continue;
 
@@ -299,7 +305,7 @@ Rectangle {
 
     function idInArray(id, list) {
 //        console.log("Search:"+id+" in:"+list+"  contains:"+String(list).indexOf(","+id+","));
-        return (String(list).indexOf(","+id+",")>=0);
+        return (String(list).indexOf("|"+id+"|")>=0);
     }
 
 
@@ -315,8 +321,7 @@ Rectangle {
                        username: item.username,
                        name: item.name,
                        avatar_url: item.avatar_url,
-                       objects: item.objects,
-                       listobjects: item.listobjects,
+                       keywords: item.keywords,
                        access_id: item.access_id,
                        ispublic: item.ispublic,
                        isdeleted: item.isdeleted,

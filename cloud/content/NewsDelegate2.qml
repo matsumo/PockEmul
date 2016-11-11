@@ -370,7 +370,7 @@ Item {
             text: "Save"
             onClicked: {
                 var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
-                //console.log('url:'+url);
+                console.log('url:'+url);
                 renderArea.showWorkingScreen();
 
 //                var data = '{
@@ -400,7 +400,7 @@ Item {
                         }
                         else {
                             var obj = JSON.parse(o.responseText);
-                            console.log(obj);
+                            console.log(o.responseText);
                             message.showErrorMessage(obj.error,5000);
                         }
                     }
@@ -434,6 +434,7 @@ Item {
                             cloud.saveCache(cacheFileName,serializerefpmlModel());
                             pmlview.categoryListView.currentIndex = 0;
                             pmlview.objid = 0;
+                            pmlview.keyword = "";
                             populatePMLModel("");
                             populateCategoryModel("");
                             // Position at the just undeleted item

@@ -61,6 +61,7 @@ Rectangle {
     property string searchText: ""
 
     property int objid: 0
+    property string keyword: ""
     property int ispublic: ispublicCloud ? 1 : 0
     property string cacheFileName:""
 

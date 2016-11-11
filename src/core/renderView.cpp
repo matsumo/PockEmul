@@ -17,6 +17,7 @@
 #include "dialoganalog.h"
 #include "ui/windowide.h"
 #include "binarydata.h"
+#include "laserfilter.h"
 
 #include "ganalytics.h"
 extern GAnalytics *tracker;
@@ -46,6 +47,7 @@ CrenderView::CrenderView(QWidget *parent):cloud(this)
     if (mainwindow->dialoganalogic==0) mainwindow->dialoganalogic = new dialogAnalog(11,this);
 
     qmlRegisterType<BinaryData>("HexEditor", 1, 0, "HexModel");
+    qmlRegisterType<laserfilter>("LaserFilter", 2, 3, "laserfilter");
     QZXing::registerQMLTypes();
 
     engine()->addImageProvider(QLatin1String("Pocket"),new PocketImageProvider(this) );

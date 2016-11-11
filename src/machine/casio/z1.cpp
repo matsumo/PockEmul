@@ -37,18 +37,21 @@ Cz1::Cz1(CPObject *parent, Models mod)	: CpcXXXX(parent)
     switch (model) {
     case Z1GR:
         setcfgfname(QString("z1gr"));
+        setresName("z1");
         SessionHeader	= "Z1GGRPKM";
         Initial_Session_Fname ="z1gr.pkm";
         BackGroundFname	= P_RES(":/z1/z1gr.png");
         break;
     case FX890P:
         setcfgfname(QString("fx890p"));
+        setresName("z1");
         SessionHeader	= "FX890PPKM";
         Initial_Session_Fname ="fx890p.pkm";
         BackGroundFname	= P_RES(":/z1/fx-890p.png");
         break;
     default:
         setcfgfname(QString("z1"));
+        setresName("z1");
         SessionHeader	= "Z1PKM";
         Initial_Session_Fname ="z1.pkm";
         BackGroundFname	= P_RES(":/z1/z1.png");

@@ -39,7 +39,7 @@ Rectangle {
     }
 
     function currentObjectChanged(json) {
-        console.log("change:",JSON.stringify(json));
+//        console.log("change:",JSON.stringify(json));
     }
 
     function loginChanged() {
@@ -115,14 +115,13 @@ Rectangle {
                 onClicked: close();
             }
         }
-        //        Tab {
-        //            name: "Test"
-        //            icon: "pics/white-about-256.png"
-        //            PdfViewer {
-        //                anchors.fill: parent
-        //                url: "qrc:/pdfjs/web/viewer.html"
-        //            }
-        //        }
+        Tab {
+            name: "Test"
+            icon: "pics/white-about-256.png"
+            Camera {
+                anchors.fill: parent
+            }
+        }
 
     }
 
@@ -337,8 +336,7 @@ Rectangle {
 
     function addRefPmlModel(_pmlid,
                             _username,
-                            _objects,
-                            _listobjects,
+                            _keywords,
                             _ispublic,
                             _isdeleted,
                             _title,
@@ -347,8 +345,7 @@ Rectangle {
         refpmlModel.append({rowid: refpmlModel.count(),
                                pmlid: _pmlid,
                                username: _username,
-                               objects: _objects,
-                               listobjects: _listobjects,
+                               keywords: _keywords,
                                ispublic: _ispublic,
                                isdeleted: _isdeleted,
                                title: _title,

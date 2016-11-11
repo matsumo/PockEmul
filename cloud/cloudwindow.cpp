@@ -198,7 +198,7 @@ void Cloud::finishedSave(QNetworkReply *reply)
 
 //    qWarning()<<"received id:"<<xmlData;
 
-    QString pmlid,username,ispublic,isdeleted,title,description,objects,listobjects;
+    QString pmlid,username,ispublic,isdeleted,title,description,keywords;
 
     QXmlStreamReader *xml = new QXmlStreamReader(xmlData);
     if (xml->readNextStartElement()) {
@@ -212,19 +212,17 @@ void Cloud::finishedSave(QNetworkReply *reply)
                     if (eltname == "isdeleted") isdeleted = xml->readElementText();
                     if (eltname == "title") title = xml->readElementText();
                     if (eltname == "description") description = xml->readElementText();
-                    if (eltname == "objects") objects = xml->readElementText();
-                    if (eltname == "listobjects") listobjects = xml->readElementText();
+                    if (eltname == "keywords") keywords = xml->readElementText();
                 }
             }
         }
     }
-//    qWarning()<<pmlid<<username<<ispublic<<isdeleted<<title<<description<<objects<<listobjects;
+//    qWarning()<<pmlid<<username<<ispublic<<isdeleted<<title<<description<<keywords;
 
     QMetaObject::invokeMethod(object, "addRefPmlModel",
                               Q_ARG(QVariant, pmlid),
                               Q_ARG(QVariant, username),
-                              Q_ARG(QVariant, objects),
-                              Q_ARG(QVariant, listobjects),
+                              Q_ARG(QVariant, keywords),
                               Q_ARG(QVariant, ispublic),
                               Q_ARG(QVariant, isdeleted),
                               Q_ARG(QVariant, title),

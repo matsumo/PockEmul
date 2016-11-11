@@ -39,7 +39,7 @@
 
 #include "filt.h"
 #define ECODE(x) {m_error_flag = x; return;}
-
+#define M_PI		3.14159265358979323846
 // Handles LPF and HPF case
 Filter::Filter(filterType filt_t, int num_taps, double Fs, double Fx)
 {

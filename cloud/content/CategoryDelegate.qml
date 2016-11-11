@@ -50,7 +50,7 @@ Item {
     Text {
         id:textlabel
         renderType: Text.NativeRendering
-        text: name+" ("+counter+")"
+        text: keyword+" ("+counter+")"
         color: delegate.ListView.isCurrentItem ? "white" : "black"
         font { family: "Helvetica"; pointSize: 14; bold: false }
         anchors {
@@ -79,7 +79,8 @@ Item {
         anchors.fill: delegate
         onClicked: {
             delegate.ListView.view.currentIndex = index
-            pmlview.objid = objid
+//            pmlview.objid = objid
+            pmlview.keyword = keyword
             //window.currentObjid = objid
         }
     }
