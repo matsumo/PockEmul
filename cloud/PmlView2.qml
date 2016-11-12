@@ -111,6 +111,7 @@ Rectangle {
         XmlRole { name: "isdeleted"; query: "deleted/number()" }
         XmlRole { name: "title"; query: "title/string()" }
         XmlRole { name: "description"; query: "description/string()" }
+        XmlRole { name: "type"; query: "type/string()" }
         XmlRole { name: "snap_small"; query: "snapshot_small/string()" }
         XmlRole { name: "snap_medium"; query: "snapshot_medium/string()" }
         XmlRole { name: "snap_large"; query: "snapshot_large/string()" }
@@ -139,6 +140,7 @@ Rectangle {
                                             isdeleted: item.isdeleted,
                                             title: decodeXml(item.title),
                                             description: decodeXml(item.description),
+                                               type: decodeXml(item.type),
                                             snap_small: decodeXml(item.snap_small),
                                            snap_medium: decodeXml(item.snap_medium),
                                            snap_large: decodeXml(item.snap_large),
@@ -254,6 +256,7 @@ Rectangle {
             xml += "<deleted>"+pmlItem.isdeleted+"</deleted>";
             xml += "<title>"+encodeXml(pmlItem.title)+"</title>";
             xml += "<description>"+encodeXml(pmlItem.description)+"</description>";
+            xml += "<type>"+encodeXml(pmlItem.type)+"</type>";
             xml += "</item>";
 
         }
@@ -292,6 +295,7 @@ Rectangle {
                                 isdeleted: item.isdeleted,
                                 title: item.title,
                                 description: item.description,
+                                type: item.type,
                                 snap_small: item.snap_small,
                                 pmlfile: item.pmlfile,
                                 createdAt: item.createdAt,
@@ -327,6 +331,7 @@ Rectangle {
                        isdeleted: item.isdeleted,
                        title: item.title,
                        description: item.description,
+                       type: item.type,
                        snap_small: item.snap_small,
                        pmlfile: item.pmlfile,
                        createdAt: item.createdAt,

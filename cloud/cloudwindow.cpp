@@ -42,6 +42,10 @@
 #include "pobject.h"
 #include "Keyb.h"
 
+#include "quazip/quazip.h"
+#include "quazip/quazipfile.h"
+#include "quazip/JlCompress.h"
+
 extern MainWindowPockemul *mainwindow;
 extern CrenderView* view;
 extern int ask(QWidget *parent, QString msg, int nbButton);
@@ -53,6 +57,8 @@ extern bool hiRes;
 extern bool flipOnEdge;
 extern bool trackerEnabled;
 extern bool magnifyTouch;
+
+extern QString workDir;
 
 extern QList<CPObject *> listpPObject;
 extern QSettings* settings;
@@ -234,7 +240,7 @@ void Cloud::finishedSave(QNetworkReply *reply)
 }
 
 
-void Cloud::downloadFinished()
+void Cloud::downloadFinishedPml()
 {
 //    qWarning()<<"CloudWindow::downloadFinished - ";
     QByteArray xmlData = m_reply->readAll();
@@ -244,6 +250,68 @@ void Cloud::downloadFinished()
 
     mainwindow->opensession(xml);
 //    emit imageChanged(m_object.value("id").toString());
+
+    m_reply->deleteLater();
+    QMetaObject::invokeMethod(object, "hideWorkingScreen");
+
+    emit downloadEnd();
+//    this->hide();
+
+}
+
+void Cloud::downloadFinishedPsk()
+{
+    qWarning()<<"CloudWindow::downloadFinishedPsk - ";
+    QByteArray data = m_reply->readAll();
+
+    QBuffer buf(&data);
+
+    QuaZip zip(&buf);
+
+    zip.open(QuaZip::mdUnzip);
+
+    // check Package.json exist
+    if (!zip.setCurrentFile("package.json")) {
+        // ERROR
+        qWarning()<<"ERROR - package.json missing";
+    }
+
+    // open Package.json
+    QuaZipFile file(&zip);
+    file.open(QIODevice::ReadOnly);
+    QByteArray _ba =   file.readAll();
+    QJsonDocument json = QJsonDocument::fromJson(_ba);
+
+    QString model = json.object().value("model").toString();
+
+    if (model.isEmpty()) {
+        // ERROR
+        qWarning()<<"ERROR model empty";
+    }
+    file.close();
+
+    JlCompress::extractDir(&buf,workDir+"/res/"+model);
+
+    qWarning()<<json;
+
+    file.close();
+
+
+//    // Dialog content and ask for validation
+//    // Extract files in the corresponding diretory in home/res
+//    currentObject = json.object();
+//    qWarning()<<"updatePMLfile Result:"<<json.object();
+//    // update pml file link
+//    setEndPoint("classes/Pml/"+objectId);
+//    QJsonObject obj;
+//    QJsonObject pmlfileLink{
+//                {"name",json.object().value("name").toString()},
+//                {"__type","File"}
+//            };
+//    obj.insert("pmlfile",pmlfileLink);
+
+
+    qWarning()<<zip.getFileNameList();
 
     m_reply->deleteLater();
     QMetaObject::invokeMethod(object, "hideWorkingScreen");
@@ -288,7 +356,7 @@ void Cloud::showFileDialog()
     m_fileDialog->show();
 }
 
-void Cloud::getPML(int id,int version,QString auth_token) {
+void Cloud::getPML(int id,int version,QString auth_token, QString type) {
     QNetworkAccessManager *mgr = new QNetworkAccessManager();
     QString url;
 
@@ -317,9 +385,11 @@ void Cloud::getPML(int id,int version,QString auth_token) {
 //    qWarning()<<req.url();
     m_reply = mgr->get(req);
     if (version==0)
-        connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
-    else if (getValueFor("api","elgg") == "parse")
-        connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished()));
+        connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinishedPml()));
+    else if (getValueFor("api","elgg") == "parse") {
+        if (type == "pml") connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinishedPml()));
+        if (type == "psk") connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinishedPsk()));
+    }
     else if (getValueFor("api","elgg") == "elgg")
         connect(m_reply, SIGNAL(finished()), this, SLOT(downloadFinished2()));
 }

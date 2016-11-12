@@ -35,8 +35,8 @@ public:
     Q_INVOKABLE bool ensureEndPointHasPrefix(QString prefix);
 
     Q_INVOKABLE void pmlList();
-    Q_INVOKABLE void uploadPML();
-    Q_INVOKABLE void postPML(QString title, QString description, QString pml_file);
+    Q_INVOKABLE void uploadPML(QString type);
+    Q_INVOKABLE void postPML(QString type, QString title, QString description, QByteArray pml_file, QString keywords=QString());
     Q_INVOKABLE void updatePMLfile(QString objectId, QString pml_file);
     Q_INVOKABLE void saveCurrentSession(QString title, QString description, QString pml_file);
 
@@ -84,7 +84,7 @@ public: // property access
 
     QObject *object;
 
-    void processPML(QString pmlFileName);
+    void processPML(QString type, QString pmlFileName);
     void updatePML(QString doc);
     void updateSnapfile(QString objectId, QString pml_file, QJsonObject obj);
 signals:

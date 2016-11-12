@@ -29,8 +29,16 @@ Column {
         expand: false
         font.pointSize: 16
         onClicked: {
-//            cloud.showFileDialog();
-            parse.uploadPML();
+            parse.uploadPML("pml");
+        }
+    }
+
+    TextButton {
+        text: "upload Skin File"
+        expand: false
+        font.pointSize: 16
+        onClicked: {
+            parse.uploadPML("psk");
         }
     }
 

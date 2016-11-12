@@ -509,18 +509,20 @@ QNetworkReply* Parse::deleteFile(QString fileName)
 
 }
 
-void Parse::uploadPML() {
+void Parse::uploadPML(QString type) {
+    QString _filter;
+    if (type == "pml") _filter = "PockEmul Session files (*.pml)";
+    if (type == "psk") _filter = "PockEmul Skin files (*.psk)";
+
     m_uploadQueue = QFileDialog::getOpenFileNames(0,
                                                     tr("Open Session files"),
                                                     ".",
-                                                    tr("PockEmul Session files (*.pml)"));
-
-
+                                                    _filter);
 
     connect(this,&Parse::pmlUploaded,this,[=](){
         if (!m_uploadQueue.isEmpty()) {
             qWarning()<<"**"<<m_uploadQueue.count()<<" files remaining";
-            processPML(m_uploadQueue.takeFirst());
+            processPML(type,m_uploadQueue.takeFirst());
         }
         else {
             QMetaObject::invokeMethod(object, "hideWorkingScreen");
@@ -529,7 +531,7 @@ void Parse::uploadPML() {
     });
 
     QMetaObject::invokeMethod(object, "showWorkingScreen");
-    processPML(m_uploadQueue.takeFirst());
+    processPML(type,m_uploadQueue.takeFirst());
 }
 void Parse::saveCurrentSession(QString title, QString description, QString pml_file) {
 
@@ -539,12 +541,13 @@ void Parse::saveCurrentSession(QString title, QString description, QString pml_f
     });
 
     QMetaObject::invokeMethod(object, "showWorkingScreen");
-    postPML(  title,  description,  pml_file );
+    postPML(  "pml", title,  description,  pml_file.toLatin1() );
 }
-void Parse::processPML(QString pmlFileName) {
+void Parse::processPML(QString type,QString pmlFileName) {
     QFile _file(pmlFileName);
     _file.open(QIODevice::ReadOnly);
-    postPML( "Titre", "Description", QString(_file.readAll()));
+
+    postPML( type,"Titre", "Description", _file.readAll());
     _file.close();
 }
 
@@ -584,7 +587,7 @@ void Parse::updatePML(QString doc)
     request( BaaS::PUT, doc.toUtf8() );
 
 }
-void Parse::postPML( QString title, QString description, QString pml_file )
+void Parse::postPML( QString type, QString title, QString description, QByteArray pml_file, QString keywords )
 {
     if (!isReady()) return;
 
@@ -599,11 +602,13 @@ void Parse::postPML( QString title, QString description, QString pml_file )
             };
 
     obj.insert("owner",owner);
-    obj.insert("type","pml");
+    obj.insert("type",type);
     obj.insert("title",title);
     obj.insert("description",description);
+    obj.insert("keywords",keywords);
+
 //    obj.insert("xml",QString(qCompress(pml_file.toLatin1()).remove(0,4).toBase64()));
-    obj.insert("xml",QString(pml_file.toLatin1().toBase64()));
+    obj.insert("data",QString(pml_file.toBase64()));
 
     QJsonObject acl{
         { userId,  QJsonObject{
@@ -718,7 +723,7 @@ QString Parse::generatePmlXml(QJsonObject obj) {
         xml->writeTextElement("access_id",pml_item["ACL"].toObject().contains("*")?"2":"0");
         xml->writeTextElement("ispublic",pml_item["ACL"].toObject().contains("*")?"1":"0");
         xml->writeTextElement("keywords",pml_item["keywords"].toString());
-        xml->writeTextElement("type",pml_item["pml"].toString());
+        xml->writeTextElement("type",pml_item["type"].toString());
         xml->writeTextElement("createdAt",pml_item["createdAt"].toString());
         xml->writeTextElement("updatedAt",pml_item["updatedAt"].toString());
 

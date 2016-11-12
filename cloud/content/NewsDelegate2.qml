@@ -234,11 +234,11 @@ Item {
         }
         TextButton {
             id: downloadButton
-            text: "Download File"
+            text: "Download "+ type +" File"
             onClicked: {
 //                renderArea.showWorkingScreen();
 //                cloud.getPML(pmlid,1,rootCloud.auth_token);
-                cloud.getPML(pmlid,1,pmlfile);
+                cloud.getPML(pmlid,1,pmlfile,type);
 //                renderArea.hideWorkingScreen();
                 main.sendTrackingEvent('cloud','download','pml',pmlid);
             }

@@ -27,7 +27,7 @@ public:
     Cloud(QWidget *parent=0);
 
     Q_INVOKABLE int askDialog(QString msg, int nbButton);
-    Q_INVOKABLE void getPML(int id, int version=0, QString auth_token = QString());
+    Q_INVOKABLE void getPML(int id, int version=0, QString auth_token = QString(), QString type=QString("pml"));
     Q_INVOKABLE static QString getValueFor(const QString &objectName, const QString &defaultValue = QString());
     Q_INVOKABLE static void saveValueFor(const QString &objectName, const QString &inputValue);
     Q_INVOKABLE QByteArray generateKey(QString username, QString password);
@@ -48,7 +48,8 @@ public slots:
     Q_INVOKABLE void warning(QString msg);
 
     void sendPML(const QString &filePath);
-    void downloadFinished();
+    void downloadFinishedPml();
+    void downloadFinishedPsk();
     void downloadFinished2();
     void finishedSave(QNetworkReply* reply);
 public:

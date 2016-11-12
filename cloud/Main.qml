@@ -115,13 +115,13 @@ Rectangle {
                 onClicked: close();
             }
         }
-        Tab {
-            name: "Test"
-            icon: "pics/white-about-256.png"
-            Camera {
-                anchors.fill: parent
-            }
-        }
+//        Tab {
+//            name: "Test"
+//            icon: "pics/white-about-256.png"
+//            Camera {
+//                anchors.fill: parent
+//            }
+//        }
 
     }
 
@@ -340,7 +340,8 @@ Rectangle {
                             _ispublic,
                             _isdeleted,
                             _title,
-                            _description) {
+                            _description,
+                            _type) {
 //        console.log("count before:"+refpmlModel.count());
         refpmlModel.append({rowid: refpmlModel.count(),
                                pmlid: _pmlid,
@@ -349,7 +350,8 @@ Rectangle {
                                ispublic: _ispublic,
                                isdeleted: _isdeleted,
                                title: _title,
-                               description: _description});
+                               description: _description,
+                               type: _type});
 //        console.log("count after:"+refpmlModel.count());
 
     }

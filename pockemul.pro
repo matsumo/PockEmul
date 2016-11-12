@@ -15,6 +15,8 @@ CONFIG += qt \
 
 CONFIG += rtti
 
+DEFINES += QUAZIP_STATIC
+
 #CONFIG += qtquickcompiler
 
 QT += \
@@ -943,7 +945,34 @@ HEADERS *= \
     baas/baas.h \
     baas/parse.h \
     src/core/filt.h \
-    src/core/laserfilter.h
+    src/core/laserfilter.h \
+    quazip/crypt.h \
+    quazip/ioapi.h \
+    quazip/JlCompress.h \
+    quazip/quaadler32.h \
+    quazip/quachecksum32.h \
+    quazip/quacrc32.h \
+    quazip/quagzipfile.h \
+    quazip/quaziodevice.h \
+    quazip/quazip.h \
+    quazip/quazip_global.h \
+    quazip/quazipdir.h \
+    quazip/quazipfile.h \
+    quazip/quazipfileinfo.h \
+    quazip/quazipnewinfo.h \
+    quazip/unzip.h \
+    quazip/zip.h \
+    zlib/crc32.h \
+    zlib/deflate.h \
+    zlib/gzguts.h \
+    zlib/inffast.h \
+    zlib/inffixed.h \
+    zlib/inflate.h \
+    zlib/inftrees.h \
+    zlib/trees.h \
+    zlib/zconf.h \
+    zlib/zlib.h \
+    zlib/zutil.h
 
 
 
@@ -1117,7 +1146,36 @@ SOURCES *=  \
     baas/baas.cpp \
     baas/parse.cpp \
     src/core/filt.cpp \
-    src/core/laserfilter.cpp
+    src/core/laserfilter.cpp \
+    quazip/JlCompress.cpp \
+    quazip/qioapi.cpp \
+    quazip/quaadler32.cpp \
+    quazip/quacrc32.cpp \
+    quazip/quagzipfile.cpp \
+    quazip/quaziodevice.cpp \
+    quazip/quazip.cpp \
+    quazip/quazipdir.cpp \
+    quazip/quazipfile.cpp \
+    quazip/quazipfileinfo.cpp \
+    quazip/quazipnewinfo.cpp \
+    quazip/unzip.c \
+    quazip/zip.c \
+    zlib/adler32.c \
+    zlib/compress.c \
+    zlib/crc32.c \
+    zlib/deflate.c \
+    zlib/gzclose.c \
+    zlib/gzlib.c \
+    zlib/gzread.c \
+    zlib/gzwrite.c \
+    zlib/infback.c \
+    zlib/inffast.c \
+    zlib/inflate.c \
+    zlib/inftrees.c \
+    zlib/trees.c \
+    zlib/uncompr.c \
+    zlib/zutil.c
+
 
 
 
@@ -1614,6 +1672,7 @@ OTHER_FILES *= \
     cloud/content/MemoryDump.qml \
     cloud/content/SlotList.qml \
     cloud/content/Portal.qml \
+    cloud/content/SendRes.qml \
 
 
 
