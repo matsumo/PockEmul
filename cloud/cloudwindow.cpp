@@ -244,6 +244,18 @@ void Cloud::downloadFinishedPml()
 {
 //    qWarning()<<"CloudWindow::downloadFinished - ";
     QByteArray xmlData = m_reply->readAll();
+
+//    QBuffer buf(&data);
+
+//    QuaZip zip(&buf);
+
+//    zip.open(QuaZip::mdUnzip);
+
+//    QuaZipFile file(&zip);
+//    file.open(QIODevice::ReadOnly);
+//    QByteArray xmlData =   file.readAll();
+
+
 //    qWarning() << "data="<<xmlData.left(200);
     QXmlStreamReader *xml = new QXmlStreamReader(xmlData);
 

@@ -9,6 +9,10 @@
 #include "mainwindowpockemul.h"
 #include "cloud/cloudwindow.h"
 
+#include "quazip/quazip.h"
+#include "quazip/quazipfile.h"
+#include "quazip/JlCompress.h"
+
 extern MainWindowPockemul *mainwindow;
 
 Parse::Parse(): BaaS()
@@ -607,7 +611,21 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
     obj.insert("description",description);
     obj.insert("keywords",keywords);
 
-//    obj.insert("xml",QString(qCompress(pml_file.toLatin1()).remove(0,4).toBase64()));
+//    QByteArray zipdata;
+//    QBuffer buf(&zipdata);
+//    QuaZip zip(&buf);
+
+//    zip.open(QuaZip::mdCreate);
+//    QuaZipFile file(&zip);
+//    file.open(QIODevice::WriteOnly, QuaZipNewInfo("session.pml"));
+
+//    file.write(pml_file);
+
+//    file.close();
+//    zip.close();
+
+//    obj.insert("data",QString(zipdata.toBase64()));
+
     obj.insert("data",QString(pml_file.toBase64()));
 
     QJsonObject acl{
