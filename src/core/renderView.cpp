@@ -371,13 +371,15 @@ QString CrenderView::getRes(QString _fn)
 {
     QString _res = P_RES(_fn);
 
-//    qWarning()<<_res;
+    //    qWarning()<<_res;
 
-    if (_res.startsWith(':')) {
-        _res = "qrc" + _res;
-    }
-    else {
-        _res = "file:///"+_res;
+    if (! _res.isEmpty()) {
+        if (_res.startsWith(':')) {
+            _res = "qrc" + _res;
+        }
+        else {
+            _res = "file:///"+_res;
+        }
     }
 
     return _res;

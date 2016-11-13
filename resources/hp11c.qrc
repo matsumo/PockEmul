@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
         <file>hp11c/hp11c.png</file>
-        <file>hp11c/hp11c.bin</file>
-        <file>hp11c/hp11cback.png</file>
     </qresource>
 </RCC>

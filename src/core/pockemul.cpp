@@ -660,8 +660,9 @@ QString P_RES(QString _name) {
     if (QFile::exists(_locName)) {
         return _locName;
     }
-    return _name;
+    if (QFile::exists(_name)) return _name;
 
+    return QString();
 #endif
 }
 

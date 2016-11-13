@@ -22,6 +22,7 @@ XmlListModel {
     XmlRole { name: "name"; query: "@name/string()" }
     XmlRole { name: "image"; query: "@image/string()" }
     XmlRole { name: "connectortype"; query: "@connectortype/string()" }
+    XmlRole { name: "res"; query: "@res/string()" }
 
     onStatusChanged: {
         if (status == XmlListModel.Ready) {
@@ -35,12 +36,25 @@ XmlListModel {
                      ( !settings.groupByCategory && !(item.idpocket.substring(0,1) === '#')) ||
                      ( !(item.connectortype==='') && ( item.connectortype === connectorsearch ))
                     )  {
+                    // check if package.json exists in P_RES
+                    var _installed = true;
+                    if ( (item.res !== "") &&
+                         (main.getRes(':/'+item.res+'/package.json') == "") ) {
+                        console.log("NOT FOUND:",':/'+item.res+'/package.json');
+                        _installed = false;
+                    }
+                    else {
+                        console.log("FOUND:",':/'+item.res+'/package.json');
+                    }
+
                     sortedModel.append({rowid : i,
                                            brand: item.brand,
                                            idpocket: (item.idpocket),
                                            name: (item.name),
                                            image: (item.image),
-                                           connectortype: (item.connectortype)});
+                                           connectortype: (item.connectortype),
+                                           res: (item.res),
+                                           installed: _installed});
                 }
             }
         }

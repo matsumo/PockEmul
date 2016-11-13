@@ -4,6 +4,8 @@ Item {
     id: root
 
     property string name
+    property bool isBrand: (model.idpocket.substring(0, 1)==='#')
+    property bool installed: model.installed || isBrand
     property bool isSelected: listView.currentIndex === index
 
     width: parent.width //parent ? parent.width : imageItem.width
@@ -30,37 +32,62 @@ Item {
     }
 
     function select(){
-    //            console.log("*****",model.brand,model.idpocket);
-                var _b = model.brand;
-                if (model.idpocket.substring(0, 1)==='#') {
-                    // drill down into brand
-                    var _brand = model.idpocket;
-                    var _res = _brand.split('#');
-    //                console.log(_brand,_res[0],_res[1],_res[2]);
+        //            console.log("*****",model.brand,model.idpocket);
 
-                    pobjectsmodel.brandsearch.push(_res[2]);
-                    pobjectsmodel.reload();
-                }
-                else {
-                    main.loadPocket(model.idpocket);
-                    showRoom.visible=false;
-                    showRoom.connectorsearch = '';
-                    launched();
-                }
-    //            if (isSelected) {
-    //                detailsView.image = model.image
-    //                detailsView.name =  model.name
-    //                detailsView.year = model.year
-    //                detailsView.director = model.director
-    //                detailsView.cast = model.cast
-    ////                detailsView.rating = model.rating
-    //                detailsView.overview = model.overview
-    //                detailsView.show();
-    //            } else {
-    //                listView.currentIndex = index;
-    //                if (settings.showShootingStarParticles) shootingStarBurst.burst(50);
-    //            }
+        var _b = model.brand;
+//        if (model.idpocket.substring(0, 1)==='#') {
+        if (isBrand) {
+            // drill down into brand
+            var _brand = model.idpocket;
+            var _res = _brand.split('#');
+            //                console.log(_brand,_res[0],_res[1],_res[2]);
+
+            pobjectsmodel.brandsearch.push(_res[2]);
+            pobjectsmodel.reload();
+        }
+        else {
+            if (model.installed)
+            {
+                main.loadPocket(model.idpocket);
+                showRoom.visible=false;
+                showRoom.connectorsearch = '';
+                launched();
             }
+            else {
+                if (cloud.askDialog(
+                            "This model is not included in the default PockEmul package.\n"+
+                            "Do you want to download it from the PockEmul Cloud ?",2) == 1) {
+                    console.log("DOWNLOAD");
+
+                    // Show Cloud
+                    cloudShow();
+
+                    // Select Cloud tab
+                    thecloud.tabbedui.tabClicked(1);
+
+                    // Fill search field
+                    thecloud.search_text = "standard_"+model.res+"_package";
+                    showroomNew.mainview.select();
+
+                }
+            }
+
+        }
+            //            if (isSelected) {
+            //                detailsView.image = model.image
+            //                detailsView.name =  model.name
+            //                detailsView.year = model.year
+            //                detailsView.director = model.director
+            //                detailsView.cast = model.cast
+            ////                detailsView.rating = model.rating
+            //                detailsView.overview = model.overview
+            //                detailsView.show();
+            //            } else {
+            //                listView.currentIndex = index;
+            //                if (settings.showShootingStarParticles) shootingStarBurst.burst(50);
+            //            }
+
+    }
     Image {
         id: imageItem
         width: parent.width/3

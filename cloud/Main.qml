@@ -15,7 +15,8 @@ Rectangle {
     signal sendWarning(string test)
     signal close
 
-
+    property alias search_text: newprivateSearchItem.text
+    property alias tabbedui: tabbedui
 
     property string serverURL: cloud.getValueFor("serverURL","http://pockemul.dscloud.me/elgg/")
     property string currentUserid: "pock emul"

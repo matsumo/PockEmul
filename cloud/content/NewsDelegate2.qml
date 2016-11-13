@@ -317,7 +317,7 @@ Item {
         TextButton {
             id: saveCurrentSessionButtonIn
             text: "Save current session"
-            visible: ismine && (delegate.detailsOpacity == 1)
+            visible: ismine && (delegate.detailsOpacity == 1) & (type == 'pml')
             opacity: delegate.detailsOpacity
             onClicked: {
                 cloudHide();

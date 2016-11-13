@@ -286,6 +286,7 @@ void Cloud::downloadFinishedPsk()
     if (!zip.setCurrentFile("package.json")) {
         // ERROR
         qWarning()<<"ERROR - package.json missing";
+        return;
     }
 
     // open Package.json
@@ -299,31 +300,16 @@ void Cloud::downloadFinishedPsk()
     if (model.isEmpty()) {
         // ERROR
         qWarning()<<"ERROR model empty";
+        return;
     }
     file.close();
 
+    // Check if workDir+"/res/"+model directory exist
+    QDir home(workDir);
+    home.mkpath("res/"+model);
     JlCompress::extractDir(&buf,workDir+"/res/"+model);
 
     qWarning()<<json;
-
-    file.close();
-
-
-//    // Dialog content and ask for validation
-//    // Extract files in the corresponding diretory in home/res
-//    currentObject = json.object();
-//    qWarning()<<"updatePMLfile Result:"<<json.object();
-//    // update pml file link
-//    setEndPoint("classes/Pml/"+objectId);
-//    QJsonObject obj;
-//    QJsonObject pmlfileLink{
-//                {"name",json.object().value("name").toString()},
-//                {"__type","File"}
-//            };
-//    obj.insert("pmlfile",pmlfileLink);
-
-
-    qWarning()<<zip.getFileNameList();
 
     m_reply->deleteLater();
     QMetaObject::invokeMethod(object, "hideWorkingScreen");

@@ -8,6 +8,7 @@ Item {
     property alias brandsearch : pobjectsmodel.brandsearch
     property alias connectorsearch : pobjectsmodel.connectorsearch
     property alias pobjectsmodel : pobjectsmodel
+    property alias mainview: mainView
 
     signal launched;
 

@@ -101,7 +101,7 @@ Item {
             horizontalAlignment: Text.AlignHCenter
             text:
 //                listView.activeFocus ? "I have active focus!" : "I do not have active focus";
-                (listView.currentIndex >=0) ? (listView.currentIndex+1) + ". " + listView.currentItem.name : ""
+                (listView.currentIndex >=0) ? (listView.currentItem.installed ? "":"(Click to install) ")+(listView.currentIndex+1) + ". " + listView.currentItem.name : ""
             color: "#ffffff"
             style: Text.Outline
             styleColor: "#b0a030"
@@ -151,22 +151,24 @@ Item {
             MouseArea {
                 anchors.fill: parent
                 anchors.margins: -20
-                onClicked: backIcon.select();
+                onClicked: select();
             }
 
-            function select() {
 
-                if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
-                {
-                    if (exitOnBack) showRoom.visible = false;
-                }
-                else {
-                    console.log("OK***:",pobjectsmodel.brandsearch);
-                    pobjectsmodel.brandsearch.pop();
-                    console.log("OK***:",pobjectsmodel.brandsearch);
-                    pobjectsmodel.reload();
-                }
-            }
+        }
+    }
+
+    function select() {
+
+        if (pobjectsmodel.brandsearch[pobjectsmodel.brandsearch.length-1]==='BRAND')
+        {
+            if (exitOnBack) showRoom.visible = false;
+        }
+        else {
+            console.log("OK***:",pobjectsmodel.brandsearch);
+            pobjectsmodel.brandsearch.pop();
+            console.log("OK***:",pobjectsmodel.brandsearch);
+            pobjectsmodel.reload();
         }
     }
 }
