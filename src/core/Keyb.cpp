@@ -449,8 +449,10 @@ bool Ckeyb::init(void)
 
     if (fn_KeyMap.isEmpty()) return true;
 
+
     QFile file;
-    file.setFileName(workDir+"sessions/"+fn_KeyMap );
+    file.setFileName(workDir+"res/"+pPC->getresName()+"/"+fn_KeyMap );
+
     if (!file.exists()) {
         file.setFileName(":/KEYMAP/keymap/"+fn_KeyMap);
     }
