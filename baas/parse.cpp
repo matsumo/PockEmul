@@ -345,7 +345,7 @@ void Parse::postProcessGet(QJsonObject obj) {
     qWarning()<<getEndPoint();
 
 
-    if (getEndPoint() == "classes/Pml?include=owner&order=-updatedAt") {
+    if (getEndPoint() == "classes/Pml?include=owner&order=-updatedAt&limit=2000") {
         qWarning()<<"obj:"<<obj;
         generatePmlXml(obj);
     }
@@ -523,12 +523,13 @@ void Parse::uploadPML(QString type) {
                                                     ".",
                                                     _filter);
 
-    connect(this,&Parse::pmlUploaded,this,[=](){
+    m_conn_uploadPML = connect(this,&Parse::pmlUploaded,this,[=](){
         if (!m_uploadQueue.isEmpty()) {
-            qWarning()<<"**"<<m_uploadQueue.count()<<" files remaining";
+            qWarning()<<"**"<<m_uploadQueue.count()<<" files remaining"<<m_uploadQueue.first();
             processPML(type,m_uploadQueue.takeFirst());
         }
         else {
+            disconnect(m_conn_uploadPML);
             QMetaObject::invokeMethod(object, "hideWorkingScreen");
             pmlList();
         }
@@ -547,12 +548,16 @@ void Parse::saveCurrentSession(QString title, QString description, QString pml_f
     QMetaObject::invokeMethod(object, "showWorkingScreen");
     postPML(  "pml", title,  description,  pml_file.toLatin1() );
 }
+
 void Parse::processPML(QString type,QString pmlFileName) {
     QFile _file(pmlFileName);
     _file.open(QIODevice::ReadOnly);
 
-    postPML( type,"Titre", "Description", _file.readAll());
+    QByteArray _ba = _file.readAll();
     _file.close();
+
+    postPML( type,"Titre", "Description", _ba);
+
 }
 
 
@@ -593,7 +598,8 @@ void Parse::updatePML(QString doc)
 }
 void Parse::postPML( QString type, QString title, QString description, QByteArray pml_file, QString keywords )
 {
-    if (!isReady()) return;
+    qWarning()<<"postPML, ready:"<<isReady();
+    while (!isReady()) { }
 
     setEndPoint("classes/Pml");
 
@@ -611,22 +617,22 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
     obj.insert("description",description);
     obj.insert("keywords",keywords);
 
-//    QByteArray zipdata;
-//    QBuffer buf(&zipdata);
-//    QuaZip zip(&buf);
+    QByteArray zipdata;
+    QBuffer buf(&zipdata);
+    QuaZip zip(&buf);
 
-//    zip.open(QuaZip::mdCreate);
-//    QuaZipFile file(&zip);
-//    file.open(QIODevice::WriteOnly, QuaZipNewInfo("session.pml"));
+    zip.open(QuaZip::mdCreate);
+    QuaZipFile file(&zip);
+    file.open(QIODevice::WriteOnly, QuaZipNewInfo("session.pml"));
 
-//    file.write(pml_file);
+    file.write(pml_file);
 
-//    file.close();
-//    zip.close();
+    file.close();
+    zip.close();
 
-//    obj.insert("data",QString(zipdata.toBase64()));
+    obj.insert("data",QString(zipdata.toBase64()));
 
-    obj.insert("data",QString(pml_file.toBase64()));
+//    obj.insert("data",QString(pml_file.toBase64()));
 
     QJsonObject acl{
         { userId,  QJsonObject{
@@ -657,20 +663,17 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
 //    obj.insert("keywords",keywords);
 
     m_conn = connect(this, &BaaS::replyFinished, [=]( QJsonDocument json){
+//        qWarning()<<"disconnect"<<m_conn;
         disconnect(m_conn);
         if ( getHttpCode() == 201 ){
-            QJsonObject obj = json.object();
-            qWarning()<<"updatePMLfile Result:"<<json.object();
-
-            if (m_uploadQueue.isEmpty()) {
-//                QMetaObject::invokeMethod(object, "hideWorkingScreen");
-            }
+            qWarning()<<"postPML Result:"<<json.object();
 
             emit pmlUploaded();
         }
 
     } );
 
+    qWarning()<<"connect"<<m_conn;
     initHeaders();
     request( BaaS::POST, QJsonDocument(obj).toJson());
 
@@ -681,7 +684,7 @@ void Parse::pmlList()
 
     if (!isReady()) return;
 
-    setEndPoint("classes/Pml?include=owner&order=-updatedAt");
+    setEndPoint("classes/Pml?include=owner&order=-updatedAt&limit=2000");
     get();
 
 }
@@ -728,6 +731,7 @@ QString Parse::generatePmlXml(QJsonObject obj) {
     xml->writeStartElement("pmllist");
     //        xml->writeAttribute("version", "2.0");
     QJsonArray results = obj["results"].toArray();
+    qWarning()<<"json count"<<results.count();
     foreach (const QJsonValue & value, results) {
 
         xml->writeStartElement("pml_item");

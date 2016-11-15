@@ -203,7 +203,7 @@ QNetworkReply* BaaS::request( BaaS::Ope operation, const QByteArray& data )
     qsUrl += extraHostURI.isEmpty() ? "" : "/" + extraHostURI;
     qsUrl += endPoint.isEmpty() ? "" : "/" + endPoint;
 
-    qDebug() << "Start request - " << operation << "- url:" << qsUrl<< "  data-"<<data;
+    qDebug() << "Start request - " << operation << "- url:" << qsUrl; //<< "  data-"<<data;
     QNetworkReply *reply = processRequest( operation, QUrl( qsUrl), data );
 
 

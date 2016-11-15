@@ -243,17 +243,22 @@ void Cloud::finishedSave(QNetworkReply *reply)
 void Cloud::downloadFinishedPml()
 {
 //    qWarning()<<"CloudWindow::downloadFinished - ";
-    QByteArray xmlData = m_reply->readAll();
+    QByteArray data = m_reply->readAll();
 
-//    QBuffer buf(&data);
+    QBuffer buf(&data);
 
-//    QuaZip zip(&buf);
+    QuaZip zip(&buf);
 
-//    zip.open(QuaZip::mdUnzip);
+    zip.open(QuaZip::mdUnzip);
 
-//    QuaZipFile file(&zip);
-//    file.open(QIODevice::ReadOnly);
-//    QByteArray xmlData =   file.readAll();
+    if (!zip.setCurrentFile("session.pml")) {
+        // ERROR
+        qWarning()<<"ERROR - package.json missing";
+        return;
+    }
+    QuaZipFile file(&zip);
+    file.open(QIODevice::ReadOnly);
+    QByteArray xmlData =   file.readAll();
 
 
 //    qWarning() << "data="<<xmlData.left(200);

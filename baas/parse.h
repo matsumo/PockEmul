@@ -116,6 +116,7 @@ private:
     QString xmlPmlList;
 
     QMetaObject::Connection m_conn;             //temporary use for terminating connection with lambda
+    QMetaObject::Connection m_conn_uploadPML;
     bool registerInstallationOnLogin = false;
     bool useMaster = false;
 
