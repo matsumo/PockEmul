@@ -77,6 +77,8 @@ bool Cpc13XX::init(void)
     pS1CONNECTOR = new Cconnector(this,35,2,Cconnector::Sharp_35,"Memory SLOT 1",true,QPoint(0,90));	publish(pS1CONNECTOR);
     pS1CONNECTOR->closeConnectedOnExit=true;
 
+    pKEYB->getKey(K_SWITCH).enabled = false;
+
 	return true;
 }
 
@@ -541,6 +543,23 @@ bool Cpc13XX::UpdateFinalImage(void) {
     }
 
     CpcXXXX::UpdateFinalImage();
+
+    if ((currentView == FRONTview) ) {
+        QPainter painter;
+        painter.begin(FinalImage);
+        QRect _r = pKEYB->getKey(K_SWITCH).Rect;
+//        qWarning()<<"rect"<<_r;
+        painter.drawImage(_r.x()*internalImageRatio,
+                          _r.y()*internalImageRatio,
+                          BackgroundImageBackup->copy(_r.x()*internalImageRatio,
+                                                      _r.y()*internalImageRatio,
+                                                      _r.width()*internalImageRatio,
+                                                      _r.height()*internalImageRatio).mirrored(false,off));
+
+
+        painter.end();
+    }
+
 
     if ((currentView != FRONTview) ) {
         if (pS1CONNECTOR->isLinked()) {
