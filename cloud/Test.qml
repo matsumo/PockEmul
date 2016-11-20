@@ -71,7 +71,7 @@ Rectangle {
 
      property alias xmlThumbModel: xmlThumbModel
 
-    property string apiSelected: cloud.getValueFor("api","elgg");
+    property string apiSelected: cloud.getValueFor("api","parse");
 
     visible: true
     width: 1024; height: 600
@@ -765,6 +765,7 @@ Rectangle {
         workingScreen.visible=true;
     }
     function hideWorkingScreen() {
+        console.log("hide busy");
         workingScreen.z=-9999;
         workingScreen.visible=false;
     }
@@ -798,7 +799,6 @@ Rectangle {
         download.sendDownloadCancel.connect(sendDownloadCancel);
         logicObj.refreshLogic.connect(refreshLogic);
         logicObj.markersLengthChanged.connect(markersLengthChanged);
-//        showWorkingScreen();
 
         console.log("Test.qml: Completed",new Date());
     }
@@ -810,7 +810,7 @@ Rectangle {
 //        menu.visible = true;
     }
     function cloudShow() {
-        console.log("Show");
+        console.log("Show test");
         thecloud.visible = true;
         scene.visible = false;
 //        menu.visible = false;
@@ -993,17 +993,12 @@ Rectangle {
 
         var xhr = new XMLHttpRequest();
 
-        if (apiSelected==='wp') {
-            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
-        }
-
         xhr.onreadystatechange = function() { callback(xhr);}
 
-        console.log('before POST:');
         xhr.open('POST', url,true);
-        console.log('before SEND*:'+data+'*');
+//        console.log('before SEND*:'+data+'*');
         xhr.send(data);
-        console.log('after SEND:');
+//        console.log('after SEND:');
 
     }
 
@@ -1022,9 +1017,9 @@ Rectangle {
             xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
         }
 
-        console.log('before SEND*:'+JSON.stringify(data)+'*');
+//        console.log('before SEND*:'+JSON.stringify(data)+'*');
         xhr.send(data);
-        console.log('after SEND:');
+//        console.log('after SEND:');
 
     }
 
@@ -1033,16 +1028,11 @@ Rectangle {
 
         var xhr = new XMLHttpRequest();
 
-
-
         xhr.onreadystatechange = function() { callback(xhr);}
 
-        console.log('before DELETE:');
+//        console.log('before DELETE:');
         xhr.open('DELETE', url,true);
 
-        if (apiSelected==='wp') {
-            xhr.setRequestHeader("authorization", "Basic cG9ja2VtdWw6dTNZbCBwc0RzIGhYVVIgQnpEVSA3VU9sIGVER2Y=");
-        }
         if (apiSelected==='parse') {
             console.log('parse',parse.applicationId,parse.sessionId);
             var _app = parse.applicationId;
@@ -1051,9 +1041,9 @@ Rectangle {
             xhr.setRequestHeader("X-Parse-Session-Token", parse.sessionId);
         }
 
-        console.log('before SEND*:'+data+'*');
+//        console.log('before SEND*:'+data+'*');
         xhr.send(data);
-        console.log('after SEND:');
+//        console.log('after SEND:');
 
     }
 

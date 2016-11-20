@@ -51,11 +51,9 @@ Rectangle {
             id: edit
             renderType: Text.NativeRendering
             width: rootEdit.width-10
-//            height: root.height-10
-//            anchors.centerIn: root
-            //focus: true
             wrapMode: TextEdit.Wrap
             textFormat: TextEdit.PlainText
+//            textFormat: Text.RichText
             onCursorRectangleChanged: flick.ensureVisible(cursorRectangle)
         }
     }

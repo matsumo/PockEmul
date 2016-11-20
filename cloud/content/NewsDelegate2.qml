@@ -78,6 +78,7 @@ Item {
         x: 20; y: 20
         width: parent.width - 30
         //        height: background.height
+        spacing: 15
         Row {
             width: parent.width;
             spacing: 5
@@ -137,7 +138,7 @@ Item {
             Image {
                 id: pmlThumbImage
                 width: 200 * cloud.getValueFor("hiResRatio","1")
-                height: 200 * cloud.getValueFor("hiResRatio","1")
+                height: 150 * cloud.getValueFor("hiResRatio","1")
                 asynchronous: true
                 cache: true
 //                source:
@@ -178,18 +179,14 @@ Item {
 ////                    }
 //                }
             }
-//            TextEdit {
-//                id: objectsText
-//                text: objects
-//                readOnly: true
-//                opacity: delegate.detailsOpacity
-//            }
         }
 
         Edit {
             id: descriptionText
             width: parent.width;
-//            height:background.height - y - 25
+//            anchors.bottom: background.bottom - 15
+            height: background.height - y - 30
+
             text: (description=="")?"No description":description
             readOnly: !ismine
 //            wrapMode: Text.WordWrap;
@@ -200,9 +197,9 @@ Item {
             opacity: delegate.detailsOpacity
             onTextChanged: checkmodif()
         }
-        Item {
-            id: comments
-        }
+//        Item {
+//            id: comments
+//        }
     }
 
 
@@ -483,7 +480,7 @@ Item {
         name: "Details"
 
         PropertyChanges { target: background; color: "white" }
-        PropertyChanges { target: pmlThumbImage; width: 400 * cloud.getValueFor("hiResRatio","1"); height: 400 * cloud.getValueFor("hiResRatio","1");} // Make picture bigger
+        PropertyChanges { target: pmlThumbImage; width: 400 * cloud.getValueFor("hiResRatio","1"); height: 300 * cloud.getValueFor("hiResRatio","1");} // Make picture bigger
         PropertyChanges { target: delegate; detailsOpacity: 1; x: 0 } // Make details visible
         PropertyChanges { target: delegate; height: list.height } // Fill the entire list area with the detailed view
         PropertyChanges { target: categoriesView; width: rootCloud.isPortrait?0:categoriesView.width }

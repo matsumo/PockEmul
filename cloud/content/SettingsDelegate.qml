@@ -1,7 +1,7 @@
 
 import QtQuick 2.0
 
-Item {
+Rectangle {
     id: delegate
 
     property string name
@@ -17,14 +17,17 @@ Item {
 
     width: delegate.ListView.view.width;
     height: cloud.getValueFor("hiResRatio","1") *
-            (type == "input") ? inputElement.height :
+            (type == "input") ? inputElement.height + 40:
             (type == "action")? buttonElement.height +40 : labelElement.height +40
 
+    border.color: "lightgrey"
+    border.width: 1
 
     LineInput {
         id: inputElement
         objectName: name
         width: parent.width
+        anchors.verticalCenter: parent.verticalCenter
         label: labelString
         font.pointSize: 16
         onInputAccepted: if (saveInput) cloud.saveValueFor(key,value)
@@ -37,13 +40,15 @@ Item {
 
     Rectangle {
         width: parent.width
-        height: labelElement.height *1.2
+        height: labelElement.height +40
+        anchors.verticalCenter: parent.verticalCenter
         color: "black"
         opacity: 1
         visible: (type == "text")
     }
 
     Row {
+        anchors.verticalCenter: parent.verticalCenter
         y:2
         spacing: 10
         Text {
@@ -67,14 +72,16 @@ Item {
                 buttonClicked();
             }
         }
-        Switch {
-            objectName: name
-            bheight: buttonElement.height*.9
-            bwidth: bheight * 2
-            on: (labelString=="checked") ? true:false
-            onToggleState: if (saveInput) cloud.saveValueFor(key,value)
-            visible: (type == "checkbox")
-        }
+    }
+    Switch {
+        objectName: name
+        anchors.right: parent.right
+        anchors.verticalCenter: parent.verticalCenter
+        bheight: buttonElement.height*.9
+        bwidth: bheight * 2
+        on: (labelString=="checked") ? true:false
+        onToggleState: if (saveInput) cloud.saveValueFor(key,value)
+        visible: (type == "checkbox")
     }
 
 

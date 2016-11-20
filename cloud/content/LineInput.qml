@@ -19,7 +19,7 @@ Rectangle {
 
 
     width: 480;
-    height: row.height +40
+    height: row.height
 
     Text {
         id: fontstyle
@@ -31,6 +31,7 @@ Rectangle {
     Row {
         id: row
         width: parent.width
+        anchors.verticalCenter: parent.verticalCenter
 //        y: 10
         spacing: 10
         Text {
@@ -72,6 +73,7 @@ Rectangle {
                 width: parent.width - 20
 //                height: parent.height - 10
                 anchors.centerIn: parent
+                anchors.verticalCenter: parent.verticalCenter
                 id: input
                 objectName: "inputField"
                 renderType: Text.NativeRendering

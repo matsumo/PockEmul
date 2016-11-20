@@ -613,26 +613,69 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
 
     obj.insert("owner",owner);
     obj.insert("type",type);
-    obj.insert("title",title);
-    obj.insert("description",description);
-    obj.insert("keywords",keywords);
 
     QByteArray zipdata;
-    QBuffer buf(&zipdata);
-    QuaZip zip(&buf);
 
-    zip.open(QuaZip::mdCreate);
-    QuaZipFile file(&zip);
-    file.open(QIODevice::WriteOnly, QuaZipNewInfo("session.pml"));
+    if (type=="pml") {
+        QBuffer buf(&zipdata);
+        QuaZip zip(&buf);
 
-    file.write(pml_file);
+        zip.open(QuaZip::mdCreate);
+        QuaZipFile file(&zip);
+        file.open(QIODevice::WriteOnly, QuaZipNewInfo("session.pml"));
 
-    file.close();
-    zip.close();
+        file.write(pml_file);
+
+        file.close();
+        zip.close();
+    }
+
+    if (type=="psk") {
+        zipdata = pml_file;
+
+        QBuffer buf(&zipdata);
+        QuaZip zip(&buf);
+        zip.open(QuaZip::mdUnzip);
+
+        // check Package.json exist
+        if (!zip.setCurrentFile("package.json")) {
+            // ERROR
+            qWarning()<<"ERROR - package.json missing";
+            return;
+        }
+
+        // open Package.json
+        QuaZipFile file(&zip);
+        file.open(QIODevice::ReadOnly);
+        QByteArray _ba =   file.readAll();
+        QJsonDocument json = QJsonDocument::fromJson(_ba);
+
+
+        if (json.object().value("model").isUndefined()) {
+            // ERROR
+            qWarning()<<"ERROR model empty";
+            return;
+        }
+
+        QString _model = json.object().value("model").toString();
+        QString _title = json.object().value("title").toString();
+        QString _description = json.object().value("description").toString();
+        QString _author = json.object().value("author").toString();
+        QString _email = json.object().value("email").toString();
+        QString _url = json.object().value("url").toString();
+
+        title = _title;
+        description = _description + "\r\n" +
+                "Author : "+_author + "\r\n" +
+                "Email : "+_email + "\r\n" +
+                "Url : "+_url;
+//                "Email :<a href=\"mailto://"+_email +"\">"+_email+"</a>\r\n" +
+//                "Url :<a href=\""+_url +"\">"+_url+"</a>";
+        file.close();
+    }
 
     obj.insert("data",QString(zipdata.toBase64()));
 
-//    obj.insert("data",QString(pml_file.toBase64()));
 
     QJsonObject acl{
         { userId,  QJsonObject{
@@ -643,6 +686,9 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
     };
     obj.insert("ACL",acl);
 
+    obj.insert("title",title);
+    obj.insert("description",description);
+    obj.insert("keywords",keywords);
 
     // parse pml to generate objetcs list
     // This should be moved to parse.Cloud
