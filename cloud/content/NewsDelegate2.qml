@@ -117,17 +117,20 @@ Item {
                 source: avatar_url
             }
             Text {
-                id: updatedAtText
-                text: 'MàJ le '+Date(updatedAt).toString()
-
+                id: usernameText
+                text: username;
                 renderType: Text.NativeRendering
                 //            width: parent.width;
                 wrapMode: Text.WordWrap
                 font { bold: false; family: "Helvetica"; pointSize: 14 }
             }
             Text {
-                id: usernameText
-                text: username;
+                id: updatedAtText
+                text: 'MàJ le '+ new Date(updatedAt).toString()
+//                text: new Date("2016-11-20T15:00:07.853Z").toString()
+//                text: Date('1995-12-17 03:24:00');
+//                text: new Date(1995, 11, 17);
+
                 renderType: Text.NativeRendering
                 //            width: parent.width;
                 wrapMode: Text.WordWrap
@@ -147,29 +150,31 @@ Item {
 //                        "services/api/rest/xml/?method=file.get_snap"+
 //                        "&file_guid="+pmlid+
 //                        "&size=medium"
-                source:   snap_small
+                source:   "image://PockEmulCloud/"+snap_small.replace("http://","")
 
 
                     //serverURL+"getPMLthumb/"+pmlid+"/"+getThumbId(pmlid)
                 fillMode: Image.PreserveAspectFit;
-//                Timer {
-//                        id: reset
-//                        interval: 500;
-//                        onTriggered:
-////                            pmlThumbImage.source="image://PockEmulCloud/"+
-////                                     cloud.getValueFor("serverURL","").replace("http://","")+
-////                                     "services/api/rest/xml/?method=file.get_snap"+
-////                                     "&file_guid="+pmlid+
-////                                     "&size=medium";
-//                            pmlThumbImage.source="image://PockEmulCloud/"+snap_small.replace("http://","");
-//                    }
-//                onStatusChanged: {
-//                    if (status == Image.Error) {
-//                        source = "";
-//                        reset.restart();
-//                    }
-////                                     console.log("*****image status("+index+")="+pmlThumbImage.status);
-//                }
+                Timer {
+                        id: reset
+                        interval: 500;
+                        onTriggered:
+//                            pmlThumbImage.source="image://PockEmulCloud/"+
+//                                     cloud.getValueFor("serverURL","").replace("http://","")+
+//                                     "services/api/rest/xml/?method=file.get_snap"+
+//                                     "&file_guid="+pmlid+
+//                                     "&size=medium";
+                            pmlThumbImage.source="image://PockEmulCloud/"+snap_small.replace("http://","");
+                    }
+                onStatusChanged: {
+                    if (status == Image.Error) {
+                        if (snap_small.replace("http://","") !== "") {
+                            source = "";
+                            reset.restart();
+                        }
+                    }
+//                                     console.log("*****image status("+index+")="+pmlThumbImage.status);
+                }
 
 //                MouseArea {
 //                    anchors.fill: parent
