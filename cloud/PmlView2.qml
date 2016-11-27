@@ -199,6 +199,10 @@ Rectangle {
 
             if (item.isdeleted) { isdeletedCount++; continue; }
 
+            if (item.type == "pml" && !typelistModel.get(0).selected) continue;
+            if (item.type == "psk" && !typelistModel.get(1).selected) continue;
+            if (item.type == "pum" && !typelistModel.get(2).selected) continue;
+
             // Apply seacrh !text is defined
 
             if ( (searchText != "") && !pmlContain(item,searchText)) continue;
@@ -269,7 +273,10 @@ Rectangle {
 //            console.log("public OK");
 //            if ( (pmlview.objid >= 0) && (item.isdeleted == 1)) continue;
 
-//            if ( (pmlview.objid > 0) && !idInArray(pmlview.objid.toString(),item.listobjects)) continue;
+            if (item.type == "pml" && !typelistModel.get(0).selected) continue;
+            if (item.type == "psk" && !typelistModel.get(1).selected) continue;
+            if (item.type == "pum" && !typelistModel.get(2).selected) continue;
+
             if ( (pmlview.keyword != "") && (pmlview.keyword != "All") && !idInArray(pmlview.keyword,item.keywords)) continue;
 //            console.log("object OK");
 //            if ( (pmlview.objid == -1) && (item.isdeleted != 1 )) continue;
@@ -304,6 +311,15 @@ Rectangle {
         return (String(list).indexOf("|"+id+"|")>=0);
     }
 
+    function refresh() {
+        xmlpmlModel.xml = "";
+        xmlpmlModel.reload();
+    }
+
+    function populate(searchText) {
+        populateCategoryModel(searchText);
+        populatePMLModel(searchText);
+    }
 
     // Reference List Model. Contains all record
     // it might be valuable to dump it on disk when the application close
@@ -351,29 +367,59 @@ Rectangle {
             width: 220; height: pmlview.height
             color: "#efefef"
 
-            Rectangle {
+            ListView {
                 id: types
                 width: parent.width
-                height: types_col.height
-                anchors.top: parent.top
-                color: "white"
-                Column {
-                    id: types_col
-                    spacing: 10
-                    Text {
-                        text: "Session"
-                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                height: 150
+
+                Component {
+                    id: listDelegate
+                    Item {
+                        id: listItem
+                        width: types.width
+                        height: text.height * 1.4
+
+                        Text {
+                            id: text
+                            text: name // Title text is from the 'name' property in the model item (ListElement)
+//                            width: parent.width
+                            font { family: "Helvetica"; pointSize: 16; bold: false }
+                        }
+
+                        // The checkbox to display
+                        CheckBox {
+                            id: checkbox
+                            checked: selected  // Checked state is from the 'selected' property in the model item
+                            anchors { right: listItem.right; verticalCenter: listItem.verticalCenter }
+                            onClicked: {
+                                typelistModel.set(index, { "selected": checkbox.checked });
+                                populate(newprivateSearchItem.text);
+                            }
+                        }
                     }
-                    Text {
-                        text: "Skin"
-                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                }
+
+                delegate: listDelegate
+                model: ListModel {
+                    id: typelistModel
+                    ListElement {
+                        name: "Session"
+                        description: "Selectable item 1"
+                        selected: true
                     }
-                    Text {
-                        text: "Document"
-                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                    ListElement {
+                        name: "Skin"
+                        description: "Selectable item 2"
+                        selected: true
+                    }
+                    ListElement {
+                        name: "Document"
+                        description: "Selectable item 3"
+                        selected: true
                     }
                 }
             }
+
 
             ListView {
                 id: categories
@@ -479,13 +525,5 @@ Rectangle {
         return 0;
     }
 
-    function refresh() {
-        xmlpmlModel.xml = "";
-        xmlpmlModel.reload();
-    }
 
-    function populate(searchText) {
-        populateCategoryModel(searchText);
-        populatePMLModel(searchText);
-    }
 }
