@@ -813,12 +813,14 @@ void MainWindowPockemul::slotDocument(QAction *action) {
     if (!file.open(QIODevice::ReadOnly)) {
 
         if (ask(mainwindow,
-                   tr("The document %1 is not available locally. Do you want do download it ?").
+                   tr("The document %1 is not available locally.\n\rDo you want do download it ?").
                    arg(action->data().toString()),2)!=1) return;
 
         // Download it
         QUrl url(action->data().toString());
         downloadManager->doDownload(url);
+        QUrl thumb(action->data().toString().replace(".pdf",".png"));
+        downloadManager->doDownload(thumb);
         return;
     }
     QUrl url = QUrl::fromLocalFile(fn);

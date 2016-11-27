@@ -321,7 +321,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('Z'))			data|=0x04;
             if (KEY('+'))			data|=0x08;
             if (KEY('1'))			data|=0x10;
-//            if (KEY(K_F1))			data|=0x20;
+//            if (KEY(K_F6))			data|=0x20;
         }
 
         if (ks&0x02) {
@@ -330,7 +330,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('X'))			data|=0x04; // Q
             if (KEY('*'))			data|=0x08;
             if (KEY('2'))			data|=0x10; // 1
-//            if (KEY(K_F2))			data|=0x20;
+//            if (KEY(K_F7))			data|=0x20;
         }
         if (ks&0x04) {
             if (KEY('E'))			data|=0x01; // X
@@ -338,7 +338,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('C'))			data|=0x04; // W
             if (KEY('-'))			data|=0x08;
             if (KEY('3'))			data|=0x10; // 2
-//            if (KEY(K_F3))			data|=0x20;
+//            if (KEY(K_F8))			data|=0x20;
         }
 
         if (ks&0x08) {
@@ -347,7 +347,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY('V'))			data|=0x04; // E
             if (KEY('/'))			data|=0x08;
             if (KEY('4'))			data|=0x10; // 3
-//            if (KEY(K_F4))			data|=0x20;
+//            if (KEY(K_F9))			data|=0x20;
         }
 
         if (ks&0x10) {
@@ -412,20 +412,20 @@ UINT16 Ctpc8300::getKey()
 
         if (ks&0x800) {
             if (KEY(K_RET))			data|=0x01;
-            if (KEY(K_F6))			data|=0x02;
-            if (KEY(K_F7))			data|=0x04;
-            if (KEY(K_F8))			data|=0x08;
-            if (KEY(K_F9))			data|=0x010;
+//            if (KEY(K_F6))			data|=0x02;
+//            if (KEY(K_F7))			data|=0x04;
+//            if (KEY(K_F8))			data|=0x08;
+//            if (KEY(K_F9))			data|=0x010;
 //            if (KEY(K_F6))			data|=0x020;
         }
 
         if (ks&0x1000) {
-            if (KEY(K_F9))		data|=0x01;
+//            if (KEY(K_F9))		data|=0x01;
             if (KEY(K_CTRL))		data|=0x02;
             if (KEY(K_SHT))			data|=0x04;
-            if (KEY(K_F6))			data|=0x08;
-            if (KEY(K_F7))			data|=0x10;
-            if (KEY(K_F8))			data|=0x20;
+//            if (KEY(K_F6))			data|=0x08;
+//            if (KEY(K_F7))			data|=0x10;
+//            if (KEY(K_F8))			data|=0x20;
         }
 
         if (ks&0x2000) {

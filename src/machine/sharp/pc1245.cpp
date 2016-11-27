@@ -58,9 +58,9 @@ bool Cpc1245::InitDisplay(void)
 
     CpcXXXX::InitDisplay();
 
-    iPowerOFF.load( P_RES(":/pc1245/powerOFF.png"));
-    iPowerRUN.load( P_RES(":/pc1245/powerRUN.png"));
-    iPowerPRO.load( P_RES(":/pc1245/powerPRO.png"));
+    iPowerOFF.load( P_RES(":/"+getresName()+"/powerOFF.png"));
+    iPowerRUN.load( P_RES(":/"+getresName()+"/powerRUN.png"));
+    iPowerPRO.load( P_RES(":/"+getresName()+"/powerPRO.png"));
 
     return(1);
 }
@@ -102,7 +102,7 @@ Cmc2200::Cmc2200(CPObject *parent)	: Cpc1245(parent)
     SessionHeader	= "MC2200PKM";
     Initial_Session_Fname ="mc2200.pkm";
 
-    BackGroundFname	= P_RES(":/pc1245/mc2200.png");
+    BackGroundFname	= P_RES(":/mc2200/mc2200.png");
 
     pLCDC->rect.moveTo(125,54);
     pLCDC->symbRect.moveTo(125,40);

@@ -41,7 +41,7 @@
 
 import QtQuick 2.0
 import QtQuick.XmlListModel 2.0
-import QtQuick.Controls 1.2
+import QtQuick.Controls 2.0
 
 import "content"
 Rectangle {
@@ -90,22 +90,15 @@ Rectangle {
 
     XmlListModel {
         id: xmlpmlModel
-//        source: cloud.getValueFor("serverURL","")+"services/api/rest/xml/?method=file.get_pmlfiles"+
-//                "&username="+cloud.getValueFor("username","")+
-//                "&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa"+
-//                "&auth_token="+rootCloud.auth_token
-//        query: "/elgg/result/array_item"
-
         query: "/pmllist/pml_item"
+
         xml: parse.xmlPmlList
 
         XmlRole { name: "pmlid"; query: "guid/string()"; }
         XmlRole { name: "username"; query: "owner_username/string()" }
         XmlRole { name: "name"; query: "owner_name/string()" }
         XmlRole { name: "avatar_url"; query: "owner_avatar_url/string()" }
-//        XmlRole { name: "objects"; query: "objects/string()" }
         XmlRole { name: "keywords"; query: "keywords/string()" }
-//        XmlRole { name: "listobjects"; query: "listobjects/string()" }
         XmlRole { name: "access_id"; query: "access_id/number()" }
         XmlRole { name: "ispublic"; query: "ispublic/number()" }
         XmlRole { name: "isdeleted"; query: "deleted/number()" }
@@ -129,24 +122,23 @@ Rectangle {
                         var item = get(i)
 //                        console.log(item.objects)
                         refpmlModel.append({rowid : i,
-                                            pmlid: item.pmlid,
-                                            username: decodeXml(item.username),
-                                            name: decodeXml(item.name),
-                                            avatar_url: decodeXml(item.avatar_url),
-                                            keywords: decodeXml(item.keywords),
-//                                            listobjects: decodeXml(item.listobjects),
-                                            access_id: item.access_id,
-                                            ispublic: item.ispublic,
-                                            isdeleted: item.isdeleted,
-                                            title: decodeXml(item.title),
-                                            description: decodeXml(item.description),
-                                               type: decodeXml(item.type),
-                                            snap_small: decodeXml(item.snap_small),
+                                           pmlid: item.pmlid,
+                                           username: decodeXml(item.username),
+                                           name: decodeXml(item.name),
+                                           avatar_url: decodeXml(item.avatar_url),
+                                           keywords: decodeXml(item.keywords),
+                                           access_id: item.access_id,
+                                           ispublic: item.ispublic,
+                                           isdeleted: item.isdeleted,
+                                           title: decodeXml(item.title),
+                                           description: decodeXml(item.description),
+                                           type: decodeXml(item.type),
+                                           snap_small: decodeXml(item.snap_small),
                                            snap_medium: decodeXml(item.snap_medium),
                                            snap_large: decodeXml(item.snap_large),
-                                               pmlfile: decodeXml(item.pmlfile),
-                                               createdAt: decodeXml(item.createdAt),
-                                               updatedAt: decodeXml(item.updatedAt)})
+                                           pmlfile: decodeXml(item.pmlfile),
+                                           createdAt: decodeXml(item.createdAt),
+                                           updatedAt: decodeXml(item.updatedAt)})
                     }
 
                     cloud.saveCache(cacheFileName,serializerefpmlModel());
@@ -359,22 +351,50 @@ Rectangle {
             width: 220; height: pmlview.height
             color: "#efefef"
 
-            ListView {
-                id: categories
-                focus: visible
-                anchors.fill: parent
-                model: categoryModel //xmlcategoryModel
-                clip:true
-                header: refreshButtonDelegate
-                delegate: CategoryDelegate {}
-                highlight: Rectangle { color: "steelblue" }
-                highlightMoveVelocity: 9999999
+            Rectangle {
+                id: types
+                width: parent.width
+                height: types_col.height
+                anchors.top: parent.top
+                color: "white"
+                Column {
+                    id: types_col
+                    spacing: 10
+                    Text {
+                        text: "Session"
+                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                    }
+                    Text {
+                        text: "Skin"
+                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                    }
+                    Text {
+                        text: "Document"
+                        font { family: "Helvetica"; pointSize: 16; bold: false }
+                    }
+                }
             }
 
-            ScrollBar {
-                scrollArea: categories; height: categories.height; width: 8
-                anchors.right: categories.right
-            }
+            ListView {
+                id: categories
+                    focus: visible
+                    width: parent.width
+                    anchors.top: types.bottom
+                    anchors.bottom: parent.bottom
+
+                    model: categoryModel //xmlcategoryModel
+                    clip:true
+                    header: refreshButtonDelegate
+                    delegate: CategoryDelegate {}
+                    highlight: Rectangle { color: "steelblue" }
+                    highlightMoveVelocity: 9999999
+                }
+
+                ScrollBar {
+                    scrollArea: categories; height: categories.height; width: 8
+                    anchors.right: categories.right
+                    anchors.top: categories.top
+                }
         }
 
         ListView {

@@ -163,6 +163,7 @@
     <model value="e500">
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-e500_e.html"/>
         <document desc="User Guide (en)" link="http://pockemul.free.fr/Documents/userguide/PCE500_OM_GB.pdf"/>
+        <document desc="User Guide (fr)" link="http://pockemul.free.fr/Documents/userguide/PCE500_OM_FR.pdf"/>
     </model>
     <model value="e500s">
         <url desc="Pocket Museum" link="http://pocket.free.fr/html/sharp/pc-e500s_e.html"/>

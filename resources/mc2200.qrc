@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>mc2200/mc2200.png</file>
+        <file>mc2200/powerOFF.png</file>
+        <file>mc2200/powerPRO.png</file>
+        <file>mc2200/powerRUN.png</file>
+    </qresource>
+</RCC>

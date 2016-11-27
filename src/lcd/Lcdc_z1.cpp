@@ -13,7 +13,7 @@
 Clcdc_z1::Clcdc_z1(CPObject *parent, QRect _lcdRect, QRect _symbRect, QString _lcdfname, QString _symbfname):
     Clcdc(parent,_lcdRect,_symbRect,_lcdfname,_symbfname){						//[constructor]
 
-    internalSize = QSize(190,32);
+    internalSize = QSize(192,32);
     pixelSize = 4;
     pixelGap = 1;
 }

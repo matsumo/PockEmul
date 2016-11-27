@@ -1688,7 +1688,8 @@ RESOURCES += \
     resources/fp40.qrc \
     resources/md100.qrc \
     resources/h20rc.qrc \
-    resources/cl1000.qrc
+    resources/cl1000.qrc \
+    resources/mc2200.qrc
 
 DISTFILES += \
     package.pri \

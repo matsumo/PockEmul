@@ -59,14 +59,14 @@ Rectangle {
 
     VisualItemModel {
         id: tabsModel
-        Tab {name: "Portal"
-            Portal {
-                id: myPortal
-//                z: 9999
-                visible: true
-                anchors.fill: parent
-            }
-        }
+//        Tab {name: "Portal"
+//            Portal {
+//                id: myPortal
+////                z: 9999
+//                visible: true
+//                anchors.fill: parent
+//            }
+//        }
         Tab {name: "Cloud"
             icon: "pics/public-cloud-white.png"
 

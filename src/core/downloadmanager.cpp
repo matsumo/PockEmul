@@ -147,18 +147,11 @@ extern CrenderView *view;
      if (reply->error()) {
          ask(mainwindow,tr("Download of %1 failed: %2").
              arg(url.toEncoded().constData()).arg(reply->errorString()),1);
-
-//         QMessageBox::warning(mainwindow,tr("Download Manager"),
-//                              tr("Download of %1 failed: %2").
-//                              arg(url.toEncoded().constData()).arg(reply->errorString()));
      } else {
          QString filename = saveFileName(url);
-         if (saveToDisk(filename, reply))
+         if (saveToDisk(filename, reply) && !filename.endsWith(".png"))
              ask(mainwindow,tr("Download of %1 succeeded (saved to %2)").
                                       arg(url.toEncoded().constData()).arg(filename),1);
-//             QMessageBox::information(mainwindow,tr("Download Manager"),
-//                                      tr("Download of %1 succeeded (saved to %2)").
-//                                      arg(url.toEncoded().constData()).arg(filename));
      }
 
      currentDownloads.removeAll(reply);

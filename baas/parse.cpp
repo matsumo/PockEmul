@@ -14,6 +14,7 @@
 #include "quazip/JlCompress.h"
 
 extern MainWindowPockemul *mainwindow;
+extern int ask(QWidget *parent, QString msg, int nbButton);
 
 Parse::Parse(): BaaS()
 {
@@ -641,6 +642,7 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
         if (!zip.setCurrentFile("package.json")) {
             // ERROR
             qWarning()<<"ERROR - package.json missing";
+            ask(mainwindow,"Invalid skin package.\n'package.json' file missing",1);
             return;
         }
 
@@ -654,6 +656,7 @@ void Parse::postPML( QString type, QString title, QString description, QByteArra
         if (json.object().value("model").isUndefined()) {
             // ERROR
             qWarning()<<"ERROR model empty";
+            ask(mainwindow,"Invalid skin package.\nModel not defined in package.json file",1);
             return;
         }
 

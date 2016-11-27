@@ -237,6 +237,9 @@ qWarning()<<"After PopulatePictureFlow";
      QImage img;
 
      if (fileInfo.completeSuffix()=="pdf") {
+         if (QFile(fileInfo.absoluteFilePath().replace("pdf","png")).exists()) {
+             return QImage(fileInfo.absoluteFilePath().replace("pdf","png"));
+         }
          return QImage(":/core/pdfthumbnail.png");
      }
 

@@ -8,7 +8,7 @@
    <example brand="HEWLETT-PACKARD" idpocket="HP-15C" res="hp15c" filename="./" name="HP-15C" image=":/hp15c/hp15c.png"/>
    <example brand="HEWLETT-PACKARD" idpocket="HP-16C" res="hp16c" filename="./" name="HP-16C" image=":/hp16c/hp16c.png"/>
     <example brand="SHARP_PC12XX" idpocket="PC-1245" filename="./" name="Sharp pc-1245" image=":/pc1245/pc1245.png"/>
-    <example brand="OTHER" idpocket="MC-2200" filename="./" name="Seiko MC-2200" image=":/pc1245/mc2200.png"/>
+    <example brand="OTHER" idpocket="MC-2200" filename="./" name="Seiko MC-2200" image=":/mc2200/mc2200.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1250" filename="./" name="Sharp pc-1250" image=":/pc1250/pc1250.png"/>
      <example brand="TANDY" idpocket="Tandy PC-3" filename="./" name="Tandy PC-3" image=":/pc1250/pc31k.png"/>
      <example brand="SHARP_PC12XX" idpocket="PC-1251" filename="./" name="Sharp pc-1251" image=":/pc1251/pc1251.png"/>
