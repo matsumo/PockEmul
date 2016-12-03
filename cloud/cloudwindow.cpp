@@ -53,6 +53,7 @@ extern void m_addShortcut(QString name,QString param);
 
 extern bool syncEnabled;
 extern bool soundEnabled;
+extern bool kbSoundEnabled;
 extern bool hiRes;
 extern bool flipOnEdge;
 extern bool trackerEnabled;
@@ -418,6 +419,7 @@ void Cloud::saveValueFor(const QString &objectName, const QString &inputValue)
     if (objectName == "trackerEnabled") trackerEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "syncEnabled") syncEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "soundEnabled") soundEnabled =  (inputValue=="on") ? true : false;
+    if (objectName == "kbSoundEnabled") kbSoundEnabled =  (inputValue=="on") ? true : false;
     if (objectName == "hiRes") hiRes =  (inputValue=="on") ? true : false;
     if (objectName == "vibDelay") {
         vibDelay = (inputValue.toInt());

@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QPainter>
+#include <QSound>
 
 #include "xmlwriter.h"
  
@@ -12,6 +13,7 @@
 #include "Keyb.h"
 
 extern QString workDir;
+extern bool kbSoundEnabled;
 
 INLINE BYTE bit(int ii)
 {
@@ -186,8 +188,9 @@ void Ckeyb::insertKey(int _key)
 
     keyPressing.unlock();
 
-//    QApplication::beep();
-
+    if (kbSoundEnabled) {
+        QSound::play(":/core/key.wav");
+    }
 //    qWarning()<<"insert key into buffer"<<_key<<"   buffer size"<<keyPressedList.size();
     emit keyPressed(_key);
 }

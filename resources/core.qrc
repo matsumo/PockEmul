@@ -25,5 +25,6 @@
         <file>core/check.png</file>
         <file>core/analyser.png</file>
         <file>core/expand.png</file>
+        <file>core/key.wav</file>
     </qresource>
 </RCC>

@@ -55,6 +55,7 @@ Rectangle {
 
         SettingsDelegate { id: labelAppSettings;name: "labelAppSettings";   labelString: "Application Settings"; type: "text"; saveInput: false }
         SettingsDelegate { id: soundEnabled;    name: "soundEnabled";       labelString: "Enable sound"; type: "checkbox"; defaultText: "on"}
+        SettingsDelegate { id: kbSoundEnabled;  name: "kbSoundEnabled";     labelString: "Keyboard audio feedback"; type: "checkbox"; defaultText: "on"}
         SettingsDelegate { id: hiRes;           name: "hiRes";              labelString: "Enable High Resolution"; type: "checkbox"; defaultText: "on"}
         SettingsDelegate { id: hiResRatio;      name: "hiResRatio";         labelString: "Scale icons"; type: "input"; defaultText: "0"}
         SettingsDelegate { id: vibDelay;        name: "vibDelay";           labelString: "Vibrator delay(ms)"; type: "input"; defaultText: "75"}

@@ -68,6 +68,7 @@ LaunchButtonWidget* bookcase;
 LaunchButtonWidget* exitButton;
 
 bool soundEnabled=true;
+bool kbSoundEnabled=true;
 bool hiRes=true;
 bool syncEnabled=true;
 bool flipOnEdge=true;
@@ -288,6 +289,7 @@ int main(int argc, char *argv[])
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
 
     soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
+    kbSoundEnabled =  (Cloud::getValueFor("kbSoundEnabled","on")=="on") ? true : false;
     hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
     magnifyTouch =  (Cloud::getValueFor("magnifyTouch","on")=="on") ? true : false;
     qWarning()<<"magnifyTouch"<<magnifyTouch;
