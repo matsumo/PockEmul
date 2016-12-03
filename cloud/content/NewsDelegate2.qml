@@ -127,9 +127,6 @@ Item {
             Text {
                 id: updatedAtText
                 text: 'MàJ le '+ new Date(updatedAt).toString()
-//                text: new Date("2016-11-20T15:00:07.853Z").toString()
-//                text: Date('1995-12-17 03:24:00');
-//                text: new Date(1995, 11, 17);
 
                 renderType: Text.NativeRendering
                 //            width: parent.width;
@@ -144,28 +141,16 @@ Item {
                 height: 150 * cloud.getValueFor("hiResRatio","1")
                 asynchronous: true
                 cache: true
-//                source:
-//                        "image://PockEmulCloud/"+
-//                        cloud.getValueFor("serverURL","").replace("http://","")+
-//                        "services/api/rest/xml/?method=file.get_snap"+
-//                        "&file_guid="+pmlid+
-//                        "&size=medium"
                 source:   "image://PockEmulCloud/"+snap_small.replace("http://","")
 
-
-                    //serverURL+"getPMLthumb/"+pmlid+"/"+getThumbId(pmlid)
                 fillMode: Image.PreserveAspectFit;
+
                 Timer {
                         id: reset
                         interval: 500;
-                        onTriggered:
-//                            pmlThumbImage.source="image://PockEmulCloud/"+
-//                                     cloud.getValueFor("serverURL","").replace("http://","")+
-//                                     "services/api/rest/xml/?method=file.get_snap"+
-//                                     "&file_guid="+pmlid+
-//                                     "&size=medium";
-                            pmlThumbImage.source="image://PockEmulCloud/"+snap_small.replace("http://","");
-                    }
+                        onTriggered: pmlThumbImage.source="image://PockEmulCloud/"+snap_small.replace("http://","");
+                }
+
                 onStatusChanged: {
                     if (status == Image.Error) {
                         if (snap_small.replace("http://","") !== "") {
@@ -173,16 +158,7 @@ Item {
                             reset.restart();
                         }
                     }
-//                                     console.log("*****image status("+index+")="+pmlThumbImage.status);
                 }
-
-//                MouseArea {
-//                    anchors.fill: parent
-////                    onClicked: {
-////                        root.bigposter.source = serverURL+"getPMLsnap/"+pmlid;
-////                        root.bigposter.visible = true;
-////                    }
-//                }
             }
         }
 

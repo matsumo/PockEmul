@@ -859,6 +859,10 @@ qWarning()<<"Weel";
  */
 void CPObject::maximize(QPoint pos) {
 
+    if (pos.isNull()) {
+        pos = RectWithLinked().center().toPoint();
+    }
+
     // Compute global rect
     QRectF rs = RectWithLinked();
     float rw= mainwindow->centralwidget->rect().width()/(rs.width());
@@ -882,6 +886,10 @@ void CPObject::maximize(QPoint pos) {
  * @param pos
  */
 void CPObject::minimize(QPoint pos) {
+
+    if (pos.isNull()) {
+        pos = RectWithLinked().center().toPoint();
+    }
 
     mainwindow->doZoom(pos,1.0/mainwindow->zoom);
 }
@@ -1696,12 +1704,44 @@ void CPObject::contextMenuEvent ( QContextMenuEvent * event )
  */
 void CPObject::BuildContextMenu(QMenu * menu)
 {
+    QString  menuStyle(
+                "QMenu { "
+                "font-size:20pt; "
+                "color:white; "
+                "left: 10pt; "
+                "background-color: #333333;"
+//                "background-color:qlineargradient(x1:0, y1:0, x2:0, y2:1, stop: 0 #cccccc, stop: 1 #333333);"
+                "}"
+                "QLabel { "
+                "font-size:20pt; "
+                "color:white; "
+                "left: 10pt; "
+                "background-color: #333333;"
+                "}"
+            );
+
+      menu->setStyleSheet(menuStyle);
+
+
     Vibrate();
 #ifdef Q_OS_ANDROID
     menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
     menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
      menu->addAction(tr("Create desktop Shortcut"),this,SLOT(createShortcut()));
 #endif
+
+    menu->addAction(tr("Maximize"),this,SLOT(maximize()));
+    menu->addAction(tr("Minimize"),this,SLOT(minimize()));
+    menu->addAction(tr("Pinch"),[=] () {
+        QMetaObject::invokeMethod(view->cloud.object,"manageContextResponse",
+                                  Q_ARG(QVariant, QString("Pinch")),
+                                  Q_ARG(QVariant, QString("%1").arg((quint64)this)),
+                                  Q_ARG(QVariant, QPoint()),
+                                  Q_ARG(QVariant, 0)
+                                  );
+    });
+
+    menu->addSeparator();
 
     if ( ( dynamic_cast<CpcXXXX *>(this) ) &&  ((CpcXXXX*)this)->pCPU)
     {

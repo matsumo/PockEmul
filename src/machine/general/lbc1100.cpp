@@ -306,7 +306,7 @@ void Clbc1100::TurnOFF(void) {
 
 void Clbc1100::TurnON(void){
     CpcXXXX::TurnON();
-    upd7907->upd7907stat.pc.w.l=0;
+//    upd7907->upd7907stat.pc.w.l=0;
 
 }
 

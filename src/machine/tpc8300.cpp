@@ -121,11 +121,11 @@ bool Ctpc8300::run() {
 
     CpcXXXX::run();
 
-    if (pTIMER->msElapsedId(1)>1000) {
-        // Check if interrupts are enabled
-//        upd7907->upd7907stat.irr |= 0x10;
-        pTIMER->resetTimer(1);
-    }
+//    if (pTIMER->msElapsedId(1)>1000) {
+//        // Check if interrupts are enabled
+////        upd7907->upd7907stat.irr |= 0x8;
+//        pTIMER->resetTimer(1);
+//    }
 
     if (upd7907->upd7907stat.imem[0x01] & 0x40)
     {
@@ -274,7 +274,7 @@ void Ctpc8300::TurnOFF(void) {
 
 void Ctpc8300::TurnON(void){
     CpcXXXX::TurnON();
-    upd7907->upd7907stat.pc.w.l=0;
+//    upd7907->upd7907stat.pc.w.l=0;
 
 }
 
@@ -415,8 +415,8 @@ UINT16 Ctpc8300::getKey()
 //            if (KEY(K_F6))			data|=0x02;
 //            if (KEY(K_F7))			data|=0x04;
 //            if (KEY(K_F8))			data|=0x08;
-//            if (KEY(K_F9))			data|=0x010;
-//            if (KEY(K_F6))			data|=0x020;
+//            if (KEY(K_F9))			data|=0x10;
+            if (KEY(K_BRK))       data|=0x20;
         }
 
         if (ks&0x1000) {
@@ -425,34 +425,7 @@ UINT16 Ctpc8300::getKey()
             if (KEY(K_SHT))			data|=0x04;
 //            if (KEY(K_F6))			data|=0x08;
 //            if (KEY(K_F7))			data|=0x10;
-//            if (KEY(K_F8))			data|=0x20;
         }
-
-        if (ks&0x2000) {
-//            if (KEY(K_F6))			data|=0x01;
-//            if (KEY(K_F7))			data|=0x02;
-//            if (KEY(K_F8))			data|=0x04;
-//            if (KEY(K_F9))			data|=0x08;
-//            if (KEY(K_F6))			data|=0x10;
-//            if (KEY(K_F7))			data|=0x20;
-        }
-        if (ks&0x4000) {
-//            if (KEY(K_F6))			data|=0x01;
-//            if (KEY(K_F7))			data|=0x02;
-//            if (KEY(K_F8))			data|=0x04;
-//            if (KEY(K_F9))			data|=0x08;
-//            if (KEY(K_F6))			data|=0x10;
-//            if (KEY(K_F7))			data|=0x20;
-        }
-        if (ks&0x8000) {
-//            if (KEY(K_F6))			data|=0x01;
-//            if (KEY(K_F7))			data|=0x02;
-//            if (KEY(K_F8))			data|=0x04;
-//            if (KEY(K_F9))			data|=0x08;
-//            if (KEY(K_F6))			data|=0x10;
-//            if (KEY(K_F7))			data|=0x20;
-        }
-
 
 //        if (fp_log) fprintf(fp_log,"Read key [%02x]: strobe=%02x result=%02x\n",pKEYB->LastKey,ks,data^0xff);
 

@@ -263,9 +263,6 @@ public:
     void readBus(Cbus *bus, UINT32 *d, UINT32 *data);
     void FindAllLinked(CPObject *search, QList<CPObject *> *liste);
 
-
-    void maximize(QPoint pos);
-    void minimize(QPoint pos);
 signals:
     void msgError(QString);
     void stackPosChanged();
@@ -280,6 +277,8 @@ public slots:
     void audioStateChanged(QAudio::State state);
 #endif
 
+    void maximize(QPoint pos = QPoint());
+    void minimize(QPoint pos = QPoint());
     void maximizeWidth();
     void maximizeHeight();
     void contextMenuEvent ( QContextMenuEvent * event );

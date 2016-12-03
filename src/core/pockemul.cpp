@@ -268,11 +268,7 @@ int main(int argc, char *argv[])
 
     vibDelay = Cloud::getValueFor("vibDelay","50").toInt();
 
-    QSplashScreen splash;
-    splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")));//.scaled(mainwindow->geometry().size()));
-    splash.show();
-    splash.showMessage("Loading modules...",Qt::AlignLeft,Qt::white);
-    app->processEvents();
+
 
     mainwindow = new MainWindowPockemul();
 
@@ -291,11 +287,6 @@ int main(int argc, char *argv[])
 
     mainwindow->centralwidget->setStyleSheet("background-color:black;color: white;selection-background-color: grey;");
 
-#ifdef EMSCRIPTEN
-    mainwindow->setWindowTitle("PockEmul Online");
-#endif
-
-
     soundEnabled =  (Cloud::getValueFor("soundEnabled","on")=="on") ? true : false;
     hiRes =  (Cloud::getValueFor("hiRes","on")=="on") ? true : false;
     magnifyTouch =  (Cloud::getValueFor("magnifyTouch","on")=="on") ? true : false;
@@ -303,6 +294,7 @@ int main(int argc, char *argv[])
 
 
 #ifdef EMSCRIPTEN
+    mainwindow->setWindowTitle("PockEmul Online");
     mainwindow->zoomSlider = new QSlider(mainwindow->centralwidget);
     mainwindow->zoomSlider->setMinimum(10);
     mainwindow->zoomSlider->setMaximum(300);
@@ -323,6 +315,11 @@ int main(int argc, char *argv[])
     mainwindow->restoreGeometry(QByteArray::fromHex(Cloud::getValueFor("geometry").toLatin1()));
 #endif
 
+    QSplashScreen splash;
+    splash.setPixmap(QPixmap(P_RES(":/pockemul/splash.png")));//.scaled(mainwindow->geometry().size()));
+    splash.show();
+    splash.showMessage("Loading modules...",Qt::AlignLeft,Qt::white);
+    app->processEvents();
 
 //    test();
 

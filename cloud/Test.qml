@@ -185,13 +185,18 @@ Rectangle {
                 onRotationChanged: main.rotpocket(idpocket,rotation)
 
                 function showContextMenu(_id,_x,_y) {
-                    contextMenu.idpocket = _id;
-                    contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
-                    contextMenu.mousePt = Qt.point(_x,_y);
-                    //                                    contextMenu.buttons = mouse.buttons;
-                    contextMenu.z = z+1;
-                    contextMenu.popup(photoFrame.x+_x, photoFrame.y+_y);
-                    console.log("popup:",contextMenu.selectedOption);
+                    if (true) {
+                         main.contextMenu(_id,_x,_y);
+                    }
+                    else {
+                        contextMenu.idpocket = _id;
+                        contextMenu.width = 300*cloud.getValueFor("hiResRatio","1");//Math.max(300,image.width/2);
+                        contextMenu.mousePt = Qt.point(_x,_y);
+                        //                                    contextMenu.buttons = mouse.buttons;
+                        contextMenu.z = z+1;
+                        contextMenu.popup(photoFrame.x+_x, photoFrame.y+_y);
+                        console.log("popup:",contextMenu.selectedOption);
+                    }
                 }
 
                 Keys.onPressed: {

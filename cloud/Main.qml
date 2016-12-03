@@ -133,7 +133,7 @@ Rectangle {
 //        tabsWidth:  144 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
-        quitIndex: 4
+        quitIndex: 3
         onClose: rootCloud.close();
 
     }

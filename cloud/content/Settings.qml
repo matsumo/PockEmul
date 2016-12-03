@@ -12,8 +12,8 @@ Rectangle {
             console.log("logged:");
         }
 
-        parse.loginChanged.connect(loginChanged);
-        parse.currentObjectChanged.connect(currentObjectChanged);
+        parse.loginChanged.connect(rootCloud.loginChanged);
+        parse.currentObjectChanged.connect(rootCloud.currentObjectChanged);
     }
 
     VisualItemModel {
