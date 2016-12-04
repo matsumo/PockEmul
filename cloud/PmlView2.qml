@@ -364,32 +364,31 @@ Rectangle {
             width: 220; height: pmlview.height
             color: "#efefef"
 
-            ListView {
+            Column {
                 id: types
+                spacing: 0
                 width: parent.width
                 height:500
+                Repeater {
+                    id: repeatTypes
 
-                onCountChanged: {
-                    /* calculate ListView dimensions based on content */
-                    console.log("count:",types.count);
-                    var listViewHeight = 0
-                    var listViewWidth = 0
+                    onCountChanged: {
+                        /* calculate ListView dimensions based on content */
+                        console.log("count:",count);
+                        var listViewHeight = 0
+                        var listViewWidth = 0
 
-                    // iterate over each delegate item to get their sizes
-                    for(var i=0; i<types.count/*contentItem.children.length*/; i++) {
-                        console.log(i,types.contentItem.children[i])
-                        listViewHeight += types.contentItem.children[i].height
-                        listViewWidth  = Math.max(listViewWidth, types.contentItem.children[i].width)
+                        // iterate over each delegate item to get their sizes
+                        for(var i=0; i<repeatTypes.count/*contentItem.children.length*/; i++) {
+                            listViewHeight += types.children[i].height
+                            listViewWidth  = Math.max(listViewWidth, types.children[i].width)
+//                            console.log("h:",i,listViewHeight);
+                        }
+
+                        types.height = listViewHeight
+//                        types.width = listViewWidth
                     }
 
-                    types.height = listViewHeight
-//                    types.width = listViewWidth
-
-                    console.log("height:",listViewHeight);
-                }
-
-                Component {
-                    id: listDelegate
                     Item {
                         id: listItem
                         width: types.width
@@ -398,7 +397,7 @@ Rectangle {
                         Text {
                             id: text
                             text: name // Title text is from the 'name' property in the model item (ListElement)
-//                            width: parent.width
+                            //                            width: parent.width
                             font { family: "Helvetica"; pointSize: 18; bold: true }
                         }
 
@@ -407,11 +406,8 @@ Rectangle {
                             id: checkbox
                             checked: selected  // Checked state is from the 'selected' property in the model item
                             anchors { right: listItem.right; verticalCenter: listItem.verticalCenter }
-//                            onClicked: {
-//                                typelistModel.set(index, { "selected": checkbox.checked });
-//                                populate(newprivateSearchItem.text);
-//                            }
                         }
+
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
@@ -421,25 +417,24 @@ Rectangle {
                             }
                         }
                     }
-                }
 
-                delegate: listDelegate
-                model: ListModel {
-                    id: typelistModel
-                    ListElement {
-                        name: "Session"
-                        description: "Selectable item 1"
-                        selected: true
-                    }
-                    ListElement {
-                        name: "Skin"
-                        description: "Selectable item 2"
-                        selected: true
-                    }
-                    ListElement {
-                        name: "Document"
-                        description: "Selectable item 3"
-                        selected: true
+                    model: ListModel {
+                        id: typelistModel
+                        ListElement {
+                            name: "Session"
+                            description: "Selectable item 1"
+                            selected: true
+                        }
+                        ListElement {
+                            name: "Skin"
+                            description: "Selectable item 2"
+                            selected: true
+                        }
+                        ListElement {
+                            name: "Document"
+                            description: "Selectable item 3"
+                            selected: true
+                        }
                     }
                 }
             }
