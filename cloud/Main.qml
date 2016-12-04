@@ -59,14 +59,6 @@ Rectangle {
 
     VisualItemModel {
         id: tabsModel
-//        Tab {name: "Portal"
-//            Portal {
-//                id: myPortal
-////                z: 9999
-//                visible: true
-//                anchors.fill: parent
-//            }
-//        }
         Tab {name: "Cloud"
             icon: "pics/public-cloud-white.png"
 
@@ -123,26 +115,25 @@ Rectangle {
 //                anchors.fill: parent
 //            }
 //        }
+//        Tab {name: "Portal"
+//            Portal {
+//                id: myPortal
+////                z: 9999
+//                visible: true
+//                anchors.fill: parent
+//            }
+//        }
 
     }
 
     TabbedUI {
         id: tabbedui
-//        vertical: true
         tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-//        tabsWidth:  144 * cloud.getValueFor("hiResRatio","1")
         tabIndex: 0
         tabsModel: tabsModel
         quitIndex: 3
         onClose: rootCloud.close();
-
     }
-
-
-
-
-
-
 
     function save_pml(title,description) {
         var serverURL = '';
@@ -153,43 +144,9 @@ Rectangle {
             xml = cloud.save();
             parse.saveCurrentSession(title,description,xml);
         }
-
-        if(apiSelected==='elgg') {
-            serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-            url = serverURL+ '?method=file.save_pml&'+
-                    '&title='+encodeURIComponent(title)+
-                    '&description='+encodeURIComponent(description)+
-                    '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-                    '&auth_token='+auth_token;
-            xml = cloud.save();
-            console.log('url:'+url);
-
-            requestPost(url, xml , function (o) {
-                renderArea.hideWorkingScreen();
-
-                if (o.readyState == 4 ) {
-                    if (o.status==200) {
-                        var obj = JSON.parse(o.responseText);
-                        console.log(o.responseText);
-                        if (obj.status == 0) {
-                            message.showMessage("Session saved",5000);
-                        }
-                        else {
-                            message.showErrorMessage(obj.message,5000);
-                        }
-                    }
-                }
-            });
-        }
     }
 
     function set_access(pmlid,access,on_success,on_failure) {
-//        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-//        var url = serverURL+ '?method=file.set_access'+
-//                '&file_guid='+pmlid+
-//                '&access='+access+
-//                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-//                '&auth_token='+auth_token;
 
         var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
         console.log('url:'+url);
@@ -242,6 +199,7 @@ Rectangle {
         });
     }
 
+// Migrate to PARSE
     function clone_pml(pmlid,on_success,on_failure) {
         var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
         var url = serverURL+ '?method=file.clone_pml'+
@@ -272,18 +230,10 @@ Rectangle {
     }
 
     function delete_pml(pmlid,on_success,on_failure) {
-//        var serverURL = cloud.getValueFor("serverURL","")+'services/api/rest/json/';
-//        var url = serverURL+ '?method=file.delete_pml'+
-//                '&file_guid='+pmlid+
-//                '&api_key=7118206e08fed2c5ec8c0f2db61bbbdc09ab2dfa'+
-//                '&auth_token='+auth_token;
 
         var url = cloud.getValueFor("serverURL","")+'/parse/classes/Pml/'+pmlid;
-//                '?X-Parse-Application-Id='+ encodeURIComponent(parse.applicationId)+
-//                '&Accept=application/json'+
-//                '&X-Parse-Session-Token='+ encodeURIComponent(parse.sessionId);
 
-        console.log('url:'+url);
+//        console.log('url:'+url);
 
         requestDelete(url, "" , function (o) {
             renderArea.hideWorkingScreen();

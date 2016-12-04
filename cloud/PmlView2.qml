@@ -278,9 +278,6 @@ Rectangle {
             if (item.type == "pum" && !typelistModel.get(2).selected) continue;
 
             if ( (pmlview.keyword != "") && (pmlview.keyword != "All") && !idInArray(pmlview.keyword,item.keywords)) continue;
-//            console.log("object OK");
-//            if ( (pmlview.objid == -1) && (item.isdeleted != 1 )) continue;
-//            console.log("Deleted OK");
             if ( (searchText !== "") && !pmlContain(item,searchText)) continue;
 
             pmlModel.append({   rowid : i,
@@ -370,7 +367,26 @@ Rectangle {
             ListView {
                 id: types
                 width: parent.width
-                height: 150
+                height:500
+
+                onCountChanged: {
+                    /* calculate ListView dimensions based on content */
+                    console.log("count:",types.count);
+                    var listViewHeight = 0
+                    var listViewWidth = 0
+
+                    // iterate over each delegate item to get their sizes
+                    for(var i=0; i<types.count/*contentItem.children.length*/; i++) {
+                        console.log(i,types.contentItem.children[i])
+                        listViewHeight += types.contentItem.children[i].height
+                        listViewWidth  = Math.max(listViewWidth, types.contentItem.children[i].width)
+                    }
+
+                    types.height = listViewHeight
+//                    types.width = listViewWidth
+
+                    console.log("height:",listViewHeight);
+                }
 
                 Component {
                     id: listDelegate
@@ -383,7 +399,7 @@ Rectangle {
                             id: text
                             text: name // Title text is from the 'name' property in the model item (ListElement)
 //                            width: parent.width
-                            font { family: "Helvetica"; pointSize: 16; bold: false }
+                            font { family: "Helvetica"; pointSize: 18; bold: true }
                         }
 
                         // The checkbox to display
@@ -391,7 +407,15 @@ Rectangle {
                             id: checkbox
                             checked: selected  // Checked state is from the 'selected' property in the model item
                             anchors { right: listItem.right; verticalCenter: listItem.verticalCenter }
+//                            onClicked: {
+//                                typelistModel.set(index, { "selected": checkbox.checked });
+//                                populate(newprivateSearchItem.text);
+//                            }
+                        }
+                        MouseArea {
+                            anchors.fill: parent
                             onClicked: {
+                                checkbox.checked = ! checkbox.checked;
                                 typelistModel.set(index, { "selected": checkbox.checked });
                                 populate(newprivateSearchItem.text);
                             }

@@ -1725,8 +1725,8 @@ void CPObject::BuildContextMenu(QMenu * menu)
 
     Vibrate();
 #ifdef Q_OS_ANDROID
-    menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
-    menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
+//    menu->addAction(tr("Fit width"),this,SLOT(maximizeWidth()));
+//    menu->addAction(tr("fit height"),this,SLOT(maximizeHeight()));
      menu->addAction(tr("Create desktop Shortcut"),this,SLOT(createShortcut()));
 #endif
 
@@ -1879,14 +1879,15 @@ void CPObject::BuildContextMenu(QMenu * menu)
 void CPObject::computeWebLinksMenu(QMenu * menu) {
 
     menuweblink = menu->addMenu(tr("Web Links"));
-
     menuDocument = menu->addMenu(tr("Documents"));
     connect(menuweblink, SIGNAL(triggered( QAction *)), mainwindow, SLOT(slotWebLink( QAction *)));
+
 // FETCH XML FILE TO ADD MENU ACTIONS
 #ifdef EMSCRIPTEN
     connect(menuDocument, SIGNAL(triggered(QAction*)), mainwindow, SLOT(slotWebLink(QAction*)));
     QFile fileRes(P_RES(":/pockemul/weblinks.xml"));
 #else
+
     connect(menuDocument, SIGNAL(triggered(QAction*)), mainwindow, SLOT(slotDocument(QAction*)));
     // Does weblinks.xml exists locally ? if not generate one
 //    QString weblinksFn = QApplication::applicationDirPath()+"/weblinks.xml";
@@ -1901,10 +1902,16 @@ void CPObject::computeWebLinksMenu(QMenu * menu) {
     QXmlInputSource sourceRes(&fileRes);
     QXmlSimpleReader reader;
     reader.setContentHandler( new WebLinksParser(this) );
-
     reader.parse( sourceRes );
-
     fileRes.close();
+
+    // Remove menu entries if they have no children
+    if (menuweblink->isEmpty()) {
+        menu->removeAction(menuweblink->menuAction());
+    }
+    if (menuDocument->isEmpty()) {
+        menu->removeAction(menuDocument->menuAction());
+    }
 
 }
 
