@@ -33,6 +33,7 @@
 #include "ui/dialogvkeyboard.h"
 #include "dialoganalog.h"
 #include "weblinksparser.h"
+#include "watchpoint.h"
 
 #include "fluidlauncher.h"
 
@@ -169,6 +170,9 @@ CPObject::~CPObject()
 //    delete extensionArray[4];
 
 //    if (mem) free(mem);
+
+    // remove watchpoints
+    WatchPoint.remove(this);
 }
 
 
