@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1475</model>
 <Keyboard>
+<KEY description="Power Switch" height="21" left="592" masterscancode="0x00" modifier="" scancode="0x229" top="30" view="FRONT" width="21"/>
     <KEY delay="3" description="RESET" height="50" left="249" masterscancode="0x00" modifier="" scancode="0x20d" top="13" view="BACK" width="30"/>
     <KEY description="Left Connector" height="125" left="5" masterscancode="0x00" modifier="" scancode="0x240" top="90" view="LEFT" width="15"/>
     <KEY description="S1" height="190" left="68" masterscancode="0x00" modifier="" scancode="0x241" top="31" view="BACK" width="140"/>

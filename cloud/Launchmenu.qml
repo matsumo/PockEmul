@@ -26,7 +26,7 @@ Rectangle {
             "Close All":        function(){ sendCloseAll(); },
             "Fit to screen":    function(){ main.fit() ;},
             "Toggle Fullscreen":function(){ toggleFullscreen() ;},
-            "Logic Analyser":   function(){ /*logic.visible = true;*/ analyser() ;},
+            "Logic Analyser":   function(){ if (false) logic.visible = true; else analyser() ;},
             "Help":             function(){ about.visible = true; },
             "Check for Updates":function(){ sendCheck(); },
             "Exit":             function(){ sendExit(); }

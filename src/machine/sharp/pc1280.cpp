@@ -63,7 +63,7 @@ Cpc1280::Cpc1280(CPObject *parent)	: Cpc1360(parent)
 
     remove(pSIOCONNECTOR);
 
-    closed = false;
+    closed = true;
     flipping = false;
     m_angle = -180;
     m_zoom = 1;
@@ -354,6 +354,7 @@ void Cpc1280::renderAnimation()
 }
 
 void Cpc1280::TurnCLOSE(void) {
+    return;
     // IF CONNECTED to printer , exit
     if (pCONNECTOR->isLinked()) return;
 

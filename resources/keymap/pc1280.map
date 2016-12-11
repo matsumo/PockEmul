@@ -1,6 +1,7 @@
 <!DOCTYPE KEYBMAP><KEYBMAP version="1.0">
 <model>pc1280</model>
 <Keyboard>
+<KEY description="Power Switch" height="21" left="592" masterscancode="0x00" modifier="" scancode="0x229" top="30" view="FRONT" width="21"/>
     <KEY description="!" height="16" left="19" scancode="0x21" top="361" width="16"/>
     <KEY description="dbl quot" height="16" left="48" scancode="0x22" top="362" width="16"/>
     <KEY description="#" height="16" left="76" scancode="0x23" top="362" width="16"/>

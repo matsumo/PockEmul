@@ -663,62 +663,61 @@ Rectangle {
     }
 
 
-/*
-    VisualItemModel {
-        id: logicModel
+//    VisualItemModel {
+//        id: logicModel
 
-        Tab {
-            id: sceneTab
-            name: "PockEmul Desktop"
-            icon: "qrc:/core/pocket.png"
-        }
-        Tab {
-            name: "Memory Dump"
-            icon: "qrc:/core/analyser.png"
-            MemoryDump {
-                id: memoryDump
-                anchors.fill: parent
-            }
-        }
-        Tab {
-            name: "Logic Analyser"
-            icon: "qrc:/core/analyser.png"
-            Logic {
-                id: logicAnalyser
-                anchors.fill: parent
-            }
-        }
-        Tab {name: "Back"
-            icon: "pics/back-white.png"
-            MouseArea {
-                anchors.fill: parent
-                onClicked: close();
-            }
-        }
-    }
+//        Tab {
+//            id: sceneTab
+//            name: "PockEmul Desktop"
+//            icon: "qrc:/core/pocket.png"
+//        }
+//        Tab {
+//            name: "Memory Dump"
+//            icon: "qrc:/core/analyser.png"
+//            MemoryDump {
+//                id: memoryDump
+//                anchors.fill: parent
+//            }
+//        }
+//        Tab {
+//            name: "Logic Analyser"
+//            icon: "qrc:/core/analyser.png"
+//            Logic {
+//                id: logicAnalyser
+//                anchors.fill: parent
+//            }
+//        }
+//        Tab {name: "Back"
+//            icon: "pics/back-white.png"
+//            MouseArea {
+//                anchors.fill: parent
+//                onClicked: close();
+//            }
+//        }
+//    }
 
-    TabbedUI {
-        id: logic
-        visible: false
-        z: parent.z+2
-        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
-        tabIndex: 0
-        tabsModel: logicModel
-        quitIndex: 3
-        onClose: visible=false;
+//    TabbedUI {
+//        id: logic
+//        visible: false
+//        z: parent.z+2
+//        tabsHeight: 72 * cloud.getValueFor("hiResRatio","1")
+//        tabIndex: 0
+//        tabsModel: logicModel
+//        quitIndex: 3
+//        onClose: visible=false;
 
-        onVisibleChanged: {
-            if (visible) {
-                scene.parent = sceneTab;
-            }
-            else {
-                scene.parent = renderArea;
-            }
+//        onVisibleChanged: {
+//            if (visible) {
+//                scene.parent = sceneTab;
+//            }
+//            else {
+//                scene.parent = renderArea;
+//            }
 
-            main.sendTrackingEvent('nav',visible ? 'show':'hide','logic analyser');
-        }
-    }
-*/
+//            main.sendTrackingEvent('nav',visible ? 'show':'hide','logic analyser');
+//        }
+//    }
+
 
 //    DevEditor {
 //        id: codeEditor

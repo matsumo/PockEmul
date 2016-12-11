@@ -93,7 +93,7 @@ bool Ctpc8300::init(void)				// initialize
 
 //pCPU->logsw = true;
 #ifndef QT_NO_DEBUG
-//    pCPU->logsw = true;
+//
 //    if (!fp_log) fp_log=fopen("tpc8300.log","wt");	// Open log file
 #endif
     CpcXXXX::init();
@@ -416,7 +416,7 @@ UINT16 Ctpc8300::getKey()
 //            if (KEY(K_F7))			data|=0x04;
 //            if (KEY(K_F8))			data|=0x08;
 //            if (KEY(K_F9))			data|=0x10;
-            if (KEY(K_BRK))       data|=0x20;
+//            if (KEY(K_BRK))       { data|=0x20; pCPU->logsw = true; pCPU->Check_Log();}
         }
 
         if (ks&0x1000) {
