@@ -94,7 +94,7 @@ Item {
         Text {
             id: titleText
             anchors.verticalCenter: parent.verticalCenter
-            anchors.verticalCenterOffset: -40
+            anchors.verticalCenterOffset: -200
             anchors.horizontalCenter: parent.horizontalCenter
             width: 180 + parent.width * 0.25
             wrapMode: Text.WordWrap

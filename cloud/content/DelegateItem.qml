@@ -9,10 +9,10 @@ Item {
     property bool isSelected: listView.currentIndex === index
 
     width: parent.width //parent ? parent.width : imageItem.width
-    height: Math.max(imageItem.height,500)
+    height: parent.width /3 //Math.max(imageItem.height,500) //parent.height/2)
     z: isSelected ? 1000 : -index
     rotation: isSelected ? 0 : -15
-    scale: isSelected ? mainView.height/540 : mainView.height/1080
+    scale: isSelected ? 1 : 0.25 //mainView.height/540 : mainView.height/1080
     opacity: 1.0 - Math.abs((listView.currentIndex - index) * 0.25)
 
     Behavior on rotation {
@@ -90,7 +90,7 @@ Item {
     }
     Image {
         id: imageItem
-        width: parent.width/3
+        width: parent.width/2
         height: width *3/4 //parent.height
         anchors.horizontalCenter: parent.horizontalCenter
         fillMode: Image.PreserveAspectFit

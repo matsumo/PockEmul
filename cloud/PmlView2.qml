@@ -361,7 +361,8 @@ Rectangle {
     Row {
         Rectangle {
             id: categoriesView
-            width: 220; height: pmlview.height
+            width: pmlview.width /8 //pmlview.height / 8
+            height: pmlview.height
             color: "#efefef"
 
             Column {
