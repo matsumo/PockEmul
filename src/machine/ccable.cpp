@@ -1,4 +1,5 @@
 #include <QPainter>
+#include <QPainterPath>
 
 #include "mainwindowpockemul.h"
 #include "dialoganalog.h"

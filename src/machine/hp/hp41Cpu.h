@@ -28,7 +28,7 @@
 
 
 typedef unsigned char flag;
-typedef unsigned char byte;
+typedef unsigned char My_byte;
 typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned short ushort;
@@ -36,10 +36,10 @@ typedef unsigned long ulong;
 typedef unsigned int uint;
 typedef quint64 UINT64;
 
-// ram registers each have 7 bytes
+// ram registers each have 7 My_bytes
 struct RAM_REG
   {
-  byte Reg[7];
+  My_byte Reg[7];
   };
 
 extern word TypeA[];
@@ -76,7 +76,7 @@ class Chp41;
 
 // CPU registers
 typedef struct {
-    byte A_REG[14],B_REG[14],C_REG[14],M_REG[14],N_REG[14];
+    My_byte A_REG[14],B_REG[14],C_REG[14],M_REG[14],N_REG[14];
     word G_REG,F_REG,ST_REG,Q_REG,P_REG,KEY_REG,XST_REG;
     word PT_PREV;                          // set to value of previous PT
     word FI_REG;                           //14 bits used - there is no actual physical register - this is just an input stream from peripherals
@@ -133,8 +133,8 @@ public:
   unsigned short eSleepMode;
   word perph_in_control,perph_selected,asdf,ram_selected,wqer;    // modes dependant on previous instructions that set modes
   word control_perph;              // number of perph in control
-  word Tyte1;                      // current instruction (ten bit byte)
-  word Tyte2;                      // valid only if tyte1 is two byte instruction
+  word Tyte1;                      // current instruction (ten bit My_byte)
+  word Tyte2;                      // valid only if tyte1 is two My_byte instruction
   word TytePrev;                   // previous instruction code
   word Modifier;                   // instruction modifier
   word FirstTEF,LastTEF;           // starting and ending tef pointers (always starting at least significant digit)
@@ -183,8 +183,8 @@ public:
   void Class2(void);
   int ArithCarry(unsigned short tyte);
   void ConvertTEF(void);
-  byte Adder(byte nib1,byte nib2);
-  byte Subtractor(byte nib1,byte nib2);
+  My_byte Adder(My_byte nib1,My_byte nib2);
+  My_byte Subtractor(My_byte nib1,My_byte nib2);
 
   void Class3(void);
 
@@ -194,7 +194,7 @@ public:
   void Speaker(short Freq, int Duration);
 
   // user code support
-  int DecodeUCByte(int PrevType,byte CurrByte);
+  int DecodeUCByte(int PrevType,My_byte CurrByte);
   void CalcOffset(int LowReg,int LowByte,int HighReg,int HighByte,int &RegOff,int &ByteOff);
   void PrevGlobal(int CurrReg,int CurrByte,int &PrevReg,int &PrevByte,int &RegOff,int &ByteOff);
 

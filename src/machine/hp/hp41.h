@@ -36,7 +36,7 @@ class Cbus;
 #define LOG(x) qWarning()<<"ERROR!!!!! "<<x
 
 typedef unsigned char flag;
-typedef unsigned char byte;
+typedef unsigned char My_byte;
 typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned short ushort;
@@ -86,13 +86,13 @@ struct ModuleHeader
   char szCopyright[100];
   char szLicense[200];
   char szComments[255];
-  byte Category;
-  byte Hardware;
-  byte MemModules;
-  byte XMemModules;
-  byte Original;
-  byte AppAutoUpdate;
-  byte NumPages;
+  My_byte Category;
+  My_byte Hardware;
+  My_byte MemModules;
+  My_byte XMemModules;
+  My_byte Original;
+  My_byte AppAutoUpdate;
+  My_byte NumPages;
   };
 
 struct ModulePage
@@ -101,11 +101,11 @@ struct ModulePage
   ModulePage *pAltPage;           // pointer to alternate page if any (HEPAX, W&W RAMBOX2 use)
   char szName[50];
   char szID[9];
-  byte Page;                      // file data - unchanged
-  byte ActualPage;                // running data- the actual location this page is loaded in
-  byte PageGroup;                 // file data - unchanged
-  byte Bank;
-  byte BankGroup;                 // file data - unchanged
+  My_byte Page;                      // file data - unchanged
+  My_byte ActualPage;                // running data- the actual location this page is loaded in
+  My_byte PageGroup;                 // file data - unchanged
+  My_byte Bank;
+  My_byte BankGroup;                 // file data - unchanged
   uint ActualBankGroup;           // running data - BankGroup is unique to file only
   flag fRAM;
   flag fWriteProtect;
@@ -193,7 +193,7 @@ public:
   int Catalog1(flag &fFirst,Cat1Label *pLbl);
   int PutUserCode(char *pszUCFile,char *pszError,Cat1Label *pLbl);
 
-  void SetKeyDown(byte KeyCode = 0);
+  void SetKeyDown(My_byte KeyCode = 0);
   void SetKeyUp(void);
 
   // HP41Trace.cpp
@@ -259,15 +259,15 @@ public:
   ModulePage *PageMatrix[16][4];         // matrix of page pointers
   ModulePage *pCurPage;                  // current page pointer
   word CurPage;                          // current page number
-  byte active_bank[16];                  // array[page] of banks that are enabled
+  My_byte active_bank[16];                  // array[page] of banks that are enabled
   word NextActualBankGroup;              // counter for loading actual bank groups
 
 
 
   // display registers and variables
-  byte DIS_C_REG[12];              // bit 8 for chars 1-12 (lower bit)
-  byte DIS_B_REG[12];              // bits 7-4 for chars 1-12 (occupy lower nybbles)
-  byte DIS_A_REG[12];              // bits 3-0 for chars 1-12 (occupy lower nybbles)
+  My_byte DIS_C_REG[12];              // bit 8 for chars 1-12 (lower bit)
+  My_byte DIS_B_REG[12];              // bits 7-4 for chars 1-12 (occupy lower nybbles)
+  My_byte DIS_A_REG[12];              // bits 3-0 for chars 1-12 (occupy lower nybbles)
   word DIS_ANNUN_REG;              // 12 bit annunciator register
   word UpdateDisplay;              // set to 1 when display needs to be updated
   word UpdateAnnun;                // set to 1 when annunciators need to be updated
@@ -280,12 +280,12 @@ public:
   UINT64 ClockA,ClockB;
   UINT64 AlarmA,AlarmB;
   UINT64 IntTimer,IntTimerEnd;     // interval timer counter and terminal value
-  byte CLK_A[14], CLK_B[14];       // clock A&B - 56 bits
-  byte ALM_A[14], ALM_B[14];       // alarm A&B - 56 bits
-  byte SCR_A[14], SCR_B[14];       // scratch A&B - 56 bits
-  byte INTV_CNT[14], INTV_TV[14];  // interval timer - only low 20 bits used - INTV_CNT is counter, INTV_TV is terminal value
-  byte ACC_F[14];                  // accuracy factor - only low 13 bits used
-  byte TMR_S[14];                  // status bits - only low 13 bits used
+  My_byte CLK_A[14], CLK_B[14];       // clock A&B - 56 bits
+  My_byte ALM_A[14], ALM_B[14];       // alarm A&B - 56 bits
+  My_byte SCR_A[14], SCR_B[14];       // scratch A&B - 56 bits
+  My_byte INTV_CNT[14], INTV_TV[14];  // interval timer - only low 20 bits used - INTV_CNT is counter, INTV_TV is terminal value
+  My_byte ACC_F[14];                  // accuracy factor - only low 13 bits used
+  My_byte TMR_S[14];                  // status bits - only low 13 bits used
 //  MMRESULT TimerEvent;             // ==NULL if no timer, higher precision multimedia timers used for callbacks
 
   // instruction delay
@@ -317,8 +317,8 @@ public:
 
   void DisplayRead(void);
   void DisplayWrite(void);
-  void DisplayRotRight(byte REG[],int Times);
-  void DisplayRotLeft(byte REG[],int Times);
+  void DisplayRotRight(My_byte REG[],int Times);
+  void DisplayRotLeft(My_byte REG[],int Times);
   void AnnunRead(void);
   void AnnunWrite(void);
   void HalfnutRead(void);
@@ -330,8 +330,8 @@ public:
   void SaveTimer(void);
   void RestoreTimer(void);
   void ContinueTimer(void);
-  void ConvertToReg14(byte *DEST_REG,UINT64 Src);
-  void ConvertToUINT64(UINT64 *Dest,byte *SRC_REG);
+  void ConvertToReg14(My_byte *DEST_REG,UINT64 Src);
+  void ConvertToUINT64(UINT64 *Dest,My_byte *SRC_REG);
   void TimerWrite(void);
   void TimerRead(void);
 
@@ -341,7 +341,7 @@ public:
   void Speaker(short Freq, int Duration);
 
   // user code support
-  int DecodeUCByte(int PrevType,byte CurrByte);
+  int DecodeUCByte(int PrevType,My_byte CurrByte);
   void CalcOffset(int LowReg,int LowByte,int HighReg,int HighByte,int &RegOff,int &ByteOff);
   void PrevGlobal(int CurrReg,int CurrByte,int &PrevReg,int &PrevByte,int &RegOff,int &ByteOff);
 

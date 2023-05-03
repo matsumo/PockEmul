@@ -540,7 +540,7 @@ void Chp41cpu::Subclass3()
 /****************************/
 void Chp41cpu::Subclass4()     /* LC 0-15 (HP) OR LC 0-9,A-F (OTHERS) */
 {
-    r->C_REG[*PT_REG]=(byte)Modifier;
+    r->C_REG[*PT_REG]=(My_byte)Modifier;
     if (*PT_REG==0)
         *PT_REG=13;
     else
@@ -604,12 +604,12 @@ void Chp41cpu::Subclass6()
         {
             if (TytePrev!=0x2d4 && TytePrev!=0x3d4 && TytePrev!=0x3dc)       // case 1b: PT is 13 and last inst was not: PT=13, -PT, +PT
             {
-                r->C_REG[13]=(byte)((r->G_REG&0xf0)>>4);
-                r->C_REG[0]=(byte)(r->G_REG&0x0f);
+                r->C_REG[13]=(My_byte)((r->G_REG&0xf0)>>4);
+                r->C_REG[0]=(My_byte)(r->G_REG&0x0f);
             }
             else                                                             // case 2b: PT is 13 and last inst was: PT=13, -PT, +PT
             {
-                r->C_REG[13]=(byte)(r->G_REG&0x0f);
+                r->C_REG[13]=(My_byte)(r->G_REG&0x0f);
                 r->G_REG=((r->G_REG&0x0f)<<4)|((r->G_REG&0xf0)>>4);
             }
         }
@@ -621,14 +621,14 @@ void Chp41cpu::Subclass6()
         {    // this case was incompletely described in David Assm.
             //  Newt describes it as an additional case but the end result is same
             r->G_REG=(((r->G_REG&0x0f)<<4)|((r->G_REG&0xf0)>>4));
-            r->C_REG[*PT_REG+1]=(byte)((r->G_REG&0xf0)>>4);
-            r->C_REG[*PT_REG]=(byte)(r->G_REG&0x0f);
+            r->C_REG[*PT_REG+1]=(My_byte)((r->G_REG&0xf0)>>4);
+            r->C_REG[*PT_REG]=(My_byte)(r->G_REG&0x0f);
             r->C_REG[0]=r->C_REG[*PT_REG+1];
         }
         else  // normal case
         {
-            r->C_REG[*PT_REG+1]=(byte)((r->G_REG&0xf0)>>4);
-            r->C_REG[*PT_REG]=(byte)(r->G_REG&0x0f);
+            r->C_REG[*PT_REG+1]=(My_byte)((r->G_REG&0xf0)>>4);
+            r->C_REG[*PT_REG]=(My_byte)(r->G_REG&0x0f);
         }
         break;
     }
@@ -642,14 +642,14 @@ void Chp41cpu::Subclass6()
             { // case 1a: PT is 13 and last inst was not: PT=13, -PT, +PT
                 TMP_REG=r->G_REG;
                 r->G_REG=((r->C_REG[13]<<4)|r->C_REG[0]);
-                r->C_REG[13]=(byte)((TMP_REG&0xf0)>>4);
-                r->C_REG[0]=(byte)(TMP_REG&0x0f);
+                r->C_REG[13]=(My_byte)((TMP_REG&0xf0)>>4);
+                r->C_REG[0]=(My_byte)(TMP_REG&0x0f);
             }
             else
             {  // case 2a: PT is 13 and last inst was: PT=13, -PT, +PT
                 TMP_REG=r->G_REG;
                 r->G_REG=((r->C_REG[13]<<4)|((r->G_REG&0xf0)>>4));
-                r->C_REG[13]=(byte)(TMP_REG&0x0f);
+                r->C_REG[13]=(My_byte)(TMP_REG&0x0f);
             }
         }
         else if (r->PT_PREV==13 && (TytePrev==0x3d4 ||                       // case 3a: PT was 13 but last inst was -PT or PT=1..12
@@ -662,15 +662,15 @@ void Chp41cpu::Subclass6()
             TMP_REG=r->G_REG;
             r->G_REG=((r->C_REG[*PT_REG+1]<<4)|r->C_REG[*PT_REG]);
             r->C_REG[*PT_REG+1]=r->C_REG[0];
-            r->C_REG[*PT_REG]=(byte)((TMP_REG&0xf0)>>4);
-            r->C_REG[0]=(byte)(TMP_REG&0x0f);
+            r->C_REG[*PT_REG]=(My_byte)((TMP_REG&0xf0)>>4);
+            r->C_REG[0]=(My_byte)(TMP_REG&0x0f);
         }
         else                                                              // normal case
         {
             TMP_REG=r->G_REG;
             r->G_REG=((r->C_REG[*PT_REG+1]<<4)|r->C_REG[*PT_REG]);
-            r->C_REG[*PT_REG+1]=(byte)((TMP_REG&0xf0)>>4);
-            r->C_REG[*PT_REG]=(byte)(TMP_REG&0x0f);
+            r->C_REG[*PT_REG+1]=(My_byte)((TMP_REG&0xf0)>>4);
+            r->C_REG[*PT_REG]=(My_byte)(TMP_REG&0x0f);
         }
         break;
     }
@@ -686,7 +686,7 @@ void Chp41cpu::Subclass6()
     }
     case 7:  /* C<>M */
     {
-        byte _tmp_reg[14];
+        My_byte _tmp_reg[14];
         memcpy(_tmp_reg,r->M_REG,14);
         memcpy(r->M_REG,r->C_REG,14);
         memcpy(r->C_REG,_tmp_reg,14);
@@ -727,16 +727,16 @@ void Chp41cpu::Subclass6()
     }
     case 14:  /* C=ST */
     {
-        r->C_REG[1]=(byte)((r->ST_REG&0xf0)>>4);
-        r->C_REG[0]=(byte)(r->ST_REG&0x0f);
+        r->C_REG[1]=(My_byte)((r->ST_REG&0xf0)>>4);
+        r->C_REG[0]=(My_byte)(r->ST_REG&0x0f);
         break;
     }
     case 15:  /* C<>ST */
     {
         word tmp1=r->C_REG[1];
         word tmp0=r->C_REG[0];
-        r->C_REG[1]=(byte)((r->ST_REG&0xf0)>>4);
-        r->C_REG[0]=(byte)(r->ST_REG&0x0f);
+        r->C_REG[1]=(My_byte)((r->ST_REG&0xf0)>>4);
+        r->C_REG[0]=(My_byte)(r->ST_REG&0x0f);
         r->ST_REG=(tmp1<<4)|tmp0;
         break;
     }
@@ -840,8 +840,8 @@ void Chp41cpu::Subclass8()
     }
     case 8:   /* C=KEY */
     {
-        r->C_REG[4]=(byte)((r->KEY_REG&0x00f0)>>4);
-        r->C_REG[3]=(byte)(r->KEY_REG&0x000f);
+        r->C_REG[4]=(My_byte)((r->KEY_REG&0x00f0)>>4);
+        r->C_REG[3]=(My_byte)(r->KEY_REG&0x000f);
         r->CARRY=0;
         break;
     }
@@ -1016,7 +1016,7 @@ void Chp41cpu::SubclassC()
                 hp41->PageMatrix[dest][bank-1]=hp41->PageMatrix[src][bank-1];
                 hp41->PageMatrix[src][bank-1]=hp41->PageMatrix[src][bank-1]->pAltPage;  // move src alt page to primary now that hepax is moved off it
                 hp41->PageMatrix[dest][bank-1]->pAltPage=pDestAltPage;
-                hp41->PageMatrix[dest][bank-1]->ActualPage=(byte)dest;
+                hp41->PageMatrix[dest][bank-1]->ActualPage=(My_byte)dest;
             }
         }
         break;
@@ -1033,7 +1033,7 @@ void Chp41cpu::SubclassC()
     }
     case 3:  /* C<>N */
     {
-        byte TMP_REG[14];
+        My_byte TMP_REG[14];
         memcpy(TMP_REG,r->N_REG,14);
         memcpy(r->N_REG,r->C_REG,14);
         memcpy(r->C_REG,TMP_REG,14);
@@ -1042,9 +1042,9 @@ void Chp41cpu::SubclassC()
     case 4:  /* LDI */
     {
         Tyte2=GetNextTyte();
-        r->C_REG[2]=(byte)((Tyte2&0x0300)>>8);
-        r->C_REG[1]=(byte)((Tyte2&0x00f0)>>4);
-        r->C_REG[0]=(byte)(Tyte2&0x000f);
+        r->C_REG[2]=(My_byte)((Tyte2&0x0300)>>8);
+        r->C_REG[1]=(My_byte)((Tyte2&0x00f0)>>4);
+        r->C_REG[0]=(My_byte)(Tyte2&0x000f);
         break;
     }
     case 5:  /* STK=C */
@@ -1055,10 +1055,10 @@ void Chp41cpu::SubclassC()
     case 6:  /* C=STK */
     {
         word addr=PopReturn();
-        r->C_REG[6]=(byte)((addr&0xf000)>>12);
-        r->C_REG[5]=(byte)((addr&0x0f00)>>8);
-        r->C_REG[4]=(byte)((addr&0x00f0)>>4);
-        r->C_REG[3]=(byte)(addr&0x000f);
+        r->C_REG[6]=(My_byte)((addr&0xf000)>>12);
+        r->C_REG[5]=(My_byte)((addr&0x0f00)>>8);
+        r->C_REG[4]=(My_byte)((addr&0x00f0)>>4);
+        r->C_REG[3]=(My_byte)(addr&0x000f);
         break;
     }
     case 7:   /* WPTOG - Toggles write protection on HEPAX RAM at page C[0] */
@@ -1112,15 +1112,15 @@ void Chp41cpu::SubclassC()
             Tyte=0;
         else
             Tyte=pPage->Image[addr];
-        r->C_REG[2]=(byte)((Tyte&0x0300)>>8);
-        r->C_REG[1]=(byte)((Tyte&0x00f0)>>4);
-        r->C_REG[0]=(byte)(Tyte&0x000f);
+        r->C_REG[2]=(My_byte)((Tyte&0x0300)>>8);
+        r->C_REG[1]=(My_byte)((Tyte&0x00f0)>>4);
+        r->C_REG[0]=(My_byte)(Tyte&0x000f);
         break;
     }
     case 13:  /* C=CORA */
     {
-        byte *C_REGpt=r->C_REG;
-        byte *A_REGpt=r->A_REG;
+        My_byte *C_REGpt=r->C_REG;
+        My_byte *A_REGpt=r->A_REG;
         while (C_REGpt < r->C_REG+14)
         {
             *C_REGpt|=*A_REGpt;
@@ -1148,8 +1148,8 @@ void Chp41cpu::SubclassC()
     }
     case 14:  /* C=CANDA */
     {
-        byte *C_REGpt=r->C_REG;
-        byte *A_REGpt=r->A_REG;
+        My_byte *C_REGpt=r->C_REG;
+        My_byte *A_REGpt=r->A_REG;
         while (C_REGpt<r->C_REG+14)
         {
             *C_REGpt&=*A_REGpt;
@@ -1260,7 +1260,7 @@ void Chp41cpu::SubclassF()
     {
         int i;
         int num;
-        byte _tmp_reg[14];
+        My_byte _tmp_reg[14];
         memcpy(_tmp_reg,r->C_REG,14);
         num=TypeA[Modifier];
         for (i=0;i<14;i++)
@@ -1432,7 +1432,7 @@ void Chp41cpu::Class2(void)
     {
         for (int i=FirstTEF;i<=LastTEF;i++)
         {
-            byte _tmp_reg=r->A_REG[i];
+            My_byte _tmp_reg=r->A_REG[i];
             r->A_REG[i]=r->B_REG[i];
             r->B_REG[i]=_tmp_reg;
         }
@@ -1448,7 +1448,7 @@ void Chp41cpu::Class2(void)
     {
         for (int i=FirstTEF;i<=LastTEF;i++)
         {
-            byte _tmp_reg=r->A_REG[i];
+            My_byte _tmp_reg=r->A_REG[i];
             r->A_REG[i]=r->C_REG[i];
             r->C_REG[i]=_tmp_reg;
         }
@@ -1464,7 +1464,7 @@ void Chp41cpu::Class2(void)
     {
         for (int i=FirstTEF;i<=LastTEF;i++)
         {
-            byte _tmp_reg=r->B_REG[i];
+            My_byte _tmp_reg=r->B_REG[i];
             r->B_REG[i]=r->C_REG[i];
             r->C_REG[i]=_tmp_reg;
         }
@@ -1761,8 +1761,8 @@ void Chp41cpu::ConvertTEF()
 /****************************/
 // digit Adder
 /****************************/
-byte Chp41cpu::Adder(byte nib1,byte nib2) {
-    byte result = nib1 + nib2 + r->CARRY;
+My_byte Chp41cpu::Adder(My_byte nib1,My_byte nib2) {
+    My_byte result = nib1 + nib2 + r->CARRY;
     if (result >= r->BASE)
     {
         result -= r->BASE;
@@ -1778,7 +1778,7 @@ byte Chp41cpu::Adder(byte nib1,byte nib2) {
 /****************************/
 // digit subtractor
 /****************************/
-byte Chp41cpu::Subtractor( byte nib1, byte nib2) {
+My_byte Chp41cpu::Subtractor( My_byte nib1, My_byte nib2) {
     char result = nib1 - nib2 - r->CARRY;
     if (result < 0) {
         result += r->BASE;

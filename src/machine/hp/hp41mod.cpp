@@ -17,13 +17,13 @@ system pages (ex: time module).
 
 Supported File Formats:
 ROM - This format is used by V41 Release 7 and prior (Warren Furlow).
-      It is always 8192 bytes with the High 2 bits followed by the Low 8 bits.
+      It is always 8192 My_bytes with the High 2 bits followed by the Low 8 bits.
 
 BIN - This format is used by Emu41 (J-F Garnier) and HP41EPC (HrastProgrammer).
       Note: HP41EPC uses BIN format but names them .ROM files.
-      All bits are packed into 5120 bytes, but several consecutive pages may
+      All bits are packed into 5120 My_bytes, but several consecutive pages may
       occupy the same file, so the file size could be a multiple of 5120.
-      4 machine words are packed into 5 bytes:
+      4 machine words are packed into 5 My_bytes:
       Byte0=Word0[7-0]
       Byte1=Word1[5-0]<<2 | Word0[9-8]
       Byte2=Word2[3-0]<<4 | Word1[9-6]
@@ -183,7 +183,7 @@ word * Chp41Mod::read_rom_file(QString FullFileName)
     {
     File->close();
     fprintf(stderr,"ERROR: File Size Invalid: %s\n",FullFileName.toLatin1().data());
-    fprintf(stderr,"  ROM file size is 8192 bytes\n");
+    fprintf(stderr,"  ROM file size is 8192 My_bytes\n");
     return(NULL);
     }
   Rom=(word*)malloc(sizeof(word)*0x1000);
@@ -249,7 +249,7 @@ word * Chp41Mod::read_bin_file(char *FullFileName,int Page)
   {
   FILE *File;
   long FileSize,SizeRead;
-  byte *BIN;
+  My_byte *BIN;
   word *Rom;
 
   File=fopen(FullFileName,"rb");
@@ -267,7 +267,7 @@ word * Chp41Mod::read_bin_file(char *FullFileName,int Page)
     fprintf(stderr,"ERROR: File Size Invalid: %s\n",FullFileName);
     return(NULL);
     }
-  BIN=(byte*)malloc(FileSize);
+  BIN=(My_byte*)malloc(FileSize);
   if (BIN==NULL)
     {
     fclose(File);
@@ -299,7 +299,7 @@ int Chp41Mod::write_bin_file(char *FullFileName,word *Rom)
   {
   FILE *File;
   long SizeWritten;
-  byte *BIN;
+  My_byte *BIN;
 
   if (Rom==NULL)
     return(0);
@@ -310,7 +310,7 @@ int Chp41Mod::write_bin_file(char *FullFileName,word *Rom)
     return(0);
     }
 
-  BIN=(byte*)malloc(5120);
+  BIN=(My_byte*)malloc(5120);
   if (BIN==NULL)
     {
     fprintf(stderr,"ERROR: Memory Allocation\n");
@@ -409,7 +409,7 @@ int Chp41Mod::compare_rom_files(char *FullFileName1,char *FullFileName2)
 /******************************/
 void Chp41Mod::unpack_image(
   word *Rom,
-  byte *Bin)
+  My_byte *Bin)
   {
   int i;
   word *ptr=Rom;
@@ -427,7 +427,7 @@ void Chp41Mod::unpack_image(
 /******************************/
 void Chp41Mod::pack_image(
   word *rom,
-  byte *BIN)
+  My_byte *BIN)
   {
   int i,j;
   if ((rom==NULL)||(BIN==NULL))
@@ -749,7 +749,7 @@ QString Chp41Mod::output_mod_info(
 //  for (i=0;i<=0xfff;i++)
 //    {
 //    if (Rom[i]!=ROM2[i])
-//      fprintf(OutFile," error on byte %03X)\n",i);
+//      fprintf(OutFile," error on My_byte %03X)\n",i);
 //    }
 //  }
 
@@ -769,7 +769,7 @@ int Chp41Mod::extract_roms(
   char drive[_MAX_DRIVE],dir[_MAX_DIR],fname[_MAX_FNAME],ext[_MAX_EXT];
   FILE *MODFile;
   unsigned long FileSize,SizeRead;
-  byte *pBuff;
+  My_byte *pBuff;
   ModuleFileHeader *pMFH;
   int i;
 
@@ -786,7 +786,7 @@ int Chp41Mod::extract_roms(
     fclose(MODFile);
     return(3);
     }
-  pBuff=(byte*)malloc(FileSize);
+  pBuff=(My_byte*)malloc(FileSize);
   if (pBuff==NULL)
     {
     fclose(MODFile);

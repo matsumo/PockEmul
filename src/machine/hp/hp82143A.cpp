@@ -234,7 +234,7 @@ void Chp82143A::clearPaper(void)
 #define PRINTER_GRAPHIC     (1 << 6)  // Graphics mode (bit-mapped columns)
 #define PRINTER_DOUBLE      (1 << 5)  // Double Wide mode
 #define PRINTER_RIGHTJUST   (1 << 4)  // Type of End of Line is Right Justify
-#define PRINTER_EOLSENT     (1 << 3)  // Last byte was End Of Line
+#define PRINTER_EOLSENT     (1 << 3)  // Last My_byte was End Of Line
 #define PRINTER_NOADV       (1 << 2)  // IGNore paper advance key
 #define PRINTER_NOTUSED_1   (1 << 1)
 #define PRINTER_NOTUSED_0   (1 << 0)

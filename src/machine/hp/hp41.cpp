@@ -339,7 +339,7 @@ void Chp41::ComputeKey(KEYEVENT ke, int scancode, QMouseEvent *event)
     }
     if (_response==2) return;
 
-    if (slot>=0) {
+    if (_slot>=0) {
         currentSlot = _slot;
 #if 1
         connect(view,SIGNAL(Launched(QString,CPObject *)),this,SLOT(addModule(QString,CPObject *)));
@@ -716,10 +716,10 @@ void Chp41::exec_perph_printer(void)
 //        qWarning()<<"Get Printer Status:"<<PRINT_STATUS;
 
         memset(hp41cpu->r->C_REG,0,sizeof(hp41cpu->r->C_REG));
-        hp41cpu->r->C_REG[13]=(byte)((PRINT_STATUS>>12)&0x0f);
-        hp41cpu->r->C_REG[12]=(byte)((PRINT_STATUS>>8)&0x0f);
-        hp41cpu->r->C_REG[11]=(byte)((PRINT_STATUS>>4)&0x0f);
-        hp41cpu->r->C_REG[10]=(byte)( PRINT_STATUS&0x0f);
+        hp41cpu->r->C_REG[13]=(My_byte)((PRINT_STATUS>>12)&0x0f);
+        hp41cpu->r->C_REG[12]=(My_byte)((PRINT_STATUS>>8)&0x0f);
+        hp41cpu->r->C_REG[11]=(My_byte)((PRINT_STATUS>>4)&0x0f);
+        hp41cpu->r->C_REG[10]=(My_byte)( PRINT_STATUS&0x0f);
         break;
     }
     case 0x005:       /* RTNCPU or WPREG 01, RTN */
@@ -746,8 +746,8 @@ void Chp41::Speaker(short Freq, int Duration)
 {
 #if 0
     ulong Count;
-    byte off,on;
-    byte spk;
+    My_byte off,on;
+    My_byte spk;
 
     spk=_inp(0x61);      // get current status
     off=spk&0xFC;
@@ -772,7 +772,7 @@ void Chp41::Speaker(short Freq, int Duration)
 }
 
 
-void Chp41::SetKeyDown(byte KeyCode) {
+void Chp41::SetKeyDown(My_byte KeyCode) {
 
     if (pKEYB->LastKey)
         fEnableCLRKEY=false;           // disable CLRKEY instruction

@@ -352,9 +352,9 @@ void Chp41::DisplayRead()
     // 178          READEN   READAN   READEN                        ;copy annunciators into C[2:0]
     case 5:
       {
-      hp41cpu->r->C_REG[0]=(byte)(DIS_ANNUN_REG&0x00f);
-      hp41cpu->r->C_REG[1]=(byte)((DIS_ANNUN_REG&0x0f0)>>4);
-      hp41cpu->r->C_REG[2]=(byte)((DIS_ANNUN_REG&0xf00)>>8);
+      hp41cpu->r->C_REG[0]=(My_byte)(DIS_ANNUN_REG&0x00f);
+      hp41cpu->r->C_REG[1]=(My_byte)((DIS_ANNUN_REG&0x0f0)>>4);
+      hp41cpu->r->C_REG[2]=(My_byte)((DIS_ANNUN_REG&0xf00)>>8);
       break;
       }
     // 1B8          FLSDC    RDC1L    FLSDC
@@ -484,10 +484,10 @@ void Chp41::DisplayRead()
 
 /****************************/
 void Chp41::DisplayRotRight(
-  byte REG[],
+  My_byte REG[],
   int Times)
   {
-  byte TEMP[12];
+  My_byte TEMP[12];
   memcpy(TEMP,REG,12);
   memcpy(REG+Times,TEMP,12-Times);
   memcpy(REG,TEMP+12-Times,Times);
@@ -495,10 +495,10 @@ void Chp41::DisplayRotRight(
 
 /****************************/
 void Chp41::DisplayRotLeft(
-  byte REG[],
+  My_byte REG[],
   int Times)
   {
-  byte TEMP[12];
+  My_byte TEMP[12];
   memcpy(TEMP,REG,12);
   memcpy(REG,TEMP+Times,12-Times);
   memcpy(REG+12-Times,TEMP,Times);
@@ -540,7 +540,7 @@ void Chp41::HalfnutRead()
   {
   // C=REG 5
   if (hp41cpu->Modifier==5)
-    hp41cpu->r->C_REG[0]=(byte)Contrast;
+    hp41cpu->r->C_REG[0]=(My_byte)Contrast;
   }
 
 #endif
