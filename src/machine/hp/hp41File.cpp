@@ -372,10 +372,10 @@ int Chp41::SaveMOD(
     return(0);
 
   // allocate a buffer
-  byte *pBuff;
+  My_byte *pBuff;
   DWORD FileSize;
   FileSize=sizeof(ModuleFileHeader)+sizeof(ModuleFilePage)*pModule->NumPages;
-  pBuff=(byte*)malloc(FileSize);
+  pBuff=(My_byte*)malloc(FileSize);
   if (pBuff==NULL)
     return(0);
   memset(pBuff,0,sizeof(FileSize));
@@ -697,7 +697,7 @@ bool Chp41::SaveConfig(QXmlStreamWriter *xmlOut)
   char Reg12Format[]=":%s %0X%0X%0X%0X%0X%0X%0X%0X%0X%0X%0X%0X%s\r\n";
   char RAMRegFormat[]=":RAM %03X %02X %02X %02X %02X %02X %02X %02X\r\n";
   char szRegName[20];
-  byte *pbReg;
+  My_byte *pbReg;
 
   // CPU regs
   strcpy(szRegName,"A_REG");  pbReg=A_REG;
@@ -842,30 +842,30 @@ bool Chp41::SaveConfig(QXmlStreamWriter *xmlOut)
 
 
 /****************************/
-// This decoder returns the type of the current byte
-// based on its value and the previous byte types
+// This decoder returns the type of the current My_byte
+// based on its value and the previous My_byte types
 /****************************/
 enum
   {
   FIRST,          // unknown previous
-  SINGLE,         // single byte inst
-  DOUBLE1,        // first byte of double byte inst
+  SINGLE,         // single My_byte inst
+  DOUBLE1,        // first My_byte of double My_byte inst
   DOUBLE2,        // 2 of 2
   TRIPLE1,        // 1 of 3
   TRIPLE2,        // 2 of 3
   TRIPLE3,        // 3 of 3
   TEXT,           // alpha string
-  JUMP_TEXT,      // first byte of gto, xeq, w
-  GLOBAL1,        // first byte of global
-  GLOBAL2,        // second byte of global
-  GLOBAL_LBL,     // third byte of label
-  GLOBAL_END,     // third byte of end
-  GLOBAL_KEYCODE  // fourth byte of label
+  JUMP_TEXT,      // first My_byte of gto, xeq, w
+  GLOBAL1,        // first My_byte of global
+  GLOBAL2,        // second My_byte of global
+  GLOBAL_LBL,     // third My_byte of label
+  GLOBAL_END,     // third My_byte of end
+  GLOBAL_KEYCODE  // fourth My_byte of label
   };
 /****************************/
 int Chp41::DecodeUCByte(
   int PrevType,
-  byte CurrByte)
+  My_byte CurrByte)
   {
   static int TextCount=0;
   int CurrType;
@@ -875,9 +875,9 @@ int Chp41::DecodeUCByte(
     case FIRST:
     case SINGLE:
       {
-      if ((CurrByte>=0x90 && CurrByte<=0xBF) || (CurrByte>=0xCE && CurrByte<=0xCF))  // 2 byte
+      if ((CurrByte>=0x90 && CurrByte<=0xBF) || (CurrByte>=0xCE && CurrByte<=0xCF))  // 2 My_byte
         CurrType=DOUBLE1;
-      else if(CurrByte>=0xD0 && CurrByte<=0xEF)       // GTO, XEQ 3 byte
+      else if(CurrByte>=0xD0 && CurrByte<=0xEF)       // GTO, XEQ 3 My_byte
         CurrType=TRIPLE1;
       else if (CurrByte>=0xF0 && CurrByte<=0xFF)      // text
         {
@@ -1017,7 +1017,7 @@ void Chp41::CalcOffset(
 
 /****************************/
 // position on current global and this finds the previous global
-// and returns its starting byte and register offset and addr
+// and returns its starting My_byte and register offset and addr
 /****************************/
 void Chp41::PrevGlobal(
   int CurrReg,
@@ -1075,17 +1075,17 @@ int Chp41::GetUserCode(
   HANDLE hUCFile;   // file handle
   DWORD FileSize; // size of file
   DWORD BytesRead;
-  byte *pBuffer;    // program loaded into buffer
-  int ProgSize;     // size of program in bytes up to and including any END inst
+  My_byte *pBuffer;    // program loaded into buffer
+  int ProgSize;     // size of program in My_bytes up to and including any END inst
   int EndAddr;      // the .END. address
   int FreeAddr;     // bottom of available free space
-  int ByteType;     // type of current byte
+  int ByteType;     // type of current My_byte
   int RegIndex;     // register index for loop
-  int ByteIndex;    // byte index for loop
+  int ByteIndex;    // My_byte index for loop
   int RegOff;       // register offset to previous global
-  int ByteOff;      // byte offset to previous global
+  int ByteOff;      // My_byte offset to previous global
   int PrevReg;      // register where last global starts (or start of program memory)
-  int PrevByte;     // byte where last global starts
+  int PrevByte;     // My_byte where last global starts
   int i;            // loop counter
 
   // open file and copy it to a buffer
@@ -1096,7 +1096,7 @@ int Chp41::GetUserCode(
     return(0);
     }
   FileSize=GetFileSize(hUCFile,NULL);
-  pBuffer=(byte*)malloc(FileSize);
+  pBuffer=(My_byte*)malloc(FileSize);
   ReadFile(hUCFile,pBuffer,FileSize,&BytesRead,NULL);
   CloseHandle(hUCFile);
   if (FileSize!=BytesRead)
@@ -1118,12 +1118,12 @@ int Chp41::GetUserCode(
     ByteType=DecodeUCByte(ByteType,pBuffer[ProgSize]);
     }
 
-  // find bottom of available memory - key assignments have 0xf0 in byte 6 - Zenrom pg 37-38
+  // find bottom of available memory - key assignments have 0xf0 in My_byte 6 - Zenrom pg 37-38
   FreeAddr=EndAddr;
   while ((hp41cpu->pRAM[FreeAddr-1].Reg[6]!=0xf0) && (FreeAddr!=0x0c0))
     FreeAddr--;
 
-  // make sure there is enough space - not counting any bytes available on register with .end.
+  // make sure there is enough space - not counting any My_bytes available on register with .end.
   if (ProgSize>(EndAddr-FreeAddr)*7)
     {
     strcpy(pszError,"Not enough free registers");
@@ -1133,7 +1133,7 @@ int Chp41::GetUserCode(
 
   // set starting location
   RegIndex=EndAddr;
-  for (ByteIndex=2;ByteIndex<6;ByteIndex++)  // bytes 2-0 were used by .END.
+  for (ByteIndex=2;ByteIndex<6;ByteIndex++)  // My_bytes 2-0 were used by .END.
     {
     if (pRAM[RegIndex].Reg[ByteIndex+1])      // if non null
       break;                                 // cant use it - stop here
@@ -1177,7 +1177,7 @@ int Chp41::GetUserCode(
         }
       }
 
-    // copy byte
+    // copy My_byte
     if (RamExist(RegIndex))                      // just to be safe
       pRAM[RegIndex].Reg[ByteIndex]=pBuffer[i];
 
@@ -1236,13 +1236,13 @@ int Chp41::Catalog1(         // returns 0 when no more labels
   static int CurrByte;
   static int LastEndReg;    // save the last END addr
   static int LastEndByte;
-  int ByteType;     // type of current byte
+  int ByteType;     // type of current My_byte
   int RegIndex;     // register index for loop
-  int ByteIndex;    // byte index for loop
+  int ByteIndex;    // My_byte index for loop
   int RegOff;       // register offset to previous global
-  int ByteOff;      // byte offset to previous global
+  int ByteOff;      // My_byte offset to previous global
   int PrevReg;      // register where prev global starts (or start of program memory)
-  int PrevByte;     // byte where prev global starts
+  int PrevByte;     // My_byte where prev global starts
   int LabelIndex;   // counts from 0..n for indexing text string
   int TextCount;    // counts from n..0 for counting text length
   int LoopStatus;   // state variable for loop
@@ -1322,7 +1322,7 @@ int Chp41::Catalog1(         // returns 0 when no more labels
           }
         }
 
-      // next byte
+      // next My_byte
       if (ByteIndex==0)
         {
         ByteIndex=6;
@@ -1353,23 +1353,23 @@ int Chp41::PutUserCode(
 #if 0
   HANDLE hUCFile;
   DWORD dwBytesWritten;
-  byte *pBuffer;
+  My_byte *pBuffer;
   int RegIndex;
   int ByteIndex;
-  int StopReg;         // points to byte after last valid byte
+  int StopReg;         // points to My_byte after last valid My_byte
   int StopByte;
   int ByteType;
   int ProgSize=0;
 
-  pBuffer=(byte*)malloc(pLbl->StartReg*7-pLbl->EndReg*7+20);   // overestimate space needed
+  pBuffer=(My_byte*)malloc(pLbl->StartReg*7-pLbl->EndReg*7+20);   // overestimate space needed
   RegIndex=pLbl->StartReg;
   ByteIndex=pLbl->StartByte;
   StopReg=pLbl->EndReg;
   StopByte=pLbl->EndByte;
   ByteType=FIRST;
 
-  // eliminate any null bytes at end of program
-  while (pRAM[StopByte==6?StopReg+1:StopReg].Reg[StopByte==6?0:StopByte+1]==0)       // look at previous byte
+  // eliminate any null My_bytes at end of program
+  while (pRAM[StopByte==6?StopReg+1:StopReg].Reg[StopByte==6?0:StopByte+1]==0)       // look at previous My_byte
     {
     if (StopByte==6)
       {
@@ -1383,7 +1383,7 @@ int Chp41::PutUserCode(
   // copy program to buffer
   while (RegIndex!=StopReg || ByteIndex!=StopByte)
     {
-    // copy byte
+    // copy My_byte
     if (RamExist(RegIndex))                      // just to be safe
       pBuffer[ProgSize]=pRAM[RegIndex].Reg[ByteIndex];
 
@@ -1397,7 +1397,7 @@ int Chp41::PutUserCode(
         }
       }
 
-    // next byte
+    // next My_byte
     if (ByteIndex==0)
       {
       ByteIndex=6;

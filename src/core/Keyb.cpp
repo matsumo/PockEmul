@@ -1,5 +1,6 @@
 #include <QDebug>
 #include <QPainter>
+#include <QPainterPath>
 #include <QSound>
 
 #include "xmlwriter.h"

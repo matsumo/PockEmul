@@ -10,7 +10,7 @@ class CConnector;
 class Cbus;
 
 typedef unsigned char flag;
-typedef unsigned char byte;
+typedef unsigned char My_byte;
 typedef unsigned short word;
 typedef unsigned long dword;
 typedef unsigned short ushort;

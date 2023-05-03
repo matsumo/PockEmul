@@ -230,12 +230,12 @@ void Chp41::TimerProc()  {
 /****************************/
 // Converts UINT64 to Reg14 (BCD)
 void Chp41::ConvertToReg14(
-  byte *DEST_REG,
+  My_byte *DEST_REG,
   UINT64 Src)
   {
   for (int i=0;i<14;i++)
     {
-    DEST_REG[i]=(byte)(Src%10);
+    DEST_REG[i]=(My_byte)(Src%10);
     Src/=10;
     }
   }
@@ -245,7 +245,7 @@ void Chp41::ConvertToReg14(
 // Converts Reg14 (BCD) to UINT64
 void Chp41::ConvertToUINT64(
   UINT64 *Dest,
-  byte *SRC_REG)
+  My_byte *SRC_REG)
   {
   UINT64 temp=0;
   for (int i=13;i>=0;i--)

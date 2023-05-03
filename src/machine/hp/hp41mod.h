@@ -21,7 +21,7 @@ MOD file.  Obviously certain configurations do not make sense any more than
 with the real hardware and may return an error (ie an HP-41CV AND a Quad
 Memory Module).  It is also possible to define MLDL RAM using a blank page.
 
-Strings are null terminated and all unused bytes are set to zero.  Fields are
+Strings are null terminated and all unused My_bytes are set to zero.  Fields are
 strictly limited to valid values defined below.  Some combinations of values
 would make no sense and not represent any actual hardware.
 File size=sizeof(ModuleFileHeader)+NumPages*sizeof(ModuleFilePage)
@@ -29,7 +29,7 @@ File size=sizeof(ModuleFileHeader)+NumPages*sizeof(ModuleFilePage)
 
 #include <QString>
 
-typedef unsigned char byte;
+typedef unsigned char My_byte;
 typedef unsigned short word;
 
 #define MOD_FORMAT "MOD1"
@@ -83,14 +83,14 @@ typedef struct
   char Copyright[100];    /* copyright notice, if any */
   char License[200];      /* license terms, if any */
   char Comments[255];     /* free form comments, if any */
-  byte Category;          /* module category, see codes below */
-  byte Hardware;          /* defines special hardware that module contains */
-  byte MemModules;        /* defines number of main memory modules (0-4) */
-  byte XMemModules;       /* defines number of extended memory modules (0=none, 1=Xfuns/XMem, 2,3=one or two additional XMem modules) */
-  byte Original;          /* allows validation of original contents: 1=images and data are original, 0=this file has been updated by a user application (data in RAM written back to MOD file, etc) */
-  byte AppAutoUpdate;     /* tells any application to: 1=overwrite this file automatically when saving other data, 0=do not update */
-  byte NumPages;          /* the number of pages in this file (0-256, but normally between 1-6) */
-  byte HeaderCustom[32];  /* for special hardware attributes */
+  My_byte Category;          /* module category, see codes below */
+  My_byte Hardware;          /* defines special hardware that module contains */
+  My_byte MemModules;        /* defines number of main memory modules (0-4) */
+  My_byte XMemModules;       /* defines number of extended memory modules (0=none, 1=Xfuns/XMem, 2,3=one or two additional XMem modules) */
+  My_byte Original;          /* allows validation of original contents: 1=images and data are original, 0=this file has been updated by a user application (data in RAM written back to MOD file, etc) */
+  My_byte AppAutoUpdate;     /* tells any application to: 1=overwrite this file automatically when saving other data, 0=do not update */
+  My_byte NumPages;          /* the number of pages in this file (0-256, but normally between 1-6) */
+  My_byte HeaderCustom[32];  /* for special hardware attributes */
   } ModuleFileHeader;
 
 /* page struct */
@@ -98,16 +98,16 @@ typedef struct
   {
   char Name[20];       /* normally the name of the original .ROM file, if any */
   char ID[9];          /* ROM ID code, normally two letters and a number are ID and last letter is revision - if all zeros, will show up as @@@@ */
-  byte Page;           /* the page that this image must be in (0-F, although 8-F is not normally used)
+  My_byte Page;           /* the page that this image must be in (0-F, although 8-F is not normally used)
                           or defines each page's position relative to other images in a page group, see codes below */
-  byte PageGroup;      /* 0=not grouped, otherwise images with matching PageGroup values (1..8) are grouped according to POSITION code */
-  byte Bank;           /* the bank that this image must be in (1-4) */
-  byte BankGroup;      /* 0=not grouped, otherwise images with matching BankGroup values (1..8) are bankswitched with each other */
-  byte Ram;            /* 0=ROM, 1=RAM - normally RAM pages are all blank if Original=1 */
-  byte WriteProtect;   /* 0=No or N/A, 1=protected - for HEPAX RAM and others that might support it */
-  byte FAT;            /* 0=no FAT, 1=has FAT */
-  byte Image[5120];    /* the image in packed format (.BIN file format) */
-  byte PageCustom[32]; /* for special hardware attributes */
+  My_byte PageGroup;      /* 0=not grouped, otherwise images with matching PageGroup values (1..8) are grouped according to POSITION code */
+  My_byte Bank;           /* the bank that this image must be in (1-4) */
+  My_byte BankGroup;      /* 0=not grouped, otherwise images with matching BankGroup values (1..8) are bankswitched with each other */
+  My_byte Ram;            /* 0=ROM, 1=RAM - normally RAM pages are all blank if Original=1 */
+  My_byte WriteProtect;   /* 0=No or N/A, 1=protected - for HEPAX RAM and others that might support it */
+  My_byte FAT;            /* 0=no FAT, 1=has FAT */
+  My_byte Image[5120];    /* the image in packed format (.BIN file format) */
+  My_byte PageCustom[32]; /* for special hardware attributes */
   } ModuleFilePage;
 
 class Chp41;
@@ -133,8 +133,8 @@ public:
     word *read_lst_file(char *FullFileName);
     int write_lst_file(char *FullFileName, word *Rom, int Page);
     int compare_rom_files(char *FullFileName1,char *FullFileName2);
-     static void unpack_image(word *Rom, byte *Bin);
-    void pack_image(word *rom, byte *BIN);
+     static void unpack_image(word *Rom, My_byte *Bin);
+    void pack_image(word *rom, My_byte *BIN);
     QString output_mod_info(int Verbose, int DecodeFat);
     int extract_roms(char *FullFileName);
     static word compute_checksum(word *Rom);

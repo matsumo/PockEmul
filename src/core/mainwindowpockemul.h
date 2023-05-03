@@ -6,6 +6,7 @@
 #include <QGesture>
 #include <QGestureEvent>
 #include <QXmlStreamReader>
+#include <QSlider>
 
 
 //
